@@ -3,7 +3,7 @@ import { expect } from 'vitest';
 import type { LaunchedApp } from '../support/launch-app';
 import { settledProof } from '../support/settled-proof';
 import { LOCAL_PORT, PROFILE } from '../support/flow-constants';
-import { closeLayer, layer, nestedButtons, openScreen } from '../support/locators';
+import { base, closeHub, dialogOf, hub, nestedButtons, openScreen, openSection } from '../support/locators';
 
 const SETTINGS_TABS: [string, string][] = [
   ['General', 'Open in fullscreen on launch.'],
@@ -14,27 +14,27 @@ const SETTINGS_TABS: [string, string][] = [
 
 const createProfile = async (launched: LaunchedApp) => {
   const { page } = launched;
-  const profiles = layer(page, 'Profiles');
+  const profiles = dialogOf(page, 'Profiles');
   await profiles.getByText('Create a profile to get started.').waitFor();
   await settledProof(launched, '01-profiles-first-boot');
   await profiles.getByRole('textbox', { name: 'Profile name' }).fill(PROFILE);
   await profiles.getByRole('button', { name: 'Create' }).click();
-  await page.getByRole('heading', { name: 'Good to go', level: 1 }).waitFor();
-  await expect.poll(() => page.getByText(/Engine AP 0\.6\.7 ready/).count()).toBe(1);
+  await base(page).getByText('No room is hosting right now.', { exact: true }).waitFor();
+  await base(page).getByRole('button', { name: 'Run a session' }).waitFor();
+  const home = await openScreen(page, 'Home');
+  await home.getByRole('heading', { name: 'Good to go', level: 1 }).waitFor();
+  await expect.poll(() => home.getByText(/Engine AP 0\.6\.7 ready/).count()).toBe(1);
   expect(await nestedButtons(page), 'no button inside a button on Home').toBe(0);
   await settledProof(launched, '02-home-engine-ready');
+  await closeHub(page, 'Multiworld');
 };
 
-const sectionNav = (launched: LaunchedApp) => launched.page.getByRole('navigation', { name: 'Sections' });
-
-const openSettingsTab = async (launched: LaunchedApp, tab: string) => {
-  await sectionNav(launched).getByRole('button', { name: tab, exact: true }).click();
-  return layer(launched.page, 'Settings');
-};
+const openSettingsTab = (launched: LaunchedApp, tab: string) => openSection(hub(launched.page, 'Multiworld'), tab);
 
 const visitSettingsTabs = async (launched: LaunchedApp) => {
   const settings = await openScreen(launched.page, 'Settings');
-  await settings.getByText(PROFILE, { exact: true }).waitFor();
+  const general = settings.getByRole('navigation', { name: 'Sections' }).getByRole('button', { name: 'General', exact: true });
+  expect(await general.getAttribute('aria-current'), 'Settings opens Multiworld at General').toBe('page');
   for (const [index, [tab, text]] of SETTINGS_TABS.entries()) {
     const view = await openSettingsTab(launched, tab);
     await view.getByText(text, { exact: true }).waitFor();
@@ -57,13 +57,12 @@ const setLocalPort = async (launched: LaunchedApp) => {
   await input.fill(String(LOCAL_PORT));
   await input.blur();
   await settledProof(launched, '04-settings-hosting-port-set');
-  await closeLayer(launched.page, 'Settings');
-  await layer(launched.page, 'Settings').waitFor({ state: 'detached' });
+  await closeHub(launched.page, 'Multiworld');
   await openScreen(launched.page, 'Settings');
   const reopened = await localPortInput(launched);
   expect(await reopened.inputValue()).toBe(String(LOCAL_PORT));
   await settledProof(launched, '05-settings-hosting-port-kept');
-  await closeLayer(launched.page, 'Settings');
+  await closeHub(launched.page, 'Multiworld');
 };
 
 export { checkEngineTab, createProfile, setLocalPort, visitSettingsTabs };

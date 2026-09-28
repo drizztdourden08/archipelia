@@ -32,7 +32,7 @@ describe('Archipelia app, headless, every screen end to end', () => {
     expect(notes, 'teardown notes').toEqual([]);
   });
 
-  test('1. first boot: create a profile, land on Home with the engine ready', () => createProfile(app()));
+  test('1. first boot: create a profile, the base screen is idle, Home shows the engine ready', () => createProfile(app()));
 
   test('2a. settings: every tab opens', () => visitSettingsTabs(app()));
 
@@ -50,7 +50,7 @@ describe('Archipelia app, headless, every screen end to end', () => {
 
   test('7a. session: stop from the dashboard', () => stopFromDashboard(app(), state.clients));
 
-  test('7b. sessions: history shows the stopped run', () => checkHistory(app()));
+  test('7b. sessions: history shows the stopped run and Open returns to it', () => checkHistory(app()));
 
   test('7c. data: sizes per area and a library export', () => checkDataAndExport(app()));
 

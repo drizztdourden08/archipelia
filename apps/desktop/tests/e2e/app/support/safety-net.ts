@@ -3,14 +3,24 @@ import { rm } from 'node:fs/promises';
 import type { Client } from 'archipelago.js';
 import type { LaunchedApp } from './launch-app';
 import { removeLeftWorlds } from './engine-cleanup';
-import { dialogOf, layer, rail } from './locators';
+import { base, dialogOf, hub } from './locators';
+import type { HubTitle } from './locators';
 
 const QUICK = { timeout: 5000 };
 
-const stopIfHosting = async ({ page }: LaunchedApp) => {
-  await page.keyboard.press('Escape');
-  await rail(page).getByRole('button', { name: 'Session', exact: true }).click(QUICK);
-  const stop = layer(page, 'Session').getByRole('button', { name: 'Stop', exact: true });
+const HUBS: HubTitle[] = ['Multiworld', 'Data'];
+
+const closeOpenHubs = async ({ page }: LaunchedApp) => {
+  for (const title of HUBS) {
+    const opened = hub(page, title);
+    if (await opened.count()) await opened.getByRole('button', { name: 'Close', exact: true }).first().click(QUICK);
+  }
+};
+
+const stopIfHosting = async (launched: LaunchedApp) => {
+  const { page } = launched;
+  await closeOpenHubs(launched);
+  const stop = base(page).getByRole('button', { name: 'Stop', exact: true });
   if (!(await stop.count()) || await stop.isDisabled()) return;
   await stop.click(QUICK);
   await dialogOf(page, 'Stop the room').getByRole('button', { name: 'Stop', exact: true }).click(QUICK);

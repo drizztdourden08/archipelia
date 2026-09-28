@@ -14,7 +14,7 @@ const MENU: MenuEntry[] = [
   { key: 'servers', label: 'Servers', onClick: openSection(SECTION.servers) },
   'separator',
   { key: 'data', label: 'Data', onClick: () => nav.open(DATA_HUB) },
-  { key: 'settings', label: 'Settings', onClick: openSection(SECTION.general) },
+  { key: 'settings', label: 'Settings', screen: 'settings' },
   { key: 'about', label: 'About', screen: 'about' },
 ];
 

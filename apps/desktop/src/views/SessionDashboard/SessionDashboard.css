@@ -11,6 +11,7 @@
 
 .session-dashboard__dock {
   position: relative;
+  isolation: isolate;
   flex: 1 0 auto;
   min-height: calc(var(--size-256) + var(--size-320));
   overflow: hidden;

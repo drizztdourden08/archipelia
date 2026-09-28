@@ -7,7 +7,7 @@ import type { LaunchedApp } from '../support/launch-app';
 import { settledProof } from '../support/settled-proof';
 import { LOCAL_PORT, SOH, TIMESPINNER } from '../support/flow-constants';
 import { expectReadableDock } from '../support/dock-geometry';
-import { dialogOf, layer } from '../support/locators';
+import { base, dialogOf } from '../support/locators';
 import { proofText } from '../support/proof-text';
 
 const CHECKS = 10;
@@ -23,7 +23,7 @@ const showDockBottom = (dashboard: Locator) =>
 const filterLog =(dashboard: Locator, text: string) => dashboard.getByRole('textbox', { name: 'Filter the log' }).fill(text);
 
 const joinPlayers = async (launched: LaunchedApp, clients: Client[]) => {
-  const dashboard = layer(launched.page, 'Session');
+  const dashboard = base(launched.page);
   await playerItem(dashboard, TIMESPINNER.game).getByText('offline').waitFor();
   const url = `ws://127.0.0.1:${LOCAL_PORT}`;
   const link = await joinAs({ url, slot: SOH.slot, game: SOH.game });
@@ -61,7 +61,7 @@ const askForPlayers = async (launched: LaunchedApp, dashboard: Locator) => {
 
 const stopFromDashboard = async (launched: LaunchedApp, clients: Client[]) => {
   clients.forEach((client) => client.socket.disconnect());
-  const dashboard = layer(launched.page, 'Session');
+  const dashboard = base(launched.page);
   await dashboard.getByRole('button', { name: 'Stop', exact: true }).click();
   const confirm = dialogOf(launched.page, 'Stop the room');
   await confirm.getByText('The server stops and every player is disconnected.').waitFor();

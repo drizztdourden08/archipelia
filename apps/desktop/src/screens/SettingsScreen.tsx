@@ -14,6 +14,7 @@ const settingsScreen = defineScreen({
   id: 'settings',
   title: 'Settings',
   shortcut: 'Mod+Comma',
+  layer: 'own',
   render: () => <OpenGeneralSection />,
 });
 

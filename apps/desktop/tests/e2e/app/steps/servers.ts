@@ -3,7 +3,7 @@ import { expect } from 'vitest';
 import type { Locator } from 'playwright-core';
 import type { LaunchedApp } from '../support/launch-app';
 import { settledProof } from '../support/settled-proof';
-import { closeLayer, openScreen } from '../support/locators';
+import { closeHub, openScreen } from '../support/locators';
 
 const SERVER = { label: 'E2E box', host: '192.0.2.10', user: 'ap', keyPath: 'C:\\keys\\e2e_ed25519', apPath: '/opt/archipelago' };
 
@@ -56,7 +56,7 @@ const manageServer = async (launched: LaunchedApp) => {
   await showProblems(launched, servers);
   await fillServer(launched, servers);
   await saveAndRemove(launched, servers);
-  await closeLayer(launched.page, 'Servers');
+  await closeHub(launched.page, 'Multiworld');
 };
 
 export { manageServer };

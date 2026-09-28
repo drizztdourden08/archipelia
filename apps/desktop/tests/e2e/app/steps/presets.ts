@@ -5,7 +5,7 @@ import type { Locator } from 'playwright-core';
 import type { LaunchedApp } from '../support/launch-app';
 import { settledProof } from '../support/settled-proof';
 import { exportPath, SOH, TIMESPINNER } from '../support/flow-constants';
-import { closeLayer, dialogOf, openScreen, optionRowOf, pickOption } from '../support/locators';
+import { closeHub, dialogOf, openScreen, optionRowOf, pickOption } from '../support/locators';
 import { answerSaveDialogWith } from '../support/save-dialog';
 
 const newPreset = async (launched: LaunchedApp, presets: Locator, game: string, name: string) => {
@@ -52,7 +52,7 @@ const timespinnerPreset = async (launched: LaunchedApp, presets: Locator) => {
 };
 
 const reopenAndSeeChanges = async (launched: LaunchedApp) => {
-  await closeLayer(launched.page, 'Presets');
+  await closeHub(launched.page, 'Multiworld');
   const presets = await openScreen(launched.page, 'Presets');
   await presets.getByRole('button', { name: new RegExp(`^${SOH.preset} 1 changed`) }).click();
   const sohRow = await findOption(presets, SOH.toggle);
@@ -85,7 +85,7 @@ const buildPresets = async (launched: LaunchedApp) => {
   await timespinnerPreset(launched, presets);
   const reopened = await reopenAndSeeChanges(launched);
   await exportYaml(launched, reopened);
-  await closeLayer(launched.page, 'Presets');
+  await closeHub(launched.page, 'Multiworld');
 };
 
 export { buildPresets };
