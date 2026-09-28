@@ -13,6 +13,10 @@
       "types": "./src/index.d.mts",
       "default": "./src/index.mjs"
     },
+    "./provision": {
+      "types": "./src/provision/index.d.mts",
+      "default": "./src/provision/index.mjs"
+    },
     "./package.json": "./package.json"
   },
   "bin": {

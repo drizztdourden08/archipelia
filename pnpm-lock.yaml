@@ -100,13 +100,13 @@ importers:
     devDependencies:
       '@drizztdourden08/brock-build':
         specifier: link:X:/brock/packages/build
-        version: link:../brock/packages/build
+        version: link:../../../brock/packages/build
       '@drizztdourden08/brock-lint-config':
         specifier: link:X:/brock/packages/lint-config
-        version: link:../brock/packages/lint-config
+        version: link:../../../brock/packages/lint-config
       '@drizztdourden08/brock-thread':
         specifier: link:X:/brock/packages/thread
-        version: link:../brock/packages/thread
+        version: link:../../../brock/packages/thread
       jscpd:
         specifier: 'catalog:'
         version: 4.3.0
@@ -145,19 +145,19 @@ importers:
         version: link:../../packages/sessions
       '@drizztdourden08/brock-core':
         specifier: link:X:/brock/packages/core
-        version: link:../../../brock/packages/core
+        version: link:../../../../../brock/packages/core
       '@drizztdourden08/brock-electron':
         specifier: link:X:/brock/packages/electron
-        version: link:../../../brock/packages/electron
+        version: link:../../../../../brock/packages/electron
       '@drizztdourden08/brock-react':
         specifier: link:X:/brock/packages/react
-        version: link:../../../brock/packages/react
+        version: link:../../../../../brock/packages/react
       '@drizztdourden08/brock-secrets':
         specifier: link:X:/brock/packages/modules/secrets
-        version: link:../../../brock/packages/modules/secrets
+        version: link:../../../../../brock/packages/modules/secrets
       '@drizztdourden08/tessera':
         specifier: link:X:/tessera
-        version: link:../../../tessera
+        version: link:../../../../../tessera
       '@electron-toolkit/utils':
         specifier: 'catalog:'
         version: 4.0.0(electron@42.11.8)
@@ -188,10 +188,10 @@ importers:
     devDependencies:
       '@drizztdourden08/brock-build':
         specifier: link:X:/brock/packages/build
-        version: link:../../../brock/packages/build
+        version: link:../../../../../brock/packages/build
       '@drizztdourden08/brock-lint-config':
         specifier: link:X:/brock/packages/lint-config
-        version: link:../../../brock/packages/lint-config
+        version: link:../../../../../brock/packages/lint-config
       '@types/node':
         specifier: 'catalog:'
         version: 24.19.0
@@ -251,7 +251,7 @@ importers:
         version: link:../model
       '@drizztdourden08/brock-core':
         specifier: link:X:/brock/packages/core
-        version: link:../../../brock/packages/core
+        version: link:../../../../../brock/packages/core
       fflate:
         specifier: 'catalog:'
         version: 0.8.3
@@ -261,7 +261,7 @@ importers:
     devDependencies:
       '@drizztdourden08/brock-lint-config':
         specifier: link:X:/brock/packages/lint-config
-        version: link:../../../brock/packages/lint-config
+        version: link:../../../../../brock/packages/lint-config
       '@types/node':
         specifier: 'catalog:'
         version: 24.19.0
@@ -279,11 +279,11 @@ importers:
         version: link:../model
       '@drizztdourden08/brock-core':
         specifier: link:X:/brock/packages/core
-        version: link:../../../brock/packages/core
+        version: link:../../../../../brock/packages/core
     devDependencies:
       '@drizztdourden08/brock-lint-config':
         specifier: link:X:/brock/packages/lint-config
-        version: link:../../../brock/packages/lint-config
+        version: link:../../../../../brock/packages/lint-config
       '@types/node':
         specifier: 'catalog:'
         version: 24.19.0
@@ -304,14 +304,14 @@ importers:
         version: link:../model
       '@drizztdourden08/brock-core':
         specifier: link:X:/brock/packages/core
-        version: link:../../../brock/packages/core
+        version: link:../../../../../brock/packages/core
       ssh2:
         specifier: 'catalog:'
         version: 1.17.0
     devDependencies:
       '@drizztdourden08/brock-lint-config':
         specifier: link:X:/brock/packages/lint-config
-        version: link:../../../brock/packages/lint-config
+        version: link:../../../../../brock/packages/lint-config
       '@types/node':
         specifier: 'catalog:'
         version: 24.19.0
@@ -329,7 +329,7 @@ importers:
     devDependencies:
       '@drizztdourden08/brock-lint-config':
         specifier: link:X:/brock/packages/lint-config
-        version: link:../../../brock/packages/lint-config
+        version: link:../../../../../brock/packages/lint-config
       '@types/node':
         specifier: 'catalog:'
         version: 24.19.0
@@ -347,11 +347,11 @@ importers:
         version: link:../model
       '@drizztdourden08/brock-core':
         specifier: link:X:/brock/packages/core
-        version: link:../../../brock/packages/core
+        version: link:../../../../../brock/packages/core
     devDependencies:
       '@drizztdourden08/brock-lint-config':
         specifier: link:X:/brock/packages/lint-config
-        version: link:../../../brock/packages/lint-config
+        version: link:../../../../../brock/packages/lint-config
       '@types/node':
         specifier: 'catalog:'
         version: 24.19.0
@@ -378,7 +378,7 @@ importers:
         version: link:../presets
       '@drizztdourden08/brock-core':
         specifier: link:X:/brock/packages/core
-        version: link:../../../brock/packages/core
+        version: link:../../../../../brock/packages/core
       fflate:
         specifier: 'catalog:'
         version: 0.8.3
@@ -388,7 +388,7 @@ importers:
     devDependencies:
       '@drizztdourden08/brock-lint-config':
         specifier: link:X:/brock/packages/lint-config
-        version: link:../../../brock/packages/lint-config
+        version: link:../../../../../brock/packages/lint-config
       '@types/node':
         specifier: 'catalog:'
         version: 24.19.0

@@ -1,5 +1,6 @@
 {
   "$schema": "https://unpkg.com/knip@5/schema.json",
+  "ignore": [".worktrees/**"],
   "workspaces": {
     ".": {
       "entry": [".markdownlint-cli2.mjs", "brock.workspace.mjs", "eslint.config.mjs", "stylelint.config.mjs"],
