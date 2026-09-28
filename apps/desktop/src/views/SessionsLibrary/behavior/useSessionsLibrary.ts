@@ -1,9 +1,10 @@
 /* @layer renderer-app @kind hook */
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { dialogs, useNavigation } from '@drizztdourden08/brock-react';
+import { dialogs } from '@drizztdourden08/brock-react';
 import { secretsApi } from '@drizztdourden08/brock-secrets/renderer';
 import type { ServerEntry, SessionTemplate } from '@archipelia/model';
 import { archipeliaApi } from '../../../ipc/archipelia-api';
+import { useAppNavigation } from '../../../navigation/useAppNavigation';
 import { useLibraryStore } from '../../../state/useLibraryStore';
 import { useRunsStore } from '../../../state/useRunsStore';
 import { useKeyedGuard } from '../../../state/useKeyedGuard';
@@ -16,7 +17,7 @@ const useSessionsLibrary = () => {
   const runs = useRunsStore((state) => state.runs);
   const loadRuns = useRunsStore((state) => state.load);
   const removeRun = useRunsStore((state) => state.remove);
-  const { open } = useNavigation();
+  const { openSession } = useAppNavigation();
   const [editing, setEditing] = useState<SessionTemplate | null>(null);
   const [servers, setServers] = useState<ServerEntry[]>([]);
   const [query, setQuery] = useState('');
@@ -52,7 +53,7 @@ const useSessionsLibrary = () => {
     });
   }, [byId, guard, removeTemplate]);
 
-  const openRun = useCallback((id: string) => open('session', { sessionId: id }), [open]);
+  const openRun = openSession;
 
   const deleteRun = useCallback((id: string) => {
     const run = runs.find((entry) => entry.id === id);

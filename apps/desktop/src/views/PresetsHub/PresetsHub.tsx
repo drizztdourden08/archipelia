@@ -1,15 +1,14 @@
 /* @layer renderer-app @kind component */
 import { Box } from '@drizztdourden08/tessera/primitives';
 import { Dialog, MasterDetailLayout } from '@drizztdourden08/tessera/composites';
-import type { PresetsHubProps } from './PresetsHub.type';
 import { usePresetsHub } from './behavior/usePresetsHub';
 import { PresetList } from './sub-components/PresetList';
 import { PresetDetail } from './sub-components/PresetDetail';
 import { CreatePresetDialog } from './sub-components/CreatePresetDialog';
 import './PresetsHub.css';
 
-const PresetsHub = ({ presetId }: PresetsHubProps) => {
-  const { actions, creator, error, groups, loading, openGames, openNew, schema, selected, selection, total } = usePresetsHub(presetId);
+const PresetsHub = () => {
+  const { actions, creator, error, groups, loading, openGames, openNew, schema, selected, selection, total } = usePresetsHub();
 
   return (
     <Box className="presets-hub">

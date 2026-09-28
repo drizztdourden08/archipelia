@@ -1,6 +1,6 @@
 /* @layer renderer-app @kind hook */
 import { useCallback, useEffect, useMemo } from 'react';
-import { useNavigation } from '@drizztdourden08/brock-react';
+import { useAppNavigation } from '../../../navigation/useAppNavigation';
 import { useRunsStore } from '../../../state/useRunsStore';
 import { generateTextOf } from './generate-text-of';
 import { hostLinesOf } from './host-lines-of';
@@ -16,7 +16,7 @@ const useRunProgress = (launch: RunLaunch | null, onClose: () => void) => {
   const hostLogs = useRunsStore((state) => state.logs);
   const streamed = useRunsStore((state) => state.generateLines);
   const cancelRun = useRunsStore((state) => state.cancel);
-  const { open } = useNavigation();
+  const { openSession } = useAppNavigation();
 
   const session = useMemo(() => (launch ? findLaunchedRun(runs, launch) : undefined), [runs, launch]);
   const sessionId = session?.id;
@@ -28,8 +28,8 @@ const useRunProgress = (launch: RunLaunch | null, onClose: () => void) => {
   useEffect(() => {
     if (!launch || launch.inspect || !sessionId || status !== 'hosting') return;
     onClose();
-    open('session', { sessionId });
-  }, [launch, onClose, open, sessionId, status]);
+    openSession(sessionId);
+  }, [launch, onClose, openSession, sessionId, status]);
 
   const generateText = generateTextOf(logText, streamed, sessionId);
   const logRows = useMemo(

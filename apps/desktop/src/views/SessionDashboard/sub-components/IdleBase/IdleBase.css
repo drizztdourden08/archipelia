@@ -1,0 +1,6 @@
+/* @layer renderer-app @kind style */
+.idle-base {
+  flex: 1;
+  min-height: 0;
+  text-align: center;
+}

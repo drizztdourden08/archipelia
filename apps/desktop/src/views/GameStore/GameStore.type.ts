@@ -15,4 +15,6 @@ type GameTab = 'installed' | 'official' | 'community' | 'updates';
 
 type GameRow = { entry: CatalogEntry; installed?: InstalledGame; latest?: CatalogVersion; state: GameRowState };
 
-export type { CardHandlers, GameRow, GameRowState, GameTab };
+type GameStoreProps = { tab: GameTab };
+
+export type { CardHandlers, GameRow, GameRowState, GameStoreProps, GameTab };

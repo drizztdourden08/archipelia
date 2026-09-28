@@ -6,8 +6,6 @@ type ActionParams = { select: (id: string | null) => void; report: (message: str
 
 type StartOption = { value: string; label: string };
 
-type PresetsHubProps = { presetId?: string };
-
 type PresetRow = { preset: GamePreset; changed: number; meta: string };
 
 type PresetGroup = { game: string; schema?: GameSchema; rows: PresetRow[] };
@@ -16,4 +14,4 @@ type PresetCreatorParams = { installed: InstalledGame[]; onCreated: (id: string)
 
 type PresetCreator = ReturnType<typeof usePresetCreator>;
 
-export type { ActionParams, PresetCreator, PresetCreatorParams, PresetGroup, PresetRow, PresetsHubProps, StartOption };
+export type { ActionParams, PresetCreator, PresetCreatorParams, PresetGroup, PresetRow, StartOption };

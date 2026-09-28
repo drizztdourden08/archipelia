@@ -8,7 +8,7 @@ export default defineBrockConfig({
     appId: 'com.drizztdourden08.archipelia',
     description: 'The Archipelago multiworld workflow in one app.',
     author: { name: 'drizztdourden_', email: 'drizztdourden08@users.noreply.github.com' },
-    icons: { ico: 'public/logos/icon.ico', png256: 'public/logos/logo-256.png' },
+    icons: { brand: 'archipelia' },
   },
   targets: ['desktop'],
   modules: ['secrets'],

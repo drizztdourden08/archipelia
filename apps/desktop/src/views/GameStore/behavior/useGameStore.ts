@@ -9,10 +9,9 @@ import { filterRows } from './filter-rows';
 import type { InstallRequest } from '../../../ipc/contract.type';
 import { APWORLD } from '../GameStore.constants';
 
-const useGameStore = () => {
+const useGameStore = (tab: GameTab) => {
   const { catalog, official, installed, loadGames, install, removeGame } = useLibraryStore();
   const { filePicker } = usePlatform();
-  const [tab, setTab] = useState<GameTab>('installed');
   const [query, setQuery] = useState('');
   const { busy, error, guard } = useKeyedGuard();
 
@@ -29,7 +28,7 @@ const useGameStore = () => {
     if (picked) await install({ kind: 'file', fileName: picked.name, bytes: picked.bytes });
   }), [guard, filePicker, install]);
 
-  return { addFromFile, busy, catalog, error, installWorld, installed, query, refresh, remove, rows, setQuery, setTab, tab, visible };
+  return { addFromFile, busy, catalog, error, installWorld, installed, query, refresh, remove, rows, setQuery, visible };
 };
 
 export { useGameStore };

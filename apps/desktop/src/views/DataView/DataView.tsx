@@ -1,43 +1,42 @@
 /* @layer renderer-app @kind component */
-import { formatBytes } from '@drizztdourden08/brock-core/format';
-import { Button, ButtonRow, Card, Grid, Stack, StatRow, Text } from '@drizztdourden08/tessera/primitives';
+import { Button, ButtonRow, Card, Icon, Stack, Text } from '@drizztdourden08/tessera/primitives';
 import { CLEAN_DAYS } from './DataView.constants';
+import type { DataViewProps } from './DataView.type';
 import { useDataView } from './behavior/useDataView';
+import { DataOverview } from './sub-components/DataOverview';
 
-const DataView = () => {
+const DataView = ({ part }: DataViewProps) => {
   const { busy, clean, exportLibrary, importLibrary, message, reveal, runs, stale, summary } = useDataView();
   return (
     <Stack>
-      <Stack gap="xs">
-        <Text as="h1" variant="title">Data</Text>
-        <Text variant="caption">{summary ? `${summary.location.path} · ${formatBytes(summary.totalBytes)}` : 'Reading the data folder'}</Text>
-      </Stack>
-      <ButtonRow align="start">
-        <Button variant="secondary" disabled={!summary?.location.canReveal} onClick={reveal}>Open folder</Button>
-        <Button variant="secondary" disabled={busy} onClick={exportLibrary}>Export presets and templates</Button>
-        <Button variant="secondary" disabled={busy} onClick={importLibrary}>Import</Button>
-      </ButtonRow>
-      {message && <Text variant="body" role="status">{message}</Text>}
-      <Grid minColWidth={240} gap="md">
-        {(summary?.domains ?? []).map((domain) => (
-          <Card key={domain.domain}>
-            <Stack gap="xs">
-              <Text variant="subtitle">{domain.label}</Text>
-              <StatRow label="Files" value={String(domain.count)} />
-              <StatRow label="Size" value={formatBytes(domain.bytes)} />
-            </Stack>
-          </Card>
-        ))}
-      </Grid>
-      <Card>
-        <Stack gap="xs">
-          <Text variant="subtitle">Session runs</Text>
-          <Text variant="body">{runs.length} runs kept, {stale.length} older than {CLEAN_DAYS} days.</Text>
+      {part === 'overview' && <DataOverview summary={summary} onReveal={reveal} />}
+      {part === 'runs' && (
+        <Card>
+          <Stack gap="xs">
+            <Text variant="body">{runs.length} runs kept, {stale.length} older than {CLEAN_DAYS} days.</Text>
+            <ButtonRow align="start">
+              <Button variant="secondary" disabled={busy || stale.length === 0} onClick={clean}><Icon name="trash-2" />Remove runs older than {CLEAN_DAYS} days</Button>
+            </ButtonRow>
+          </Stack>
+        </Card>
+      )}
+      {part === 'export' && (
+        <Stack gap="sm">
+          <Text variant="body">Saves every preset and session template to one zip file.</Text>
           <ButtonRow align="start">
-            <Button variant="secondary" disabled={busy || stale.length === 0} onClick={clean}>Remove runs older than {CLEAN_DAYS} days</Button>
+            <Button variant="primary" disabled={busy} onClick={exportLibrary}><Icon name="upload" />Export presets and templates</Button>
           </ButtonRow>
         </Stack>
-      </Card>
+      )}
+      {part === 'import' && (
+        <Stack gap="sm">
+          <Text variant="body">Adds the presets and templates from an exported zip file.</Text>
+          <ButtonRow align="start">
+            <Button variant="primary" disabled={busy} onClick={importLibrary}><Icon name="download" />Import a zip file</Button>
+          </ButtonRow>
+        </Stack>
+      )}
+      {message && <Text variant="body" role="status">{message}</Text>}
     </Stack>
   );
 };

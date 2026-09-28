@@ -1,7 +1,8 @@
 /* @layer renderer-app @kind component */
-import { useNavigation } from '@drizztdourden08/brock-react';
 import { useCallback } from 'react';
-import { Button, EmptyState, Stack, Text } from '@drizztdourden08/tessera/primitives';
+import { Stack, Text } from '@drizztdourden08/tessera/primitives';
+import { SECTION } from '../../navigation/app-navigation.constants';
+import { useAppNavigation } from '../../navigation/useAppNavigation';
 import type { SessionDashboardProps } from './SessionDashboard.type';
 import { useSessionDashboard } from './behavior/useSessionDashboard';
 import { useLiveRoom } from './behavior/useLiveRoom';
@@ -11,6 +12,7 @@ import { hostLabel } from './behavior/host-label';
 import { progressLabel } from './behavior/progress-label';
 import { statusView } from './behavior/status-view';
 import { SessionStatusBar } from '../../compounds/SessionStatusBar';
+import { IdleBase } from './sub-components/IdleBase';
 import { SessionSummary } from './sub-components/SessionSummary';
 import { SessionWidgets } from './sub-components/SessionWidgets';
 import './SessionDashboard.css';
@@ -19,14 +21,11 @@ const SessionDashboard = ({ sessionId }: SessionDashboardProps) => {
   const board = useSessionDashboard(sessionId);
   const live = useLiveRoom(board.session, board.lines);
   const dock = useSessionDock();
-  const { open } = useNavigation();
-  const openSessions = useCallback(() => open('sessions'), [open]);
+  const { openSection } = useAppNavigation();
+  const openSessions = useCallback(() => openSection(SECTION.sessions), [openSection]);
 
   const { session } = board;
-  if (!session) {
-    const message = board.loaded ? 'No room is hosting right now. Start one from Sessions.' : 'Loading sessions';
-    return <EmptyState message={message} action={<Button variant="primary" onClick={openSessions}>Open Sessions</Button>} />;
-  }
+  if (!session) return <IdleBase loaded={board.loaded} onOpenSessions={openSessions} />;
 
   const status = statusView(session.status);
   return (
