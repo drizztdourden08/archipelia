@@ -1,0 +1,14 @@
+/* @layer renderer-app @kind style */
+.run-row__when {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.run-row__error {
+  color: var(--c-danger);
+  overflow-wrap: anywhere;
+}
+
+.run-row .list-item-row__action {
+  opacity: 1;
+}

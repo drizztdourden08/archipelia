@@ -1,0 +1,13 @@
+/* @layer renderer-app @kind style */
+.preset-editor__name {
+  min-width: var(--size-256);
+}
+
+.preset-editor__problems,
+.preset-editor__status--error {
+  color: var(--c-danger-bright);
+}
+
+.preset-editor__status--info {
+  color: var(--c-text-muted);
+}

@@ -1,0 +1,30 @@
+/* @layer renderer-app @kind style */
+.player-row {
+  display: grid;
+  grid-template-columns: var(--size-32) minmax(var(--size-128), 1fr) minmax(var(--size-160), 1.4fr) minmax(var(--size-160), 1.4fr) var(--size-128) auto;
+  gap: var(--space-sm);
+  align-items: start;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-md);
+}
+
+.player-row--selected {
+  background: var(--c-selected);
+}
+
+.player-row__slot {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  padding-top: var(--space-xs);
+}
+
+.player-row__file {
+  font-family: var(--font-mono);
+  overflow-wrap: anywhere;
+}
+
+@media (width <= 60rem) {
+  .player-row {
+    grid-template-columns: var(--size-32) 1fr 1fr;
+  }
+}

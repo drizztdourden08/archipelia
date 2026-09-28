@@ -1,0 +1,30 @@
+/* @layer renderer-app @kind style */
+.log-lines {
+  flex: 1;
+  min-height: 0;
+}
+
+.log-lines__panel .log-panel__tag--send,
+.log-lines__panel .log-panel__msg--send {
+  color: var(--c-info-bright);
+}
+
+.log-lines__panel .log-panel__tag--hint,
+.log-lines__panel .log-panel__msg--hint {
+  color: var(--c-warning-bright);
+}
+
+.log-lines__panel .log-panel__tag--join,
+.log-lines__panel .log-panel__msg--join {
+  color: var(--c-success-bright);
+}
+
+.log-lines__panel .log-panel__tag--error,
+.log-lines__panel .log-panel__msg--error {
+  color: var(--c-danger-bright);
+}
+
+.log-lines__panel .log-panel__tag--info,
+.log-lines__panel .log-panel__tag--text {
+  color: var(--c-text-faint);
+}

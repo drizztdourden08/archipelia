@@ -1,0 +1,35 @@
+{
+  "name": "@archipelia/catalog",
+  "version": "0.1.0",
+  "description": "Archipelia catalog: reads the community apworld index into catalog entries, cached by content hash.",
+  "type": "module",
+  "private": true,
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=24"
+  },
+  "exports": {
+    ".": "./src/index.ts",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "src"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "lint": "tsc --noEmit && eslint ."
+  },
+  "devDependencies": {
+    "@drizztdourden08/brock-lint-config": "link:X:/brock/packages/lint-config",
+    "@types/node": "catalog:",
+    "eslint": "catalog:",
+    "typescript": "catalog:"
+  },
+  "dependencies": {
+    "@archipelia/engine": "workspace:*",
+    "@archipelia/model": "workspace:*",
+    "smol-toml": "catalog:",
+    "@drizztdourden08/brock-core": "link:X:/brock/packages/core",
+    "fflate": "catalog:"
+  }
+}

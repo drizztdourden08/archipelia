@@ -1,0 +1,18 @@
+{
+  "ap": {
+    "version": "0.6.7",
+    "commit": "debe4cf035c7c15efe6fb95f72343af0d420c68c",
+    "url": "https://codeload.github.com/ArchipelagoMW/Archipelago/tar.gz/debe4cf035c7c15efe6fb95f72343af0d420c68c"
+  },
+  "python": {
+    "version": "3.12.14",
+    "release": "20260924",
+    "targets": {
+      "win32-x64": { "file": "cpython-3.12.14+20260924-x86_64-pc-windows-msvc-install_only.tar.gz", "sha256": "c5303174bc29f5205decf6721ac549d4eb41c448f9b8c46cbc562d00348865bb" },
+      "linux-x64": { "file": "cpython-3.12.14+20260924-x86_64-unknown-linux-gnu-install_only.tar.gz", "sha256": "5eae8cf79dd47fc2496a4fccc892936be831ce7a84d984b2299dfb1cdb592682" },
+      "darwin-arm64": { "file": "cpython-3.12.14+20260924-aarch64-apple-darwin-install_only.tar.gz", "sha256": "9763f43db2481a6af36af82ec40302aab7a73632f880129d07a6e81aec846277" }
+    }
+  },
+  "skipRequirements": ["kivy", "kivymd", "pyshortcuts"],
+  "extraRequirements": ["requests==2.32.5", "setuptools==80.9.0"]
+}

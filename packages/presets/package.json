@@ -1,0 +1,32 @@
+{
+  "name": "@archipelia/presets",
+  "version": "0.1.0",
+  "description": "Archipelia presets: per-game option presets, their store, and option values resolved and checked against a game schema.",
+  "type": "module",
+  "private": true,
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=24"
+  },
+  "exports": {
+    ".": "./src/index.ts",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "src"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "lint": "tsc --noEmit && eslint ."
+  },
+  "devDependencies": {
+    "@drizztdourden08/brock-lint-config": "link:X:/brock/packages/lint-config",
+    "@types/node": "catalog:",
+    "eslint": "catalog:",
+    "typescript": "catalog:"
+  },
+  "dependencies": {
+    "@archipelia/model": "workspace:*",
+    "@drizztdourden08/brock-core": "link:X:/brock/packages/core"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "name": "@archipelia/engine-bundle",
+  "version": "0.1.0",
+  "description": "Builds the Archipelia engine: a standalone Python with the pinned Archipelago source and its dependencies.",
+  "type": "module",
+  "private": true,
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=24"
+  },
+  "exports": {
+    ".": {
+      "types": "./src/index.d.mts",
+      "default": "./src/index.mjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "engine-bundle": "./bin/engine-bundle.mjs"
+  },
+  "scripts": {
+    "build": "node bin/engine-bundle.mjs",
+    "lint": "eslint ."
+  },
+  "devDependencies": {
+    "eslint": "catalog:"
+  },
+  "dependencies": {
+    "fflate": "catalog:"
+  }
+}

@@ -1,0 +1,7 @@
+node_modules/
+.user-data/
+tooling/engine-bundle/dist/
+dist/
+coverage/
+*.log
+*.tsbuildinfo

@@ -1,0 +1,41 @@
+/* @layer renderer-app @kind config */
+import type { HostLogLine } from '@archipelia/hosts';
+import type { HostTarget, SessionStatus } from '@archipelia/model';
+import type { WidgetPersistenceIO } from '@drizztdourden08/tessera/composites';
+import type { LogTab, SessionText, StatusView } from './SessionDashboard.type';
+
+const IDLE: SessionText = { value: null, loading: false };
+
+const TICK_MS = 1000;
+
+const COPIED_MS = 2000;
+
+const NO_LINES: HostLogLine[] = [];
+
+const HOST_LABEL: Record<HostTarget['kind'], string> = { local: 'local', 'archipelago-gg': 'archipelago.gg', remote: 'remote' };
+
+const STATUS_VIEW: Record<SessionStatus, StatusView> = {
+  draft: { label: 'DRAFT', variant: 'neutral' },
+  generating: { label: 'GENERATING', variant: 'warning' },
+  starting: { label: 'STARTING', variant: 'warning' },
+  hosting: { label: 'HOSTING', variant: 'success' },
+  stopped: { label: 'STOPPED', variant: 'neutral' },
+  failed: { label: 'FAILED', variant: 'danger' },
+};
+
+const GENERATE_LOG = 'generate.log';
+
+const LOG_TAB_LABEL: Record<LogTab, string> = { server: 'Server', generate: 'Generate', spoiler: 'Spoiler' };
+
+const KIND_RULES: readonly [RegExp, string][] = [
+  [/\[Hint\]/, 'hint'],
+  [/\(Team #\d+\) .+ sent .+ to /, 'send'],
+  [/ has (joined|left)/, 'join'],
+  [/error|exception|traceback/i, 'error'],
+];
+
+const MAX_SENT = 40;
+
+const LOCAL_ONLY: WidgetPersistenceIO = { load: () => Promise.resolve(null), save: () => Promise.resolve() };
+
+export { COPIED_MS, GENERATE_LOG, HOST_LABEL, IDLE, KIND_RULES, LOCAL_ONLY, LOG_TAB_LABEL, MAX_SENT, NO_LINES, STATUS_VIEW, TICK_MS };

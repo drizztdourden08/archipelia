@@ -1,0 +1,6 @@
+/* @layer renderer-app @kind style */
+.option-group-tabs__search {
+  flex: 1;
+  min-width: var(--size-192);
+  max-width: var(--size-384);
+}

@@ -1,0 +1,36 @@
+/* @layer renderer-app @kind style */
+.run-progress-panel__line {
+  font-family: var(--font-mono);
+}
+
+.run-progress-panel__step {
+  font-family: var(--font-mono);
+}
+
+.run-progress-panel__step--done {
+  color: var(--c-success);
+}
+
+.run-progress-panel__step--current {
+  color: var(--c-primary-bright);
+}
+
+.run-progress-panel__step--pending {
+  color: var(--c-text-faint);
+}
+
+.run-progress-panel__step--failed,
+.run-progress-panel__error {
+  color: var(--c-danger);
+}
+
+.run-progress-panel__log {
+  display: flex;
+  flex-direction: column;
+  height: var(--size-288);
+}
+
+.run-progress-panel__log .log-panel__tag--error,
+.run-progress-panel__log .log-panel__msg--error {
+  color: var(--c-danger);
+}

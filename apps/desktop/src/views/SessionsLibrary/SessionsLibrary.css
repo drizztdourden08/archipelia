@@ -1,0 +1,5 @@
+/* @layer renderer-app @kind style */
+.sessions-library__columns > * {
+  flex: 1 1 var(--size-384);
+  min-width: 0;
+}

@@ -1,0 +1,18 @@
+/* @layer renderer-app @kind style */
+.session-builder__columns > * {
+  flex: 1 1 var(--size-384);
+  min-width: 0;
+}
+
+.session-builder__error,
+.session-builder__problem {
+  color: var(--c-danger);
+}
+
+.session-builder__override-rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  max-height: var(--size-512);
+  overflow-y: auto;
+}

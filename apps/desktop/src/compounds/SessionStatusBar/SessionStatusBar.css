@@ -1,0 +1,17 @@
+/* @layer renderer-app @kind style */
+.session-status-bar {
+  padding: var(--space-sm) var(--space-md);
+  background: var(--c-surface);
+  border: var(--border-width-thin) solid var(--c-hairline);
+  border-radius: var(--radius-lg);
+}
+
+.session-status-bar__fact {
+  white-space: nowrap;
+}
+
+.session-status-bar__value {
+  color: var(--c-text);
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}

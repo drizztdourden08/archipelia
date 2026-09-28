@@ -1,0 +1,5 @@
+/* @layer renderer-app @kind style */
+.player-status-row__checks {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}

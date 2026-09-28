@@ -1,0 +1,36 @@
+/* @layer renderer-app @kind style */
+.option-field {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md) var(--space-lg);
+  padding: var(--space-md) 0;
+  border-top: var(--border-width-thin) solid var(--c-hairline);
+}
+
+.option-field--problem {
+  border-top-color: var(--c-danger);
+}
+
+.option-field__description {
+  white-space: pre-line;
+  color: var(--c-text-muted);
+}
+
+.option-field__hint {
+  color: var(--c-text-faint);
+}
+
+.option-field__about {
+  flex: 2 1 var(--size-224);
+  min-width: 0;
+}
+
+.option-field__control {
+  flex: 1 1 var(--size-224);
+  max-width: var(--size-384);
+  min-width: 0;
+}
+
+.option-field__problem {
+  color: var(--c-danger-bright);
+}

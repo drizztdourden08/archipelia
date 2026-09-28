@@ -1,0 +1,39 @@
+packages:
+  - apps/*
+  - packages/*
+  - tooling/*
+
+catalog:
+  '@electron-toolkit/utils': ^4.0.0
+  '@types/node': ^24.19.0
+  '@types/react': ^19.2.15
+  '@types/react-dom': ^19.2.3
+  '@types/ssh2': ^1.15.5
+  '@vitejs/plugin-react': ^5.2.0
+  archipelago.js: ^2.1.0
+  electron: ^42.2.0
+  electron-builder: ^26.8.1
+  electron-vite: ^5.0.0
+  eslint: ^10.4.0
+  fflate: ^0.8.3
+  eslint-plugin-react-hooks: ^7.1.1
+  jscpd: ^4.0.5
+  knip: ^5.65.0
+  markdownlint-cli2: ^0.22.1
+  playwright-core: ^1.63.0
+  react: ^19.2.6
+  react-dom: ^19.2.6
+  smol-toml: ^1.4.2
+  ssh2: ^1.17.0
+  stylelint: ^17.13.0
+  stylelint-config-standard: ^40.0.0
+  typescript: ^6.0.3
+  typescript-eslint: ^8.60.1
+  vite: ^7.3.3
+  vitest: ^4.1.11
+  yaml: ^2.9.1
+  zustand: ^5.0.13
+
+onlyBuiltDependencies:
+  - electron
+  - esbuild

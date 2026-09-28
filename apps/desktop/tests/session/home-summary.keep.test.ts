@@ -1,0 +1,64 @@
+/* @layer tests @kind test */
+import { describe, expect, test } from 'vitest';
+import type { GamePreset, InstalledGame, Session } from '@archipelia/model';
+import { engineHeadline } from '../../src/views/HomeView/behavior/engine-headline';
+import { engineMeta } from '../../src/views/HomeView/behavior/engine-meta';
+import { engineValue } from '../../src/views/HomeView/behavior/engine-value';
+import { gamesMeta } from '../../src/views/HomeView/behavior/games-meta';
+import { needsEngineSetup } from '../../src/views/HomeView/behavior/needs-engine-setup';
+import { newestRuns } from '../../src/views/HomeView/behavior/newest-runs';
+import { presetsMeta } from '../../src/views/HomeView/behavior/presets-meta';
+import { relativeTime } from '../../src/views/HomeView/behavior/relative-time';
+import { sessionMeta } from '../../src/views/HomeView/behavior/session-meta';
+import { summaryLine } from '../../src/views/HomeView/behavior/summary-line';
+
+const MINUTE = 60_000;
+const DAY = 24 * 60 * MINUTE;
+
+const game = (name: string) => ({ game: name }) as InstalledGame;
+const preset = (gameName: string) => ({ game: gameName }) as GamePreset;
+
+const run = (id: string, createdAt: number): Session => ({
+  id,
+  createdAt,
+  status: 'stopped',
+  snapshot: {
+    id: 't', name: id, updatedAt: 0,
+    players: [{ slot: 1, name: 'Johnny', game: 'ALttP', source: { kind: 'yaml', fileName: 'a.yaml', yaml: '' } }],
+    generator: { spoiler: 1, race: false, progressionBalancing: true },
+    server: { hintCost: 10, releaseMode: 'auto', collectMode: 'auto', remainingMode: 'goal', autoShutdownMinutes: 0 },
+    host: { kind: 'archipelago-gg' },
+  },
+});
+
+describe('home summary', () => {
+  test('engine headline, value and setup need', () => {
+    const ready = { state: 'ready', dir: 'x', apVersion: '0.6.7' } as const;
+    expect(engineHeadline(ready)).toBe('Good to go');
+    expect(engineHeadline(null)).toBe('Checking the engine');
+    expect(engineValue(ready)).toBe('0.6.7');
+    expect(engineValue({ state: 'missing', dir: 'x' })).toBe('missing');
+    expect(engineMeta({ state: 'failed', dir: 'x', error: 'pip failed' })).toBe('pip failed');
+    expect(needsEngineSetup({ state: 'missing', dir: 'x' })).toBe(true);
+    expect(needsEngineSetup(ready)).toBe(false);
+    expect(summaryLine(ready, { games: 1, presets: 5, templates: 2 })).toBe('Engine AP 0.6.7 ready · 1 game installed · 5 presets · 2 templates');
+  });
+
+  test('games and presets meta', () => {
+    expect(gamesMeta([])).toBe('none installed yet');
+    expect(gamesMeta(['A', 'B', 'C', 'D', 'E'].map(game))).toBe('A · B · C +2');
+    expect(presetsMeta(['A', 'A', 'B'].map(preset))).toBe('across 2 games');
+    expect(presetsMeta([])).toBe('across 0 games');
+  });
+
+  test('relative time and recent runs', () => {
+    const now = 10 * DAY;
+    expect(relativeTime(now - 10_000, now)).toBe('just now');
+    expect(relativeTime(now - (5 * MINUTE), now)).toBe('5 min ago');
+    expect(relativeTime(now - (3 * 60 * MINUTE), now)).toBe('3 h ago');
+    expect(relativeTime(now - (2 * DAY), now)).toBe('2 d ago');
+    const runs = [run('a', 1), run('b', 4), run('c', 3), run('d', 2)];
+    expect(newestRuns(runs, 3).map((r) => r.id)).toEqual(['b', 'c', 'd']);
+    expect(sessionMeta(run('a', now - (2 * DAY)), now)).toBe('archipelago.gg · 1 player · stopped 2 d ago');
+  });
+});

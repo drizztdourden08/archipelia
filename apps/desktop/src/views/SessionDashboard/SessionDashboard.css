@@ -1,0 +1,40 @@
+/* @layer renderer-app @kind style */
+.session-dashboard {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.session-dashboard > * {
+  flex-shrink: 0;
+}
+
+.session-dashboard__dock {
+  position: relative;
+  flex: 1 0 auto;
+  min-height: calc(var(--size-256) + var(--size-320));
+  overflow: hidden;
+  background: var(--c-bg);
+  border: var(--border-width-thin) solid var(--c-hairline);
+  border-radius: var(--radius-lg);
+}
+
+.session-panel {
+  padding: var(--space-sm);
+}
+
+.session-panel--fill {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.session-panel__mono {
+  font-family: var(--font-mono);
+  overflow-wrap: anywhere;
+}
+
+.session-panel .list-item-row__action {
+  opacity: 1;
+}
