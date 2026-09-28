@@ -1,6 +1,7 @@
 /* @layer tests @kind test */
 import { expect, test } from 'vitest';
 import { onlineFromLog } from '../../src/widgets/live-room/online-from-log';
+import { presenceOf } from '../../src/widgets/live-room/presence-of';
 import { withPresence } from '../../src/widgets/live-room/with-presence';
 
 const LOG = [
@@ -21,4 +22,11 @@ test('presence overrides the stored status except a goal', () => {
   expect(withPresence('playing', true)).toBe('playing');
   expect(withPresence('goal', false)).toBe('goal');
   expect(withPresence('ready', undefined)).toBe('ready');
+});
+
+test('a slot only our tracker joined reads offline with a server log and unknown without one', () => {
+  const trackerOnly = [LOG[0] ?? ''];
+  expect(presenceOf(trackerOnly, ['Link', 'Lunais'])).toEqual({ Link: false, Lunais: false });
+  expect(presenceOf([], ['Link'])).toEqual({});
+  expect(withPresence('connected', undefined)).toBe('unknown');
 });

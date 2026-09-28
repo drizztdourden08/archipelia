@@ -4,8 +4,8 @@ import type { Session } from '@archipelia/model';
 import type { HostLogLine } from '@archipelia/hosts';
 import { useLiveRoomStore } from '../../../state/useLiveRoomStore';
 import { checksFromLog } from '../../../widgets/live-room/log-checks';
-import { onlineFromLog } from '../../../widgets/live-room/online-from-log';
 import { playerRows } from '../../../widgets/live-room/player-rows';
+import { presenceOf } from '../../../widgets/live-room/presence-of';
 import { roomPlayersOf } from '../../../widgets/live-room/room-players-of';
 import { targetKey } from '../../../widgets/live-room/target-key';
 import { watchTarget } from '../../../widgets/live-room/watch-target';
@@ -32,7 +32,7 @@ const useLiveRoom = (session: Session | null, lines: readonly HostLogLine[]) => 
   const names = useMemo(() => (planned ?? []).map((player) => player.name), [planned]);
   const texts = useMemo(() => lines.map((line) => line.text), [lines]);
   const logChecks = useMemo(() => checksFromLog(texts, names), [texts, names]);
-  const online = useMemo(() => onlineFromLog(texts), [texts]);
+  const online = useMemo(() => presenceOf(texts, names), [texts, names]);
   const live = phase === 'live' && players.length > 0;
   const rows = useMemo(
     () => playerRows({ players: live ? players : roomPlayersOf(planned ?? []), statuses: live ? statuses : {}, watched: live ? watched : null, logChecks, online }),
