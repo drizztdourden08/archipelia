@@ -15,7 +15,7 @@ const SETTINGS_TABS: [string, string][] = [
 const createProfile = async (launched: LaunchedApp) => {
   const { page } = launched;
   const profiles = dialogOf(page, 'Profiles');
-  await profiles.getByText('Create a profile to get started.').waitFor();
+  await profiles.getByText('Create a profile to get started').waitFor();
   await settledProof(launched, '01-profiles-first-boot');
   await profiles.getByRole('textbox', { name: 'Profile name' }).fill(PROFILE);
   await profiles.getByRole('button', { name: 'Create' }).click();

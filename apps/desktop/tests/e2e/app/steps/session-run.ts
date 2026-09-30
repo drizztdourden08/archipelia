@@ -19,8 +19,8 @@ const fillPlayer = async (page: Page, builder: Locator, { slot, name, game, pres
   await builder.getByRole('button', { name: 'Add player' }).click();
   const row = playerRowOf(builder, slot);
   await row.getByRole('textbox', { name: `Name of player ${slot}`, exact: true }).fill(name);
-  await pickOption(page, row.getByRole('button', { name: `Game of player ${slot}: none`, exact: true }), game);
-  await row.getByRole('button', { name: `Preset of player ${slot}: ${preset}`, exact: true }).waitFor();
+  await pickOption(page, row.getByRole('combobox', { name: `Game of player ${slot}: none`, exact: true }), game);
+  await row.getByRole('combobox', { name: `Preset of player ${slot}: ${preset}`, exact: true }).waitFor();
   for (const action of ['Edit', 'Duplicate', 'Remove']) {
     await row.getByRole('button', { name: `${action} player ${slot}`, exact: true }).waitFor();
   }
@@ -35,8 +35,8 @@ const buildSession = async (launched: LaunchedApp) => {
   await settledProof(launched, '18-sessions-new');
   for (const player of PLAYERS) await fillPlayer(page, sessions, player);
   expect(await sessions.getByRole('spinbutton', { name: 'Port', exact: true }).inputValue()).toBe(String(LOCAL_PORT));
-  expect(await sessions.getByRole('button', { name: 'Host', exact: true }).textContent()).toContain('This computer');
-  await pickOption(page, sessions.getByRole('button', { name: 'Spoiler', exact: true }), 'Full with paths');
+  expect(await sessions.getByRole('combobox', { name: 'Host', exact: true }).textContent()).toContain('This computer');
+  await pickOption(page, sessions.getByRole('combobox', { name: 'Spoiler', exact: true }), 'Full with paths');
   await sessions.getByRole('textbox', { name: 'Template name' }).fill(TEMPLATE);
   await settledProof(launched, '19-sessions-two-players');
   await sessions.getByRole('button', { name: 'Save as template' }).click();

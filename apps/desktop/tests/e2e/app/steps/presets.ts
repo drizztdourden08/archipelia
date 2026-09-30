@@ -12,7 +12,7 @@ const newPreset = async (launched: LaunchedApp, presets: Locator, game: string, 
   const { page } = launched;
   await presets.getByRole('button', { name: 'New', exact: true }).click();
   const dialog = dialogOf(page, 'New preset');
-  await pickOption(page, dialog.getByRole('button', { name: 'Game', exact: true }), game);
+  await pickOption(page, dialog.getByRole('combobox', { name: 'Game', exact: true }), game);
   await dialog.getByRole('textbox', { name: 'Name', exact: true }).fill(name);
   await dialog.getByRole('button', { name: 'Create' }).click();
   await dialog.waitFor({ state: 'detached' });
@@ -45,7 +45,7 @@ const sohPreset = async (launched: LaunchedApp, presets: Locator) => {
 const timespinnerPreset = async (launched: LaunchedApp, presets: Locator) => {
   await newPreset(launched, presets, TIMESPINNER.game, TIMESPINNER.preset);
   const row = await findOption(presets, TIMESPINNER.choice);
-  await pickOption(launched.page, row.getByRole('button', { name: new RegExp(`^${TIMESPINNER.choice}: `) }), TIMESPINNER.value);
+  await pickOption(launched.page, row.getByRole('combobox', { name: new RegExp(`^${TIMESPINNER.choice}: `) }), TIMESPINNER.value);
   await row.getByText('changed', { exact: true }).waitFor();
   await settledProof(launched, '14-presets-timespinner-choice-changed');
   await save(presets, TIMESPINNER.preset);
@@ -62,7 +62,7 @@ const reopenAndSeeChanges = async (launched: LaunchedApp) => {
   await presets.getByRole('button', { name: new RegExp(`^${TIMESPINNER.preset} 1 changed`) }).click();
   const tsRow = await findOption(presets, TIMESPINNER.choice);
   await tsRow.getByText('changed', { exact: true }).waitFor();
-  await tsRow.getByRole('button', { name: `${TIMESPINNER.choice}: ${TIMESPINNER.value}`, exact: true }).waitFor();
+  await tsRow.getByRole('combobox', { name: `${TIMESPINNER.choice}: ${TIMESPINNER.value}`, exact: true }).waitFor();
   await tsRow.getByRole('button', { name: `Reset ${TIMESPINNER.choice}`, exact: true }).waitFor();
   await settledProof(launched, '16-presets-timespinner-reopened');
   return presets;

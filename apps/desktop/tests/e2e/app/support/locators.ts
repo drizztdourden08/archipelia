@@ -31,7 +31,12 @@ const hub = (page: Page, title: HubTitle) => dialogOf(page, title);
 
 const base = (page: Page) => page.locator('.session-dashboard, .idle-base');
 
-const pageTitle = (scope: Locator, label: string) => scope.getByRole('heading', { name: label, exact: true, level: 3 }).first();
+const MENU_LABEL_OF: Partial<Record<MenuEntry, string>> = { Home: 'Multiworld' };
+
+const sectionsNav = (scope: Locator) => scope.getByRole('navigation', { name: 'Sections' });
+
+const currentPage = (scope: Locator, label: string) =>
+  sectionsNav(scope).getByRole('button', { name: label, exact: true }).and(scope.locator('[aria-current="page"]'));
 
 const cardOf = (scope: Locator, title: string) => scope.getByRole('group', { name: title, exact: true });
 
@@ -41,15 +46,15 @@ const playerRowOf = (scope: Locator, slot: number) => scope.getByRole('group', {
 
 const openScreen = async (page: Page, entry: MenuEntry) => {
   await page.getByRole('button', { name: 'Menu', exact: true }).click();
-  await page.locator('.dropdown-menu').getByRole('button', { name: entry, exact: true }).click();
+  await page.locator('.dropdown-menu').getByRole('button', { name: MENU_LABEL_OF[entry] ?? entry, exact: true }).click();
   const opened = hub(page, HUB_OF[entry]);
-  await pageTitle(opened, PAGE_OF[entry]).waitFor();
+  await currentPage(opened, PAGE_OF[entry]).waitFor();
   return opened;
 };
 
 const openSection = async (scope: Locator, label: string) => {
-  await scope.getByRole('navigation', { name: 'Sections' }).getByRole('button', { name: label, exact: true }).click();
-  await pageTitle(scope, label).waitFor();
+  await sectionsNav(scope).getByRole('button', { name: label, exact: true }).click();
+  await currentPage(scope, label).waitFor();
   return scope;
 };
 

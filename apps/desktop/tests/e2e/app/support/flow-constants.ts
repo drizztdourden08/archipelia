@@ -2,7 +2,7 @@
 import { join } from 'node:path';
 
 const PROOF_DIR = process.env.PROOF_DIR
-  ?? 'C:/Users/drizz/AppData/Local/Temp/claude/X--relic-of-the-past/3e40cb40-b776-4e8f-ad27-a78003ca6153/scratchpad/proof/app';
+  ?? 'C:/Users/drizz/AppData/Local/Temp/claude/X--archipelia/3e40cb40-b776-4e8f-ad27-a78003ca6153/scratchpad/proof/app';
 
 const LOCAL_PORT = 38297;
 const PROFILE = 'E2E tester';
