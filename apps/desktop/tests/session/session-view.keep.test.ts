@@ -27,9 +27,9 @@ const run = (id: string, createdAt: number, patch: Partial<Session> = {}): Sessi
 });
 
 describe('session status', () => {
-  test('labels and badge variants', () => {
-    expect(statusView('hosting')).toEqual({ label: 'HOSTING', variant: 'success' });
-    expect(statusView('failed')).toEqual({ label: 'FAILED', variant: 'danger' });
+  test('labels and status tones', () => {
+    expect(statusView('hosting')).toEqual({ label: 'HOSTING', tone: 'success' });
+    expect(statusView('failed')).toEqual({ label: 'FAILED', tone: 'danger' });
     expect(statusView('stopped').label).toBe('STOPPED');
   });
 

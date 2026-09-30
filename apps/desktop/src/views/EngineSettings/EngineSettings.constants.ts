@@ -1,13 +1,13 @@
 /* @layer renderer-app @kind config */
 import type { EngineState } from '@archipelia/model';
-import type { BadgeVariant } from '@drizztdourden08/tessera/primitives';
+import type { StatusTone } from '@drizztdourden08/tessera/primitives';
 
-const BADGES: Record<EngineState | 'unknown', { label: string; variant: BadgeVariant }> = {
-  ready: { label: 'Ready', variant: 'success' },
-  building: { label: 'Setting up', variant: 'warning' },
-  missing: { label: 'Not set up', variant: 'neutral' },
-  failed: { label: 'Broken', variant: 'danger' },
-  unknown: { label: 'Checking', variant: 'neutral' },
+const STATE_VIEW: Record<EngineState | 'unknown', { label: string; tone: StatusTone }> = {
+  ready: { label: 'Ready', tone: 'success' },
+  building: { label: 'Setting up', tone: 'warning' },
+  missing: { label: 'Not set up', tone: 'neutral' },
+  failed: { label: 'Broken', tone: 'danger' },
+  unknown: { label: 'Checking', tone: 'neutral' },
 };
 
-export { BADGES };
+export { STATE_VIEW };

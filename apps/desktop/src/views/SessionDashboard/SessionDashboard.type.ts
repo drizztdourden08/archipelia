@@ -1,5 +1,5 @@
 /* @layer renderer-app @kind types */
-import type { BadgeVariant } from '@drizztdourden08/tessera/primitives';
+import type { StatusTone } from '@drizztdourden08/tessera/primitives';
 import type { useLiveRoom } from './behavior/useLiveRoom';
 
 type SessionText = { value: string | null; loading: boolean };
@@ -10,7 +10,7 @@ type SessionDashboardProps = { sessionId: string };
 
 type ConfirmActionParams = { title: string; message: string; confirmLabel: string; run: () => void };
 
-type StatusView = { label: string; variant: BadgeVariant };
+type StatusView = { label: string; tone: StatusTone };
 
 type LiveRoom = ReturnType<typeof useLiveRoom>;
 

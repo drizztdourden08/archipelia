@@ -1,5 +1,5 @@
 /* @layer renderer-app @kind component */
-import { Badge, Button, ButtonRow, Flex, Text } from '@drizztdourden08/tessera/primitives';
+import { Button, ButtonRow, Flex, Status, Text } from '@drizztdourden08/tessera/primitives';
 import type { SessionStatusBarProps } from './SessionStatusBar.type';
 import { StatusFact } from './sub-components/StatusFact';
 import { WidgetToggle } from './sub-components/WidgetToggle';
@@ -7,13 +7,13 @@ import './SessionStatusBar.css';
 
 const SessionStatusBar = (props: SessionStatusBarProps) => {
   const {
-    status, statusVariant, name, host, address, roomUrl, seed, uptime, progress, copied, stoppable,
+    status, statusTone, name, host, address, roomUrl, seed, uptime, progress, copied, stoppable,
     widgets, onToggleWidget, onResetLayout, onCopy, onStop,
   } = props;
   return (
     <Flex className="session-status-bar" align="center" justify="between" wrap gap="sm">
       <Flex align="center" wrap gap="md">
-        <Badge variant={statusVariant}>{status}</Badge>
+        <Status tone={statusTone} variant="pill">{status}</Status>
         <Text variant="subtitle">{name}</Text>
         <StatusFact label={host} value={address ?? 'no address yet'} />
         {roomUrl && <StatusFact label="room" value={roomUrl} />}

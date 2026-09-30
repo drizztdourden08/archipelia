@@ -7,12 +7,12 @@ const DATE_FORMAT = new Intl.DateTimeFormat(undefined, { month: 'short', day: 'n
 const LIVE: SessionStatus[] = ['generating', 'starting', 'hosting'];
 
 const STATUS_VIEW: Record<SessionStatus, RunStatusView> = {
-  draft: { label: 'draft', variant: 'neutral' },
-  generating: { label: 'generating', variant: 'neutral' },
-  starting: { label: 'starting', variant: 'neutral' },
-  hosting: { label: 'hosting', variant: 'success' },
-  stopped: { label: 'stopped', variant: 'warning' },
-  failed: { label: 'failed', variant: 'danger' },
+  draft: { label: 'draft', tone: 'neutral' },
+  generating: { label: 'generating', tone: 'neutral' },
+  starting: { label: 'starting', tone: 'neutral' },
+  hosting: { label: 'hosting', tone: 'success' },
+  stopped: { label: 'stopped', tone: 'warning' },
+  failed: { label: 'failed', tone: 'danger' },
 };
 
 const SPOILER_LABEL: Record<SpoilerLevel, string> = { 0: 'no spoiler', 1: 'spoiler basic', 2: 'spoiler playthrough', 3: 'spoiler full' };

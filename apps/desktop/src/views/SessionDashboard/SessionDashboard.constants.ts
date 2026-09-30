@@ -15,12 +15,12 @@ const NO_LINES: HostLogLine[] = [];
 const HOST_LABEL: Record<HostTarget['kind'], string> = { local: 'local', 'archipelago-gg': 'archipelago.gg', remote: 'remote' };
 
 const STATUS_VIEW: Record<SessionStatus, StatusView> = {
-  draft: { label: 'DRAFT', variant: 'neutral' },
-  generating: { label: 'GENERATING', variant: 'warning' },
-  starting: { label: 'STARTING', variant: 'warning' },
-  hosting: { label: 'HOSTING', variant: 'success' },
-  stopped: { label: 'STOPPED', variant: 'neutral' },
-  failed: { label: 'FAILED', variant: 'danger' },
+  draft: { label: 'DRAFT', tone: 'neutral' },
+  generating: { label: 'GENERATING', tone: 'warning' },
+  starting: { label: 'STARTING', tone: 'warning' },
+  hosting: { label: 'HOSTING', tone: 'success' },
+  stopped: { label: 'STOPPED', tone: 'neutral' },
+  failed: { label: 'FAILED', tone: 'danger' },
 };
 
 const GENERATE_LOG = 'generate.log';

@@ -4,7 +4,7 @@ import type { PlayerView } from '../../../../widgets/live-room/live-room.type';
 import type { PlayersPanelProps } from './PlayersPanel.type';
 import { LiveNotice } from '../LiveNotice';
 import { PlayerStatusRow } from '../../../../compounds/PlayerStatusRow';
-import { STATUS_VARIANT } from '../../../../widgets/live-room/client-status.constants';
+import { STATUS_TONE } from '../../../../widgets/live-room/client-status.constants';
 import { checksLabel } from '../../../../widgets/live-room/checks-label';
 
 const progressOf = ({ checked, total }: PlayerView) => (checked !== null && total ? { value: checked, max: total } : null);
@@ -22,7 +22,7 @@ const PlayersPanel = ({ rows, phase, error, onPassword }: PlayersPanelProps) => 
             name={row.name}
             game={row.game}
             status={row.status}
-            statusVariant={STATUS_VARIANT[row.status]}
+            statusTone={STATUS_TONE[row.status]}
             checks={checksLabel(row)}
             progress={progressOf(row)}
           />

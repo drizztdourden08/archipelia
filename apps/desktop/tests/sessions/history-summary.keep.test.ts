@@ -24,13 +24,13 @@ describe('template summary', () => {
 describe('run summary', () => {
   const session = (patch: Partial<Session>): Session => ({ id: 's1', status: 'hosting', createdAt: 0, snapshot: TEMPLATE, ...patch });
 
-  test('status badges follow the run state', () => {
-    expect(runSummary(session({})).status).toEqual({ label: 'hosting', variant: 'success' });
+  test('status tones follow the run state', () => {
+    expect(runSummary(session({})).status).toEqual({ label: 'hosting', tone: 'success' });
     expect(runSummary(session({})).canDelete).toBe(false);
     expect(runSummary(session({ status: 'stopped' })).canDelete).toBe(true);
-    expect(runSummary(session({ status: 'stopped' })).status.variant).toBe('warning');
+    expect(runSummary(session({ status: 'stopped' })).status.tone).toBe('warning');
     const failed = runSummary(session({ status: 'failed', error: 'boom' }));
-    expect(failed).toMatchObject({ status: { label: 'generation failed', variant: 'danger' }, error: 'boom', hasLog: true });
+    expect(failed).toMatchObject({ status: { label: 'generation failed', tone: 'danger' }, error: 'boom', hasLog: true });
   });
 });
 

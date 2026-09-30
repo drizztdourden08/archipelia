@@ -1,7 +1,7 @@
 /* @layer renderer-app @kind component */
 import { useCallback } from 'react';
 import { ListItemRow } from '@drizztdourden08/tessera/composites';
-import { Badge, Button, ButtonRow, Stack, Text } from '@drizztdourden08/tessera/primitives';
+import { Button, ButtonRow, Stack, Status, Text } from '@drizztdourden08/tessera/primitives';
 import type { RunRowProps } from './RunRow.type';
 import './RunRow.css';
 
@@ -17,7 +17,7 @@ const RunRow = ({ id, when, name, host, status, error, hasLog, canDelete, busy, 
   );
   const actions = (
     <ButtonRow gap="xs">
-      <Badge variant={status.variant}>{status.label}</Badge>
+      <Status tone={status.tone}>{status.label}</Status>
       {hasLog && <Button size="sm" variant="ghost" onClick={showLog}>Show log</Button>}
       <Button size="sm" variant="ghost" disabled={busy === true || !canDelete} onClick={remove}>Delete</Button>
       <Button size="sm" variant="secondary" onClick={open}>Open</Button>

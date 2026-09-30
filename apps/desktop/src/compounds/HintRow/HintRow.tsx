@@ -1,9 +1,9 @@
 /* @layer renderer-app @kind component */
 import { ListItemRow } from '@drizztdourden08/tessera/composites';
-import { Badge, Stack, Text } from '@drizztdourden08/tessera/primitives';
+import { Stack, Status, Text } from '@drizztdourden08/tessera/primitives';
 import type { HintRowProps } from './HintRow.type';
 
-const HintRow = ({ item, receiver, finder, location, entrance, state, stateVariant }: HintRowProps) => {
+const HintRow = ({ item, receiver, finder, location, entrance, state, stateTone }: HintRowProps) => {
   const name = `${receiver}'s ${item}`;
   const meta = (
     <Stack gap="xs">
@@ -11,8 +11,8 @@ const HintRow = ({ item, receiver, finder, location, entrance, state, stateVaria
       {entrance && <Text variant="caption">{`via ${entrance}`}</Text>}
     </Stack>
   );
-  const badge = <Badge variant={stateVariant}>{state}</Badge>;
-  return <ListItemRow role="listitem" name={name} meta={meta} action={badge} />;
+  const stateLabel = <Status tone={stateTone}>{state}</Status>;
+  return <ListItemRow role="listitem" name={name} meta={meta} action={stateLabel} />;
 };
 
 export { HintRow };

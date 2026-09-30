@@ -1,12 +1,12 @@
 /* @layer renderer-app @kind types */
-import type { BadgeVariant } from '@drizztdourden08/tessera/primitives';
+import type { StatusTone } from '@drizztdourden08/tessera/primitives';
 
 type RunRowProps = {
   id: string;
   when: string;
   name: string;
   host: string;
-  status: { label: string; variant: BadgeVariant };
+  status: { label: string; tone: StatusTone };
   error?: string;
   hasLog: boolean;
   canDelete: boolean;

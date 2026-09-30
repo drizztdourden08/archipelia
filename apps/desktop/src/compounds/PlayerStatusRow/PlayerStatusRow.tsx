@@ -1,10 +1,10 @@
 /* @layer renderer-app @kind component */
 import { ListItemRow } from '@drizztdourden08/tessera/composites';
-import { Badge, ProgressBar, Stack, Text } from '@drizztdourden08/tessera/primitives';
+import { ProgressBar, Stack, Status, Text } from '@drizztdourden08/tessera/primitives';
 import type { PlayerStatusRowProps } from './PlayerStatusRow.type';
 import './PlayerStatusRow.css';
 
-const PlayerStatusRow = ({ slot, name, game, status, statusVariant, checks, progress }: PlayerStatusRowProps) => {
+const PlayerStatusRow = ({ slot, name, game, status, statusTone, checks, progress }: PlayerStatusRowProps) => {
   const meta = (
     <Stack gap="xs">
       <Text variant="caption">{game}</Text>
@@ -13,7 +13,7 @@ const PlayerStatusRow = ({ slot, name, game, status, statusVariant, checks, prog
   );
   const action = (
     <Stack gap="xs" align="end">
-      <Badge variant={statusVariant}>{status}</Badge>
+      <Status tone={statusTone}>{status}</Status>
       <Text variant="caption" className="player-status-row__checks">{checks}</Text>
     </Stack>
   );

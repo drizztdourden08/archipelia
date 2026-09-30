@@ -1,6 +1,6 @@
 /* @layer renderer-app @kind component */
 import { ListItemRow, MasterDetailLayout } from '@drizztdourden08/tessera/composites';
-import { Badge, Button, ButtonRow, EmptyState, Flex, Stack, Text } from '@drizztdourden08/tessera/primitives';
+import { Button, ButtonRow, EmptyState, Flex, Stack, Status, Text } from '@drizztdourden08/tessera/primitives';
 import { useServerManager } from './behavior/useServerManager';
 import { ServerForm } from './sub-components/ServerForm';
 import { ServerTestPanel } from './sub-components/ServerTestPanel';
@@ -17,7 +17,7 @@ const ServerManager = () => {
       {manager.servers.map((entry) => (
         <ListItemRow key={entry.id} name={entry.label} selected={draft?.id === entry.id} onClick={() => manager.select(entry)}
           meta={`${entry.host} · ${entry.auth.kind === 'ssh-key' ? 'SSH key' : 'password'}`}
-          action={entry.lastTest ? <Badge variant={entry.lastTest.ok ? 'success' : 'danger'}>{entry.lastTest.ok ? 'tested' : 'failing'}</Badge> : undefined} />
+          action={entry.lastTest ? <Status tone={entry.lastTest.ok ? 'success' : 'danger'}>{entry.lastTest.ok ? 'tested' : 'failing'}</Status> : undefined} />
       ))}
       <Text variant="caption">Passwords and key passphrases stay encrypted in the vault and are only used by the app itself.</Text>
     </Stack>

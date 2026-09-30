@@ -1,5 +1,5 @@
 /* @layer renderer-app @kind types */
-import type { BadgeVariant } from '@drizztdourden08/tessera/primitives';
+import type { StatusTone } from '@drizztdourden08/tessera/primitives';
 
 type HintRowProps = {
   item: string;
@@ -8,7 +8,7 @@ type HintRowProps = {
   location: string;
   entrance: string;
   state: string;
-  stateVariant: BadgeVariant;
+  stateTone: StatusTone;
 };
 
 export type { HintRowProps };

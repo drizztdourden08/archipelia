@@ -6,16 +6,16 @@ import { DATA_HUB, MULTIWORLD_HUB, SECTION } from './navigation/app-navigation.c
 const openSection = (section: string) => () => nav.open(MULTIWORLD_HUB, { section });
 
 const MENU: MenuEntry[] = [
-  { key: 'home', label: 'Home', onClick: openSection(SECTION.home) },
+  { key: 'multiworld', label: 'Multiworld', icon: 'layers', onClick: openSection(SECTION.home) },
   'separator',
-  { key: 'sessions', label: 'Sessions', onClick: openSection(SECTION.sessions) },
-  { key: 'games', label: 'Games', onClick: openSection(SECTION.games) },
-  { key: 'presets', label: 'Presets', onClick: openSection(SECTION.presets) },
-  { key: 'servers', label: 'Servers', onClick: openSection(SECTION.servers) },
+  { key: 'sessions', label: 'Sessions', icon: 'layers', onClick: openSection(SECTION.sessions) },
+  { key: 'games', label: 'Games', icon: 'gamepad-2', onClick: openSection(SECTION.games) },
+  { key: 'presets', label: 'Presets', icon: 'sliders-horizontal', onClick: openSection(SECTION.presets) },
+  { key: 'servers', label: 'Servers', icon: 'server', onClick: openSection(SECTION.servers) },
   'separator',
-  { key: 'data', label: 'Data', onClick: () => nav.open(DATA_HUB) },
-  { key: 'settings', label: 'Settings', screen: 'settings' },
-  { key: 'about', label: 'About', screen: 'about' },
+  { key: 'data', label: 'Data', icon: 'hard-drive', onClick: () => nav.open(DATA_HUB) },
+  { key: 'settings', label: 'Settings', icon: 'settings', screen: 'settings' },
+  { key: 'about', label: 'About', icon: 'info', screen: 'about' },
 ];
 
 export { MENU };

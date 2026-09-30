@@ -11,7 +11,7 @@ const readFrames = (page: Page) => page.evaluate(() => {
   const dock = document.querySelector('[aria-label="Session widgets"]');
   if (!dock) return null;
   const box = dock.getBoundingClientRect();
-  const frames = [...dock.querySelectorAll('.widget--docked')].map((node) => {
+  const frames = [...dock.querySelectorAll('.dock-layout__pane .widget')].map((node) => {
     const rect = node.getBoundingClientRect();
     const title = node.querySelector('.widget__title')?.textContent ?? '';
     return { title, left: rect.left, top: rect.top, right: rect.right, bottom: rect.bottom };

@@ -3,7 +3,7 @@ import { Stack, Text } from '@drizztdourden08/tessera/primitives';
 import type { HintsPanelProps } from './HintsPanel.type';
 import { LiveNotice } from '../LiveNotice';
 import { HintRow } from '../../../../compounds/HintRow';
-import { HINT_VARIANT } from '../../../../widgets/live-room/hint-rows.constants';
+import { HINT_TONE } from '../../../../widgets/live-room/hint-rows.constants';
 
 const HintsPanel = ({ rows, phase, error, onPassword }: HintsPanelProps) => (
   <Stack gap="sm" className="session-panel">
@@ -20,7 +20,7 @@ const HintsPanel = ({ rows, phase, error, onPassword }: HintsPanelProps) => (
             location={row.location}
             entrance={row.entrance}
             state={row.state}
-            stateVariant={HINT_VARIANT[row.state]}
+            stateTone={HINT_TONE[row.state]}
           />
         ))}
       </Stack>

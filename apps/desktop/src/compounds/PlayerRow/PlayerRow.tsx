@@ -1,7 +1,7 @@
 /* @layer renderer-app @kind component */
 import { useCallback } from 'react';
 import type { ChangeEvent } from 'react';
-import { Badge, Box, Button, ButtonRow, Select, Stack, Text, TextInput } from '@drizztdourden08/tessera/primitives';
+import { Box, Button, ButtonRow, Select, Stack, Status, Text, TextInput } from '@drizztdourden08/tessera/primitives';
 import { optionLabel } from './behavior/option-label';
 import type { PlayerRowProps } from './PlayerRow.type';
 import './PlayerRow.css';
@@ -47,7 +47,7 @@ const PlayerRow = (props: PlayerRowProps) => {
         )}
       </Stack>
       <Box>
-        <Badge variant={changed ? 'warning' : 'neutral'}>{overrides}</Badge>
+        <Status tone={changed ? 'warning' : 'neutral'}>{overrides}</Status>
       </Box>
       <ButtonRow gap="xs" align="end">
         <Button size="sm" variant={selected ? 'secondary' : 'ghost'} disabled={!canEdit} aria-label={`Edit ${player}`} onClick={edit}>Edit</Button>

@@ -1,7 +1,7 @@
 /* @layer renderer-app @kind component */
 import { useCallback } from 'react';
 import { ListItemRow } from '@drizztdourden08/tessera/composites';
-import { Badge, Button, ButtonRow } from '@drizztdourden08/tessera/primitives';
+import { Button, ButtonRow, Tag } from '@drizztdourden08/tessera/primitives';
 import type { TemplateRowProps } from './TemplateRow.type';
 
 const TemplateRow = ({ id, name, meta, playersLabel, busy, onEdit, onRun, onDuplicate, onDelete }: TemplateRowProps) => {
@@ -11,7 +11,7 @@ const TemplateRow = ({ id, name, meta, playersLabel, busy, onEdit, onRun, onDupl
   const remove = useCallback(() => onDelete(id), [id, onDelete]);
   const actions = (
     <ButtonRow gap="xs">
-      <Badge variant="neutral">{playersLabel}</Badge>
+      <Tag>{playersLabel}</Tag>
       <Button size="sm" variant="ghost" onClick={edit}>Edit</Button>
       <Button size="sm" variant="ghost" disabled={busy} onClick={duplicate}>Duplicate</Button>
       <Button size="sm" variant="ghost" disabled={busy} onClick={remove}>Delete</Button>

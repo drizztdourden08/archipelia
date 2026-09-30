@@ -11,6 +11,9 @@ import { assertLaunchable } from './preflight';
 const APP_DIR = join(import.meta.dirname, '../../../..');
 const MAIN = join(APP_DIR, 'dist', 'electron', 'main.js');
 const HEADLESS = ['--no-focus', '--muted'];
+const APP_PAGE = '/renderer/index.html';
+const WINDOW_TIMEOUT_MS = 60000;
+const POLL_MS = 100;
 
 type LaunchedApp = { app: ElectronApplication; page: Page; userData: string; proofDir: string };
 
@@ -18,6 +21,14 @@ const electronBinary = (): string => {
   const resolved: unknown = createRequire(join(APP_DIR, 'package.json'))('electron');
   if (typeof resolved !== 'string') throw new Error('the electron package did not resolve to a binary path');
   return resolved;
+};
+
+const appWindow = async (app: ElectronApplication, until = Date.now() + WINDOW_TIMEOUT_MS): Promise<Page> => {
+  const found = app.windows().find((win) => win.url().includes(APP_PAGE));
+  if (found) return found;
+  if (Date.now() > until) throw new Error('the app window never opened');
+  await new Promise((resolve) => { setTimeout(resolve, POLL_MS); });
+  return appWindow(app, until);
 };
 
 const launchApp = async (proofDir: string): Promise<LaunchedApp> => {
@@ -33,7 +44,7 @@ const launchApp = async (proofDir: string): Promise<LaunchedApp> => {
   app.process().stdout?.on('data', (chunk: Buffer) => output.push(chunk.toString()));
   app.process().stderr?.on('data', (chunk: Buffer) => output.push(chunk.toString()));
   try {
-    const page = await app.firstWindow({ timeout: 60000 });
+    const page = await appWindow(app);
     await page.waitForLoadState('domcontentloaded');
     return { app, page, userData, proofDir };
   } catch (err) {

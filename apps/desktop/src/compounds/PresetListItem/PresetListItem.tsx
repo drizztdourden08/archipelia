@@ -1,7 +1,7 @@
 /* @layer renderer-app @kind component */
 import { useCallback } from 'react';
 import { ListItemRow } from '@drizztdourden08/tessera/composites';
-import { Badge } from '@drizztdourden08/tessera/primitives';
+import { Status } from '@drizztdourden08/tessera/primitives';
 import type { PresetListItemProps } from './PresetListItem.type';
 
 const PresetListItem = ({ id, name, meta, selected, unavailable, onSelect }: PresetListItemProps) => {
@@ -12,7 +12,7 @@ const PresetListItem = ({ id, name, meta, selected, unavailable, onSelect }: Pre
       meta={meta}
       selected={selected}
       onClick={handleClick}
-      action={unavailable ? <Badge variant="neutral">not installed</Badge> : undefined}
+      action={unavailable ? <Status tone="neutral">not installed</Status> : undefined}
     />
   );
 };

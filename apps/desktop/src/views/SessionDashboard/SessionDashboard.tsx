@@ -32,7 +32,7 @@ const SessionDashboard = ({ sessionId }: SessionDashboardProps) => {
     <Stack gap="md" className="session-dashboard">
       <SessionStatusBar
         status={status.label}
-        statusVariant={status.variant}
+        statusTone={status.tone}
         name={session.snapshot.name}
         host={hostLabel(session.snapshot.host)}
         address={board.address}
@@ -51,7 +51,7 @@ const SessionDashboard = ({ sessionId }: SessionDashboardProps) => {
       {board.error && <Text variant="body" role="alert">{board.error}</Text>}
       {session.error && <Text variant="body" role="alert">{session.error}</Text>}
       <SessionSummary players={live.players} hints={live.hints} phase={live.phase} uptime={board.uptime} status={status.label} />
-      <SessionWidgets session={session} lines={board.lines} live={live} layout={dock.layout} onUpdate={dock.update} onClose={dock.close} />
+      <SessionWidgets session={session} lines={board.lines} live={live} layout={dock.layout} onLayoutChange={dock.setLayout} />
     </Stack>
   );
 };

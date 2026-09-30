@@ -9,11 +9,13 @@ const requestOf = ({ entry, latest }: GameRow): InstallRequest | undefined => {
   return latest ? { kind: 'index', apworld: entry.apworld, version: latest.version } : undefined;
 };
 
-const badgeOf = ({ state, latest, entry }: GameRow): GameCardProps['badge'] => {
-  if (state === 'installed') return { label: 'Installed', variant: 'success' };
-  if (state === 'update') return { label: `Update ${latest?.version}`, variant: 'warning' };
-  return entry.stability === 'unknown' ? undefined : { label: entry.stability, variant: 'neutral' };
+const statusOf = ({ state, latest }: GameRow): GameCardProps['status'] => {
+  if (state === 'installed') return { label: 'Installed', tone: 'success' };
+  return state === 'update' ? { label: `Update ${latest?.version}`, tone: 'warning' } : undefined;
 };
+
+const tagOf = (row: GameRow): string | undefined =>
+  (statusOf(row) || row.entry.stability === 'unknown' ? undefined : row.entry.stability);
 
 const versionLine = ({ installed, latest }: GameRow) => {
   if (installed) return `Installed ${installed.version}`;
@@ -36,7 +38,8 @@ const cardPropsOf = (row: GameRow, { busy, installWorld, remove, openHome }: Car
   return {
     title: row.entry.displayName,
     source: SOURCE_LABEL[row.entry.source],
-    badge: badgeOf(row),
+    status: statusOf(row),
+    tag: tagOf(row),
     details: detailsOf(row),
     actions: [...install, ...removal, ...home],
   };

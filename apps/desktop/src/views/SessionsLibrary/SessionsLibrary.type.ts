@@ -1,6 +1,6 @@
 /* @layer renderer-app @kind types */
-import type { BadgeVariant } from '@drizztdourden08/tessera/primitives';
+import type { StatusTone } from '@drizztdourden08/tessera/primitives';
 
-type RunStatusView = { label: string; variant: BadgeVariant };
+type RunStatusView = { label: string; tone: StatusTone };
 
 export type { RunStatusView };

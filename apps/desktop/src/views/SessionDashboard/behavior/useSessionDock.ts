@@ -1,19 +1,24 @@
 /* @layer renderer-app @kind hook */
-import { useWidgetLayout } from '@drizztdourden08/tessera/composites';
-import { useMemo } from 'react';
+import { isWidgetOpen, useWidgetLayout } from '@drizztdourden08/tessera/composites';
+import { useCallback, useMemo } from 'react';
 import { SESSION_DOCK_KEY, SESSION_WIDGETS } from '../../../widgets/widget-registry.constants';
 import { LOCAL_ONLY } from '../SessionDashboard.constants';
 import { SESSION_DOCK_PRESET } from '../../../widgets/session-dock.constants';
+import { openSessionWidget } from '../../../widgets/open-session-widget';
 
 const useSessionDock = () => {
-  const { layout, update, close, toggle, reset } = useWidgetLayout({
+  const { layout, setLayout, close, reset } = useWidgetLayout({
     definitions: SESSION_WIDGETS, profileId: null, io: LOCAL_ONLY, storageKey: SESSION_DOCK_KEY, preset: SESSION_DOCK_PRESET,
   });
   const toggles = useMemo(
-    () => SESSION_WIDGETS.map(({ id, label }) => ({ id, label, visible: layout.widgets.find((w) => w.id === id)?.visible ?? false })),
-    [layout.widgets],
+    () => SESSION_WIDGETS.map(({ id, label }) => ({ id, label, visible: isWidgetOpen(layout, id) })),
+    [layout],
   );
-  return { close, layout, reset, toggle, toggles, update };
+  const toggle = useCallback(
+    (id: string) => (isWidgetOpen(layout, id) ? close(id) : setLayout(openSessionWidget(layout, id))),
+    [layout, close, setLayout],
+  );
+  return { layout, reset, setLayout, toggle, toggles };
 };
 
 export { useSessionDock };

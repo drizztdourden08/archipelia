@@ -1,11 +1,11 @@
 /* @layer renderer-app @kind types */
-import type { BadgeVariant } from '@drizztdourden08/tessera/primitives';
+import type { StatusTone } from '@drizztdourden08/tessera/primitives';
 
 type StatusBarWidget = { id: string; label: string; visible: boolean };
 
 type SessionStatusBarProps = {
   status: string;
-  statusVariant: BadgeVariant;
+  statusTone: StatusTone;
   name: string;
   host: string;
   address: string | null;

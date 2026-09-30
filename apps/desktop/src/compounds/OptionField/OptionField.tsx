@@ -1,6 +1,6 @@
 /* @layer renderer-app @kind component */
 import { useCallback, useMemo, useState } from 'react';
-import { Badge, Box, Button, Flex, Stack, Text } from '@drizztdourden08/tessera/primitives';
+import { Box, Button, Flex, Stack, Status, Tag, Text } from '@drizztdourden08/tessera/primitives';
 import { descriptionPreview } from './behavior/description-preview';
 import type { OptionFieldProps } from './OptionField.type';
 import './OptionField.css';
@@ -14,7 +14,7 @@ const OptionField = ({ label, description, hint, changed, advanced, problem, onR
       <Stack gap="xs" className="option-field__about">
         <Flex gap="sm" align="center" wrap>
           <Text variant="label">{label}</Text>
-          {advanced && <Badge variant="neutral">advanced</Badge>}
+          {advanced && <Tag>advanced</Tag>}
         </Flex>
         {description && <Text variant="caption" className="option-field__description">{expanded ? description.trim() : preview}</Text>}
         {long && (
@@ -26,7 +26,7 @@ const OptionField = ({ label, description, hint, changed, advanced, problem, onR
       </Stack>
       <Stack gap="xs" className="option-field__control">
         <Flex gap="sm" align="center" justify="end">
-          {changed && <Badge variant="warning">changed</Badge>}
+          {changed && <Status tone="warning">changed</Status>}
           <Button size="sm" variant="tertiary" aria-label={`Reset ${label}`} onClick={onReset} disabled={!changed}>Reset</Button>
         </Flex>
         {children}

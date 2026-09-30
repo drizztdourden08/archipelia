@@ -4,15 +4,14 @@ import { WidgetManager } from '@drizztdourden08/tessera/composites';
 import type { SessionDockProps } from './SessionDock.type';
 import { SESSION_WIDGETS } from '../../../../widgets/widget-registry.constants';
 
-const SessionDock = ({ layout, content, onUpdate, onClose }: SessionDockProps) => (
+const SessionDock = ({ layout, content, onLayoutChange }: SessionDockProps) => (
   <Box className="session-dashboard__dock" role="region" aria-label="Session widgets">
     <WidgetManager
       definitions={SESSION_WIDGETS}
       layout={layout}
+      onLayoutChange={onLayoutChange}
       contextActive
-      bounds="container"
-      onUpdate={onUpdate}
-      onClose={onClose}
+      mainGrip="hidden"
     >
       {content}
     </WidgetManager>

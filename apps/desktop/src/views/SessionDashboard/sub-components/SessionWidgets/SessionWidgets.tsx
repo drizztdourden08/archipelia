@@ -9,7 +9,7 @@ import { RoomWidget } from '../RoomWidget';
 import { SessionDock } from '../SessionDock';
 import { SpoilerWidget } from '../SpoilerWidget';
 
-const SessionWidgets = ({ session, lines, live, layout, onUpdate, onClose }: SessionWidgetsProps) => {
+const SessionWidgets = ({ session, lines, live, layout, onLayoutChange }: SessionWidgetsProps) => {
   const { players, hints, phase, error, passwordRequired, submitPassword } = live;
   const content = useMemo(() => ({
     players: <PlayersPanel rows={players} phase={phase} error={error} onPassword={submitPassword} />,
@@ -19,7 +19,7 @@ const SessionWidgets = ({ session, lines, live, layout, onUpdate, onClose }: Ses
     spoiler: <SpoilerWidget session={session} />,
     room: <RoomWidget session={session} passwordRequired={passwordRequired} />,
   }), [session, lines, players, hints, phase, error, passwordRequired, submitPassword]);
-  return <SessionDock layout={layout} content={content} onUpdate={onUpdate} onClose={onClose} />;
+  return <SessionDock layout={layout} content={content} onLayoutChange={onLayoutChange} />;
 };
 
 export { SessionWidgets };

@@ -1,6 +1,6 @@
 /* @layer renderer-app @kind component */
 import type { ServerCheck } from '@archipelia/model';
-import { Badge, Button, Stack, StatRow, Text } from '@drizztdourden08/tessera/primitives';
+import { Button, Stack, StatRow, Status, Text } from '@drizztdourden08/tessera/primitives';
 import type { ServerTestPanelProps } from './ServerTestPanel.type';
 
 const verdictOf = (check: ServerCheck) => {
@@ -20,7 +20,7 @@ const ServerTestPanel = ({ test, pinned, busy, onTrust }: ServerTestPanelProps) 
     )}
     {test && (
       <Stack gap="xs">
-        <Badge variant={test.ok ? 'success' : 'danger'}>{test.ok ? 'Ready' : 'Not ready'}</Badge>
+        <Status tone={test.ok ? 'success' : 'danger'}>{test.ok ? 'Ready' : 'Not ready'}</Status>
         <Text variant="body">{test.message}</Text>
         {(test.checks ?? []).map((check) => (
           <StatRow key={check.name} label={check.name} value={`${verdictOf(check)}: ${check.detail}`} />

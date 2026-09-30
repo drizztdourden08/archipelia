@@ -1,7 +1,7 @@
 /* @layer renderer-app @kind component */
 import { useCallback } from 'react';
 import type { ChangeEvent } from 'react';
-import { Badge, Box, Button, ButtonRow, Flex, TextInput } from '@drizztdourden08/tessera/primitives';
+import { Box, Button, ButtonRow, Flex, Status, Tag, TextInput } from '@drizztdourden08/tessera/primitives';
 import type { EditorHeaderProps } from './EditorHeader.type';
 
 const EditorHeader = (props: EditorHeaderProps) => {
@@ -13,8 +13,8 @@ const EditorHeader = (props: EditorHeaderProps) => {
         <Box className="preset-editor__name">
           <TextInput aria-label="Preset name" placeholder="Preset name" value={name} onChange={handleName} />
         </Box>
-        <Badge variant="neutral">{gameLabel}</Badge>
-        {dirty && <Badge variant="warning">unsaved</Badge>}
+        <Tag>{gameLabel}</Tag>
+        {dirty && <Status tone="warning">unsaved</Status>}
       </Flex>
       <ButtonRow align="end">
         <Button variant="ghost" onClick={onDuplicate} disabled={busy}>Duplicate</Button>
