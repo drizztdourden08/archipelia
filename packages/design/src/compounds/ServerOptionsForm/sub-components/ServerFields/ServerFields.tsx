@@ -1,7 +1,7 @@
 /* @layer renderer-app @kind component */
 import { useCallback } from 'react';
 import type { ReleaseMode, RemainingMode } from '@archipelia/model';
-import { Button, Field, Flex, NumberInput, Select, Stack, TextInput } from '@drizztdourden08/tessera/primitives';
+import { Button, Field, Flex, NumberInput, PasswordInput, Select, Stack } from '@drizztdourden08/tessera/primitives';
 import type { ServerFieldsProps } from './ServerFields.type';
 import { RELEASE_OPTIONS, REMAINING_OPTIONS } from '../../ServerOptionsForm.constants';
 
@@ -17,7 +17,7 @@ const ServerFields = ({ server, password, hasPassword, onServer, onPassword, onC
     <Stack gap="sm">
       <Field label="Room password" hint={hasPassword ? 'A password is stored. Type to replace it.' : 'Optional. Kept in the vault, never in the template.'}>
         <Flex gap="sm" align="center">
-          <TextInput type="password" autoComplete="new-password" value={password} placeholder={hasPassword ? 'stored' : 'optional'} onChange={(event) => onPassword(event.target.value)} />
+          <PasswordInput mode="new" value={password} placeholder={hasPassword ? 'stored' : 'optional'} onChange={onPassword} />
           {hasPassword && <Button size="sm" variant="ghost" onClick={onClearPassword}>Clear</Button>}
         </Flex>
       </Field>
