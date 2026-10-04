@@ -9,7 +9,7 @@ const DataOverview = ({ summary, error, onRetry, onReveal }: DataOverviewProps) 
       <Stack gap="sm">
         <Box role="alert"><Callout tone="danger">{`Could not read the data folder: ${error}`}</Callout></Box>
         <ButtonRow align="start">
-          <Button variant="primary" onClick={onRetry}><Icon name="refresh-cw" />Retry</Button>
+          <Button variant="primary" onClick={onRetry} icon={<Icon name="refresh-cw" />}>Retry</Button>
         </ButtonRow>
       </Stack>
     );
@@ -27,8 +27,8 @@ const DataOverview = ({ summary, error, onRetry, onReveal }: DataOverviewProps) 
       <Text variant="caption">{`${summary.location.path} · ${formatBytes(summary.totalBytes)}`}</Text>
       {error && <Box role="alert"><Callout tone="danger">{`Could not refresh the data folder: ${error}`}</Callout></Box>}
       <ButtonRow align="start">
-        <Button variant="secondary" disabled={!summary.location.canReveal} onClick={onReveal}><Icon name="folder" />Open folder</Button>
-        {error && <Button variant="secondary" onClick={onRetry}><Icon name="refresh-cw" />Retry</Button>}
+        <Button variant="secondary" disabled={!summary.location.canReveal} onClick={onReveal} icon={<Icon name="folder" />}>Open folder</Button>
+        {error && <Button variant="secondary" onClick={onRetry} icon={<Icon name="refresh-cw" />}>Retry</Button>}
       </ButtonRow>
       <Grid minColWidth={240} gap="md">
         {summary.domains.map((domain) => (

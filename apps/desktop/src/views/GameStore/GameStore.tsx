@@ -21,8 +21,8 @@ const GameStore = ({ tab }: GameStoreProps) => {
         )}
         <ButtonRow>
           <SearchInput placeholder="Search worlds" aria-label="Search worlds" value={store.query} onChange={store.setQuery} />
-          <Button variant="secondary" disabled={store.isBusy()} onClick={store.refresh}><Icon name="refresh-cw" />Refresh index</Button>
-          <Button variant="secondary" disabled={store.isBusy()} onClick={store.addFromFile}><Icon name="plus" />Add from file</Button>
+          <Button variant="secondary" disabled={store.isBusy()} onClick={store.refresh} icon={<Icon name="refresh-cw" />}>Refresh index</Button>
+          <Button variant="secondary" disabled={store.isBusy()} onClick={store.addFromFile} icon={<Icon name="plus" />}>Add from file</Button>
         </ButtonRow>
       </Flex>
       {store.error && <Box role="alert"><Callout tone="danger">{store.error}</Callout></Box>}

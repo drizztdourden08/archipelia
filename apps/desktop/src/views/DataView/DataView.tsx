@@ -15,7 +15,7 @@ const DataView = ({ part }: DataViewProps) => {
           <Stack gap="xs">
             <Text variant="body">{runs.length} runs kept, {stale.length} older than {CLEAN_DAYS} days.</Text>
             <ButtonRow align="start">
-              <Button variant="danger" disabled={busy || stale.length === 0} onClick={clean}><Icon name="trash-2" />Remove runs older than {CLEAN_DAYS} days</Button>
+              <Button variant="danger" disabled={busy || stale.length === 0} onClick={clean} icon={<Icon name="trash-2" />}>Remove runs older than {CLEAN_DAYS} days</Button>
             </ButtonRow>
           </Stack>
         </Card>
@@ -24,7 +24,7 @@ const DataView = ({ part }: DataViewProps) => {
         <Stack gap="sm">
           <Text variant="body">Saves every preset and session template to one zip file.</Text>
           <ButtonRow align="start">
-            <Button variant="primary" disabled={busy} onClick={exportLibrary}><Icon name="upload" />Export presets and templates</Button>
+            <Button variant="primary" disabled={busy} onClick={exportLibrary} icon={<Icon name="upload" />}>Export presets and templates</Button>
           </ButtonRow>
         </Stack>
       )}
@@ -32,7 +32,7 @@ const DataView = ({ part }: DataViewProps) => {
         <Stack gap="sm">
           <Text variant="body">Adds the presets and templates from an exported zip file.</Text>
           <ButtonRow align="start">
-            <Button variant="primary" disabled={busy} onClick={importLibrary}><Icon name="download" />Import a zip file</Button>
+            <Button variant="primary" disabled={busy} onClick={importLibrary} icon={<Icon name="download" />}>Import a zip file</Button>
           </ButtonRow>
         </Stack>
       )}

@@ -8,7 +8,7 @@ const LibraryHeader = ({ query, onQuery, onNew }: LibraryHeaderProps) => {
       <Text variant="caption">A template is a session you can run again. History keeps every run with its outputs.</Text>
       <ButtonRow>
         <SearchInput placeholder="Filter sessions" aria-label="Filter sessions" value={query} onChange={onQuery} />
-        <Button variant="primary" onClick={onNew}><Icon name="plus" />New session</Button>
+        <Button variant="primary" onClick={onNew} icon={<Icon name="plus" />}>New session</Button>
       </ButtonRow>
     </Flex>
   );
