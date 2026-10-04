@@ -1,26 +1,48 @@
 /* @layer renderer-app @kind component */
 import { formatBytes } from '@drizztdourden08/brock-core/format';
-import { Button, ButtonRow, Card, Grid, Icon, Stack, StatRow, Text } from '@drizztdourden08/tessera/primitives';
+import { Button, ButtonRow, Card, Flex, Grid, Icon, Spinner, Stack, StatRow, Text } from '@drizztdourden08/tessera/primitives';
 import type { DataOverviewProps } from './DataOverview.type';
 
-const DataOverview = ({ summary, onReveal }: DataOverviewProps) => (
-  <Stack>
-    <Text variant="caption">{summary ? `${summary.location.path} · ${formatBytes(summary.totalBytes)}` : 'Reading the data folder'}</Text>
-    <ButtonRow align="start">
-      <Button variant="secondary" disabled={!summary?.location.canReveal} onClick={onReveal}><Icon name="folder" />Open folder</Button>
-    </ButtonRow>
-    <Grid minColWidth={240} gap="md">
-      {(summary?.domains ?? []).map((domain) => (
-        <Card key={domain.domain}>
-          <Stack gap="xs">
-            <Text variant="subtitle">{domain.label}</Text>
-            <StatRow label="Files" value={String(domain.count)} />
-            <StatRow label="Size" value={formatBytes(domain.bytes)} />
-          </Stack>
-        </Card>
-      ))}
-    </Grid>
-  </Stack>
-);
+const DataOverview = ({ summary, error, onRetry, onReveal }: DataOverviewProps) => {
+  if (!summary && error) {
+    return (
+      <Stack gap="sm">
+        <Text variant="body" role="alert">{`Could not read the data folder: ${error}`}</Text>
+        <ButtonRow align="start">
+          <Button variant="primary" onClick={onRetry}><Icon name="refresh-cw" />Retry</Button>
+        </ButtonRow>
+      </Stack>
+    );
+  }
+  if (!summary) {
+    return (
+      <Flex gap="sm" align="center">
+        <Spinner size="sm" />
+        <Text variant="caption">Reading the data folder</Text>
+      </Flex>
+    );
+  }
+  return (
+    <Stack>
+      <Text variant="caption">{`${summary.location.path} · ${formatBytes(summary.totalBytes)}`}</Text>
+      {error && <Text variant="body" role="alert">{`Could not refresh the data folder: ${error}`}</Text>}
+      <ButtonRow align="start">
+        <Button variant="secondary" disabled={!summary.location.canReveal} onClick={onReveal}><Icon name="folder" />Open folder</Button>
+        {error && <Button variant="secondary" onClick={onRetry}><Icon name="refresh-cw" />Retry</Button>}
+      </ButtonRow>
+      <Grid minColWidth={240} gap="md">
+        {summary.domains.map((domain) => (
+          <Card key={domain.domain}>
+            <Stack gap="xs">
+              <Text variant="subtitle">{domain.label}</Text>
+              <StatRow label="Files" value={String(domain.count)} />
+              <StatRow label="Size" value={formatBytes(domain.bytes)} />
+            </Stack>
+          </Card>
+        ))}
+      </Grid>
+    </Stack>
+  );
+};
 
 export { DataOverview };

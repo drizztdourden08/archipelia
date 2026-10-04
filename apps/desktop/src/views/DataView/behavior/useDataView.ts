@@ -11,13 +11,23 @@ const useDataView = () => {
   const { filePicker } = usePlatform();
   const { runs, load, remove } = useRunsStore();
   const [summary, setSummary] = useState<StorageSummary | null>(null);
+  const [summaryError, setSummaryError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
+  const loadSummary = useCallback(async () => {
+    setSummaryError(null);
+    try {
+      setSummary(await requireHostApi().getStorageSummary());
+    } catch (err) {
+      setSummaryError(err instanceof Error ? err.message : String(err));
+    }
+  }, []);
+
   const refresh = useCallback(async () => {
-    setSummary(await requireHostApi().getStorageSummary());
+    await loadSummary();
     await load();
-  }, [load]);
+  }, [load, loadSummary]);
 
   useEffect(() => { void refresh(); }, [refresh]);
 
@@ -35,6 +45,7 @@ const useDataView = () => {
 
   const stale = olderThan(runs, CLEAN_DAYS, Date.now());
   const reveal = useCallback(() => { void requireHostApi().revealDataFolder(); }, []);
+  const retrySummary = useCallback(() => { void loadSummary(); }, [loadSummary]);
   const clean = useCallback(() => guard(async () => {
     for (const run of stale) await remove(run.id);
     return `${stale.length} old runs removed`;
@@ -50,7 +61,7 @@ const useDataView = () => {
     return `Imported ${counts.presets} presets and ${counts.templates} templates`;
   }), [guard, filePicker]);
 
-  return { busy, clean, exportLibrary, importLibrary, message, reveal, runs, stale, summary };
+  return { busy, clean, exportLibrary, importLibrary, message, retrySummary, reveal, runs, stale, summary, summaryError };
 };
 
 export { useDataView };

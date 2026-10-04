@@ -6,10 +6,10 @@ import { useDataView } from './behavior/useDataView';
 import { DataOverview } from './sub-components/DataOverview';
 
 const DataView = ({ part }: DataViewProps) => {
-  const { busy, clean, exportLibrary, importLibrary, message, reveal, runs, stale, summary } = useDataView();
+  const { busy, clean, exportLibrary, importLibrary, message, retrySummary, reveal, runs, stale, summary, summaryError } = useDataView();
   return (
     <Stack>
-      {part === 'overview' && <DataOverview summary={summary} onReveal={reveal} />}
+      {part === 'overview' && <DataOverview summary={summary} error={summaryError} onRetry={retrySummary} onReveal={reveal} />}
       {part === 'runs' && (
         <Card>
           <Stack gap="xs">
