@@ -5,6 +5,7 @@ import { useSessionView } from '../hooks/useSessionView';
 
 const meta: WidgetMeta = {
   label: 'Spoiler',
+  order: 6,
   icon: 'eye-off',
   popOut: true,
   defaultVisibility: 'context-only',

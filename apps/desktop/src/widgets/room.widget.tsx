@@ -5,6 +5,7 @@ import { useSessionView } from '../hooks/useSessionView';
 
 const meta: WidgetMeta = {
   label: 'Room',
+  order: 3,
   icon: 'house',
   popOut: true,
   defaultVisibility: 'context-only',

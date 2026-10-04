@@ -5,6 +5,7 @@ import { useSessionView } from '../hooks/useSessionView';
 
 const meta: WidgetMeta = {
   label: 'Hints',
+  order: 2,
   icon: 'compass',
   popOut: true,
   defaultVisibility: 'context-only',

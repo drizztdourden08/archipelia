@@ -5,6 +5,7 @@ import { useSessionView } from '../hooks/useSessionView';
 
 const meta: WidgetMeta = {
   label: 'Players',
+  order: 1,
   icon: 'users',
   popOut: true,
   defaultVisibility: 'context-only',

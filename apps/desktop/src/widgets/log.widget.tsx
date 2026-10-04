@@ -5,6 +5,7 @@ import { useSessionView } from '../hooks/useSessionView';
 
 const meta: WidgetMeta = {
   label: 'Log',
+  order: 4,
   icon: 'file-text',
   popOut: true,
   defaultVisibility: 'context-only',
