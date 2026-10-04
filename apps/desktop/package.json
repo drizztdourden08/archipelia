@@ -40,7 +40,8 @@
     "@archipelia/engine-bundle": "workspace:*",
     "smol-toml": "catalog:",
     "ssh2": "catalog:",
-    "@electron-toolkit/utils": "catalog:"
+    "@electron-toolkit/utils": "catalog:",
+    "@archipelia/design": "workspace:*"
   },
   "devDependencies": {
     "@drizztdourden08/brock-build": "^0.9.0",
@@ -53,13 +54,13 @@
     "electron-builder": "catalog:",
     "electron-vite": "catalog:",
     "eslint": "catalog:",
-    "eslint-plugin-react-hooks": "catalog:",
     "markdownlint-cli2": "catalog:",
     "stylelint": "catalog:",
-    "stylelint-config-standard": "catalog:",
     "typescript": "catalog:",
-    "typescript-eslint": "catalog:",
     "vite": "catalog:",
     "playwright-core": "catalog:"
+  },
+  "brock": {
+    "tessera": "0.9.1"
   }
 }

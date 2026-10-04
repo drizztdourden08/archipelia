@@ -5,7 +5,7 @@ import type { SpoilerWidgetProps } from './SpoilerWidget.type';
 import { useSessionText } from '../../behavior/useSessionText';
 import { textRows } from '../../behavior/text-rows';
 import { rowsText } from '../../behavior/rows-text';
-import { LogLines } from '../../../../compounds/LogLines';
+import { LogLines } from '@archipelia/design';
 
 const SpoilerWidget = ({ session }: SpoilerWidgetProps) => {
   const file = session.output?.spoiler ?? null;

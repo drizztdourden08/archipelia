@@ -7,7 +7,7 @@ import { BuilderHeader } from './sub-components/BuilderHeader';
 import { ProblemList } from './sub-components/ProblemList';
 import { PlayersCard } from './sub-components/PlayersCard';
 import { OverridesPanel } from './sub-components/OverridesPanel';
-import { ServerOptionsForm } from '../../compounds/ServerOptionsForm';
+import { ServerOptionsForm } from '@archipelia/design';
 import './SessionBuilder.css';
 
 const SessionBuilder = ({ initial, onBack, onRun }: SessionBuilderProps) => {

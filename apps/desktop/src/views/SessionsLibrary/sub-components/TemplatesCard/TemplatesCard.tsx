@@ -1,7 +1,7 @@
 /* @layer renderer-app @kind component */
 import { Card, EmptyState, SectionHeader, Stack } from '@drizztdourden08/tessera/primitives';
 import type { TemplatesCardProps } from './TemplatesCard.type';
-import { TemplateRow } from '../../../../compounds/TemplateRow';
+import { TemplateRow } from '@archipelia/design';
 import { templateMeta } from '../../behavior/template-meta';
 import { playersLabel } from '../../behavior/players-label';
 

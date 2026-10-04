@@ -23,7 +23,7 @@ const BASE_SECTIONS: Section[] = [
     id: 'window',
     title: 'Window',
     items: [
-      { key: 'windowMode', label: 'Window mode', description: 'Windowed, borderless or fullscreen.' },
+      { key: 'windowMode', label: 'Window mode', description: 'Windowed, borderless or fullscreen.', control: { kind: 'choice', options: [{ value: 'windowed', label: 'Windowed' }, { value: 'borderless', label: 'Borderless' }, { value: 'fullscreen', label: 'Fullscreen' }] } },
       { key: 'startFullscreen', label: 'Start fullscreen', description: 'Open in fullscreen on launch.' },
     ],
   },

@@ -3,7 +3,5 @@ dist/
 release/
 out/
 *.tsbuildinfo
-.vite/
-.user-data/
 build/
 public/logos/

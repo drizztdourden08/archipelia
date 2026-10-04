@@ -1,7 +1,7 @@
 /* @layer renderer-app @kind component */
 import { useCallback, useMemo } from 'react';
 import type { ChangeEvent } from 'react';
-import { Box, Flex, Stack, TabBar, TextInput, Toggle } from '@drizztdourden08/tessera/primitives';
+import { Box, Flex, Stack, Tabs, TextInput, Toggle } from '@drizztdourden08/tessera/primitives';
 import type { OptionGroupTabsProps } from './OptionGroupTabs.type';
 import './OptionGroupTabs.css';
 
@@ -19,7 +19,7 @@ const OptionGroupTabs = (props: OptionGroupTabsProps) => {
           <Toggle checked={showAdvanced} onChange={onShowAdvancedChange} label={`Show advanced (${advancedCount})`} />
         )}
       </Flex>
-      <TabBar tabs={items} activeTab={activeTab} onTabChange={onTabChange} />
+      <Tabs tabs={items} activeTab={activeTab} onTabChange={onTabChange} />
     </Stack>
   );
 };

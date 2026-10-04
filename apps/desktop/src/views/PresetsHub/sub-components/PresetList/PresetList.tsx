@@ -1,7 +1,7 @@
 /* @layer renderer-app @kind component */
 import { Button, EmptyState, Flex, Stack, Text } from '@drizztdourden08/tessera/primitives';
 import type { PresetListProps } from './PresetList.type';
-import { PresetListItem } from '../../../../compounds/PresetListItem';
+import { PresetListItem } from '@archipelia/design';
 
 const PresetList = ({ groups, total, selectedId, loading, error, canCreate, onSelect, onNew }: PresetListProps) => (
   <Stack gap="md">

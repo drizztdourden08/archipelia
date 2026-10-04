@@ -1,7 +1,7 @@
 /* @layer renderer-app @kind logic */
 import type { CardHandlers, GameRow } from '../GameStore.type';
 import type { InstallRequest } from '../../../ipc/contract.type';
-import type { GameCardProps } from '../../../compounds/GameCard';
+import type { GameCardProps } from '@archipelia/design';
 import { SOURCE_LABEL } from '../GameStore.constants';
 
 const requestOf = ({ entry, latest }: GameRow): InstallRequest | undefined => {

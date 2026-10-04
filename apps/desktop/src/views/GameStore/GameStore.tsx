@@ -4,7 +4,7 @@ import { Button, ButtonRow, EmptyState, Flex, Grid, Icon, Stack, Text, TextInput
 import { useGameStore } from './behavior/useGameStore';
 import type { GameStoreProps } from './GameStore.type';
 import { MAX_CARDS } from './GameStore.constants';
-import { GameCard } from '../../compounds/GameCard';
+import { GameCard } from '@archipelia/design';
 import { cardPropsOf } from './behavior/card-props';
 
 const GameStore = ({ tab }: GameStoreProps) => {

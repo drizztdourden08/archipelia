@@ -11,7 +11,7 @@ import { canStop } from './behavior/can-stop';
 import { hostLabel } from './behavior/host-label';
 import { progressLabel } from './behavior/progress-label';
 import { statusView } from './behavior/status-view';
-import { SessionStatusBar } from '../../compounds/SessionStatusBar';
+import { SessionStatusBar } from '@archipelia/design';
 import { IdleBase } from './sub-components/IdleBase';
 import { SessionSummary } from './sub-components/SessionSummary';
 import { SessionWidgets } from './sub-components/SessionWidgets';

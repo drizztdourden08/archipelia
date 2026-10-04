@@ -3,7 +3,7 @@ import { Stack, Text } from '@drizztdourden08/tessera/primitives';
 import type { PlayerView } from '../../../../widgets/live-room/live-room.type';
 import type { PlayersPanelProps } from './PlayersPanel.type';
 import { LiveNotice } from '../LiveNotice';
-import { PlayerStatusRow } from '../../../../compounds/PlayerStatusRow';
+import { PlayerStatusRow } from '@archipelia/design';
 import { STATUS_TONE } from '../../../../widgets/live-room/client-status.constants';
 import { checksLabel } from '../../../../widgets/live-room/checks-label';
 

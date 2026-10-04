@@ -4,7 +4,7 @@ import type { PlayerView } from '../../../../widgets/live-room/live-room.type';
 import type { SessionSummaryProps } from './SessionSummary.type';
 import { hintCounts } from '../../../../widgets/live-room/hint-counts';
 import { SUMMARY_MIN_COL } from './SessionSummary.constants';
-import { StatCard } from '../../../../compounds/StatCard';
+import { StatCard } from '@archipelia/design';
 import { connectedCount } from '../../../../widgets/live-room/connected-count';
 
 const checksSeen = (players: readonly PlayerView[]) => players.reduce((sum, player) => sum + (player.checked ?? 0), 0);

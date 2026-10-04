@@ -3,7 +3,7 @@ import { Button } from '@drizztdourden08/tessera/primitives';
 import { DialogShell } from '@drizztdourden08/tessera/composites';
 import type { RunLaunch, RunProgressProps } from './RunProgress.type';
 import { useRunProgress } from './behavior/useRunProgress';
-import { RunProgressPanel } from '../../compounds/RunProgressPanel';
+import { RunProgressPanel } from '@archipelia/design';
 import { LOG_EMPTY } from './RunProgress.constants';
 
 const titleOf = (launch: RunLaunch | null, failed: boolean) => {

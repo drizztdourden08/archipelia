@@ -16,7 +16,6 @@ catalog:
   electron-vite: ^5.0.0
   eslint: ^10.4.0
   fflate: ^0.8.3
-  eslint-plugin-react-hooks: ^7.1.1
   jscpd: ^4.0.5
   knip: ^5.65.0
   markdownlint-cli2: ^0.22.1
@@ -26,9 +25,7 @@ catalog:
   smol-toml: ^1.4.2
   ssh2: ^1.17.0
   stylelint: ^17.13.0
-  stylelint-config-standard: ^40.0.0
   typescript: ^6.0.3
-  typescript-eslint: ^8.60.1
   vite: ^7.3.3
   vitest: ^4.1.11
   yaml: ^2.9.1

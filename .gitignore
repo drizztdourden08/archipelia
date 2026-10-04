@@ -1,8 +1,12 @@
+# Every folder that needs ignoring is a dot-folder, and the .*/ line below
+# ignores them all, at any depth. A dot-folder the repo tracks gets a ! line
+# here. Never add a line for a single dot-folder: .*/ already covers it.
+.*/
+
 node_modules/
-.user-data/
 tooling/engine-bundle/dist/
 dist/
 coverage/
 *.log
 *.tsbuildinfo
-.brock/profile-config.json
+.brock-port-slot

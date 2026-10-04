@@ -1,7 +1,7 @@
 /* @layer renderer-app @kind component */
 import { Card, EmptyState, SectionHeader, Stack } from '@drizztdourden08/tessera/primitives';
 import type { HistoryCardProps } from './HistoryCard.type';
-import { RunRow } from '../../../../compounds/RunRow';
+import { RunRow } from '@archipelia/design';
 import { runSummary } from '../../behavior/run-summary';
 
 const HistoryCard = ({ runs, total, busy, onOpen, onShowLog, onDelete }: HistoryCardProps) => (

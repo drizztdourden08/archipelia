@@ -4,7 +4,7 @@ import type { ReleaseMode, RemainingMode } from '@archipelia/model';
 import type { HostingSettingsProps } from './HostingSettings.type';
 import { DEFAULT_HOST_OPTIONS } from './HostingSettings.constants';
 import type { AppSettings } from '../../settings.type';
-import { RELEASE_OPTIONS, REMAINING_OPTIONS } from '../../compounds/ServerOptionsForm';
+import { RELEASE_OPTIONS, REMAINING_OPTIONS } from '@archipelia/design';
 
 const HostingSettings = ({ settings, onChange }: HostingSettingsProps) => (
   <Stack>

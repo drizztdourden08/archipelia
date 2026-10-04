@@ -2,7 +2,7 @@
 import { Box } from '@drizztdourden08/tessera/primitives';
 import type { LogWidgetProps } from './LogWidget.type';
 import { useLogTabs } from '../../behavior/useLogTabs';
-import { LogLines } from '../../../../compounds/LogLines';
+import { LogLines } from '@archipelia/design';
 
 const LogWidget = ({ session, lines }: LogWidgetProps) => {
   const log = useLogTabs(session, lines);

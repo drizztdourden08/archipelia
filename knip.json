@@ -1,34 +1,70 @@
 {
   "$schema": "https://unpkg.com/knip@5/schema.json",
-  "ignore": [".worktrees/**"],
   "workspaces": {
     ".": {
-      "entry": [".markdownlint-cli2.mjs", "brock.workspace.mjs", "eslint.config.mjs", "stylelint.config.mjs"],
-      "project": ["*.{mjs,ts}"],
-      "ignoreDependencies": ["@drizztdourden08/brock-lint-config", "@drizztdourden08/brock-thread"]
+      "entry": [
+        ".markdownlint-cli2.mjs",
+        "brock.workspace.mjs",
+        "eslint.config.mjs",
+        "stylelint.config.mjs"
+      ],
+      "project": [
+        "*.{mjs,ts}"
+      ]
     },
     "apps/desktop": {
       "entry": [
-        "electron/main.ts", "electron/preload.ts", "src/main.tsx", ".brock/*.ts", "brock.config.ts", "*.config.{cjs,ts,mjs}",
-        "tests/**/*.keep.test.ts", "tests/e2e/**/*.e2e.ts"
+        "electron/main.ts",
+        "electron/preload.ts",
+        "src/main.tsx",
+        "brock.config.ts",
+        "*.config.{cjs,ts,mjs}",
+        "tests/**/*.keep.test.ts",
+        "tests/e2e/**/*.e2e.ts"
       ],
-      "project": ["src/**/*.{ts,tsx}", "electron/**/*.ts", ".brock/*.ts", "tests/**/*.ts"],
+      "project": [
+        "src/**/*.{ts,tsx}",
+        "electron/**/*.ts",
+        "tests/**/*.ts"
+      ],
       "ignoreDependencies": [
-        "@drizztdourden08/brock-core", "@drizztdourden08/brock-electron", "@drizztdourden08/brock-react",
-        "@drizztdourden08/brock-secrets", "@drizztdourden08/tessera", "@electron-toolkit/utils", "smol-toml", "ssh2", "zustand"
+        "@electron-toolkit/utils",
+        "smol-toml",
+        "ssh2"
       ]
     },
     "packages/model": {
-      "project": ["src/**/*.ts"]
+      "project": [
+        "src/**/*.ts"
+      ]
     },
     "packages/*": {
-      "entry": ["tests/**/*.keep.test.ts"],
-      "project": ["src/**/*.ts", "tests/**/*.ts"],
-      "ignoreDependencies": ["@drizztdourden08/brock-core"]
+      "entry": [
+        "tests/**/*.keep.test.ts"
+      ],
+      "project": [
+        "src/**/*.ts",
+        "tests/**/*.ts"
+      ]
     },
     "tooling/engine-bundle": {
-      "entry": ["bin/*.mjs", "tests/**/*.keep.test.mjs"],
-      "project": ["src/**/*.mjs", "bin/*.mjs", "tests/**/*.mjs"]
+      "entry": [
+        "bin/*.mjs",
+        "tests/**/*.keep.test.mjs"
+      ],
+      "project": [
+        "src/**/*.mjs",
+        "bin/*.mjs",
+        "tests/**/*.mjs"
+      ]
+    },
+    "packages/design": {
+      "project": [
+        "src/**/*.{ts,tsx}"
+      ],
+      "ignoreDependencies": [
+        "vite"
+      ]
     }
   }
 }

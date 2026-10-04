@@ -11,7 +11,7 @@ const RunProgressPanel = ({ percent, line, steps, failed, error, seed, logRows, 
       <Text variant="caption" className="run-progress-panel__line">{line}</Text>
       {seed && <Tag>seed {seed}</Tag>}
     </Flex>
-    <ProgressBar value={percent} max={100} variant={failed ? 'danger' : 'primary'} live={!failed} />
+    <ProgressBar value={percent} max={100} tone={failed ? 'danger' : 'primary'} live={!failed} />
     <Stack gap="xs">
       {steps.map((step) => (
         <Text key={step.id} variant="caption" className={`run-progress-panel__step run-progress-panel__step--${failed && step.state === 'current' ? 'failed' : step.state}`}>

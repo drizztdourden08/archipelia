@@ -14,14 +14,14 @@
   },
   "packageManager": "pnpm@10.17.0",
   "scripts": {
-    "lint": "pnpm -r lint && brock prose && knip && jscpd .",
+    "lint": "pnpm -r lint && brock prose && brock knip && jscpd .",
     "lint:md": "markdownlint-cli2",
     "structure": "brock structure --check",
     "test": "vitest run",
     "build": "pnpm --filter ./apps/desktop build",
     "test:e2e": "vitest run --config vitest.e2e.config.ts",
     "prose": "brock prose",
-    "deadcode": "knip",
+    "deadcode": "brock knip",
     "duplicates": "jscpd .",
     "postinstall": "node bin/archipelia.mjs --link"
   },

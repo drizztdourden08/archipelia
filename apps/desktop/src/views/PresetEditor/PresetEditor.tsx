@@ -2,7 +2,7 @@
 import { useCallback } from 'react';
 import { Box, EmptyState, Stack, Text } from '@drizztdourden08/tessera/primitives';
 import { valueOf } from '@archipelia/presets';
-import { OptionGroupTabs } from '../../compounds/OptionGroupTabs';
+import { OptionGroupTabs } from '@archipelia/design';
 import { usePresetEditor } from './behavior/usePresetEditor';
 import type { PresetEditorProps } from './PresetEditor.type';
 import { EditorHeader } from './sub-components/EditorHeader';

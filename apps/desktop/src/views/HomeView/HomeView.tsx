@@ -9,7 +9,7 @@ import { presetsMeta } from './behavior/presets-meta';
 import { sessionMeta } from './behavior/session-meta';
 import { summaryLine } from './behavior/summary-line';
 import { CARD_MIN_COL } from './HomeView.constants';
-import { StatCard } from '../../compounds/StatCard';
+import { StatCard } from '@archipelia/design';
 import { RecentSessionRow } from './sub-components/RecentSessionRow';
 import './HomeView.css';
 
