@@ -2,7 +2,6 @@
 
 type IdleBaseProps = {
   loaded: boolean;
-  onOpenSessions: () => void;
 };
 
 export type { IdleBaseProps };

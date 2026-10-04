@@ -20,7 +20,7 @@ const createProfile = async (launched: LaunchedApp) => {
   await profiles.getByRole('textbox', { name: 'Profile name' }).fill(PROFILE);
   await profiles.getByRole('button', { name: 'Create' }).click();
   await base(page).getByText('No room is hosting right now.', { exact: true }).waitFor();
-  await base(page).getByRole('button', { name: 'Run a session' }).waitFor();
+  for (const name of ['New session', 'Games', 'Presets']) await base(page).getByRole('button', { name, exact: true }).waitFor();
   const home = await openScreen(page, 'Home');
   await home.getByRole('heading', { name: 'Multiworld', level: 2, exact: true }).waitFor();
   await expect.poll(() => home.getByText(/Engine AP 0\.6\.7 ready/).count()).toBe(1);

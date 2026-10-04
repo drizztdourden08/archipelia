@@ -2,7 +2,8 @@
 import { nav } from '@drizztdourden08/brock-react';
 import type { SearchAction } from '@drizztdourden08/brock-react';
 import type { Session } from '@archipelia/model';
-import { CREATE_PARAM, ROUTE } from '../hooks/app-navigation.constants';
+import { ROUTE } from '../hooks/app-navigation.constants';
+import { openNewSession } from '../hooks/open-new-session';
 import { useFocusStore } from '../stores/useFocusStore';
 import { ACTION_GROUP, NO_ROOM } from './search-actions.constants';
 import { refreshGames } from './refresh-games';
@@ -20,7 +21,7 @@ const searchActionsFor = (room: Session | undefined): SearchAction[] => [
     group: ACTION_GROUP,
     description: 'Open the session builder on a new session.',
     keywords: ['session', 'builder', 'run', 'multiworld'],
-    run: () => nav.open(ROUTE.sessions, { [CREATE_PARAM]: Date.now() }),
+    run: openNewSession,
   },
   {
     id: 'archipelia:install-game',

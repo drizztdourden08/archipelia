@@ -8,6 +8,7 @@ import { useRunsStore } from '../../../stores/useRunsStore';
 import { newestRuns } from './newest-runs';
 import { RECENT_COUNT } from '../HomeView.constants';
 import { needsEngineSetup } from './needs-engine-setup';
+import { openNewSession } from '../../../hooks/open-new-session';
 
 const useHome = () => {
   const { status, refresh } = useEngineStore();
@@ -25,7 +26,6 @@ const useHome = () => {
   const recent = useMemo(() => newestRuns(runs, RECENT_COUNT), [runs]);
   const last = recent[0] ?? null;
 
-  const newSession = useCallback(() => open(ROUTE.sessions), [open]);
   const openEngine = useCallback(() => open(ROUTE.engine), [open]);
 
   const runAgain = useCallback(async () => {
@@ -49,7 +49,7 @@ const useHome = () => {
   );
 
   return {
-    busy, counts, engineNeeded, error, installed, last, newSession, now, openEngine, openSession, presets, recent, runAgain, status,
+    busy, counts, engineNeeded, error, installed, last, newSession: openNewSession, now, openEngine, openSession, presets, recent, runAgain, status,
   };
 };
 
