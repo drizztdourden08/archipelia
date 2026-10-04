@@ -7,6 +7,7 @@ import { showRunJob } from '../../runs/show-run-job';
 import { useSessionsLibrary } from './behavior/useSessionsLibrary';
 import { RunsCard } from './sub-components/RunsCard';
 import { SessionsCard } from './sub-components/SessionsCard';
+import { TemplateSearchEntry } from './sub-components/TemplateSearchEntry';
 
 const SessionsLibrary = () => {
   const hub = useSessionsLibrary();
@@ -33,6 +34,7 @@ const SessionsLibrary = () => {
     <Stack>
       <Text variant="caption">A session is a saved setup you can run again. Each run makes a seed and a room, kept in Runs with its files.</Text>
       {hub.error && <Box role="alert"><Callout tone="danger">{hub.error}</Callout></Box>}
+      {hub.templates.map((template) => <TemplateSearchEntry key={template.id} template={template} servers={hub.servers} />)}
       <Grid minColWidth={384} gap="md">
         <SessionsCard
           templates={hub.visibleTemplates}

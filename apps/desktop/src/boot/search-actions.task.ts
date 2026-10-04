@@ -5,8 +5,8 @@ import { watchSearchActions } from '../search-actions/watch-search-actions';
 export default defineBootTask({
   label: 'Adding the search actions',
   after: ['runs'],
-  run: ({ report }) => {
-    watchSearchActions();
+  run: ({ report, platform }) => {
+    watchSearchActions(platform.filePicker);
     report(1);
   },
 });

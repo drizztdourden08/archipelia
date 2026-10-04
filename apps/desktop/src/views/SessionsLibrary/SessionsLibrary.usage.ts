@@ -10,7 +10,7 @@ const usage = {
     { case: 'One session being edited.', use: 'SessionBuilder' },
   ],
   rules: [
-    'Put each session in search while the page is open.',
+    'Put each session in search while the page is open, keyed by its id; picking it opens its Edit session sub-page.',
     'Open the builder as the New session or Edit session sub-page, never in place of the lists.',
     'Open a run that is still generating or starting in its job dialog, and any other run on the dashboard; Show log opens the job dialog of any run.',
     'Filter sessions and runs with the page header filter, read with usePageSearch; New session is the header primary button.',

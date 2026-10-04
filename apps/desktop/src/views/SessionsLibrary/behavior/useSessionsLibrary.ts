@@ -11,7 +11,6 @@ import { useRunsStore } from '../../../stores/useRunsStore';
 import { duplicateTemplate, passwordNameOf } from '../../SessionBuilder';
 import { matchesRun } from './matches-run';
 import { matchesTemplate } from './matches-template';
-import { useTemplateEntries } from './useTemplateEntries';
 
 const useSessionsLibrary = () => {
   const { templates, loadTemplates, saveTemplate, removeTemplate } = useLibraryStore();
@@ -29,8 +28,6 @@ const useSessionsLibrary = () => {
       setServers(await appApi().serversList());
     });
   }, [guard, loadRuns, loadTemplates]);
-
-  useTemplateEntries(templates, servers);
 
   const byId = useCallback((id: string) => templates.find((template) => template.id === id), [templates]);
 

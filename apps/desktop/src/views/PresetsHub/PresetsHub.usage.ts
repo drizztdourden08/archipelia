@@ -11,7 +11,7 @@ const usage = {
     { case: 'A preset in a list.', use: 'PresetListItem' },
   ],
   rules: [
-    'Put each preset in search while the page is open.',
+    'Put each preset in search while the page is open, keyed by its id with its presetId as the param, so picking it selects that preset.',
     'Ask before leaving a preset with unsaved changes.',
     'Ask before deleting a preset, and name what uses it.',
     'Offer to open the games store when no game is installed.',
