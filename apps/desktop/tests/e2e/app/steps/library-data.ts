@@ -38,7 +38,7 @@ const exportData = async (launched: LaunchedApp) => {
   expect((await stat(target)).size).toBeGreaterThan(0);
   await settledProof(launched, '30-data-exported');
   const job = dialogOf(page, 'Exporting data');
-  if (await job.count()) await job.getByRole('button', { name: 'Close', exact: true }).click();
+  if (await job.count()) await job.getByRole('button', { name: 'Close', exact: true }).last().click();
   await closeHub(page, 'Data');
 };
 

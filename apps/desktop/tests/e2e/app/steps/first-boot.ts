@@ -39,6 +39,7 @@ const localPortInput = async (launched: LaunchedApp) =>
   (await openSettingsTab(launched, 'Hosting')).getByRole('spinbutton', { name: 'Local port', exact: true });
 
 const setLocalPort = async (launched: LaunchedApp) => {
+  await openScreen(launched.page, 'Settings');
   const input = await localPortInput(launched);
   await input.fill(String(LOCAL_PORT));
   await input.blur();
