@@ -2,7 +2,7 @@
 import type { ComponentUsage } from '@drizztdourden08/tessera';
 
 const usage = {
-  job: 'The Multiworld home banner: the engine state, the facts with the counts, the run again action and the recent sessions.',
+  job: 'The Multiworld home banner: the engine state, the facts with the counts, the run again action and the recent runs.',
   useWhen: [
     'The hero home of the Multiworld bucket.',
   ],
@@ -17,8 +17,8 @@ const usage = {
   ],
   a11y: [
     'The hero title names the hub; the eyebrow carries the engine state.',
-    'An error is an alert; no session yet shows an empty state.',
-    'The run again button names the session it runs.',
+    'An error is an alert; no run yet shows an empty state.',
+    'The run again button names the session it runs again.',
   ],
   tree: {
     path: ['a full screen view', 'a page of the multiworld app', 'the home banner'],

@@ -8,7 +8,7 @@ const IdleBase = ({ loaded, onOpenSessions }: IdleBaseProps) => (
   <Stack gap="lg" align="center" justify="center" className="idle-base">
     <EmptyState
       icon={<ChosenMascot mascot="pelago" animation="idle" loop size="xl" />}
-      message={loaded ? 'No room is hosting right now.' : 'Loading sessions'}
+      message={loaded ? 'No room is hosting right now.' : 'Loading runs'}
       action={<Button variant="primary" icon={<Icon name="play" />} onClick={onOpenSessions}>Run a session</Button>}
     />
     <Text variant="caption">

@@ -16,5 +16,5 @@ export { RUN_STATUS, RunRow } from './compounds/RunRow';
 export type { RunStatusView } from './compounds/RunRow';
 export { ServerOptionsForm, RELEASE_OPTIONS, REMAINING_OPTIONS } from './compounds/ServerOptionsForm';
 export { SessionStatusBar } from './compounds/SessionStatusBar';
-export { TemplateRow } from './compounds/TemplateRow';
+export { SessionRow } from './compounds/SessionRow';
 export type { DesignPart } from './guide/app-tree.type';

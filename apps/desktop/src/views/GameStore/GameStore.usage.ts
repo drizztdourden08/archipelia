@@ -15,7 +15,7 @@ const usage = {
     'Pick the tab from the page tab; the view filters the rows for it.',
     'Guard each install with its world as the key, through useKeyedGuard, so its card shows it working.',
     'Cap the number of cards drawn, say how many are shown of how many, and offer Show more.',
-    'Removing a game asks first with the number of presets and templates that use it.',
+    'Removing a game asks first with the number of presets and sessions that use it.',
     'Toast each install and removal once it is done.',
   ],
   a11y: [

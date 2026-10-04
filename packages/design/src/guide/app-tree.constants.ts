@@ -46,7 +46,7 @@ const APP_TREE = [
       },
       'a hint in a live room': null,
       'a past run of a session': null,
-      'a saved session template': null,
+      'a saved session': null,
       'a preset in a list': null,
     },
   },

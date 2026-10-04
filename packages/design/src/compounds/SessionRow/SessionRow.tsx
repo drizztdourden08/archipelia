@@ -2,9 +2,9 @@
 import { useCallback } from 'react';
 import { ListItemRow } from '@drizztdourden08/tessera/composites';
 import { Button, ButtonRow, Tag } from '@drizztdourden08/tessera/primitives';
-import type { TemplateRowProps } from './TemplateRow.type';
+import type { SessionRowProps } from './SessionRow.type';
 
-const TemplateRow = ({ id, name, meta, playersLabel, busy, onEdit, onRun, onDuplicate, onDelete }: TemplateRowProps) => {
+const SessionRow = ({ id, name, meta, playersLabel, busy, onEdit, onRun, onDuplicate, onDelete }: SessionRowProps) => {
   const edit = useCallback(() => onEdit(id), [id, onEdit]);
   const run = useCallback(() => onRun(id), [id, onRun]);
   const duplicate = useCallback(() => onDuplicate(id), [id, onDuplicate]);
@@ -21,4 +21,4 @@ const TemplateRow = ({ id, name, meta, playersLabel, busy, onEdit, onRun, onDupl
   return <ListItemRow actionVisibility="always" name={name} meta={meta} action={actions} onDoubleClick={edit} />;
 };
 
-export { TemplateRow };
+export { SessionRow };

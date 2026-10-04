@@ -2,7 +2,7 @@
 import type { ComponentUsage } from '@drizztdourden08/tessera';
 
 const usage = {
-  job: 'The Export page of the Data hub: saves every preset and session template to one zip file the user picks.',
+  job: 'The Export page of the Data hub: saves every preset and saved session to one zip file the user picks.',
   useWhen: [
     'The Export page of the Data bucket.',
   ],
@@ -17,11 +17,11 @@ const usage = {
   ],
   a11y: [
     'The result is a status line, read when it changes.',
-    'The button says what it exports: Export presets and templates.',
+    'The button says what it exports: Export presets and sessions.',
   ],
   tree: {
     path: ['a full screen view', 'a page of the multiworld app', 'the data on disk', 'a library export'],
-    rule: 'Take the presets and templates to another machine or keep a backup.',
+    rule: 'Take the presets and sessions to another machine or keep a backup.',
   },
   example: `import { LibraryExport } from '../LibraryExport';
 

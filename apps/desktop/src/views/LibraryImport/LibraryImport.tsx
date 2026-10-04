@@ -6,7 +6,7 @@ const LibraryImport = () => {
   const { busy, importLibrary, message } = useLibraryImport();
   return (
     <Stack gap="sm">
-      <Text variant="body">Adds the presets and templates from an exported zip file.</Text>
+      <Text variant="body">Adds the presets and saved sessions from an exported zip file.</Text>
       <ButtonRow align="start">
         <Button variant="primary" disabled={busy} onClick={importLibrary} icon={<Icon name="download" />}>Import a zip file</Button>
       </ButtonRow>

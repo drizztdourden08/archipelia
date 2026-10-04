@@ -1,5 +1,5 @@
 /* @layer renderer-app @kind types */
-type TemplateRowProps = {
+type SessionRowProps = {
   id: string;
   name: string;
   meta: string;
@@ -11,4 +11,4 @@ type TemplateRowProps = {
   onDelete: (id: string) => void;
 };
 
-export type { TemplateRowProps };
+export type { SessionRowProps };

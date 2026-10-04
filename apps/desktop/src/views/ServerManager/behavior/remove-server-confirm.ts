@@ -4,7 +4,7 @@ import type { ServerEntry } from '@archipelia/model';
 
 const removeServerConfirm = (entry: ServerEntry): ConfirmActionOptions => ({
   title: 'Remove server',
-  message: `Remove ${entry.label}? Its password and passphrase leave the vault. Templates that host on it need another server.`,
+  message: `Remove ${entry.label}? Its password and passphrase leave the vault. Sessions that host on it need another server.`,
   confirmLabel: 'Remove',
   variant: 'danger',
 });

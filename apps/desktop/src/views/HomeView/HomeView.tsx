@@ -27,10 +27,10 @@ const HomeView = ({ slots }: HomeViewProps) => {
       <Facts rows={facts} />
       <Aside>
         <Stack gap="sm">
-          <Text variant="label">Recent sessions</Text>
+          <Text variant="label">Recent runs</Text>
           {home.error && <Box role="alert"><Callout tone="danger">{home.error}</Callout></Box>}
           {home.recent.length === 0
-            ? <EmptyState message="No session has run yet." />
+            ? <EmptyState message="Nothing has run yet." />
             : home.recent.map((session) => <RecentSessionRow key={session.id} session={session} now={now} onOpen={home.openSession} />)}
         </Stack>
       </Aside>

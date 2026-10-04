@@ -9,7 +9,7 @@ const useTemplateEntries = (templates: readonly SessionTemplate[], servers: Serv
   const entries = useMemo(() => templates.map((template) => ({
     label: template.name,
     description: templateMeta(template, servers),
-    keywords: ['template', 'session', ...template.players.map((player) => player.game)],
+    keywords: ['session', 'saved session', ...template.players.map((player) => player.game)],
     anchor: templateAnchor(template.id),
   })), [templates, servers]);
   useSearchEntries(entries);

@@ -44,7 +44,7 @@ const useHome = () => {
 
   const engineNeeded = needsEngineSetup(status);
   const counts = useMemo(
-    () => ({ games: installed.length, presets: presets.length, templates: templates.length }),
+    () => ({ games: installed.length, presets: presets.length, sessions: templates.length }),
     [installed.length, presets.length, templates.length],
   );
 

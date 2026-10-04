@@ -18,8 +18,8 @@ const searchActionsFor = (room: Session | undefined): SearchAction[] => [
     id: 'archipelia:new-session',
     label: 'New session',
     group: ACTION_GROUP,
-    description: 'Open the session builder on a new template.',
-    keywords: ['template', 'builder', 'run', 'multiworld'],
+    description: 'Open the session builder on a new session.',
+    keywords: ['session', 'builder', 'run', 'multiworld'],
     run: () => nav.open(ROUTE.sessions, { [CREATE_PARAM]: Date.now() }),
   },
   {

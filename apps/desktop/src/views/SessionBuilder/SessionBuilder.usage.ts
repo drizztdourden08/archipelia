@@ -4,19 +4,19 @@ import type { ComponentUsage } from '@drizztdourden08/tessera';
 const usage = {
   job: 'The session builder: its name, the players with their games and presets, the overrides of the picked player, and the generation and server options.',
   useWhen: [
-    'Creating or editing a session template from the sessions library.',
+    'Creating or editing a saved session from the Sessions page.',
   ],
   avoidWhen: [
-    { case: 'The list of templates and runs.', use: 'SessionsLibrary' },
+    { case: 'The list of sessions and runs.', use: 'SessionsLibrary' },
     { case: 'The options of one preset.', use: 'PresetEditor' },
   ],
   rules: [
-    'Start from a template: newTemplate for a new one, the saved one to edit.',
+    'Start from a session: newTemplate for a new one, the saved one to edit.',
     'Turn Run off while the problem list is not empty.',
-    'Save the template before running it.',
+    'Save the session before running it.',
   ],
   a11y: [
-    'The template name field is labelled.',
+    'The session name field is labelled.',
     'Each player row is a group named after its slot.',
     'An error is an alert.',
   ],

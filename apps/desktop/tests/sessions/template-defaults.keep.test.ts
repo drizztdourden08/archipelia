@@ -11,8 +11,8 @@ import { passwordNameOf } from '../../src/views/SessionBuilder/behavior/password
 import { removePlayer } from '../../src/views/SessionBuilder/behavior/remove-player';
 import { presetPlayer } from './session-fixtures';
 
-describe('new template defaults', () => {
-  test('a new template hosts locally on the default port with a full spoiler', () => {
+describe('new session defaults', () => {
+  test('a new session hosts locally on the default port with a full spoiler', () => {
     const template = newTemplate('t1');
     expect(template).toMatchObject({ id: 't1', players: [], host: { kind: 'local', port: DEFAULT_PORT } });
     expect(template.generator).toEqual({ spoiler: 3, race: false, progressionBalancing: true });
@@ -20,7 +20,7 @@ describe('new template defaults', () => {
     expect(template.server.passwordRef).toBeUndefined();
   });
 
-  test('the room password secret is named after the template', () => {
+  test('the room password secret is named after the session', () => {
     expect(passwordNameOf('abc')).toBe('room-password-abc');
   });
 });
@@ -49,7 +49,7 @@ describe('player numbering', () => {
     expect(freeName([presetPlayer(1, 'sam1')], 'Sam')).toBe('Sam2');
   });
 
-  test('a duplicated template gets a new id, a copy name and a fresh date', () => {
+  test('a duplicated session gets a new id, a copy name and a fresh date', () => {
     const template = { ...newTemplate('t1'), name: 'Friday', updatedAt: 99 };
     const copy = duplicateTemplate(template, ['Friday', 'Friday copy'], 't2');
     expect(copy).toMatchObject({ id: 't2', name: 'Friday copy 2', updatedAt: 0 });

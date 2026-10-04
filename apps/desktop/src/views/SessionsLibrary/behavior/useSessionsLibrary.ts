@@ -50,8 +50,8 @@ const useSessionsLibrary = () => {
   const deleteTemplate = useCallback((id: string) => {
     const template = byId(id);
     if (!template) return;
-    const message = `Delete ${template.name}? Its runs stay in the history.`;
-    void confirmAction({ title: 'Delete template', message, confirmLabel: 'Delete', variant: 'danger' }).then((confirmed) => {
+    const message = `Delete ${template.name}? Its runs stay in Runs.`;
+    void confirmAction({ title: 'Delete session', message, confirmLabel: 'Delete', variant: 'danger' }).then((confirmed) => {
       if (!confirmed) return;
       void guard(id, async () => {
         if (template.server.passwordRef === passwordNameOf(id)) await secretsApi()?.delete(passwordNameOf(id));
@@ -64,7 +64,7 @@ const useSessionsLibrary = () => {
 
   const deleteRun = useCallback((id: string) => {
     const run = runs.find((entry) => entry.id === id);
-    const message = `Delete the ${run?.snapshot.name ?? ''} run and its output files?`;
+    const message = `Delete this run of ${run?.snapshot.name ?? 'the session'} and its output files?`;
     void confirmAction({ title: 'Delete run', message, confirmLabel: 'Delete', variant: 'danger' }).then((confirmed) => {
       if (confirmed) void guard(id, () => removeRun(id));
     });

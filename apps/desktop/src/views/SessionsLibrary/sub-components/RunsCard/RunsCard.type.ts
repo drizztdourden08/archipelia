@@ -1,7 +1,7 @@
 /* @layer renderer-app @kind types */
 import type { Session } from '@archipelia/model';
 
-type HistoryCardProps = {
+type RunsCardProps = {
   runs: Session[];
   total: number;
   isBusy: (key: string) => boolean;
@@ -10,4 +10,4 @@ type HistoryCardProps = {
   onDelete: (id: string) => void;
 };
 
-export type { HistoryCardProps };
+export type { RunsCardProps };

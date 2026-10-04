@@ -6,9 +6,9 @@ const LibraryExport = () => {
   const { busy, exportLibrary, message } = useLibraryExport();
   return (
     <Stack gap="sm">
-      <Text variant="body">Saves every preset and session template to one zip file.</Text>
+      <Text variant="body">Saves every preset and saved session to one zip file.</Text>
       <ButtonRow align="start">
-        <Button variant="primary" disabled={busy} onClick={exportLibrary} icon={<Icon name="upload" />}>Export presets and templates</Button>
+        <Button variant="primary" disabled={busy} onClick={exportLibrary} icon={<Icon name="upload" />}>Export presets and sessions</Button>
       </ButtonRow>
       {message && <Text variant="body" role="status">{message}</Text>}
     </Stack>

@@ -12,7 +12,7 @@ import { presetPlayer } from './session-fixtures';
 
 const TEMPLATE = { ...newTemplate('t1'), name: 'Friday night', players: [presetPlayer(1, 'Johnny'), presetPlayer(2, 'Marie')] };
 
-describe('template summary', () => {
+describe('session summary', () => {
   test('meta lists players, host and spoiler', () => {
     expect(templateMeta(TEMPLATE)).toBe('Johnny · Marie · local :38281 · spoiler full');
     expect(hostLabel({ kind: 'archipelago-gg' })).toBe('archipelago.gg');

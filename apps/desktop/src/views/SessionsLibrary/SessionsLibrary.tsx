@@ -4,9 +4,9 @@ import { Box, Callout, Grid, Stack } from '@drizztdourden08/tessera/primitives';
 import { RunProgress, useRunLauncher } from '../RunProgress';
 import { SessionBuilder } from '../SessionBuilder';
 import { useSessionsLibrary } from './behavior/useSessionsLibrary';
-import { HistoryCard } from './sub-components/HistoryCard';
+import { RunsCard } from './sub-components/RunsCard';
 import { LibraryHeader } from './sub-components/LibraryHeader';
-import { TemplatesCard } from './sub-components/TemplatesCard';
+import { SessionsCard } from './sub-components/SessionsCard';
 
 const SessionsLibrary = () => {
   const hub = useSessionsLibrary();
@@ -46,7 +46,7 @@ const SessionsLibrary = () => {
       <LibraryHeader query={hub.query} onQuery={hub.setQuery} onNew={hub.createNew} />
       {hub.error && <Box role="alert"><Callout tone="danger">{hub.error}</Callout></Box>}
       <Grid minColWidth={384} gap="md">
-        <TemplatesCard
+        <SessionsCard
           templates={hub.visibleTemplates}
           total={hub.templates.length}
           servers={hub.servers}
@@ -56,7 +56,7 @@ const SessionsLibrary = () => {
           onDuplicate={hub.duplicate}
           onDelete={hub.deleteTemplate}
         />
-        <HistoryCard
+        <RunsCard
           runs={hub.visibleRuns}
           total={hub.runs.length}
           isBusy={hub.isBusy}

@@ -48,7 +48,7 @@ describe('finding the launched run', () => {
     id, templateId, createdAt, status: 'generating', snapshot: newTemplate(templateId),
   });
 
-  test('picks the first run of the template started after the click', () => {
+  test('picks the first run of the session started after the click', () => {
     const runs = [run('new', 't1', 5000), run('old', 't1', 100), run('other', 't2', 5000)];
     expect(findLaunchedRun(runs, { name: 'x', templateId: 't1', startedAt: 4000 })?.id).toBe('new');
     expect(findLaunchedRun(runs, { name: 'x', templateId: 't3', startedAt: 4000 })).toBeUndefined();

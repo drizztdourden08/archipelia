@@ -10,11 +10,11 @@ const BuilderHeader = ({ name, saved, busy, canRun, onBack, onName, onSave, onRu
     <Flex justify="between" align="center" gap="sm" wrap>
       <Flex gap="sm" align="center" wrap>
         <Button variant="ghost" onClick={onBack}>Back to sessions</Button>
-        <TextInput aria-label="Template name" value={name} placeholder="Session name" onChange={handleName} />
+        <TextInput aria-label="Session name" value={name} placeholder="Session name" onChange={handleName} />
         {saved && <Text variant="caption">Saved</Text>}
       </Flex>
       <ButtonRow>
-        <Button variant="secondary" disabled={busy} onClick={onSave}>Save as template</Button>
+        <Button variant="secondary" disabled={busy} onClick={onSave}>Save</Button>
         <Button variant="primary" disabled={busy || !canRun} onClick={onRun}>Run</Button>
       </ButtonRow>
     </Flex>

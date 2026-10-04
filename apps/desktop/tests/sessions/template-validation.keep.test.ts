@@ -9,8 +9,8 @@ const LIBRARY = { installed: [GAME], presets: [PRESET] };
 
 const withPlayers = (players: SessionTemplate['players']): SessionTemplate => ({ ...newTemplate('t1'), name: 'Friday', players });
 
-describe('template validation', () => {
-  test('a named template with one valid player has no problem', () => {
+describe('session validation', () => {
+  test('a named session with one valid player has no problem', () => {
     expect(validateTemplate(withPlayers([presetPlayer(1, 'Johnny')]), LIBRARY)).toEqual([]);
   });
 

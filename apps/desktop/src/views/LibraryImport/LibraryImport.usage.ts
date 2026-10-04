@@ -2,7 +2,7 @@
 import type { ComponentUsage } from '@drizztdourden08/tessera';
 
 const usage = {
-  job: 'The Import page of the Data hub: adds the presets and session templates of an exported zip file to the library.',
+  job: 'The Import page of the Data hub: adds the presets and saved sessions of an exported zip file to the library.',
   useWhen: [
     'The Import page of the Data bucket.',
   ],
@@ -12,7 +12,7 @@ const usage = {
   ],
   rules: [
     'Pick the zip file with the file picker; a cancelled pick changes nothing and says nothing.',
-    'Report how many presets and templates came in, in the status line and in a toast.',
+    'Report how many presets and sessions came in, in the status line and in a toast.',
     'Keep the button disabled while the import runs.',
   ],
   a11y: [

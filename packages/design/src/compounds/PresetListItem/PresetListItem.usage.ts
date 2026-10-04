@@ -8,7 +8,7 @@ const usage = {
     'Any picker of saved presets where one is selected at a time.',
   ],
   avoidWhen: [
-    { case: 'A saved session template with run and edit actions.', use: 'TemplateRow' },
+    { case: 'A saved session with run and edit actions.', use: 'SessionRow' },
     { case: 'A preset as a dropdown choice.', use: 'Select' },
   ],
   rules: [

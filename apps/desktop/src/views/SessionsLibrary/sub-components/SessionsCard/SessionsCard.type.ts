@@ -1,7 +1,7 @@
 /* @layer renderer-app @kind types */
 import type { ServerEntry, SessionTemplate } from '@archipelia/model';
 
-type TemplatesCardProps = {
+type SessionsCardProps = {
   templates: SessionTemplate[];
   total: number;
   servers: ServerEntry[];
@@ -12,4 +12,4 @@ type TemplatesCardProps = {
   onDelete: (id: string) => void;
 };
 
-export type { TemplatesCardProps };
+export type { SessionsCardProps };

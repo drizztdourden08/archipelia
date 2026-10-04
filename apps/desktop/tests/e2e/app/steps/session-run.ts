@@ -29,7 +29,7 @@ const fillPlayer = async (page: Page, builder: Locator, { slot, name, game, pres
 const buildSession = async (launched: LaunchedApp) => {
   const { page } = launched;
   const sessions = await openScreen(page, 'Sessions');
-  await sessions.getByText('No template yet. New session starts one.').waitFor();
+  await sessions.getByText('No session yet. New session builds one.').waitFor();
   await sessions.getByRole('button', { name: 'New session' }).click();
   await sessions.getByText('Add at least one player').waitFor();
   await settledProof(launched, '18-sessions-new');
@@ -37,11 +37,11 @@ const buildSession = async (launched: LaunchedApp) => {
   expect(await sessions.getByRole('spinbutton', { name: 'Port', exact: true }).inputValue()).toBe(String(LOCAL_PORT));
   expect(await sessions.getByRole('combobox', { name: 'Host', exact: true }).textContent()).toContain('This computer');
   await pickOption(page, sessions.getByRole('combobox', { name: 'Spoiler', exact: true }), 'Full with paths');
-  await sessions.getByRole('textbox', { name: 'Template name' }).fill(TEMPLATE);
+  await sessions.getByRole('textbox', { name: 'Session name' }).fill(TEMPLATE);
   await settledProof(launched, '19-sessions-two-players');
-  await sessions.getByRole('button', { name: 'Save as template' }).click();
+  await sessions.getByRole('button', { name: 'Save', exact: true }).click();
   await sessions.getByText('Saved', { exact: true }).waitFor();
-  await settledProof(launched, '20-sessions-template-saved');
+  await settledProof(launched, '20-sessions-saved');
   return sessions;
 };
 

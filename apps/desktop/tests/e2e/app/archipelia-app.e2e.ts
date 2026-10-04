@@ -44,13 +44,13 @@ describe('Archipelia app, headless, every screen end to end', () => {
 
   test('4. presets: one per game, a toggle and a choice changed, saved and exported', () => buildPresets(app()));
 
-  test('5. sessions: build, save as template, run and host', () => buildAndRun(app()));
+  test('5. sessions: build, save, run and host', () => buildAndRun(app()));
 
   test('6. live room: two players join, check, and the console answers', () => playLiveRoom(app(), state.clients));
 
   test('7a. session: stop from the dashboard', () => stopFromDashboard(app(), state.clients));
 
-  test('7b. sessions: history shows the stopped run and Open returns to it', () => checkHistory(app()));
+  test('7b. sessions: Runs shows the stopped run and Open returns to it', () => checkHistory(app()));
 
   test('7c. data: sizes per area and a library export', () => checkDataAndExport(app()));
 

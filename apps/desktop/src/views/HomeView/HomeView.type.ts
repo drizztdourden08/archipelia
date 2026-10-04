@@ -2,7 +2,7 @@
 import type { HeroSlots } from '@drizztdourden08/brock-react';
 import type { EngineStatus, GamePreset, InstalledGame, Session } from '@archipelia/model';
 
-type HomeCounts = { games: number; presets: number; templates: number };
+type HomeCounts = { games: number; presets: number; sessions: number };
 
 type HomeViewProps = { slots: HeroSlots };
 

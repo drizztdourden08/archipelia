@@ -15,7 +15,7 @@ const ServerFields = ({ server, password, hasPassword, onServer, onPassword, onC
   const setShutdown = useCallback((value: number) => onServer({ autoShutdownMinutes: whole(value) }), [onServer]);
   return (
     <Stack gap="sm">
-      <Field label="Room password" hint={hasPassword ? 'A password is stored. Type to replace it.' : 'Optional. Kept in the vault, never in the template.'}>
+      <Field label="Room password" hint={hasPassword ? 'A password is stored. Type to replace it.' : 'Optional. Kept in the vault, never in the saved session.'}>
         <Flex gap="sm" align="center">
           <PasswordInput mode="new" value={password} placeholder={hasPassword ? 'stored' : 'optional'} onChange={onPassword} />
           {hasPassword && <Button size="sm" variant="ghost" onClick={onClearPassword}>Clear</Button>}

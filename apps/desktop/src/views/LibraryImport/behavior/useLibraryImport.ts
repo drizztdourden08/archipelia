@@ -12,7 +12,7 @@ const useLibraryImport = () => {
     const picked = await filePicker.pickFile({ extensions: ['zip'] });
     if (!picked) return null;
     const counts = await appApi().dataImport(picked.bytes);
-    const imported = `Imported ${counts.presets} presets and ${counts.templates} templates`;
+    const imported = `Imported ${counts.presets} presets and ${counts.templates} sessions`;
     toast(imported, { variant: 'success' });
     return imported;
   }), [filePicker, run]);

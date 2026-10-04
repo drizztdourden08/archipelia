@@ -2,13 +2,13 @@
 import type { ComponentUsage } from '@drizztdourden08/tessera';
 
 const usage = {
-  job: 'One past run of a session in the history: when, where it was hosted, its status and the open, log and delete actions.',
+  job: 'One past run of a session in Runs: when, where it was hosted, its status and the open, log and delete actions.',
   useWhen: [
-    'Each run in the history card of the sessions page.',
-    'Any list of session runs that can be reopened.',
+    'Each run in the Runs card of the Sessions page.',
+    'Any list of runs that can be reopened.',
   ],
   avoidWhen: [
-    { case: 'A saved template that has not run.', use: 'TemplateRow' },
+    { case: 'A saved session to edit or run.', use: 'SessionRow' },
     { case: 'Runs to sort and filter in columns.', use: 'DataTable' },
   ],
   rules: [
@@ -23,7 +23,7 @@ const usage = {
   ],
   tree: {
     path: ['data', 'a past run of a session'],
-    rule: 'One run in the history with its actions.',
+    rule: 'One run in Runs with its actions.',
   },
   example: `import { RunRow } from '@archipelia/design';
 

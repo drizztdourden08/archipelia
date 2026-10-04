@@ -9,11 +9,11 @@ import { presetsMeta } from './presets-meta';
 import { sessionMeta } from './session-meta';
 
 const homeFacts = ({ last, now, status, counts, installed, presets }: HomeFactsInput): FactsPanelGroup[] => [
-  [{ label: 'Last session', value: last?.snapshot.name ?? 'None yet', title: last ? `${RUN_STATUS[last.status].label} · ${sessionMeta(last, now)}` : 'Build one in Sessions' }],
+  [{ label: 'Last run', value: last?.snapshot.name ?? 'None yet', title: last ? `${RUN_STATUS[last.status].label} · ${sessionMeta(last, now)}` : 'Build a session, then run it' }],
   [
     { label: 'Games', value: String(counts.games), title: gamesMeta(installed) },
     { label: 'Presets', value: String(counts.presets), title: presetsMeta(presets) },
-    { label: 'Templates', value: String(counts.templates), title: 'saved sessions' },
+    { label: 'Sessions', value: String(counts.sessions), title: 'saved setups to run' },
   ],
   [{ label: 'Engine', value: engineValue(status), title: engineMeta(status), mono: true }],
 ];

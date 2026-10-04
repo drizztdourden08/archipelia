@@ -14,17 +14,17 @@ const checkHistory = async (launched: LaunchedApp) => {
   const sessions = await openScreen(page, 'Sessions');
   const back = sessions.getByRole('button', { name: 'Back to sessions' });
   if (await back.count()) await back.click();
-  await sessions.getByText('History · 1').waitFor();
+  await sessions.getByText('Runs · 1').waitFor();
   const template = sessions.getByRole('button', { name: new RegExp(`^${TEMPLATE} .*local :${LOCAL_PORT} · spoiler full`) });
   await template.waitFor();
   const run = sessions.getByRole('list', { name: 'Runs', exact: true }).getByRole('listitem').filter({ hasText: TEMPLATE });
   await run.getByRole('button', { name: new RegExp(`^${TEMPLATE} .* · local`) }).waitFor();
   const open = run.getByRole('button', { name: 'Open', exact: true });
   for (const shown of [run.getByText('Stopped', { exact: true }), run.getByRole('button', { name: 'Delete', exact: true }), open]) {
-    await expect.poll(() => shownOpacity(shown), { message: 'history row status and actions show without hover' }).toBe(1);
+    await expect.poll(() => shownOpacity(shown), { message: 'run row status and actions show without hover' }).toBe(1);
   }
   expect(await nestedButtons(page), 'no button inside a button on Home or Sessions').toBe(0);
-  await settledProof(launched, '28-sessions-history-stopped');
+  await settledProof(launched, '28-sessions-runs-stopped');
   await open.click();
   await hub(page, 'Multiworld').waitFor({ state: 'detached' });
   await base(page).getByText(TEMPLATE, { exact: true }).first().waitFor();
@@ -39,7 +39,7 @@ const exportLibrary = async (launched: LaunchedApp) => {
   const data = await openSection(hub(launched.page, 'Data'), 'Export');
   const target = exportPath(launched.userData, 'archipelia-library.zip');
   await answerSaveDialogWith(launched.app, target);
-  await data.getByRole('button', { name: 'Export presets and templates' }).click();
+  await data.getByRole('button', { name: 'Export presets and sessions' }).click();
   await data.getByRole('status').filter({ hasText: 'Saved archipelia-library.zip' }).waitFor();
   expect((await stat(target)).size).toBeGreaterThan(0);
   await settledProof(launched, '30-data-exported');

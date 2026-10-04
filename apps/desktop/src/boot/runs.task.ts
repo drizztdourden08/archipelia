@@ -3,7 +3,7 @@ import { defineBootTask } from '@drizztdourden08/brock-react';
 import { useRunsStore } from '../stores/useRunsStore';
 
 export default defineBootTask({
-  label: 'Loading sessions',
+  label: 'Loading runs',
   after: ['settings'],
   run: async ({ report }) => {
     await useRunsStore.getState().load();

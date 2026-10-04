@@ -5,9 +5,9 @@ import type { LibraryHeaderProps } from './LibraryHeader.type';
 const LibraryHeader = ({ query, onQuery, onNew }: LibraryHeaderProps) => {
   return (
     <Flex justify="between" align="center" wrap>
-      <Text variant="caption">A template is a session you can run again. History keeps every run with its outputs.</Text>
+      <Text variant="caption">A session is a saved setup you can run again. Each run makes a seed and a room, kept in Runs with its files.</Text>
       <ButtonRow>
-        <SearchInput placeholder="Filter sessions" aria-label="Filter sessions" value={query} onChange={onQuery} />
+        <SearchInput placeholder="Filter sessions and runs" aria-label="Filter sessions and runs" value={query} onChange={onQuery} />
         <Button variant="primary" onClick={onNew} icon={<Icon name="plus" />}>New session</Button>
       </ButtonRow>
     </Flex>
