@@ -5,6 +5,4 @@ const EMPTY_SESSION_VIEW: SessionView = { session: null, lines: [], loaded: fals
 
 const SESSION_VIEW_SLICE = 'archipelia:session-view';
 
-const SESSION_VIEW_RELAY_MS = 250;
-
-export { EMPTY_SESSION_VIEW, SESSION_VIEW_RELAY_MS, SESSION_VIEW_SLICE };
+export { EMPTY_SESSION_VIEW, SESSION_VIEW_SLICE };

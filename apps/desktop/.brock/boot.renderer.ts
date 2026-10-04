@@ -3,13 +3,13 @@ import type { RendererBootTask } from '@drizztdourden08/brock-react';
 import runsTask from '../src/boot/runs.task';
 import searchActionsTask from '../src/boot/search-actions.task';
 import sessionEventsTask from '../src/boot/session-events.task';
-import sessionViewRelayTask from '../src/boot/session-view-relay.task';
+import shareSessionViewTask from '../src/boot/share-session-view.task';
 
 const rendererBootTasks: RendererBootTask[] = [
   { ...runsTask, id: 'runs' },
   { ...searchActionsTask, id: 'search-actions' },
   { ...sessionEventsTask, id: 'session-events' },
-  { ...sessionViewRelayTask, id: 'session-view-relay' },
+  { ...shareSessionViewTask, id: 'share-session-view' },
 ];
 
 export { rendererBootTasks };
