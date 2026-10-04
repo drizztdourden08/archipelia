@@ -8,6 +8,7 @@ import { appApi } from '../../../ipc/app-api';
 import { buildRows } from './build-rows';
 import { filterRows } from './filter-rows';
 import { removeGameConfirm } from './remove-game-confirm';
+import { useCardLimit } from './useCardLimit';
 import type { InstallRequest } from '@archipelia/catalog';
 import { APWORLD } from '../GameStore.constants';
 
@@ -25,6 +26,7 @@ const useGameStore = (tab: GameTab) => {
 
   const rows = useMemo(() => buildRows([...official, ...(catalog?.entries ?? [])], installed), [catalog, official, installed]);
   const visible = useMemo(() => filterRows(rows, tab, query), [rows, tab, query]);
+  const cards = useCardLimit(visible.length, `${tab}:${query}`);
 
   const installWorld = useCallback((request: InstallRequest, key: string) => guard(key, () => install(request)), [guard, install]);
   const remove = useCallback(({ entry, installed: game }: GameRow) => guard(entry.apworld, async () => {
@@ -38,7 +40,7 @@ const useGameStore = (tab: GameTab) => {
     if (picked) await install({ kind: 'file', fileName: picked.name, bytes: picked.bytes });
   }), [guard, filePicker, install]);
 
-  return { addFromFile, catalog, error, installWorld, installed, isBusy, loading, query, refresh, remove, rows, setQuery, visible };
+  return { addFromFile, cards, catalog, error, installWorld, installed, isBusy, loading, query, refresh, remove, rows, setQuery, visible };
 };
 
 export { useGameStore };

@@ -3,7 +3,6 @@ import { openExternal } from '@drizztdourden08/brock-react';
 import { Box, Button, ButtonRow, Callout, EmptyState, Flex, Grid, Icon, SearchInput, Spinner, Stack, Text } from '@drizztdourden08/tessera/primitives';
 import { useGameStore } from './behavior/useGameStore';
 import type { GameStoreProps } from './GameStore.type';
-import { MAX_CARDS } from './GameStore.constants';
 import { GameCard } from '@archipelia/design';
 import { cardPropsOf } from './behavior/card-props';
 
@@ -30,9 +29,15 @@ const GameStore = ({ tab }: GameStoreProps) => {
         ? <EmptyState icon={store.loading ? <Spinner /> : undefined} message={store.loading ? 'Loading the catalog' : 'No world matches'} />
         : (
           <Grid minColWidth={260} gap="md">
-            {store.visible.slice(0, MAX_CARDS).map((row) => <GameCard key={`${row.entry.source}:${row.entry.apworld}`} {...cardPropsOf(row, handlers)} />)}
+            {store.visible.slice(0, store.cards.shown).map((row) => <GameCard key={`${row.entry.source}:${row.entry.apworld}`} {...cardPropsOf(row, handlers)} />)}
           </Grid>
         )}
+      {store.cards.hidden && (
+        <Flex justify="center" align="center" gap="sm" wrap>
+          <Text variant="caption">{`Showing ${store.cards.shown} of ${store.cards.total}: refine the search or show more.`}</Text>
+          <Button variant="secondary" onClick={store.cards.showMore}>Show more</Button>
+        </Flex>
+      )}
     </Stack>
   );
 };

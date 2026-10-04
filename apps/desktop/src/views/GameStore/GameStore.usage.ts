@@ -13,7 +13,7 @@ const usage = {
   rules: [
     'Pick the tab from the page tab; the view filters the rows for it.',
     'Guard each install with its world as the key, through useKeyedGuard, so its card shows it working.',
-    'Cap the number of cards drawn and let search narrow the rest.',
+    'Cap the number of cards drawn, say how many are shown of how many, and offer Show more.',
     'Removing a game asks first with the number of presets and templates that use it.',
   ],
   a11y: [
