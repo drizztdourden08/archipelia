@@ -1,5 +1,5 @@
 /* @layer renderer-app @kind hook */
-import { confirmAction, toast, useKeyedGuard, usePlatform } from '@drizztdourden08/brock-react';
+import { confirmAction, toast, useKeyedGuard, usePlatform, useScreenState } from '@drizztdourden08/brock-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useLibraryStore } from '../../../stores/useLibraryStore';
 import type { GameRow, GameTab } from '../GameStore.type';
@@ -16,7 +16,7 @@ import { useInstalledEntries } from './useInstalledEntries';
 const useGameStore = (tab: GameTab) => {
   const { catalog, official, installed, loadGames, install, removeGame } = useLibraryStore();
   const { filePicker } = usePlatform();
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useScreenState('query', '');
   const [opened, setOpened] = useState(false);
   const { guard, isBusy, lastError: error } = useKeyedGuard();
 
