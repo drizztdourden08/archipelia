@@ -9,7 +9,7 @@ import { cardOf, closeHub, dialogOf, openScreen } from '../support/locators';
 const INSTALL_TIMEOUT = 180000;
 
 const tab = (games: Locator, name: string) =>
-  games.getByRole('navigation', { name: 'Games tabs', exact: true }).getByRole('button', { name, exact: true });
+  games.getByRole('navigation', { name: 'Games views', exact: true }).getByRole('button', { name, exact: true });
 
 const openTab = async (games: Locator, name: string) => {
   await tab(games, name).click();
