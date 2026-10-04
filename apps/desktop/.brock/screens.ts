@@ -18,6 +18,8 @@ import MultiworldLibraryGamesOfficialTab, { meta as multiworldLibraryGamesOffici
 import MultiworldLibraryGamesUpdatesTab, { meta as multiworldLibraryGamesUpdatesTabMeta } from '../src/screens/multiworld/library/games/updates.tab';
 import { meta as multiworldLibraryGamesPageMetaMeta } from '../src/screens/multiworld/library/games.page';
 import MultiworldLibraryPresetsPage, { meta as multiworldLibraryPresetsPageMeta } from '../src/screens/multiworld/library/presets.page';
+import MultiworldLibrarySessionsEditSub, { meta as multiworldLibrarySessionsEditSubMeta } from '../src/screens/multiworld/library/sessions/edit.sub';
+import MultiworldLibrarySessionsNewSub, { meta as multiworldLibrarySessionsNewSubMeta } from '../src/screens/multiworld/library/sessions/new.sub';
 import MultiworldLibrarySessionsPage, { meta as multiworldLibrarySessionsPageMeta } from '../src/screens/multiworld/library/sessions.page';
 import SessionBase, { meta as sessionBaseMeta } from '../src/screens/session.base';
 
@@ -38,6 +40,8 @@ const screenTree = buildScreenTree(config, [
   { kind: 'tab', bucket: 'multiworld', group: 'library', page: 'games', id: 'updates', component: MultiworldLibraryGamesUpdatesTab, meta: multiworldLibraryGamesUpdatesTabMeta },
   { kind: 'page-meta', bucket: 'multiworld', group: 'library', id: 'games', meta: multiworldLibraryGamesPageMetaMeta },
   { kind: 'page', bucket: 'multiworld', group: 'library', id: 'presets', component: MultiworldLibraryPresetsPage, meta: multiworldLibraryPresetsPageMeta },
+  { kind: 'sub', bucket: 'multiworld', group: 'library', page: 'sessions', id: 'edit', component: MultiworldLibrarySessionsEditSub, meta: multiworldLibrarySessionsEditSubMeta },
+  { kind: 'sub', bucket: 'multiworld', group: 'library', page: 'sessions', id: 'new', component: MultiworldLibrarySessionsNewSub, meta: multiworldLibrarySessionsNewSubMeta },
   { kind: 'page', bucket: 'multiworld', group: 'library', id: 'sessions', component: MultiworldLibrarySessionsPage, meta: multiworldLibrarySessionsPageMeta },
   { kind: 'base', id: 'session', component: SessionBase, meta: sessionBaseMeta },
 ], searchIndex);

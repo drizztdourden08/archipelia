@@ -1,6 +1,7 @@
 /* @layer renderer-app @kind config */
 const ROUTE = {
   sessions: 'multiworld/sessions',
+  newSession: 'multiworld/sessions/new',
   games: 'multiworld/games',
   presets: 'multiworld/presets',
   officialGames: 'multiworld/games/official',
@@ -8,6 +9,6 @@ const ROUTE = {
   engine: 'multiworld/engine',
 } as const;
 
-const CREATE_PARAM = 'create';
+const EDIT_SUB = 'edit';
 
-export { CREATE_PARAM, ROUTE };
+export { EDIT_SUB, ROUTE };

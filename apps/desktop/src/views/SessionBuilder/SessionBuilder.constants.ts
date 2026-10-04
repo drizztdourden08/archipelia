@@ -1,5 +1,4 @@
 /* @layer renderer-app @kind config */
-import type { ConfirmActionOptions } from '@drizztdourden08/brock-react';
 import type { GeneratorSettings, ServerSettings } from '@archipelia/model';
 
 const DEFAULT_SERVER: ServerSettings = {
@@ -22,11 +21,6 @@ const PRESET_PREFIX = 'preset:';
 
 const YAML_EXTENSIONS = ['yaml', 'yml'];
 
-const DISCARD_CONFIRM: ConfirmActionOptions = {
-  title: 'Discard changes',
-  message: 'This session has unsaved changes. Leave it and lose them?',
-  confirmLabel: 'Discard',
-  variant: 'danger',
-};
+const UNSAVED_SESSION = 'A session has changes that are not saved.';
 
-export { DEFAULT_GENERATOR, DISCARD_CONFIRM, DEFAULT_GG_SITE, DEFAULT_PORT, DEFAULT_SERVER, NAME_LIMIT, NEW_PRESET_VALUE, PRESET_PREFIX, YAML_EXTENSIONS, YAML_VALUE };
+export { DEFAULT_GENERATOR, DEFAULT_GG_SITE, DEFAULT_PORT, DEFAULT_SERVER, NAME_LIMIT, NEW_PRESET_VALUE, PRESET_PREFIX, UNSAVED_SESSION, YAML_EXTENSIONS, YAML_VALUE };

@@ -19,6 +19,8 @@ const searchIndex = buildSearchIndex(config, [
   {"kind":"tab","id":"updates","bucket":"multiworld","group":"library","page":"games","title":"Updates","icon":"gamepad-2","keywords":["games","apworld","new","versions"]},
   {"kind":"page-meta","id":"games","bucket":"multiworld","group":"library","title":"Games","icon":"gamepad-2","keywords":["apworld","install","catalog","worlds"]},
   {"kind":"page","id":"presets","bucket":"multiworld","group":"library","title":"Presets","icon":"sliders-horizontal","keywords":["options","yaml","player","settings"]},
+  {"kind":"sub","id":"edit","bucket":"multiworld","group":"library","page":"sessions","title":"Edit session","icon":"pencil","path":":id/edit"},
+  {"kind":"sub","id":"new","bucket":"multiworld","group":"library","page":"sessions","title":"New session","icon":"plus","path":"new","keywords":["builder","players","create","session"]},
   {"kind":"page","id":"sessions","bucket":"multiworld","group":"library","title":"Sessions","icon":"layers","keywords":["saved","sessions","runs","new","session","builder"]},
   {"kind":"base","id":"session","title":"Session","icon":"radio"},
 ]);

@@ -1,6 +1,6 @@
 /* @layer renderer-app @kind hook */
 import { useCallback, useMemo, useState } from 'react';
-import { useKeyedGuard } from '@drizztdourden08/brock-react';
+import { useKeyedGuard, useUnsavedChanges } from '@drizztdourden08/brock-react';
 import type { GeneratorSettings, HostTarget, ServerSettings, SessionTemplate } from '@archipelia/model';
 import type { BuilderParams } from '../SessionBuilder.type';
 import { useBuilderData } from './useBuilderData';
@@ -12,9 +12,9 @@ import { hostOfKind } from './host-of-kind';
 import { withPort } from './with-port';
 import { withServer } from './with-server';
 import { withoutPassword } from './without-password';
-import { useLeaveGuard } from './useLeaveGuard';
+import { UNSAVED_SESSION } from '../SessionBuilder.constants';
 
-const useSessionBuilder = ({ initial, onBack, onRun }: BuilderParams) => {
+const useSessionBuilder = ({ initial, onRun }: BuilderParams) => {
   const [draft, setDraft] = useState<SessionTemplate>(initial);
   const [selectedSlot, setSelectedSlot] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -67,10 +67,10 @@ const useSessionBuilder = ({ initial, onBack, onRun }: BuilderParams) => {
   const draftJson = JSON.stringify(draft);
   const saved = savedJson !== null && !room.password && savedJson === draftJson;
   const dirty = Boolean(room.password) || draftJson !== (savedJson ?? JSON.stringify(initial));
-  const leave = useLeaveGuard(dirty, onBack);
+  useUnsavedChanges(dirty, UNSAVED_SESSION);
 
   return {
-    ...data, busy: isBusy(), clearPassword, draft, error: lastError ?? error, leave, password: room.password, players, problems, run, save, saved, selected,
+    ...data, busy: isBusy(), clearPassword, draft, error: lastError ?? error, password: room.password, players, problems, run, save, saved, selected,
     setGenerator, setHostKind, setName, setPassword: room.setPassword, setPort, setRemoteServer, setServer, toggleSelected,
   };
 };

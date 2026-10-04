@@ -1,72 +1,22 @@
 /* @layer renderer-app @kind component */
-import { Box, Callout, Grid, Stack } from '@drizztdourden08/tessera/primitives';
+import { Box, Callout, EmptyState } from '@drizztdourden08/tessera/primitives';
+import { RunProgress, useRunLauncher } from '../RunProgress';
 import type { SessionBuilderProps } from './SessionBuilder.type';
-import { useSessionBuilder } from './behavior/useSessionBuilder';
-import { sourcesOf } from './behavior/player-sources';
-import { BuilderHeader } from './sub-components/BuilderHeader';
-import { ProblemList } from './sub-components/ProblemList';
-import { PlayersCard } from './sub-components/PlayersCard';
-import { OverridesPanel } from './sub-components/OverridesPanel';
-import { ServerOptionsForm } from '@archipelia/design';
+import { useBuilderTemplate } from './behavior/useBuilderTemplate';
+import { BuilderForm } from './sub-components/BuilderForm';
 import './SessionBuilder.css';
 
-const SessionBuilder = ({ initial, onBack, onRun }: SessionBuilderProps) => {
-  const builder = useSessionBuilder({ initial, onBack, onRun });
-  const { draft, selected, players, toggleSelected } = builder;
-  const { game, preset } = sourcesOf(selected, builder.installed, builder.presets);
-
+const SessionBuilder = ({ templateId }: SessionBuilderProps) => {
+  const { initial, missing, error } = useBuilderTemplate(templateId);
+  const launcher = useRunLauncher();
+  if (error) return <Box role="alert"><Callout tone="danger">{error}</Callout></Box>;
+  if (missing) return <EmptyState message="This session no longer exists. Back to Sessions lists the saved ones." />;
+  if (!initial) return <EmptyState message="Loading the session" />;
   return (
-    <Stack>
-      <BuilderHeader
-        name={draft.name}
-        saved={builder.saved}
-        busy={builder.busy}
-        canRun={builder.problems.length === 0}
-        onBack={builder.leave}
-        onName={builder.setName}
-        onSave={builder.save}
-        onRun={builder.run}
-      />
-      {builder.error && <Box role="alert"><Callout tone="danger">{builder.error}</Callout></Box>}
-      <ProblemList problems={builder.problems} />
-      <PlayersCard
-        players={draft.players}
-        installed={builder.installed}
-        presets={builder.presets}
-        selectedSlot={selected?.slot}
-        busy={builder.busy}
-        actions={players}
-        onEdit={toggleSelected}
-      />
-      <Grid minColWidth={384} gap="md">
-        {selected && (
-          <OverridesPanel
-            player={selected}
-            game={game}
-            preset={preset}
-            onValue={players.setOverride}
-            onReset={players.resetOverride}
-            onResetAll={players.resetAll}
-            onClose={toggleSelected}
-          />
-        )}
-        <ServerOptionsForm
-          generator={draft.generator}
-          server={draft.server}
-          host={draft.host}
-          serverOptions={builder.serverOptions}
-          password={builder.password}
-          hasPassword={Boolean(draft.server.passwordRef)}
-          onGenerator={builder.setGenerator}
-          onServer={builder.setServer}
-          onHostKind={builder.setHostKind}
-          onPort={builder.setPort}
-          onRemoteServer={builder.setRemoteServer}
-          onPassword={builder.setPassword}
-          onClearPassword={builder.clearPassword}
-        />
-      </Grid>
-    </Stack>
+    <>
+      <BuilderForm key={initial.id} initial={initial} onRun={launcher.start} />
+      <RunProgress launch={launcher.launch} onClose={launcher.dismiss} />
+    </>
   );
 };
 

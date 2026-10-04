@@ -2,7 +2,6 @@
 import { useCallback } from 'react';
 import { Box, Callout, Grid, Stack } from '@drizztdourden08/tessera/primitives';
 import { RunProgress, useRunLauncher } from '../RunProgress';
-import { SessionBuilder } from '../SessionBuilder';
 import { useSessionsLibrary } from './behavior/useSessionsLibrary';
 import { RunsCard } from './sub-components/RunsCard';
 import { LibraryHeader } from './sub-components/LibraryHeader';
@@ -30,17 +29,6 @@ const SessionsLibrary = () => {
     else openRun(id);
   }, [inspect, openRun, runs]);
 
-  const progress = <RunProgress launch={launcher.launch} onClose={launcher.dismiss} />;
-
-  if (hub.editing) {
-    return (
-      <>
-        <SessionBuilder initial={hub.editing} onBack={hub.closeBuilder} onRun={start} />
-        {progress}
-      </>
-    );
-  }
-
   return (
     <Stack>
       <LibraryHeader query={hub.query} onQuery={hub.setQuery} onNew={hub.createNew} />
@@ -65,7 +53,7 @@ const SessionsLibrary = () => {
           onDelete={hub.deleteRun}
         />
       </Grid>
-      {progress}
+      <RunProgress launch={launcher.launch} onClose={launcher.dismiss} />
     </Stack>
   );
 };

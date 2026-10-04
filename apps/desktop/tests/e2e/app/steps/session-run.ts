@@ -26,14 +26,14 @@ const fillPlayer = async (page: Page, builder: Locator, { slot, name, game, pres
   }
 };
 
-const DISCARD_TEXT = 'This session has unsaved changes. Leave it and lose them?';
+const DISCARD_TEXT = 'This page has changes that are not saved. Leave it and lose them?';
 
 const keepEditing = async (page: Page, sessions: Locator) => {
-  const back = sessions.getByRole('button', { name: 'Back to sessions', exact: true });
-  const discard = dialogOf(page, 'Discard changes');
+  const back = sessions.getByRole('button', { name: 'Back to Sessions', exact: true });
+  const discard = dialogOf(page, 'Discard changes?');
   await back.click();
   await discard.getByText(DISCARD_TEXT).waitFor();
-  await discard.getByRole('button', { name: 'Cancel', exact: true }).click();
+  await discard.getByRole('button', { name: 'Keep editing', exact: true }).click();
   await discard.waitFor({ state: 'detached' });
   await back.focus();
   await page.keyboard.press('Escape');

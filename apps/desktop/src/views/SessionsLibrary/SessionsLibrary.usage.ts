@@ -2,7 +2,7 @@
 import type { ComponentUsage } from '@drizztdourden08/tessera';
 
 const usage = {
-  job: 'The Sessions page: the saved sessions and their runs side by side, the builder while one is edited, and the run dialog.',
+  job: 'The Sessions page: the saved sessions and their runs side by side, and the run dialog.',
   useWhen: [
     'The Sessions page of the Library group.',
   ],
@@ -11,8 +11,8 @@ const usage = {
     { case: 'A run in progress.', use: 'RunProgress' },
   ],
   rules: [
-    'Put each session in search while the page is open, and open the builder on a new session when the page is opened with the create param.',
-    'Open the builder in place of the lists while a session is edited.',
+    'Put each session in search while the page is open.',
+    'Open the builder as the New session or Edit session sub-page, never in place of the lists.',
     'Open a run that is still starting in the run dialog, and any other run on the dashboard.',
     'Filter sessions and runs with the same query.',
     'Deleting a session or a run is a danger button behind a danger confirm.',

@@ -12,7 +12,7 @@ const DATA_ROWS = ['Sessions', 'Presets', 'Installed games'];
 const checkHistory = async (launched: LaunchedApp) => {
   const { page } = launched;
   const sessions = await openScreen(page, 'Sessions');
-  const back = sessions.getByRole('button', { name: 'Back to sessions' });
+  const back = sessions.getByRole('button', { name: 'Back to Sessions', exact: true });
   if (await back.count()) await back.click();
   await sessions.getByText('Runs · 1').waitFor();
   const template = sessions.getByRole('button', { name: new RegExp(`^${TEMPLATE} .*local :${LOCAL_PORT} · spoiler full`) });

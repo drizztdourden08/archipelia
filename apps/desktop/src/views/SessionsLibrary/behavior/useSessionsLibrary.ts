@@ -1,14 +1,15 @@
 /* @layer renderer-app @kind hook */
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { confirmAction, useKeyedGuard, useNavigation } from '@drizztdourden08/brock-react';
+import { confirmAction, useKeyedGuard } from '@drizztdourden08/brock-react';
 import { secretsApi } from '@drizztdourden08/brock-secrets/renderer';
-import type { ServerEntry, SessionTemplate } from '@archipelia/model';
+import type { ServerEntry } from '@archipelia/model';
 import { appApi } from '../../../ipc/app-api';
-import { CREATE_PARAM } from '../../../hooks/app-navigation.constants';
+import { openNewSession } from '../../../hooks/open-new-session';
+import { openSessionEditor } from '../../../hooks/open-session-editor';
 import { useAppNavigation } from '../../../hooks/useAppNavigation';
 import { useLibraryStore } from '../../../stores/useLibraryStore';
 import { useRunsStore } from '../../../stores/useRunsStore';
-import { duplicateTemplate, newTemplate, passwordNameOf, useHostingDefaults } from '../../SessionBuilder';
+import { duplicateTemplate, passwordNameOf } from '../../SessionBuilder';
 import { matchesRun } from './matches-run';
 import { matchesTemplate } from './matches-template';
 import { useTemplateEntries } from './useTemplateEntries';
@@ -19,7 +20,6 @@ const useSessionsLibrary = () => {
   const loadRuns = useRunsStore((state) => state.load);
   const removeRun = useRunsStore((state) => state.remove);
   const { openSession } = useAppNavigation();
-  const [editing, setEditing] = useState<SessionTemplate | null>(null);
   const [servers, setServers] = useState<ServerEntry[]>([]);
   const [query, setQuery] = useState('');
   const { guard, isBusy, lastError: error } = useKeyedGuard();
@@ -35,12 +35,8 @@ const useSessionsLibrary = () => {
 
   const byId = useCallback((id: string) => templates.find((template) => template.id === id), [templates]);
 
-  const hosting = useHostingDefaults();
-  const createNew = useCallback(() => setEditing(newTemplate(undefined, hosting)), [hosting]);
-  const createAsked = useNavigation().params[CREATE_PARAM];
-  useEffect(() => { if (createAsked !== undefined) createNew(); }, [createAsked]);
-  const edit = useCallback((id: string) => setEditing(byId(id) ?? null), [byId]);
-  const closeBuilder = useCallback(() => setEditing(null), []);
+  const createNew = openNewSession;
+  const edit = openSessionEditor;
 
   const duplicate = useCallback((id: string) => {
     const template = byId(id);
@@ -74,8 +70,8 @@ const useSessionsLibrary = () => {
   const visibleRuns = useMemo(() => runs.filter((run) => matchesRun(run, query)), [runs, query]);
 
   return {
-    byId, closeBuilder, createNew, deleteRun, deleteTemplate, duplicate, edit, editing, error, isBusy, openRun, query,
-    runs, servers, setEditing, setQuery, templates, visibleRuns, visibleTemplates,
+    byId, createNew, deleteRun, deleteTemplate, duplicate, edit, error, isBusy, openRun, query,
+    runs, servers, setQuery, templates, visibleRuns, visibleTemplates,
   };
 };
 
