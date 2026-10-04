@@ -8,6 +8,8 @@ const meta: WidgetMeta = {
   order: 4,
   icon: 'file-text',
   popOut: true,
+  padding: 'md',
+  fill: true,
   defaultVisibility: 'context-only',
   defaultOpen: true,
   defaultSide: 'bottom',

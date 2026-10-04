@@ -4,15 +4,15 @@ import { Stack, Tabs } from '@drizztdourden08/tessera/primitives';
 import { LOG_KINDS } from './LogLines.constants';
 import { logCopyText } from './behavior/log-copy-text';
 import type { LogLinesProps } from './LogLines.type';
-import './LogLines.css';
 
 const LogLines = (props: LogLinesProps) => {
   const { rows, search, onSearchChange, emptyLabel, countLabel = 'lines', tabs, activeTab, onTabChange, copyText = logCopyText, toolbarExtra, placeholder } = props;
   return (
-    <Stack gap="sm" className="log-lines">
+    <Stack gap="sm">
       {tabs && activeTab && onTabChange && <Tabs tabs={tabs} activeTab={activeTab} onTabChange={onTabChange} />}
       {placeholder ?? (
         <LogPanel
+          height="fill"
           rows={rows}
           kinds={LOG_KINDS}
           search={search}

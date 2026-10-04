@@ -13,13 +13,6 @@
   padding: var(--space-sm);
 }
 
-.session-panel--fill {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  box-sizing: border-box;
-}
-
 .session-panel__mono {
   font-family: var(--font-mono);
   overflow-wrap: anywhere;
