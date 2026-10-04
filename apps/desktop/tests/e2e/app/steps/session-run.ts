@@ -76,6 +76,7 @@ const runSession = async (launched: LaunchedApp, sessions: Locator) => {
   await dashboard.getByText(/^hosting$/i).first().waitFor({ timeout: RUN_TIMEOUT });
   await dashboard.getByText(new RegExp(`^[\\w.-]+:${LOCAL_PORT}$`)).first().waitFor();
   await docked(page).getByText(/_Spoiler\.txt$/).waitFor();
+  await page.getByText(`Hosting: ${TEMPLATE}`, { exact: true }).first().waitFor();
   await settledProof(launched, '22-dashboard-hosting');
   return dashboard;
 };
