@@ -2,7 +2,7 @@
 import { writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import type { Locator } from 'playwright-core';
-import type { LaunchedApp } from './launch-app';
+import type { LaunchedApp } from './launched-app.type';
 
 const proofText = async ({ proofDir }: LaunchedApp, name: string, found: Locator) => {
   const lines = (await found.allInnerTexts()).map((text) => text.replace(/\s+/g, ' ').trim());

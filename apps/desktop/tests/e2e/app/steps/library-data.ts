@@ -1,7 +1,7 @@
 /* @layer tests @kind helper */
 import { stat } from 'node:fs/promises';
 import { expect } from 'vitest';
-import type { LaunchedApp } from '../support/launch-app';
+import type { LaunchedApp } from '../support/launched-app.type';
 import { settledProof } from '../support/settled-proof';
 import { exportPath, LOCAL_PORT, TEMPLATE } from '../support/flow-constants';
 import { base, closeHub, hub, nestedButtons, openScreen, openSection, shownOpacity } from '../support/locators';

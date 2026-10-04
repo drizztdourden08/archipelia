@@ -1,7 +1,7 @@
 /* @layer tests @kind helper */
 import { rm } from 'node:fs/promises';
 import type { Client } from 'archipelago.js';
-import type { LaunchedApp } from './launch-app';
+import type { LaunchedApp } from './launched-app.type';
 import { removeLeftWorlds } from './engine-cleanup';
 import { base, dialogOf, hub } from './locators';
 import type { HubTitle } from './locators';

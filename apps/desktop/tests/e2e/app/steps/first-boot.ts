@@ -1,6 +1,6 @@
 /* @layer tests @kind helper */
 import { expect } from 'vitest';
-import type { LaunchedApp } from '../support/launch-app';
+import type { LaunchedApp } from '../support/launched-app.type';
 import { settledProof } from '../support/settled-proof';
 import { LOCAL_PORT, PROFILE } from '../support/flow-constants';
 import { base, closeHub, dialogOf, hub, nestedButtons, openScreen, openSection } from '../support/locators';

@@ -1,7 +1,7 @@
 /* @layer tests @kind helper */
 import { expect } from 'vitest';
 import type { Locator, Page } from 'playwright-core';
-import type { LaunchedApp } from '../support/launch-app';
+import type { LaunchedApp } from '../support/launched-app.type';
 import { settledProof } from '../support/settled-proof';
 import { LOCAL_PORT, SOH, TEMPLATE, TIMESPINNER } from '../support/flow-constants';
 import { base, docked, hub, openScreen, pickOption, playerRowOf } from '../support/locators';

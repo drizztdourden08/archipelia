@@ -11,7 +11,7 @@ import { buildAndRun } from './steps/session-run';
 import { engineLeftovers } from './support/engine-cleanup';
 import { PROOF_DIR } from './support/flow-constants';
 import { launchApp } from './support/launch-app';
-import type { LaunchedApp } from './support/launch-app';
+import type { LaunchedApp } from './support/launched-app.type';
 import { tearDown } from './support/safety-net';
 
 describe('Archipelia app, headless, every screen end to end', () => {

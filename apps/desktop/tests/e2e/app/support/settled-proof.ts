@@ -1,6 +1,6 @@
 /* @layer tests @kind helper */
-import type { LaunchedApp } from './launch-app';
-import { proof } from './launch-app';
+import type { LaunchedApp } from './launched-app.type';
+import { proof } from './proof';
 
 const SETTLE_MS = 3000;
 

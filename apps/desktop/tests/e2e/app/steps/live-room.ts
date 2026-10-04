@@ -3,7 +3,7 @@ import { expect } from 'vitest';
 import type { Client } from 'archipelago.js';
 import type { Locator, Page } from 'playwright-core';
 import { checkSome, joinAs } from '../../support/ap-player';
-import type { LaunchedApp } from '../support/launch-app';
+import type { LaunchedApp } from '../support/launched-app.type';
 import { settledProof } from '../support/settled-proof';
 import { LOCAL_PORT, SOH, TIMESPINNER } from '../support/flow-constants';
 import { expectReadableDock } from '../support/dock-geometry';
