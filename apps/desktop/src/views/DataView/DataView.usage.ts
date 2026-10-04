@@ -14,6 +14,7 @@ const usage = {
     'Pick the part from the page that draws it; one page shows one part.',
     'Keep the work in useDataView; the view only lays out the buttons and the message.',
     'Report the result of an export, import or clean in the status line, not in a toast.',
+    'Removing old runs is a danger button that asks first with the count and says the output files go too.',
   ],
   a11y: [
     'The result of each action is a status line, read when it changes.',

@@ -14,6 +14,7 @@ const usage = {
     'Keep passwords and passphrases in the vault; the form holds them only while typed.',
     'Turn save off while the draft has a problem, and list the problems.',
     'Test a server before trusting its host key.',
+    'Remove is a danger button that asks first and names what loses the server.',
   ],
   a11y: [
     'The server list rows are buttons, pressed while selected.',

@@ -31,9 +31,9 @@ const cardPropsOf = (row: GameRow, { isBusy, installWorld, remove, openHome }: C
   const request = requestOf(row);
   const working = isBusy(row.entry.apworld);
   const install = request && row.state !== 'installed'
-    ? [{ label: row.state === 'update' ? 'Update' : 'Add', primary: true, disabled: working, onClick: () => installWorld(request, row.entry.apworld) }]
+    ? [{ label: row.state === 'update' ? 'Update' : 'Add', variant: 'primary', disabled: working, onClick: () => installWorld(request, row.entry.apworld) }]
     : [];
-  const removal = row.installed ? [{ label: 'Remove', disabled: working, onClick: () => remove(row.entry.apworld) }] : [];
+  const removal = row.installed ? [{ label: 'Remove', variant: 'danger', disabled: working, onClick: () => remove(row) }] : [];
   const home = row.entry.home ? [{ label: 'Home page', onClick: () => openHome(row.entry.home ?? '') }] : [];
   return {
     title: row.entry.displayName,

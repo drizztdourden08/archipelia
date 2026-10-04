@@ -2,7 +2,7 @@
 import type { ComponentUsage } from '@drizztdourden08/tessera';
 
 const usage = {
-  job: 'The Presets page: every preset grouped by game beside the editor of the picked one, with create, discard and delete dialogs.',
+  job: 'The Presets page: every preset grouped by game beside the editor of the picked one, with the create dialog and a confirm before discarding or deleting.',
   useWhen: [
     'The Presets page of the Library group.',
   ],
@@ -17,7 +17,7 @@ const usage = {
   ],
   a11y: [
     'The list and the detail are two regions of the master detail layout.',
-    'Each dialog has a title and a confirm button that says what it does.',
+    'Each confirm has a title and a danger button that says what it does.',
   ],
   tree: {
     path: ['a full screen view', 'a page of the multiworld app', 'the presets of every game'],

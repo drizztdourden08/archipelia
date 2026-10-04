@@ -14,6 +14,7 @@ const usage = {
     'Take the settings and the patch from the page; the view writes only ggBaseUrl.',
     'Keep the owner id in the vault; the view only asks whether one exists.',
     'Mark the site field and the owner buttons with their search anchors.',
+    'Forget the owner id is a danger button that asks first and says the rooms are lost.',
   ],
   a11y: [
     'The site field has a visible label and a hint.',

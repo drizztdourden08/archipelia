@@ -1,10 +1,11 @@
 /* @layer renderer-app @kind hook */
 import { useCallback, useEffect, useState } from 'react';
-import { useKeyedGuard } from '@drizztdourden08/brock-react';
+import { confirmAction, useKeyedGuard } from '@drizztdourden08/brock-react';
 import { secretsApi } from '@drizztdourden08/brock-secrets/renderer';
 import { appApi } from '../../../ipc/app-api';
 import { lastGuardError } from '../../../keyed-guard/last-guard-error';
 import { GG_OWNER_SECRET } from '../../../secrets/secret-names.constants';
+import { FORGET_OWNER_CONFIRM } from '../GgSettings.constants';
 
 const useGgOwner = (baseUrl: string) => {
   const [hasOwner, setHasOwner] = useState(false);
@@ -23,7 +24,11 @@ const useGgOwner = (baseUrl: string) => {
   }, [check, clearError, guard]);
 
   const openRooms = useCallback(() => { void act('rooms', () => appApi().ggOpenRooms(baseUrl)); }, [act, baseUrl]);
-  const resetOwner = useCallback(() => { void act('reset', async () => secretsApi()?.delete(GG_OWNER_SECRET)); }, [act]);
+  const resetOwner = useCallback(() => {
+    void confirmAction(FORGET_OWNER_CONFIRM).then((confirmed) => {
+      if (confirmed) void act('reset', async () => secretsApi()?.delete(GG_OWNER_SECRET));
+    });
+  }, [act]);
 
   return { busy: isBusy(), error: lastGuardError(guarded), hasOwner, openRooms, resetOwner };
 };

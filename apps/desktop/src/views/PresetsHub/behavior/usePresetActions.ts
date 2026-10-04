@@ -1,12 +1,13 @@
 /* @layer renderer-app @kind hook */
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
+import { confirmAction } from '@drizztdourden08/brock-react';
 import type { GamePreset } from '@archipelia/model';
 import type { ActionParams } from '../PresetsHub.type';
 import { useLibraryStore } from '../../../stores/useLibraryStore';
+import { deletePresetConfirm } from './delete-preset-confirm';
 
 const usePresetActions = ({ select, report }: ActionParams) => {
   const { duplicatePreset, removePreset } = useLibraryStore();
-  const [deleting, setDeleting] = useState<GamePreset | null>(null);
 
   const duplicate = useCallback(async (preset: GamePreset) => {
     try {
@@ -17,21 +18,19 @@ const usePresetActions = ({ select, report }: ActionParams) => {
     }
   }, [duplicatePreset, select, report]);
 
-  const requestDelete = useCallback((preset: GamePreset) => setDeleting(preset), []);
-  const cancelDelete = useCallback(() => setDeleting(null), []);
-
-  const confirmDelete = useCallback(async () => {
-    if (!deleting) return;
+  const remove = useCallback(async (preset: GamePreset) => {
     try {
-      await removePreset(deleting.id);
+      await removePreset(preset.id);
     } catch (err) {
       report((err as Error).message);
-    } finally {
-      setDeleting(null);
     }
-  }, [deleting, removePreset, report]);
+  }, [removePreset, report]);
 
-  return { cancelDelete, confirmDelete, deleting, duplicate, requestDelete };
+  const requestDelete = useCallback((preset: GamePreset) => {
+    void confirmAction(deletePresetConfirm(preset)).then((confirmed) => { if (confirmed) void remove(preset); });
+  }, [remove]);
+
+  return { duplicate, requestDelete };
 };
 
 export { usePresetActions };

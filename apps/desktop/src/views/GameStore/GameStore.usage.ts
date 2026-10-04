@@ -14,6 +14,7 @@ const usage = {
     'Pick the tab from the page tab; the view filters the rows for it.',
     'Guard each install with its world as the key, through useKeyedGuard, so its card shows it working.',
     'Cap the number of cards drawn and let search narrow the rest.',
+    'Removing a game asks first with the number of presets and templates that use it.',
   ],
   a11y: [
     'The search field has a placeholder that says what it finds.',

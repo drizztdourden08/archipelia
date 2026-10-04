@@ -1,11 +1,13 @@
 /* @layer renderer-app @kind hook */
-import { useKeyedGuard, usePlatform } from '@drizztdourden08/brock-react';
+import { confirmAction, useKeyedGuard, usePlatform } from '@drizztdourden08/brock-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { lastGuardError } from '../../../keyed-guard/last-guard-error';
 import { useLibraryStore } from '../../../stores/useLibraryStore';
-import type { GameTab } from '../GameStore.type';
+import type { GameRow, GameTab } from '../GameStore.type';
+import { appApi } from '../../../ipc/app-api';
 import { buildRows } from './build-rows';
 import { filterRows } from './filter-rows';
+import { removeGameConfirm } from './remove-game-confirm';
 import type { InstallRequest } from '@archipelia/catalog';
 import { APWORLD } from '../GameStore.constants';
 
@@ -25,7 +27,11 @@ const useGameStore = (tab: GameTab) => {
   const visible = useMemo(() => filterRows(rows, tab, query), [rows, tab, query]);
 
   const installWorld = useCallback((request: InstallRequest, key: string) => guard(key, () => install(request)), [guard, install]);
-  const remove = useCallback((apworld: string) => guard(apworld, () => removeGame(apworld)), [guard, removeGame]);
+  const remove = useCallback(({ entry, installed: game }: GameRow) => guard(entry.apworld, async () => {
+    const [presets, templates] = await Promise.all([appApi().presetsList(), appApi().templatesList()]);
+    const confirm = removeGameConfirm(entry.displayName, game?.game ?? entry.displayName, presets, templates);
+    if (await confirmAction(confirm)) await removeGame(entry.apworld);
+  }), [guard, removeGame]);
   const refresh = useCallback(() => guard('load', () => loadGames(true)), [guard, loadGames]);
   const addFromFile = useCallback(() => guard('file', async () => {
     const picked = await filePicker.pickFile({ extensions: APWORLD });

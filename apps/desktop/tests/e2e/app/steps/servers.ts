@@ -3,7 +3,7 @@ import { expect } from 'vitest';
 import type { Locator } from 'playwright-core';
 import type { LaunchedApp } from '../support/launch-app';
 import { settledProof } from '../support/settled-proof';
-import { closeHub, openScreen } from '../support/locators';
+import { closeHub, dialogOf, openScreen } from '../support/locators';
 
 const SERVER = { label: 'E2E box', host: '192.0.2.10', user: 'ap', keyPath: 'C:\\keys\\e2e_ed25519', apPath: '/opt/archipelago' };
 
@@ -45,6 +45,7 @@ const saveAndRemove = async (launched: LaunchedApp, servers: Locator) => {
   await servers.getByText('Servers · 1').waitFor();
   await settledProof(launched, '33-servers-saved');
   await servers.getByRole('button', { name: 'Remove' }).click();
+  await dialogOf(launched.page, 'Remove server').getByRole('button', { name: 'Remove', exact: true }).click();
   await entry.waitFor({ state: 'detached' });
   await servers.getByText('Servers · 0').waitFor();
   await settledProof(launched, '34-servers-removed');

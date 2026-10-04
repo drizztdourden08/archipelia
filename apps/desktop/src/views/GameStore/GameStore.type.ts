@@ -5,7 +5,7 @@ import type { InstallRequest } from '@archipelia/catalog';
 type CardHandlers = {
   isBusy: (key?: string) => boolean;
   installWorld: (request: InstallRequest, key: string) => void;
-  remove: (apworld: string) => void;
+  remove: (row: GameRow) => void;
   openHome: (url: string) => void;
 };
 

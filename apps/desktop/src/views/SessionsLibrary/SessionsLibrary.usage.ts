@@ -14,6 +14,7 @@ const usage = {
     'Open the builder in place of the lists while a template is edited.',
     'Open a run that is still starting in the run dialog, and any other run on the dashboard.',
     'Filter templates and runs with the same query.',
+    'Deleting a template or a run is a danger button behind a danger confirm.',
   ],
   a11y: [
     'The filter field has a placeholder that says what it filters.',

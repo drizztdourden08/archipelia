@@ -1,9 +1,10 @@
 /* @layer renderer-app @kind hook */
-import { requireHostApi, useKeyedGuard, usePlatform } from '@drizztdourden08/brock-react';
+import { confirmAction, requireHostApi, useKeyedGuard, usePlatform } from '@drizztdourden08/brock-react';
 import { useCallback, useEffect, useState } from 'react';
 import type { StorageSummary } from '@drizztdourden08/brock-core/platform';
 import { useRunsStore } from '../../../stores/useRunsStore';
 import { olderThan } from './old-runs';
+import { cleanRunsConfirm } from './clean-runs-confirm';
 import { CLEAN_DAYS, EXPORT_NAME } from '../DataView.constants';
 import { appApi } from '../../../ipc/app-api';
 import { lastGuardError } from '../../../keyed-guard/last-guard-error';
@@ -43,10 +44,15 @@ const useDataView = () => {
   const stale = olderThan(runs, CLEAN_DAYS, Date.now());
   const reveal = useCallback(() => { void requireHostApi().revealDataFolder(); }, []);
   const retrySummary = useCallback(() => { void loadSummary(); }, [loadSummary]);
-  const clean = useCallback(() => guard('clean', async () => {
-    for (const run of stale) await remove(run.id);
-    return `${stale.length} old runs removed`;
-  }), [guard, remove, stale]);
+  const clean = useCallback(() => {
+    void confirmAction(cleanRunsConfirm(stale.length)).then((confirmed) => {
+      if (!confirmed) return;
+      void guard('clean', async () => {
+        for (const run of stale) await remove(run.id);
+        return `${stale.length} old runs removed`;
+      });
+    });
+  }, [guard, remove, stale]);
   const exportLibrary = useCallback(() => guard('export', async () => {
     const result = await filePicker.saveFile({ name: EXPORT_NAME, bytes: await appApi().dataExport(), extensions: ['zip'] });
     return result.saved ? `Saved ${result.name ?? EXPORT_NAME}` : result.error ?? null;

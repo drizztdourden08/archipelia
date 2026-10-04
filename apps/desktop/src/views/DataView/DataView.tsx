@@ -15,7 +15,7 @@ const DataView = ({ part }: DataViewProps) => {
           <Stack gap="xs">
             <Text variant="body">{runs.length} runs kept, {stale.length} older than {CLEAN_DAYS} days.</Text>
             <ButtonRow align="start">
-              <Button variant="secondary" disabled={busy || stale.length === 0} onClick={clean}><Icon name="trash-2" />Remove runs older than {CLEAN_DAYS} days</Button>
+              <Button variant="danger" disabled={busy || stale.length === 0} onClick={clean}><Icon name="trash-2" />Remove runs older than {CLEAN_DAYS} days</Button>
             </ButtonRow>
           </Stack>
         </Card>

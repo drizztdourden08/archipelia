@@ -16,7 +16,7 @@ const GameCard = ({ title, source, status, tag, details, actions }: GameCardProp
         {actions.map((action) => (
           <Button
             key={action.label}
-            variant={action.primary ? 'primary' : 'secondary'}
+            variant={action.variant ?? 'secondary'}
             disabled={action.disabled}
             aria-label={`${action.label} ${title}`}
             onClick={action.onClick}

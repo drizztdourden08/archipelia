@@ -16,6 +16,7 @@ const usage = {
     'Mark at most one action primary: the next step for that world.',
     'Pass status only when the world is installed or has an update; leave it out for a world not installed.',
     'Disable an action while that world is busy; never hide it.',
+    'Mark an action that deletes something as danger.',
   ],
   a11y: [
     'The card is a group named after the world title.',
@@ -33,7 +34,7 @@ const GameCardSample = ({ onInstall }: { onInstall: () => void }) => (
     source="Official"
     status={{ label: 'update', tone: 'warning' }}
     details={['World 1.2.0', 'For AP 0.6.7']}
-    actions={[{ label: 'Update', onClick: onInstall, primary: true }]}
+    actions={[{ label: 'Update', onClick: onInstall, variant: 'primary' }]}
   />
 );
 `,

@@ -28,7 +28,7 @@ const ServerManager = () => {
         <Text as="h2" variant="subtitle">{draft.label || 'New server'}</Text>
         <ButtonRow>
           <Button variant="secondary" disabled={manager.busy || !draft.id} onClick={manager.runTest}>Test connection</Button>
-          <Button variant="secondary" disabled={manager.busy || !draft.id} onClick={manager.remove}>Remove</Button>
+          <Button variant="danger" disabled={manager.busy || !draft.id} onClick={manager.remove}>Remove</Button>
           <Button variant="primary" disabled={manager.busy || manager.problems.length > 0} onClick={manager.save}>Save</Button>
         </ButtonRow>
       </Flex>

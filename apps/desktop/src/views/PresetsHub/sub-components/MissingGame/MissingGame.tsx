@@ -12,7 +12,7 @@ const MissingGame = ({ preset, onOpenGames, onDelete }: MissingGameProps) => {
       <Text variant="caption">Add the game from Games and its options come back. The preset keeps {Object.keys(preset.values).length} saved values.</Text>
       <ButtonRow align="start">
         <Button variant="primary" onClick={onOpenGames}>Open Games</Button>
-        <Button variant="ghost" onClick={handleDelete}>Delete</Button>
+        <Button variant="danger" onClick={handleDelete}>Delete</Button>
       </ButtonRow>
     </Stack>
   );

@@ -2,7 +2,7 @@
 import type { ServerEntry } from '@archipelia/model';
 import { secretsApi } from '@drizztdourden08/brock-secrets/renderer';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useKeyedGuard } from '@drizztdourden08/brock-react';
+import { confirmAction, useKeyedGuard } from '@drizztdourden08/brock-react';
 import type { SecretInputs } from '../ServerManager.type';
 import { passwordSecret } from './password-secret';
 import { passphraseSecret } from './passphrase-secret';
@@ -13,12 +13,19 @@ import { lastGuardError } from '../../../keyed-guard/last-guard-error';
 import { newServerEntry } from './new-server-entry';
 import { draftProblems } from './draft-problems';
 import { withSecretRefs } from './with-secret-refs';
+import { removeServerConfirm } from './remove-server-confirm';
 
 const storeSecrets = async (entry: ServerEntry, inputs: SecretInputs) => {
   const secrets = secretsApi();
   if (!secrets) throw new Error('the vault is not available');
   if (inputs.password) await secrets.set(passwordSecret(entry.id), inputs.password, `SSH password for ${entry.label}`);
   if (inputs.passphrase) await secrets.set(passphraseSecret(entry.id), inputs.passphrase, `Key passphrase for ${entry.label}`);
+};
+
+const removeServer = async (id: string) => {
+  await appApi().serversRemove(id);
+  const vault = secretsApi();
+  if (vault) await Promise.all([passwordSecret(id), passphraseSecret(id)].map((name) => vault.delete(name)));
 };
 
 const useServerManager = () => {
@@ -58,13 +65,17 @@ const useServerManager = () => {
     setDraft(await appApi().serversTrustKey(draft.id, sha));
     setTest(await appApi().serversTest(draft.id));
   }), [draft, guard]);
-  const remove = useCallback(() => guard('remove', async () => {
+  const remove = useCallback(() => {
     if (!draft?.id) return;
-    await appApi().serversRemove(draft.id);
-    const vault = secretsApi();
-    if (vault) await Promise.all([passwordSecret(draft.id), passphraseSecret(draft.id)].map((name) => vault.delete(name)));
-    setDraft(null);
-  }), [draft, guard]);
+    const { id } = draft;
+    void confirmAction(removeServerConfirm(draft)).then((confirmed) => {
+      if (!confirmed) return;
+      void guard('remove', async () => {
+        await removeServer(id);
+        setDraft(null);
+      });
+    });
+  }, [draft, guard]);
 
   return { busy: isBusy(), create, draft, error: lastGuardError(guarded), inputs, problems, remove, runTest, save, select, servers, setDraft, setInputs, test, trust };
 };

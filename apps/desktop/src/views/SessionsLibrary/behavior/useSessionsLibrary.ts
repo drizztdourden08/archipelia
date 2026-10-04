@@ -1,6 +1,6 @@
 /* @layer renderer-app @kind hook */
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { dialogs, useKeyedGuard } from '@drizztdourden08/brock-react';
+import { confirmAction, useKeyedGuard } from '@drizztdourden08/brock-react';
 import { secretsApi } from '@drizztdourden08/brock-secrets/renderer';
 import type { ServerEntry, SessionTemplate } from '@archipelia/model';
 import { appApi } from '../../../ipc/app-api';
@@ -47,7 +47,9 @@ const useSessionsLibrary = () => {
   const deleteTemplate = useCallback((id: string) => {
     const template = byId(id);
     if (!template) return;
-    dialogs.confirmDelete('Delete template', `Delete ${template.name}? Its runs stay in the history.`, () => {
+    const message = `Delete ${template.name}? Its runs stay in the history.`;
+    void confirmAction({ title: 'Delete template', message, confirmLabel: 'Delete', variant: 'danger' }).then((confirmed) => {
+      if (!confirmed) return;
       void guard(id, async () => {
         if (template.server.passwordRef === passwordNameOf(id)) await secretsApi()?.delete(passwordNameOf(id));
         await removeTemplate(id);
@@ -59,8 +61,9 @@ const useSessionsLibrary = () => {
 
   const deleteRun = useCallback((id: string) => {
     const run = runs.find((entry) => entry.id === id);
-    dialogs.confirmDelete('Delete run', `Delete the ${run?.snapshot.name ?? ''} run and its output files?`, () => {
-      void guard(id, () => removeRun(id));
+    const message = `Delete the ${run?.snapshot.name ?? ''} run and its output files?`;
+    void confirmAction({ title: 'Delete run', message, confirmLabel: 'Delete', variant: 'danger' }).then((confirmed) => {
+      if (confirmed) void guard(id, () => removeRun(id));
     });
   }, [guard, removeRun, runs]);
 

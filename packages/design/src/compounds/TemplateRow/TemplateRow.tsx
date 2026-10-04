@@ -14,7 +14,7 @@ const TemplateRow = ({ id, name, meta, playersLabel, busy, onEdit, onRun, onDupl
       <Tag>{playersLabel}</Tag>
       <Button size="sm" variant="ghost" onClick={edit}>Edit</Button>
       <Button size="sm" variant="ghost" disabled={busy} onClick={duplicate}>Duplicate</Button>
-      <Button size="sm" variant="ghost" disabled={busy} onClick={remove}>Delete</Button>
+      <Button size="sm" variant="danger" disabled={busy} onClick={remove}>Delete</Button>
       <Button size="sm" variant="primary" disabled={busy} onClick={run}>Run</Button>
     </ButtonRow>
   );

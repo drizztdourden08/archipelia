@@ -19,7 +19,7 @@ const RunRow = ({ id, when, name, host, status, error, hasLog, canDelete, busy, 
     <ButtonRow gap="xs">
       <Status tone={status.tone}>{status.label}</Status>
       {hasLog && <Button size="sm" variant="ghost" onClick={showLog}>Show log</Button>}
-      <Button size="sm" variant="ghost" disabled={busy === true || !canDelete} onClick={remove}>Delete</Button>
+      <Button size="sm" variant="danger" disabled={busy === true || !canDelete} onClick={remove}>Delete</Button>
       <Button size="sm" variant="secondary" onClick={open}>Open</Button>
     </ButtonRow>
   );

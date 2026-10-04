@@ -1,6 +1,6 @@
 /* @layer renderer-app @kind component */
 import { Box } from '@drizztdourden08/tessera/primitives';
-import { Dialog, MasterDetailLayout } from '@drizztdourden08/tessera/composites';
+import { MasterDetailLayout } from '@drizztdourden08/tessera/composites';
 import { usePresetsHub } from './behavior/usePresetsHub';
 import { PresetList } from './sub-components/PresetList';
 import { PresetDetail } from './sub-components/PresetDetail';
@@ -38,24 +38,6 @@ const PresetsHub = () => {
         )}
       />
       <CreatePresetDialog creator={creator} />
-      <Dialog
-        open={selection.discardOpen}
-        title="Discard changes?"
-        message="This preset has unsaved changes. Leave it and lose them?"
-        confirmLabel="Discard"
-        variant="danger"
-        onConfirm={selection.confirmDiscard}
-        onCancel={selection.cancelDiscard}
-      />
-      <Dialog
-        open={actions.deleting !== null}
-        title="Delete preset?"
-        message={`Delete "${actions.deleting?.name ?? ''}"? Sessions that use it will need another preset.`}
-        confirmLabel="Delete"
-        variant="danger"
-        onConfirm={actions.confirmDelete}
-        onCancel={actions.cancelDelete}
-      />
     </Box>
   );
 };

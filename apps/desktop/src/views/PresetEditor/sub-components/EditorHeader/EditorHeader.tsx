@@ -20,7 +20,7 @@ const EditorHeader = (props: EditorHeaderProps) => {
         <Button variant="ghost" onClick={onDuplicate} disabled={busy}>Duplicate</Button>
         <Button variant="ghost" onClick={onImport} disabled={busy}>Import yaml</Button>
         <Button variant="ghost" onClick={onExport} disabled={busy}>Export yaml</Button>
-        <Button variant="ghost" onClick={onDelete} disabled={busy}>Delete</Button>
+        <Button variant="danger" onClick={onDelete} disabled={busy}>Delete</Button>
         <Button variant="secondary" onClick={onResetAll} disabled={busy}>Reset all</Button>
         <Button variant="primary" onClick={onSave} disabled={!canSave}>Save</Button>
       </ButtonRow>

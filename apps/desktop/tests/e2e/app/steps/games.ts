@@ -4,7 +4,7 @@ import type { Locator } from 'playwright-core';
 import type { LaunchedApp } from '../support/launch-app';
 import { settledProof } from '../support/settled-proof';
 import { SOH, TIMESPINNER } from '../support/flow-constants';
-import { cardOf, closeHub, openScreen } from '../support/locators';
+import { cardOf, closeHub, dialogOf, openScreen } from '../support/locators';
 
 const INSTALL_TIMEOUT = 180000;
 
@@ -62,6 +62,7 @@ const removeBothWorlds = async (launched: LaunchedApp) => {
   await openTab(games, 'Installed');
   for (const title of [TIMESPINNER.card, SOH.card]) {
     await cardOf(games, title).getByRole('button', { name: `Remove ${title}`, exact: true }).click();
+    await dialogOf(launched.page, 'Remove game').getByRole('button', { name: 'Remove', exact: true }).click();
     await cardOf(games, title).waitFor({ state: 'detached' });
   }
   await games.getByText('No world matches').waitFor();

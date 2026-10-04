@@ -21,7 +21,7 @@ const GgSettings = ({ settings, onChange }: GgSettingsProps) => {
       <Box data-search-anchor="owner">
         <ButtonRow align="start">
           <Button variant="secondary" disabled={!hasOwner || busy} onClick={openRooms}>Open my rooms in the browser</Button>
-          <Button variant="secondary" disabled={!hasOwner || busy} onClick={resetOwner}>Forget the owner id</Button>
+          <Button variant="danger" disabled={!hasOwner || busy} onClick={resetOwner}>Forget the owner id</Button>
         </ButtonRow>
       </Box>
     </Stack>
