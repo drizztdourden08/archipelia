@@ -17,3 +17,9 @@
   font-family: var(--font-mono);
   overflow-wrap: anywhere;
 }
+
+.console-players {
+  flex: none;
+  max-block-size: 40%;
+  overflow-y: auto;
+}

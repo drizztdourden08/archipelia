@@ -4,8 +4,8 @@ import { useLiveRoom } from '../../behavior/useLiveRoom';
 import { PlayersPanel } from '../PlayersPanel';
 
 const PlayersWidget = ({ session, lines }: PlayersWidgetProps) => {
-  const { players, phase, error, submitPassword, retry } = useLiveRoom(session, lines);
-  return <PlayersPanel rows={players} phase={phase} error={error} onPassword={submitPassword} onRetry={retry} />;
+  const { players, connection } = useLiveRoom(session, lines);
+  return <PlayersPanel rows={players} connection={connection} />;
 };
 
 export { PlayersWidget };

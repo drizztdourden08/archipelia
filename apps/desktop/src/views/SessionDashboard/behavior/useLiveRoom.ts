@@ -5,9 +5,10 @@ import type { HostLogLine } from '@archipelia/hosts';
 import { checksFromLog, hintsFromLog, playerRows, presenceOf, roomPlayersOf, targetKey, watchTarget } from '@archipelia/sessions/live-room';
 import { holdLiveRoom } from './hold-live-room';
 import { useLiveRoomStore } from '../../../stores/useLiveRoomStore';
+import type { LiveConnection } from '../SessionDashboard.type';
 
 const useLiveRoom = (session: Session | null, lines: readonly HostLogLine[]) => {
-  const { phase, error, players, statuses, watched, hints, passwordRequired, connect } = useLiveRoomStore();
+  const { phase, error, players, statuses, watched, hints, passwordRequired, connect, retry, retryAt, attempt, attempts, retrying } = useLiveRoomStore();
   const target = useMemo(() => (session ? watchTarget(session) : null), [session]);
   const targetRef = useRef(target);
   targetRef.current = target;
@@ -18,7 +19,6 @@ const useLiveRoom = (session: Session | null, lines: readonly HostLogLine[]) => 
   const submitPassword = useCallback((password: string) => {
     if (targetRef.current) void connect(targetRef.current, password);
   }, [connect]);
-  const retry = useCallback(() => submitPassword(''), [submitPassword]);
 
   const planned = session?.snapshot.players;
   const names = useMemo(() => (planned ?? []).map((player) => player.name), [planned]);
@@ -33,7 +33,12 @@ const useLiveRoom = (session: Session | null, lines: readonly HostLogLine[]) => 
 
   const logHints = useMemo(() => (phase === 'live' ? [] : hintsFromLog(texts)), [phase, texts]);
 
-  return { error, hints: phase === 'live' ? hints : logHints, passwordRequired, phase, players: rows, retry, submitPassword };
+  const connection: LiveConnection = useMemo(
+    () => ({ phase, error, retryAt, attempt, attempts, retrying, onPassword: submitPassword, onRetry: retry }),
+    [phase, error, retryAt, attempt, attempts, retrying, submitPassword, retry],
+  );
+
+  return { connection, hints: phase === 'live' ? hints : logHints, passwordRequired, phase, players: rows };
 };
 
 export { useLiveRoom };

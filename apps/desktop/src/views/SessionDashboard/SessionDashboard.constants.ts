@@ -1,5 +1,6 @@
 /* @layer renderer-app @kind config */
 import type { HostLogLine } from '@archipelia/hosts';
+import type { LiveRoomPhase } from '@archipelia/sessions/live-room';
 import type { LogTab, SessionText } from './SessionDashboard.type';
 
 const IDLE: SessionText = { value: null, loading: false, failed: false };
@@ -25,6 +26,13 @@ const KIND_RULES: readonly [RegExp, string][] = [
 
 const MAX_SENT = 40;
 
+const REPLY_WINDOW_MS = 15000;
+
+const LIVE_DETAIL: Partial<Record<LiveRoomPhase, string>> = {
+  idle: 'Live data shows while the room is hosting.',
+  password: 'Enter it to watch the room.',
+};
+
 const OUTPUT_DIR = 'output';
 
 const READ_FAILED = 'Could not read this file.';
@@ -35,4 +43,6 @@ const FAILURE = {
   run: 'This run did not get its room up. Show log on the Sessions page has the details.',
 } as const;
 
-export { FAILURE, GENERATE_LOG, IDLE, KIND_RULES, LOG_TAB_ITEMS, LOG_TABS, MAX_SENT, NO_LINES, OUTPUT_DIR, READ_FAILED, TICK_MS };
+export {
+  FAILURE, GENERATE_LOG, IDLE, KIND_RULES, LIVE_DETAIL, LOG_TAB_ITEMS, LOG_TABS, MAX_SENT, NO_LINES, OUTPUT_DIR, READ_FAILED, REPLY_WINDOW_MS, TICK_MS,
+};

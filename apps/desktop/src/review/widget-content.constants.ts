@@ -16,4 +16,6 @@ const LIVE_WIDGETS: [string, RegExp][] = [
   ['console', /Send/],
 ];
 
-export { LIVE_WIDGETS, SPOILER_WIDGET, STOPPED_WIDGETS };
+const CONSOLE_REPLY = /> \/players[\s\S]*players of \d+ connected/;
+
+export { CONSOLE_REPLY, LIVE_WIDGETS, SPOILER_WIDGET, STOPPED_WIDGETS };

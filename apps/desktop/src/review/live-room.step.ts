@@ -10,6 +10,8 @@ import { SELECTOR } from './review-dom.constants';
 import { checkWidgets } from './check-widgets';
 import { clickNamed } from './click-named';
 import { joinRoom } from './join-room';
+import { checkLiveStatus } from './check-live-status';
+import { sendFromConsole } from './send-from-console';
 import { waitNamed } from './wait-named';
 import { waitText } from './wait-text';
 import { withHeartbeat } from './with-heartbeat';
@@ -59,6 +61,8 @@ export default defineReviewStep({
     tour.check('player-joins', client !== null, 'a player joins the room and checks locations', 'the review player could not join');
     widgets.reset();
     await checkWidgets(tour, LIVE_WIDGETS, 'live');
+    await checkLiveStatus(tour);
+    await sendFromConsole(tour);
     await tour.capture('hosting');
     client?.socket.disconnect();
     await stopFromDashboard(tour);

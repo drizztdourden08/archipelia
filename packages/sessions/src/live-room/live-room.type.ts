@@ -43,11 +43,13 @@ type PlayerView = {
   total: number | null;
 };
 
-type LiveRoomPhase = 'idle' | 'connecting' | 'live' | 'password' | 'failed' | 'closed';
+type LiveRoomPhase = 'idle' | 'connecting' | 'live' | 'reconnecting' | 'password' | 'failed' | 'closed';
+
+type RetryPlan = { attempt: number; attempts: number; retryAt: number };
 
 type LiveRoomTarget = { sessionId: string; urls: string[]; slotName: string };
 
 export type {
-  HintLookup, HintState, HintView, LiveRoomPhase, LiveRoomTarget, PlayerStatus, PlayerView, ProtocolHint, RoomPlayer,
+  HintLookup, HintState, HintView, LiveRoomPhase, LiveRoomTarget, PlayerStatus, PlayerView, ProtocolHint, RetryPlan, RoomPlayer,
   WatchedChecks,
 };

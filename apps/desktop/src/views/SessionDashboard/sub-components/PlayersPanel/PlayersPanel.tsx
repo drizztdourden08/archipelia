@@ -4,14 +4,14 @@ import type { PlayerView } from '@archipelia/sessions/live-room';
 import { checksLabel } from '@archipelia/sessions/live-room';
 import { STATUS_TONE } from './PlayersPanel.constants';
 import type { PlayersPanelProps } from './PlayersPanel.type';
-import { LiveNotice } from '../LiveNotice';
+import { LiveStatus } from '../LiveStatus';
 import { PlayerStatusRow } from '@archipelia/design';
 
 const progressOf = ({ checked, total }: PlayerView) => (checked !== null && total ? { value: checked, max: total } : null);
 
-const PlayersPanel = ({ rows, phase, error, onPassword, onRetry }: PlayersPanelProps) => (
+const PlayersPanel = ({ rows, connection }: PlayersPanelProps) => (
   <Stack gap="sm" className="session-panel">
-    <LiveNotice phase={phase} error={error} onPassword={onPassword} onRetry={onRetry} />
+    <LiveStatus connection={connection} />
     {rows.length === 0 && <EmptyState message="No players in this session." />}
     {rows.length > 0 && (
       <Stack gap="sm" role="list" aria-label="Players">
