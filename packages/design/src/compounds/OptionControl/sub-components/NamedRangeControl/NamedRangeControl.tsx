@@ -9,7 +9,7 @@ import { numberShown } from '../../behavior/number-shown';
 import type { OptionControlProps } from '../../OptionControl.type';
 import { RangeControl } from '../RangeControl';
 
-const NamedRangeControl = ({ def, value, onChange, disabled }: OptionControlProps) => {
+const NamedRangeControl = ({ def, value, onChange, disabled, labelId }: OptionControlProps) => {
   const [customMode, setCustomMode] = useState(false);
   const options = useMemo(() => namedOptions(def), [def]);
   const selection = customMode && typeof value === 'number' ? CUSTOM_NUMBER : namedSelection(def, value);
@@ -19,9 +19,9 @@ const NamedRangeControl = ({ def, value, onChange, disabled }: OptionControlProp
   }, [def, value, onChange]);
   return (
     <Stack gap="xs">
-      <Select value={selection} options={options} onChange={handlePick} disabled={disabled} />
+      <Select value={selection} options={options} aria-labelledby={labelId} onChange={handlePick} disabled={disabled} />
       {selection === CUSTOM_NUMBER && (
-        <RangeControl def={def} value={numberShown(def, value)} onChange={onChange} disabled={disabled} />
+        <RangeControl def={def} value={numberShown(def, value)} onChange={onChange} disabled={disabled} labelId={labelId} />
       )}
     </Stack>
   );

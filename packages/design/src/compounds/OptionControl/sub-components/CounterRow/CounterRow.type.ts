@@ -6,6 +6,7 @@ type CounterRowProps = {
   onCount: (name: string, count: number) => void;
   onRemove: (name: string) => void;
   disabled?: boolean;
+  labelId?: string;
 };
 
 export type { CounterRowProps };

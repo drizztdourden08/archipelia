@@ -33,7 +33,6 @@ const openDraft = async (tour: AppReviewTour) => {
   await tour.resetUi();
   nav.open(ROUTE.sessions);
   await clickNamed(tour, SELECTOR.button, 'New session', layer(tour) ?? undefined);
-  await waitText(tour, 'Add at least one player', () => layer(tour));
   const nameField = await waitNamed(tour, SELECTOR.field, 'Session name', layer(tour) ?? undefined);
   tour.check('builder-opens', nameField !== null, 'New session opens the builder', 'the builder has no Session name field');
   if (nameField instanceof HTMLInputElement) tour.typeText(nameField, 'Review draft');

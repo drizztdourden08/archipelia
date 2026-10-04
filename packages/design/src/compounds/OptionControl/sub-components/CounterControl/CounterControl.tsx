@@ -9,7 +9,7 @@ import type { OptionControlProps } from '../../OptionControl.type';
 import { CounterAdd } from '../CounterAdd';
 import { CounterRow } from '../CounterRow';
 
-const CounterControl = ({ def, value, onChange, disabled }: OptionControlProps) => {
+const CounterControl = ({ def, value, onChange, disabled, labelId }: OptionControlProps) => {
   const rows = counterEntries(value);
   const handleCount = useCallback((name: string, count: number) => onChange(setCount(value, name, count)), [value, onChange]);
   const handleRemove = useCallback((name: string) => onChange(removeCount(value, name)), [value, onChange]);
@@ -18,7 +18,7 @@ const CounterControl = ({ def, value, onChange, disabled }: OptionControlProps) 
     <Stack gap="xs">
       {rows.length === 0 && <EmptyState message="None yet. Add one below." />}
       {rows.map(([name, count]) => (
-        <CounterRow key={name} optionKey={def.key} name={name} count={count} onCount={handleCount} onRemove={handleRemove} disabled={disabled} />
+        <CounterRow key={name} optionKey={def.key} name={name} count={count} onCount={handleCount} onRemove={handleRemove} disabled={disabled} labelId={labelId} />
       ))}
       <CounterAdd def={def} value={value} onAdd={handleAdd} disabled={disabled} />
     </Stack>

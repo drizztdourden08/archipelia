@@ -8,6 +8,7 @@ type KitEditorProps = {
   onChange: (raw: unknown) => void;
   disabled?: boolean;
   bounds?: NumberBounds;
+  labelId?: string;
 };
 
 export type { KitEditorProps };

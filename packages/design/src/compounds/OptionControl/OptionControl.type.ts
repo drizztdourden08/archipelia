@@ -6,6 +6,7 @@ type OptionControlProps = {
   value: OptionValue;
   onChange: (value: OptionValue) => void;
   disabled?: boolean;
+  labelId?: string;
 };
 
 export type { OptionControlProps };

@@ -20,6 +20,7 @@ const usage = {
   a11y: [
     'The row is a group named Player and the slot number.',
     'The name, game and preset inputs and every button are named after the player, such as Remove player 2.',
+    'Below 60rem the column header hides and each cell shows its own caption: Name, Game, Preset and Overrides. The captions are hidden from screen readers, since each input is already named.',
   ],
   tree: {
     path: ['data', 'a player of a session', 'in the session builder'],

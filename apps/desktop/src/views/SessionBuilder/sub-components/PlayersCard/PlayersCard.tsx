@@ -52,7 +52,7 @@ const PlayersCard = ({ players, installed, presets, selectedSlot, busy, actions,
             </Stack>
           )}
         <ButtonRow align="start">
-          <Button variant="secondary" onClick={actions.add}>Add player</Button>
+          <Button variant="secondary" data-problem-target="players" onClick={actions.add}>Add player</Button>
           {last && <Button variant="ghost" onClick={duplicateLast}>Duplicate player {last.slot}</Button>}
         </ButtonRow>
       </Stack>

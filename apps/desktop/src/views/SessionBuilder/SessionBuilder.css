@@ -1,5 +1,9 @@
 /* @layer renderer-app @kind style */
 .session-builder__problem {
+  align-self: flex-start;
+}
+
+.session-builder__problem-text {
   color: var(--c-danger);
 }
 

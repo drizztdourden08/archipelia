@@ -8,7 +8,7 @@ import { parseJson } from '../../behavior/parse-json';
 import { sameJson } from '../../behavior/same-json';
 import { MAX_ROWS } from './JsonControl.constants';
 
-const JsonControl = ({ def, value, onChange, disabled }: OptionControlProps) => {
+const JsonControl = ({ def, value, onChange, disabled, labelId }: OptionControlProps) => {
   const shape = def.kind === 'dict' ? 'object' : 'list';
   const [draft, setDraft] = useState(() => formatJson(value));
   const [error, setError] = useState<string | null>(null);
@@ -36,6 +36,7 @@ const JsonControl = ({ def, value, onChange, disabled }: OptionControlProps) => 
         value={draft}
         onChange={handleChange}
         disabled={disabled}
+        aria-labelledby={labelId}
         spellCheck={false}
         rows={Math.min(MAX_ROWS, draft.split('\n').length + 1)}
       />

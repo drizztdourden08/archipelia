@@ -6,7 +6,7 @@ import { numberValue } from '../../behavior/number-value';
 import type { OptionControlProps } from '../../OptionControl.type';
 import { KitEditor } from '../KitEditor';
 
-const RangeControl = ({ def, value, onChange, disabled }: OptionControlProps) => {
+const RangeControl = ({ def, value, onChange, disabled, labelId }: OptionControlProps) => {
   const field = useMemo(() => optionDescriptor(def), [def]);
   const bounds = useMemo(() => ({ min: def.range?.min, max: def.range?.max, step: 1 }), [def.range]);
   const handleChange = useCallback((raw: unknown) => {
@@ -18,10 +18,10 @@ const RangeControl = ({ def, value, onChange, disabled }: OptionControlProps) =>
     <Flex className="option-control__range" gap="sm" align="center">
       {def.range && (
         <Box className="option-control__slider">
-          <Slider value={current} min={def.range.min} max={def.range.max} onChange={handleChange} disabled={disabled} showValue={false} />
+          <Slider value={current} min={def.range.min} max={def.range.max} onChange={handleChange} disabled={disabled} showValue={false} aria-label={def.displayName} />
         </Box>
       )}
-      <KitEditor field={field} value={value} onChange={handleChange} disabled={disabled} bounds={bounds} />
+      <KitEditor field={field} value={value} onChange={handleChange} disabled={disabled} bounds={bounds} labelId={labelId} />
     </Flex>
   );
 };

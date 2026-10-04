@@ -19,6 +19,7 @@ const usage = {
   a11y: [
     'The row is a group named after the option display name.',
     'The reset button and the problem line follow OptionField.',
+    'The control is named by the visible label through the label id of OptionField.',
   ],
   tree: {
     path: ['a value the user sets', 'a game option', 'the whole row from its definition'],

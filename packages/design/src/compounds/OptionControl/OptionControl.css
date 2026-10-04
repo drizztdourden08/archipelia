@@ -1,4 +1,8 @@
 /* @layer renderer-app @kind style */
+.option-control__labelled {
+  display: contents;
+}
+
 .option-control__range {
   width: 100%;
 }

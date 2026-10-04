@@ -31,7 +31,7 @@ const buildSession = async (launched: LaunchedApp) => {
   const sessions = await openScreen(page, 'Sessions');
   await sessions.getByText('No session yet. New session builds one.').waitFor();
   await sessions.getByRole('button', { name: 'New session' }).click();
-  await sessions.getByText('Add at least one player').waitFor();
+  await sessions.getByRole('textbox', { name: 'Session name' }).waitFor();
   await settledProof(launched, '18-sessions-new');
   for (const player of PLAYERS) await fillPlayer(page, sessions, player);
   expect(await sessions.getByRole('spinbutton', { name: 'Local port', exact: true }).inputValue()).toBe(String(LOCAL_PORT));

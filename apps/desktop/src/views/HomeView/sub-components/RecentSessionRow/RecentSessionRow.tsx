@@ -12,7 +12,7 @@ const RecentSessionRow = ({ session, now, onOpen }: RecentSessionRowProps) => {
   const action = (
     <ButtonRow gap="xs">
       <Status tone={status.tone}>{status.label}</Status>
-      <Button size="sm" variant="ghost" onClick={openRow}>Open</Button>
+      <Button size="sm" variant="ghost" aria-label={`Open run ${session.snapshot.name}`} onClick={openRow}>Open</Button>
     </ButtonRow>
   );
   return <ListItemRow actionVisibility="always" name={session.snapshot.name} meta={sessionMeta(session, now)} action={action} onDoubleClick={openRow} />;

@@ -26,7 +26,7 @@ const hosting = (tour: AppReviewTour) => withHeartbeat(
 const startFromSessions = async (tour: AppReviewTour) => {
   nav.open(ROUTE.sessions);
   await waitText(tour, REVIEW_SESSION, () => tour.find(SELECTOR.layer));
-  await clickNamed(tour, SELECTOR.button, 'Run', tour.find(SELECTOR.layer) ?? undefined);
+  await clickNamed(tour, SELECTOR.button, `Run ${REVIEW_SESSION}`, tour.find(SELECTOR.layer) ?? undefined);
   const job = await tour.waitFor(() => tour.find(`${SELECTOR.runJob}[data-state="running"]`), 15000);
   tour.check('run-job-opens', job !== null, 'Run opens the run job dialog while the seed generates', 'Run showed no run job dialog');
   if (job) await tour.capture('run-job');

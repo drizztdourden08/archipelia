@@ -12,7 +12,7 @@ const usage = {
     { case: 'An app setting row.', use: 'SettingsRow' },
   ],
   rules: [
-    'Put exactly one control in children.',
+    'Put exactly one control in children. Pass children as a function to get the id of the label, and name the control with it through aria-labelledby.',
     'Set changed when the value differs from the preset or the default, so reset turns on.',
     'Pass problem only for a value the generator would refuse.',
     'Set advanced for an option the game hides in its simple view.',
@@ -20,7 +20,8 @@ const usage = {
   a11y: [
     'The field is a group named after the label.',
     'The reset button is named Reset and the label, and the problem line is an alert.',
-    'The More and Less button reports whether the description is expanded.',
+    'The More and Less button reports whether the description is expanded and is named after the label, such as More about Starting hearts.',
+    'The label text carries a generated id that the control can point at with aria-labelledby.',
   ],
   tree: {
     path: ['a value the user sets', 'a game option', 'the frame around a control'],
@@ -35,7 +36,7 @@ const OptionFieldSample = ({ onReset }: { onReset: () => void }) => (
   </OptionField>
 );
 `,
-  propsHash: '06d2c3eb5d70724a',
+  propsHash: 'bd89e856ec64aad7',
 } satisfies ComponentUsage;
 
 export { usage };

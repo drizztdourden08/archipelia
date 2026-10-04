@@ -18,9 +18,9 @@ const RunRow = ({ id, when, name, host, status, error, hasLog, canDelete, busy, 
   const actions = (
     <ButtonRow gap="xs">
       <Status tone={status.tone}>{status.label}</Status>
-      {hasLog && <Button size="sm" variant="ghost" onClick={showLog}>Show log</Button>}
-      <Button size="sm" variant="danger" disabled={busy === true || !canDelete} onClick={remove}>Delete</Button>
-      <Button size="sm" variant="secondary" onClick={open}>Open</Button>
+      {hasLog && <Button size="sm" variant="ghost" aria-label={`Show log of run ${name}`} onClick={showLog}>Show log</Button>}
+      <Button size="sm" variant="danger" disabled={busy === true || !canDelete} aria-label={`Delete run ${name}`} onClick={remove}>Delete</Button>
+      <Button size="sm" variant="secondary" aria-label={`Open run ${name}`} onClick={open}>Open</Button>
     </ButtonRow>
   );
   return <ListItemRow actionVisibility="always" role="listitem" name={name} meta={meta} action={actions} onDoubleClick={open} />;

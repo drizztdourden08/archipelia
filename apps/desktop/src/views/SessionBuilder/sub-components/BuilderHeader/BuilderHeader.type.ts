@@ -3,7 +3,6 @@ type BuilderHeaderProps = {
   name: string;
   saved: boolean;
   busy: boolean;
-  canRun: boolean;
   onName: (name: string) => void;
   onSave: () => void;
   onRun: () => void;
