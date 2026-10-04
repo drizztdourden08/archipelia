@@ -27,7 +27,7 @@ const PAGE_OF: Record<MenuEntry, string> = {
 
 const dialogOf = (page: Page, title: string) => page.getByRole('dialog', { name: title, exact: true });
 
-const hub = (page: Page, title: HubTitle) => dialogOf(page, title);
+const hub = (page: Page, title: HubTitle) => page.getByRole('dialog', { name: new RegExp(`^(Back )?${title}$`) });
 
 const base = (page: Page) => page.locator('.session-dashboard, .idle-base');
 
