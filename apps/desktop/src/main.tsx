@@ -6,9 +6,10 @@ import { BrockApp } from '@drizztdourden08/brock-react';
 import { rendererBootTasks } from '../.brock/boot.renderer';
 import { rendererModules } from '../.brock/modules.renderer';
 import { screenTree } from '../.brock/screens';
-import { appWidgets } from '../.brock/widgets';
-import { BASE_SCREEN } from './hooks/app-navigation.constants';
-import { MENU, SCREENS, SETTINGS } from './main.constants';
+import { appWidgetLayout, appWidgets } from '../.brock/widgets';
+import { appReview } from '../.brock/review';
+import { appTitleBar } from '../.brock/title-bar';
+import { MENU, SETTINGS } from './main.constants';
 import { product } from './product';
 import { quitWhileHosting } from './rooms/quit-while-hosting';
 import type { AppSettings } from './settings.type';
@@ -23,12 +24,13 @@ createRoot(root).render(
       settings={SETTINGS}
       screenTree={screenTree}
       bootTasks={rendererBootTasks}
-      screens={SCREENS}
-      home={BASE_SCREEN}
       modules={rendererModules}
       menu={MENU}
       widgets={appWidgets}
+      widgetLayout={appWidgetLayout}
       beforeQuit={quitWhileHosting}
+      review={appReview}
+      titleBar={appTitleBar}
     />
   </StrictMode>,
 );

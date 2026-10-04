@@ -2,6 +2,8 @@
 # ignores them all, at any depth. A dot-folder the repo tracks gets a ! line
 # here. Never add a line for a single dot-folder: .*/ already covers it.
 .*/
+!.brock/
+.brock/profile-config.json
 
 node_modules/
 tooling/engine-bundle/dist/

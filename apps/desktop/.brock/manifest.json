@@ -1,0 +1,16 @@
+{
+  "brock": "0.17.0",
+  "generatedAt": "2026-10-04T19:47:08.386Z",
+  "modules": [
+    {
+      "id": "secrets",
+      "package": "@drizztdourden08/brock-secrets",
+      "version": "0.17.0"
+    },
+    {
+      "id": "updater",
+      "package": "@drizztdourden08/brock-updater",
+      "version": "0.17.0"
+    }
+  ]
+}
