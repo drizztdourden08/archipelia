@@ -32,12 +32,12 @@ const usePlayersEditor = ({ setDraft, installed, presets, createPreset, guard }:
   const rename = useCallback((slot: number, name: string) => change(slot, (player) => ({ ...player, name })), [change]);
   const setGame = useCallback((slot: number, game: string) => change(slot, (player) => withGame(player, game, presets)), [change, presets]);
 
-  const importYaml = useCallback((slot: number) => guard(async () => {
+  const importYaml = useCallback((slot: number) => guard(`yaml-${slot}`, async () => {
     const imported = await pickYaml();
     if (imported) change(slot, (player) => withYaml(player, imported.fileName, imported.yaml, imported.game));
   }), [change, guard, pickYaml]);
 
-  const createDefault = useCallback((slot: number, game: string) => guard(async () => {
+  const createDefault = useCallback((slot: number, game: string) => guard(`preset-${slot}`, async () => {
     const preset = await createPreset({ game, name: 'Default' });
     change(slot, (player) => withPreset(player, preset.id));
   }), [change, createPreset, guard]);

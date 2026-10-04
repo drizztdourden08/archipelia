@@ -1,7 +1,9 @@
 /* @layer renderer-app @kind hook */
 import { useCallback, useMemo, useState } from 'react';
+import { useKeyedGuard } from '@drizztdourden08/brock-react';
 import type { GeneratorSettings, HostTarget, ServerSettings, SessionTemplate } from '@archipelia/model';
 import type { BuilderParams } from '../SessionBuilder.type';
+import { lastGuardError } from '../../../keyed-guard/last-guard-error';
 import { useBuilderData } from './useBuilderData';
 import { useHostingDefaults } from './useHostingDefaults';
 import { useRoomPassword } from './useRoomPassword';
@@ -15,8 +17,9 @@ import { withoutPassword } from './without-password';
 const useSessionBuilder = ({ initial, onRun }: BuilderParams) => {
   const [draft, setDraft] = useState<SessionTemplate>(initial);
   const [selectedSlot, setSelectedSlot] = useState<number | null>(null);
-  const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const guarded = useKeyedGuard();
+  const { guard: keyed, isBusy, clearError } = guarded;
   const [savedJson, setSavedJson] = useState<string | null>(null);
   const data = useBuilderData(setError);
   const { installed, presets, servers, templates, saveTemplate, createPreset } = data;
@@ -24,17 +27,11 @@ const useSessionBuilder = ({ initial, onRun }: BuilderParams) => {
   const room = useRoomPassword();
   const { commit, clear } = room;
 
-  const guard = useCallback(async (work: () => Promise<unknown>) => {
-    setBusy(true);
+  const guard = useCallback((key: string, work: () => Promise<unknown>) => {
     setError(null);
-    try {
-      await work();
-    } catch (err) {
-      setError((err as Error).message);
-    } finally {
-      setBusy(false);
-    }
-  }, []);
+    clearError();
+    return keyed(key, work);
+  }, [clearError, keyed]);
 
   const players = usePlayersEditor({ setDraft, installed, presets, createPreset, guard });
   const problems = useMemo(() => validateTemplate(draft, { installed, presets }), [draft, installed, presets]);
@@ -57,10 +54,10 @@ const useSessionBuilder = ({ initial, onRun }: BuilderParams) => {
     return saved;
   }, [commit, draft, saveTemplate]);
 
-  const save = useCallback(() => guard(persist), [guard, persist]);
-  const run = useCallback(() => guard(async () => onRun(await persist())), [guard, onRun, persist]);
+  const save = useCallback(() => guard('save', persist), [guard, persist]);
+  const run = useCallback(() => guard('run', async () => onRun(await persist())), [guard, onRun, persist]);
 
-  const clearPassword = useCallback(() => guard(async () => {
+  const clearPassword = useCallback(() => guard('password', async () => {
     setDraft(await clear(draft));
     const stored = templates.find((template) => template.id === draft.id);
     if (stored) await saveTemplate(withoutPassword(stored));
@@ -71,7 +68,7 @@ const useSessionBuilder = ({ initial, onRun }: BuilderParams) => {
   const saved = savedJson !== null && !room.password && savedJson === JSON.stringify(draft);
 
   return {
-    ...data, busy, clearPassword, draft, error, password: room.password, players, problems, run, save, saved, selected,
+    ...data, busy: isBusy(), clearPassword, draft, error: lastGuardError(guarded) ?? error, password: room.password, players, problems, run, save, saved, selected,
     setGenerator, setHostKind, setName, setPassword: room.setPassword, setPort, setRemoteServer, setServer, toggleSelected,
   };
 };

@@ -1,34 +1,31 @@
 /* @layer renderer-app @kind hook */
 import { useCallback, useEffect, useState } from 'react';
+import { useKeyedGuard } from '@drizztdourden08/brock-react';
 import { secretsApi } from '@drizztdourden08/brock-secrets/renderer';
 import { appApi } from '../../../ipc/app-api';
+import { lastGuardError } from '../../../keyed-guard/last-guard-error';
 import { GG_OWNER_SECRET } from '../../../secrets/secret-names.constants';
 
 const useGgOwner = (baseUrl: string) => {
   const [hasOwner, setHasOwner] = useState(false);
-  const [busy, setBusy] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const guarded = useKeyedGuard();
+  const { guard, isBusy, clearError } = guarded;
 
   const check = useCallback(async () => setHasOwner((await secretsApi()?.has(GG_OWNER_SECRET)) ?? false), []);
   useEffect(() => { void check(); }, [check]);
 
-  const guard = useCallback(async (work: () => Promise<unknown>) => {
-    setBusy(true);
-    setError(null);
-    try {
+  const act = useCallback((key: string, work: () => Promise<unknown>) => {
+    clearError();
+    return guard(key, async () => {
       await work();
       await check();
-    } catch (err) {
-      setError((err as Error).message);
-    } finally {
-      setBusy(false);
-    }
-  }, [check]);
+    });
+  }, [check, clearError, guard]);
 
-  const openRooms = useCallback(() => { void guard(() => appApi().ggOpenRooms(baseUrl)); }, [guard, baseUrl]);
-  const resetOwner = useCallback(() => { void guard(async () => secretsApi()?.delete(GG_OWNER_SECRET)); }, [guard]);
+  const openRooms = useCallback(() => { void act('rooms', () => appApi().ggOpenRooms(baseUrl)); }, [act, baseUrl]);
+  const resetOwner = useCallback(() => { void act('reset', async () => secretsApi()?.delete(GG_OWNER_SECRET)); }, [act]);
 
-  return { busy, error, hasOwner, openRooms, resetOwner };
+  return { busy: isBusy(), error: lastGuardError(guarded), hasOwner, openRooms, resetOwner };
 };
 
 export { useGgOwner };

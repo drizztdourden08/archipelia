@@ -1,16 +1,16 @@
 /* @layer renderer-app @kind hook */
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { confirmAction, useNow } from '@drizztdourden08/brock-react';
+import { confirmAction, useCopyText, useNow } from '@drizztdourden08/brock-react';
 import { useRunsStore } from '../../../stores/useRunsStore';
 import { useSessionViewStore } from '../../../stores/useSessionViewStore';
 import { pickSession } from './pick-session';
-import { COPIED_MS, NO_LINES, TICK_MS } from '../SessionDashboard.constants';
+import { NO_LINES, TICK_MS } from '../SessionDashboard.constants';
 import { addressOf } from './address-of';
 import { uptimeOf } from './uptime-of';
 
 const useSessionDashboard = (sessionId: string) => {
   const { runs, loaded, logs, progress, load, loadLog, stop } = useRunsStore();
-  const [copied, setCopied] = useState(false);
+  const { copied, copy, error: copyError } = useCopyText();
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => { void load(); }, [load]);
@@ -20,12 +20,6 @@ const useSessionDashboard = (sessionId: string) => {
 
   useEffect(() => { if (id) void loadLog(id); }, [id, loadLog]);
 
-  useEffect(() => {
-    if (!copied) return undefined;
-    const timer = setTimeout(() => setCopied(false), COPIED_MS);
-    return () => clearTimeout(timer);
-  }, [copied]);
-
   const lines = (id ? logs[id] : undefined) ?? NO_LINES;
 
   useEffect(() => useSessionViewStore.getState().show({ session, lines, loaded }), [session, lines, loaded]);
@@ -34,9 +28,8 @@ const useSessionDashboard = (sessionId: string) => {
   const address = addressOf(session?.endpoint);
 
   const copyAddress = useCallback(() => {
-    if (!address) return;
-    navigator.clipboard.writeText(address).then(() => setCopied(true), (err: Error) => setError(err.message));
-  }, [address]);
+    if (address) void copy(address);
+  }, [address, copy]);
 
   const stopSession = useCallback(() => {
     if (!id) return;
@@ -54,10 +47,10 @@ const useSessionDashboard = (sessionId: string) => {
     address,
     copied,
     copyAddress,
-    error,
+    error: error ?? copyError,
     lines,
     loaded,
-    progress: id ? progress[id] : undefined,
+    progress: progress[id],
     session,
     stopSession,
     uptime: session ? uptimeOf(session, lines[0]?.at, now) : null,

@@ -2,12 +2,14 @@
 import type { ServerEntry } from '@archipelia/model';
 import { secretsApi } from '@drizztdourden08/brock-secrets/renderer';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useKeyedGuard } from '@drizztdourden08/brock-react';
 import type { SecretInputs } from '../ServerManager.type';
 import { passwordSecret } from './password-secret';
 import { passphraseSecret } from './passphrase-secret';
 import { EMPTY_INPUTS } from '../ServerManager.constants';
 import type { ServerTestResult } from '@archipelia/hosts';
 import { appApi } from '../../../ipc/app-api';
+import { lastGuardError } from '../../../keyed-guard/last-guard-error';
 import { newServerEntry } from './new-server-entry';
 import { draftProblems } from './draft-problems';
 import { withSecretRefs } from './with-secret-refs';
@@ -24,30 +26,25 @@ const useServerManager = () => {
   const [draft, setDraft] = useState<ServerEntry | null>(null);
   const [inputs, setInputs] = useState<SecretInputs>(EMPTY_INPUTS);
   const [test, setTest] = useState<ServerTestResult | null>(null);
-  const [busy, setBusy] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const guarded = useKeyedGuard();
+  const { guard: keyed, isBusy, clearError } = guarded;
 
   const load = useCallback(async () => setServers(await appApi().serversList()), []);
   useEffect(() => { void load(); }, [load]);
 
-  const guard = useCallback(async (work: () => Promise<void>) => {
-    setBusy(true);
-    setError(null);
-    try {
+  const guard = useCallback((key: string, work: () => Promise<void>) => {
+    clearError();
+    return keyed(key, async () => {
       await work();
       await load();
-    } catch (err) {
-      setError((err as Error).message);
-    } finally {
-      setBusy(false);
-    }
-  }, [load]);
+    });
+  }, [clearError, keyed, load]);
 
   const select = useCallback((entry: ServerEntry) => { setDraft(entry); setInputs(EMPTY_INPUTS); setTest(entry.lastTest ?? null); }, []);
   const create = useCallback(() => select(newServerEntry()), [select]);
   const problems = useMemo(() => (draft ? draftProblems(draft, inputs) : []), [draft, inputs]);
 
-  const save = useCallback(() => guard(async () => {
+  const save = useCallback(() => guard('save', async () => {
     if (!draft || problems.length) return;
     const saved = draft.id ? draft : await appApi().serversSave(draft);
     await storeSecrets(saved, inputs);
@@ -55,13 +52,13 @@ const useServerManager = () => {
     setInputs(EMPTY_INPUTS);
   }), [draft, guard, inputs, problems]);
 
-  const runTest = useCallback(() => guard(async () => { if (draft?.id) setTest(await appApi().serversTest(draft.id)); }), [draft, guard]);
-  const trust = useCallback((sha: string) => guard(async () => {
+  const runTest = useCallback(() => guard('test', async () => { if (draft?.id) setTest(await appApi().serversTest(draft.id)); }), [draft, guard]);
+  const trust = useCallback((sha: string) => guard('trust', async () => {
     if (!draft?.id) return;
     setDraft(await appApi().serversTrustKey(draft.id, sha));
     setTest(await appApi().serversTest(draft.id));
   }), [draft, guard]);
-  const remove = useCallback(() => guard(async () => {
+  const remove = useCallback(() => guard('remove', async () => {
     if (!draft?.id) return;
     await appApi().serversRemove(draft.id);
     const vault = secretsApi();
@@ -69,7 +66,7 @@ const useServerManager = () => {
     setDraft(null);
   }), [draft, guard]);
 
-  return { busy, create, draft, error, inputs, problems, remove, runTest, save, select, servers, setDraft, setInputs, test, trust };
+  return { busy: isBusy(), create, draft, error: lastGuardError(guarded), inputs, problems, remove, runTest, save, select, servers, setDraft, setInputs, test, trust };
 };
 
 export { useServerManager };

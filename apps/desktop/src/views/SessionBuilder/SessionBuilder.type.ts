@@ -29,7 +29,7 @@ type EditorDeps = {
   installed: InstalledGame[];
   presets: GamePreset[];
   createPreset: (preset: PresetInput) => Promise<GamePreset>;
-  guard: (work: () => Promise<unknown>) => Promise<void>;
+  guard: (key: string, work: () => Promise<unknown>) => Promise<unknown>;
 };
 
 type ImportedYaml = { fileName: string; yaml: string; game: string };
