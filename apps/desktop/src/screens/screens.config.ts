@@ -26,5 +26,5 @@ export default defineScreens({
     },
   ],
   home: 'multiworld',
-  settings: { bucket: 'multiworld' },
+  settings: { bucket: 'multiworld', page: 'general' },
 });
