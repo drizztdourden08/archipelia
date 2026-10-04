@@ -18,7 +18,7 @@ const TemplateRow = ({ id, name, meta, playersLabel, busy, onEdit, onRun, onDupl
       <Button size="sm" variant="primary" disabled={busy} onClick={run}>Run</Button>
     </ButtonRow>
   );
-  return <ListItemRow name={name} meta={meta} action={actions} onDoubleClick={edit} />;
+  return <ListItemRow actionVisibility="always" name={name} meta={meta} action={actions} onDoubleClick={edit} />;
 };
 
 export { TemplateRow };

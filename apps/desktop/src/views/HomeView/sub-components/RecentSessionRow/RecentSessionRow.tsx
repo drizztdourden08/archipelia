@@ -12,7 +12,7 @@ const RecentSessionRow = ({ session, now, onOpen }: RecentSessionRowProps) => {
       <Button size="sm" variant="ghost" onClick={openRow}>Open</Button>
     </ButtonRow>
   );
-  return <ListItemRow name={session.snapshot.name} meta={sessionMeta(session, now)} action={action} onDoubleClick={openRow} />;
+  return <ListItemRow actionVisibility="always" name={session.snapshot.name} meta={sessionMeta(session, now)} action={action} onDoubleClick={openRow} />;
 };
 
 export { RecentSessionRow };

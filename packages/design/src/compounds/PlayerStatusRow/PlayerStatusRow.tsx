@@ -17,7 +17,7 @@ const PlayerStatusRow = ({ slot, name, game, status, statusTone, checks, progres
       <Text variant="caption" className="player-status-row__checks">{checks}</Text>
     </Stack>
   );
-  return <ListItemRow className="player-status-row" role="listitem" icon={String(slot)} name={name} meta={meta} action={action} />;
+  return <ListItemRow actionVisibility="always" className="player-status-row" role="listitem" icon={String(slot)} name={name} meta={meta} action={action} />;
 };
 
 export { PlayerStatusRow };

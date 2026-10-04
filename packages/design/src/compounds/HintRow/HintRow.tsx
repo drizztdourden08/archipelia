@@ -12,7 +12,7 @@ const HintRow = ({ item, receiver, finder, location, entrance, state, stateTone 
     </Stack>
   );
   const stateLabel = <Status tone={stateTone}>{state}</Status>;
-  return <ListItemRow role="listitem" name={name} meta={meta} action={stateLabel} />;
+  return <ListItemRow actionVisibility="always" role="listitem" name={name} meta={meta} action={stateLabel} />;
 };
 
 export { HintRow };

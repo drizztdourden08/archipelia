@@ -24,7 +24,3 @@
   font-family: var(--font-mono);
   overflow-wrap: anywhere;
 }
-
-.session-panel .list-item-row__action {
-  opacity: 1;
-}

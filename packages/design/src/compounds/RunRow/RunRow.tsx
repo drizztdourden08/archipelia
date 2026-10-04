@@ -23,7 +23,7 @@ const RunRow = ({ id, when, name, host, status, error, hasLog, canDelete, busy, 
       <Button size="sm" variant="secondary" onClick={open}>Open</Button>
     </ButtonRow>
   );
-  return <ListItemRow className="run-row" role="listitem" name={name} meta={meta} action={actions} onDoubleClick={open} />;
+  return <ListItemRow actionVisibility="always" role="listitem" name={name} meta={meta} action={actions} onDoubleClick={open} />;
 };
 
 export { RunRow };

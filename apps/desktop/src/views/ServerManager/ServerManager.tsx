@@ -15,7 +15,7 @@ const ServerManager = () => {
         <Button variant="primary" onClick={manager.create}>Add</Button>
       </Flex>
       {manager.servers.map((entry) => (
-        <ListItemRow key={entry.id} name={entry.label} selected={draft?.id === entry.id} onClick={() => manager.select(entry)}
+        <ListItemRow key={entry.id} actionVisibility="always" name={entry.label} selected={draft?.id === entry.id} onClick={() => manager.select(entry)}
           meta={`${entry.host} · ${entry.auth.kind === 'ssh-key' ? 'SSH key' : 'password'}`}
           action={entry.lastTest ? <Status tone={entry.lastTest.ok ? 'success' : 'danger'}>{entry.lastTest.ok ? 'tested' : 'failing'}</Status> : undefined} />
       ))}

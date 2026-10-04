@@ -8,6 +8,7 @@ const PresetListItem = ({ id, name, meta, selected, unavailable, onSelect }: Pre
   const handleClick = useCallback(() => onSelect(id), [id, onSelect]);
   return (
     <ListItemRow
+      actionVisibility="always"
       name={name}
       meta={meta}
       selected={selected}

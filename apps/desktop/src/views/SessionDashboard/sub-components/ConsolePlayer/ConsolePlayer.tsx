@@ -19,7 +19,7 @@ const ConsolePlayer = ({ name, onConfirm }: ConsolePlayerProps) => {
       <Button size="sm" variant="ghost" aria-label={`Collect for ${name}`} onClick={collect}>Collect</Button>
     </ButtonRow>
   );
-  return <ListItemRow name={name} action={actions} />;
+  return <ListItemRow actionVisibility="always" name={name} action={actions} />;
 };
 
 export { ConsolePlayer };
