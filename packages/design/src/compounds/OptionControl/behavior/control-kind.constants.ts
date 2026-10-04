@@ -1,8 +1,8 @@
 /* @layer renderer-app @kind config */
+import { isStringList } from '@archipelia/model';
 import type { OptionDef, OptionKind, OptionValue } from '@archipelia/model';
 import type { ControlKind } from './control-kind.type';
 import { setKind } from './set-kind';
-import { isStringList } from './is-string-list';
 
 const CONTROL_OF: Record<OptionKind, (def: OptionDef, value: OptionValue) => ControlKind> = {
   toggle: () => 'toggle',

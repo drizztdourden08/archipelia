@@ -1,6 +1,6 @@
 /* @layer renderer-app @kind logic */
 import type { CardHandlers, GameRow } from '../GameStore.type';
-import type { InstallRequest } from '../../../ipc/contract.type';
+import type { InstallRequest } from '@archipelia/catalog';
 import type { GameCardProps } from '@archipelia/design';
 import { SOURCE_LABEL } from '../GameStore.constants';
 

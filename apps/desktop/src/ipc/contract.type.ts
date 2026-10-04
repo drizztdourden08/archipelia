@@ -2,12 +2,11 @@
 import type { BASE_EVENT_MAP, BASE_INVOKE_MAP, BASE_SEND_MAP } from '@drizztdourden08/brock-core';
 import type { EventContract, InvokeContract, SendContract } from '@drizztdourden08/brock-core/augment';
 import type { IpcApi } from '@drizztdourden08/brock-core/ipc';
-import type {
-  CatalogEntry, EngineStatus, GamePreset, InstalledGame, ServerEntry, ServerTest, Session, SessionTemplate,
-} from '@archipelia/model';
-import type { HostLogLine } from '@archipelia/hosts';
+import type { CatalogView, InstallRequest } from '@archipelia/catalog';
+import type { CatalogEntry, EngineStatus, GamePreset, InstalledGame, ServerEntry, Session, SessionTemplate } from '@archipelia/model';
+import type { HostLogLine, ServerTestResult } from '@archipelia/hosts';
 import type { PresetInput } from '@archipelia/presets';
-import type { SessionEvent } from '@archipelia/sessions';
+import type { LibraryImportResult, SessionEvent } from '@archipelia/sessions';
 import type { APP_EVENT_MAP, APP_INVOKE_MAP, APP_SEND_MAP } from './contract.constants';
 
 declare module '@drizztdourden08/brock-core/augment' {
@@ -42,7 +41,7 @@ declare module '@drizztdourden08/brock-core/augment' {
     'ap:servers:trustKey': (id: string, sha256: string) => Promise<ServerEntry>;
     'ap:gg:openRooms': (baseUrl: string) => Promise<void>;
     'ap:data:export': () => Promise<Uint8Array>;
-    'ap:data:import': (bytes: Uint8Array) => Promise<DataImportResult>;
+    'ap:data:import': (bytes: Uint8Array) => Promise<LibraryImportResult>;
   }
 
   interface EventContract {
@@ -51,21 +50,10 @@ declare module '@drizztdourden08/brock-core/augment' {
   }
 }
 
-type CatalogView = { apVersion: string; entries: CatalogEntry[]; problems: number; fetchedAt: number };
-
-type InstallRequest =
-  | { kind: 'index'; apworld: string; version: string }
-  | { kind: 'official'; apworld: string }
-  | { kind: 'file'; fileName: string; bytes: Uint8Array };
-
-type DataImportResult = { presets: number; templates: number };
-
-type ServerTestResult = ServerTest & { hostKey?: string };
-
 type AppApi = IpcApi<
   typeof BASE_INVOKE_MAP & typeof APP_INVOKE_MAP,
   typeof BASE_SEND_MAP & typeof APP_SEND_MAP,
   typeof BASE_EVENT_MAP & typeof APP_EVENT_MAP
 >;
 
-export type { AppApi, CatalogView, EventContract, InstallRequest, InvokeContract, SendContract, ServerTestResult };
+export type { AppApi, EventContract, InvokeContract, SendContract };

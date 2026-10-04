@@ -6,7 +6,7 @@ import { useLibraryStore } from '../../../stores/useLibraryStore';
 import type { GameTab } from '../GameStore.type';
 import { buildRows } from './build-rows';
 import { filterRows } from './filter-rows';
-import type { InstallRequest } from '../../../ipc/contract.type';
+import type { InstallRequest } from '@archipelia/catalog';
 import { APWORLD } from '../GameStore.constants';
 
 const useGameStore = (tab: GameTab) => {

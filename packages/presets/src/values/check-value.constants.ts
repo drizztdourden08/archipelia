@@ -1,8 +1,8 @@
 /* @layer core @kind config */
+import { isStringList } from '@archipelia/model';
 import type { OptionKind } from '@archipelia/model';
 import type { Check } from './check-value.type';
 import { checkRange } from './check-range';
-import { isStringList } from './is-string-list';
 import { checkKeys } from './check-keys';
 import { isCountMap } from './is-count-map';
 import { isMap } from './is-map';

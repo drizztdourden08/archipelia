@@ -1,31 +1,35 @@
 /* @layer electron-main @kind logic */
 import type { MainContext } from '@drizztdourden08/brock-electron/main';
-import { createPresetStore } from '@archipelia/presets';
-import { createRunStore, createSessionService, createTemplateStore } from '@archipelia/sessions';
+import { lanAddresses } from '@drizztdourden08/brock-electron/main';
 import { getSecrets } from '@drizztdourden08/brock-secrets/main';
-import { listInstalled } from '@archipelia/catalog';
+import { createCatalogService, listInstalled } from '@archipelia/catalog';
+import { loadRuntime } from '@archipelia/engine';
+import { createHostFactory } from '@archipelia/hosts';
 import type { GameSchema } from '@archipelia/model';
-import { createServerStore } from './server-store';
-import { createCatalogService } from './catalog-service';
-import { loadRuntime } from './load-runtime';
-import { createHostFactory } from './host-factory';
+import { createPresetStore } from '@archipelia/presets';
+import { createRunStore, createServerStore, createSessionService, createTemplateStore } from '@archipelia/sessions';
+import { GG_OWNER_SECRET } from '../../src/secrets/secret-names.constants';
+import { engineDirOf } from '../engine/engine-dir-of';
+
+const advertiseHost = () => lanAddresses().find((lan) => lan.family === 'IPv4')?.address ?? '127.0.0.1';
 
 const createAppServices = (ctx: MainContext) => {
   const { files } = ctx;
+  const engineDir = () => engineDirOf(ctx);
   const presets = createPresetStore(files);
   const templates = createTemplateStore(files);
   const runs = createRunStore(files);
   const servers = createServerStore(files);
-  const catalog = createCatalogService(ctx);
+  const catalog = createCatalogService({ files, engineDir });
   const secrets = getSecrets(ctx);
-  const runtime = () => loadRuntime(ctx);
+  const runtime = () => loadRuntime(engineDir());
   const installed = () => listInstalled(files);
   const schemaOf = async (game: string): Promise<GameSchema | undefined> =>
     (await installed()).find((record) => record.game === game)?.schema;
   const sessions = createSessionService({
     files, presets, runs, runtime, schemaOf,
     dataRoot: ctx.paths.data(),
-    hostFor: createHostFactory({ ctx, runtime, secrets, servers }),
+    hostFor: createHostFactory({ runtime, secrets, servers, advertiseHost, ggOwnerSecret: GG_OWNER_SECRET }),
     resolveSecret: (ref) => secrets.get(ref),
     emit: (event) => ctx.emit('ap:sessions:event', event),
   });

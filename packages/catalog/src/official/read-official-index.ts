@@ -1,12 +1,10 @@
 /* @layer core @kind logic */
+import { isRecord, isStringList } from '@archipelia/model';
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import type { OfficialWorld } from './official-index.type';
-import { isRecord } from './is-record';
 import { officialDir } from './official-dir';
 import { INDEX_FILE } from './official-index.constants';
-
-const isStringList = (value: unknown) => Array.isArray(value) && value.every((item) => typeof item === 'string');
 
 const isOfficialWorld = (value: unknown): value is OfficialWorld =>
   isRecord(value) && ['apworld', 'game', 'file', 'sha256'].every((key) => typeof value[key] === 'string')

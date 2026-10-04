@@ -1,12 +1,9 @@
 {
-  "$schema": "./node_modules/@drizztdourden08/tessera/tessera.config.schema.json",
+  "$schema": "./packages/design/node_modules/@drizztdourden08/tessera/tessera.config.schema.json",
   "package": "@archipelia/design",
   "parts": {
-    "primitives": "packages/design/src/primitives",
-    "composites": "packages/design/src/composites",
     "compounds": "packages/design/src/compounds"
   },
-  "stories": "packages/design/stories",
   "guide": { "usage": "enforce", "tree": "packages/design/src/guide/app-tree.constants.ts" },
   "apps": {
     "apps/desktop": {

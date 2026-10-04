@@ -1,7 +1,7 @@
 /* @layer renderer-app @kind types */
 import type { CatalogEntry, GamePreset, InstalledGame, SessionTemplate } from '@archipelia/model';
 import type { PresetInput } from '@archipelia/presets';
-import type { CatalogView, InstallRequest } from '../ipc/contract.type';
+import type { CatalogView, InstallRequest } from '@archipelia/catalog';
 
 type LibraryState = {
   installed: InstalledGame[];

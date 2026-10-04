@@ -6,7 +6,7 @@ import type { SecretInputs } from '../ServerManager.type';
 import { passwordSecret } from './password-secret';
 import { passphraseSecret } from './passphrase-secret';
 import { EMPTY_INPUTS } from '../ServerManager.constants';
-import type { ServerTestResult } from '../../../ipc/contract.type';
+import type { ServerTestResult } from '@archipelia/hosts';
 import { appApi } from '../../../ipc/app-api';
 import { newServerEntry } from './new-server-entry';
 import { draftProblems } from './draft-problems';

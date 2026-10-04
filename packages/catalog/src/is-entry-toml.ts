@@ -1,5 +1,5 @@
 /* @layer core @kind logic */
-import { isRecord } from '@archipelia/engine';
+import { isRecord } from '@archipelia/model';
 import type { EntryToml } from './index-toml.type';
 
 const optionalString = (value: unknown) => value === undefined || typeof value === 'string';

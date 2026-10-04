@@ -24,7 +24,7 @@ const usage = {
     rule: 'A settings row the Brock controls cannot draw yet.',
   },
   example: `import type { AppSettings } from '../../settings.type';
-import { NumberSetting } from '../NumberSetting';
+import { NumberSetting } from '../NumberSetting/NumberSetting';
 
 const NumberSettingSample = ({ settings, onChange }: { settings: AppSettings; onChange: (patch: Partial<AppSettings>) => void }) => (
   <NumberSetting settingKey="hostingLocalPort" settings={settings} onChange={onChange} />

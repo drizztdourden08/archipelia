@@ -1,10 +1,10 @@
 /* @layer core @kind logic */
+import { isRecord } from '@archipelia/model';
 import type { EngineRuntime } from '@archipelia/model';
 import { mkdtemp, readFile, rm } from 'node:fs/promises';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import type { DumpedSchema, SchemaDump, SchemaRead } from './read-options-schema.type';
-import { isRecord } from '../runtime/is-record';
 import { parseJson } from '../runtime/parse-json';
 import { runPython } from '../process/run-python';
 import { apRoot } from '../runtime/ap-root';

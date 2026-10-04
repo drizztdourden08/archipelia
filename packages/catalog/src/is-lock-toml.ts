@@ -1,5 +1,5 @@
 /* @layer core @kind logic */
-import { isRecord } from '@archipelia/engine';
+import { isRecord } from '@archipelia/model';
 import type { LockToml } from './index-toml.type';
 
 const isLockToml = (value: unknown): value is LockToml =>

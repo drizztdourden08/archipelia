@@ -1,6 +1,6 @@
 /* @layer renderer-app @kind types */
 import type { CatalogEntry, CatalogVersion, InstalledGame } from '@archipelia/model';
-import type { InstallRequest } from '../../ipc/contract.type';
+import type { InstallRequest } from '@archipelia/catalog';
 
 type CardHandlers = {
   isBusy: (key?: string) => boolean;
