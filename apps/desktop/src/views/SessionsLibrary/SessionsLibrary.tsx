@@ -1,13 +1,12 @@
 /* @layer renderer-app @kind component */
 import { useCallback } from 'react';
-import { Box, Callout, Flex, Stack } from '@drizztdourden08/tessera/primitives';
+import { Box, Callout, Grid, Stack } from '@drizztdourden08/tessera/primitives';
 import { RunProgress, useRunLauncher } from '../RunProgress';
 import { SessionBuilder } from '../SessionBuilder';
 import { useSessionsLibrary } from './behavior/useSessionsLibrary';
 import { HistoryCard } from './sub-components/HistoryCard';
 import { LibraryHeader } from './sub-components/LibraryHeader';
 import { TemplatesCard } from './sub-components/TemplatesCard';
-import './SessionsLibrary.css';
 
 const SessionsLibrary = () => {
   const hub = useSessionsLibrary();
@@ -46,7 +45,7 @@ const SessionsLibrary = () => {
     <Stack>
       <LibraryHeader query={hub.query} onQuery={hub.setQuery} onNew={hub.createNew} />
       {hub.error && <Box role="alert"><Callout tone="danger">{hub.error}</Callout></Box>}
-      <Flex gap="md" align="start" wrap className="sessions-library__columns">
+      <Grid minColWidth={384} gap="md">
         <TemplatesCard
           templates={hub.visibleTemplates}
           total={hub.templates.length}
@@ -65,7 +64,7 @@ const SessionsLibrary = () => {
           onShowLog={showLog}
           onDelete={hub.deleteRun}
         />
-      </Flex>
+      </Grid>
       {progress}
     </Stack>
   );

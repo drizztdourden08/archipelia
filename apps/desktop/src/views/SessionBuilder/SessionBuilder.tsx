@@ -1,5 +1,5 @@
 /* @layer renderer-app @kind component */
-import { Box, Callout, Flex, Stack } from '@drizztdourden08/tessera/primitives';
+import { Box, Callout, Grid, Stack } from '@drizztdourden08/tessera/primitives';
 import type { SessionBuilderProps } from './SessionBuilder.type';
 import { useSessionBuilder } from './behavior/useSessionBuilder';
 import { sourcesOf } from './behavior/player-sources';
@@ -38,7 +38,7 @@ const SessionBuilder = ({ initial, onBack, onRun }: SessionBuilderProps) => {
         actions={players}
         onEdit={toggleSelected}
       />
-      <Flex gap="md" align="start" wrap className="session-builder__columns">
+      <Grid minColWidth={384} gap="md">
         {selected && (
           <OverridesPanel
             player={selected}
@@ -65,7 +65,7 @@ const SessionBuilder = ({ initial, onBack, onRun }: SessionBuilderProps) => {
           onPassword={builder.setPassword}
           onClearPassword={builder.clearPassword}
         />
-      </Flex>
+      </Grid>
     </Stack>
   );
 };
