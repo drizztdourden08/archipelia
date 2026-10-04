@@ -2,7 +2,7 @@
 import { useCallback, useMemo, useState } from 'react';
 import type { OptionValue } from '@archipelia/model';
 import { FilterBar } from '@drizztdourden08/tessera/composites';
-import { Box, Button, ButtonRow, Card, EmptyState, SectionHeader, Stack, Toggle } from '@drizztdourden08/tessera/primitives';
+import { Button, ButtonRow, Card, EmptyState, ScrollArea, SectionHeader, Stack, Toggle } from '@drizztdourden08/tessera/primitives';
 import type { OverridesPanelProps } from './OverridesPanel.type';
 import { overridesOf } from '../../behavior/overrides-of';
 import { overrideRows } from '../../behavior/override-rows';
@@ -47,21 +47,23 @@ const OverridesPanel = ({ player, game, preset, onValue, onReset, onResetAll, on
         {!game || !preset
           ? <EmptyState message="Pick an installed game and a preset to change its options." />
           : (
-            <Box className="session-builder__override-rows">
-              {rows.length === 0 && <EmptyState message="No option matches" />}
-              {rows.map((row) => (
-                <OverrideRow
-                  key={row.def.key}
-                  def={row.def}
-                  value={row.value}
-                  presetValue={row.presetValue}
-                  overridden={row.overridden}
-                  problem={row.problem}
-                  onValue={handleValue}
-                  onReset={handleReset}
-                />
-              ))}
-            </Box>
+            <ScrollArea scrollbar="slim" className="session-builder__override-rows">
+              <Stack gap="xs">
+                {rows.length === 0 && <EmptyState message="No option matches" />}
+                {rows.map((row) => (
+                  <OverrideRow
+                    key={row.def.key}
+                    def={row.def}
+                    value={row.value}
+                    presetValue={row.presetValue}
+                    overridden={row.overridden}
+                    problem={row.problem}
+                    onValue={handleValue}
+                    onReset={handleReset}
+                  />
+                ))}
+              </Stack>
+            </ScrollArea>
           )}
       </Stack>
     </Card>
