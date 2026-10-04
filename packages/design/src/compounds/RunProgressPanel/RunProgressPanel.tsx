@@ -1,6 +1,7 @@
 /* @layer renderer-app @kind component */
 import { LogPanel } from '@drizztdourden08/tessera/composites';
 import { Box, Callout, Flex, ProgressBar, Stack, Tag, Text } from '@drizztdourden08/tessera/primitives';
+import { RUN_LOG_KINDS } from './RunProgressPanel.constants';
 import type { RunProgressPanelProps } from './RunProgressPanel.type';
 import { StepMark } from './sub-components/StepMark';
 import './RunProgressPanel.css';
@@ -22,7 +23,7 @@ const RunProgressPanel = ({ percent, line, steps, failed, error, seed, logRows, 
     {error && <Box role="alert"><Callout tone="danger">{error}</Callout></Box>}
     {showLog && (
       <Box className="run-progress-panel__log">
-        <LogPanel rows={logRows} countLabel="lines" emptyLabel={logEmpty} />
+        <LogPanel rows={logRows} kinds={RUN_LOG_KINDS} countLabel="lines" emptyLabel={logEmpty} />
       </Box>
     )}
   </Stack>
