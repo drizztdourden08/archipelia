@@ -30,7 +30,6 @@ electron/engine/, electron/gg/ main-side logic the handlers call
 src/product.ts                 defineProduct(config.product)
 src/main.tsx                   <BrockApp screenTree widgets bootTasks screens home menu ... />
 src/main.constants.ts          settings, the base Session screen and the menu quick links
-src/theme.css                  Tessera palette seeds
 src/settings.type.ts           AppSettings
 src/settings.constants.ts      defaults
 src/view-parts.type.ts         the view names for the Tessera guide

@@ -11,7 +11,7 @@
         "views": "apps/desktop/src/views"
       },
       "theme": {
-        "css": "apps/desktop/src/theme.css"
+        "palette": "archipelia"
       }
     }
   }
