@@ -18,6 +18,8 @@
         "electron/preload.ts",
         "src/main.tsx",
         "src/screens/**/*.custom.tsx",
+        "src/views/*/*.usage.ts",
+        "src/guide/*.type.ts",
         ".brock/*.ts",
         "brock.config.ts",
         "*.config.{cjs,ts,mjs}",
@@ -29,11 +31,6 @@
         "electron/**/*.ts",
         ".brock/*.ts",
         "tests/**/*.ts"
-      ],
-      "ignoreDependencies": [
-        "@electron-toolkit/utils",
-        "smol-toml",
-        "ssh2"
       ]
     },
     "packages/model": {
@@ -63,7 +60,9 @@
     },
     "packages/design": {
       "entry": [
-        "tests/**/*.keep.test.ts"
+        "tests/**/*.keep.test.ts",
+        "src/compounds/*/*.usage.ts",
+        "src/guide/app-tree.*.ts"
       ],
       "project": [
         "src/**/*.{ts,tsx}",

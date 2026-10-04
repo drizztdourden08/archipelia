@@ -1,18 +1,17 @@
 /* @layer renderer-app @kind config */
-import type { ScreenMeta } from '@drizztdourden08/brock-react';
+import type { ScreenMeta, Section } from '@drizztdourden08/brock-react';
 import { RELEASE_OPTIONS, REMAINING_OPTIONS } from '@archipelia/design';
-import type { SettingsSection } from '../../../settings.type';
 
 const meta: ScreenMeta = { title: 'Hosting', icon: 'radio', order: 2, keywords: ['defaults', 'port', 'server', 'release', 'collect', 'hints'] };
 
 const hosts = [
-  { value: 'local', label: 'This computer' },
-  { value: 'archipelago-gg', label: 'archipelago.gg' },
+  { value: 'local', label: 'This computer', hint: 'Runs the server here; players connect to this computer.' },
+  { value: 'archipelago-gg', label: 'archipelago.gg', hint: 'Uploads the seed and the website hosts the room.' },
 ];
 
 const asPercent = (value: number): string => `${value}%`;
 
-const sections: SettingsSection[] = [
+const sections: Section[] = [
   {
     id: 'new-sessions',
     title: 'New sessions',

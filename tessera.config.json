@@ -7,6 +7,7 @@
     "compounds": "packages/design/src/compounds"
   },
   "stories": "packages/design/stories",
+  "guide": { "usage": "enforce", "tree": "packages/design/src/guide/app-tree.constants.ts" },
   "apps": {
     "apps/desktop": {
       "parts": {

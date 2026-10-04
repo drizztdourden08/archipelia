@@ -10,10 +10,11 @@ const upsert = (runs: Session[], session: Session) =>
 
 const useRunsStore = createSessionStore<RunsState>((set, get) => ({
   runs: [],
+  loaded: false,
   progress: {},
   logs: {},
   generateLines: {},
-  load: async () => set({ runs: await archipeliaApi().sessionsList() }),
+  load: async () => set({ runs: await archipeliaApi().sessionsList(), loaded: true }),
   run: (template) => archipeliaApi().sessionsRun(template),
   stop: async (id) => { await archipeliaApi().sessionsStop(id); },
   cancel: (id) => archipeliaApi().sessionsCancel(id),

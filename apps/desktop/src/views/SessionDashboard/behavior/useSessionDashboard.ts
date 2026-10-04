@@ -9,12 +9,11 @@ import { confirmAction } from './confirm-action';
 import { uptimeOf } from './uptime-of';
 
 const useSessionDashboard = (sessionId: string) => {
-  const { runs, logs, progress, load, loadLog, stop } = useRunsStore();
-  const [loaded, setLoaded] = useState(false);
+  const { runs, loaded, logs, progress, load, loadLog, stop } = useRunsStore();
   const [copied, setCopied] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => { void load().finally(() => setLoaded(true)); }, [load]);
+  useEffect(() => { void load(); }, [load]);
 
   const session = useMemo(() => pickSession(runs, sessionId), [runs, sessionId]);
   const id = session?.id ?? '';

@@ -9,7 +9,7 @@ import { NUMBER_BOUNDS } from './number-bounds.constants';
 
 const isNumberKey = (key: string): key is NumberSettingKey => Object.hasOwn(NUMBER_BOUNDS, key);
 
-const rowOf = (key: string) => hostingSections.flatMap((section) => section.items).find((item) => item.key === key);
+const rowOf = (key: string) => hostingSections.flatMap((section) => section.items ?? []).find((item) => item.key === key);
 
 const renderSettingControl = (key: string, settings: AppSettings, onChange: SettingsPatch<AppSettings>): ReactNode | null => {
   const row = rowOf(key);

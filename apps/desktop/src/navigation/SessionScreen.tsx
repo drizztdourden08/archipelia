@@ -1,5 +1,6 @@
 /* @layer renderer-app @kind component */
 import { defineScreen } from '@drizztdourden08/brock-react';
+import { Icon } from '@drizztdourden08/tessera/primitives';
 import { BASE_SCREEN } from './app-navigation.constants';
 import { useFocusStore } from '../state/useFocusStore';
 import { SessionDashboard } from '../views/SessionDashboard';
@@ -12,6 +13,8 @@ const FocusedSession = () => {
 const sessionScreen = defineScreen({
   id: BASE_SCREEN,
   title: 'Session',
+  icon: <Icon name="radio" />,
+  header: 'own',
   render: () => <FocusedSession />,
 });
 

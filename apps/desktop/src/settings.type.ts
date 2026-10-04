@@ -1,6 +1,5 @@
 /* @layer renderer-app @kind types */
 import type { BaseSettings } from '@drizztdourden08/brock-core';
-import type { Section, SettingItem } from '@drizztdourden08/brock-react';
 import type { ReleaseMode, RemainingMode } from '@archipelia/model';
 
 interface AppSettings extends BaseSettings {
@@ -14,14 +13,6 @@ interface AppSettings extends BaseSettings {
   ggBaseUrl: string;
 }
 
-interface SettingsRow extends SettingItem {
-  hint: string;
-}
-
-interface SettingsSection extends Omit<Section, 'items' | 'subsections'> {
-  items: SettingsRow[];
-}
-
 type NumberSettingKey = 'hostingLocalPort' | 'hostingAutoShutdownMinutes';
 
 interface NumberBounds {
@@ -29,4 +20,4 @@ interface NumberBounds {
   max?: number;
 }
 
-export type { AppSettings, NumberBounds, NumberSettingKey, SettingsSection };
+export type { AppSettings, NumberBounds, NumberSettingKey };

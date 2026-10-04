@@ -1,16 +1,15 @@
 /* @layer renderer-app @kind config */
-import type { ScreenMeta } from '@drizztdourden08/brock-react';
-import type { SettingsSection } from '../../../settings.type';
+import type { ScreenMeta, Section } from '@drizztdourden08/brock-react';
 
 const meta: ScreenMeta = { title: 'General', icon: 'settings', order: 1, keywords: ['window', 'fullscreen', 'developer', 'logging'] };
 
 const windowModes = [
-  { value: 'windowed', label: 'Windowed' },
-  { value: 'borderless', label: 'Borderless' },
-  { value: 'fullscreen', label: 'Fullscreen' },
+  { value: 'windowed', label: 'Windowed', hint: 'A normal window you can move and resize.' },
+  { value: 'borderless', label: 'Borderless', hint: 'Fills the screen without a frame or a title bar.' },
+  { value: 'fullscreen', label: 'Fullscreen', hint: 'Takes over the display until you leave fullscreen.' },
 ];
 
-const sections: SettingsSection[] = [
+const sections: Section[] = [
   {
     id: 'window',
     title: 'Window',

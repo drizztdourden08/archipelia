@@ -4,7 +4,8 @@ export type { GameCardProps } from './compounds/GameCard';
 export { HintRow } from './compounds/HintRow';
 export { LogLines } from './compounds/LogLines';
 export { OptionGroupTabs } from './compounds/OptionGroupTabs';
-export { coercePresetValues, hintOf, isChangedValue, isLoose } from './compounds/OptionControl';
+export { OptionControl, coercePresetValues, hintOf, isChangedValue, isLoose } from './compounds/OptionControl';
+export { OptionField } from './compounds/OptionField';
 export type { CoercedValues } from './compounds/OptionControl';
 export { OptionFieldRow } from './compounds/OptionFieldRow';
 export { PlayerRow, PlayerRowHeader } from './compounds/PlayerRow';
@@ -16,3 +17,4 @@ export { ServerOptionsForm, RELEASE_OPTIONS, REMAINING_OPTIONS } from './compoun
 export { SessionStatusBar } from './compounds/SessionStatusBar';
 export { StatCard } from './compounds/StatCard';
 export { TemplateRow } from './compounds/TemplateRow';
+export type { DesignPart } from './guide/app-tree.type';

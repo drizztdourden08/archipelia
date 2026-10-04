@@ -5,6 +5,7 @@ import type { SessionEvent } from '@archipelia/sessions';
 
 type RunsState = {
   runs: Session[];
+  loaded: boolean;
   progress: Record<string, EngineProgress>;
   logs: Record<string, HostLogLine[]>;
   generateLines: Record<string, string[]>;

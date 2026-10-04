@@ -1,0 +1,39 @@
+/* @layer renderer-app @kind data */
+import type { ComponentUsage } from '@drizztdourden08/tessera';
+
+const usage = {
+  job: 'The editor of one preset: its name, the option groups with search, every option row, save, reset, import and export of its yaml.',
+  useWhen: [
+    'The detail side of the Presets page once a preset is picked.',
+  ],
+  avoidWhen: [
+    { case: 'The presets list with its detail side.', use: 'PresetsHub' },
+    { case: 'One option row on its own.', use: 'OptionFieldRow' },
+  ],
+  rules: [
+    'Report dirty changes through onDirtyChange so the hub can ask before leaving.',
+    'Keep save off while a value would be refused by the generator.',
+    'Take duplicate and delete from the hub, which asks before it deletes.',
+  ],
+  a11y: [
+    'The name field is labelled Preset name.',
+    'Problems are an alert; the save result is a status line.',
+    'The option groups are a tablist.',
+  ],
+  tree: {
+    path: ['a full screen view', 'a page of the multiworld app', 'one preset being edited'],
+    rule: 'Every option of one preset.',
+  },
+  example: `import type { GamePreset, GameSchema } from '@archipelia/model';
+import { PresetEditor } from '../PresetEditor';
+
+const noop = () => {};
+
+const PresetEditorSample = ({ preset, schema }: { preset: GamePreset; schema: GameSchema }) => (
+  <PresetEditor preset={preset} schema={schema} onDuplicate={noop} onDelete={noop} onDirtyChange={noop} />
+);
+`,
+  propsHash: 'f4ae36cdab0f0e57',
+} satisfies ComponentUsage;
+
+export { usage };

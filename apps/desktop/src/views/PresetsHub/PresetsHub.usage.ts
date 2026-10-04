@@ -1,0 +1,33 @@
+/* @layer renderer-app @kind data */
+import type { ComponentUsage } from '@drizztdourden08/tessera';
+
+const usage = {
+  job: 'The Presets page: every preset grouped by game beside the editor of the picked one, with create, discard and delete dialogs.',
+  useWhen: [
+    'The Presets page of the Library group.',
+  ],
+  avoidWhen: [
+    { case: 'One preset in its editor.', use: 'PresetEditor' },
+    { case: 'A preset in a list.', use: 'PresetListItem' },
+  ],
+  rules: [
+    'Ask before leaving a preset with unsaved changes.',
+    'Ask before deleting a preset, and name what uses it.',
+    'Offer to open the games store when no game is installed.',
+  ],
+  a11y: [
+    'The list and the detail are two regions of the master detail layout.',
+    'Each dialog has a title and a confirm button that says what it does.',
+  ],
+  tree: {
+    path: ['a full screen view', 'a page of the multiworld app', 'the presets of every game'],
+    rule: 'Every preset, picked from a list.',
+  },
+  example: `import { PresetsHub } from '../PresetsHub';
+
+const PresetsHubSample = () => <PresetsHub />;
+`,
+  propsHash: '69a6789bb8733db8',
+} satisfies ComponentUsage;
+
+export { usage };
