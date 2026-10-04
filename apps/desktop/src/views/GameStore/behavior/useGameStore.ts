@@ -13,11 +13,13 @@ const useGameStore = (tab: GameTab) => {
   const { catalog, official, installed, loadGames, install, removeGame } = useLibraryStore();
   const { filePicker } = usePlatform();
   const [query, setQuery] = useState('');
+  const [opened, setOpened] = useState(false);
   const guarded = useKeyedGuard();
   const { guard, isBusy } = guarded;
   const error = lastGuardError(guarded);
 
-  useEffect(() => { void guard('load', () => loadGames(false)); }, [guard, loadGames]);
+  useEffect(() => { void guard('load', () => loadGames(false)).finally(() => setOpened(true)); }, [guard, loadGames]);
+  const loading = !opened || isBusy('load');
 
   const rows = useMemo(() => buildRows([...official, ...(catalog?.entries ?? [])], installed), [catalog, official, installed]);
   const visible = useMemo(() => filterRows(rows, tab, query), [rows, tab, query]);
@@ -30,7 +32,7 @@ const useGameStore = (tab: GameTab) => {
     if (picked) await install({ kind: 'file', fileName: picked.name, bytes: picked.bytes });
   }), [guard, filePicker, install]);
 
-  return { addFromFile, catalog, error, installWorld, installed, isBusy, query, refresh, remove, rows, setQuery, visible };
+  return { addFromFile, catalog, error, installWorld, installed, isBusy, loading, query, refresh, remove, rows, setQuery, visible };
 };
 
 export { useGameStore };
