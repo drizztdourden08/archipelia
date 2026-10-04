@@ -1,8 +1,8 @@
 /* @layer renderer-app @kind component */
 import type { Session } from '@archipelia/model';
+import { hostLabel } from '@archipelia/model';
 import { EmptyState, Stack, StatRow, Text } from '@drizztdourden08/tessera/primitives';
 import type { RoomWidgetProps } from './RoomWidget.type';
-import { hostLabel } from '../../../../hosts/host-label';
 import { addressOf } from '../../behavior/address-of';
 
 const passwordText = (session: Session, passwordRequired: boolean) =>

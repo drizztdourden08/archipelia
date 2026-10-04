@@ -1,5 +1,6 @@
-/* @layer renderer-app @kind logic */
-import type { HostTarget, ServerEntry } from '@archipelia/model';
+/* @layer core @kind logic */
+import type { ServerEntry } from './server.type';
+import type { HostTarget } from './session.type';
 
 const hostLabel = (host: HostTarget, servers: ServerEntry[] = []) => {
   if (host.kind === 'local') return `local :${host.port}`;

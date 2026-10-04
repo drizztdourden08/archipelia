@@ -5,7 +5,7 @@ import { newTemplate } from '../../src/views/SessionBuilder/behavior/new-templat
 import { hostOfKind } from '../../src/views/SessionBuilder/behavior/host-of-kind';
 import { withPort } from '../../src/views/SessionBuilder/behavior/with-port';
 import { runSummary } from '../../src/views/SessionsLibrary/behavior/run-summary';
-import { hostLabel } from '../../src/hosts/host-label';
+import { hostLabel } from '@archipelia/model';
 import { matchesTemplate } from '../../src/views/SessionsLibrary/behavior/matches-template';
 import { templateMeta } from '../../src/views/SessionsLibrary/behavior/template-meta';
 import { presetPlayer } from './session-fixtures';

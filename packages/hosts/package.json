@@ -10,6 +10,7 @@
   },
   "exports": {
     ".": "./src/index.ts",
+    "./archipelago-gg": "./src/archipelago-gg/index.ts",
     "./package.json": "./package.json"
   },
   "files": [

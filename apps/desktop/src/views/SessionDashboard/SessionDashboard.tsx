@@ -8,7 +8,7 @@ import { useSessionDashboard } from './behavior/useSessionDashboard';
 import { useLiveRoom } from './behavior/useLiveRoom';
 import { useSessionLayoutSeed } from './behavior/useSessionLayoutSeed';
 import { canStop } from './behavior/can-stop';
-import { hostLabel } from '../../hosts/host-label';
+import { hostLabel } from '@archipelia/model';
 import { progressLabel } from './behavior/progress-label';
 import { statusView } from './behavior/status-view';
 import { SessionStatusBar } from '@archipelia/design';

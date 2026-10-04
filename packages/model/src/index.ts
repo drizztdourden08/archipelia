@@ -1,6 +1,7 @@
 /* @layer core @kind barrel */
 export type * from './engine.type';
 export type * from './game.type';
+export { hostLabel } from './host-label';
 export { isRecord } from './is-record';
 export { isStringList } from './is-string-list';
 export { optionDef } from './option-def';

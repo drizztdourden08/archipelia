@@ -4,7 +4,7 @@ import { confirmAction, useKeyedGuard } from '@drizztdourden08/brock-react';
 import { secretsApi } from '@drizztdourden08/brock-secrets/renderer';
 import { appApi } from '../../../ipc/app-api';
 import { lastGuardError } from '../../../keyed-guard/last-guard-error';
-import { GG_OWNER_SECRET } from '../../../secrets/secret-names.constants';
+import { GG_OWNER_SECRET } from '@archipelia/hosts/archipelago-gg';
 import { FORGET_OWNER_CONFIRM } from '../GgSettings.constants';
 
 const useGgOwner = (baseUrl: string) => {

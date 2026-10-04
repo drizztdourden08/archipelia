@@ -12,7 +12,7 @@ import { pickSession } from '../../src/views/SessionDashboard/behavior/pick-sess
 import { addressOf } from '../../src/views/SessionDashboard/behavior/address-of';
 import { canStop } from '../../src/views/SessionDashboard/behavior/can-stop';
 import { formatDuration } from '../../src/views/SessionDashboard/behavior/format-duration';
-import { hostLabel } from '../../src/hosts/host-label';
+import { hostLabel } from '@archipelia/model';
 import { progressLabel } from '../../src/views/SessionDashboard/behavior/progress-label';
 import { statusView } from '../../src/views/SessionDashboard/behavior/status-view';
 import { uptimeOf } from '../../src/views/SessionDashboard/behavior/uptime-of';

@@ -1,7 +1,7 @@
 /* @layer electron-main @kind logic */
 import { shell } from 'electron';
 import type { SecretReader } from '@archipelia/hosts';
-import { GG_OWNER_SECRET } from '../../src/secrets/secret-names.constants';
+import { GG_OWNER_SECRET } from '@archipelia/hosts';
 
 const openGgRooms = async (baseUrl: string, secrets: SecretReader): Promise<void> => {
   if (!baseUrl.startsWith('https://')) throw new Error('the site address must start with https://');

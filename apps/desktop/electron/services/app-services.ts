@@ -4,11 +4,10 @@ import { lanAddresses } from '@drizztdourden08/brock-electron/main';
 import { getSecrets } from '@drizztdourden08/brock-secrets/main';
 import { createCatalogService, listInstalled } from '@archipelia/catalog';
 import { loadRuntime } from '@archipelia/engine';
-import { createHostFactory } from '@archipelia/hosts';
+import { createHostFactory, GG_OWNER_SECRET } from '@archipelia/hosts';
 import type { GameSchema } from '@archipelia/model';
 import { createPresetStore } from '@archipelia/presets';
 import { createRunStore, createServerStore, createSessionService, createTemplateStore } from '@archipelia/sessions';
-import { GG_OWNER_SECRET } from '../../src/secrets/secret-names.constants';
 import { engineDirOf } from '../engine/engine-dir-of';
 
 const advertiseHost = () => lanAddresses().find((lan) => lan.family === 'IPv4')?.address ?? '127.0.0.1';
