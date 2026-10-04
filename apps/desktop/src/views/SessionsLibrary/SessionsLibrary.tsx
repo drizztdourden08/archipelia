@@ -1,16 +1,17 @@
 /* @layer renderer-app @kind component */
 import { useCallback } from 'react';
 import { Box, Callout, Grid, Stack, Text } from '@drizztdourden08/tessera/primitives';
-import { RunProgress, useRunLauncher } from '../RunProgress';
+import { useRunLauncher } from '../../hooks/useRunLauncher';
+import { isWorking } from '../../runs/is-working';
+import { showRunJob } from '../../runs/show-run-job';
 import { useSessionsLibrary } from './behavior/useSessionsLibrary';
 import { RunsCard } from './sub-components/RunsCard';
 import { SessionsCard } from './sub-components/SessionsCard';
 
 const SessionsLibrary = () => {
   const hub = useSessionsLibrary();
-  const launcher = useRunLauncher();
   const { byId, runs, openRun } = hub;
-  const { start, inspect } = launcher;
+  const { start } = useRunLauncher();
 
   const runTemplate = useCallback((id: string) => {
     const template = byId(id);
@@ -19,14 +20,14 @@ const SessionsLibrary = () => {
 
   const showLog = useCallback((id: string) => {
     const run = runs.find((entry) => entry.id === id);
-    if (run) inspect(run);
-  }, [inspect, runs]);
+    if (run) void showRunJob(run);
+  }, [runs]);
 
   const open = useCallback((id: string) => {
     const run = runs.find((entry) => entry.id === id);
-    if (run && (run.status === 'generating' || run.status === 'starting')) inspect(run);
+    if (run && isWorking(run)) void showRunJob(run);
     else openRun(id);
-  }, [inspect, openRun, runs]);
+  }, [openRun, runs]);
 
   return (
     <Stack>
@@ -52,7 +53,6 @@ const SessionsLibrary = () => {
           onDelete={hub.deleteRun}
         />
       </Grid>
-      <RunProgress launch={launcher.launch} onClose={launcher.dismiss} />
     </Stack>
   );
 };

@@ -7,7 +7,6 @@ const usage = {
     'The base layer under every hub, drawn by the session screen.',
   ],
   avoidWhen: [
-    { case: 'A run that is still generating.', use: 'RunProgress' },
     { case: 'Past runs of a session.', use: 'RunRow' },
   ],
   rules: [

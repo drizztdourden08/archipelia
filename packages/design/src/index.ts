@@ -11,7 +11,6 @@ export { OptionFieldRow } from './compounds/OptionFieldRow';
 export { PlayerRow, PlayerRowHeader } from './compounds/PlayerRow';
 export { PlayerStatusRow } from './compounds/PlayerStatusRow';
 export { PresetListItem } from './compounds/PresetListItem';
-export { RunProgressPanel } from './compounds/RunProgressPanel';
 export { RUN_STATUS, RunRow } from './compounds/RunRow';
 export type { RunStatusView } from './compounds/RunRow';
 export {

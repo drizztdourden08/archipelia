@@ -1,10 +1,6 @@
 /* @layer renderer-app @kind logic */
-import type { EngineProgress } from '@archipelia/model';
+import type { JobSnapshot } from '@drizztdourden08/brock-core';
 
-const progressLabel = (progress: EngineProgress | undefined) => {
-  if (!progress) return null;
-  const count = progress.total ? ` ${progress.done ?? 0}/${progress.total}` : '';
-  return `${progress.stage}${count}`;
-};
+const progressLabel = (job: JobSnapshot | null) => (job?.state === 'running' ? `${Math.round(job.progress * 100)}%` : null);
 
 export { progressLabel };

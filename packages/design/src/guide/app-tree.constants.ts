@@ -47,8 +47,6 @@ const APP_TREE = [
     },
   },
   { at: ['navigation'], answers: { 'between the option groups of a game': null } },
-  { at: ['something over the page'], answers: { 'a session run as it starts': null } },
-  { at: ['feedback'], answers: { 'a session as it generates and starts': null } },
   { at: ['layout', 'window chrome'], answers: { 'the bar of a hosted room': null } },
 ] as const satisfies AppTree;
 

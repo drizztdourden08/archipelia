@@ -1,5 +1,6 @@
 /* @layer tests @kind test */
 import { describe, expect, test } from 'vitest';
+import type { JobSnapshot } from '@drizztdourden08/brock-core';
 import type { Session } from '@archipelia/model';
 import { clockOf } from '../../src/views/SessionDashboard/behavior/clock-of';
 import { kindOf } from '../../src/views/SessionDashboard/behavior/kind-of';
@@ -16,6 +17,11 @@ import { hostLabel } from '@archipelia/model';
 import { progressLabel } from '../../src/views/SessionDashboard/behavior/progress-label';
 import { uptimeOf } from '../../src/views/SessionDashboard/behavior/uptime-of';
 import { templateOf } from './session-fixtures';
+
+const JOB: JobSnapshot = {
+  id: 'run', title: 'Running', state: 'running', steps: [], currentStep: null, progress: 0, stepProgress: 0,
+  line: null, error: null, log: [], startedAt: 0, endedAt: null, cancellable: true,
+};
 
 const run = (id: string, createdAt: number, patch: Partial<Session> = {}): Session => ({
   id,
@@ -45,9 +51,9 @@ describe('session status', () => {
     expect(addressOf({ host: '192.168.1.20', port: 38281 })).toBe('192.168.1.20:38281');
     expect(addressOf(undefined)).toBeNull();
     expect(hostLabel({ kind: 'archipelago-gg' })).toBe('archipelago.gg');
-    expect(progressLabel({ stage: 'fill', done: 3, total: 9 })).toBe('fill 3/9');
-    expect(progressLabel({ stage: 'output' })).toBe('output');
-    expect(progressLabel(undefined)).toBeNull();
+    expect(progressLabel({ ...JOB, progress: 0.426 })).toBe('43%');
+    expect(progressLabel({ ...JOB, state: 'done', progress: 1 })).toBeNull();
+    expect(progressLabel(null)).toBeNull();
     expect(canStop('hosting')).toBe(true);
     expect(canStop('stopped')).toBe(false);
   });

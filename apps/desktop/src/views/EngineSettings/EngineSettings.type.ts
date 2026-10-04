@@ -4,6 +4,7 @@ type EngineActionsInput = {
   building: boolean;
   setup: () => Promise<void>;
   refresh: () => Promise<void>;
+  showProgress?: () => void;
 };
 
 export type { EngineActionsInput };

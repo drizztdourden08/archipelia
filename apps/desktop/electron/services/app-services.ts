@@ -11,6 +11,7 @@ import { createPresetStore } from '@archipelia/presets';
 import { createRunStore, createServerStore, createSessionService, createTemplateStore } from '@archipelia/sessions';
 import { engineDirOf } from '../engine/engine-dir-of';
 import { DOMAIN } from '../../src/storage/domains.constants';
+import { createRunJobs } from '../runs/create-run-jobs';
 
 const advertiseHost = () => lanAddresses().find((lan) => lan.family === 'IPv4')?.address ?? '127.0.0.1';
 
@@ -28,14 +29,18 @@ const createAppServices = (ctx: MainContext) => {
   const installed = () => listInstalled(games);
   const schemaOf = async (game: string): Promise<GameSchema | undefined> =>
     (await installed()).find((record) => record.game === game)?.schema;
+  const runJobs = createRunJobs({ job: ctx.job, cancel: (id) => sessions.cancel(id) });
   const sessions = createSessionService({
     files: sessionFiles, presets, runs, runtime, schemaOf,
     hostFor: createHostFactory({ runtime, secrets, servers, advertiseHost, ggOwnerSecret: GG_OWNER_SECRET }),
     resolveSecret: (ref) => secrets.get(ref),
-    emit: (event) => ctx.emit(APP_CHANNELS.onSessionEvent, event),
+    emit: (event) => {
+      runJobs.onEvent(event);
+      if (event.type === 'session' || event.type === 'log') ctx.emit(APP_CHANNELS.onSessionEvent, event);
+    },
   });
   const dispose = () => sessions.stopLocal();
-  return { catalog, dispose, installed, presets, runs, runtime, secrets, servers, sessionFiles, sessions, templates };
+  return { catalog, dispose, installed, presets, runJobs, runs, runtime, secrets, servers, sessionFiles, sessions, templates };
 };
 
 export { createAppServices };

@@ -69,7 +69,7 @@ const runSession = async (launched: LaunchedApp, sessions: Locator) => {
   const { page } = launched;
   await sessions.getByRole('button', { name: 'Run', exact: true }).click();
   const progress = page.getByRole('dialog', { name: `Running ${TEMPLATE}` });
-  await progress.getByText('Rolling 2 player files').waitFor();
+  await progress.getByRole('progressbar', { name: new RegExp(`^Running ${TEMPLATE}: \\d+%$`) }).waitFor();
   await settledProof(launched, '21-run-progress');
   await hub(page, 'Multiworld').waitFor({ state: 'detached', timeout: RUN_TIMEOUT });
   const dashboard = base(page);

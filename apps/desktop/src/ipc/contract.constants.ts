@@ -29,6 +29,7 @@ const APP_CHANNELS = defineChannels({
   sessionsCommand: invoke<(id: string, cmd: string) => Promise<void>>()('ap:sessions:command'),
   sessionsLog: invoke<(id: string) => Promise<HostLogLine[]>>()('ap:sessions:log'),
   sessionsRemove: invoke<(id: string) => Promise<void>>()('ap:sessions:remove'),
+  sessionsShowJob: invoke<(id: string) => Promise<void>>()('ap:sessions:showJob'),
   serversList: invoke<() => Promise<ServerEntry[]>>()('ap:servers:list'),
   serversSave: invoke<(entry: ServerEntry) => Promise<ServerEntry>>()('ap:servers:save'),
   serversRemove: invoke<(id: string) => Promise<void>>()('ap:servers:remove'),
@@ -36,7 +37,6 @@ const APP_CHANNELS = defineChannels({
   serversTrustKey: invoke<(id: string, sha256: string) => Promise<ServerEntry>>()('ap:servers:trustKey'),
   ggOpenRooms: invoke<(baseUrl: string) => Promise<void>>()('ap:gg:openRooms'),
   onSessionEvent: event<(event: SessionEvent) => void>()('ap:sessions:event'),
-  onEngineProgress: event<(line: string) => void>()('ap:engine:progress'),
 });
 
 const APP_INVOKE_MAP = APP_CHANNELS.maps.invoke;
