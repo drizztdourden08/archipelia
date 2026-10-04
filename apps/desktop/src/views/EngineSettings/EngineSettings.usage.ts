@@ -13,6 +13,7 @@ const usage = {
   rules: [
     'Read the engine state from useEngineStore and check it again when the page opens.',
     'Turn the buttons off while the engine builds.',
+    'Once ready, Check again is the primary action and Rebuild is a danger button behind a confirm.',
     'Show the log only once set up has written a line.',
   ],
   a11y: [

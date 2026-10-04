@@ -1,4 +1,5 @@
 /* @layer renderer-app @kind config */
+import type { ConfirmActionOptions } from '@drizztdourden08/brock-react';
 import type { EngineState } from '@archipelia/model';
 import type { StatusTone } from '@drizztdourden08/tessera/primitives';
 
@@ -10,4 +11,11 @@ const STATE_VIEW: Record<EngineState | 'unknown', { label: string; tone: StatusT
   unknown: { label: 'Checking', tone: 'neutral' },
 };
 
-export { STATE_VIEW };
+const REBUILD_CONFIRM: ConfirmActionOptions = {
+  title: 'Rebuild the engine',
+  message: 'The engine is removed and downloaded again, about 90 MB.',
+  confirmLabel: 'Rebuild',
+  variant: 'danger',
+};
+
+export { REBUILD_CONFIRM, STATE_VIEW };

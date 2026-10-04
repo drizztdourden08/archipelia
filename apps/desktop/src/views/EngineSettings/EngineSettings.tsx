@@ -1,16 +1,21 @@
 /* @layer renderer-app @kind component */
-import { useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
+import { confirmAction } from '@drizztdourden08/brock-react';
 import { LogPanel } from '@drizztdourden08/tessera/composites';
 import { Button, ButtonRow, Stack, StatRow, Status, Text } from '@drizztdourden08/tessera/primitives';
 import { useEngineStore } from '../../stores/useEngineStore';
 import { engineLogRows } from './behavior/engine-log-rows';
 import { engineView } from './behavior/engine-view';
+import { REBUILD_CONFIRM } from './EngineSettings.constants';
 
 const EngineSettings = () => {
   const { status, lines, refresh, setup } = useEngineStore();
   useEffect(() => { void refresh(); }, [refresh]);
   const rows = useMemo(() => engineLogRows(lines), [lines]);
-  const { state, building, apVersion, dir, error, setupLabel } = engineView(status);
+  const { state, building, ready, apVersion, dir, error } = engineView(status);
+  const rebuild = useCallback(() => {
+    void confirmAction(REBUILD_CONFIRM).then((confirmed) => { if (confirmed) void setup(); });
+  }, [setup]);
 
   return (
     <Stack>
@@ -23,8 +28,9 @@ const EngineSettings = () => {
       <StatRow label="Folder" value={dir} />
       {error && <Text variant="body" role="alert">{error}</Text>}
       <ButtonRow align="start">
-        <Button variant="primary" disabled={building} onClick={() => { void setup(); }}>{setupLabel}</Button>
-        <Button variant="secondary" disabled={building} onClick={() => { void refresh(); }}>Check again</Button>
+        {!ready && <Button variant="primary" disabled={building} onClick={() => { void setup(); }}>Set up engine</Button>}
+        <Button variant={ready ? 'primary' : 'secondary'} disabled={building} onClick={() => { void refresh(); }}>Check again</Button>
+        {ready && <Button variant="danger" onClick={rebuild}>Rebuild engine</Button>}
       </ButtonRow>
       {rows.length > 0 && <LogPanel rows={rows} countLabel={`${rows.length} lines`} emptyLabel="No output yet" />}
     </Stack>
