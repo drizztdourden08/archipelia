@@ -5,7 +5,7 @@ import type { Locator } from 'playwright-core';
 import type { LaunchedApp } from '../support/launched-app.type';
 import { settledProof } from '../support/settled-proof';
 import { exportPath, SOH, TIMESPINNER } from '../support/flow-constants';
-import { closeHub, dialogOf, openScreen, optionRowOf, pickOption } from '../support/locators';
+import { closeHub, dialogOf, hub, openScreen, optionRowOf, pickOption } from '../support/locators';
 import { answerSaveDialogWith } from '../support/save-dialog';
 
 const newPreset = async (launched: LaunchedApp, presets: Locator, game: string, name: string) => {
@@ -30,6 +30,14 @@ const save = async (presets: Locator, name: string) => {
   await presets.getByRole('button', { name: new RegExp(`^${name} 1 changed`) }).waitFor();
 };
 
+const keepPresetEdits = async ({ page }: LaunchedApp) => {
+  const discard = dialogOf(page, 'Discard changes?');
+  await hub(page, 'Multiworld').getByRole('button', { name: 'Close', exact: true }).first().click();
+  await discard.getByRole('button', { name: 'Keep editing', exact: true }).click();
+  await discard.waitFor({ state: 'detached' });
+  await hub(page, 'Multiworld').waitFor();
+};
+
 const sohPreset = async (launched: LaunchedApp, presets: Locator) => {
   await newPreset(launched, presets, SOH.game, SOH.preset);
   await settledProof(launched, '12-presets-soh-created');
@@ -39,6 +47,7 @@ const sohPreset = async (launched: LaunchedApp, presets: Locator) => {
   expect(await toggle.isChecked()).toBe(true);
   await row.getByText('changed', { exact: true }).waitFor();
   await settledProof(launched, '13-presets-soh-toggle-changed');
+  await keepPresetEdits(launched);
   await save(presets, SOH.preset);
 };
 

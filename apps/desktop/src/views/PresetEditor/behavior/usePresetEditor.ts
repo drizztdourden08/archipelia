@@ -1,6 +1,6 @@
 /* @layer renderer-app @kind hook */
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { toast } from '@drizztdourden08/brock-react';
+import { toast, useUnsavedChanges } from '@drizztdourden08/brock-react';
 import type { EditorParams, EditorStatus } from '../PresetEditor.type';
 import { useLibraryStore } from '../../../stores/useLibraryStore';
 import { usePresetDraft } from './usePresetDraft';
@@ -8,6 +8,7 @@ import { useOptionFilter } from './useOptionFilter';
 import { useYamlTransfer } from './useYamlTransfer';
 import { problemMap } from './problem-map';
 import { problemSummary } from './problem-summary';
+import { UNSAVED_PRESET } from '../PresetEditor.constants';
 
 const usePresetEditor = ({ preset, schema, onDirtyChange }: EditorParams) => {
   const { savePreset } = useLibraryStore();
@@ -17,6 +18,7 @@ const usePresetEditor = ({ preset, schema, onDirtyChange }: EditorParams) => {
   const [busy, setBusy] = useState(false);
   const transfer = useYamlTransfer({ schema, name: draft.name, values: draft.values, replaceValues: draft.replaceValues, report: setStatus });
 
+  useUnsavedChanges(draft.dirty, UNSAVED_PRESET);
   useEffect(() => { onDirtyChange(draft.dirty); }, [draft.dirty]);
   useEffect(() => () => onDirtyChange(false), []);
 

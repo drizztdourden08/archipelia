@@ -11,7 +11,7 @@ const usage = {
     { case: 'One option row on its own.', use: 'OptionFieldRow' },
   ],
   rules: [
-    'Report dirty changes through onDirtyChange so the hub can ask before leaving.',
+    'Report dirty changes through onDirtyChange so the hub asks before it shows another preset, and guard them with useUnsavedChanges so a page switch, Back, Escape, the hub switch, the close button and Quit ask first.',
     'Keep save off while a value would be refused by the generator.',
     'Take duplicate and delete from the hub, which asks before it deletes.',
     'Toast the outcome of a save, saved or not saved with the reason.',

@@ -11,4 +11,6 @@ const YAML_PICK = ['yaml', 'yml'];
 
 const YAML_SAVE = ['yaml'];
 
-export { ALL_TAB, NAMES_SHOWN, PLAYER_NAME, SKIPPED_SHOWN, YAML_PICK, YAML_SAVE };
+const UNSAVED_PRESET = 'A preset has changes that are not saved.';
+
+export { ALL_TAB, NAMES_SHOWN, PLAYER_NAME, SKIPPED_SHOWN, UNSAVED_PRESET, YAML_PICK, YAML_SAVE };
