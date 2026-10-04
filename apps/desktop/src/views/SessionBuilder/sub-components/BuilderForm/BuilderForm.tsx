@@ -15,56 +15,57 @@ const BuilderForm = ({ initial, onRun }: BuilderFormProps) => {
   const { game, preset } = sourcesOf(selected, builder.installed, builder.presets);
 
   return (
-    <Stack>
-      <BuilderHeader
-        name={draft.name}
-        saved={builder.saved}
-        busy={builder.busy}
-        canRun={builder.problems.length === 0}
-        onName={builder.setName}
-        onSave={builder.save}
-        onRun={builder.run}
-      />
-      {builder.error && <Box role="alert"><Callout tone="danger">{builder.error}</Callout></Box>}
-      <ProblemList problems={builder.problems} />
-      <PlayersCard
-        players={draft.players}
-        installed={builder.installed}
-        presets={builder.presets}
-        selectedSlot={selected?.slot}
-        busy={builder.busy}
-        actions={players}
-        onEdit={toggleSelected}
-      />
-      <Grid minColWidth={384} gap="md">
-        {selected && (
-          <OverridesPanel
-            player={selected}
-            game={game}
-            preset={preset}
-            onValue={players.setOverride}
-            onReset={players.resetOverride}
-            onResetAll={players.resetAll}
-            onClose={toggleSelected}
-          />
-        )}
-        <ServerOptionsForm
-          generator={draft.generator}
-          server={draft.server}
-          host={draft.host}
-          serverOptions={builder.serverOptions}
-          password={builder.password}
-          hasPassword={Boolean(draft.server.passwordRef)}
-          onGenerator={builder.setGenerator}
-          onServer={builder.setServer}
-          onHostKind={builder.setHostKind}
-          onPort={builder.setPort}
-          onRemoteServer={builder.setRemoteServer}
-          onPassword={builder.setPassword}
-          onClearPassword={builder.clearPassword}
+    <Box ref={builder.rootRef}>
+      <Stack>
+        <BuilderHeader
+          name={draft.name}
+          saved={builder.saved}
+          busy={builder.busy}
+          onName={builder.setName}
+          onSave={builder.save}
+          onRun={builder.run}
         />
-      </Grid>
-    </Stack>
+        {builder.error && <Box role="alert"><Callout tone="danger">{builder.error}</Callout></Box>}
+        <ProblemList problems={builder.problems} attempted={builder.runAttempted} onShow={builder.showProblem} />
+        <PlayersCard
+          players={draft.players}
+          installed={builder.installed}
+          presets={builder.presets}
+          selectedSlot={selected?.slot}
+          busy={builder.busy}
+          actions={players}
+          onEdit={toggleSelected}
+        />
+        <Grid minColWidth={384} gap="md">
+          {selected && (
+            <OverridesPanel
+              player={selected}
+              game={game}
+              preset={preset}
+              onValue={players.setOverride}
+              onReset={players.resetOverride}
+              onResetAll={players.resetAll}
+              onClose={toggleSelected}
+            />
+          )}
+          <ServerOptionsForm
+            generator={draft.generator}
+            server={draft.server}
+            host={draft.host}
+            serverOptions={builder.serverOptions}
+            password={builder.password}
+            hasPassword={Boolean(draft.server.passwordRef)}
+            onGenerator={builder.setGenerator}
+            onServer={builder.setServer}
+            onHostKind={builder.setHostKind}
+            onPort={builder.setPort}
+            onRemoteServer={builder.setRemoteServer}
+            onPassword={builder.setPassword}
+            onClearPassword={builder.clearPassword}
+          />
+        </Grid>
+      </Stack>
+    </Box>
   );
 };
 

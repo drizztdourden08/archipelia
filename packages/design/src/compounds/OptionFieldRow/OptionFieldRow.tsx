@@ -13,7 +13,7 @@ const OptionFieldRow = ({ def, value, hint, changed, problem, onChange, onReset 
     problem={problem}
     onReset={onReset}
   >
-    <OptionControl def={def} value={value} onChange={onChange} />
+    {(labelId) => <OptionControl def={def} value={value} onChange={onChange} labelId={labelId} />}
   </OptionField>
 );
 

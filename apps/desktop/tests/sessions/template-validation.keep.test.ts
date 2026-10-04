@@ -1,6 +1,6 @@
 /* @layer tests @kind test */
 import { describe, expect, test } from 'vitest';
-import type { SessionTemplate } from '@archipelia/model';
+import type { InstalledGame, SessionTemplate } from '@archipelia/model';
 import { newTemplate } from '../../src/views/SessionBuilder/behavior/new-template';
 import { validateTemplate } from '../../src/views/SessionBuilder/behavior/template-validation';
 import { GAME, PRESET, presetPlayer } from './session-fixtures';
@@ -9,46 +9,69 @@ const LIBRARY = { installed: [GAME], presets: [PRESET] };
 
 const withPlayers = (players: SessionTemplate['players']): SessionTemplate => ({ ...newTemplate('t1'), name: 'Friday', players });
 
+const brokenCrystals = () => ({ ...presetPlayer(1, 'A'), source: { kind: 'preset' as const, presetId: 'p1', overrides: { crystals: 12 } } });
+
 describe('session validation', () => {
   test('a named session with one valid player has no problem', () => {
     expect(validateTemplate(withPlayers([presetPlayer(1, 'Johnny')]), LIBRARY)).toEqual([]);
   });
 
   test('it needs a name and at least one player', () => {
-    expect(validateTemplate({ ...newTemplate('t1'), name: ' ' }, LIBRARY)).toEqual(['The session needs a name', 'Add at least one player']);
+    expect(validateTemplate({ ...newTemplate('t1'), name: ' ' }, LIBRARY)).toEqual([
+      { field: 'session-name', message: 'The session needs a name' },
+      { field: 'players', message: 'Add at least one player' },
+    ]);
   });
 
   test('player names must be unique, ignoring case, and short enough', () => {
     const problems = validateTemplate(withPlayers([
       presetPlayer(1, 'Johnny'), presetPlayer(2, 'johnny'), presetPlayer(3, ''), presetPlayer(4, 'ABCDEFGHIJKLMNOPQ'),
     ]), LIBRARY);
-    expect(problems).toContain('Two players are named johnny');
-    expect(problems).toContain('Player 3 needs a name');
-    expect(problems).toContain('ABCDEFGHIJKLMNOPQ: a name holds at most 16 characters');
+    expect(problems).toContainEqual({ slot: 2, field: 'name', message: 'Two players are named johnny' });
+    expect(problems).toContainEqual({ slot: 3, field: 'name', message: 'Player 3 needs a name' });
+    expect(problems).toContainEqual({ slot: 4, field: 'name', message: 'ABCDEFGHIJKLMNOPQ: a name holds at most 16 characters' });
   });
 
   test('a preset player needs an installed game and a preset of that game', () => {
     const problems = validateTemplate(withPlayers([
       presetPlayer(1, 'A', 'p1', 'Missing'), presetPlayer(2, 'B', 'nope'), presetPlayer(3, 'C', '', ''),
     ]), LIBRARY);
-    expect(problems).toEqual(['A: Missing is not installed', 'B: pick a preset', 'C: pick a game']);
+    expect(problems).toEqual([
+      { slot: 1, field: 'game', message: 'A: Missing is not installed' },
+      { slot: 2, field: 'source', message: 'B: pick a preset' },
+      { slot: 3, field: 'game', message: 'C: pick a game' },
+    ]);
   });
 
-  test('overrides that break an option are reported', () => {
-    const player = { ...presetPlayer(1, 'A'), source: { kind: 'preset' as const, presetId: 'p1', overrides: { crystals: 12 } } };
-    expect(validateTemplate(withPlayers([player]), LIBRARY)).toEqual(['A: crystals must be between 0 and 7']);
+  test('overrides that break an option are reported with the option key', () => {
+    expect(validateTemplate(withPlayers([brokenCrystals()]), LIBRARY)).toEqual([
+      { slot: 1, field: 'option', optionKey: 'crystals', optionLabel: 'crystals', message: 'A: crystals must be between 0 and 7' },
+    ]);
+  });
+
+  test('a broken option is named by its display name', () => {
+    const named: InstalledGame = {
+      ...GAME,
+      schema: { ...GAME.schema, options: GAME.schema.options.map((def) => (def.key === 'crystals' ? { ...def, displayName: 'Crystal count' } : def)) },
+    };
+    expect(validateTemplate(withPlayers([brokenCrystals()]), { installed: [named], presets: [PRESET] })).toEqual([
+      { slot: 1, field: 'option', optionKey: 'crystals', optionLabel: 'Crystal count', message: 'A: Crystal count must be between 0 and 7' },
+    ]);
   });
 
   test('an imported player needs a file and an installed game', () => {
     const empty = { slot: 1, name: 'A', game: 'Demo', source: { kind: 'yaml' as const, fileName: '', yaml: '' } };
     const other = { slot: 2, name: 'B', game: 'Other', source: { kind: 'yaml' as const, fileName: 'b.yaml', yaml: 'game: Other' } };
-    expect(validateTemplate(withPlayers([empty, other]), LIBRARY)).toEqual(['A: import a player file', 'B: Other is not installed']);
+    expect(validateTemplate(withPlayers([empty, other]), LIBRARY)).toEqual([
+      { slot: 1, field: 'source', message: 'A: import a player file' },
+      { slot: 2, field: 'source', message: 'B: Other is not installed' },
+    ]);
   });
 
   test('a remote host needs a server and a local port must be valid', () => {
     const remote = { ...withPlayers([presetPlayer(1, 'A')]), host: { kind: 'remote' as const, serverId: '' } };
     const local = { ...withPlayers([presetPlayer(1, 'A')]), host: { kind: 'local' as const, port: 70000 } };
-    expect(validateTemplate(remote, LIBRARY)).toEqual(['Pick a server to host on']);
-    expect(validateTemplate(local, LIBRARY)).toEqual(['The port must be between 1 and 65535']);
+    expect(validateTemplate(remote, LIBRARY)).toEqual([{ field: 'host', message: 'Pick a server to host on' }]);
+    expect(validateTemplate(local, LIBRARY).map((problem) => problem.message)).toEqual(['The port must be between 1 and 65535']);
   });
 });

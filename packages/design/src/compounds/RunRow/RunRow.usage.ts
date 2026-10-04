@@ -19,6 +19,7 @@ const usage = {
   ],
   a11y: [
     'The row is a list item; double click and the Open button do the same.',
+    'Each button is named after the run, such as Open run Friday run and Delete run Friday run.',
     'The status is text in a Status, from RUN_STATUS, the one status map the status bar and Home use too.',
   ],
   tree: {

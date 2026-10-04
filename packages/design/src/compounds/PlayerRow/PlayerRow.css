@@ -23,8 +23,16 @@
   overflow-wrap: anywhere;
 }
 
+.player-row__caption {
+  display: none;
+}
+
 @media (width <= 60rem) {
   .player-row {
     grid-template-columns: var(--size-32) 1fr 1fr;
+  }
+
+  .player-row__caption {
+    display: block;
   }
 }

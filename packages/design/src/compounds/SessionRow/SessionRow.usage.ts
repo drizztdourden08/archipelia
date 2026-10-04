@@ -2,7 +2,7 @@
 import type { ComponentUsage } from '@drizztdourden08/tessera';
 
 const usage = {
-  job: 'One saved session: its name, a meta line, the number of players and the edit, duplicate, delete and run actions.',
+  job: 'One saved session: its name, a meta line, the number of players, the edit and run buttons and a menu with duplicate and delete.',
   useWhen: [
     'Each session in the Sessions card of the Sessions page.',
     'Any list of sessions that can be run again.',
@@ -15,9 +15,10 @@ const usage = {
     'Write meta as the games of the session; playersLabel as the count, such as 3 players.',
     'Set busy while any action of the list runs, so nothing runs twice.',
     'Every callback takes the session id; double click edits.',
+    'Edit and Run stay on the row; Duplicate and Delete sit in the More actions menu. The caller asks before Delete removes anything.',
   ],
   a11y: [
-    'Each button has a visible label.',
+    'Each button is named after the session, such as Run Friday run, Edit session Friday run and More actions for Friday run.',
     'The players count is text in a Tag.',
   ],
   tree: {

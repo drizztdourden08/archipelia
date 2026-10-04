@@ -14,10 +14,12 @@ const usage = {
   rules: [
     'Pass the definition from the game schema; the control picks its input from the kind and the value.',
     'Pass the current value, never the default, and write the new value back through onChange.',
-    'Draw the label outside it, usually through OptionField.',
+    'Draw the label outside it, usually through OptionField, and pass the id of that label as labelId.',
   ],
   a11y: [
-    'Each input is labelled from the option display name.',
+    'With labelId, each input points at the visible label through aria-labelledby; where the Tessera input cannot take it, the input sits in a group named by the label or takes the display name.',
+    'Without labelId, each input is labelled from the option display name.',
+    'A counter row is named by the option label and its name, and its Remove button by the name, such as Remove Bombs.',
     'A disabled control stays visible and readable.',
   ],
   tree: {
@@ -31,7 +33,7 @@ const OptionControlSample = ({ def, value, onChange }: { def: OptionDef; value: 
   <OptionControl def={def} value={value} onChange={onChange} />
 );
 `,
-  propsHash: '55b3df176564d56e',
+  propsHash: '5bbe2fc25df75fbb',
 } satisfies ComponentUsage;
 
 export { usage };

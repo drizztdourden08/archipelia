@@ -9,7 +9,7 @@ type OptionFieldProps = {
   advanced?: boolean;
   problem?: string;
   onReset: () => void;
-  children: ReactNode;
+  children: ReactNode | ((labelId: string) => ReactNode);
 };
 
 type DescriptionPreview = { preview: string; long: boolean };

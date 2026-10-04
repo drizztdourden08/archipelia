@@ -12,7 +12,7 @@ const usage = {
   ],
   rules: [
     'Pass no templateId for a new session, or the id of the saved one to edit; the builder loads it and says when it is gone.',
-    'Turn Run off while the problem list is not empty.',
+    'Keep the problem list hidden until the first Run; a Run with problems shows the list and runs nothing.',
     'Save the session before running it.',
     'Guard unsaved edits with useUnsavedChanges, so Back, Escape, the hub switch, the close button and Quit ask first.',
     'Show the run dialog over the builder once Run saves the session.',
@@ -21,6 +21,7 @@ const usage = {
     'The session name field is labelled.',
     'Each player row is a group named after its slot.',
     'An error is an alert.',
+    'The problem list is a status region; each problem is a button that selects its player and focuses the field to fix.',
   ],
   tree: {
     path: ['a full screen view', 'a page of the multiworld app', 'a session being built'],

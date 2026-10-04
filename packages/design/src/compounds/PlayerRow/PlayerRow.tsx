@@ -22,16 +22,17 @@ const PlayerRow = (props: PlayerRowProps) => {
   return (
     <Box className={`player-row${selected ? ' player-row--selected' : ''}`} role="group" aria-label={`Player ${slot}`}>
       <Text variant="label" className="player-row__slot" aria-hidden>{slot}</Text>
-      <TextInput value={name} placeholder="Name" aria-label={`Name of ${player}`} maxLength={16} onChange={rename} />
-      <Select
-        value={game}
-        options={gameOptions}
-        placeholder="Pick a game"
-        aria-label={`Game of ${player}: ${optionLabel(gameOptions, game, 'none')}`}
-        searchable
-        onChange={pickGame}
-      />
       <Stack gap="xs">
+        <Text variant="caption" className="player-row__caption" aria-hidden>Name</Text>
+        <TextInput value={name} placeholder="Name" aria-label={`Name of ${player}`} maxLength={16} onChange={rename} />
+      </Stack>
+      <Stack gap="xs">
+        <Text variant="caption" className="player-row__caption" aria-hidden>Game</Text>
+        <Select value={game} options={gameOptions} placeholder="Pick a game" searchable onChange={pickGame}
+          aria-label={`Game of ${player}: ${optionLabel(gameOptions, game, 'none')}`} />
+      </Stack>
+      <Stack gap="xs">
+        <Text variant="caption" className="player-row__caption" aria-hidden>Preset</Text>
         <Select
           value={source}
           options={sourceOptions}
@@ -46,9 +47,12 @@ const PlayerRow = (props: PlayerRowProps) => {
           </ButtonRow>
         )}
       </Stack>
-      <Box>
-        <Status tone={changed ? 'warning' : 'neutral'}>{overrides}</Status>
-      </Box>
+      <Stack gap="xs">
+        <Text variant="caption" className="player-row__caption" aria-hidden>Overrides</Text>
+        <Box>
+          <Status tone={changed ? 'warning' : 'neutral'}>{overrides}</Status>
+        </Box>
+      </Stack>
       <ButtonRow gap="xs" align="end">
         <Button size="sm" variant={selected ? 'secondary' : 'ghost'} disabled={!canEdit} aria-label={`Edit ${player}`} onClick={edit}>Edit</Button>
         <Button size="sm" variant="ghost" aria-label={`Duplicate ${player}`} onClick={duplicate}>Duplicate</Button>

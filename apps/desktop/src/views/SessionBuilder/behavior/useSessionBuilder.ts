@@ -1,5 +1,5 @@
 /* @layer renderer-app @kind hook */
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useKeyedGuard, useUnsavedChanges } from '@drizztdourden08/brock-react';
 import type { GeneratorSettings, HostTarget, ServerSettings, SessionTemplate } from '@archipelia/model';
 import type { BuilderParams } from '../SessionBuilder.type';
@@ -7,7 +7,7 @@ import { useBuilderData } from './useBuilderData';
 import { useHostingDefaults } from './useHostingDefaults';
 import { useRoomPassword } from './useRoomPassword';
 import { usePlayersEditor } from './usePlayersEditor';
-import { validateTemplate } from './template-validation';
+import { useProblems } from './useProblems';
 import { hostOfKind } from './host-of-kind';
 import { withPort } from './with-port';
 import { withServer } from './with-server';
@@ -33,7 +33,8 @@ const useSessionBuilder = ({ initial, onRun }: BuilderParams) => {
   }, [clearError, keyed]);
 
   const players = usePlayersEditor({ setDraft, installed, presets, createPreset, guard });
-  const problems = useMemo(() => validateTemplate(draft, { installed, presets }), [draft, installed, presets]);
+  const check = useProblems(draft, { installed, presets }, setSelectedSlot);
+  const { attemptRun } = check;
 
   const setName = useCallback((name: string) => setDraft((current) => ({ ...current, name })), []);
   const setGenerator = useCallback((patch: Partial<GeneratorSettings>) =>
@@ -54,7 +55,7 @@ const useSessionBuilder = ({ initial, onRun }: BuilderParams) => {
   }, [commit, draft, saveTemplate]);
 
   const save = useCallback(() => guard('save', persist), [guard, persist]);
-  const run = useCallback(() => guard('run', async () => onRun(await persist())), [guard, onRun, persist]);
+  const run = useCallback(() => (attemptRun() ? guard('run', async () => onRun(await persist())) : undefined), [attemptRun, guard, onRun, persist]);
 
   const clearPassword = useCallback(() => guard('password', async () => {
     setDraft(await clear(draft));
@@ -70,7 +71,7 @@ const useSessionBuilder = ({ initial, onRun }: BuilderParams) => {
   useUnsavedChanges(dirty, UNSAVED_SESSION);
 
   return {
-    ...data, busy: isBusy(), clearPassword, draft, error: lastError ?? error, password: room.password, players, problems, run, save, saved, selected,
+    ...data, ...check, busy: isBusy(), clearPassword, draft, error: lastError ?? error, password: room.password, players, run, save, saved, selected,
     setGenerator, setHostKind, setName, setPassword: room.setPassword, setPort, setRemoteServer, setServer, toggleSelected,
   };
 };
