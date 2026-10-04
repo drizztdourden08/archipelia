@@ -4,8 +4,8 @@ import { useLiveRoom } from '../../behavior/useLiveRoom';
 import { HintsPanel } from '../HintsPanel';
 
 const HintsWidget = ({ session, lines }: HintsWidgetProps) => {
-  const { hints, phase, error, submitPassword } = useLiveRoom(session, lines);
-  return <HintsPanel rows={hints} phase={phase} error={error} onPassword={submitPassword} />;
+  const { hints, phase, error, submitPassword, retry } = useLiveRoom(session, lines);
+  return <HintsPanel rows={hints} phase={phase} error={error} onPassword={submitPassword} onRetry={retry} />;
 };
 
 export { HintsWidget };

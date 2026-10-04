@@ -2,6 +2,7 @@
 
 type IdleBaseProps = {
   loaded: boolean;
+  failed: boolean;
 };
 
 export type { IdleBaseProps };

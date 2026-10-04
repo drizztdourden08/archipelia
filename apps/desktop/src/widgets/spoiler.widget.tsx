@@ -16,8 +16,8 @@ const meta: WidgetMeta = {
 };
 
 const Spoiler = () => {
-  const { session, loaded } = useSessionView();
-  return session ? <SpoilerWidget session={session} /> : <NoSession loaded={loaded} />;
+  const { session } = useSessionView();
+  return session ? <SpoilerWidget session={session} /> : <NoSession />;
 };
 
 export default Spoiler;

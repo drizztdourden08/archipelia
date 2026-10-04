@@ -7,4 +7,6 @@ const IDLE: LiveRoomData = {
   sessionId: null, phase: 'idle', error: null, players: [], statuses: {}, hints: [], watched: null, passwordRequired: false,
 };
 
-export { IDLE, TRACKER_TAGS };
+const LIVE_FAILED = 'Could not connect to the room.';
+
+export { IDLE, LIVE_FAILED, TRACKER_TAGS };

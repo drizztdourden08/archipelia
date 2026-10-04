@@ -1,7 +1,7 @@
 /* @layer renderer-app @kind config */
 import type { SessionView } from './session-view-store.type';
 
-const EMPTY_SESSION_VIEW: SessionView = { session: null, lines: [], loaded: false };
+const EMPTY_SESSION_VIEW: SessionView = { session: null, lines: [], loaded: false, failed: false };
 
 const SESSION_VIEW_SLICE = 'archipelia:session-view';
 

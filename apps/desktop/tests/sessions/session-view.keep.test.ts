@@ -4,7 +4,6 @@ import type { JobSnapshot } from '@drizztdourden08/brock-core';
 import type { Session } from '@archipelia/model';
 import { clockOf } from '../../src/views/SessionDashboard/behavior/clock-of';
 import { kindOf } from '../../src/views/SessionDashboard/behavior/kind-of';
-import { logTabsFor } from '../../src/views/SessionDashboard/behavior/log-tabs-for';
 import { logCopyText, RUN_STATUS } from '@archipelia/design';
 import { serverRows } from '../../src/views/SessionDashboard/behavior/server-rows';
 import { textFileFor } from '../../src/views/SessionDashboard/behavior/text-file-for';
@@ -16,6 +15,8 @@ import { formatDuration } from '../../src/views/SessionDashboard/behavior/format
 import { hostLabel } from '@archipelia/model';
 import { progressLabel } from '../../src/views/SessionDashboard/behavior/progress-label';
 import { uptimeOf } from '../../src/views/SessionDashboard/behavior/uptime-of';
+import { LOG_TABS } from '../../src/views/SessionDashboard/SessionDashboard.constants';
+import { spoilerFileOf } from '../../src/views/SessionDashboard/behavior/spoiler-file-of';
 import { templateOf } from './session-fixtures';
 
 const JOB: JobSnapshot = {
@@ -74,13 +75,16 @@ describe('pickSession', () => {
 });
 
 describe('log tabs', () => {
-  test('spoiler tab only when the output has one', () => {
-    expect(logTabsFor(run('a', 1))).toEqual(['server', 'generate']);
+  test('the log has a server and a generate tab, never the spoiler', () => {
+    expect(LOG_TABS).toEqual(['server', 'generate']);
+    expect(textFileFor('generate')).toBe('generate.log');
+    expect(textFileFor('server')).toBeNull();
+  });
+
+  test('the spoiler file comes from the output, and only when it has one', () => {
+    expect(spoilerFileOf(run('a', 1))).toBeNull();
     const withSpoiler = run('a', 1, { output: { zip: 'AP_1.zip', files: [], spoiler: 'AP_1_Spoiler.txt', generateLog: 'generate.log' } });
-    expect(logTabsFor(withSpoiler)).toEqual(['server', 'generate', 'spoiler']);
-    expect(textFileFor('spoiler', withSpoiler)).toBe('output/AP_1_Spoiler.txt');
-    expect(textFileFor('generate', withSpoiler)).toBe('generate.log');
-    expect(textFileFor('server', withSpoiler)).toBeNull();
+    expect(spoilerFileOf(withSpoiler)).toBe('output/AP_1_Spoiler.txt');
   });
 
   test('server lines get a clock and a kind', () => {

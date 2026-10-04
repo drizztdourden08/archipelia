@@ -12,7 +12,7 @@ const usage = {
   rules: [
     'A run is old after the clean age and only when it no longer generates, starts or hosts.',
     'Removing old runs is a danger button that asks first with the count and says the output files go too.',
-    'Report the result in the status line under the card.',
+    'Report the result in the status line under the card, or a failure as one plain sentence in an alert.',
   ],
   a11y: [
     'The result is a status line, read when it changes.',

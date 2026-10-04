@@ -9,9 +9,9 @@ import { PlayerStatusRow } from '@archipelia/design';
 
 const progressOf = ({ checked, total }: PlayerView) => (checked !== null && total ? { value: checked, max: total } : null);
 
-const PlayersPanel = ({ rows, phase, error, onPassword }: PlayersPanelProps) => (
+const PlayersPanel = ({ rows, phase, error, onPassword, onRetry }: PlayersPanelProps) => (
   <Stack gap="sm" className="session-panel">
-    <LiveNotice phase={phase} error={error} onPassword={onPassword} />
+    <LiveNotice phase={phase} error={error} onPassword={onPassword} onRetry={onRetry} />
     {rows.length === 0 && <EmptyState message="No players in this session." />}
     {rows.length > 0 && (
       <Stack gap="sm" role="list" aria-label="Players">

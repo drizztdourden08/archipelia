@@ -20,4 +20,11 @@ const EMPTY_INPUTS: SecretInputs = { password: '', passphrase: '' };
 
 const NO_SERVER_TEXT = 'Add a remote machine you reach over SSH. Hosting on this computer needs no server.';
 
-export { DEFAULT_GAME_PORT, DRAFT_RULES, EMPTY_INPUTS, NO_SERVER_TEXT };
+const FAILURE = {
+  save: 'Could not save the server.',
+  test: 'Could not test the connection.',
+  trust: 'Could not trust the host key.',
+  remove: 'Could not remove the server.',
+} as const;
+
+export { DEFAULT_GAME_PORT, DRAFT_RULES, EMPTY_INPUTS, FAILURE, NO_SERVER_TEXT };

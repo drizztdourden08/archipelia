@@ -5,17 +5,20 @@ import { useRunsStore } from '../../../stores/useRunsStore';
 import { useSessionViewStore } from '../../../stores/useSessionViewStore';
 import { pickSession } from './pick-session';
 import { runJobId } from '../../../jobs/run-job-id';
-import { NO_LINES, TICK_MS } from '../SessionDashboard.constants';
+import { FAILURE, NO_LINES, TICK_MS } from '../SessionDashboard.constants';
+import { failWith } from '../../../hooks/fail-with';
+import { useLoggedFailure } from '../../../hooks/useLoggedFailure';
 import { addressOf } from './address-of';
 import { uptimeOf } from './uptime-of';
+import { reloadRuns } from '../../../runs/reload-runs';
 import { STOP_ROOM_CONFIRM } from '../../../rooms/stop-room-confirm.constants';
 
 const useSessionDashboard = (sessionId: string) => {
-  const { runs, loaded, logs, load, loadLog, stop } = useRunsStore();
+  const { runs, loaded, failed, logs, loadLog, stop } = useRunsStore();
   const { copied, copy, error: copyError } = useCopyText();
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => { void load(); }, [load]);
+  useEffect(reloadRuns, []);
 
   const session = useMemo(() => pickSession(runs, sessionId), [runs, sessionId]);
   const id = session?.id ?? '';
@@ -25,7 +28,9 @@ const useSessionDashboard = (sessionId: string) => {
   const lines = (id ? logs[id] : undefined) ?? NO_LINES;
   const { job } = useJob(runJobId(id));
 
-  useEffect(() => useSessionViewStore.getState().show({ session, lines, loaded }), [session, lines, loaded]);
+  useEffect(() => useSessionViewStore.getState().show({ session, lines, loaded, failed }), [session, lines, loaded, failed]);
+
+  const copyFailure = useLoggedFailure(copyError, FAILURE.copy);
 
   const now = useNow(TICK_MS, session?.status === 'hosting');
   const address = addressOf(session?.endpoint);
@@ -37,7 +42,7 @@ const useSessionDashboard = (sessionId: string) => {
   const stopSession = useCallback(() => {
     if (!id) return;
     void confirmAction(STOP_ROOM_CONFIRM).then((confirmed) => {
-      if (confirmed) stop(id).catch((err: Error) => setError(err.message));
+      if (confirmed) failWith(FAILURE.stop, () => stop(id))().catch((err: Error) => setError(err.message));
     });
   }, [id, stop]);
 
@@ -45,8 +50,9 @@ const useSessionDashboard = (sessionId: string) => {
     address,
     copied,
     copyAddress,
-    error: error ?? copyError,
+    error: error ?? copyFailure,
     lines,
+    failed,
     loaded,
     progress: job,
     session,

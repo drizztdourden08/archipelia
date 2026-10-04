@@ -7,6 +7,7 @@ type PresetListProps = {
   selectedId: string | null;
   loading: boolean;
   error: string | null;
+  onRetry?: () => void;
   canCreate: boolean;
   onSelect: (id: string) => void;
   onNew: () => void;

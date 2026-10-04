@@ -20,7 +20,7 @@ const usage = {
   a11y: [
     'The session name field is labelled.',
     'Each player row is a group named after its slot.',
-    'An error is an alert.',
+    'An error is an alert with one plain sentence, and Retry when a load failed.',
     'The problem list is a status region; each problem is a button that selects its player and focuses the field to fix.',
   ],
   tree: {

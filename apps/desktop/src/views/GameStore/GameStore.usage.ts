@@ -21,7 +21,7 @@ const usage = {
   ],
   a11y: [
     'The search field has a placeholder that says what it finds.',
-    'An error is an alert; an empty result says why: No world matches only while a search is typed, Every installed game is up to date on Updates, and No game installed yet with Open Official on Installed.',
+    'An error is an alert with one plain sentence, and Retry when the games did not load; an empty result says why: No world matches only while a search is typed, Every installed game is up to date on Updates, and No game installed yet with Open Official on Installed.',
     'Each card action is named after its world.',
   ],
   tree: {

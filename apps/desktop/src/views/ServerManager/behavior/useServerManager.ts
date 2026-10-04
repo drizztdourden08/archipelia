@@ -6,7 +6,8 @@ import { confirmDelete, useKeyedGuard } from '@drizztdourden08/brock-react';
 import type { SecretInputs } from '../ServerManager.type';
 import { passwordSecret } from './password-secret';
 import { passphraseSecret } from './passphrase-secret';
-import { EMPTY_INPUTS } from '../ServerManager.constants';
+import { EMPTY_INPUTS, FAILURE } from '../ServerManager.constants';
+import { failWith } from '../../../hooks/fail-with';
 import type { ServerTestResult } from '@archipelia/hosts';
 import { appApi } from '../../../ipc/app-api';
 import { newServerEntry } from './new-server-entry';
@@ -42,12 +43,12 @@ const useServerManager = () => {
   const load = useCallback(async () => setServers(await appApi().serversList()), []);
   useEffect(() => { void load(); }, [load]);
 
-  const guard = useCallback((key: string, work: () => Promise<void>) => {
+  const guard = useCallback((key: keyof typeof FAILURE, work: () => Promise<void>) => {
     clearError();
-    return keyed(key, async () => {
+    return keyed(key, failWith(FAILURE[key], async () => {
       await work();
       await load();
-    });
+    }));
   }, [clearError, keyed, load]);
 
   const problems = useMemo(() => (draft ? draftProblems(draft, inputs) : []), [draft, inputs]);

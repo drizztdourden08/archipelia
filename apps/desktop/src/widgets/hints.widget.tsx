@@ -16,8 +16,8 @@ const meta: WidgetMeta = {
 };
 
 const Hints = () => {
-  const { session, lines, loaded } = useSessionView();
-  return session ? <HintsWidget session={session} lines={lines} /> : <NoSession loaded={loaded} />;
+  const { session, lines } = useSessionView();
+  return session ? <HintsWidget session={session} lines={lines} /> : <NoSession />;
 };
 
 export default Hints;

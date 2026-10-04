@@ -15,4 +15,11 @@ const EMPTY_TEXT: Record<EmptyKind, string> = {
 
 const APWORLD = ['apworld'];
 
-export { APWORLD, EMPTY_TEXT, MAX_CARDS, SOURCE_LABEL };
+const FAILURE = {
+  load: 'Could not load the games.',
+  install: 'Could not install the game.',
+  remove: 'Could not remove the game.',
+  file: 'Could not add the game from that file.',
+} as const;
+
+export { APWORLD, EMPTY_TEXT, FAILURE, MAX_CARDS, SOURCE_LABEL };

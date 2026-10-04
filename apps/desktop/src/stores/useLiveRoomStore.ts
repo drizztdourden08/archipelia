@@ -4,7 +4,8 @@ import type { API } from 'archipelago.js';
 import { createSessionStore } from '@drizztdourden08/brock-react';
 import type { HintLookup, LiveRoomTarget, ProtocolHint, RoomPlayer, WatchedChecks } from '@archipelia/sessions/live-room';
 import { HINTS_KEY_PREFIX, STATUS_KEY_PREFIX, asHints, hintRows, hintsKey, statusKey } from '@archipelia/sessions/live-room';
-import { IDLE, TRACKER_TAGS } from './live-room-store.constants';
+import { IDLE, LIVE_FAILED, TRACKER_TAGS } from './live-room-store.constants';
+import { logFailure } from '../hooks/log-failure';
 import type { LiveRoomData, LiveRoomState } from './live-room-store.type';
 
 let client: Client | null = null;
@@ -54,7 +55,8 @@ const refusalOf = (error: unknown, password: string): Partial<LiveRoomData> => {
     return { phase: 'password', passwordRequired: true, error: password ? 'Wrong password' : null };
   }
   const reason = error instanceof LoginError ? error.errors.join(', ') : (error as Error).message;
-  return { phase: 'failed', error: reason || 'The room did not answer' };
+  logFailure(LIVE_FAILED, reason || 'The room did not answer');
+  return { phase: 'failed', error: LIVE_FAILED };
 };
 
 const useLiveRoomStore = createSessionStore<LiveRoomState>((set) => {

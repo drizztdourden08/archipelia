@@ -1,5 +1,5 @@
 /* @layer renderer-app @kind component */
-import { Box, Callout, Grid, Stack } from '@drizztdourden08/tessera/primitives';
+import { Box, Grid, Stack } from '@drizztdourden08/tessera/primitives';
 import type { BuilderFormProps } from './BuilderForm.type';
 import { useSessionBuilder } from '../../behavior/useSessionBuilder';
 import { sourcesOf } from '../../behavior/player-sources';
@@ -7,7 +7,8 @@ import { BuilderHeader } from '../BuilderHeader';
 import { ProblemList } from '../ProblemList';
 import { PlayersCard } from '../PlayersCard';
 import { OverridesPanel } from '../OverridesPanel';
-import { ServerOptionsForm } from '@archipelia/design';
+import { ErrorCallout, ServerOptionsForm } from '@archipelia/design';
+import { FAILURE } from '../../SessionBuilder.constants';
 
 const BuilderForm = ({ initial, onRun }: BuilderFormProps) => {
   const builder = useSessionBuilder({ initial, onRun });
@@ -25,7 +26,8 @@ const BuilderForm = ({ initial, onRun }: BuilderFormProps) => {
           onSave={builder.save}
           onRun={builder.run}
         />
-        {builder.error && <Box role="alert"><Callout tone="danger">{builder.error}</Callout></Box>}
+        {builder.dataFailed && <ErrorCallout message={FAILURE.data} onRetry={builder.reloadData} />}
+        {builder.error && <ErrorCallout message={builder.error} />}
         <ProblemList problems={builder.problems} attempted={builder.runAttempted} onShow={builder.showProblem} />
         <PlayersCard
           players={draft.players}

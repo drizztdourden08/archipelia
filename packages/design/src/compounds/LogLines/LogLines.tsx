@@ -7,19 +7,22 @@ import type { LogLinesProps } from './LogLines.type';
 import './LogLines.css';
 
 const LogLines = (props: LogLinesProps) => {
-  const { rows, search, onSearchChange, emptyLabel, countLabel = 'lines', tabs, activeTab, onTabChange, copyText = logCopyText } = props;
+  const { rows, search, onSearchChange, emptyLabel, countLabel = 'lines', tabs, activeTab, onTabChange, copyText = logCopyText, toolbarExtra, placeholder } = props;
   return (
     <Stack gap="sm" className="log-lines">
       {tabs && activeTab && onTabChange && <Tabs tabs={tabs} activeTab={activeTab} onTabChange={onTabChange} />}
-      <LogPanel
-        rows={rows}
-        kinds={LOG_KINDS}
-        search={search}
-        onSearchChange={onSearchChange}
-        copyText={copyText}
-        countLabel={countLabel}
-        emptyLabel={emptyLabel}
-      />
+      {placeholder ?? (
+        <LogPanel
+          rows={rows}
+          kinds={LOG_KINDS}
+          search={search}
+          onSearchChange={onSearchChange}
+          copyText={copyText}
+          countLabel={countLabel}
+          emptyLabel={emptyLabel}
+          toolbarExtra={toolbarExtra}
+        />
+      )}
     </Stack>
   );
 };

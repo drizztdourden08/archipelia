@@ -5,9 +5,9 @@ import { LiveNotice } from '../LiveNotice';
 import { HintRow } from '@archipelia/design';
 import { HINT_TONE } from './HintsPanel.constants';
 
-const HintsPanel = ({ rows, phase, error, onPassword }: HintsPanelProps) => (
+const HintsPanel = ({ rows, phase, error, onPassword, onRetry }: HintsPanelProps) => (
   <Stack gap="sm" className="session-panel">
-    {phase !== 'live' && <LiveNotice phase={phase} error={error} onPassword={onPassword} />}
+    {phase !== 'live' && <LiveNotice phase={phase} error={error} onPassword={onPassword} onRetry={onRetry} />}
     {phase === 'live' && rows.length === 0 && <EmptyState message="No hints yet." />}
     {rows.length > 0 && (
       <Stack gap="sm" role="list" aria-label="Hints">

@@ -15,6 +15,8 @@ const usage = {
     'Open a run that is still generating or starting in its job dialog, and any other run on the dashboard; Show log opens the job dialog of any run.',
     'Filter sessions and runs with the page header filter, read with usePageSearch; New session is the header primary button.',
     'Deleting a run is a danger button and deleting a session is an item of its More actions menu; both ask through a danger confirm.',
+    'Show a spinner in each card while the lists load; when the load fails, show its sentence with Retry in place of the cards.',
+    'Show a failed action as one plain sentence and keep its raw error in the app log.',
   ],
   a11y: [
     'The filter field is labelled with what it filters.',

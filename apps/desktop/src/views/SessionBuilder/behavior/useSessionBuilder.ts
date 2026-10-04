@@ -13,23 +13,23 @@ import { withPort } from './with-port';
 import { withServer } from './with-server';
 import { withoutPassword } from './without-password';
 import { UNSAVED_SESSION } from '../SessionBuilder.constants';
+import { failWith } from '../../../hooks/fail-with';
+import { failureOf } from './failure-of';
 
 const useSessionBuilder = ({ initial, onRun }: BuilderParams) => {
   const [draft, setDraft] = useState<SessionTemplate>(initial);
   const [selectedSlot, setSelectedSlot] = useState<number | null>(null);
-  const [error, setError] = useState<string | null>(null);
   const { guard: keyed, isBusy, clearError, lastError } = useKeyedGuard();
   const [savedJson, setSavedJson] = useState<string | null>(null);
-  const data = useBuilderData(setError);
+  const data = useBuilderData();
   const { installed, presets, servers, templates, saveTemplate, createPreset } = data;
   const hosting = useHostingDefaults();
   const room = useRoomPassword();
   const { commit, clear } = room;
 
   const guard = useCallback((key: string, work: () => Promise<unknown>) => {
-    setError(null);
     clearError();
-    return keyed(key, work);
+    return keyed(key, failWith(failureOf(key), work));
   }, [clearError, keyed]);
 
   const players = usePlayersEditor({ setDraft, installed, presets, createPreset, guard });
@@ -71,7 +71,7 @@ const useSessionBuilder = ({ initial, onRun }: BuilderParams) => {
   useUnsavedChanges(dirty, UNSAVED_SESSION);
 
   return {
-    ...data, ...check, busy: isBusy(), clearPassword, draft, error: lastError ?? error, password: room.password, players, run, save, saved, selected,
+    ...data, ...check, busy: isBusy(), clearPassword, draft, error: lastError, password: room.password, players, run, save, saved, selected,
     setGenerator, setHostKind, setName, setPassword: room.setPassword, setPort, setRemoteServer, setServer, toggleSelected,
   };
 };

@@ -1,9 +1,9 @@
 /* @layer renderer-app @kind component */
 import { openExternal, SearchAnchor } from '@drizztdourden08/brock-react';
-import { Box, Button, ButtonRow, Callout, EmptyState, Flex, Grid, Icon, SearchInput, Spinner, Stack, Text } from '@drizztdourden08/tessera/primitives';
+import { Button, ButtonRow, EmptyState, Flex, Grid, Icon, SearchInput, Spinner, Stack, Text } from '@drizztdourden08/tessera/primitives';
 import { useGameStore } from './behavior/useGameStore';
 import type { GameStoreProps } from './GameStore.type';
-import { GameCard } from '@archipelia/design';
+import { ErrorCallout, GameCard } from '@archipelia/design';
 import { cardPropsOf } from './behavior/card-props';
 import { EMPTY_TEXT } from './GameStore.constants';
 import { gameAnchor } from './behavior/game-anchor';
@@ -27,7 +27,7 @@ const GameStore = ({ tab }: GameStoreProps) => {
           <Button variant="secondary" loading={store.isBusy('file')} onClick={store.addFromFile} icon={<Icon name="plus" />}>Add from file</Button>
         </ButtonRow>
       </Flex>
-      {store.error && <Box role="alert"><Callout tone="danger">{store.error}</Callout></Box>}
+      {store.error && <ErrorCallout message={store.error} onRetry={store.loadFailed ? store.retry : undefined} />}
       {store.visible.length === 0
         ? (
           <EmptyState icon={store.loading ? <Spinner /> : undefined} message={EMPTY_TEXT[store.empty]}

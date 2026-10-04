@@ -1,4 +1,5 @@
 /* @layer renderer-app @kind barrel */
+export { ErrorCallout } from './compounds/ErrorCallout';
 export { GameCard } from './compounds/GameCard';
 export type { GameCardProps } from './compounds/GameCard';
 export { HintRow } from './compounds/HintRow';

@@ -6,6 +6,7 @@ type HintsPanelProps = {
   phase: LiveRoomPhase;
   error: string | null;
   onPassword: (password: string) => void;
+  onRetry: () => void;
 };
 
 export type { HintsPanelProps };
