@@ -20,14 +20,14 @@
     "structure": "brock structure --check"
   },
   "dependencies": {
-    "@drizztdourden08/brock-core": "link:X:/brock/packages/core",
-    "@drizztdourden08/brock-electron": "link:X:/brock/packages/electron",
-    "@drizztdourden08/brock-react": "link:X:/brock/packages/react",
-    "@drizztdourden08/tessera": "link:X:/tessera",
+    "@drizztdourden08/brock-core": "^0.9.0",
+    "@drizztdourden08/brock-electron": "^0.9.0",
+    "@drizztdourden08/brock-react": "^0.9.0",
+    "@drizztdourden08/tessera": "^0.9.0",
     "react": "catalog:",
     "react-dom": "catalog:",
     "zustand": "catalog:",
-    "@drizztdourden08/brock-secrets": "link:X:/brock/packages/modules/secrets",
+    "@drizztdourden08/brock-secrets": "^0.9.0",
     "@archipelia/model": "workspace:*",
     "@archipelia/catalog": "workspace:*",
     "@archipelia/engine": "workspace:*",
@@ -43,8 +43,8 @@
     "@electron-toolkit/utils": "catalog:"
   },
   "devDependencies": {
-    "@drizztdourden08/brock-build": "link:X:/brock/packages/build",
-    "@drizztdourden08/brock-lint-config": "link:X:/brock/packages/lint-config",
+    "@drizztdourden08/brock-build": "^0.9.0",
+    "@drizztdourden08/brock-lint-config": "^0.9.0",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
