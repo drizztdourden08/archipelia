@@ -3,7 +3,6 @@ import { useCallback, useMemo, useState } from 'react';
 import { useKeyedGuard } from '@drizztdourden08/brock-react';
 import type { GeneratorSettings, HostTarget, ServerSettings, SessionTemplate } from '@archipelia/model';
 import type { BuilderParams } from '../SessionBuilder.type';
-import { lastGuardError } from '../../../keyed-guard/last-guard-error';
 import { useBuilderData } from './useBuilderData';
 import { useHostingDefaults } from './useHostingDefaults';
 import { useRoomPassword } from './useRoomPassword';
@@ -18,8 +17,7 @@ const useSessionBuilder = ({ initial, onRun }: BuilderParams) => {
   const [draft, setDraft] = useState<SessionTemplate>(initial);
   const [selectedSlot, setSelectedSlot] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const guarded = useKeyedGuard();
-  const { guard: keyed, isBusy, clearError } = guarded;
+  const { guard: keyed, isBusy, clearError, lastError } = useKeyedGuard();
   const [savedJson, setSavedJson] = useState<string | null>(null);
   const data = useBuilderData(setError);
   const { installed, presets, servers, templates, saveTemplate, createPreset } = data;
@@ -68,7 +66,7 @@ const useSessionBuilder = ({ initial, onRun }: BuilderParams) => {
   const saved = savedJson !== null && !room.password && savedJson === JSON.stringify(draft);
 
   return {
-    ...data, busy: isBusy(), clearPassword, draft, error: lastGuardError(guarded) ?? error, password: room.password, players, problems, run, save, saved, selected,
+    ...data, busy: isBusy(), clearPassword, draft, error: lastError ?? error, password: room.password, players, problems, run, save, saved, selected,
     setGenerator, setHostKind, setName, setPassword: room.setPassword, setPort, setRemoteServer, setServer, toggleSelected,
   };
 };

@@ -6,7 +6,6 @@ import type { ServerEntry, SessionTemplate } from '@archipelia/model';
 import { appApi } from '../../../ipc/app-api';
 import { CREATE_PARAM } from '../../../hooks/app-navigation.constants';
 import { useAppNavigation } from '../../../hooks/useAppNavigation';
-import { lastGuardError } from '../../../keyed-guard/last-guard-error';
 import { useLibraryStore } from '../../../stores/useLibraryStore';
 import { useRunsStore } from '../../../stores/useRunsStore';
 import { duplicateTemplate, newTemplate, passwordNameOf, useHostingDefaults } from '../../SessionBuilder';
@@ -23,9 +22,7 @@ const useSessionsLibrary = () => {
   const [editing, setEditing] = useState<SessionTemplate | null>(null);
   const [servers, setServers] = useState<ServerEntry[]>([]);
   const [query, setQuery] = useState('');
-  const guarded = useKeyedGuard();
-  const { guard, isBusy } = guarded;
-  const error = lastGuardError(guarded);
+  const { guard, isBusy, lastError: error } = useKeyedGuard();
 
   useEffect(() => {
     void guard('load', async () => {

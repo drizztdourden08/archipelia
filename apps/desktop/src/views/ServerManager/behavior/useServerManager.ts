@@ -9,7 +9,6 @@ import { passphraseSecret } from './passphrase-secret';
 import { EMPTY_INPUTS } from '../ServerManager.constants';
 import type { ServerTestResult } from '@archipelia/hosts';
 import { appApi } from '../../../ipc/app-api';
-import { lastGuardError } from '../../../keyed-guard/last-guard-error';
 import { newServerEntry } from './new-server-entry';
 import { draftProblems } from './draft-problems';
 import { withSecretRefs } from './with-secret-refs';
@@ -35,8 +34,7 @@ const useServerManager = () => {
   const [draft, setDraft] = useState<ServerEntry | null>(null);
   const [inputs, setInputs] = useState<SecretInputs>(EMPTY_INPUTS);
   const [test, setTest] = useState<ServerTestResult | null>(null);
-  const guarded = useKeyedGuard();
-  const { guard: keyed, isBusy, clearError } = guarded;
+  const { guard: keyed, isBusy, clearError, lastError } = useKeyedGuard();
 
   useServerEntries(servers);
 
@@ -86,7 +84,7 @@ const useServerManager = () => {
     });
   }, [draft, guard]);
 
-  return { busy: isBusy(), create, draft, error: lastGuardError(guarded), inputs, problems, remove, runTest, save, select, servers, setDraft, setInputs, test, trust };
+  return { busy: isBusy(), create, draft, error: lastError, inputs, problems, remove, runTest, save, select, servers, setDraft, setInputs, test, trust };
 };
 
 export { useServerManager };

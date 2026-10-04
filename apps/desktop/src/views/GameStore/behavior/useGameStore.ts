@@ -1,7 +1,6 @@
 /* @layer renderer-app @kind hook */
 import { confirmAction, toast, useKeyedGuard, usePlatform } from '@drizztdourden08/brock-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { lastGuardError } from '../../../keyed-guard/last-guard-error';
 import { useLibraryStore } from '../../../stores/useLibraryStore';
 import type { GameRow, GameTab } from '../GameStore.type';
 import { appApi } from '../../../ipc/app-api';
@@ -19,9 +18,7 @@ const useGameStore = (tab: GameTab) => {
   const { filePicker } = usePlatform();
   const [query, setQuery] = useState('');
   const [opened, setOpened] = useState(false);
-  const guarded = useKeyedGuard();
-  const { guard, isBusy } = guarded;
-  const error = lastGuardError(guarded);
+  const { guard, isBusy, lastError: error } = useKeyedGuard();
 
   useEffect(() => { void guard('load', () => loadGames(false)).finally(() => setOpened(true)); }, [guard, loadGames]);
   const loading = !opened || isBusy('load');
