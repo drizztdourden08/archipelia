@@ -12,6 +12,7 @@ import { useCardLimit } from './useCardLimit';
 import type { InstallRequest } from '@archipelia/catalog';
 import { APWORLD } from '../GameStore.constants';
 import { toastInstalled } from './toast-installed';
+import { useInstalledEntries } from './useInstalledEntries';
 
 const useGameStore = (tab: GameTab) => {
   const { catalog, official, installed, loadGames, install, removeGame } = useLibraryStore();
@@ -24,6 +25,8 @@ const useGameStore = (tab: GameTab) => {
 
   useEffect(() => { void guard('load', () => loadGames(false)).finally(() => setOpened(true)); }, [guard, loadGames]);
   const loading = !opened || isBusy('load');
+
+  useInstalledEntries(installed);
 
   const rows = useMemo(() => buildRows([...official, ...(catalog?.entries ?? [])], installed), [catalog, official, installed]);
   const visible = useMemo(() => filterRows(rows, tab, query), [rows, tab, query]);

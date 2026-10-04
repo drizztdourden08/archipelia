@@ -7,6 +7,7 @@ import { pickSession } from './pick-session';
 import { NO_LINES, TICK_MS } from '../SessionDashboard.constants';
 import { addressOf } from './address-of';
 import { uptimeOf } from './uptime-of';
+import { STOP_ROOM_CONFIRM } from '../../../rooms/stop-room-confirm.constants';
 
 const useSessionDashboard = (sessionId: string) => {
   const { runs, loaded, logs, progress, load, loadLog, stop } = useRunsStore();
@@ -33,12 +34,7 @@ const useSessionDashboard = (sessionId: string) => {
 
   const stopSession = useCallback(() => {
     if (!id) return;
-    void confirmAction({
-      title: 'Stop the room',
-      message: 'The server stops and every player is disconnected.',
-      confirmLabel: 'Stop',
-      variant: 'danger',
-    }).then((confirmed) => {
+    void confirmAction(STOP_ROOM_CONFIRM).then((confirmed) => {
       if (confirmed) stop(id).catch((err: Error) => setError(err.message));
     });
   }, [id, stop]);

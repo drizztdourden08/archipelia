@@ -8,6 +8,7 @@ import { schemaFor } from './schema-for';
 import { usePresetCreator } from './usePresetCreator';
 import { usePresetActions } from './usePresetActions';
 import { usePresetSelection } from './usePresetSelection';
+import { usePresetEntries } from './usePresetEntries';
 
 const usePresetsHub = () => {
   const { params, open } = useNavigation();
@@ -20,6 +21,8 @@ const usePresetsHub = () => {
     const fail = (err: unknown) => setError((err as Error).message);
     void Promise.allSettled([loadPresets().catch(fail), loadInstalled().catch(fail)]).then(() => setLoading(false));
   }, [loadPresets, loadInstalled]);
+
+  usePresetEntries(presets);
 
   const groups = useMemo(() => buildPresetGroups(installed, presets, Date.now()), [installed, presets]);
   const selection = usePresetSelection(requestedId);

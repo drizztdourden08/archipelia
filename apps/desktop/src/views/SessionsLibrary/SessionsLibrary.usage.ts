@@ -11,6 +11,7 @@ const usage = {
     { case: 'A run in progress.', use: 'RunProgress' },
   ],
   rules: [
+    'Put each template in search while the page is open, and open the builder on a new template when the page is opened with the create param.',
     'Open the builder in place of the lists while a template is edited.',
     'Open a run that is still starting in the run dialog, and any other run on the dashboard.',
     'Filter templates and runs with the same query.',

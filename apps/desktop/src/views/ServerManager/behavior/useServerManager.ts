@@ -15,6 +15,7 @@ import { draftProblems } from './draft-problems';
 import { withSecretRefs } from './with-secret-refs';
 import { removeServerConfirm } from './remove-server-confirm';
 import { toastTest } from './toast-test';
+import { useServerEntries } from './useServerEntries';
 
 const storeSecrets = async (entry: ServerEntry, inputs: SecretInputs) => {
   const secrets = secretsApi();
@@ -36,6 +37,8 @@ const useServerManager = () => {
   const [test, setTest] = useState<ServerTestResult | null>(null);
   const guarded = useKeyedGuard();
   const { guard: keyed, isBusy, clearError } = guarded;
+
+  useServerEntries(servers);
 
   const load = useCallback(async () => setServers(await appApi().serversList()), []);
   useEffect(() => { void load(); }, [load]);

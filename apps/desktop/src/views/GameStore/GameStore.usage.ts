@@ -11,6 +11,7 @@ const usage = {
     { case: 'A list of presets of the installed games.', use: 'PresetsHub' },
   ],
   rules: [
+    'Put each installed game in search, pointing at the Installed tab.',
     'Pick the tab from the page tab; the view filters the rows for it.',
     'Guard each install with its world as the key, through useKeyedGuard, so its card shows it working.',
     'Cap the number of cards drawn, say how many are shown of how many, and offer Show more.',

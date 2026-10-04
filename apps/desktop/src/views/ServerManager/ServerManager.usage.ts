@@ -11,6 +11,7 @@ const usage = {
     { case: 'Picking a saved server in a session.', use: 'ServerOptionsForm' },
   ],
   rules: [
+    'Put each saved server in search while the page is open.',
     'Keep passwords and passphrases in the vault; the form holds them only while typed.',
     'Turn save off while the draft has a problem, and list the problems.',
     'Test a server before trusting its host key, and toast whether it is ready.',
