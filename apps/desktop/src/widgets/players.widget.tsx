@@ -9,6 +9,7 @@ const meta: WidgetMeta = {
   icon: 'users',
   popOut: true,
   defaultVisibility: 'context-only',
+  defaultOpen: true,
   defaultSide: 'top',
   defaultDockedSize: 260,
   defaultFloatingSize: { width: 360, height: 300 },

@@ -9,6 +9,7 @@ const meta: WidgetMeta = {
   icon: 'compass',
   popOut: true,
   defaultVisibility: 'context-only',
+  defaultOpen: true,
   defaultSide: 'top',
   defaultDockedSize: 260,
   defaultFloatingSize: { width: 380, height: 300 },

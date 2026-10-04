@@ -9,6 +9,7 @@ const meta: WidgetMeta = {
   icon: 'file-text',
   popOut: true,
   defaultVisibility: 'context-only',
+  defaultOpen: true,
   defaultSide: 'bottom',
   defaultDockedSize: 300,
   defaultFloatingSize: { width: 640, height: 320 },

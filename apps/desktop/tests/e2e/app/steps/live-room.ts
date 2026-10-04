@@ -29,6 +29,12 @@ const popIn = async (popped: Page) => {
   await Promise.all([popped.waitForEvent('close'), button.evaluate((node: HTMLElement) => { setTimeout(() => node.click(), 0); })]);
 };
 
+const resetLayout = async (page: Page) => {
+  await page.getByRole('button', { name: 'Menu', exact: true }).click();
+  await page.getByRole('menuitem', { name: 'Widgets', exact: true }).click();
+  await page.getByRole('menuitem', { name: 'Reset layout', exact: true }).click();
+};
+
 const popPlayersOut = async (launched: LaunchedApp) => {
   const widgets = docked(launched.page);
   await widgetFrame(launched.page, 'Players').getByRole('button', { name: 'Pop out', exact: true }).click();
@@ -38,7 +44,7 @@ const popPlayersOut = async (launched: LaunchedApp) => {
   await playerItem(body, SOH.game).getByText(`${CHECKS} / `, { exact: false }).waitFor();
   await popIn(popped);
   await playerItem(widgets, SOH.game).getByText('connected', { exact: true }).waitFor();
-  await base(launched.page).getByRole('button', { name: 'Reset layout', exact: true }).click();
+  await resetLayout(launched.page);
   await widgetFrame(launched.page, 'Players').waitFor();
   expect(launched.app.windows().map((win) => win.url()).filter((url) => url.includes('widget=')), 'no widget window is left').toEqual([]);
 };

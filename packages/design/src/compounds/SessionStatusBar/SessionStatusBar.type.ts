@@ -13,7 +13,6 @@ type SessionStatusBarProps = {
   progress: string | null;
   copied: boolean;
   stoppable: boolean;
-  onResetLayout: () => void;
   onCopy: () => void;
   onStop: () => void;
 };

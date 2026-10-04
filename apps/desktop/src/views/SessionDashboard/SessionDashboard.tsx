@@ -3,7 +3,6 @@ import { Box, Callout, Stack } from '@drizztdourden08/tessera/primitives';
 import type { SessionDashboardProps } from './SessionDashboard.type';
 import { useSessionDashboard } from './behavior/useSessionDashboard';
 import { useLiveRoom } from './behavior/useLiveRoom';
-import { useSessionLayoutSeed } from './behavior/useSessionLayoutSeed';
 import { useStartOnHome } from './behavior/useStartOnHome';
 import { canStop } from './behavior/can-stop';
 import { hostLabel } from '@archipelia/model';
@@ -11,7 +10,6 @@ import { progressLabel } from './behavior/progress-label';
 import { RUN_STATUS, SessionStatusBar } from '@archipelia/design';
 import { IdleBase } from './sub-components/IdleBase';
 import { SessionSummary } from './sub-components/SessionSummary';
-import { resetSessionWidgets } from '../../session-widgets/reset-session-widgets';
 import { useFocusStore } from '../../stores/useFocusStore';
 import './SessionDashboard.css';
 
@@ -19,7 +17,6 @@ const SessionDashboard = ({ sessionId }: SessionDashboardProps) => {
   const focused = useFocusStore((state) => state.sessionId);
   const board = useSessionDashboard(sessionId ?? focused);
   const live = useLiveRoom(board.session, board.lines);
-  useSessionLayoutSeed(board.session !== null);
   useStartOnHome(sessionId === undefined, board.loaded, board.session !== null);
 
   const { session } = board;
@@ -40,7 +37,6 @@ const SessionDashboard = ({ sessionId }: SessionDashboardProps) => {
         progress={progressLabel(board.progress)}
         copied={board.copied}
         stoppable={canStop(session.status)}
-        onResetLayout={resetSessionWidgets}
         onCopy={board.copyAddress}
         onStop={board.stopSession}
       />

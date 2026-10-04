@@ -9,6 +9,7 @@ const meta: WidgetMeta = {
   icon: 'house',
   popOut: true,
   defaultVisibility: 'context-only',
+  defaultOpen: true,
   defaultSide: 'top',
   defaultDockedSize: 260,
   defaultFloatingSize: { width: 340, height: 300 },

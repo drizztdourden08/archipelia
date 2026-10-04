@@ -9,6 +9,7 @@ const meta: WidgetMeta = {
   icon: 'send',
   popOut: true,
   defaultVisibility: 'context-only',
+  defaultOpen: true,
   defaultSide: 'bottom',
   defaultDockedSize: 300,
   defaultFloatingSize: { width: 380, height: 300 },

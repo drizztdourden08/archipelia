@@ -7,7 +7,7 @@ import './SessionStatusBar.css';
 const SessionStatusBar = (props: SessionStatusBarProps) => {
   const {
     status, statusTone, name, host, address, roomUrl, seed, uptime, progress, copied, stoppable,
-    onResetLayout, onCopy, onStop,
+    onCopy, onStop,
   } = props;
   return (
     <Flex className="session-status-bar" align="center" justify="between" wrap gap="sm">
@@ -21,7 +21,6 @@ const SessionStatusBar = (props: SessionStatusBarProps) => {
         {progress && <StatusFact label="stage" value={progress} />}
       </Flex>
       <ButtonRow gap="xs">
-        <Button size="sm" variant="ghost" onClick={onResetLayout}>Reset layout</Button>
         <Button size="sm" variant="secondary" disabled={!address} onClick={onCopy}>{copied ? 'Copied' : 'Copy address'}</Button>
         <Button size="sm" variant="danger" disabled={!stoppable} onClick={onStop}>Stop</Button>
       </ButtonRow>

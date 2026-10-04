@@ -6,6 +6,7 @@ import LogWidget, { meta as logWidgetMeta } from '../src/widgets/log.widget';
 import PlayersWidget, { meta as playersWidgetMeta } from '../src/widgets/players.widget';
 import RoomWidget, { meta as roomWidgetMeta } from '../src/widgets/room.widget';
 import SpoilerWidget, { meta as spoilerWidgetMeta } from '../src/widgets/spoiler.widget';
+import appWidgetLayout from '../src/widgets/layout';
 
 const appWidgets = widgetsFromFiles([
   { id: 'console', component: ConsoleWidget, meta: consoleWidgetMeta },
@@ -15,6 +16,5 @@ const appWidgets = widgetsFromFiles([
   { id: 'room', component: RoomWidget, meta: roomWidgetMeta },
   { id: 'spoiler', component: SpoilerWidget, meta: spoilerWidgetMeta },
 ]);
-const appWidgetLayout = undefined;
 
 export { appWidgetLayout, appWidgets };
