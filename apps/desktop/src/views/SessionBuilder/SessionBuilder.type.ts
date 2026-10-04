@@ -4,7 +4,7 @@ import type { Dispatch, SetStateAction } from 'react';
 import type { PresetInput } from '@archipelia/presets';
 import type { AppSettings } from '../../settings.type';
 
-type BuilderParams = { initial: SessionTemplate; onRun: (template: SessionTemplate) => void | Promise<void> };
+type BuilderParams = { initial: SessionTemplate; onBack: () => void; onRun: (template: SessionTemplate) => void | Promise<void> };
 
 type LibraryView = { installed: InstalledGame[]; presets: GamePreset[] };
 

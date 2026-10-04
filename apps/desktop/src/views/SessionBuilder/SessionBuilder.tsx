@@ -11,7 +11,7 @@ import { ServerOptionsForm } from '@archipelia/design';
 import './SessionBuilder.css';
 
 const SessionBuilder = ({ initial, onBack, onRun }: SessionBuilderProps) => {
-  const builder = useSessionBuilder({ initial, onRun });
+  const builder = useSessionBuilder({ initial, onBack, onRun });
   const { draft, selected, players, toggleSelected } = builder;
   const { game, preset } = sourcesOf(selected, builder.installed, builder.presets);
 
@@ -22,7 +22,7 @@ const SessionBuilder = ({ initial, onBack, onRun }: SessionBuilderProps) => {
         saved={builder.saved}
         busy={builder.busy}
         canRun={builder.problems.length === 0}
-        onBack={onBack}
+        onBack={builder.leave}
         onName={builder.setName}
         onSave={builder.save}
         onRun={builder.run}

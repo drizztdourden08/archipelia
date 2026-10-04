@@ -12,8 +12,9 @@ import { hostOfKind } from './host-of-kind';
 import { withPort } from './with-port';
 import { withServer } from './with-server';
 import { withoutPassword } from './without-password';
+import { useLeaveGuard } from './useLeaveGuard';
 
-const useSessionBuilder = ({ initial, onRun }: BuilderParams) => {
+const useSessionBuilder = ({ initial, onBack, onRun }: BuilderParams) => {
   const [draft, setDraft] = useState<SessionTemplate>(initial);
   const [selectedSlot, setSelectedSlot] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -63,10 +64,13 @@ const useSessionBuilder = ({ initial, onRun }: BuilderParams) => {
 
   const toggleSelected = useCallback((slot: number) => setSelectedSlot((current) => (current === slot ? null : slot)), []);
   const selected = draft.players.find((player) => player.slot === selectedSlot);
-  const saved = savedJson !== null && !room.password && savedJson === JSON.stringify(draft);
+  const draftJson = JSON.stringify(draft);
+  const saved = savedJson !== null && !room.password && savedJson === draftJson;
+  const dirty = Boolean(room.password) || draftJson !== (savedJson ?? JSON.stringify(initial));
+  const leave = useLeaveGuard(dirty, onBack);
 
   return {
-    ...data, busy: isBusy(), clearPassword, draft, error: lastError ?? error, password: room.password, players, problems, run, save, saved, selected,
+    ...data, busy: isBusy(), clearPassword, draft, error: lastError ?? error, leave, password: room.password, players, problems, run, save, saved, selected,
     setGenerator, setHostKind, setName, setPassword: room.setPassword, setPort, setRemoteServer, setServer, toggleSelected,
   };
 };

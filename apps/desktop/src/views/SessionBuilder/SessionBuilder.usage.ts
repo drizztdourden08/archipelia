@@ -14,6 +14,7 @@ const usage = {
     'Start from a session: newTemplate for a new one, the saved one to edit.',
     'Turn Run off while the problem list is not empty.',
     'Save the session before running it.',
+    'Ask with the Discard changes confirm, the one Presets uses, before Back or Escape drops unsaved edits.',
   ],
   a11y: [
     'The session name field is labelled.',
