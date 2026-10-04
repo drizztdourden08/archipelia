@@ -14,6 +14,7 @@ import { newServerEntry } from './new-server-entry';
 import { draftProblems } from './draft-problems';
 import { withSecretRefs } from './with-secret-refs';
 import { removeServerConfirm } from './remove-server-confirm';
+import { toastTest } from './toast-test';
 
 const storeSecrets = async (entry: ServerEntry, inputs: SecretInputs) => {
   const secrets = secretsApi();
@@ -59,7 +60,12 @@ const useServerManager = () => {
     setInputs(EMPTY_INPUTS);
   }), [draft, guard, inputs, problems]);
 
-  const runTest = useCallback(() => guard('test', async () => { if (draft?.id) setTest(await appApi().serversTest(draft.id)); }), [draft, guard]);
+  const runTest = useCallback(() => guard('test', async () => {
+    if (!draft?.id) return;
+    const result = await appApi().serversTest(draft.id);
+    setTest(result);
+    toastTest(draft.label, result);
+  }), [draft, guard]);
   const trust = useCallback((sha: string) => guard('trust', async () => {
     if (!draft?.id) return;
     setDraft(await appApi().serversTrustKey(draft.id, sha));

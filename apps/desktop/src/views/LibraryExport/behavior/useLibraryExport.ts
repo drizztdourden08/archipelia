@@ -1,6 +1,6 @@
 /* @layer renderer-app @kind hook */
 import { useCallback } from 'react';
-import { usePlatform } from '@drizztdourden08/brock-react';
+import { toast, usePlatform } from '@drizztdourden08/brock-react';
 import { useDataAction } from '../../../hooks/useDataAction';
 import { appApi } from '../../../ipc/app-api';
 import { EXPORT_NAME } from '../LibraryExport.constants';
@@ -11,7 +11,10 @@ const useLibraryExport = () => {
 
   const exportLibrary = useCallback(() => run('export', async () => {
     const result = await filePicker.saveFile({ name: EXPORT_NAME, bytes: await appApi().dataExport(), extensions: ['zip'] });
-    return result.saved ? `Saved ${result.name ?? EXPORT_NAME}` : result.error ?? null;
+    if (!result.saved) return result.error ?? null;
+    const saved = `Saved ${result.name ?? EXPORT_NAME}`;
+    toast(saved, { variant: 'success' });
+    return saved;
   }), [filePicker, run]);
 
   return { busy, exportLibrary, message };

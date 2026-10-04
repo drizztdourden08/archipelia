@@ -1,5 +1,6 @@
 /* @layer renderer-app @kind hook */
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { toast } from '@drizztdourden08/brock-react';
 import type { EditorParams, EditorStatus } from '../PresetEditor.type';
 import { useLibraryStore } from '../../../stores/useLibraryStore';
 import { usePresetDraft } from './usePresetDraft';
@@ -29,8 +30,10 @@ const usePresetEditor = ({ preset, schema, onDirtyChange }: EditorParams) => {
     try {
       await savePreset({ ...preset, name, values: draft.changed });
       setStatus({ tone: 'info', text: 'Saved.' });
+      toast(`Saved the preset ${name}`, { variant: 'success' });
     } catch (err) {
       setStatus({ tone: 'error', text: (err as Error).message });
+      toast(`The preset ${name} was not saved: ${(err as Error).message}`, { variant: 'danger' });
     } finally {
       setBusy(false);
     }

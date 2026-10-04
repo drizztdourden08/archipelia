@@ -1,6 +1,6 @@
 /* @layer renderer-app @kind hook */
 import { useCallback } from 'react';
-import { usePlatform } from '@drizztdourden08/brock-react';
+import { toast, usePlatform } from '@drizztdourden08/brock-react';
 import { useDataAction } from '../../../hooks/useDataAction';
 import { appApi } from '../../../ipc/app-api';
 
@@ -12,7 +12,9 @@ const useLibraryImport = () => {
     const picked = await filePicker.pickFile({ extensions: ['zip'] });
     if (!picked) return null;
     const counts = await appApi().dataImport(picked.bytes);
-    return `Imported ${counts.presets} presets and ${counts.templates} templates`;
+    const imported = `Imported ${counts.presets} presets and ${counts.templates} templates`;
+    toast(imported, { variant: 'success' });
+    return imported;
   }), [filePicker, run]);
 
   return { busy, importLibrary, message };

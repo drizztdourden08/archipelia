@@ -12,7 +12,7 @@ const usage = {
   ],
   rules: [
     'Ask where to save with the save dialog, named archipelia-library.zip by default.',
-    'Report where the file went in the status line.',
+    'Report where the file went in the status line, and toast it.',
     'Keep the button disabled while the export runs.',
   ],
   a11y: [

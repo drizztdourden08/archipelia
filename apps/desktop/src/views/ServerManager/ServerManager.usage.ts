@@ -13,7 +13,7 @@ const usage = {
   rules: [
     'Keep passwords and passphrases in the vault; the form holds them only while typed.',
     'Turn save off while the draft has a problem, and list the problems.',
-    'Test a server before trusting its host key.',
+    'Test a server before trusting its host key, and toast whether it is ready.',
     'Remove is a danger button that asks first and names what loses the server.',
   ],
   a11y: [

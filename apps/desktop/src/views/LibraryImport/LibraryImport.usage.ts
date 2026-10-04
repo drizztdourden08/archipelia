@@ -12,7 +12,7 @@ const usage = {
   ],
   rules: [
     'Pick the zip file with the file picker; a cancelled pick changes nothing and says nothing.',
-    'Report how many presets and templates came in, in the status line.',
+    'Report how many presets and templates came in, in the status line and in a toast.',
     'Keep the button disabled while the import runs.',
   ],
   a11y: [

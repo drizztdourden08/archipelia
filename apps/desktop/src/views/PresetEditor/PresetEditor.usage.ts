@@ -14,6 +14,7 @@ const usage = {
     'Report dirty changes through onDirtyChange so the hub can ask before leaving.',
     'Keep save off while a value would be refused by the generator.',
     'Take duplicate and delete from the hub, which asks before it deletes.',
+    'Toast the outcome of a save, saved or not saved with the reason.',
   ],
   a11y: [
     'The name field is labelled Preset name.',

@@ -15,6 +15,7 @@ const usage = {
     'Guard each install with its world as the key, through useKeyedGuard, so its card shows it working.',
     'Cap the number of cards drawn, say how many are shown of how many, and offer Show more.',
     'Removing a game asks first with the number of presets and templates that use it.',
+    'Toast each install and removal once it is done.',
   ],
   a11y: [
     'The search field has a placeholder that says what it finds.',
