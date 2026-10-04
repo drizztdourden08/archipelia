@@ -1,6 +1,6 @@
 /* @layer renderer-app @kind logic */
 import type { ConfirmActionOptions } from '@drizztdourden08/brock-react';
-import { CLEAN_DAYS } from '../DataView.constants';
+import { CLEAN_DAYS } from '../OldRuns.constants';
 
 const cleanRunsConfirm = (count: number): ConfirmActionOptions => ({
   title: 'Remove old runs',

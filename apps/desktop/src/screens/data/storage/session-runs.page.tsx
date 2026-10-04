@@ -1,10 +1,10 @@
 /* @layer renderer-app @kind component */
 import type { ScreenMeta } from '@drizztdourden08/brock-react';
-import { DataView } from '../../../views/DataView';
+import { OldRuns } from '../../../views/OldRuns';
 
 const meta: ScreenMeta = { title: 'Session runs', icon: 'history', order: 1, keywords: ['history', 'clean', 'old runs'] };
 
-const SessionRunsPage = () => <DataView part="runs" />;
+const SessionRunsPage = () => <OldRuns />;
 
 export default SessionRunsPage;
 export { meta };

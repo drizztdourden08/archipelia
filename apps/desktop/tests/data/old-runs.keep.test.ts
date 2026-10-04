@@ -1,7 +1,7 @@
 /* @layer tests @kind test */
 import { expect, test } from 'vitest';
 import type { Session } from '@archipelia/model';
-import { olderThan } from '../../src/views/DataView/behavior/old-runs';
+import { olderThan } from '../../src/views/OldRuns/behavior/old-runs';
 
 const DAY = 24 * 60 * 60 * 1000;
 const run = (id: string, status: Session['status'], ageDays: number): Session =>

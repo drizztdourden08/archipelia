@@ -18,7 +18,10 @@ const APP_TREE = [
           'the saved servers': null,
           'the engine': null,
           'the archipelago.gg address': null,
-          'the data on disk': null,
+          'the data on disk': {
+            question: 'Which part of it?',
+            answers: { 'the folder sizes': null, 'the old runs to clean': null, 'a library export': null, 'a library import': null },
+          },
         },
       },
     },
