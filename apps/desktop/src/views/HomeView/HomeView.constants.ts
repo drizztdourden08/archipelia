@@ -21,8 +21,8 @@ const ENGINE_LINE: Record<EngineState, string> = {
 const STEP_TEXT: Record<HomeStepId, { label: string; todo: string; action: string }> = {
   engine: { label: 'Engine', todo: 'Set up the engine that makes seeds and runs rooms.', action: 'Open Engine' },
   games: { label: 'Games', todo: 'Install the worlds your players play.', action: 'Open Games' },
-  preset: { label: 'Preset', todo: 'Pick the options of a game once, to reuse in sessions.', action: 'Open Presets' },
-  session: { label: 'Session', todo: 'Add players, pick their presets, save, then run.', action: 'New session' },
+  preset: { label: 'Preset', todo: 'Pick the options of a game once.', action: 'Open Presets' },
+  session: { label: 'Session', todo: 'Add players, save, then run.', action: 'New session' },
 };
 
 const HERO_TITLE: Record<HomeStepId | 'checking' | 'building' | 'run' | 'ready', string> = {

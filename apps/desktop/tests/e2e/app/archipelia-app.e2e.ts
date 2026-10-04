@@ -32,7 +32,7 @@ describe('Archipelia app, headless, every screen end to end', () => {
     expect(notes, 'teardown notes').toEqual([]);
   });
 
-  test('1. first boot: create a profile, the base screen is idle, Home shows the engine ready', () => createProfile(app()));
+  test('1. first boot: create a profile, Home opens with the engine ready and the setup checklist, the base screen is idle behind it', () => createProfile(app()));
 
   test('2a. settings: every tab opens', () => visitSettingsTabs(app()));
 

@@ -2,7 +2,7 @@
 import type { ComponentUsage } from '@drizztdourden08/tessera';
 
 const usage = {
-  job: 'The Multiworld home banner: the engine state, the facts with the counts, the run again action and the recent runs.',
+  job: 'The Multiworld home banner: the engine state, the facts with the counts, the run again action and the recent runs, or the setup checklist before the first run.',
   useWhen: [
     'The hero home of the Multiworld bucket.',
   ],
@@ -14,6 +14,7 @@ const usage = {
     'Fill only the hero slots it is given; the hub draws the frame.',
     'Load the engine, the library and the runs when it opens, together.',
     'Keep exactly one primary action: Open Engine while the engine is not ready, the next setup step before the first run, else Run again.',
+    'Before the first run, show the four setup steps (Engine, Games, Preset, Session) with their state and a button to each; hide them once a run exists.',
     'Make the title say what to do next, such as Set up the engine, Add your first game or Ready to host.',
   ],
   a11y: [

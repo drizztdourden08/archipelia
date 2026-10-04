@@ -4,6 +4,7 @@ import type { SessionDashboardProps } from './SessionDashboard.type';
 import { useSessionDashboard } from './behavior/useSessionDashboard';
 import { useLiveRoom } from './behavior/useLiveRoom';
 import { useSessionLayoutSeed } from './behavior/useSessionLayoutSeed';
+import { useStartOnHome } from './behavior/useStartOnHome';
 import { canStop } from './behavior/can-stop';
 import { hostLabel } from '@archipelia/model';
 import { progressLabel } from './behavior/progress-label';
@@ -19,6 +20,7 @@ const SessionDashboard = ({ sessionId }: SessionDashboardProps) => {
   const board = useSessionDashboard(sessionId ?? focused);
   const live = useLiveRoom(board.session, board.lines);
   useSessionLayoutSeed(board.session !== null);
+  useStartOnHome(sessionId === undefined, board.loaded, board.session !== null);
 
   const { session } = board;
   if (!session) return <IdleBase loaded={board.loaded} />;

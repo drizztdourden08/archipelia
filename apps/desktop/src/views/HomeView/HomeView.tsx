@@ -8,6 +8,7 @@ import { heroTitle } from './behavior/hero-title';
 import { homeFacts } from './behavior/home-facts';
 import type { HomeViewProps } from './HomeView.type';
 import { RecentSessionRow } from './sub-components/RecentSessionRow';
+import { SetupChecklist } from './sub-components/SetupChecklist';
 
 const HomeView = ({ slots }: HomeViewProps) => {
   const { Eyebrow, Title, Actions, Facts, Aside } = slots;
@@ -28,13 +29,15 @@ const HomeView = ({ slots }: HomeViewProps) => {
       </Actions>
       <Facts rows={facts} />
       <Aside>
-        <Stack gap="sm">
-          <Text variant="label">Recent runs</Text>
-          {home.error && <Box role="alert"><Callout tone="danger">{home.error}</Callout></Box>}
-          {home.recent.length === 0
-            ? <EmptyState message="Nothing has run yet." />
-            : home.recent.map((session) => <RecentSessionRow key={session.id} session={session} now={now} onOpen={home.openSession} />)}
-        </Stack>
+        {home.firstRun ? <SetupChecklist steps={home.steps} onStep={home.act} /> : (
+          <Stack gap="sm">
+            <Text variant="label">Recent runs</Text>
+            {home.error && <Box role="alert"><Callout tone="danger">{home.error}</Callout></Box>}
+            {home.recent.length === 0
+              ? <EmptyState message="Nothing has run yet." />
+              : home.recent.map((session) => <RecentSessionRow key={session.id} session={session} now={now} onOpen={home.openSession} />)}
+          </Stack>
+        )}
       </Aside>
     </>
   );

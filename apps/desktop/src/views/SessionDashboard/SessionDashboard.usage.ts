@@ -12,6 +12,7 @@ const usage = {
   ],
   rules: [
     'Leave sessionId out to follow the focused session; an empty focus shows the newest hosting run.',
+    'When a profile starts with no run hosting and none focused, open the Multiworld home over it instead of leaving the idle state in front.',
     'Load the runs when it opens; the runs boot task loads them first.',
     'Ask before stopping a room.',
   ],

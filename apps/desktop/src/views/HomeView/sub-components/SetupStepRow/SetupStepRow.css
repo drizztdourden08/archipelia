@@ -1,0 +1,11 @@
+/* @layer renderer-app @kind style */
+.setup-step-row__text {
+  flex: 1;
+  min-width: 0;
+}
+
+.setup-step-row__meta {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
