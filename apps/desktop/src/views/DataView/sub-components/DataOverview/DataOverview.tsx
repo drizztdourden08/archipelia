@@ -1,13 +1,13 @@
 /* @layer renderer-app @kind component */
 import { formatBytes } from '@drizztdourden08/brock-core/format';
-import { Button, ButtonRow, Card, Flex, Grid, Icon, Spinner, Stack, StatRow, Text } from '@drizztdourden08/tessera/primitives';
+import { Box, Button, ButtonRow, Callout, Card, Flex, Grid, Icon, Spinner, Stack, StatRow, Text } from '@drizztdourden08/tessera/primitives';
 import type { DataOverviewProps } from './DataOverview.type';
 
 const DataOverview = ({ summary, error, onRetry, onReveal }: DataOverviewProps) => {
   if (!summary && error) {
     return (
       <Stack gap="sm">
-        <Text variant="body" role="alert">{`Could not read the data folder: ${error}`}</Text>
+        <Box role="alert"><Callout tone="danger">{`Could not read the data folder: ${error}`}</Callout></Box>
         <ButtonRow align="start">
           <Button variant="primary" onClick={onRetry}><Icon name="refresh-cw" />Retry</Button>
         </ButtonRow>
@@ -25,7 +25,7 @@ const DataOverview = ({ summary, error, onRetry, onReveal }: DataOverviewProps) 
   return (
     <Stack>
       <Text variant="caption">{`${summary.location.path} · ${formatBytes(summary.totalBytes)}`}</Text>
-      {error && <Text variant="body" role="alert">{`Could not refresh the data folder: ${error}`}</Text>}
+      {error && <Box role="alert"><Callout tone="danger">{`Could not refresh the data folder: ${error}`}</Callout></Box>}
       <ButtonRow align="start">
         <Button variant="secondary" disabled={!summary.location.canReveal} onClick={onReveal}><Icon name="folder" />Open folder</Button>
         {error && <Button variant="secondary" onClick={onRetry}><Icon name="refresh-cw" />Retry</Button>}

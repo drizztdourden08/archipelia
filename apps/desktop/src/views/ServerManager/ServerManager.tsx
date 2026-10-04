@@ -1,6 +1,6 @@
 /* @layer renderer-app @kind component */
 import { ListItemRow, MasterDetailLayout } from '@drizztdourden08/tessera/composites';
-import { Button, ButtonRow, EmptyState, Flex, Stack, Status, Text } from '@drizztdourden08/tessera/primitives';
+import { Box, Button, ButtonRow, Callout, EmptyState, Flex, Stack, Status, Text } from '@drizztdourden08/tessera/primitives';
 import { useServerManager } from './behavior/useServerManager';
 import { ServerForm } from './sub-components/ServerForm';
 import { ServerTestPanel } from './sub-components/ServerTestPanel';
@@ -33,7 +33,7 @@ const ServerManager = () => {
         </ButtonRow>
       </Flex>
       {manager.problems.map((problem) => <Text key={problem} variant="caption">{problem}</Text>)}
-      {manager.error && <Text variant="body" role="alert">{manager.error}</Text>}
+      {manager.error && <Box role="alert"><Callout tone="danger">{manager.error}</Callout></Box>}
       <ServerForm entry={draft} inputs={manager.inputs} onEntry={manager.setDraft} onInputs={manager.setInputs} />
       <ServerTestPanel test={manager.test} pinned={draft.hostKeySha256} busy={manager.busy} onTrust={manager.trust} />
     </Stack>

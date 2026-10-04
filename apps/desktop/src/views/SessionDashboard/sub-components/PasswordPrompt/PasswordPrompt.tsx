@@ -1,7 +1,7 @@
 /* @layer renderer-app @kind component */
 import { useCallback, useState } from 'react';
 import type { ChangeEvent, KeyboardEvent } from 'react';
-import { Button, Flex, Stack, Text, TextInput } from '@drizztdourden08/tessera/primitives';
+import { Box, Button, Callout, Flex, Stack, Text, TextInput } from '@drizztdourden08/tessera/primitives';
 import type { PasswordPromptProps } from './PasswordPrompt.type';
 
 const PasswordPrompt = ({ error, onSubmit }: PasswordPromptProps) => {
@@ -20,7 +20,7 @@ const PasswordPrompt = ({ error, onSubmit }: PasswordPromptProps) => {
         <TextInput type="password" autoComplete="off" placeholder="Room password" value={password} onChange={change} onKeyDown={keyDown} />
         <Button size="sm" variant="primary" disabled={!password} onClick={submit}>Watch</Button>
       </Flex>
-      {error && <Text variant="caption" role="alert">{error}</Text>}
+      {error && <Box role="alert"><Callout tone="danger">{error}</Callout></Box>}
     </Stack>
   );
 };

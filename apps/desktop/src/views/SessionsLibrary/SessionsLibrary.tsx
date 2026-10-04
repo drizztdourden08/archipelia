@@ -1,6 +1,6 @@
 /* @layer renderer-app @kind component */
 import { useCallback } from 'react';
-import { Flex, Stack, Text } from '@drizztdourden08/tessera/primitives';
+import { Box, Callout, Flex, Stack } from '@drizztdourden08/tessera/primitives';
 import { RunProgress, useRunLauncher } from '../RunProgress';
 import { SessionBuilder } from '../SessionBuilder';
 import { useSessionsLibrary } from './behavior/useSessionsLibrary';
@@ -45,7 +45,7 @@ const SessionsLibrary = () => {
   return (
     <Stack>
       <LibraryHeader query={hub.query} onQuery={hub.setQuery} onNew={hub.createNew} />
-      {hub.error && <Text variant="body" role="alert">{hub.error}</Text>}
+      {hub.error && <Box role="alert"><Callout tone="danger">{hub.error}</Callout></Box>}
       <Flex gap="md" align="start" wrap className="sessions-library__columns">
         <TemplatesCard
           templates={hub.visibleTemplates}

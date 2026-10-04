@@ -1,6 +1,6 @@
 /* @layer renderer-app @kind component */
 import { useMemo } from 'react';
-import { Button, EmptyState, Stack, Text } from '@drizztdourden08/tessera/primitives';
+import { Box, Button, Callout, EmptyState, Stack, Text } from '@drizztdourden08/tessera/primitives';
 import { useHome } from './behavior/useHome';
 import { engineLine } from './behavior/engine-line';
 import { homeFacts } from './behavior/home-facts';
@@ -28,7 +28,7 @@ const HomeView = ({ slots }: HomeViewProps) => {
       <Aside>
         <Stack gap="sm">
           <Text variant="label">Recent sessions</Text>
-          {home.error && <Text variant="body" role="alert">{home.error}</Text>}
+          {home.error && <Box role="alert"><Callout tone="danger">{home.error}</Callout></Box>}
           {home.recent.length === 0
             ? <EmptyState message="No session has run yet." />
             : home.recent.map((session) => <RecentSessionRow key={session.id} session={session} now={now} onOpen={home.openSession} />)}

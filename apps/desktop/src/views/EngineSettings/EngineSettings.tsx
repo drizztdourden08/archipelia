@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useMemo } from 'react';
 import { confirmAction } from '@drizztdourden08/brock-react';
 import { LogPanel } from '@drizztdourden08/tessera/composites';
-import { Button, ButtonRow, Stack, StatRow, Status, Text } from '@drizztdourden08/tessera/primitives';
+import { Box, Button, ButtonRow, Callout, Stack, StatRow, Status, Text } from '@drizztdourden08/tessera/primitives';
 import { useEngineStore } from '../../stores/useEngineStore';
 import { engineLogRows } from './behavior/engine-log-rows';
 import { engineView } from './behavior/engine-view';
@@ -26,7 +26,7 @@ const EngineSettings = () => {
       <Status tone={state.tone}>{state.label}</Status>
       <StatRow label="Archipelago" value={apVersion} />
       <StatRow label="Folder" value={dir} />
-      {error && <Text variant="body" role="alert">{error}</Text>}
+      {error && <Box role="alert"><Callout tone="danger">{error}</Callout></Box>}
       <ButtonRow align="start">
         {!ready && <Button variant="primary" disabled={building} onClick={() => { void setup(); }}>Set up engine</Button>}
         <Button variant={ready ? 'primary' : 'secondary'} disabled={building} onClick={() => { void refresh(); }}>Check again</Button>

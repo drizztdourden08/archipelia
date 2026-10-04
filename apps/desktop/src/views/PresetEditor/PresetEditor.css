@@ -3,11 +3,6 @@
   min-width: var(--size-256);
 }
 
-.preset-editor__problems,
-.preset-editor__status--error {
-  color: var(--c-danger-bright);
-}
-
-.preset-editor__status--info {
+.preset-editor__status {
   color: var(--c-text-muted);
 }

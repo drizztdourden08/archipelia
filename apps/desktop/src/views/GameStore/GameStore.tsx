@@ -1,6 +1,6 @@
 /* @layer renderer-app @kind component */
 import { openExternal } from '@drizztdourden08/brock-react';
-import { Button, ButtonRow, EmptyState, Flex, Grid, Icon, Spinner, Stack, Text, TextInput } from '@drizztdourden08/tessera/primitives';
+import { Box, Button, ButtonRow, Callout, EmptyState, Flex, Grid, Icon, Spinner, Stack, Text, TextInput } from '@drizztdourden08/tessera/primitives';
 import { useGameStore } from './behavior/useGameStore';
 import type { GameStoreProps } from './GameStore.type';
 import { MAX_CARDS } from './GameStore.constants';
@@ -25,7 +25,7 @@ const GameStore = ({ tab }: GameStoreProps) => {
           <Button variant="secondary" disabled={store.isBusy()} onClick={store.addFromFile}><Icon name="plus" />Add from file</Button>
         </ButtonRow>
       </Flex>
-      {store.error && <Text variant="body" role="alert">{store.error}</Text>}
+      {store.error && <Box role="alert"><Callout tone="danger">{store.error}</Callout></Box>}
       {store.visible.length === 0
         ? <EmptyState icon={store.loading ? <Spinner /> : undefined} message={store.loading ? 'Loading the catalog' : 'No world matches'} />
         : (

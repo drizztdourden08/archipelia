@@ -4,7 +4,6 @@
   min-width: 0;
 }
 
-.session-builder__error,
 .session-builder__problem {
   color: var(--c-danger);
 }

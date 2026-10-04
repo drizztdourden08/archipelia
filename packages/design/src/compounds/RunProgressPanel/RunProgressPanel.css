@@ -19,8 +19,7 @@
   color: var(--c-text-faint);
 }
 
-.run-progress-panel__step--failed,
-.run-progress-panel__error {
+.run-progress-panel__step--failed {
   color: var(--c-danger);
 }
 

@@ -1,6 +1,6 @@
 /* @layer renderer-app @kind component */
 import { useCallback } from 'react';
-import { Stack, Text } from '@drizztdourden08/tessera/primitives';
+import { Box, Callout, Stack } from '@drizztdourden08/tessera/primitives';
 import { ROUTE } from '../../hooks/app-navigation.constants';
 import { useAppNavigation } from '../../hooks/useAppNavigation';
 import type { SessionDashboardProps } from './SessionDashboard.type';
@@ -48,8 +48,8 @@ const SessionDashboard = ({ sessionId }: SessionDashboardProps) => {
         onCopy={board.copyAddress}
         onStop={board.stopSession}
       />
-      {board.error && <Text variant="body" role="alert">{board.error}</Text>}
-      {session.error && <Text variant="body" role="alert">{session.error}</Text>}
+      {board.error && <Box role="alert"><Callout tone="danger">{board.error}</Callout></Box>}
+      {session.error && <Box role="alert"><Callout tone="danger">{session.error}</Callout></Box>}
       <SessionSummary players={live.players} hints={live.hints} phase={live.phase} uptime={board.uptime} status={status.label} />
     </Stack>
   );

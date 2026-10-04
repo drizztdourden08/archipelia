@@ -1,7 +1,7 @@
 /* @layer renderer-app @kind component */
 import { useCallback } from 'react';
 import type { ChangeEvent } from 'react';
-import { Button, Field, Select, Stack, Text, TextInput } from '@drizztdourden08/tessera/primitives';
+import { Box, Button, Callout, Field, Select, Stack, TextInput } from '@drizztdourden08/tessera/primitives';
 import { DialogShell } from '@drizztdourden08/tessera/composites';
 import type { CreatePresetDialogProps } from './CreatePresetDialog.type';
 
@@ -26,7 +26,7 @@ const CreatePresetDialog = ({ creator }: CreatePresetDialogProps) => {
         <Field label="Name">
           <TextInput value={name} onChange={handleName} placeholder="Preset name" />
         </Field>
-        {error && <Text variant="caption" role="alert">{error}</Text>}
+        {error && <Box role="alert"><Callout tone="danger">{error}</Callout></Box>}
       </Stack>
     </DialogShell>
   );

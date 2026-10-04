@@ -1,5 +1,5 @@
 /* @layer renderer-app @kind component */
-import { Box, Button, ButtonRow, Field, Stack, Text, TextInput } from '@drizztdourden08/tessera/primitives';
+import { Box, Button, ButtonRow, Callout, Field, Stack, Text, TextInput } from '@drizztdourden08/tessera/primitives';
 import type { GgSettingsProps } from './GgSettings.type';
 import { useGgOwner } from './behavior/useGgOwner';
 
@@ -17,7 +17,7 @@ const GgSettings = ({ settings, onChange }: GgSettingsProps) => {
         </Field>
       </Box>
       <Text variant="body">{hasOwner ? 'An owner id is stored in the vault.' : 'No owner id yet. One is made the first time a session runs there.'}</Text>
-      {error && <Text variant="body" role="alert">{error}</Text>}
+      {error && <Box role="alert"><Callout tone="danger">{error}</Callout></Box>}
       <Box data-search-anchor="owner">
         <ButtonRow align="start">
           <Button variant="secondary" disabled={!hasOwner || busy} onClick={openRooms}>Open my rooms in the browser</Button>

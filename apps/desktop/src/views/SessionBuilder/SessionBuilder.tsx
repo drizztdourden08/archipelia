@@ -1,5 +1,5 @@
 /* @layer renderer-app @kind component */
-import { Flex, Stack, Text } from '@drizztdourden08/tessera/primitives';
+import { Box, Callout, Flex, Stack } from '@drizztdourden08/tessera/primitives';
 import type { SessionBuilderProps } from './SessionBuilder.type';
 import { useSessionBuilder } from './behavior/useSessionBuilder';
 import { sourcesOf } from './behavior/player-sources';
@@ -27,7 +27,7 @@ const SessionBuilder = ({ initial, onBack, onRun }: SessionBuilderProps) => {
         onSave={builder.save}
         onRun={builder.run}
       />
-      {builder.error && <Text variant="body" role="alert" className="session-builder__error">{builder.error}</Text>}
+      {builder.error && <Box role="alert"><Callout tone="danger">{builder.error}</Callout></Box>}
       <ProblemList problems={builder.problems} />
       <PlayersCard
         players={draft.players}
