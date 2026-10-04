@@ -14,7 +14,7 @@ const usage = {
     'Put each session in search while the page is open.',
     'Open the builder as the New session or Edit session sub-page, never in place of the lists.',
     'Open a run that is still starting in the run dialog, and any other run on the dashboard.',
-    'Filter sessions and runs with the same query.',
+    'Filter sessions and runs with the page header filter, read with usePageSearch; New session is the header primary button.',
     'Deleting a session or a run is a danger button behind a danger confirm.',
   ],
   a11y: [

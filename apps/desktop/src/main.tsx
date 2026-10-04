@@ -9,7 +9,7 @@ import { screenTree } from '../.brock/screens';
 import { appWidgetLayout, appWidgets } from '../.brock/widgets';
 import { appReview } from '../.brock/review';
 import { appTitleBar } from '../.brock/title-bar';
-import { MENU, SETTINGS } from './main.constants';
+import { SETTINGS } from './main.constants';
 import { product } from './product';
 import { useSessionContext } from './hooks/useSessionContext';
 import { quitWhileHosting } from './rooms/quit-while-hosting';
@@ -26,7 +26,6 @@ createRoot(root).render(
       screenTree={screenTree}
       bootTasks={rendererBootTasks}
       modules={rendererModules}
-      menu={MENU}
       widgets={appWidgets}
       widgetLayout={appWidgetLayout}
       widgetContext={useSessionContext}

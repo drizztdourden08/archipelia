@@ -1,10 +1,9 @@
 /* @layer renderer-app @kind component */
 import { useCallback } from 'react';
-import { Box, Callout, Grid, Stack } from '@drizztdourden08/tessera/primitives';
+import { Box, Callout, Grid, Stack, Text } from '@drizztdourden08/tessera/primitives';
 import { RunProgress, useRunLauncher } from '../RunProgress';
 import { useSessionsLibrary } from './behavior/useSessionsLibrary';
 import { RunsCard } from './sub-components/RunsCard';
-import { LibraryHeader } from './sub-components/LibraryHeader';
 import { SessionsCard } from './sub-components/SessionsCard';
 
 const SessionsLibrary = () => {
@@ -31,7 +30,7 @@ const SessionsLibrary = () => {
 
   return (
     <Stack>
-      <LibraryHeader query={hub.query} onQuery={hub.setQuery} onNew={hub.createNew} />
+      <Text variant="caption">A session is a saved setup you can run again. Each run makes a seed and a room, kept in Runs with its files.</Text>
       {hub.error && <Box role="alert"><Callout tone="danger">{hub.error}</Callout></Box>}
       <Grid minColWidth={384} gap="md">
         <SessionsCard

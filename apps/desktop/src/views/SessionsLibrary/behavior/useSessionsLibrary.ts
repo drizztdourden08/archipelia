@@ -1,10 +1,9 @@
 /* @layer renderer-app @kind hook */
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { confirmAction, useKeyedGuard } from '@drizztdourden08/brock-react';
+import { confirmAction, useKeyedGuard, usePageSearch } from '@drizztdourden08/brock-react';
 import { secretsApi } from '@drizztdourden08/brock-secrets/renderer';
 import type { ServerEntry } from '@archipelia/model';
 import { appApi } from '../../../ipc/app-api';
-import { openNewSession } from '../../../hooks/open-new-session';
 import { openSessionEditor } from '../../../hooks/open-session-editor';
 import { useAppNavigation } from '../../../hooks/useAppNavigation';
 import { useLibraryStore } from '../../../stores/useLibraryStore';
@@ -21,7 +20,7 @@ const useSessionsLibrary = () => {
   const removeRun = useRunsStore((state) => state.remove);
   const { openSession } = useAppNavigation();
   const [servers, setServers] = useState<ServerEntry[]>([]);
-  const [query, setQuery] = useState('');
+  const query = usePageSearch();
   const { guard, isBusy, lastError: error } = useKeyedGuard();
 
   useEffect(() => {
@@ -35,7 +34,6 @@ const useSessionsLibrary = () => {
 
   const byId = useCallback((id: string) => templates.find((template) => template.id === id), [templates]);
 
-  const createNew = openNewSession;
   const edit = openSessionEditor;
 
   const duplicate = useCallback((id: string) => {
@@ -70,8 +68,8 @@ const useSessionsLibrary = () => {
   const visibleRuns = useMemo(() => runs.filter((run) => matchesRun(run, query)), [runs, query]);
 
   return {
-    byId, createNew, deleteRun, deleteTemplate, duplicate, edit, error, isBusy, openRun, query,
-    runs, servers, setQuery, templates, visibleRuns, visibleTemplates,
+    byId, deleteRun, deleteTemplate, duplicate, edit, error, isBusy, openRun, query,
+    runs, servers, templates, visibleRuns, visibleTemplates,
   };
 };
 
