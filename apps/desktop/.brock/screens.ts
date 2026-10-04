@@ -19,6 +19,7 @@ import MultiworldLibraryGamesUpdatesTab, { meta as multiworldLibraryGamesUpdates
 import { meta as multiworldLibraryGamesPageMetaMeta } from '../src/screens/multiworld/library/games.page';
 import MultiworldLibraryPresetsPage, { meta as multiworldLibraryPresetsPageMeta } from '../src/screens/multiworld/library/presets.page';
 import MultiworldLibrarySessionsPage, { meta as multiworldLibrarySessionsPageMeta } from '../src/screens/multiworld/library/sessions.page';
+import SessionBase, { meta as sessionBaseMeta } from '../src/screens/session.base';
 
 const screenTree = buildScreenTree(config, [
   { kind: 'page', bucket: 'data', id: 'overview', component: DataOverviewPage, meta: dataOverviewPageMeta },
@@ -38,6 +39,7 @@ const screenTree = buildScreenTree(config, [
   { kind: 'page-meta', bucket: 'multiworld', group: 'library', id: 'games', meta: multiworldLibraryGamesPageMetaMeta },
   { kind: 'page', bucket: 'multiworld', group: 'library', id: 'presets', component: MultiworldLibraryPresetsPage, meta: multiworldLibraryPresetsPageMeta },
   { kind: 'page', bucket: 'multiworld', group: 'library', id: 'sessions', component: MultiworldLibrarySessionsPage, meta: multiworldLibrarySessionsPageMeta },
+  { kind: 'base', id: 'session', component: SessionBase, meta: sessionBaseMeta },
 ], searchIndex);
 
 export { screenTree };

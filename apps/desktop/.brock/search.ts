@@ -20,6 +20,7 @@ const searchIndex = buildSearchIndex(config, [
   {"kind":"page-meta","id":"games","bucket":"multiworld","group":"library","title":"Games","icon":"gamepad-2","keywords":["apworld","install","catalog","worlds"]},
   {"kind":"page","id":"presets","bucket":"multiworld","group":"library","title":"Presets","icon":"sliders-horizontal","keywords":["options","yaml","player","settings"]},
   {"kind":"page","id":"sessions","bucket":"multiworld","group":"library","title":"Sessions","icon":"layers","keywords":["saved","sessions","runs","new","session","builder"]},
+  {"kind":"base","id":"session","title":"Session","icon":"radio"},
 ]);
 
 export { searchIndex };
