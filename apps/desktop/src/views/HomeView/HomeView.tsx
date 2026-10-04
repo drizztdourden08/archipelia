@@ -3,26 +3,28 @@ import { useMemo } from 'react';
 import { Box, Button, Callout, EmptyState, Stack, Text } from '@drizztdourden08/tessera/primitives';
 import { useHome } from './behavior/useHome';
 import { engineLine } from './behavior/engine-line';
+import { heroActions } from './behavior/hero-actions';
+import { heroTitle } from './behavior/hero-title';
 import { homeFacts } from './behavior/home-facts';
-import { HERO_TITLE } from './HomeView.constants';
 import type { HomeViewProps } from './HomeView.type';
 import { RecentSessionRow } from './sub-components/RecentSessionRow';
 
 const HomeView = ({ slots }: HomeViewProps) => {
   const { Eyebrow, Title, Actions, Facts, Aside } = slots;
   const home = useHome();
-  const { last, now, status, counts, installed, presets } = home;
+  const { last, now, status, counts, installed, presets, next, engineNeeded, busy } = home;
   const facts = useMemo(() => homeFacts({ last, now, status, counts, installed, presets }), [last, now, status, counts, installed, presets]);
+  const actions = useMemo(() => heroActions({ engineNeeded, next, last, busy }), [engineNeeded, next, last, busy]);
   return (
     <>
       <Eyebrow>{engineLine(status)}</Eyebrow>
-      <Title>{HERO_TITLE}</Title>
+      <Title>{heroTitle(status, next, home.recent.length > 0)}</Title>
       <Actions>
-        {home.engineNeeded && <Button variant="primary" onClick={home.openEngine}>Open Engine</Button>}
-        <Button variant="secondary" onClick={home.newSession}>New session</Button>
-        {last && (
-          <Button variant="primary" disabled={home.busy} onClick={home.runAgain}>{`Run "${last.snapshot.name}" again`}</Button>
-        )}
+        {actions.map((action) => (
+          <Button key={action.id} variant={action.primary ? 'primary' : 'secondary'} disabled={action.disabled} onClick={() => home.act(action.id)}>
+            {action.label}
+          </Button>
+        ))}
       </Actions>
       <Facts rows={facts} />
       <Aside>

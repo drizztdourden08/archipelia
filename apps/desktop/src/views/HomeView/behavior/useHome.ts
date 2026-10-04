@@ -1,6 +1,7 @@
 /* @layer renderer-app @kind hook */
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ROUTE } from '../../../hooks/app-navigation.constants';
+import { openNewSession } from '../../../hooks/open-new-session';
 import { useAppNavigation } from '../../../hooks/useAppNavigation';
 import { useEngineStore } from '../../../stores/useEngineStore';
 import { useLibraryStore } from '../../../stores/useLibraryStore';
@@ -8,16 +9,15 @@ import { useRunsStore } from '../../../stores/useRunsStore';
 import { newestRuns } from './newest-runs';
 import { RECENT_COUNT } from '../HomeView.constants';
 import { needsEngineSetup } from './needs-engine-setup';
-import { openNewSession } from '../../../hooks/open-new-session';
+import { homeSteps } from './home-steps';
+import { useRunAgain } from './useRunAgain';
 
 const useHome = () => {
   const { status, refresh } = useEngineStore();
   const { installed, presets, templates, loadInstalled, loadPresets, loadTemplates } = useLibraryStore();
-  const { runs, load, run } = useRunsStore();
+  const { runs, loaded, load } = useRunsStore();
   const { open, openSession } = useAppNavigation();
   const [now] = useState(() => Date.now());
-  const [busy, setBusy] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     void Promise.allSettled([refresh(), loadInstalled(), loadPresets(), loadTemplates(), load()]);
@@ -25,31 +25,29 @@ const useHome = () => {
 
   const recent = useMemo(() => newestRuns(runs, RECENT_COUNT), [runs]);
   const last = recent[0] ?? null;
+  const again = useRunAgain(last, openSession);
 
-  const openEngine = useCallback(() => open(ROUTE.engine), [open]);
+  const act = useCallback((id: string) => {
+    if (id === 'again') void again.runAgain();
+    else if (id === 'session') openNewSession();
+    else if (id === 'engine') open(ROUTE.engine);
+    else if (id === 'games') open(ROUTE.games);
+    else if (id === 'preset') open(ROUTE.presets);
+    else open(ROUTE.sessions);
+  }, [again, open]);
 
-  const runAgain = useCallback(async () => {
-    if (!last) return;
-    setBusy(true);
-    setError(null);
-    try {
-      const session = await run(last.snapshot);
-      openSession(session.id);
-    } catch (err) {
-      setError((err as Error).message);
-    } finally {
-      setBusy(false);
-    }
-  }, [last, run, openSession]);
-
-  const engineNeeded = needsEngineSetup(status);
+  const steps = useMemo(
+    () => homeSteps({ status, installed, presets, sessions: templates.length }),
+    [status, installed, presets, templates.length],
+  );
   const counts = useMemo(
     () => ({ games: installed.length, presets: presets.length, sessions: templates.length }),
     [installed.length, presets.length, templates.length],
   );
 
   return {
-    busy, counts, engineNeeded, error, installed, last, newSession: openNewSession, now, openEngine, openSession, presets, recent, runAgain, status,
+    act, busy: again.busy, counts, engineNeeded: needsEngineSetup(status), error: again.error, firstRun: loaded && runs.length === 0,
+    installed, last, next: steps.find((step) => !step.done) ?? null, now, openSession, presets, recent, status, steps,
   };
 };
 

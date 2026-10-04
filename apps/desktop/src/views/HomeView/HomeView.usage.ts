@@ -13,10 +13,11 @@ const usage = {
   rules: [
     'Fill only the hero slots it is given; the hub draws the frame.',
     'Load the engine, the library and the runs when it opens, together.',
-    'Offer Open Engine as the primary action while the engine is not ready.',
+    'Keep exactly one primary action: Open Engine while the engine is not ready, the next setup step before the first run, else Run again.',
+    'Make the title say what to do next, such as Set up the engine, Add your first game or Ready to host.',
   ],
   a11y: [
-    'The hero title names the hub; the eyebrow carries the engine state.',
+    'The hero title says what to do next; the eyebrow carries the engine state.',
     'An error is an alert; no run yet shows an empty state.',
     'The run again button names the session it runs again.',
   ],
