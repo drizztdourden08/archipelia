@@ -18,7 +18,7 @@
     "lint": "tsc --noEmit && eslint ."
   },
   "devDependencies": {
-    "@drizztdourden08/brock-lint-config": "^0.15.0",
+    "@drizztdourden08/brock-lint-config": "^0.16.0",
     "@types/node": "catalog:",
     "eslint": "catalog:",
     "typescript": "catalog:"
