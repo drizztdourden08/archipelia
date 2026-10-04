@@ -7,7 +7,7 @@ const usage = {
     'The pages of the Data bucket, one part per page.',
   ],
   avoidWhen: [
-    { case: 'A headline size on its own.', use: 'StatCard' },
+    { case: 'A headline size on its own.', use: 'StatTile' },
     { case: 'A list of the runs themselves.', use: 'RunRow' },
   ],
   rules: [

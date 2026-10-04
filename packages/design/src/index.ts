@@ -15,6 +15,5 @@ export { RunProgressPanel } from './compounds/RunProgressPanel';
 export { RunRow } from './compounds/RunRow';
 export { ServerOptionsForm, RELEASE_OPTIONS, REMAINING_OPTIONS } from './compounds/ServerOptionsForm';
 export { SessionStatusBar } from './compounds/SessionStatusBar';
-export { StatCard } from './compounds/StatCard';
 export { TemplateRow } from './compounds/TemplateRow';
 export type { DesignPart } from './guide/app-tree.type';

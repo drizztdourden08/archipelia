@@ -9,7 +9,7 @@ const usage = {
   ],
   avoidWhen: [
     { case: 'A world in a dense list with one action, such as a preset picker.', use: 'ListItemRow' },
-    { case: 'A headline number with one action.', use: 'StatCard' },
+    { case: 'A headline number with its trend.', use: 'StatTile' },
   ],
   rules: [
     'Keep details to short lines, such as the world version and the Archipelago version it needs.',

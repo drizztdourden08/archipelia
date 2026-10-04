@@ -8,7 +8,7 @@ const usage = {
   ],
   avoidWhen: [
     { case: 'A banner with art for another bucket.', use: 'Hero' },
-    { case: 'One number on an overview.', use: 'StatCard' },
+    { case: 'One number on an overview.', use: 'StatTile' },
   ],
   rules: [
     'Fill only the hero slots it is given; the hub draws the frame.',

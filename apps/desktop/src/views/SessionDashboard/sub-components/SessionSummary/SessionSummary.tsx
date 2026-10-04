@@ -1,10 +1,10 @@
 /* @layer renderer-app @kind component */
+import { StatTile } from '@drizztdourden08/tessera/composites';
 import { Grid } from '@drizztdourden08/tessera/primitives';
 import type { PlayerView } from '../../../../live-room/live-room.type';
 import type { SessionSummaryProps } from './SessionSummary.type';
 import { hintCounts } from '../../../../live-room/hint-counts';
 import { SUMMARY_MIN_COL } from './SessionSummary.constants';
-import { StatCard } from '@archipelia/design';
 import { connectedCount } from '../../../../live-room/connected-count';
 
 const checksSeen = (players: readonly PlayerView[]) => players.reduce((sum, player) => sum + (player.checked ?? 0), 0);
@@ -14,10 +14,10 @@ const SessionSummary = ({ players, hints, phase, uptime, status }: SessionSummar
   const live = phase === 'live';
   return (
     <Grid minColWidth={SUMMARY_MIN_COL} gap="md">
-      <StatCard heading="players" value={live ? `${connectedCount(players)} / ${players.length}` : String(players.length)} meta={live ? 'connected' : 'in the session'} />
-      <StatCard heading="checks" value={String(checksSeen(players))} meta="seen by the server" />
-      <StatCard heading="hints" value={live ? String(counts.open) : '-'} meta={live ? `open, ${counts.found} found` : 'shown while watching'} />
-      <StatCard heading="uptime" value={uptime ?? '-'} meta={status.toLowerCase()} />
+      <StatTile label="Players" value={live ? `${connectedCount(players)} / ${players.length}` : players.length} unit={live ? 'connected' : 'in the session'} />
+      <StatTile label="Checks" value={checksSeen(players)} unit="seen by the server" />
+      <StatTile label="Hints" value={live ? counts.open : '-'} unit={live ? `open, ${counts.found} found` : 'shown while watching'} />
+      <StatTile label="Uptime" value={uptime ?? '-'} unit={status.toLowerCase()} />
     </Grid>
   );
 };

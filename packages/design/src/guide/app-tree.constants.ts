@@ -52,7 +52,6 @@ const APP_TREE = [
   { at: ['something over the page'], answers: { 'a session run as it starts': null } },
   { at: ['feedback'], answers: { 'a session as it generates and starts': null } },
   { at: ['layout', 'window chrome'], answers: { 'the bar of a hosted room': null } },
-  { at: ['a status, a count or a label'], answers: { 'one headline number in a card': null } },
 ] as const satisfies AppTree;
 
 export { APP_TREE };
