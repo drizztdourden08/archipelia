@@ -1,5 +1,5 @@
 /* @layer renderer-app @kind component */
-import { useCallback } from 'react';
+import { openExternal } from '@drizztdourden08/brock-react';
 import { Button, ButtonRow, EmptyState, Flex, Grid, Icon, Spinner, Stack, Text, TextInput } from '@drizztdourden08/tessera/primitives';
 import { useGameStore } from './behavior/useGameStore';
 import type { GameStoreProps } from './GameStore.type';
@@ -9,8 +9,7 @@ import { cardPropsOf } from './behavior/card-props';
 
 const GameStore = ({ tab }: GameStoreProps) => {
   const store = useGameStore(tab);
-  const openHome = useCallback((url: string) => { window.open(url, '_blank', 'noopener'); }, []);
-  const handlers = { isBusy: store.isBusy, installWorld: store.installWorld, remove: store.remove, openHome };
+  const handlers = { isBusy: store.isBusy, installWorld: store.installWorld, remove: store.remove, openHome: openExternal };
 
   return (
     <Stack>
