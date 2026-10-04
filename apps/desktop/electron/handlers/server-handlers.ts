@@ -1,12 +1,11 @@
 /* @layer electron-main @kind logic */
 import type { HandlerGroup } from '@drizztdourden08/brock-electron/main';
 import { testSavedServer } from '@archipelia/hosts';
-import { servicesOf } from '../services/services-of';
 
 const serverHandlers: HandlerGroup = {
   id: 'archipelia-servers',
   register: (ctx) => {
-    const { secrets, servers } = servicesOf(ctx);
+    const { secrets, servers } = ctx.services;
     ctx.handle('ap:servers:list', () => servers.list());
     ctx.handle('ap:servers:save', (_event, entry) => servers.save(entry));
     ctx.handle('ap:servers:remove', (_event, id) => servers.remove(id));

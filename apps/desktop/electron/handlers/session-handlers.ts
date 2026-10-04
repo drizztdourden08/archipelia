@@ -2,12 +2,11 @@
 import type { HandlerGroup } from '@drizztdourden08/brock-electron/main';
 import { assertSafeName } from '@drizztdourden08/brock-core/storage';
 import { sessionDirOf } from '@archipelia/sessions';
-import { servicesOf } from '../services/services-of';
 
 const sessionHandlers: HandlerGroup = {
   id: 'archipelia-sessions',
   register: (ctx) => {
-    const { runs, sessions } = servicesOf(ctx);
+    const { runs, sessions } = ctx.services;
     ctx.handle('ap:sessions:list', () => runs.newest());
     ctx.handle('ap:sessions:run', (_event, template) => sessions.run(template));
     ctx.handle('ap:sessions:stop', (_event, id) => sessions.stop(id));

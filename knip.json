@@ -16,6 +16,7 @@
       "entry": [
         "electron/main.ts",
         "electron/preload.ts",
+        "electron/services/app-services.type.ts",
         "src/main.tsx",
         "src/screens/**/*.custom.tsx",
         "src/views/*/*.usage.ts",

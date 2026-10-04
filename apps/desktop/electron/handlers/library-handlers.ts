@@ -1,11 +1,10 @@
 /* @layer electron-main @kind logic */
 import type { HandlerGroup } from '@drizztdourden08/brock-electron/main';
-import { servicesOf } from '../services/services-of';
 
 const libraryHandlers: HandlerGroup = {
   id: 'archipelia-library',
   register: (ctx) => {
-    const { presets, templates } = servicesOf(ctx);
+    const { presets, templates } = ctx.services;
     ctx.handle('ap:presets:list', () => presets.list());
     ctx.handle('ap:presets:create', (_event, preset) => presets.create(preset));
     ctx.handle('ap:presets:save', (_event, preset) => presets.save(preset));

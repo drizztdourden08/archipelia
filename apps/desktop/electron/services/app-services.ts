@@ -32,7 +32,8 @@ const createAppServices = (ctx: MainContext) => {
     resolveSecret: (ref) => secrets.get(ref),
     emit: (event) => ctx.emit('ap:sessions:event', event),
   });
-  return { catalog, installed, presets, runs, runtime, secrets, servers, sessions, templates };
+  const dispose = () => sessions.stopLocal();
+  return { catalog, dispose, installed, presets, runs, runtime, secrets, servers, sessions, templates };
 };
 
 export { createAppServices };
