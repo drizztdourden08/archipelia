@@ -1,4 +1,4 @@
-/* @layer renderer-app @kind logic */
+/* @layer core @kind logic */
 import type { PlayerView } from './live-room.type';
 
 const connectedCount = (rows: readonly PlayerView[]) =>

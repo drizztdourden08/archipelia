@@ -1,11 +1,10 @@
 /* @layer renderer-app @kind component */
 import { StatTile } from '@drizztdourden08/tessera/composites';
 import { Grid } from '@drizztdourden08/tessera/primitives';
-import type { PlayerView } from '../../../../live-room/live-room.type';
+import type { PlayerView } from '@archipelia/sessions/live-room';
+import { connectedCount, hintCounts } from '@archipelia/sessions/live-room';
 import type { SessionSummaryProps } from './SessionSummary.type';
-import { hintCounts } from '../../../../live-room/hint-counts';
 import { SUMMARY_MIN_COL } from './SessionSummary.constants';
-import { connectedCount } from '../../../../live-room/connected-count';
 
 const checksSeen = (players: readonly PlayerView[]) => players.reduce((sum, player) => sum + (player.checked ?? 0), 0);
 

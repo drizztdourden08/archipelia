@@ -1,4 +1,4 @@
-/* @layer renderer-app @kind config */
+/* @layer core @kind config */
 
 const TEAM_MARK = /\(Team #\d+\) /;
 

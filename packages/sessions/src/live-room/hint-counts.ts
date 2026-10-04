@@ -1,4 +1,4 @@
-/* @layer renderer-app @kind logic */
+/* @layer core @kind logic */
 import type { HintView } from './live-room.type';
 
 const hintCounts = (rows: readonly HintView[]) => {

@@ -1,7 +1,7 @@
 /* @layer renderer-app @kind logic */
-import type { LiveRoomTarget } from './live-room.type';
-import { targetKey } from './target-key';
-import { useLiveRoomStore } from '../stores/useLiveRoomStore';
+import type { LiveRoomTarget } from '@archipelia/sessions/live-room';
+import { targetKey } from '@archipelia/sessions/live-room';
+import { useLiveRoomStore } from '../../../stores/useLiveRoomStore';
 
 let holders = 0;
 

@@ -1,4 +1,4 @@
-/* @layer renderer-app @kind logic */
+/* @layer core @kind logic */
 import { onlineFromLog } from './online-from-log';
 
 const presenceOf = (lines: readonly string[], names: readonly string[]): Record<string, boolean> => {

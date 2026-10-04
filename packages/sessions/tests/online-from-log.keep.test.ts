@@ -1,8 +1,6 @@
 /* @layer tests @kind test */
 import { expect, test } from 'vitest';
-import { onlineFromLog } from '../../src/live-room/online-from-log';
-import { presenceOf } from '../../src/live-room/presence-of';
-import { withPresence } from '../../src/live-room/with-presence';
+import { onlineFromLog, presenceOf, withPresence } from '../src/live-room';
 
 const LOG = [
   'Notice (all): Link (Team #1) tracking Ship of Harkinian has joined. Client(0.6.7), [\'Tracker\', \'NoText\'].',

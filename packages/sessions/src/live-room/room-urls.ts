@@ -1,4 +1,4 @@
-/* @layer renderer-app @kind logic */
+/* @layer core @kind logic */
 import type { Endpoint, HostTarget } from '@archipelia/model';
 import { ANY_ADDRESS } from './room-target.constants';
 

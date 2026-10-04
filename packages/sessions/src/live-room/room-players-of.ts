@@ -1,4 +1,4 @@
-/* @layer renderer-app @kind logic */
+/* @layer core @kind logic */
 import type { SessionPlayer } from '@archipelia/model';
 import type { RoomPlayer } from './live-room.type';
 

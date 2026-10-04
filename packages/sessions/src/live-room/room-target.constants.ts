@@ -1,4 +1,4 @@
-/* @layer renderer-app @kind config */
+/* @layer core @kind config */
 
 const ANY_ADDRESS = new Set(['', '0.0.0.0', '::', '[::]']);
 

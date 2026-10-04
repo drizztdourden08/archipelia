@@ -1,4 +1,4 @@
-/* @layer renderer-app @kind logic */
+/* @layer core @kind logic */
 import type { Session } from '@archipelia/model';
 import type { LiveRoomTarget } from './live-room.type';
 import { roomUrls } from './room-urls';

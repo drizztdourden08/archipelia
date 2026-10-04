@@ -1,22 +1,8 @@
 /* @layer tests @kind test */
 import { describe, expect, test } from 'vitest';
-import type { Session } from '@archipelia/model';
-import { hintsKey } from '../../src/live-room/hints-key';
-import { statusKey } from '../../src/live-room/status-key';
-import { statusOf } from '../../src/live-room/status-of';
-import { asHints } from '../../src/live-room/as-hints';
-import { hintCounts } from '../../src/live-room/hint-counts';
-import { hintRows } from '../../src/live-room/hint-rows';
-import type { HintLookup, ProtocolHint } from '../../src/live-room/live-room.type';
-import { checksFromLog } from '../../src/live-room/log-checks';
-import { checksLabel } from '../../src/live-room/checks-label';
-import { connectedCount } from '../../src/live-room/connected-count';
-import { playerRows } from '../../src/live-room/player-rows';
-import { roomPlayersOf } from '../../src/live-room/room-players-of';
-import { roomUrls } from '../../src/live-room/room-urls';
-import { targetKey } from '../../src/live-room/target-key';
-import { watchTarget } from '../../src/live-room/watch-target';
-import { templateOf } from './session-fixtures';
+import type { Session, SessionTemplate } from '@archipelia/model';
+import type { HintLookup, ProtocolHint } from '../src/live-room';
+import { asHints, checksFromLog, checksLabel, connectedCount, hintCounts, hintRows, hintsKey, playerRows, roomPlayersOf, roomUrls, statusKey, statusOf, targetKey, watchTarget } from '../src/live-room';
 
 const NAMES: Record<number, string> = { 1: 'Johnny', 2: 'Marie', 3: 'Sam Two' };
 const GAMES: Record<number, string> = { 1: 'A Link to the Past', 2: 'Ocarina of Time', 3: 'Hollow Knight' };
@@ -32,18 +18,25 @@ const hint = (patch: Partial<ProtocolHint>): ProtocolHint => ({
   receiving_player: 1, finding_player: 2, location: 10, item: 5, found: false, entrance: '', ...patch,
 });
 
+const SNAPSHOT: SessionTemplate = {
+  id: 't1',
+  name: 'Friday',
+  updatedAt: 1,
+  host: { kind: 'local', port: 38281 },
+  generator: { race: false, spoiler: 1, progressionBalancing: true },
+  server: { remainingMode: 'goal', releaseMode: 'auto', collectMode: 'auto', hintCost: 10, autoShutdownMinutes: 0 },
+  players: [
+    { slot: 2, name: 'Marie', game: 'Ocarina of Time', source: { kind: 'preset', presetId: 'p', overrides: {} } },
+    { slot: 1, name: 'Johnny', game: 'A Link to the Past', source: { kind: 'preset', presetId: 'p', overrides: {} } },
+  ],
+};
+
 const session = (patch: Partial<Session>): Session => ({
   id: 's1',
   createdAt: 1,
   status: 'hosting',
   endpoint: { host: '0.0.0.0', port: 38281 },
-  snapshot: templateOf({
-    id: 't1', name: 'Friday', updatedAt: 1,
-    players: [
-      { slot: 2, name: 'Marie', game: 'Ocarina of Time', source: { kind: 'preset', presetId: 'p', overrides: {} } },
-      { slot: 1, name: 'Johnny', game: 'A Link to the Past', source: { kind: 'preset', presetId: 'p', overrides: {} } },
-    ],
-  }),
+  snapshot: SNAPSHOT,
   ...patch,
 });
 

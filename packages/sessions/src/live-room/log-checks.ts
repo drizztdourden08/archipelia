@@ -1,4 +1,4 @@
-/* @layer renderer-app @kind logic */
+/* @layer core @kind logic */
 import { TEAM_MARK } from './log-checks.constants';
 
 const senderOf = (entry: string, names: readonly string[]) => {

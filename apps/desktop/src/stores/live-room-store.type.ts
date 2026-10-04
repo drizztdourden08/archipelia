@@ -1,5 +1,5 @@
 /* @layer renderer-app @kind types */
-import type { HintView, LiveRoomPhase, LiveRoomTarget, RoomPlayer, WatchedChecks } from '../live-room/live-room.type';
+import type { HintView, LiveRoomPhase, LiveRoomTarget, RoomPlayer, WatchedChecks } from '@archipelia/sessions/live-room';
 
 type LiveRoomData = {
   sessionId: string | null;

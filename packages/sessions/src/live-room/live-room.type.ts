@@ -1,4 +1,4 @@
-/* @layer renderer-app @kind types */
+/* @layer core @kind types */
 type PlayerStatus = 'unknown' | 'offline' | 'connected' | 'ready' | 'playing' | 'goal';
 
 type RoomPlayer = { team: number; slot: number; name: string; game: string };

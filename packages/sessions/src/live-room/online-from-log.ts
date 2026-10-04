@@ -1,4 +1,4 @@
-/* @layer renderer-app @kind logic */
+/* @layer core @kind logic */
 import { JOINED, LEFT, NOTICE, WATCHER_TAGS } from './online-from-log.constants';
 
 const nameOf = (raw: string) => raw.replace(NOTICE, '').trim();

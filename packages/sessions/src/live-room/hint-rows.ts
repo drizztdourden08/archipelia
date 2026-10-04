@@ -1,4 +1,4 @@
-/* @layer renderer-app @kind logic */
+/* @layer core @kind logic */
 import type { HintLookup, HintState, HintView, ProtocolHint } from './live-room.type';
 import { STATE_BY_CODE, STATE_ORDER } from './hint-rows.constants';
 

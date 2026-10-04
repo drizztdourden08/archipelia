@@ -1,4 +1,4 @@
-/* @layer renderer-app @kind logic */
+/* @layer core @kind logic */
 import type { PlayerStatus } from './live-room.type';
 
 const withPresence = (stored: PlayerStatus, online: boolean | undefined): PlayerStatus => {

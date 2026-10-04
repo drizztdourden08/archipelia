@@ -1,4 +1,4 @@
-/* @layer renderer-app @kind logic */
+/* @layer core @kind logic */
 import type { ProtocolHint } from './live-room.type';
 
 const isHint = (value: unknown): value is ProtocolHint => {

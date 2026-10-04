@@ -2,14 +2,10 @@
 import { Client, LoginError, itemsHandlingFlags, slotTypes } from 'archipelago.js';
 import type { API } from 'archipelago.js';
 import { createSessionStore } from '@drizztdourden08/brock-react';
-import type { HintLookup, LiveRoomTarget, ProtocolHint, RoomPlayer, WatchedChecks } from '../live-room/live-room.type';
+import type { HintLookup, LiveRoomTarget, ProtocolHint, RoomPlayer, WatchedChecks } from '@archipelia/sessions/live-room';
+import { HINTS_KEY_PREFIX, STATUS_KEY_PREFIX, asHints, hintRows, hintsKey, statusKey } from '@archipelia/sessions/live-room';
 import { IDLE, TRACKER_TAGS } from './live-room-store.constants';
 import type { LiveRoomData, LiveRoomState } from './live-room-store.type';
-import { HINTS_KEY_PREFIX, STATUS_KEY_PREFIX } from '../live-room/client-status.constants';
-import { hintsKey } from '../live-room/hints-key';
-import { statusKey } from '../live-room/status-key';
-import { asHints } from '../live-room/as-hints';
-import { hintRows } from '../live-room/hint-rows';
 
 let client: Client | null = null;
 

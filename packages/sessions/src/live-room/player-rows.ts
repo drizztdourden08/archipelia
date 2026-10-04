@@ -1,4 +1,4 @@
-/* @layer renderer-app @kind logic */
+/* @layer core @kind logic */
 import type { PlayerRowsInput } from './player-rows.type';
 import type { PlayerView } from './live-room.type';
 import { withPresence } from './with-presence';

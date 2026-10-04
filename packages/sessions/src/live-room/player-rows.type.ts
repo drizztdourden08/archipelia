@@ -1,4 +1,4 @@
-/* @layer renderer-app @kind types */
+/* @layer core @kind types */
 import type { RoomPlayer, WatchedChecks } from './live-room.type';
 
 type PlayerRowsInput = {

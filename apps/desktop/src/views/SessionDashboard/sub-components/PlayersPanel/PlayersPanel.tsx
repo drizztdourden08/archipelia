@@ -1,11 +1,11 @@
 /* @layer renderer-app @kind component */
 import { EmptyState, Stack } from '@drizztdourden08/tessera/primitives';
-import type { PlayerView } from '../../../../live-room/live-room.type';
+import type { PlayerView } from '@archipelia/sessions/live-room';
+import { checksLabel } from '@archipelia/sessions/live-room';
+import { STATUS_TONE } from './PlayersPanel.constants';
 import type { PlayersPanelProps } from './PlayersPanel.type';
 import { LiveNotice } from '../LiveNotice';
 import { PlayerStatusRow } from '@archipelia/design';
-import { STATUS_TONE } from '../../../../live-room/client-status.constants';
-import { checksLabel } from '../../../../live-room/checks-label';
 
 const progressOf = ({ checked, total }: PlayerView) => (checked !== null && total ? { value: checked, max: total } : null);
 

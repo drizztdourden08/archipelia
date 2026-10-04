@@ -1,4 +1,4 @@
-/* @layer renderer-app @kind logic */
+/* @layer core @kind logic */
 import type { PlayerStatus } from './live-room.type';
 import { STATUS_STEPS } from './client-status.constants';
 
