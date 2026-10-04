@@ -4,7 +4,9 @@ import './theme.css';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrockApp } from '@drizztdourden08/brock-react';
+import { rendererBootTasks } from '../.brock/boot.renderer';
 import { rendererModules } from '../.brock/modules.renderer';
+import { screenTree } from '../.brock/screens';
 import { SCREENS, SETTINGS } from './main.constants';
 import { MENU } from './menu.constants';
 import { BASE_SCREEN } from './navigation/app-navigation.constants';
@@ -22,10 +24,11 @@ createRoot(root).render(
     <BrockApp<AppSettings>
       product={product}
       settings={SETTINGS}
+      screenTree={screenTree}
+      bootTasks={rendererBootTasks}
       screens={SCREENS}
-      modules={rendererModules}
       home={BASE_SCREEN}
-      layout="menu"
+      modules={rendererModules}
       menu={MENU}
     />
   </StrictMode>,

@@ -1,12 +1,12 @@
 /* @layer renderer-app @kind config */
-import { dataHub } from './hubs/data-hub';
-import { multiworldHub } from './hubs/multiworld-hub';
-import { sessionScreen } from './screens/SessionScreen';
-import { settingsScreen } from './screens/SettingsScreen';
-import { DEFAULT_SETTINGS, SETTINGS_TABS } from './settings.constants';
+import type { BrockAppSettings } from '@drizztdourden08/brock-react';
+import { sessionScreen } from './navigation/SessionScreen';
+import { renderSettingControl } from './setting-controls/render-setting-control';
+import { DEFAULT_SETTINGS } from './settings.constants';
+import type { AppSettings } from './settings.type';
 
-const SETTINGS = { defaults: DEFAULT_SETTINGS, tabs: SETTINGS_TABS };
+const SETTINGS: BrockAppSettings<AppSettings> = { defaults: DEFAULT_SETTINGS, renderControl: renderSettingControl };
 
-const SCREENS = [sessionScreen, multiworldHub, dataHub, settingsScreen];
+const SCREENS = [sessionScreen];
 
 export { SCREENS, SETTINGS };

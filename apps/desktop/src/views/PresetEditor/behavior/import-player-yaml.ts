@@ -1,8 +1,8 @@
 /* @layer renderer-app @kind logic */
 import type { GameSchema } from '@archipelia/model';
 import { parse } from 'yaml';
-import { coercePresetValues, isLoose } from '../../../option-fields';
-import type { CoercedValues } from '../../../option-fields';
+import { coercePresetValues, isLoose } from '@archipelia/design';
+import type { CoercedValues } from '@archipelia/design';
 
 const gamesOf = (game: unknown): string[] => {
   if (typeof game === 'string') return [game];

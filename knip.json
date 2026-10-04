@@ -17,6 +17,8 @@
         "electron/main.ts",
         "electron/preload.ts",
         "src/main.tsx",
+        "src/screens/**/*.custom.tsx",
+        ".brock/*.ts",
         "brock.config.ts",
         "*.config.{cjs,ts,mjs}",
         "tests/**/*.keep.test.ts",
@@ -25,6 +27,7 @@
       "project": [
         "src/**/*.{ts,tsx}",
         "electron/**/*.ts",
+        ".brock/*.ts",
         "tests/**/*.ts"
       ],
       "ignoreDependencies": [
@@ -59,8 +62,12 @@
       ]
     },
     "packages/design": {
+      "entry": [
+        "tests/**/*.keep.test.ts"
+      ],
       "project": [
-        "src/**/*.{ts,tsx}"
+        "src/**/*.{ts,tsx}",
+        "tests/**/*.ts"
       ],
       "ignoreDependencies": [
         "vite"

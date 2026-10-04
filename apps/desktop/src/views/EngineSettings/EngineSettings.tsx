@@ -14,7 +14,6 @@ const EngineSettings = () => {
 
   return (
     <Stack>
-      <Text as="h2" variant="subtitle">Engine</Text>
       <Text variant="body">
         The engine is a private Python with the pinned Archipelago source. It generates seeds and runs the servers,
         out of sight. Setting it up downloads about 90 MB once.

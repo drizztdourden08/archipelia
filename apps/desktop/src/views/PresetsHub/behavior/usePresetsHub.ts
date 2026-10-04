@@ -1,8 +1,7 @@
 /* @layer renderer-app @kind hook */
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigation } from '@drizztdourden08/brock-react';
-import { SECTION } from '../../../navigation/app-navigation.constants';
-import { useAppNavigation } from '../../../navigation/useAppNavigation';
+import { ROUTE } from '../../../navigation/app-navigation.constants';
 import { useLibraryStore } from '../../../state/useLibraryStore';
 import { buildPresetGroups } from './build-preset-groups';
 import { schemaFor } from './schema-for';
@@ -11,10 +10,9 @@ import { usePresetActions } from './usePresetActions';
 import { usePresetSelection } from './usePresetSelection';
 
 const usePresetsHub = () => {
-  const { params } = useNavigation();
+  const { params, open } = useNavigation();
   const requestedId = typeof params.presetId === 'string' ? params.presetId : undefined;
   const { installed, presets, loadInstalled, loadPresets } = useLibraryStore();
-  const { openSection } = useAppNavigation();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -30,7 +28,7 @@ const usePresetsHub = () => {
 
   const selected = presets.find((preset) => preset.id === selection.selectedId) ?? null;
   const schema = selected ? schemaFor(installed, selected.game) : undefined;
-  const openGames = useCallback(() => openSection(SECTION.games), [openSection]);
+  const openGames = useCallback(() => open(ROUTE.games), [open]);
   const openNew = useCallback(() => creator.openFor(selected?.game), [creator.openFor, selected?.game]);
 
   return { actions, creator, error, groups, loading, openGames, openNew, schema, selected, selection, total: presets.length };

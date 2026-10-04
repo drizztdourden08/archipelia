@@ -21,7 +21,7 @@ const PAGE_OF: Record<MenuEntry, string> = {
   Games: 'Games',
   Presets: 'Presets',
   Servers: 'Servers',
-  Settings: 'General',
+  Settings: 'Hosting',
   Data: 'Overview',
 };
 
@@ -30,8 +30,6 @@ const dialogOf = (page: Page, title: string) => page.getByRole('dialog', { name:
 const hub = (page: Page, title: HubTitle) => dialogOf(page, title);
 
 const base = (page: Page) => page.locator('.session-dashboard, .idle-base');
-
-const MENU_LABEL_OF: Partial<Record<MenuEntry, string>> = { Home: 'Multiworld' };
 
 const sectionsNav = (scope: Locator) => scope.getByRole('navigation', { name: 'Sections' });
 
@@ -46,7 +44,7 @@ const playerRowOf = (scope: Locator, slot: number) => scope.getByRole('group', {
 
 const openScreen = async (page: Page, entry: MenuEntry) => {
   await page.getByRole('button', { name: 'Menu', exact: true }).click();
-  await page.locator('.dropdown-menu').getByRole('button', { name: MENU_LABEL_OF[entry] ?? entry, exact: true }).click();
+  await page.getByRole('menuitem', { name: entry, exact: true }).click();
   const opened = hub(page, HUB_OF[entry]);
   await currentPage(opened, PAGE_OF[entry]).waitFor();
   return opened;

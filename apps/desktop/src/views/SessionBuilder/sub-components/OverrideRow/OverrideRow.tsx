@@ -2,7 +2,7 @@
 import { memo, useCallback, useMemo } from 'react';
 import type { OptionValue } from '@archipelia/model';
 import type { OverrideRowProps } from './OverrideRow.type';
-import { OptionFieldRow, hintOf } from '../../../../option-fields';
+import { OptionFieldRow, hintOf } from '@archipelia/design';
 
 const OverrideRowView = ({ def, value, presetValue, overridden, problem, onValue, onReset }: OverrideRowProps) => {
   const handleChange = useCallback((next: OptionValue) => onValue(def.key, next, presetValue), [def.key, onValue, presetValue]);

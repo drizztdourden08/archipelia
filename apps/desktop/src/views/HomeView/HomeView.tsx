@@ -1,57 +1,40 @@
 /* @layer renderer-app @kind component */
-import { Button, ButtonRow, Card, EmptyState, Flex, Grid, Stack, Text } from '@drizztdourden08/tessera/primitives';
+import { useMemo } from 'react';
+import { Button, EmptyState, Stack, Text } from '@drizztdourden08/tessera/primitives';
 import { useHome } from './behavior/useHome';
 import { engineHeadline } from './behavior/engine-headline';
-import { engineMeta } from './behavior/engine-meta';
-import { engineValue } from './behavior/engine-value';
-import { gamesMeta } from './behavior/games-meta';
-import { presetsMeta } from './behavior/presets-meta';
-import { sessionMeta } from './behavior/session-meta';
+import { homeFacts } from './behavior/home-facts';
 import { summaryLine } from './behavior/summary-line';
-import { CARD_MIN_COL } from './HomeView.constants';
-import { StatCard } from '@archipelia/design';
+import type { HomeViewProps } from './HomeView.type';
 import { RecentSessionRow } from './sub-components/RecentSessionRow';
-import './HomeView.css';
 
-const HomeView = () => {
+const HomeView = ({ slots }: HomeViewProps) => {
+  const { Eyebrow, Title, Actions, Facts, Aside } = slots;
   const home = useHome();
-  const { last, status, counts } = home;
+  const { last, now, status, counts, installed, presets } = home;
+  const facts = useMemo(() => homeFacts({ last, now, status, counts, installed, presets }), [last, now, status, counts, installed, presets]);
   return (
-    <Stack gap="lg" className="home-view">
-      <Flex justify="between" align="center" wrap gap="md">
-        <Stack gap="xs">
-          <Text as="h1" variant="title">{engineHeadline(status)}</Text>
-          <Text variant="caption">{summaryLine(status, counts)}</Text>
-        </Stack>
-        <ButtonRow>
-          <Button variant="secondary" onClick={home.newSession}>New session</Button>
-          {last && (
-            <Button variant="primary" disabled={home.busy} onClick={home.runAgain}>{`Run "${last.snapshot.name}" again`}</Button>
-          )}
-        </ButtonRow>
-      </Flex>
-      {home.error && <Text variant="body" role="alert">{home.error}</Text>}
-      <Grid minColWidth={CARD_MIN_COL} gap="md">
-        <StatCard
-          heading="last session"
-          value={last?.snapshot.name ?? 'None yet'}
-          meta={last ? sessionMeta(last, home.now) : 'Build one in Sessions'}
-          action={home.lastAction}
-        />
-        <StatCard heading="games" value={String(counts.games)} meta={gamesMeta(home.installed)} />
-        <StatCard heading="presets" value={String(counts.presets)} meta={presetsMeta(home.presets)} />
-        <StatCard heading="templates" value={String(counts.templates)} meta="saved sessions" />
-        <StatCard heading="engine" value={engineValue(status)} meta={engineMeta(status)} action={home.engineAction} />
-      </Grid>
-      <Card>
+    <>
+      <Eyebrow>{summaryLine(status, counts)}</Eyebrow>
+      <Title>{engineHeadline(status)}</Title>
+      <Actions>
+        {home.engineNeeded && <Button variant="primary" onClick={home.openEngine}>Open Engine</Button>}
+        <Button variant="secondary" onClick={home.newSession}>New session</Button>
+        {last && (
+          <Button variant="primary" disabled={home.busy} onClick={home.runAgain}>{`Run "${last.snapshot.name}" again`}</Button>
+        )}
+      </Actions>
+      <Facts rows={facts} />
+      <Aside>
         <Stack gap="sm">
           <Text variant="label">Recent sessions</Text>
+          {home.error && <Text variant="body" role="alert">{home.error}</Text>}
           {home.recent.length === 0
             ? <EmptyState message="No session has run yet." />
-            : home.recent.map((session) => <RecentSessionRow key={session.id} session={session} now={home.now} onOpen={home.openSession} />)}
+            : home.recent.map((session) => <RecentSessionRow key={session.id} session={session} now={now} onOpen={home.openSession} />)}
         </Stack>
-      </Card>
-    </Stack>
+      </Aside>
+    </>
   );
 };
 

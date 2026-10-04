@@ -1,7 +1,6 @@
 /* @layer tests @kind test */
 import { describe, expect, test } from 'vitest';
 import type { GamePreset, InstalledGame } from '@archipelia/model';
-import { descriptionPreview } from '../../src/compounds/OptionField/behavior/description-preview';
 import { ALL_TAB } from '../../src/views/PresetEditor/PresetEditor.constants';
 import { advancedCount } from '../../src/views/PresetEditor/behavior/advanced-count';
 import { firstTab } from '../../src/views/PresetEditor/behavior/first-tab';
@@ -85,12 +84,5 @@ describe('editor helpers', () => {
     expect(problemMap(problems).get('goal')).toBe('Expected one of the listed choices.');
     expect(problemSummary(DEMO, problems)).toBe('1 option needs a fix before saving: Goal.');
     expect(problemSummary(DEMO, [])).toBeNull();
-  });
-
-  test('long descriptions get a preview', () => {
-    expect(descriptionPreview(' Short. ')).toEqual({ preview: 'Short.', long: false });
-    const long = descriptionPreview('one\ntwo\nthree');
-    expect(long).toEqual({ preview: 'one\ntwo...', long: true });
-    expect(descriptionPreview('word '.repeat(60)).preview.length).toBeLessThanOrEqual(183);
   });
 });

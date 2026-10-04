@@ -1,6 +1,6 @@
 /* @layer renderer-app @kind hook */
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { SECTION } from '../../../navigation/app-navigation.constants';
+import { ROUTE } from '../../../navigation/app-navigation.constants';
 import { useAppNavigation } from '../../../navigation/useAppNavigation';
 import { useEngineStore } from '../../../state/useEngineStore';
 import { useLibraryStore } from '../../../state/useLibraryStore';
@@ -13,7 +13,7 @@ const useHome = () => {
   const { status, refresh } = useEngineStore();
   const { installed, presets, templates, loadInstalled, loadPresets, loadTemplates } = useLibraryStore();
   const { runs, load, run } = useRunsStore();
-  const { openSection, openSession } = useAppNavigation();
+  const { open, openSession } = useAppNavigation();
   const [now] = useState(() => Date.now());
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -25,8 +25,8 @@ const useHome = () => {
   const recent = useMemo(() => newestRuns(runs, RECENT_COUNT), [runs]);
   const last = recent[0] ?? null;
 
-  const newSession = useCallback(() => openSection(SECTION.sessions), [openSection]);
-  const openSettings = useCallback(() => openSection(SECTION.engine), [openSection]);
+  const newSession = useCallback(() => open(ROUTE.sessions), [open]);
+  const openEngine = useCallback(() => open(ROUTE.engine), [open]);
 
   const runAgain = useCallback(async () => {
     if (!last) return;
@@ -42,18 +42,14 @@ const useHome = () => {
     }
   }, [last, run, openSession]);
 
-  const lastAction = useMemo(() => (last ? { label: 'Open', onClick: () => openSession(last.id) } : undefined), [last, openSession]);
-  const engineAction = useMemo(
-    () => (needsEngineSetup(status) ? { label: 'Open settings', onClick: openSettings, primary: true } : undefined),
-    [status, openSettings],
-  );
+  const engineNeeded = needsEngineSetup(status);
   const counts = useMemo(
     () => ({ games: installed.length, presets: presets.length, templates: templates.length }),
     [installed.length, presets.length, templates.length],
   );
 
   return {
-    busy, counts, engineAction, error, installed, last, lastAction, newSession, now, openSession, presets, recent, runAgain, status,
+    busy, counts, engineNeeded, error, installed, last, newSession, now, openEngine, openSession, presets, recent, runAgain, status,
   };
 };
 

@@ -13,7 +13,7 @@ const tab = (games: Locator, name: string) =>
 
 const openTab = async (games: Locator, name: string) => {
   await tab(games, name).click();
-  await expect.poll(() => tab(games, name).getAttribute('aria-current')).toBe('true');
+  await expect.poll(() => tab(games, name).getAttribute('aria-current')).toBe('location');
 };
 
 const search = (games: Locator, text: string) => games.getByRole('textbox', { name: 'Search worlds' }).fill(text);

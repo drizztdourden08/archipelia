@@ -22,10 +22,4 @@ const DEMO: GameSchema = {
   ],
 };
 
-const defOf = (key: string) => {
-  const found = DEMO.options.find((def) => def.key === key);
-  if (!found) throw new Error(`no option ${key}`);
-  return found;
-};
-
-export { defOf, DEMO };
+export { DEMO };

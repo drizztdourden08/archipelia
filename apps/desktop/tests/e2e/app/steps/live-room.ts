@@ -20,7 +20,7 @@ const playerItem = (dashboard: Locator, game: string) =>
 const showDockBottom = (dashboard: Locator) =>
   dashboard.getByRole('region', { name: 'Session widgets', exact: true }).evaluate((dock) => dock.scrollIntoView({ block: 'end' }));
 
-const filterLog =(dashboard: Locator, text: string) => dashboard.getByRole('textbox', { name: 'Filter the log' }).fill(text);
+const filterLog =(dashboard: Locator, text: string) => dashboard.getByRole('searchbox', { name: 'Filter the log' }).fill(text);
 
 const joinPlayers = async (launched: LaunchedApp, clients: Client[]) => {
   const dashboard = base(launched.page);

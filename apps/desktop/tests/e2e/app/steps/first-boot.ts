@@ -22,7 +22,7 @@ const createProfile = async (launched: LaunchedApp) => {
   await base(page).getByText('No room is hosting right now.', { exact: true }).waitFor();
   await base(page).getByRole('button', { name: 'Run a session' }).waitFor();
   const home = await openScreen(page, 'Home');
-  await home.getByRole('heading', { name: 'Good to go', level: 1 }).waitFor();
+  await home.getByRole('heading', { name: 'Good to go', level: 2 }).waitFor();
   await expect.poll(() => home.getByText(/Engine AP 0\.6\.7 ready/).count()).toBe(1);
   expect(await nestedButtons(page), 'no button inside a button on Home').toBe(0);
   await settledProof(launched, '02-home-engine-ready');
@@ -33,8 +33,8 @@ const openSettingsTab = (launched: LaunchedApp, tab: string) => openSection(hub(
 
 const visitSettingsTabs = async (launched: LaunchedApp) => {
   const settings = await openScreen(launched.page, 'Settings');
-  const general = settings.getByRole('navigation', { name: 'Sections' }).getByRole('button', { name: 'General', exact: true });
-  expect(await general.getAttribute('aria-current'), 'Settings opens Multiworld at General').toBe('page');
+  const first = settings.getByRole('navigation', { name: 'Sections' }).getByRole('button', { name: 'Hosting', exact: true });
+  expect(await first.getAttribute('aria-current'), 'Settings opens Multiworld at its first settings page').toBe('page');
   for (const [index, [tab, text]] of SETTINGS_TABS.entries()) {
     const view = await openSettingsTab(launched, tab);
     await view.getByText(text, { exact: true }).waitFor();

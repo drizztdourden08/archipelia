@@ -1,7 +1,7 @@
 /* @layer renderer-app @kind component */
 import { useCallback } from 'react';
 import { Stack, Text } from '@drizztdourden08/tessera/primitives';
-import { SECTION } from '../../navigation/app-navigation.constants';
+import { ROUTE } from '../../navigation/app-navigation.constants';
 import { useAppNavigation } from '../../navigation/useAppNavigation';
 import type { SessionDashboardProps } from './SessionDashboard.type';
 import { useSessionDashboard } from './behavior/useSessionDashboard';
@@ -21,8 +21,8 @@ const SessionDashboard = ({ sessionId }: SessionDashboardProps) => {
   const board = useSessionDashboard(sessionId);
   const live = useLiveRoom(board.session, board.lines);
   const dock = useSessionDock();
-  const { openSection } = useAppNavigation();
-  const openSessions = useCallback(() => openSection(SECTION.sessions), [openSection]);
+  const { open } = useAppNavigation();
+  const openSessions = useCallback(() => open(ROUTE.sessions), [open]);
 
   const { session } = board;
   if (!session) return <IdleBase loaded={board.loaded} onOpenSessions={openSessions} />;

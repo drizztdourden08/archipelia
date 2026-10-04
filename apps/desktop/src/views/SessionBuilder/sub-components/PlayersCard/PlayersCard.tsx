@@ -2,7 +2,7 @@
 import { useCallback } from 'react';
 import { Button, ButtonRow, Card, EmptyState, SectionHeader, Stack } from '@drizztdourden08/tessera/primitives';
 import type { PlayersCardProps } from './PlayersCard.type';
-import { PlayerRow, PlayerRowHeader } from '../../../../compounds/PlayerRow';
+import { PlayerRow, PlayerRowHeader } from '@archipelia/design';
 import { sourceValueOf } from '../../behavior/source-value-of';
 import { gameOptionsOf } from '../../behavior/game-options-of';
 import { sourceOptionsOf } from '../../behavior/source-options-of';

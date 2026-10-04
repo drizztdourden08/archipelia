@@ -2,7 +2,7 @@
 import { memo, useCallback, useMemo } from 'react';
 import type { OptionValue } from '@archipelia/model';
 import type { OptionRowProps } from './OptionRow.type';
-import { OptionFieldRow, hintOf, isChangedValue } from '../../../../option-fields';
+import { OptionFieldRow, hintOf, isChangedValue } from '@archipelia/design';
 
 const OptionRowView = ({ def, value, problem, onValue, onReset }: OptionRowProps) => {
   const handleChange = useCallback((next: OptionValue) => onValue(def.key, next), [def.key, onValue]);

@@ -1,7 +1,0 @@
-/* @layer renderer-app @kind style */
-.home-view {
-  height: 100%;
-  overflow: auto;
-  box-sizing: border-box;
-  padding: var(--space-xl);
-}
