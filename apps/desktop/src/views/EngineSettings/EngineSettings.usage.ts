@@ -15,6 +15,9 @@ const usage = {
     'Draw the buttons as SettingActions row actions and turn them off while the engine builds.',
     'Once ready, Check again is the primary action and Rebuild is a danger action whose confirm focuses Cancel.',
     'Set up and Rebuild open the job dialog with the steps and the log; Show progress, or Show the last set up once it ended, opens that dialog again.',
+    'While the set up runs, show its progress bar and current step on the page too.',
+    'Open folder sits next to the folder path and opens it in the file manager.',
+    'A failed set up is one plain sentence; its raw error goes to the app log.',
   ],
   a11y: [
     'The state is text in a Status.',

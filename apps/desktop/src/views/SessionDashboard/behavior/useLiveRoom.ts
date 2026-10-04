@@ -18,6 +18,7 @@ const useLiveRoom = (session: Session | null, lines: readonly HostLogLine[]) => 
   const submitPassword = useCallback((password: string) => {
     if (targetRef.current) void connect(targetRef.current, password);
   }, [connect]);
+  const retry = useCallback(() => submitPassword(''), [submitPassword]);
 
   const planned = session?.snapshot.players;
   const names = useMemo(() => (planned ?? []).map((player) => player.name), [planned]);
@@ -32,7 +33,7 @@ const useLiveRoom = (session: Session | null, lines: readonly HostLogLine[]) => 
 
   const logHints = useMemo(() => (phase === 'live' ? [] : hintsFromLog(texts)), [phase, texts]);
 
-  return { error, hints: phase === 'live' ? hints : logHints, passwordRequired, phase, players: rows, submitPassword };
+  return { error, hints: phase === 'live' ? hints : logHints, passwordRequired, phase, players: rows, retry, submitPassword };
 };
 
 export { useLiveRoom };

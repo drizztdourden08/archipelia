@@ -16,8 +16,8 @@ const meta: WidgetMeta = {
 };
 
 const Console = () => {
-  const { session, loaded } = useSessionView();
-  return session ? <ConsoleWidget session={session} enabled={session.status === 'hosting'} /> : <NoSession loaded={loaded} />;
+  const { session } = useSessionView();
+  return session ? <ConsoleWidget session={session} enabled={session.status === 'hosting'} /> : <NoSession />;
 };
 
 export default Console;

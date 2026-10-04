@@ -6,6 +6,7 @@ import type { SessionEvent } from '@archipelia/sessions';
 type RunsState = {
   runs: Session[];
   loaded: boolean;
+  failed: boolean;
   logs: Record<string, HostLogLine[]>;
   load: () => Promise<void>;
   run: (template: SessionTemplate) => Promise<Session>;

@@ -9,18 +9,27 @@ import { usePresetCreator } from './usePresetCreator';
 import { usePresetActions } from './usePresetActions';
 import { usePresetSelection } from './usePresetSelection';
 import { usePresetEntries } from './usePresetEntries';
+import { logFailure } from '../../../hooks/log-failure';
+import { FAILURE } from '../PresetsHub.constants';
 
 const usePresetsHub = () => {
   const { params, open } = useNavigation();
   const requestedId = typeof params.presetId === 'string' ? params.presetId : undefined;
   const { installed, presets, loadInstalled, loadPresets } = useLibraryStore();
   const [loading, setLoading] = useState(true);
+  const [loadFailed, setLoadFailed] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fail = (err: unknown) => setError((err as Error).message);
+  const load = useCallback(() => {
+    setLoading(true);
+    setLoadFailed(false);
+    const fail = (err: unknown) => {
+      logFailure(FAILURE.load, err);
+      setLoadFailed(true);
+    };
     void Promise.allSettled([loadPresets().catch(fail), loadInstalled().catch(fail)]).then(() => setLoading(false));
   }, [loadPresets, loadInstalled]);
+  useEffect(load, [load]);
 
   usePresetEntries(presets);
 
@@ -34,7 +43,9 @@ const usePresetsHub = () => {
   const openGames = useCallback(() => open(ROUTE.games), [open]);
   const openNew = useCallback(() => creator.openFor(selected?.game), [creator.openFor, selected?.game]);
 
-  return { actions, creator, error, groups, loading, openGames, openNew, schema, selected, selection, total: presets.length };
+  return {
+    actions, creator, error: loadFailed ? FAILURE.load : error, groups, loading, openGames, openNew, retry: loadFailed ? load : undefined, schema, selected, selection, total: presets.length,
+  };
 };
 
 export { usePresetsHub };

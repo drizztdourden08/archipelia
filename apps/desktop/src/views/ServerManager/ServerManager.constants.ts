@@ -16,4 +16,11 @@ const DEFAULT_GAME_PORT = 38281;
 
 const EMPTY_INPUTS: SecretInputs = { password: '', passphrase: '' };
 
-export { DEFAULT_GAME_PORT, DRAFT_RULES, EMPTY_INPUTS };
+const FAILURE = {
+  save: 'Could not save the server.',
+  test: 'Could not test the connection.',
+  trust: 'Could not trust the host key.',
+  remove: 'Could not remove the server.',
+} as const;
+
+export { DEFAULT_GAME_PORT, DRAFT_RULES, EMPTY_INPUTS, FAILURE };

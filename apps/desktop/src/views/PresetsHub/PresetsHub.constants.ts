@@ -14,4 +14,10 @@ const DISCARD_CONFIRM: ConfirmActionOptions = {
   variant: 'danger',
 };
 
-export { DAY_MS, DEFAULTS, DISCARD_CONFIRM, RECENT_DAYS };
+const FAILURE = {
+  load: 'Could not load your presets.',
+  duplicate: 'Could not duplicate the preset.',
+  remove: 'Could not delete the preset.',
+} as const;
+
+export { DAY_MS, DEFAULTS, DISCARD_CONFIRM, FAILURE, RECENT_DAYS };

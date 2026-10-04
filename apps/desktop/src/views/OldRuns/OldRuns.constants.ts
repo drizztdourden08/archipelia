@@ -5,4 +5,6 @@ const DAY_MS = 24 * 60 * 60 * 1000;
 
 const CLEAN_DAYS = 30;
 
-export { CLEAN_DAYS, DAY_MS, LIVE };
+const CLEAN_FAILED = 'Could not remove the old runs.';
+
+export { CLEAN_DAYS, CLEAN_FAILED, DAY_MS, LIVE };

@@ -11,8 +11,16 @@ const upsert = (runs: Session[], session: Session) =>
 const useRunsStore = createSessionStore<RunsState>((set, get) => ({
   runs: [],
   loaded: false,
+  failed: false,
   logs: {},
-  load: async () => set({ runs: await appApi().sessionsList(), loaded: true }),
+  load: async () => {
+    try {
+      set({ runs: await appApi().sessionsList(), loaded: true, failed: false });
+    } catch (err) {
+      set({ failed: true });
+      throw err;
+    }
+  },
   run: (template) => appApi().sessionsRun(template),
   stop: async (id) => { await appApi().sessionsStop(id); },
   cancel: (id) => appApi().sessionsCancel(id),

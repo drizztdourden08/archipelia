@@ -1,7 +1,8 @@
 /* @layer renderer-app @kind component */
 import { SearchAnchor } from '@drizztdourden08/brock-react';
 import { ListItemRow, MasterDetailLayout } from '@drizztdourden08/tessera/composites';
-import { Box, Button, ButtonRow, Callout, EmptyState, Flex, Stack, Status, Text } from '@drizztdourden08/tessera/primitives';
+import { Button, ButtonRow, EmptyState, Flex, Stack, Status, Text } from '@drizztdourden08/tessera/primitives';
+import { ErrorCallout } from '@archipelia/design';
 import { serverAnchor } from './behavior/server-anchor';
 import { useServerManager } from './behavior/useServerManager';
 import { ServerForm } from './sub-components/ServerForm';
@@ -37,7 +38,7 @@ const ServerManager = () => {
         </ButtonRow>
       </Flex>
       {manager.problems.map((problem) => <Text key={problem} variant="caption">{problem}</Text>)}
-      {manager.error && <Box role="alert"><Callout tone="danger">{manager.error}</Callout></Box>}
+      {manager.error && <ErrorCallout message={manager.error} />}
       <ServerForm entry={draft} inputs={manager.inputs} onEntry={manager.setDraft} onInputs={manager.setInputs} />
       <ServerTestPanel test={manager.test} pinned={draft.hostKeySha256} busy={manager.busy} onTrust={manager.trust} />
     </Stack>

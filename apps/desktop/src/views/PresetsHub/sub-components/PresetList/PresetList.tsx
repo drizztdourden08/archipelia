@@ -1,18 +1,19 @@
 /* @layer renderer-app @kind component */
 import { SearchAnchor } from '@drizztdourden08/brock-react';
-import { Box, Button, Callout, EmptyState, Flex, Stack, Text } from '@drizztdourden08/tessera/primitives';
+import { Button, EmptyState, Flex, Spinner, Stack, Text } from '@drizztdourden08/tessera/primitives';
 import type { PresetListProps } from './PresetList.type';
-import { PresetListItem } from '@archipelia/design';
+import { ErrorCallout, PresetListItem } from '@archipelia/design';
 import { presetAnchor } from '../../behavior/preset-anchor';
 
-const PresetList = ({ groups, total, selectedId, loading, error, canCreate, onSelect, onNew }: PresetListProps) => (
+const PresetList = ({ groups, total, selectedId, loading, error, onRetry, canCreate, onSelect, onNew }: PresetListProps) => (
   <Stack gap="md">
     <Flex justify="between" align="center">
       <Text variant="label">Presets · {total}</Text>
       <Button size="sm" variant="primary" onClick={onNew} disabled={!canCreate} title={canCreate ? undefined : 'Install a game first'}>New</Button>
     </Flex>
-    {error && <Box role="alert"><Callout tone="danger">{error}</Callout></Box>}
-    {groups.length === 0 && <EmptyState message={loading ? 'Loading presets' : 'Install a game from Games, then make a preset for it.'} />}
+    {error && <ErrorCallout message={error} onRetry={onRetry} />}
+    {groups.length === 0 && loading && <EmptyState icon={<Spinner />} message="Loading presets" />}
+    {groups.length === 0 && !loading && !onRetry && <EmptyState message="Install a game from Games, then make a preset for it." />}
     {groups.map((group) => (
       <Stack key={group.game} gap="xs">
         <Text variant="caption" className="presets-hub__game">

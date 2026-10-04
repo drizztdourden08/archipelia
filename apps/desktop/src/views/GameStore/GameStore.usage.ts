@@ -20,7 +20,7 @@ const usage = {
   ],
   a11y: [
     'The search field has a placeholder that says what it finds.',
-    'An error is an alert; an empty result says why.',
+    'An error is an alert with one plain sentence, and Retry when the games did not load; an empty result says why.',
     'Each card action is named after its world.',
   ],
   tree: {

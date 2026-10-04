@@ -20,7 +20,7 @@ const usage = {
   a11y: [
     'The session name field is labelled.',
     'Each player row is a group named after its slot.',
-    'An error is an alert.',
+    'An error is an alert with one plain sentence, and Retry when a load failed.',
   ],
   tree: {
     path: ['a full screen view', 'a page of the multiworld app', 'a session being built'],

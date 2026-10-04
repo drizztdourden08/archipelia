@@ -7,7 +7,7 @@ const STATE_VIEW: Record<EngineState | 'unknown', { label: string; tone: StatusT
   ready: { label: 'Ready', tone: 'success' },
   building: { label: 'Setting up', tone: 'warning' },
   missing: { label: 'Not set up', tone: 'neutral' },
-  failed: { label: 'Broken', tone: 'danger' },
+  failed: { label: 'Setup failed', tone: 'danger' },
   unknown: { label: 'Checking', tone: 'neutral' },
 };
 
@@ -18,4 +18,11 @@ const REBUILD_CONFIRM: ConfirmActionOptions = {
   variant: 'danger',
 };
 
-export { REBUILD_CONFIRM, STATE_VIEW };
+const FAILURE = {
+  setup: 'The engine setup failed. Set up engine tries again.',
+  open: 'Could not open the engine folder.',
+} as const;
+
+const STARTING_STEP = 'Starting';
+
+export { FAILURE, REBUILD_CONFIRM, STARTING_STEP, STATE_VIEW };

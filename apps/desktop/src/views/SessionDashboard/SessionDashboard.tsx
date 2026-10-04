@@ -1,5 +1,5 @@
 /* @layer renderer-app @kind component */
-import { Box, Callout, Stack } from '@drizztdourden08/tessera/primitives';
+import { Stack } from '@drizztdourden08/tessera/primitives';
 import type { SessionDashboardProps } from './SessionDashboard.type';
 import { useSessionDashboard } from './behavior/useSessionDashboard';
 import { useLiveRoom } from './behavior/useLiveRoom';
@@ -7,10 +7,12 @@ import { useStartOnHome } from './behavior/useStartOnHome';
 import { canStop } from './behavior/can-stop';
 import { hostLabel } from '@archipelia/model';
 import { progressLabel } from './behavior/progress-label';
-import { RUN_STATUS, SessionStatusBar } from '@archipelia/design';
+import { ErrorCallout, RUN_STATUS, SessionStatusBar } from '@archipelia/design';
 import { IdleBase } from './sub-components/IdleBase';
 import { SessionSummary } from './sub-components/SessionSummary';
 import { useFocusStore } from '../../stores/useFocusStore';
+import { useLoggedFailure } from '../../hooks/useLoggedFailure';
+import { FAILURE } from './SessionDashboard.constants';
 import './SessionDashboard.css';
 
 const SessionDashboard = ({ sessionId }: SessionDashboardProps) => {
@@ -18,9 +20,10 @@ const SessionDashboard = ({ sessionId }: SessionDashboardProps) => {
   const board = useSessionDashboard(sessionId ?? focused);
   const live = useLiveRoom(board.session, board.lines);
   useStartOnHome(sessionId === undefined, board.loaded, board.session !== null);
+  const runFailure = useLoggedFailure(board.session?.error, FAILURE.run);
 
   const { session } = board;
-  if (!session) return <IdleBase loaded={board.loaded} />;
+  if (!session) return <IdleBase loaded={board.loaded} failed={board.failed} />;
 
   const status = RUN_STATUS[session.status];
   return (
@@ -40,8 +43,8 @@ const SessionDashboard = ({ sessionId }: SessionDashboardProps) => {
         onCopy={board.copyAddress}
         onStop={board.stopSession}
       />
-      {board.error && <Box role="alert"><Callout tone="danger">{board.error}</Callout></Box>}
-      {session.error && <Box role="alert"><Callout tone="danger">{session.error}</Callout></Box>}
+      {board.error && <ErrorCallout message={board.error} />}
+      {runFailure && <ErrorCallout message={runFailure} />}
       <SessionSummary players={live.players} hints={live.hints} phase={live.phase} uptime={board.uptime} status={status.label} />
     </Stack>
   );

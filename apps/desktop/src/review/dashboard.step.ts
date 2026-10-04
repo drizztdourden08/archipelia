@@ -5,6 +5,7 @@ import { SELECTOR } from './review-dom.constants';
 import { checkWidgets } from './check-widgets';
 import { SPOILER_WIDGET, STOPPED_WIDGETS } from './widget-content.constants';
 import { waitText } from './wait-text';
+import { showSpoiler } from './show-spoiler';
 
 export default defineReviewStep({
   run: async (tour) => {
@@ -14,6 +15,7 @@ export default defineReviewStep({
     tour.check('dashboard-run', shown, `the base screen shows the stopped ${REVIEW_SESSION}`, 'the base screen shows no seeded run');
     await checkWidgets(tour, STOPPED_WIDGETS, 'stopped');
     await tour.capture('stopped-run');
+    await showSpoiler(tour);
     await checkWidgets(tour, SPOILER_WIDGET, 'stopped');
     await tour.capture('spoiler');
     widgets.reset();

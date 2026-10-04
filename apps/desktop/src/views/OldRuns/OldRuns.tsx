@@ -1,10 +1,11 @@
 /* @layer renderer-app @kind component */
 import { Button, ButtonRow, Card, Icon, Stack, Text } from '@drizztdourden08/tessera/primitives';
+import { ErrorCallout } from '@archipelia/design';
 import { CLEAN_DAYS } from './OldRuns.constants';
 import { useOldRuns } from './behavior/useOldRuns';
 
 const OldRuns = () => {
-  const { busy, clean, kept, message, stale } = useOldRuns();
+  const { busy, clean, error, kept, message, stale } = useOldRuns();
   return (
     <Stack>
       <Card>
@@ -15,6 +16,7 @@ const OldRuns = () => {
           </ButtonRow>
         </Stack>
       </Card>
+      {error && <ErrorCallout message={error} />}
       {message && <Text variant="body" role="status">{message}</Text>}
     </Stack>
   );

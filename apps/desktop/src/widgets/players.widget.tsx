@@ -16,8 +16,8 @@ const meta: WidgetMeta = {
 };
 
 const Players = () => {
-  const { session, lines, loaded } = useSessionView();
-  return session ? <PlayersWidget session={session} lines={lines} /> : <NoSession loaded={loaded} />;
+  const { session, lines } = useSessionView();
+  return session ? <PlayersWidget session={session} lines={lines} /> : <NoSession />;
 };
 
 export default Players;

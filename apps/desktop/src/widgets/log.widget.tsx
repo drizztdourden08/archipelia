@@ -16,8 +16,8 @@ const meta: WidgetMeta = {
 };
 
 const Log = () => {
-  const { session, lines, loaded } = useSessionView();
-  return session ? <LogWidget session={session} lines={lines} /> : <NoSession loaded={loaded} />;
+  const { session, lines } = useSessionView();
+  return session ? <LogWidget session={session} lines={lines} /> : <NoSession />;
 };
 
 export default Log;

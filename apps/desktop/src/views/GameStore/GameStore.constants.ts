@@ -5,4 +5,11 @@ const MAX_CARDS = 120;
 
 const APWORLD = ['apworld'];
 
-export { APWORLD, MAX_CARDS, SOURCE_LABEL };
+const FAILURE = {
+  load: 'Could not load the games.',
+  install: 'Could not install the game.',
+  remove: 'Could not remove the game.',
+  file: 'Could not add the game from that file.',
+} as const;
+
+export { APWORLD, FAILURE, MAX_CARDS, SOURCE_LABEL };

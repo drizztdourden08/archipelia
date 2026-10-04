@@ -8,7 +8,7 @@ import { CreatePresetDialog } from './sub-components/CreatePresetDialog';
 import './PresetsHub.css';
 
 const PresetsHub = () => {
-  const { actions, creator, error, groups, loading, openGames, openNew, schema, selected, selection, total } = usePresetsHub();
+  const { actions, creator, error, groups, loading, openGames, openNew, retry, schema, selected, selection, total } = usePresetsHub();
 
   return (
     <Box className="presets-hub">
@@ -21,6 +21,7 @@ const PresetsHub = () => {
             selectedId={selection.selectedId}
             loading={loading}
             error={error}
+            onRetry={retry}
             canCreate={creator.gameOptions.length > 0}
             onSelect={selection.select}
             onNew={openNew}

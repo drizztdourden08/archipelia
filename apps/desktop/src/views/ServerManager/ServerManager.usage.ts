@@ -20,7 +20,7 @@ const usage = {
   a11y: [
     'The server list rows are buttons, pressed while selected.',
     'The heading of the detail names the server.',
-    'An error is an alert.',
+    'An error is an alert with one plain sentence; the raw error goes to the app log.',
   ],
   tree: {
     path: ['a full screen view', 'a page of the multiworld app', 'the saved servers'],
