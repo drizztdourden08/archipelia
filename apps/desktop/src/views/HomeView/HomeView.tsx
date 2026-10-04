@@ -2,9 +2,9 @@
 import { useMemo } from 'react';
 import { Button, EmptyState, Stack, Text } from '@drizztdourden08/tessera/primitives';
 import { useHome } from './behavior/useHome';
-import { engineHeadline } from './behavior/engine-headline';
+import { engineLine } from './behavior/engine-line';
 import { homeFacts } from './behavior/home-facts';
-import { summaryLine } from './behavior/summary-line';
+import { HERO_TITLE } from './HomeView.constants';
 import type { HomeViewProps } from './HomeView.type';
 import { RecentSessionRow } from './sub-components/RecentSessionRow';
 
@@ -15,8 +15,8 @@ const HomeView = ({ slots }: HomeViewProps) => {
   const facts = useMemo(() => homeFacts({ last, now, status, counts, installed, presets }), [last, now, status, counts, installed, presets]);
   return (
     <>
-      <Eyebrow>{summaryLine(status, counts)}</Eyebrow>
-      <Title>{engineHeadline(status)}</Title>
+      <Eyebrow>{engineLine(status)}</Eyebrow>
+      <Title>{HERO_TITLE}</Title>
       <Actions>
         {home.engineNeeded && <Button variant="primary" onClick={home.openEngine}>Open Engine</Button>}
         <Button variant="secondary" onClick={home.newSession}>New session</Button>

@@ -15,4 +15,4 @@ type HomeFactsInput = {
   presets: readonly GamePreset[];
 };
 
-export type { HomeCounts, HomeFactsInput, HomeViewProps };
+export type { HomeFactsInput, HomeViewProps };

@@ -10,12 +10,14 @@ const ENGINE_META: Record<EngineState, string> = {
   failed: 'setup failed',
 };
 
-const HEADLINE: Record<EngineState, string> = {
-  ready: 'Good to go',
-  missing: 'Set up the engine first',
-  building: 'The engine is being set up',
-  failed: 'The engine setup failed',
+const ENGINE_LINE: Record<EngineState, string> = {
+  ready: 'Engine ready',
+  missing: 'Engine setup needed',
+  building: 'Engine setting up',
+  failed: 'Engine setup failed',
 };
+
+const HERO_TITLE = 'Multiworld';
 
 const NAMED_GAMES = 3;
 
@@ -27,4 +29,4 @@ const DAY = 24 * HOUR;
 
 const RECENT_COUNT = 3;
 
-export { DAY, ENGINE_META, HEADLINE, HOST_LABEL, HOUR, MINUTE, NAMED_GAMES, RECENT_COUNT };
+export { DAY, ENGINE_LINE, ENGINE_META, HERO_TITLE, HOST_LABEL, HOUR, MINUTE, NAMED_GAMES, RECENT_COUNT };

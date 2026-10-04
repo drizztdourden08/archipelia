@@ -22,7 +22,7 @@ const createProfile = async (launched: LaunchedApp) => {
   await base(page).getByText('No room is hosting right now.', { exact: true }).waitFor();
   await base(page).getByRole('button', { name: 'Run a session' }).waitFor();
   const home = await openScreen(page, 'Home');
-  await home.getByRole('heading', { name: 'Good to go', level: 2 }).waitFor();
+  await home.getByRole('heading', { name: 'Multiworld', level: 2, exact: true }).waitFor();
   await expect.poll(() => home.getByText(/Engine AP 0\.6\.7 ready/).count()).toBe(1);
   expect(await nestedButtons(page), 'no button inside a button on Home').toBe(0);
   await settledProof(launched, '02-home-engine-ready');

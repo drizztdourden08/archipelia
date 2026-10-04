@@ -1,7 +1,7 @@
 /* @layer tests @kind test */
 import { describe, expect, test } from 'vitest';
 import type { GamePreset, InstalledGame, Session } from '@archipelia/model';
-import { engineHeadline } from '../../src/views/HomeView/behavior/engine-headline';
+import { engineLine } from '../../src/views/HomeView/behavior/engine-line';
 import { engineMeta } from '../../src/views/HomeView/behavior/engine-meta';
 import { engineValue } from '../../src/views/HomeView/behavior/engine-value';
 import { gamesMeta } from '../../src/views/HomeView/behavior/games-meta';
@@ -10,7 +10,6 @@ import { newestRuns } from '../../src/views/HomeView/behavior/newest-runs';
 import { presetsMeta } from '../../src/views/HomeView/behavior/presets-meta';
 import { relativeTime } from '../../src/views/HomeView/behavior/relative-time';
 import { sessionMeta } from '../../src/views/HomeView/behavior/session-meta';
-import { summaryLine } from '../../src/views/HomeView/behavior/summary-line';
 
 const MINUTE = 60_000;
 const DAY = 24 * 60 * MINUTE;
@@ -32,16 +31,17 @@ const run = (id: string, createdAt: number): Session => ({
 });
 
 describe('home summary', () => {
-  test('engine headline, value and setup need', () => {
+  test('engine line, value and setup need', () => {
     const ready = { state: 'ready', dir: 'x', apVersion: '0.6.7' } as const;
-    expect(engineHeadline(ready)).toBe('Good to go');
-    expect(engineHeadline(null)).toBe('Checking the engine');
+    expect(engineLine(ready)).toBe('Engine AP 0.6.7 ready');
+    expect(engineLine({ state: 'ready', dir: 'x' })).toBe('Engine ready');
+    expect(engineLine({ state: 'missing', dir: 'x' })).toBe('Engine setup needed');
+    expect(engineLine(null)).toBe('Checking the engine');
     expect(engineValue(ready)).toBe('0.6.7');
     expect(engineValue({ state: 'missing', dir: 'x' })).toBe('missing');
     expect(engineMeta({ state: 'failed', dir: 'x', error: 'pip failed' })).toBe('pip failed');
     expect(needsEngineSetup({ state: 'missing', dir: 'x' })).toBe(true);
     expect(needsEngineSetup(ready)).toBe(false);
-    expect(summaryLine(ready, { games: 1, presets: 5, templates: 2 })).toBe('Engine AP 0.6.7 ready · 1 game installed · 5 presets · 2 templates');
   });
 
   test('games and presets meta', () => {
