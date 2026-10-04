@@ -1,9 +1,7 @@
 /* @layer renderer-app @kind component */
 import { useCallback } from 'react';
 import type { ChangeEvent, KeyboardEvent } from 'react';
-import { ConfirmDialog } from '@drizztdourden08/brock-react';
 import { Box, Button, ButtonRow, Callout, Flex, Stack, Text, TextInput } from '@drizztdourden08/tessera/primitives';
-import { inWidgetWindow } from '../../../../session-widgets/in-widget-window';
 import type { ConsoleWidgetProps } from './ConsoleWidget.type';
 import { useConsole } from '../../behavior/useConsole';
 import { ConsolePlayer } from '../ConsolePlayer';
@@ -30,7 +28,6 @@ const ConsoleWidget = ({ session, enabled }: ConsoleWidgetProps) => {
         <ConsolePlayer key={player.slot} name={player.name} onConfirm={confirmSend} />
       ))}
       {sent.map((cmd, i) => <Text key={`${i}-${cmd}`} variant="caption" className="session-panel__mono">{`> ${cmd}`}</Text>)}
-      {inWidgetWindow() && <ConfirmDialog />}
     </Stack>
   );
 };
