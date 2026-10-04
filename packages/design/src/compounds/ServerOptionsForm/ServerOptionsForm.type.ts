@@ -1,8 +1,11 @@
 /* @layer renderer-app @kind types */
+import type { ReactNode } from 'react';
 import type { SelectOption } from '@drizztdourden08/tessera/primitives';
 import type { GeneratorSettings, HostTarget, ServerSettings } from '@archipelia/model';
 
 type HostKind = HostTarget['kind'];
+
+type RowText = { label: string; description: string; hint: string; keywords?: string };
 
 type ServerOptionsFormProps = {
   generator: GeneratorSettings;
@@ -20,4 +23,14 @@ type ServerOptionsFormProps = {
   onClearPassword: () => void;
 };
 
-export type { HostKind, ServerOptionsFormProps };
+type HostRowsInput = {
+  host: HostTarget;
+  serverOptions: SelectOption[];
+  hasPassword: boolean;
+  room: ReactNode;
+  onHostKind: (kind: HostKind) => void;
+  onPort: (port: number) => void;
+  onRemoteServer: (serverId: string) => void;
+};
+
+export type { HostKind, HostRowsInput, RowText, ServerOptionsFormProps };

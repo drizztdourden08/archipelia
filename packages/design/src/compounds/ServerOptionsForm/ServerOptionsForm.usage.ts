@@ -2,7 +2,7 @@
 import type { ComponentUsage } from '@drizztdourden08/tessera';
 
 const usage = {
-  job: 'The generation and server options of a session: how the seed is made, where the room is hosted and the room rules.',
+  job: 'The generation and server options of a session in three settings sections: how the seed is made, where the room is hosted and the server rules.',
   useWhen: [
     'The options card of the session builder.',
     'Any editor of a saved session that sets its generator, host and server.',
@@ -14,11 +14,12 @@ const usage = {
   rules: [
     'Pass the session values and apply each patch to the draft; the form keeps no state.',
     'Pass the saved servers as serverOptions for the remote host choice.',
+    'The rows use the same inputs, descriptions and hints as the Hosting settings page, from SERVER_TEXT, so a rule reads the same in both places.',
     'Keep the password out of the saved session: pass hasPassword and the typed text, and clear it through onClearPassword.',
   ],
   a11y: [
-    'Each field has a visible label.',
-    'The three parts are separated and titled, so a screen reader can move between them.',
+    'Each row has a visible title and a description, and its control is named after the title.',
+    'The three parts are titled settings sections, so a screen reader can move between them.',
   ],
   tree: {
     path: ['a value the user sets', 'how a session is generated and hosted'],

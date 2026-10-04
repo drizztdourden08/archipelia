@@ -1,5 +1,5 @@
 /* @layer renderer-app @kind component */
-import { Card, Divider, SectionHeader, Stack } from '@drizztdourden08/tessera/primitives';
+import { Stack } from '@drizztdourden08/tessera/primitives';
 import { GenerationFields } from './sub-components/GenerationFields';
 import { HostFields } from './sub-components/HostFields';
 import { ServerFields } from './sub-components/ServerFields';
@@ -11,23 +11,21 @@ const ServerOptionsForm = (props: ServerOptionsFormProps) => {
     onGenerator, onServer, onHostKind, onPort, onRemoteServer, onPassword, onClearPassword,
   } = props;
   return (
-    <Card>
-      <Stack gap="md">
-        <SectionHeader title="Generation and server" subtitle="How the seed is made and how the room runs." />
-        <GenerationFields generator={generator} onGenerator={onGenerator} />
-        <Divider />
-        <HostFields host={host} serverOptions={serverOptions} onHostKind={onHostKind} onPort={onPort} onRemoteServer={onRemoteServer} />
-        <Divider />
-        <ServerFields
-          server={server}
-          password={password}
-          hasPassword={hasPassword}
-          onServer={onServer}
-          onPassword={onPassword}
-          onClearPassword={onClearPassword}
-        />
-      </Stack>
-    </Card>
+    <Stack gap="md">
+      <GenerationFields generator={generator} onGenerator={onGenerator} />
+      <HostFields
+        host={host}
+        serverOptions={serverOptions}
+        password={password}
+        hasPassword={hasPassword}
+        onHostKind={onHostKind}
+        onPort={onPort}
+        onRemoteServer={onRemoteServer}
+        onPassword={onPassword}
+        onClearPassword={onClearPassword}
+      />
+      <ServerFields server={server} onServer={onServer} />
+    </Stack>
   );
 };
 

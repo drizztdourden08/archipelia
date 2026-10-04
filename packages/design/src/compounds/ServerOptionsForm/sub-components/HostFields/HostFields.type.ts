@@ -1,14 +1,7 @@
 /* @layer renderer-app @kind types */
-import type { HostTarget } from '@archipelia/model';
-import type { SelectOption } from '@drizztdourden08/tessera/primitives';
-import type { HostKind } from '../../ServerOptionsForm.type';
+import type { HostRowsInput } from '../../ServerOptionsForm.type';
+import type { RoomPasswordProps } from '../RoomPassword/RoomPassword.type';
 
-type HostFieldsProps = {
-  host: HostTarget;
-  serverOptions: SelectOption[];
-  onHostKind: (kind: HostKind) => void;
-  onPort: (port: number) => void;
-  onRemoteServer: (serverId: string) => void;
-};
+type HostFieldsProps = Omit<HostRowsInput, 'room'> & RoomPasswordProps;
 
 export type { HostFieldsProps };

@@ -1,32 +1,17 @@
 /* @layer renderer-app @kind component */
-import { useCallback } from 'react';
-import { Field, NumberInput, Select, Stack, Text } from '@drizztdourden08/tessera/primitives';
+import { useMemo } from 'react';
+import { SettingsSection } from '@drizztdourden08/tessera/composites';
 import type { HostFieldsProps } from './HostFields.type';
-import type { HostKind } from '../../ServerOptionsForm.type';
-import { HOST_OPTIONS } from '../../ServerOptionsForm.constants';
+import { hostRows } from '../../behavior/host-rows';
+import { RoomPassword } from '../RoomPassword';
 
-const HostFields = ({ host, serverOptions, onHostKind, onPort, onRemoteServer }: HostFieldsProps) => {
-  const setKind = useCallback((value: string) => onHostKind(value as HostKind), [onHostKind]);
-  return (
-    <Stack gap="sm">
-      <Field label="Host" inline>
-        <Select value={host.kind} options={HOST_OPTIONS} onChange={setKind} />
-      </Field>
-      {host.kind === 'local' && (
-        <Field label="Port" inline>
-          <NumberInput value={host.port} min={1} max={65535} onChange={onPort} />
-        </Field>
-      )}
-      {host.kind === 'archipelago-gg' && <Text variant="caption">The seed is uploaded to archipelago.gg, which hosts the room.</Text>}
-      {host.kind === 'remote' && (serverOptions.length
-        ? (
-          <Field label="Server" inline>
-            <Select value={host.serverId} options={serverOptions} placeholder="Pick a server" onChange={onRemoteServer} />
-          </Field>
-        )
-        : <Text variant="caption">No remote server yet. Add one in Servers.</Text>)}
-    </Stack>
-  );
+const HostFields = (props: HostFieldsProps) => {
+  const { host, serverOptions, password, hasPassword, onHostKind, onPort, onRemoteServer, onPassword, onClearPassword } = props;
+  const rows = useMemo(() => {
+    const room = <RoomPassword password={password} hasPassword={hasPassword} onPassword={onPassword} onClearPassword={onClearPassword} />;
+    return hostRows({ host, serverOptions, hasPassword, room, onHostKind, onPort, onRemoteServer });
+  }, [host, serverOptions, password, hasPassword, onHostKind, onPort, onRemoteServer, onPassword, onClearPassword]);
+  return <SettingsSection id="host" title="Host" description="Where the room runs and who may join it." rows={rows} />;
 };
 
 export { HostFields };

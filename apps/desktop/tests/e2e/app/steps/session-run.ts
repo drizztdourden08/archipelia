@@ -34,8 +34,10 @@ const buildSession = async (launched: LaunchedApp) => {
   await sessions.getByText('Add at least one player').waitFor();
   await settledProof(launched, '18-sessions-new');
   for (const player of PLAYERS) await fillPlayer(page, sessions, player);
-  expect(await sessions.getByRole('spinbutton', { name: 'Port', exact: true }).inputValue()).toBe(String(LOCAL_PORT));
-  expect(await sessions.getByRole('combobox', { name: 'Host', exact: true }).textContent()).toContain('This computer');
+  expect(await sessions.getByRole('spinbutton', { name: 'Local port', exact: true }).inputValue()).toBe(String(LOCAL_PORT));
+  const host = sessions.getByRole('radiogroup', { name: 'Host', exact: true });
+  expect(await host.getByRole('radio', { name: 'This computer', exact: true }).getAttribute('aria-checked')).toBe('true');
+  await sessions.getByRole('slider', { name: 'Hint cost', exact: true }).waitFor();
   await pickOption(page, sessions.getByRole('combobox', { name: 'Spoiler', exact: true }), 'Full with paths');
   await sessions.getByRole('textbox', { name: 'Session name' }).fill(TEMPLATE);
   await settledProof(launched, '19-sessions-two-players');

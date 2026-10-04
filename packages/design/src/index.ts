@@ -14,7 +14,9 @@ export { PresetListItem } from './compounds/PresetListItem';
 export { RunProgressPanel } from './compounds/RunProgressPanel';
 export { RUN_STATUS, RunRow } from './compounds/RunRow';
 export type { RunStatusView } from './compounds/RunRow';
-export { ServerOptionsForm, RELEASE_OPTIONS, REMAINING_OPTIONS } from './compounds/ServerOptionsForm';
+export {
+  HINT_COST_RANGE, HOST_OPTIONS, PORT_RANGE, RELEASE_OPTIONS, REMAINING_OPTIONS, SERVER_TEXT, SHUTDOWN_RANGE, ServerOptionsForm, percentText,
+} from './compounds/ServerOptionsForm';
 export { SessionStatusBar } from './compounds/SessionStatusBar';
 export { SessionRow } from './compounds/SessionRow';
 export type { DesignPart } from './guide/app-tree.type';
