@@ -7,7 +7,7 @@ const usage = {
     'The Servers page of the Hosting group.',
   ],
   avoidWhen: [
-    { case: 'The archipelago.gg host.', use: 'GgSettings' },
+    { case: 'The archipelago.gg host.', use: 'GgOwner' },
     { case: 'Picking a saved server in a session.', use: 'ServerOptionsForm' },
   ],
   rules: [

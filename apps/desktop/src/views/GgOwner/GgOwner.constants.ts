@@ -8,4 +8,6 @@ const FORGET_OWNER_CONFIRM: ConfirmActionOptions = {
   variant: 'danger',
 };
 
-export { FORGET_OWNER_CONFIRM };
+const GG_OWNER_ROW = 'ggOwner';
+
+export { FORGET_OWNER_CONFIRM, GG_OWNER_ROW };
