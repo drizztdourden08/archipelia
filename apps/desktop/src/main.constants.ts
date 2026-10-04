@@ -6,10 +6,9 @@ import { Icon } from '@drizztdourden08/tessera/primitives';
 import { BASE_SCREEN } from './hooks/app-navigation.constants';
 import { DEFAULT_SETTINGS } from './settings.constants';
 import type { AppSettings } from './settings.type';
-import { renderNumberSetting } from './views/NumberSetting';
 import { SessionDashboard } from './views/SessionDashboard';
 
-const SETTINGS: BrockAppSettings<AppSettings> = { defaults: DEFAULT_SETTINGS, renderControl: renderNumberSetting };
+const SETTINGS: BrockAppSettings<AppSettings> = { defaults: DEFAULT_SETTINGS };
 
 const SCREENS = [
   defineScreen({

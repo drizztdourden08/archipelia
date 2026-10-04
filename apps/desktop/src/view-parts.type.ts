@@ -1,6 +1,6 @@
 /* @layer renderer-app @kind types */
 type DesktopView =
-  | 'DataOverview' | 'EngineSettings' | 'GameStore' | 'GgSettings' | 'HomeView' | 'LibraryExport' | 'LibraryImport' | 'NumberSetting'
+  | 'DataOverview' | 'EngineSettings' | 'GameStore' | 'GgSettings' | 'HomeView' | 'LibraryExport' | 'LibraryImport'
   | 'OldRuns' | 'PresetEditor' | 'PresetsHub' | 'RunProgress' | 'ServerManager' | 'SessionBuilder' | 'SessionDashboard' | 'SessionsLibrary';
 
 declare module '@drizztdourden08/tessera' {

@@ -13,11 +13,4 @@ interface AppSettings extends BaseSettings {
   ggBaseUrl: string;
 }
 
-type NumberSettingKey = 'hostingLocalPort' | 'hostingAutoShutdownMinutes';
-
-interface NumberBounds {
-  min: number;
-  max?: number;
-}
-
-export type { AppSettings, NumberBounds, NumberSettingKey };
+export type { AppSettings };

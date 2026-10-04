@@ -34,7 +34,6 @@ const APP_TREE = [
         answers: { 'its control alone': null, 'the frame around a control': null, 'the whole row from its definition': null },
       },
       'how a session is generated and hosted': null,
-      'an app setting typed as a number': null,
     },
   },
   {
