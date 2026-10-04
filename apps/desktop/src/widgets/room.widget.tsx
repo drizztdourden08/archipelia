@@ -1,6 +1,7 @@
 /* @layer renderer-app @kind component */
 import type { WidgetMeta } from '@drizztdourden08/brock-react';
-import { SessionWidget } from '../views/SessionDashboard';
+import { NoSession, RoomWidget } from '../views/SessionDashboard';
+import { useSessionView } from '../hooks/useSessionView';
 
 const meta: WidgetMeta = {
   label: 'Room',
@@ -12,7 +13,10 @@ const meta: WidgetMeta = {
   defaultFloatingSize: { width: 340, height: 300 },
 };
 
-const RoomWidget = () => <SessionWidget id="room" />;
+const Room = () => {
+  const { session, lines, loaded } = useSessionView();
+  return session ? <RoomWidget session={session} lines={lines} /> : <NoSession loaded={loaded} />;
+};
 
-export default RoomWidget;
+export default Room;
 export { meta };

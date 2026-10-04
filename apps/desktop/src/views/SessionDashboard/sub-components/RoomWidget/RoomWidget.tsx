@@ -4,11 +4,13 @@ import { hostLabel } from '@archipelia/model';
 import { EmptyState, Stack, StatRow, Text } from '@drizztdourden08/tessera/primitives';
 import type { RoomWidgetProps } from './RoomWidget.type';
 import { addressOf } from '../../behavior/address-of';
+import { useLiveRoom } from '../../behavior/useLiveRoom';
 
 const passwordText = (session: Session, passwordRequired: boolean) =>
   (session.snapshot.server.passwordRef || passwordRequired ? 'Set' : 'None');
 
-const RoomWidget = ({ session, passwordRequired }: RoomWidgetProps) => {
+const RoomWidget = ({ session, lines }: RoomWidgetProps) => {
+  const { passwordRequired } = useLiveRoom(session, lines);
   const files = session.output?.files ?? [];
   return (
     <Stack gap="sm" className="session-panel">

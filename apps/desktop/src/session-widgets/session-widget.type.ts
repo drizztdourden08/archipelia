@@ -1,6 +1,4 @@
 /* @layer renderer-app @kind types */
-type LiveWidgetId = 'players' | 'hints' | 'room';
+type SessionWidgetId = 'players' | 'hints' | 'room' | 'log' | 'console' | 'spoiler';
 
-type SessionWidgetId = LiveWidgetId | 'log' | 'console' | 'spoiler';
-
-export type { LiveWidgetId, SessionWidgetId };
+export type { SessionWidgetId };

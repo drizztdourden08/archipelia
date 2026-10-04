@@ -1,3 +1,9 @@
 /* @layer renderer-app @kind barrel */
 export { SessionDashboard } from './SessionDashboard';
-export { SessionWidget } from './sub-components/SessionWidget';
+export { ConsoleWidget } from './sub-components/ConsoleWidget';
+export { HintsWidget } from './sub-components/HintsWidget';
+export { LogWidget } from './sub-components/LogWidget';
+export { NoSession } from './sub-components/NoSession';
+export { PlayersWidget } from './sub-components/PlayersWidget';
+export { RoomWidget } from './sub-components/RoomWidget';
+export { SpoilerWidget } from './sub-components/SpoilerWidget';

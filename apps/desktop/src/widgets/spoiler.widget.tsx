@@ -1,6 +1,7 @@
 /* @layer renderer-app @kind component */
 import type { WidgetMeta } from '@drizztdourden08/brock-react';
-import { SessionWidget } from '../views/SessionDashboard';
+import { NoSession, SpoilerWidget } from '../views/SessionDashboard';
+import { useSessionView } from '../hooks/useSessionView';
 
 const meta: WidgetMeta = {
   label: 'Spoiler',
@@ -12,7 +13,10 @@ const meta: WidgetMeta = {
   defaultFloatingSize: { width: 560, height: 360 },
 };
 
-const SpoilerWidget = () => <SessionWidget id="spoiler" />;
+const Spoiler = () => {
+  const { session, loaded } = useSessionView();
+  return session ? <SpoilerWidget session={session} /> : <NoSession loaded={loaded} />;
+};
 
-export default SpoilerWidget;
+export default Spoiler;
 export { meta };

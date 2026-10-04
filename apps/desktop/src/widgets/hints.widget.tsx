@@ -1,6 +1,7 @@
 /* @layer renderer-app @kind component */
 import type { WidgetMeta } from '@drizztdourden08/brock-react';
-import { SessionWidget } from '../views/SessionDashboard';
+import { HintsWidget, NoSession } from '../views/SessionDashboard';
+import { useSessionView } from '../hooks/useSessionView';
 
 const meta: WidgetMeta = {
   label: 'Hints',
@@ -12,7 +13,10 @@ const meta: WidgetMeta = {
   defaultFloatingSize: { width: 380, height: 300 },
 };
 
-const HintsWidget = () => <SessionWidget id="hints" />;
+const Hints = () => {
+  const { session, lines, loaded } = useSessionView();
+  return session ? <HintsWidget session={session} lines={lines} /> : <NoSession loaded={loaded} />;
+};
 
-export default HintsWidget;
+export default Hints;
 export { meta };

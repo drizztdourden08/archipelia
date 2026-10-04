@@ -2,6 +2,6 @@
 import type { HostLogLine } from '@archipelia/hosts';
 import type { Session } from '@archipelia/model';
 
-type RoomWidgetProps = { session: Session; lines: readonly HostLogLine[] };
+type HintsWidgetProps = { session: Session; lines: readonly HostLogLine[] };
 
-export type { RoomWidgetProps };
+export type { HintsWidgetProps };
