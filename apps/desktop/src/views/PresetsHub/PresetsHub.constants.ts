@@ -12,7 +12,6 @@ const DISCARD_CONFIRM: ConfirmActionOptions = {
   message: 'This preset has unsaved changes. Leave it and lose them?',
   confirmLabel: 'Discard',
   variant: 'danger',
-  focus: 'cancel',
 };
 
 export { DAY_MS, DEFAULTS, DISCARD_CONFIRM, RECENT_DAYS };

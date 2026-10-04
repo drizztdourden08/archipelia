@@ -4,7 +4,11 @@
   "parts": {
     "compounds": "packages/design/src/compounds"
   },
-  "guide": { "usage": "enforce", "tree": "packages/design/src/guide/app-tree.constants.ts" },
+  "guide": {
+    "usage": "enforce",
+    "tree": "packages/design/src/guide/app-tree.constants.ts",
+    "parts": "packages/design/src/guide/parts.type.ts"
+  },
   "apps": {
     "apps/desktop": {
       "parts": {
@@ -12,6 +16,9 @@
       },
       "theme": {
         "palette": "archipelia"
+      },
+      "guide": {
+        "parts": "apps/desktop/src/guide/parts.type.ts"
       }
     }
   }

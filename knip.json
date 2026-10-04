@@ -21,7 +21,7 @@
         "src/main.tsx",
         "src/screens/**/*.custom.tsx",
         "src/views/*/*.usage.ts",
-        "src/view-parts.type.ts",
+        "src/guide/*.ts",
         ".brock/*.ts",
         "brock.config.ts",
         "*.config.{cjs,ts,mjs}",
@@ -64,7 +64,7 @@
       "entry": [
         "tests/**/*.keep.test.ts",
         "src/compounds/*/*.usage.ts",
-        "src/guide/app-tree.*.ts"
+        "src/guide/*.ts"
       ],
       "project": [
         "src/**/*.{ts,tsx}",

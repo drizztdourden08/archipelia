@@ -24,7 +24,7 @@ const widgetFrame = (page: Page, title: string) =>
   docked(page).locator('.widget').filter({ has: page.locator('.widget__title', { hasText: new RegExp(`^${title}$`) }) });
 
 const popIn = async (popped: Page) => {
-  const button = popped.getByRole('button', { name: 'Pop in', exact: true });
+  const button = popped.getByRole('button', { name: 'Pop in Players', exact: true });
   await button.waitFor();
   await Promise.all([popped.waitForEvent('close'), button.evaluate((node: HTMLElement) => { setTimeout(() => node.click(), 0); })]);
 };
@@ -37,7 +37,7 @@ const resetLayout = async (page: Page) => {
 
 const popPlayersOut = async (launched: LaunchedApp) => {
   const widgets = docked(launched.page);
-  await widgetFrame(launched.page, 'Players').getByRole('button', { name: 'Pop out', exact: true }).click();
+  await widgetFrame(launched.page, 'Players').getByRole('button', { name: 'Pop out Players', exact: true }).click();
   const popped = await widgetWindow(launched.app, 'players');
   const body = popped.locator('body');
   await playerItem(body, TIMESPINNER.game).getByText('connected', { exact: true }).waitFor();

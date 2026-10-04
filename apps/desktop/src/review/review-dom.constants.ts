@@ -11,7 +11,7 @@ const SELECTOR = {
   paletteRow: '.command-palette--open .command-palette-row',
   dashboard: '.session-dashboard',
   presetName: 'input[aria-label="Preset name"]',
-  runJob: '[data-job^="archipelia-run-"]',
+  runJob: '.job-dialog .task-progress[aria-label^="Running "]',
 } as const;
 
 export { SELECTOR };

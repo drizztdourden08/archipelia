@@ -12,13 +12,15 @@
     ".": "./src/index.ts",
     "./package.json": "./package.json"
   },
-  "files": ["src"],
+  "files": [
+    "src"
+  ],
   "sideEffects": false,
   "scripts": {
     "lint": "tsc --noEmit && eslint ."
   },
   "devDependencies": {
-    "@drizztdourden08/brock-lint-config": "^0.17.0",
+    "@drizztdourden08/brock-lint-config": "^0.18.0",
     "@types/node": "catalog:",
     "eslint": "catalog:",
     "typescript": "catalog:"

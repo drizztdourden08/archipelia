@@ -17,7 +17,7 @@ const layer = (tour: AppReviewTour) => tour.find(SELECTOR.layer);
 const showRunLog = async (tour: AppReviewTour) => {
   const run = useRunsStore.getState().runs.find((entry) => entry.snapshot.name === REVIEW_SESSION && entry.status === 'stopped');
   if (run) await showRunJob(run);
-  const job = await tour.waitFor(() => tour.find(`${SELECTOR.runJob}[data-job-state="done"]`), 8000);
+  const job = await tour.waitFor(() => tour.find(`${SELECTOR.runJob}[data-state="done"]`), 8000);
   tour.check('run-job-dialog', job !== null, 'a finished run opens in the job dialog, replayed from its generate log', 'the finished run opened no job dialog');
   if (!job) return;
   const logged = await tour.waitFor(() => (job.innerText.match(/\n/g)?.length ?? 0) > 6);

@@ -18,4 +18,5 @@ export {
 } from './compounds/ServerOptionsForm';
 export { SessionStatusBar } from './compounds/SessionStatusBar';
 export { SessionRow } from './compounds/SessionRow';
-export type { DesignPart } from './guide/app-tree.type';
+export type * from './guide/app-tree.type';
+export type * from './guide/parts.type';
