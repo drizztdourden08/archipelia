@@ -1,17 +1,14 @@
 /* @layer renderer-app @kind types */
-type EditorHeaderProps = {
+import type { MoreActions } from '../../PresetEditor.type';
+
+type EditorHeaderProps = MoreActions & {
   name: string;
   onNameChange: (name: string) => void;
   gameLabel: string;
   canSave: boolean;
-  busy: boolean;
   dirty: boolean;
   onSave: () => void;
-  onResetAll: () => void;
-  onDuplicate: () => void;
-  onDelete: () => void;
-  onImport: () => void;
-  onExport: () => void;
+  onRevert: () => void;
 };
 
 export type { EditorHeaderProps };

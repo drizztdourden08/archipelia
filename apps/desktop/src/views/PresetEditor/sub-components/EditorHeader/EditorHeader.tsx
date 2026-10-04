@@ -1,12 +1,19 @@
 /* @layer renderer-app @kind component */
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import type { ChangeEvent } from 'react';
+import { DropdownMenu } from '@drizztdourden08/tessera/composites';
 import { Box, Button, ButtonRow, Flex, Status, Tag, TextInput } from '@drizztdourden08/tessera/primitives';
 import type { EditorHeaderProps } from './EditorHeader.type';
+import { MORE_TRIGGER } from './EditorHeader.constants';
+import { moreActions } from '../../behavior/more-actions';
 
 const EditorHeader = (props: EditorHeaderProps) => {
-  const { name, onNameChange, gameLabel, canSave, busy, dirty, onSave, onResetAll, onDuplicate, onDelete, onImport, onExport } = props;
+  const { name, onNameChange, gameLabel, canSave, busy, dirty, onSave, onRevert, onResetAll, onDuplicate, onDelete, onImport, onExport } = props;
   const handleName = useCallback((event: ChangeEvent<HTMLInputElement>) => onNameChange(event.target.value), [onNameChange]);
+  const groups = useMemo(
+    () => moreActions({ busy, onDuplicate, onImport, onExport, onResetAll, onDelete }),
+    [busy, onDuplicate, onImport, onExport, onResetAll, onDelete],
+  );
   return (
     <Flex gap="md" align="center" justify="between" wrap>
       <Flex gap="sm" align="center" wrap>
@@ -17,12 +24,9 @@ const EditorHeader = (props: EditorHeaderProps) => {
         {dirty && <Status tone="warning">unsaved</Status>}
       </Flex>
       <ButtonRow align="end">
-        <Button variant="ghost" onClick={onDuplicate} disabled={busy}>Duplicate</Button>
-        <Button variant="ghost" onClick={onImport} disabled={busy}>Import yaml</Button>
-        <Button variant="ghost" onClick={onExport} disabled={busy}>Export yaml</Button>
-        <Button variant="danger" onClick={onDelete} disabled={busy}>Delete</Button>
-        <Button variant="secondary" onClick={onResetAll} disabled={busy}>Reset all</Button>
+        <Button variant="secondary" onClick={onRevert} disabled={busy || !dirty}>Revert</Button>
         <Button variant="primary" onClick={onSave} disabled={!canSave}>Save</Button>
+        <DropdownMenu trigger={MORE_TRIGGER} variant="secondary" intensity="medium" groups={groups} />
       </ButtonRow>
     </Flex>
   );

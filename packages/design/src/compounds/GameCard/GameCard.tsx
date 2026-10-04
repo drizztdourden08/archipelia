@@ -18,6 +18,7 @@ const GameCard = ({ title, source, status, tag, details, actions }: GameCardProp
             key={action.label}
             variant={action.variant ?? 'secondary'}
             disabled={action.disabled}
+            loading={action.loading}
             aria-label={`${action.label} ${title}`}
             onClick={action.onClick}
           >

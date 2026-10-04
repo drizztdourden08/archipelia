@@ -24,6 +24,7 @@ const PresetsHub = () => {
             canCreate={creator.gameOptions.length > 0}
             onSelect={selection.select}
             onNew={openNew}
+            onOpenGames={openGames}
           />
         )}
         detail={(

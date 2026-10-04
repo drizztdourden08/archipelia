@@ -1,6 +1,7 @@
 /* @layer renderer-app @kind logic */
 import type { HostTarget, SessionPlayer, SessionTemplate } from '@archipelia/model';
 import { checkValues, resolveValues } from '@archipelia/presets';
+import { inPortRange, PORT_PROBLEM } from '@archipelia/design';
 import { NAME_LIMIT } from '../SessionBuilder.constants';
 import type { LibraryView } from '../SessionBuilder.type';
 
@@ -37,7 +38,7 @@ const yamlProblems = (player: SessionPlayer, { installed }: LibraryView) => {
 };
 
 const hostProblems = (host: HostTarget) => {
-  if (host.kind === 'local' && !(Number.isInteger(host.port) && host.port > 0 && host.port < 65536)) return ['The port must be between 1 and 65535'];
+  if (host.kind === 'local' && !inPortRange(host.port)) return [PORT_PROBLEM];
   if (host.kind === 'remote' && !host.serverId) return ['Pick a server to host on'];
   return [];
 };

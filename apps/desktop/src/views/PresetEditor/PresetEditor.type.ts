@@ -18,6 +18,15 @@ type PresetEditorProps = {
   onDirtyChange: (dirty: boolean) => void;
 };
 
+type MoreActions = {
+  busy: boolean;
+  onDuplicate: () => void;
+  onImport: () => void;
+  onExport: () => void;
+  onResetAll: () => void;
+  onDelete: () => void;
+};
+
 type Values = Record<string, OptionValue>;
 
 type TransferParams = {
@@ -28,4 +37,4 @@ type TransferParams = {
   report: (status: EditorStatus) => void;
 };
 
-export type { EditorParams, EditorStatus, OptionFilter, OptionTab, PresetEditorProps, TransferParams, Values };
+export type { EditorParams, EditorStatus, MoreActions, OptionFilter, OptionTab, PresetEditorProps, TransferParams, Values };

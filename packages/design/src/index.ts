@@ -14,7 +14,8 @@ export { PresetListItem } from './compounds/PresetListItem';
 export { RUN_STATUS, RunRow } from './compounds/RunRow';
 export type { RunStatusView } from './compounds/RunRow';
 export {
-  HINT_COST_RANGE, HOST_OPTIONS, PORT_RANGE, RELEASE_OPTIONS, REMAINING_OPTIONS, SERVER_TEXT, SHUTDOWN_RANGE, ServerOptionsForm, percentText,
+  HINT_COST_RANGE, HOST_OPTIONS, PORT_PROBLEM, PORT_RANGE, RELEASE_OPTIONS, REMAINING_OPTIONS, SERVER_TEXT, SHUTDOWN_RANGE, ServerOptionsForm, inPortRange,
+  percentText,
 } from './compounds/ServerOptionsForm';
 export { SessionStatusBar } from './compounds/SessionStatusBar';
 export { SessionRow } from './compounds/SessionRow';

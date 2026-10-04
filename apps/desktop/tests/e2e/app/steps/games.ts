@@ -52,7 +52,7 @@ const addBothWorlds = async (launched: LaunchedApp) => {
   await games.getByText(/ · 2 installed/).waitFor();
   await settledProof(launched, '10-games-installed-tab');
   await openTab(games, 'Updates');
-  await games.getByText('No world matches').waitFor();
+  await games.getByText('Every installed game is up to date').waitFor();
   await settledProof(launched, '11-games-updates-tab');
   await closeHub(launched.page, 'Multiworld');
 };
@@ -65,7 +65,8 @@ const removeBothWorlds = async (launched: LaunchedApp) => {
     await dialogOf(launched.page, `Delete ${title}?`).getByRole('button', { name: 'Delete', exact: true }).click();
     await cardOf(games, title).waitFor({ state: 'detached' });
   }
-  await games.getByText('No world matches').waitFor();
+  await games.getByText('No game installed yet').waitFor();
+  await games.getByRole('button', { name: 'Open Official', exact: true }).waitFor();
   await games.getByText(/0 installed/).waitFor();
   await settledProof(launched, '40-games-all-removed');
   await closeHub(launched.page, 'Multiworld');

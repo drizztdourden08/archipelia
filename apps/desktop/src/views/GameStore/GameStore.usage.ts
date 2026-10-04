@@ -13,14 +13,15 @@ const usage = {
   rules: [
     'Put each installed game in search, pointing at the Installed tab.',
     'Pick the tab from the page tab; the view filters the rows for it.',
-    'Guard each install with its world as the key, through useKeyedGuard, so its card shows it working.',
+    'Guard each install with its world as the key, through useKeyedGuard, so only its card shows it working, with its Add button loading.',
+    'Guard Refresh index and Add from file with their own keys, so a card install leaves the toolbar on.',
     'Cap the number of cards drawn, say how many are shown of how many, and offer Show more.',
     'Removing a game asks first with the number of presets and sessions that use it.',
     'Toast each install and removal once it is done.',
   ],
   a11y: [
     'The search field has a placeholder that says what it finds.',
-    'An error is an alert; an empty result says why.',
+    'An error is an alert; an empty result says why: No world matches only while a search is typed, Every installed game is up to date on Updates, and No game installed yet with Open Official on Installed.',
     'Each card action is named after its world.',
   ],
   tree: {

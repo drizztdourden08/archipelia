@@ -46,7 +46,12 @@ const usePresetEditor = ({ preset, schema, onDirtyChange }: EditorParams) => {
     setStatus({ tone: 'info', text: 'Every option is back to its default. Save to keep it.' });
   }, [draft.resetAll]);
 
-  return { busy, canSave, draft, filter, problems, resetAll, save, status, summary, transfer };
+  const revert = useCallback(() => {
+    draft.revert();
+    setStatus({ tone: 'info', text: 'Back to the last saved version.' });
+  }, [draft.revert]);
+
+  return { busy, canSave, draft, filter, problems, resetAll, revert, save, status, summary, transfer };
 };
 
 export { usePresetEditor };

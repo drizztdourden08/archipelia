@@ -10,6 +10,7 @@ type PresetListProps = {
   canCreate: boolean;
   onSelect: (id: string) => void;
   onNew: () => void;
+  onOpenGames: () => void;
 };
 
 export type { PresetListProps };

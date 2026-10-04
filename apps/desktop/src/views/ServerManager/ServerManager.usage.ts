@@ -13,7 +13,8 @@ const usage = {
   rules: [
     'Put each saved server in search while the page is open.',
     'Keep passwords and passphrases in the vault; the form holds them only while typed.',
-    'Turn save off while the draft has a problem, and list the problems.',
+    'Show each problem as the error of its field, once the field was left or Save was pressed; Save with a problem saves nothing.',
+    'The game port takes the hosting range, 1024 to 65535, with the same message as the builder; the SSH port takes any port, so 22 works.',
     'Test a server before trusting its host key, and toast whether it is ready.',
     'Remove is a danger button that asks first and names what loses the server.',
   ],
@@ -21,6 +22,7 @@ const usage = {
     'The server list rows are buttons, pressed while selected.',
     'The heading of the detail names the server.',
     'An error is an alert.',
+    'A field problem is the error note of its field, so the control is marked invalid and described by it.',
   ],
   tree: {
     path: ['a full screen view', 'a page of the multiworld app', 'the saved servers'],

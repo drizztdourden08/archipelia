@@ -3,6 +3,7 @@ import { describe, expect, test } from 'vitest';
 import type { SessionTemplate } from '@archipelia/model';
 import { newTemplate } from '../../src/views/SessionBuilder/behavior/new-template';
 import { validateTemplate } from '../../src/views/SessionBuilder/behavior/template-validation';
+import { PORT_PROBLEM } from '@archipelia/design';
 import { GAME, PRESET, presetPlayer } from './session-fixtures';
 
 const LIBRARY = { installed: [GAME], presets: [PRESET] };
@@ -49,6 +50,8 @@ describe('session validation', () => {
     const remote = { ...withPlayers([presetPlayer(1, 'A')]), host: { kind: 'remote' as const, serverId: '' } };
     const local = { ...withPlayers([presetPlayer(1, 'A')]), host: { kind: 'local' as const, port: 70000 } };
     expect(validateTemplate(remote, LIBRARY)).toEqual(['Pick a server to host on']);
-    expect(validateTemplate(local, LIBRARY)).toEqual(['The port must be between 1 and 65535']);
+    expect(validateTemplate(local, LIBRARY)).toEqual([PORT_PROBLEM]);
+    expect(validateTemplate({ ...local, host: { kind: 'local' as const, port: 80 } }, LIBRARY)).toEqual([PORT_PROBLEM]);
+    expect(validateTemplate({ ...local, host: { kind: 'local' as const, port: 1024 } }, LIBRARY)).toEqual([]);
   });
 });

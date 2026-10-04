@@ -3,6 +3,7 @@ import type { CardHandlers, GameRow } from '../GameStore.type';
 import type { InstallRequest } from '@archipelia/catalog';
 import type { GameCardProps } from '@archipelia/design';
 import { SOURCE_LABEL } from '../GameStore.constants';
+import { removeKey } from './remove-key';
 
 const requestOf = ({ entry, latest }: GameRow): InstallRequest | undefined => {
   if (entry.source === 'official') return { kind: 'official', apworld: entry.apworld };
@@ -27,11 +28,17 @@ const checksumWarning = ({ entry, latest }: GameRow) =>
 
 const detailsOf = (row: GameRow) => [versionLine(row), ...checksumWarning(row)];
 
+const installLabel = ({ state }: GameRow, installing: boolean) => {
+  if (state === 'update') return installing ? 'Updating...' : 'Update';
+  return installing ? 'Adding...' : 'Add';
+};
+
 const cardPropsOf = (row: GameRow, { isBusy, installWorld, remove, openHome }: CardHandlers): GameCardProps => {
   const request = requestOf(row);
-  const working = isBusy(row.entry.apworld);
+  const installing = isBusy(row.entry.apworld);
+  const working = installing || isBusy(removeKey(row.entry.apworld));
   const install = request && row.state !== 'installed'
-    ? [{ label: row.state === 'update' ? 'Update' : 'Add', variant: 'primary', disabled: working, onClick: () => installWorld(request, row.entry.apworld) }]
+    ? [{ label: installLabel(row, installing), variant: 'primary', disabled: working, loading: installing, onClick: () => installWorld(request, row.entry.apworld) }]
     : [];
   const removal = row.installed ? [{ label: 'Remove', variant: 'danger', disabled: working, onClick: () => remove(row) }] : [];
   const home = row.entry.home ? [{ label: 'Home page', onClick: () => openHome(row.entry.home ?? '') }] : [];

@@ -16,13 +16,16 @@ const CounterAdd = ({ def, value, onAdd, disabled = false }: CounterAddProps) =>
   }, [draft, onAdd]);
 
   if (def.validKeys?.length) {
-    return <Select value="" options={options} onChange={onAdd} placeholder="Add a name" searchable disabled={disabled || !options.length} />;
+    return (
+      <Select value="" options={options} onChange={onAdd} aria-label={`Add a name to ${def.displayName}`} placeholder="Add a name" searchable
+        disabled={disabled || !options.length} />
+    );
   }
   const blocked = !draft.trim() || draft.trim() in countsOf(value);
   return (
     <Flex gap="sm" align="center">
-      <TextInput value={draft} onChange={handleDraft} placeholder="Name" disabled={disabled} />
-      <Button size="sm" variant="secondary" onClick={handleAdd} disabled={disabled || blocked}>Add</Button>
+      <TextInput value={draft} onChange={handleDraft} aria-label={`New name for ${def.displayName}`} placeholder="Name" disabled={disabled} />
+      <Button size="sm" variant="secondary" onClick={handleAdd} disabled={disabled || blocked} aria-label={`Add to ${def.displayName}`}>Add</Button>
     </Flex>
   );
 };

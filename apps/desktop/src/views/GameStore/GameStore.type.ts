@@ -3,7 +3,7 @@ import type { CatalogEntry, CatalogVersion, InstalledGame } from '@archipelia/mo
 import type { InstallRequest } from '@archipelia/catalog';
 
 type CardHandlers = {
-  isBusy: (key?: string) => boolean;
+  isBusy: (key: string) => boolean;
   installWorld: (request: InstallRequest, key: string) => void;
   remove: (row: GameRow) => void;
   openHome: (url: string) => void;
@@ -17,4 +17,6 @@ type GameRow = { entry: CatalogEntry; installed?: InstalledGame; latest?: Catalo
 
 type GameStoreProps = { tab: GameTab };
 
-export type { CardHandlers, GameRow, GameRowState, GameStoreProps, GameTab };
+type EmptyKind = 'loading' | 'search' | 'updates' | 'installed' | 'catalog';
+
+export type { CardHandlers, EmptyKind, GameRow, GameRowState, GameStoreProps, GameTab };

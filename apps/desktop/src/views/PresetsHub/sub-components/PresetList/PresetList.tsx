@@ -5,14 +5,20 @@ import type { PresetListProps } from './PresetList.type';
 import { PresetListItem } from '@archipelia/design';
 import { presetAnchor } from '../../behavior/preset-anchor';
 
-const PresetList = ({ groups, total, selectedId, loading, error, canCreate, onSelect, onNew }: PresetListProps) => (
+const PresetList = ({ groups, total, selectedId, loading, error, canCreate, onSelect, onNew, onOpenGames }: PresetListProps) => (
   <Stack gap="md">
     <Flex justify="between" align="center">
       <Text variant="label">Presets · {total}</Text>
-      <Button size="sm" variant="primary" onClick={onNew} disabled={!canCreate} title={canCreate ? undefined : 'Install a game first'}>New</Button>
+      <Button size="sm" variant="primary" onClick={onNew} disabled={!canCreate}>New preset</Button>
     </Flex>
+    {!loading && !canCreate && (
+      <Flex gap="sm" align="center" justify="between" wrap>
+        <Text variant="caption">No game is installed yet, so there is nothing to make a preset for.</Text>
+        <Button size="sm" variant="secondary" onClick={onOpenGames}>Open Games</Button>
+      </Flex>
+    )}
     {error && <Box role="alert"><Callout tone="danger">{error}</Callout></Box>}
-    {groups.length === 0 && <EmptyState message={loading ? 'Loading presets' : 'Install a game from Games, then make a preset for it.'} />}
+    {groups.length === 0 && (loading || canCreate) && <EmptyState message={loading ? 'Loading presets' : 'No preset yet. Press New preset to make one.'} />}
     {groups.map((group) => (
       <Stack key={group.game} gap="xs">
         <Text variant="caption" className="presets-hub__game">

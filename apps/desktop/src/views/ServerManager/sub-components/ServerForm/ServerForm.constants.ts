@@ -8,4 +8,6 @@ const AUTH_OPTIONS: { value: AuthKind; label: string }[] = [
   { value: 'ssh-password', label: 'Password' },
 ];
 
-export { AUTH_OPTIONS, KEY_PLACEHOLDER };
+const SSH_PORT_RANGE = { min: 1, max: 65535 };
+
+export { AUTH_OPTIONS, KEY_PLACEHOLDER, SSH_PORT_RANGE };

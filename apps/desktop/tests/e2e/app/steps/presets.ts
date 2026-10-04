@@ -10,7 +10,7 @@ import { answerSaveDialogWith } from '../support/save-dialog';
 
 const newPreset = async (launched: LaunchedApp, presets: Locator, game: string, name: string) => {
   const { page } = launched;
-  await presets.getByRole('button', { name: 'New', exact: true }).click();
+  await presets.getByRole('button', { name: 'New preset', exact: true }).click();
   const dialog = dialogOf(page, 'New preset');
   await pickOption(page, dialog.getByRole('combobox', { name: 'Game', exact: true }), game);
   await dialog.getByRole('textbox', { name: 'Name', exact: true }).fill(name);
@@ -71,7 +71,8 @@ const reopenAndSeeChanges = async (launched: LaunchedApp) => {
 const exportYaml = async (launched: LaunchedApp, presets: Locator) => {
   const target = exportPath(launched.userData, 'timespinner-e2e.yaml');
   await answerSaveDialogWith(launched.app, target);
-  await presets.getByRole('button', { name: 'Export yaml' }).click();
+  await presets.getByRole('button', { name: 'More actions' }).click();
+  await launched.page.getByRole('menuitem', { name: 'Export YAML' }).click();
   await presets.getByText(/^Exported /).waitFor();
   const yaml = await readFile(target, 'utf8');
   expect(yaml).toContain('Timespinner');

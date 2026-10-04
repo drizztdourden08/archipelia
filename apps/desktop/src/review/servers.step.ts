@@ -1,7 +1,7 @@
 /* @layer renderer-app @kind logic */
 import { defineReviewStep, nav } from '@drizztdourden08/brock-react';
 import type { AppReviewTour } from '@drizztdourden08/brock-react';
-import { REVIEW_SERVER, SERVER_FIELDS, SERVER_PROBLEMS } from './review.constants';
+import { REVIEW_SERVER, SERVER_FIELDS, SERVER_PROBLEMS, SERVER_UNTOUCHED } from './review.constants';
 import { SELECTOR } from './review-dom.constants';
 import { clickNamed } from './click-named';
 import { named } from './named';
@@ -16,14 +16,21 @@ const fill = (tour: AppReviewTour, label: string, value: string) => {
   return field !== null;
 };
 
+const serverCount = (tour: AppReviewTour) => layer(tour)?.innerText.match(/servers · [0-9]+/i)?.[0];
+
+const shows = (tour: AppReviewTour, problem: string) => layer(tour)?.innerText.includes(problem) === true;
+
 const showProblems = async (tour: AppReviewTour) => {
   await clickNamed(tour, SELECTOR.button, 'Add', layer(tour) ?? undefined);
   fill(tour, 'Label', '');
   fill(tour, 'Archipelago path on the host', 'opt/archipelago');
-  const shown = await tour.waitFor(() => SERVER_PROBLEMS.every((problem) => layer(tour)?.innerText.includes(problem)));
-  tour.check('server-problems', shown === true, 'an empty server form names every missing field', 'the server form did not name every problem');
-  const save = named(tour, SELECTOR.button, 'Save', layer(tour) ?? undefined);
-  tour.check('server-save-off', save instanceof HTMLButtonElement && save.disabled, 'Save stays off while the form has problems', 'Save was on with problems in the form');
+  await tour.settle();
+  tour.check('server-problems-wait', !shows(tour, SERVER_UNTOUCHED), 'a field the user has not reached shows no problem yet', 'an untouched field showed its problem');
+  const before = serverCount(tour);
+  await clickNamed(tour, SELECTOR.button, 'Save', layer(tour) ?? undefined);
+  const shown = await tour.waitFor(() => SERVER_PROBLEMS.every((problem) => shows(tour, problem)));
+  tour.check('server-problems', shown === true, 'Save names every problem under its field', 'Save did not name every problem in the form');
+  tour.check('server-save-refused', serverCount(tour) === before, 'Save with problems saves nothing', 'Save stored a server with problems');
   await tour.capture('validation');
 };
 

@@ -11,6 +11,7 @@ import type { ServerTestResult } from '@archipelia/hosts';
 import { appApi } from '../../../ipc/app-api';
 import { newServerEntry } from './new-server-entry';
 import { draftProblems } from './draft-problems';
+import { useDraftErrors } from './useDraftErrors';
 import { withSecretRefs } from './with-secret-refs';
 import { removeServerConfirm } from './remove-server-confirm';
 import { toastTest } from './toast-test';
@@ -49,17 +50,26 @@ const useServerManager = () => {
     });
   }, [clearError, keyed, load]);
 
-  const select = useCallback((entry: ServerEntry) => { setDraft(entry); setInputs(EMPTY_INPUTS); setTest(entry.lastTest ?? null); }, []);
-  const create = useCallback(() => select(newServerEntry()), [select]);
   const problems = useMemo(() => (draft ? draftProblems(draft, inputs) : []), [draft, inputs]);
-
-  const save = useCallback(() => guard('save', async () => {
-    if (!draft || problems.length) return;
-    const saved = draft.id ? draft : await appApi().serversSave(draft);
-    await storeSecrets(saved, inputs);
-    setDraft(await appApi().serversSave(withSecretRefs({ ...draft, id: saved.id }, inputs)));
+  const { attempt, errors, reset, touch } = useDraftErrors(problems);
+  const select = useCallback((entry: ServerEntry) => {
+    setDraft(entry);
     setInputs(EMPTY_INPUTS);
-  }), [draft, guard, inputs, problems]);
+    setTest(entry.lastTest ?? null);
+    reset();
+  }, [reset]);
+  const create = useCallback(() => select(newServerEntry()), [select]);
+
+  const save = useCallback(() => {
+    attempt();
+    if (!draft || problems.length) return;
+    void guard('save', async () => {
+      const saved = draft.id ? draft : await appApi().serversSave(draft);
+      await storeSecrets(saved, inputs);
+      setDraft(await appApi().serversSave(withSecretRefs({ ...draft, id: saved.id }, inputs)));
+      setInputs(EMPTY_INPUTS);
+    });
+  }, [attempt, draft, guard, inputs, problems]);
 
   const runTest = useCallback(() => guard('test', async () => {
     if (!draft?.id) return;
@@ -84,7 +94,7 @@ const useServerManager = () => {
     });
   }, [draft, guard]);
 
-  return { busy: isBusy(), create, draft, error: lastError, inputs, problems, remove, runTest, save, select, servers, setDraft, setInputs, test, trust };
+  return { busy: isBusy(), create, draft, error: lastError, errors, inputs, remove, runTest, save, select, servers, setDraft, setInputs, test, touch, trust };
 };
 
 export { useServerManager };

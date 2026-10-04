@@ -11,7 +11,7 @@ import './PresetEditor.css';
 
 const PresetEditor = (props: PresetEditorProps) => {
   const { preset, schema, onDuplicate, onDelete } = props;
-  const { busy, canSave, draft, filter, problems, resetAll, save, status, summary, transfer } = usePresetEditor(props);
+  const { busy, canSave, draft, filter, problems, resetAll, revert, save, status, summary, transfer } = usePresetEditor(props);
   const handleDuplicate = useCallback(() => onDuplicate(preset), [onDuplicate, preset]);
   const handleDelete = useCallback(() => onDelete(preset), [onDelete, preset]);
   const gameLabel = schema.worldVersion ? `${schema.game} · world ${schema.worldVersion}` : schema.game;
@@ -26,6 +26,7 @@ const PresetEditor = (props: PresetEditorProps) => {
         busy={busy}
         dirty={draft.dirty}
         onSave={save}
+        onRevert={revert}
         onResetAll={resetAll}
         onDuplicate={handleDuplicate}
         onDelete={handleDelete}

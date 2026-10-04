@@ -5,6 +5,7 @@ import { useGameStore } from './behavior/useGameStore';
 import type { GameStoreProps } from './GameStore.type';
 import { GameCard } from '@archipelia/design';
 import { cardPropsOf } from './behavior/card-props';
+import { EMPTY_TEXT } from './GameStore.constants';
 import { gameAnchor } from './behavior/game-anchor';
 import './GameStore.css';
 
@@ -22,13 +23,16 @@ const GameStore = ({ tab }: GameStoreProps) => {
         )}
         <ButtonRow>
           <SearchInput placeholder="Search worlds" aria-label="Search worlds" value={store.query} onChange={store.setQuery} />
-          <Button variant="secondary" disabled={store.isBusy()} onClick={store.refresh} icon={<Icon name="refresh-cw" />}>Refresh index</Button>
-          <Button variant="secondary" disabled={store.isBusy()} onClick={store.addFromFile} icon={<Icon name="plus" />}>Add from file</Button>
+          <Button variant="secondary" loading={store.isBusy('load')} onClick={store.refresh} icon={<Icon name="refresh-cw" />}>Refresh index</Button>
+          <Button variant="secondary" loading={store.isBusy('file')} onClick={store.addFromFile} icon={<Icon name="plus" />}>Add from file</Button>
         </ButtonRow>
       </Flex>
       {store.error && <Box role="alert"><Callout tone="danger">{store.error}</Callout></Box>}
       {store.visible.length === 0
-        ? <EmptyState icon={store.loading ? <Spinner /> : undefined} message={store.loading ? 'Loading the catalog' : 'No world matches'} />
+        ? (
+          <EmptyState icon={store.loading ? <Spinner /> : undefined} message={EMPTY_TEXT[store.empty]}
+            action={store.empty === 'installed' ? <Button variant="primary" onClick={store.openOfficial}>Open Official</Button> : undefined} />
+        )
         : (
           <Grid minColWidth={260} gap="md">
             {store.visible.slice(0, store.cards.shown).map((row) => (

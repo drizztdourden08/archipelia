@@ -2,6 +2,7 @@
 import { SearchAnchor } from '@drizztdourden08/brock-react';
 import { ListItemRow, MasterDetailLayout } from '@drizztdourden08/tessera/composites';
 import { Box, Button, ButtonRow, Callout, EmptyState, Flex, Stack, Status, Text } from '@drizztdourden08/tessera/primitives';
+import { NO_SERVER_TEXT } from './ServerManager.constants';
 import { serverAnchor } from './behavior/server-anchor';
 import { useServerManager } from './behavior/useServerManager';
 import { ServerForm } from './sub-components/ServerForm';
@@ -33,18 +34,17 @@ const ServerManager = () => {
         <ButtonRow>
           <Button variant="secondary" disabled={manager.busy || !draft.id} onClick={manager.runTest}>Test connection</Button>
           <Button variant="danger" disabled={manager.busy || !draft.id} onClick={manager.remove}>Remove</Button>
-          <Button variant="primary" disabled={manager.busy || manager.problems.length > 0} onClick={manager.save}>Save</Button>
+          <Button variant="primary" disabled={manager.busy} onClick={manager.save}>Save</Button>
         </ButtonRow>
       </Flex>
-      {manager.problems.map((problem) => <Text key={problem} variant="caption">{problem}</Text>)}
       {manager.error && <Box role="alert"><Callout tone="danger">{manager.error}</Callout></Box>}
-      <ServerForm entry={draft} inputs={manager.inputs} onEntry={manager.setDraft} onInputs={manager.setInputs} />
+      <ServerForm entry={draft} inputs={manager.inputs} errors={manager.errors} onEntry={manager.setDraft} onInputs={manager.setInputs} onTouch={manager.touch} />
       <ServerTestPanel test={manager.test} pinned={draft.hostKeySha256} busy={manager.busy} onTrust={manager.trust} />
     </Stack>
   );
   return (
     <MasterDetailLayout list={list} detailEmpty={!draft}
-      detail={detail ?? <EmptyState message="Pick a server, or add one to host sessions on your own machine." />} />
+      detail={detail ?? <EmptyState message={NO_SERVER_TEXT} />} />
   );
 };
 

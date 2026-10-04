@@ -18,6 +18,7 @@ const usage = {
   ],
   a11y: [
     'Each input is labelled from the option display name.',
+    'The counter add field, its name picker and its Add button name the option, such as New name for Starting items.',
     'A disabled control stays visible and readable.',
   ],
   tree: {

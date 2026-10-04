@@ -21,8 +21,12 @@ const usePresetDraft = (preset: GamePreset, schema: GameSchema) => {
   }, [defaults, setValue]);
   const resetAll = useCallback(() => setValues(defaults), [defaults]);
   const replaceValues = useCallback((next: OptionValues) => setValues(resolveValues(schema, next)), [schema]);
+  const revert = useCallback(() => {
+    setName(preset.name);
+    setValues(resolveValues(schema, preset.values));
+  }, [preset.name, preset.values, schema]);
 
-  return { changed, defaults, dirty, name, problems, replaceValues, resetAll, resetValue, setName, setValue, values };
+  return { changed, defaults, dirty, name, problems, replaceValues, resetAll, resetValue, revert, setName, setValue, values };
 };
 
 export { usePresetDraft };
