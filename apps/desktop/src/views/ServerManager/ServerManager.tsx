@@ -1,6 +1,8 @@
 /* @layer renderer-app @kind component */
+import { SearchAnchor } from '@drizztdourden08/brock-react';
 import { ListItemRow, MasterDetailLayout } from '@drizztdourden08/tessera/composites';
 import { Box, Button, ButtonRow, Callout, EmptyState, Flex, Stack, Status, Text } from '@drizztdourden08/tessera/primitives';
+import { serverAnchor } from './behavior/server-anchor';
 import { useServerManager } from './behavior/useServerManager';
 import { ServerForm } from './sub-components/ServerForm';
 import { ServerTestPanel } from './sub-components/ServerTestPanel';
@@ -15,9 +17,11 @@ const ServerManager = () => {
         <Button variant="primary" onClick={manager.create}>Add</Button>
       </Flex>
       {manager.servers.map((entry) => (
-        <ListItemRow key={entry.id} actionVisibility="always" name={entry.label} selected={draft?.id === entry.id} onClick={() => manager.select(entry)}
-          meta={`${entry.host} · ${entry.auth.kind === 'ssh-key' ? 'SSH key' : 'password'}`}
-          action={entry.lastTest ? <Status tone={entry.lastTest.ok ? 'success' : 'danger'}>{entry.lastTest.ok ? 'tested' : 'failing'}</Status> : undefined} />
+        <SearchAnchor key={entry.id} anchor={serverAnchor(entry.id)}>
+          <ListItemRow actionVisibility="always" name={entry.label} selected={draft?.id === entry.id} onClick={() => manager.select(entry)}
+            meta={`${entry.host} · ${entry.auth.kind === 'ssh-key' ? 'SSH key' : 'password'}`}
+            action={entry.lastTest ? <Status tone={entry.lastTest.ok ? 'success' : 'danger'}>{entry.lastTest.ok ? 'tested' : 'failing'}</Status> : undefined} />
+        </SearchAnchor>
       ))}
       <Text variant="caption">Passwords and key passphrases stay encrypted in the vault and are only used by the app itself.</Text>
     </Stack>

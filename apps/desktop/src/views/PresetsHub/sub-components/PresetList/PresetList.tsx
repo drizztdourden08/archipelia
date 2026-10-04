@@ -1,7 +1,9 @@
 /* @layer renderer-app @kind component */
+import { SearchAnchor } from '@drizztdourden08/brock-react';
 import { Box, Button, Callout, EmptyState, Flex, Stack, Text } from '@drizztdourden08/tessera/primitives';
 import type { PresetListProps } from './PresetList.type';
 import { PresetListItem } from '@archipelia/design';
+import { presetAnchor } from '../../behavior/preset-anchor';
 
 const PresetList = ({ groups, total, selectedId, loading, error, canCreate, onSelect, onNew }: PresetListProps) => (
   <Stack gap="md">
@@ -18,15 +20,16 @@ const PresetList = ({ groups, total, selectedId, loading, error, canCreate, onSe
         </Text>
         {group.rows.length === 0 && <EmptyState message="No presets yet" />}
         {group.rows.map((row) => (
-          <PresetListItem
-            key={row.preset.id}
-            id={row.preset.id}
-            name={row.preset.name}
-            meta={row.meta}
-            selected={row.preset.id === selectedId}
-            unavailable={!group.schema}
-            onSelect={onSelect}
-          />
+          <SearchAnchor key={row.preset.id} anchor={presetAnchor(row.preset.id)}>
+            <PresetListItem
+              id={row.preset.id}
+              name={row.preset.name}
+              meta={row.meta}
+              selected={row.preset.id === selectedId}
+              unavailable={!group.schema}
+              onSelect={onSelect}
+            />
+          </SearchAnchor>
         ))}
       </Stack>
     ))}

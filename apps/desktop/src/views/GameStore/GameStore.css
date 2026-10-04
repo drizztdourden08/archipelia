@@ -1,0 +1,4 @@
+/* @layer renderer-app @kind style */
+.game-store__anchor {
+  display: grid;
+}

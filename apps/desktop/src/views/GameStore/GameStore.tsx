@@ -1,10 +1,12 @@
 /* @layer renderer-app @kind component */
-import { openExternal } from '@drizztdourden08/brock-react';
+import { openExternal, SearchAnchor } from '@drizztdourden08/brock-react';
 import { Box, Button, ButtonRow, Callout, EmptyState, Flex, Grid, Icon, SearchInput, Spinner, Stack, Text } from '@drizztdourden08/tessera/primitives';
 import { useGameStore } from './behavior/useGameStore';
 import type { GameStoreProps } from './GameStore.type';
 import { GameCard } from '@archipelia/design';
 import { cardPropsOf } from './behavior/card-props';
+import { gameAnchor } from './behavior/game-anchor';
+import './GameStore.css';
 
 const GameStore = ({ tab }: GameStoreProps) => {
   const store = useGameStore(tab);
@@ -29,7 +31,11 @@ const GameStore = ({ tab }: GameStoreProps) => {
         ? <EmptyState icon={store.loading ? <Spinner /> : undefined} message={store.loading ? 'Loading the catalog' : 'No world matches'} />
         : (
           <Grid minColWidth={260} gap="md">
-            {store.visible.slice(0, store.cards.shown).map((row) => <GameCard key={`${row.entry.source}:${row.entry.apworld}`} {...cardPropsOf(row, handlers)} />)}
+            {store.visible.slice(0, store.cards.shown).map((row) => (
+              <SearchAnchor key={`${row.entry.source}:${row.entry.apworld}`} anchor={gameAnchor(row.entry.apworld)} className="game-store__anchor">
+                <GameCard {...cardPropsOf(row, handlers)} />
+              </SearchAnchor>
+            ))}
           </Grid>
         )}
       {store.cards.hidden && (
