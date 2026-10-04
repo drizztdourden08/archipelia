@@ -18,6 +18,7 @@ const usage = {
     'Copy all copies the lines the filter shows, with their time and tag; pass copyText only to copy them another way.',
     'Pass placeholder, such as a Spinner in an EmptyState or an ErrorCallout, to show it under the tabs in place of the lines while they load or when they could not be read.',
     'Put an action about the whole log, such as Hide spoiler, in toolbarExtra.',
+    'Render it as the whole body of a widget whose meta sets fill, so the log fills the widget below the tabs.',
   ],
   a11y: [
     'The tabs are a tablist when given.',

@@ -1,7 +1,7 @@
 /* @layer renderer-app @kind component */
 import { useCallback, useMemo } from 'react';
 import { useWidgetState } from '@drizztdourden08/brock-react';
-import { Box, Button, EmptyState, Icon } from '@drizztdourden08/tessera/primitives';
+import { Button, EmptyState, Icon } from '@drizztdourden08/tessera/primitives';
 import type { SpoilerWidgetProps } from './SpoilerWidget.type';
 import { useSessionText } from '../../behavior/useSessionText';
 import { spoilerFileOf } from '../../behavior/spoiler-file-of';
@@ -23,16 +23,14 @@ const SpoilerWidget = ({ session }: SpoilerWidgetProps) => {
     return <EmptyState icon={<Icon name="eye-off" />} message="The spoiler is covered so it gives nothing away." action={action} />;
   }
   return (
-    <Box className="session-panel session-panel--fill">
-      <LogLines
-        rows={rows}
-        search={search}
-        onSearchChange={setSearch}
-        emptyLabel="The spoiler file is empty or missing."
-        toolbarExtra={<Button size="sm" variant="secondary" icon={<Icon name="eye-off" />} onClick={hide}>Hide spoiler</Button>}
-        placeholder={text.loading || text.failed ? <TextState failed={text.failed} loadingLabel="Loading the spoiler" onRetry={text.retry} /> : undefined}
-      />
-    </Box>
+    <LogLines
+      rows={rows}
+      search={search}
+      onSearchChange={setSearch}
+      emptyLabel="The spoiler file is empty or missing."
+      toolbarExtra={<Button size="sm" variant="secondary" icon={<Icon name="eye-off" />} onClick={hide}>Hide spoiler</Button>}
+      placeholder={text.loading || text.failed ? <TextState failed={text.failed} loadingLabel="Loading the spoiler" onRetry={text.retry} /> : undefined}
+    />
   );
 };
 

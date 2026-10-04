@@ -31,7 +31,7 @@ const hub = (page: Page, title: HubTitle) => page.getByRole('dialog', { name: ne
 
 const base = (page: Page) => page.locator('.session-dashboard, .idle-base');
 
-const docked = (page: Page) => page.getByTestId('dock-layout').locator('.dock-layout__pane');
+const docked = (page: Page) => page.locator('[data-widget-id]');
 
 const sectionsNav = (scope: Locator) => scope.getByRole('navigation', { name: 'Sections' });
 

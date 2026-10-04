@@ -1,42 +1,38 @@
 /* @layer tests @kind helper */
 import { expect } from 'vitest';
 import type { Page } from 'playwright-core';
+import { readDockLayout } from '@drizztdourden08/brock-build/testing';
+import type { TestRect } from '@drizztdourden08/brock-build/testing';
 
-type Frame = { title: string; left: number; top: number; right: number; bottom: number };
+type Frame = { id: string; left: number; top: number; right: number; bottom: number };
 
 const MIN_WIDTH = 240;
 const MIN_HEIGHT = 200;
 
-const readFrames = (page: Page) => page.evaluate(() => {
-  const dock = document.querySelector('[data-testid="dock-layout"]');
-  if (!dock) return null;
-  const box = dock.getBoundingClientRect();
-  const frames = [...dock.querySelectorAll('.dock-layout__pane .widget')].map((node) => {
-    const rect = node.getBoundingClientRect();
-    const title = node.querySelector('.widget__title')?.textContent ?? '';
-    return { title, left: rect.left, top: rect.top, right: rect.right, bottom: rect.bottom };
-  });
-  return { dock: { title: 'dock', left: box.left, top: box.top, right: box.right, bottom: box.bottom }, frames };
-});
+const frameOf = (id: string, rect: TestRect): Frame => ({ id, left: rect.x, top: rect.y, right: rect.x + rect.width, bottom: rect.y + rect.height });
+
+const windowFrame = (page: Page) => page.evaluate(() => ({ id: 'window', left: 0, top: 0, right: window.innerWidth, bottom: window.innerHeight }));
 
 const overlaps = (a: Frame, b: Frame) =>
   Math.min(a.right, b.right) - Math.max(a.left, b.left) > 1 && Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top) > 1;
 
-const inside = (frame: Frame, dock: Frame) =>
-  frame.left >= dock.left - 1 && frame.top >= dock.top - 1 && frame.right <= dock.right + 1 && frame.bottom <= dock.bottom + 1;
+const inside = (frame: Frame, box: Frame) =>
+  frame.left >= box.left - 1 && frame.top >= box.top - 1 && frame.right <= box.right + 1 && frame.bottom <= box.bottom + 1;
 
 const expectReadableDock = async (page: Page, expected: readonly string[]) => {
-  const read = await readFrames(page);
-  expect(read, 'the session dock is on screen').not.toBeNull();
-  if (!read) return;
-  const { dock, frames } = read;
-  expect(frames.map((f) => f.title).sort()).toEqual([...expected].sort());
+  const reading = await readDockLayout(page);
+  const box = await windowFrame(page);
+  const frames = reading.docked.flatMap((id) => {
+    const rect = reading.rects[id];
+    return rect ? [frameOf(id, rect)] : [];
+  });
+  expect(frames.map((f) => f.id).sort()).toEqual([...expected].sort());
   for (const frame of frames) {
-    expect(inside(frame, dock), `${frame.title} stays inside the dock`).toBe(true);
-    expect(frame.right - frame.left, `${frame.title} width`).toBeGreaterThanOrEqual(MIN_WIDTH);
-    expect(frame.bottom - frame.top, `${frame.title} height`).toBeGreaterThanOrEqual(MIN_HEIGHT);
+    expect(inside(frame, box), `${frame.id} stays inside the window`).toBe(true);
+    expect(frame.right - frame.left, `${frame.id} width`).toBeGreaterThanOrEqual(MIN_WIDTH);
+    expect(frame.bottom - frame.top, `${frame.id} height`).toBeGreaterThanOrEqual(MIN_HEIGHT);
   }
-  const clashes = frames.flatMap((a, i) => frames.slice(i + 1).filter((b) => overlaps(a, b)).map((b) => `${a.title}/${b.title}`));
+  const clashes = frames.flatMap((a, i) => frames.slice(i + 1).filter((b) => overlaps(a, b)).map((b) => `${a.id}/${b.id}`));
   expect(clashes, 'docked widgets never overlap').toEqual([]);
 };
 

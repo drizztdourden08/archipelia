@@ -2,6 +2,7 @@
 import { expect } from 'vitest';
 import type { Client } from 'archipelago.js';
 import type { Locator, Page } from 'playwright-core';
+import { widgetWindows } from '@drizztdourden08/brock-build/testing';
 import { checkSome, joinAs } from '../../support/ap-player';
 import type { LaunchedApp } from '../support/launched-app.type';
 import { settledProof } from '../support/settled-proof';
@@ -9,19 +10,18 @@ import { LOCAL_PORT, SOH, TIMESPINNER } from '../support/flow-constants';
 import { expectReadableDock } from '../support/dock-geometry';
 import { base, dialogOf, docked } from '../support/locators';
 import { proofText } from '../support/proof-text';
-import { widgetWindow } from '../support/widget-window';
+import { popOutWidget } from '../support/widget-window';
 
 const CHECKS = 10;
 
-const DOCKED = ['Players', 'Hints', 'Room', 'Log', 'Console'];
+const DOCKED = ['players', 'hints', 'room', 'log', 'console'];
 
 const playerItem = (widgets: Locator, game: string) =>
   widgets.getByRole('list', { name: 'Players', exact: true }).getByRole('listitem').filter({ hasText: game });
 
 const filterLog = (widgets: Locator, text: string) => widgets.getByRole('searchbox', { name: 'Filter the log' }).fill(text);
 
-const widgetFrame = (page: Page, title: string) =>
-  docked(page).locator('.widget').filter({ has: page.locator('.widget__title', { hasText: new RegExp(`^${title}$`) }) });
+const popOutButton = (page: Page, label: string) => page.getByRole('button', { name: `Pop out ${label}`, exact: true });
 
 const popIn = async (popped: Page) => {
   const button = popped.getByRole('button', { name: 'Pop in Players', exact: true });
@@ -37,16 +37,15 @@ const resetLayout = async (page: Page) => {
 
 const popPlayersOut = async (launched: LaunchedApp) => {
   const widgets = docked(launched.page);
-  await widgetFrame(launched.page, 'Players').getByRole('button', { name: 'Pop out Players', exact: true }).click();
-  const popped = await widgetWindow(launched.app, 'players');
+  const popped = await popOutWidget(launched.app, 'players', () => popOutButton(launched.page, 'Players').click());
   const body = popped.locator('body');
   await playerItem(body, TIMESPINNER.game).getByText('connected', { exact: true }).waitFor();
   await playerItem(body, SOH.game).getByText(`${CHECKS} / `, { exact: false }).waitFor();
   await popIn(popped);
   await playerItem(widgets, SOH.game).getByText('connected', { exact: true }).waitFor();
   await resetLayout(launched.page);
-  await widgetFrame(launched.page, 'Players').waitFor();
-  expect(launched.app.windows().map((win) => win.url()).filter((url) => url.includes('widget=')), 'no widget window is left').toEqual([]);
+  await popOutButton(launched.page, 'Players').waitFor();
+  expect(await widgetWindows(launched.app), 'no widget window is left').toEqual([]);
 };
 
 const joinPlayers = async (launched: LaunchedApp, clients: Client[]) => {
