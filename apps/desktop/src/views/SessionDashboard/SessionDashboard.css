@@ -18,8 +18,7 @@
   overflow-wrap: anywhere;
 }
 
-.console-players {
-  flex: none;
-  max-block-size: 40%;
-  overflow-y: auto;
+.console-widget {
+  flex: 1;
+  min-block-size: 0;
 }
