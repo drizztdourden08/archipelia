@@ -9,7 +9,7 @@ const SETTINGS_TABS: [string, string][] = [
   ['General', 'Open in fullscreen on launch.'],
   ['Engine', 'Archipelago'],
   ['Hosting', 'Players connect to this computer on this port.'],
-  ['archipelago.gg', 'Change only for a self-hosted copy of the Archipelago website.'],
+  ['archipelago.gg', 'The Archipelago website that hosts the rooms of sessions run there.'],
 ];
 
 const createProfile = async (launched: LaunchedApp) => {
