@@ -1,5 +1,6 @@
 /* @layer renderer-app @kind component */
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
+import { useWidgetState } from '@drizztdourden08/brock-react';
 import { Box, EmptyState } from '@drizztdourden08/tessera/primitives';
 import type { SpoilerWidgetProps } from './SpoilerWidget.type';
 import { useSessionText } from '../../behavior/useSessionText';
@@ -9,7 +10,7 @@ import { LogLines } from '@archipelia/design';
 const SpoilerWidget = ({ session }: SpoilerWidgetProps) => {
   const file = session.output?.spoiler ?? null;
   const text = useSessionText(session.id, file);
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useWidgetState('search', '');
   const rows = useMemo(() => textRows(text.value), [text.value]);
   if (!file) return <EmptyState message="This session has no spoiler. Raise the spoiler level in the session to get one." />;
   return (
