@@ -16,7 +16,7 @@ const PresetList = ({ groups, total, selectedId, loading, error, canCreate, onSe
         <Text variant="caption" className="presets-hub__game">
           {group.schema ? group.game : `${group.game} · game not installed`}
         </Text>
-        {group.rows.length === 0 && <Text variant="caption">No presets yet</Text>}
+        {group.rows.length === 0 && <EmptyState message="No presets yet" />}
         {group.rows.map((row) => (
           <PresetListItem
             key={row.preset.id}

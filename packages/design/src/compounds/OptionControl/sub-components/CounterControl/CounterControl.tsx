@@ -1,6 +1,6 @@
 /* @layer renderer-app @kind component */
 import { useCallback } from 'react';
-import { Stack, Text } from '@drizztdourden08/tessera/primitives';
+import { EmptyState, Stack } from '@drizztdourden08/tessera/primitives';
 import { addCount } from '../../behavior/add-count';
 import { counterEntries } from '../../behavior/counter-entries';
 import { removeCount } from '../../behavior/remove-count';
@@ -16,7 +16,7 @@ const CounterControl = ({ def, value, onChange, disabled }: OptionControlProps) 
   const handleAdd = useCallback((name: string) => onChange(addCount(value, name)), [value, onChange]);
   return (
     <Stack gap="xs">
-      {rows.length === 0 && <Text variant="caption">None</Text>}
+      {rows.length === 0 && <EmptyState message="None yet. Add one below." />}
       {rows.map(([name, count]) => (
         <CounterRow key={name} optionKey={def.key} name={name} count={count} onCount={handleCount} onRemove={handleRemove} disabled={disabled} />
       ))}

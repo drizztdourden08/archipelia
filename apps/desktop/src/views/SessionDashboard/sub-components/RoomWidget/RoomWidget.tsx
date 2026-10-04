@@ -1,6 +1,6 @@
 /* @layer renderer-app @kind component */
 import type { Session } from '@archipelia/model';
-import { Stack, StatRow, Text } from '@drizztdourden08/tessera/primitives';
+import { EmptyState, Stack, StatRow, Text } from '@drizztdourden08/tessera/primitives';
 import type { RoomWidgetProps } from './RoomWidget.type';
 import { hostLabel } from '../../../../hosts/host-label';
 import { addressOf } from '../../behavior/address-of';
@@ -19,7 +19,7 @@ const RoomWidget = ({ session, passwordRequired }: RoomWidgetProps) => {
       {session.seed && <StatRow label="Seed" value={session.seed} mono />}
       {session.output && <StatRow label="Output" value={session.output.zip} mono />}
       <Text variant="label">{`Files (${files.length})`}</Text>
-      {files.length === 0 && <Text variant="caption">No output files yet.</Text>}
+      {files.length === 0 && <EmptyState message="No output files yet." />}
       {files.map((file) => <Text key={file} variant="caption" className="session-panel__mono">{file}</Text>)}
     </Stack>
   );
