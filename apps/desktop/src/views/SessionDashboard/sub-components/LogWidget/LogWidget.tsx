@@ -15,7 +15,6 @@ const LogWidget = ({ session, lines }: LogWidgetProps) => {
         rows={log.rows}
         search={log.search}
         onSearchChange={log.setSearch}
-        copyText={log.copyText}
         emptyLabel={log.emptyLabel}
       />
     </Box>

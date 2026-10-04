@@ -2,6 +2,8 @@
 import type { LogKindDef } from '@drizztdourden08/tessera/composites';
 
 const LOG_KINDS: readonly LogKindDef[] = [
+  { id: 'info', label: 'Info' },
+  { id: 'text', label: 'Text' },
   { id: 'send', label: 'Sent', tone: 'info', toneMessage: true },
   { id: 'hint', label: 'Hint', tone: 'warning', toneMessage: true },
   { id: 'join', label: 'Join', tone: 'success', toneMessage: true },

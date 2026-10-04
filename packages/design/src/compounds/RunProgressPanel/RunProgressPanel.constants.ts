@@ -2,6 +2,7 @@
 import type { LogKindDef } from '@drizztdourden08/tessera/composites';
 
 const RUN_LOG_KINDS: readonly LogKindDef[] = [
+  { id: 'info', label: 'Info' },
   { id: 'error', label: 'Error', tone: 'danger', toneMessage: true },
 ];
 

@@ -2,7 +2,7 @@
 export { GameCard } from './compounds/GameCard';
 export type { GameCardProps } from './compounds/GameCard';
 export { HintRow } from './compounds/HintRow';
-export { LogLines } from './compounds/LogLines';
+export { LogLines, logCopyText } from './compounds/LogLines';
 export { OptionGroupTabs } from './compounds/OptionGroupTabs';
 export { OptionControl, coercePresetValues, hintOf, isChangedValue, isLoose } from './compounds/OptionControl';
 export { OptionField } from './compounds/OptionField';

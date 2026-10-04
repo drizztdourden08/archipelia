@@ -2,6 +2,7 @@
 import { useCallback, useEffect, useMemo } from 'react';
 import { confirmAction } from '@drizztdourden08/brock-react';
 import { LogPanel } from '@drizztdourden08/tessera/composites';
+import { logCopyText } from '@archipelia/design';
 import { Box, Button, ButtonRow, Callout, Stack, StatRow, Status, Text } from '@drizztdourden08/tessera/primitives';
 import { useEngineStore } from '../../stores/useEngineStore';
 import { engineLogRows } from './behavior/engine-log-rows';
@@ -32,7 +33,7 @@ const EngineSettings = () => {
         <Button variant={ready ? 'primary' : 'secondary'} disabled={building} onClick={() => { void refresh(); }}>Check again</Button>
         {ready && <Button variant="danger" onClick={rebuild}>Rebuild engine</Button>}
       </ButtonRow>
-      {rows.length > 0 && <LogPanel rows={rows} countLabel="lines" emptyLabel="No output yet" />}
+      {rows.length > 0 && <LogPanel rows={rows} copyText={logCopyText} countLabel="lines" emptyLabel="No output yet" />}
     </Stack>
   );
 };

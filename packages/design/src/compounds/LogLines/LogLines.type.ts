@@ -11,7 +11,7 @@ type LogLinesProps = {
   tabs?: TabItem[];
   activeTab?: string;
   onTabChange?: (id: string) => void;
-  copyText?: () => string;
+  copyText?: (shown: readonly LogRow[]) => string;
 };
 
 export type { LogLinesProps };

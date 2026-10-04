@@ -4,7 +4,7 @@ import type { Session } from '@archipelia/model';
 import { clockOf } from '../../src/views/SessionDashboard/behavior/clock-of';
 import { kindOf } from '../../src/views/SessionDashboard/behavior/kind-of';
 import { logTabsFor } from '../../src/views/SessionDashboard/behavior/log-tabs-for';
-import { rowsText } from '../../src/views/SessionDashboard/behavior/rows-text';
+import { logCopyText } from '@archipelia/design';
 import { serverRows } from '../../src/views/SessionDashboard/behavior/server-rows';
 import { textFileFor } from '../../src/views/SessionDashboard/behavior/text-file-for';
 import { textRows } from '../../src/views/SessionDashboard/behavior/text-rows';
@@ -88,12 +88,15 @@ describe('log tabs', () => {
     expect(kindOf('Hosting game at 0.0.0.0:38281')).toBe('info');
     const [row] = serverRows([{ at, text: '(Team #1) Johnny sent Bow to Johnny (Eastern Palace)' }]);
     expect(row).toMatchObject({ gutter: '12:01:04', tag: 'send', kind: 'send' });
+    const shown = serverRows([{ at, text: 'Hosting game at 0.0.0.0:38281' }, { at, text: 'Notice (all): Sam has joined the game.' }]);
+    expect(logCopyText(shown)).toBe('12:01:04 Hosting game at 0.0.0.0:38281\n12:01:04 [join] Notice (all): Sam has joined the game.');
+    expect(logCopyText(shown.filter((line) => line.kind === 'join'))).toBe('12:01:04 [join] Notice (all): Sam has joined the game.');
   });
 
   test('text files split into numbered rows without a trailing blank', () => {
     const rows = textRows('first\r\nsecond\n');
     expect(rows.map((row) => [row.gutter, row.message])).toEqual([['1', 'first'], ['2', 'second']]);
     expect(textRows(null)).toEqual([]);
-    expect(rowsText(rows)).toBe('first\nsecond');
+    expect(logCopyText(rows)).toBe('first\nsecond');
   });
 });

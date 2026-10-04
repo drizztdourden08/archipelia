@@ -15,7 +15,7 @@ const usage = {
     'Keep the search text in the view that owns the rows and pass onSearchChange.',
     'Pass tabs, activeTab and onTabChange together, or none of them.',
     'Give an emptyLabel that says why there is nothing yet, such as No output yet.',
-    'Pass copyText only when copying the whole log makes sense.',
+    'Copy all copies the lines the filter shows, with their time and tag; pass copyText only to copy them another way.',
   ],
   a11y: [
     'The tabs are a tablist when given.',
@@ -36,7 +36,7 @@ const LogLinesSample = ({ onSearch }: { onSearch: (query: string) => void }) => 
   />
 );
 `,
-  propsHash: 'c37fa8501beb3553',
+  propsHash: '1154af3b422bda20',
 } satisfies ComponentUsage;
 
 export { usage };
