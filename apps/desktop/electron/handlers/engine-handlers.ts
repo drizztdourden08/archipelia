@@ -1,5 +1,6 @@
 /* @layer electron-main @kind logic */
 import type { HandlerGroup } from '@drizztdourden08/brock-electron/main';
+import { APP_CHANNELS } from '../../src/ipc/contract.constants';
 import { readEngineStatus } from '@archipelia/engine';
 import type { EngineStatus } from '@archipelia/model';
 import { engineDirOf } from '../engine/engine-dir-of';
@@ -10,9 +11,9 @@ let building: Promise<EngineStatus> | undefined;
 const engineHandlers: HandlerGroup = {
   id: 'archipelia-engine',
   register: (ctx) => {
-    ctx.handle('ap:engine:status', async (): Promise<EngineStatus> =>
+    ctx.handle(APP_CHANNELS.engineStatus, async (): Promise<EngineStatus> =>
       (building ? { state: 'building', dir: engineDirOf(ctx) } : readEngineStatus(engineDirOf(ctx))));
-    ctx.handle('ap:engine:setup', async () => {
+    ctx.handle(APP_CHANNELS.engineSetup, async () => {
       building ??= setUpEngine(ctx).finally(() => { building = undefined; });
       return building;
     });

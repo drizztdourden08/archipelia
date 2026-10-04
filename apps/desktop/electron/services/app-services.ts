@@ -1,5 +1,6 @@
 /* @layer electron-main @kind logic */
 import type { MainContext } from '@drizztdourden08/brock-electron/main';
+import { APP_CHANNELS } from '../../src/ipc/contract.constants';
 import { lanAddresses } from '@drizztdourden08/brock-electron/main';
 import { getSecrets } from '@drizztdourden08/brock-secrets/main';
 import { createCatalogService, listInstalled } from '@archipelia/catalog';
@@ -30,7 +31,7 @@ const createAppServices = (ctx: MainContext) => {
     dataRoot: ctx.paths.data(),
     hostFor: createHostFactory({ runtime, secrets, servers, advertiseHost, ggOwnerSecret: GG_OWNER_SECRET }),
     resolveSecret: (ref) => secrets.get(ref),
-    emit: (event) => ctx.emit('ap:sessions:event', event),
+    emit: (event) => ctx.emit(APP_CHANNELS.onSessionEvent, event),
   });
   const dispose = () => sessions.stopLocal();
   return { catalog, dispose, installed, presets, runs, runtime, secrets, servers, sessions, templates };

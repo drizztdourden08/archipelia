@@ -1,11 +1,7 @@
 /* @layer renderer-app @kind logic */
-import { hostApi } from '@drizztdourden08/brock-react';
-import type { AppApi } from './contract.type';
+import { channelApi } from '@drizztdourden08/brock-react';
+import { APP_CHANNELS } from './contract.constants';
 
-const appApi = (): AppApi => {
-  const api = hostApi();
-  if (!api) throw new Error('window.api is missing: the preload did not run');
-  return api as AppApi;
-};
+const appApi = () => channelApi(APP_CHANNELS);
 
 export { appApi };

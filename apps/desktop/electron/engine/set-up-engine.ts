@@ -1,5 +1,6 @@
 /* @layer electron-main @kind logic */
 import type { MainContext } from '@drizztdourden08/brock-electron/main';
+import { APP_CHANNELS } from '../../src/ipc/contract.constants';
 import { ENGINE_DIR_ENV, readEngineStatus } from '@archipelia/engine';
 import { buildEngine } from '@archipelia/engine-bundle';
 import type { EngineStatus } from '@archipelia/model';
@@ -9,7 +10,7 @@ import { engineRoot } from './engine-root';
 const setUpEngine = async (ctx: MainContext): Promise<EngineStatus> => {
   const dir = engineDirOf(ctx);
   if (process.env[ENGINE_DIR_ENV]) return { ...(await readEngineStatus(dir)), error: `${ENGINE_DIR_ENV} points at an engine managed outside the app` };
-  const onLine = (line: string) => ctx.emit('ap:engine:progress', line);
+  const onLine = (line: string) => ctx.emit(APP_CHANNELS.onEngineProgress, line);
   try {
     await buildEngine({ buildDir: engineRoot(ctx), onLine });
     return await readEngineStatus(dir);

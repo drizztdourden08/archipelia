@@ -1,45 +1,51 @@
 /* @layer renderer-app @kind config */
-import type { EventContract, InvokeContract, SendContract } from './contract.type';
+import { defineChannels, event, invoke } from '@drizztdourden08/brock-core';
+import type { CatalogView, InstallRequest } from '@archipelia/catalog';
+import type { CatalogEntry, EngineStatus, GamePreset, InstalledGame, ServerEntry, Session, SessionTemplate } from '@archipelia/model';
+import type { HostLogLine, ServerTestResult } from '@archipelia/hosts';
+import type { PresetInput } from '@archipelia/presets';
+import type { LibraryImportResult, SessionEvent } from '@archipelia/sessions';
 
-const APP_INVOKE_MAP = {
-  engineStatus: 'ap:engine:status',
-  engineSetup: 'ap:engine:setup',
-  catalogRead: 'ap:catalog:read',
-  catalogOfficial: 'ap:catalog:official',
-  gamesList: 'ap:games:list',
-  gamesInstall: 'ap:games:install',
-  gamesRemove: 'ap:games:remove',
-  presetsList: 'ap:presets:list',
-  presetsCreate: 'ap:presets:create',
-  presetsSave: 'ap:presets:save',
-  presetsDuplicate: 'ap:presets:duplicate',
-  presetsRemove: 'ap:presets:remove',
-  templatesList: 'ap:templates:list',
-  templatesSave: 'ap:templates:save',
-  templatesRemove: 'ap:templates:remove',
-  sessionsList: 'ap:sessions:list',
-  sessionsRun: 'ap:sessions:run',
-  sessionsStop: 'ap:sessions:stop',
-  sessionsCancel: 'ap:sessions:cancel',
-  sessionsCommand: 'ap:sessions:command',
-  sessionsLog: 'ap:sessions:log',
-  sessionsReadText: 'ap:sessions:readText',
-  sessionsRemove: 'ap:sessions:remove',
-  serversList: 'ap:servers:list',
-  serversSave: 'ap:servers:save',
-  serversRemove: 'ap:servers:remove',
-  serversTest: 'ap:servers:test',
-  serversTrustKey: 'ap:servers:trustKey',
-  ggOpenRooms: 'ap:gg:openRooms',
-  dataExport: 'ap:data:export',
-  dataImport: 'ap:data:import',
-} as const satisfies Record<string, keyof InvokeContract>;
+const APP_CHANNELS = defineChannels({
+  engineStatus: invoke<() => Promise<EngineStatus>>()('ap:engine:status'),
+  engineSetup: invoke<() => Promise<EngineStatus>>()('ap:engine:setup'),
+  catalogRead: invoke<(refresh: boolean) => Promise<CatalogView>>()('ap:catalog:read'),
+  catalogOfficial: invoke<() => Promise<CatalogEntry[]>>()('ap:catalog:official'),
+  gamesList: invoke<() => Promise<InstalledGame[]>>()('ap:games:list'),
+  gamesInstall: invoke<(request: InstallRequest) => Promise<InstalledGame>>()('ap:games:install'),
+  gamesRemove: invoke<(apworld: string) => Promise<void>>()('ap:games:remove'),
+  presetsList: invoke<() => Promise<GamePreset[]>>()('ap:presets:list'),
+  presetsCreate: invoke<(preset: PresetInput) => Promise<GamePreset>>()('ap:presets:create'),
+  presetsSave: invoke<(preset: GamePreset) => Promise<GamePreset>>()('ap:presets:save'),
+  presetsDuplicate: invoke<(id: string, name: string) => Promise<GamePreset>>()('ap:presets:duplicate'),
+  presetsRemove: invoke<(id: string) => Promise<void>>()('ap:presets:remove'),
+  templatesList: invoke<() => Promise<SessionTemplate[]>>()('ap:templates:list'),
+  templatesSave: invoke<(template: SessionTemplate) => Promise<SessionTemplate>>()('ap:templates:save'),
+  templatesRemove: invoke<(id: string) => Promise<void>>()('ap:templates:remove'),
+  sessionsList: invoke<() => Promise<Session[]>>()('ap:sessions:list'),
+  sessionsRun: invoke<(template: SessionTemplate) => Promise<Session>>()('ap:sessions:run'),
+  sessionsStop: invoke<(id: string) => Promise<Session | undefined>>()('ap:sessions:stop'),
+  sessionsCancel: invoke<(id: string) => Promise<void>>()('ap:sessions:cancel'),
+  sessionsCommand: invoke<(id: string, cmd: string) => Promise<void>>()('ap:sessions:command'),
+  sessionsLog: invoke<(id: string) => Promise<HostLogLine[]>>()('ap:sessions:log'),
+  sessionsReadText: invoke<(id: string, file: string) => Promise<string | null>>()('ap:sessions:readText'),
+  sessionsRemove: invoke<(id: string) => Promise<void>>()('ap:sessions:remove'),
+  serversList: invoke<() => Promise<ServerEntry[]>>()('ap:servers:list'),
+  serversSave: invoke<(entry: ServerEntry) => Promise<ServerEntry>>()('ap:servers:save'),
+  serversRemove: invoke<(id: string) => Promise<void>>()('ap:servers:remove'),
+  serversTest: invoke<(id: string) => Promise<ServerTestResult>>()('ap:servers:test'),
+  serversTrustKey: invoke<(id: string, sha256: string) => Promise<ServerEntry>>()('ap:servers:trustKey'),
+  ggOpenRooms: invoke<(baseUrl: string) => Promise<void>>()('ap:gg:openRooms'),
+  dataExport: invoke<() => Promise<Uint8Array>>()('ap:data:export'),
+  dataImport: invoke<(bytes: Uint8Array) => Promise<LibraryImportResult>>()('ap:data:import'),
+  onSessionEvent: event<(event: SessionEvent) => void>()('ap:sessions:event'),
+  onEngineProgress: event<(line: string) => void>()('ap:engine:progress'),
+});
 
-const APP_SEND_MAP = {} as const satisfies Record<string, keyof SendContract>;
+const APP_INVOKE_MAP = APP_CHANNELS.maps.invoke;
 
-const APP_EVENT_MAP = {
-  onSessionEvent: 'ap:sessions:event',
-  onEngineProgress: 'ap:engine:progress',
-} as const satisfies Record<string, keyof EventContract>;
+const APP_SEND_MAP = APP_CHANNELS.maps.send;
 
-export { APP_EVENT_MAP, APP_INVOKE_MAP, APP_SEND_MAP };
+const APP_EVENT_MAP = APP_CHANNELS.maps.events;
+
+export { APP_CHANNELS, APP_EVENT_MAP, APP_INVOKE_MAP, APP_SEND_MAP };
