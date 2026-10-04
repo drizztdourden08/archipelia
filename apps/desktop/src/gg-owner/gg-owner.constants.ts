@@ -6,8 +6,9 @@ const FORGET_OWNER_CONFIRM: ConfirmActionOptions = {
   message: 'Rooms this app made on the site can no longer be controlled or read, by this app or anyone else. A new owner id is made the next time a session runs there.',
   confirmLabel: 'Forget',
   variant: 'danger',
+  focus: 'cancel',
 };
 
-const GG_OWNER_ROW = 'ggOwner';
+const NO_OWNER = 'No owner id yet. One is made the first time a session runs there.';
 
-export { FORGET_OWNER_CONFIRM, GG_OWNER_ROW };
+export { FORGET_OWNER_CONFIRM, NO_OWNER };

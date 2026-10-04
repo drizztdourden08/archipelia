@@ -16,6 +16,7 @@ const REBUILD_CONFIRM: ConfirmActionOptions = {
   message: 'The engine is removed and downloaded again, about 90 MB.',
   confirmLabel: 'Rebuild',
   variant: 'danger',
+  focus: 'cancel',
 };
 
 export { REBUILD_CONFIRM, STATE_VIEW };

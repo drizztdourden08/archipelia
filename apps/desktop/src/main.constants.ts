@@ -2,8 +2,7 @@
 import type { BrockAppSettings } from '@drizztdourden08/brock-react';
 import { DEFAULT_SETTINGS } from './settings.constants';
 import type { AppSettings } from './settings.type';
-import { renderGgOwner } from './views/GgOwner';
 
-const SETTINGS: BrockAppSettings<AppSettings> = { defaults: DEFAULT_SETTINGS, renderControl: renderGgOwner };
+const SETTINGS: BrockAppSettings<AppSettings> = { defaults: DEFAULT_SETTINGS };
 
 export { SETTINGS };
