@@ -23,6 +23,12 @@ const filterLog = (widgets: Locator, text: string) => widgets.getByRole('searchb
 const widgetFrame = (page: Page, title: string) =>
   docked(page).locator('.widget').filter({ has: page.locator('.widget__title', { hasText: new RegExp(`^${title}$`) }) });
 
+const popIn = async (popped: Page) => {
+  const button = popped.getByRole('button', { name: 'Pop in', exact: true });
+  await button.waitFor();
+  await Promise.all([popped.waitForEvent('close'), button.evaluate((node: HTMLElement) => { setTimeout(() => node.click(), 0); })]);
+};
+
 const popPlayersOut = async (launched: LaunchedApp) => {
   const widgets = docked(launched.page);
   await widgetFrame(launched.page, 'Players').getByRole('button', { name: 'Pop out', exact: true }).click();
@@ -30,7 +36,7 @@ const popPlayersOut = async (launched: LaunchedApp) => {
   const body = popped.locator('body');
   await playerItem(body, TIMESPINNER.game).getByText('connected', { exact: true }).waitFor();
   await playerItem(body, SOH.game).getByText(`${CHECKS} / `, { exact: false }).waitFor();
-  await popped.getByRole('button', { name: 'Pop in', exact: true }).click();
+  await popIn(popped);
   await playerItem(widgets, SOH.game).getByText('connected', { exact: true }).waitFor();
   await base(launched.page).getByRole('button', { name: 'Reset layout', exact: true }).click();
   await widgetFrame(launched.page, 'Players').waitFor();
