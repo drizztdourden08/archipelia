@@ -1,42 +1,44 @@
 {
   "applied": [
     {
-      "id": "screen-icons",
-      "version": "0.10.0",
+      "id": "brock-palette",
+      "version": "0.11.0",
       "source": "@drizztdourden08/brock-build",
-      "summary": "Every screen needs an icon now, for the page header Brock draws under the window header: a defineScreen or defineHub call without one becomes a to-do.",
+      "summary": "The starter theme takes the Brock palette (orange, charcoal and greys, matching the Brock logo) in place of the old blue; only a src/theme.css still holding the untouched old starter seeds is rewritten.",
       "touched": []
     },
     {
-      "id": "settings-row-hints",
-      "version": "0.10.0",
+      "id": "widget-files",
+      "version": "0.11.0",
       "source": "@drizztdourden08/brock-build",
-      "summary": "Every settings row now needs a hint and a description, or noDescription: true. A row create-brock scaffolded gets the template hint; every other row without them, in a .settings.ts page, a settings tab or a Tessera SettingsSection, becomes a to-do naming the missing fields.",
-      "touched": []
-    },
-    {
-      "id": "tessera-renames",
-      "version": "0.10.0",
-      "source": "@drizztdourden08/tessera",
-      "summary": "Tessera renamed custom properties, components, classes, props, prop values and config keys, and removed exports; RENAMES.json replays over the app code and its JSON settings, and each note becomes a to-do.",
-      "touched": []
+      "summary": "Widgets by convention: src/widgets/<id>.widget.tsx files are listed by brock sync in .brock/widgets.ts. src/main.tsx gets widgets={appWidgets} on BrockApp and the import beside the other .brock imports. Widgets defined by hand (defineWidget, registerWidgets, a widgets prop) become to-dos naming their new file; they are not moved, because a hand-written definition can close over app state a file of its own would lose.",
+      "touched": [
+        "src/main.tsx"
+      ]
     }
   ],
   "todos": [
     {
       "number": 1,
-      "migration": "screen-icons",
-      "file": "src/navigation/SessionScreen.tsx",
-      "line": 12,
-      "message": "Brock 0.10.0 gives every screen an icon and a title: defineScreen now needs icon, the glowing mark of the page header that a fullscreen screen draws under its window header. Add icon, such as <Icon name=\"layers\" />. A screen whose content draws its own headers, like a hub, sets header: 'own'."
+      "migration": "widget-files",
+      "file": "src/main.tsx",
+      "line": 22,
+      "message": "Widgets now live in src/widgets/<id>.widget.tsx: the default export is the component, `meta` holds label, icon, popOut, devOnly, defaultVisibility ('context-only'), defaultSide and the default sizes. brock sync lists them in .brock/widgets.ts, which src/main.tsx hands to BrockApp as widgets. registerWidgets hands Brock widgets defined by hand: once each one is a file in src/widgets, remove this call."
+    },
+    {
+      "number": 2,
+      "migration": "widget-files",
+      "file": "src/widgets/session-widget.ts",
+      "line": 8,
+      "message": "Widgets now live in src/widgets/<id>.widget.tsx: the default export is the component, `meta` holds label, icon, popOut, devOnly, defaultVisibility ('context-only'), defaultSide and the default sizes. brock sync lists them in .brock/widgets.ts, which src/main.tsx hands to BrockApp as widgets. This widget is defined by hand: move it to src/widgets/<id>.widget.tsx and drop the definition. A widget a module ships stays in its module."
     }
   ],
   "tessera": {
     "warnings": [],
     "skipped": null,
-    "pinned": "0.10.0",
+    "pinned": null,
     "range": {
-      "from": "0.9.0",
+      "from": "0.10.0",
       "to": "0.10.0",
       "next": false
     }

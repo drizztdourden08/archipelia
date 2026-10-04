@@ -7,6 +7,7 @@ import { BrockApp, registerWidgets } from '@drizztdourden08/brock-react';
 import { rendererBootTasks } from '../.brock/boot.renderer';
 import { rendererModules } from '../.brock/modules.renderer';
 import { screenTree } from '../.brock/screens';
+import { appWidgets } from '../.brock/widgets';
 import { SCREENS, SETTINGS } from './main.constants';
 import { MENU } from './menu.constants';
 import { BASE_SCREEN } from './navigation/app-navigation.constants';
@@ -34,6 +35,7 @@ createRoot(root).render(
       home={BASE_SCREEN}
       modules={rendererModules}
       menu={MENU}
+      widgets={appWidgets}
     />
   </StrictMode>,
 );
