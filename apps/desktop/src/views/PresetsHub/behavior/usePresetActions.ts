@@ -1,6 +1,6 @@
 /* @layer renderer-app @kind hook */
 import { useCallback } from 'react';
-import { confirmAction } from '@drizztdourden08/brock-react';
+import { confirmDelete } from '@drizztdourden08/brock-react';
 import type { GamePreset } from '@archipelia/model';
 import type { ActionParams } from '../PresetsHub.type';
 import { useLibraryStore } from '../../../stores/useLibraryStore';
@@ -27,7 +27,7 @@ const usePresetActions = ({ select, report }: ActionParams) => {
   }, [removePreset, report]);
 
   const requestDelete = useCallback((preset: GamePreset) => {
-    void confirmAction(deletePresetConfirm(preset)).then((confirmed) => { if (confirmed) void remove(preset); });
+    void confirmDelete(deletePresetConfirm(preset)).then((confirmed) => { if (confirmed) void remove(preset); });
   }, [remove]);
 
   return { duplicate, requestDelete };

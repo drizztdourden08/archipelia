@@ -45,7 +45,7 @@ const saveAndRemove = async (launched: LaunchedApp, servers: Locator) => {
   await servers.getByText('Servers · 1').waitFor();
   await settledProof(launched, '33-servers-saved');
   await servers.getByRole('button', { name: 'Remove' }).click();
-  await dialogOf(launched.page, 'Remove server').getByRole('button', { name: 'Remove', exact: true }).click();
+  await dialogOf(launched.page, `Delete ${SERVER.label}?`).getByRole('button', { name: 'Delete', exact: true }).click();
   await entry.waitFor({ state: 'detached' });
   await servers.getByText('Servers · 0').waitFor();
   await settledProof(launched, '34-servers-removed');

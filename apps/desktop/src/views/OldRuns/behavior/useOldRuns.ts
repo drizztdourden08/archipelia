@@ -1,6 +1,6 @@
 /* @layer renderer-app @kind hook */
 import { useCallback, useEffect } from 'react';
-import { confirmAction } from '@drizztdourden08/brock-react';
+import { confirmDelete } from '@drizztdourden08/brock-react';
 import { useDataAction } from '../../../hooks/useDataAction';
 import { useRunsStore } from '../../../stores/useRunsStore';
 import { CLEAN_DAYS } from '../OldRuns.constants';
@@ -15,7 +15,7 @@ const useOldRuns = () => {
 
   const stale = olderThan(runs, CLEAN_DAYS, Date.now());
   const clean = useCallback(() => {
-    void confirmAction(cleanRunsConfirm(stale.length)).then((confirmed) => {
+    void confirmDelete(cleanRunsConfirm(stale.length)).then((confirmed) => {
       if (!confirmed) return;
       void run('clean', async () => {
         for (const old of stale) await remove(old.id);

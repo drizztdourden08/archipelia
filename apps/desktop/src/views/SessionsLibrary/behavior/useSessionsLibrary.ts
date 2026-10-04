@@ -1,6 +1,6 @@
 /* @layer renderer-app @kind hook */
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { confirmAction, useKeyedGuard, usePageSearch } from '@drizztdourden08/brock-react';
+import { confirmDelete, useKeyedGuard, usePageSearch } from '@drizztdourden08/brock-react';
 import { secretsApi } from '@drizztdourden08/brock-secrets/renderer';
 import type { ServerEntry } from '@archipelia/model';
 import { appApi } from '../../../ipc/app-api';
@@ -44,8 +44,7 @@ const useSessionsLibrary = () => {
   const deleteTemplate = useCallback((id: string) => {
     const template = byId(id);
     if (!template) return;
-    const message = `Delete ${template.name}? Its runs stay in Runs.`;
-    void confirmAction({ title: 'Delete session', message, confirmLabel: 'Delete', variant: 'danger' }).then((confirmed) => {
+    void confirmDelete({ what: template.name, consequence: 'Its runs stay in Runs.' }).then((confirmed) => {
       if (!confirmed) return;
       void guard(id, async () => {
         if (template.server.passwordRef === passwordNameOf(id)) await secretsApi()?.delete(passwordNameOf(id));
@@ -58,8 +57,8 @@ const useSessionsLibrary = () => {
 
   const deleteRun = useCallback((id: string) => {
     const run = runs.find((entry) => entry.id === id);
-    const message = `Delete this run of ${run?.snapshot.name ?? 'the session'} and its output files?`;
-    void confirmAction({ title: 'Delete run', message, confirmLabel: 'Delete', variant: 'danger' }).then((confirmed) => {
+    const what = `this run of ${run?.snapshot.name ?? 'the session'}`;
+    void confirmDelete({ what, consequence: 'Its output files go with it.' }).then((confirmed) => {
       if (confirmed) void guard(id, () => removeRun(id));
     });
   }, [guard, removeRun, runs]);

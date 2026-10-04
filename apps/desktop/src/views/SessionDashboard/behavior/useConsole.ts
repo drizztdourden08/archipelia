@@ -28,7 +28,7 @@ const useConsole = (sessionId: string) => {
   }, [draft, send, setDraft]);
 
   const confirmSend = useCallback((cmd: string, title: string, message: string) => {
-    void confirmAction({ title, message, confirmLabel: 'Send', variant: 'danger' }).then((confirmed) => {
+    void confirmAction({ title, message, confirmLabel: 'Send', variant: 'danger', focus: 'cancel' }).then((confirmed) => {
       if (confirmed) void send(cmd);
     });
   }, [send]);

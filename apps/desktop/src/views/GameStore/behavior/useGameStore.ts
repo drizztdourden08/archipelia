@@ -1,5 +1,5 @@
 /* @layer renderer-app @kind hook */
-import { confirmAction, toast, useKeyedGuard, usePlatform, useScreenState } from '@drizztdourden08/brock-react';
+import { confirmDelete, toast, useKeyedGuard, usePlatform, useScreenState } from '@drizztdourden08/brock-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useLibraryStore } from '../../../stores/useLibraryStore';
 import type { GameRow, GameTab } from '../GameStore.type';
@@ -33,7 +33,7 @@ const useGameStore = (tab: GameTab) => {
   const remove = useCallback(({ entry, installed: game }: GameRow) => guard(entry.apworld, async () => {
     const [presets, templates] = await Promise.all([appApi().presetsList(), appApi().templatesList()]);
     const confirm = removeGameConfirm(entry.displayName, game?.game ?? entry.displayName, presets, templates);
-    if (!(await confirmAction(confirm))) return;
+    if (!(await confirmDelete(confirm))) return;
     await removeGame(entry.apworld);
     toast(`Removed ${entry.displayName}`, { variant: 'success' });
   }), [guard, removeGame]);

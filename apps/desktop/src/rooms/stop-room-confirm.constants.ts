@@ -6,6 +6,7 @@ const STOP_ROOM_CONFIRM: ConfirmActionOptions = {
   message: 'The server stops and every player is disconnected.',
   confirmLabel: 'Stop',
   variant: 'danger',
+  focus: 'cancel',
 };
 
 const HOSTING_QUIT_MESSAGE = 'A room is hosting. Quitting stops its server and every player is disconnected.';

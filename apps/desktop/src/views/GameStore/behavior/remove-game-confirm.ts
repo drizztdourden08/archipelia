@@ -1,5 +1,5 @@
 /* @layer renderer-app @kind logic */
-import type { ConfirmActionOptions } from '@drizztdourden08/brock-react';
+import type { ConfirmDeleteOptions } from '@drizztdourden08/brock-react';
 import type { GamePreset, SessionTemplate } from '@archipelia/model';
 
 const counted = (count: number, word: string) => `${count} ${word}${count === 1 ? '' : 's'}`;
@@ -13,11 +13,9 @@ const usersOf = (game: string, presets: readonly GamePreset[], templates: readon
 
 const removeGameConfirm = (
   title: string, game: string, presets: readonly GamePreset[], templates: readonly SessionTemplate[],
-): ConfirmActionOptions => ({
-  title: 'Remove game',
-  message: `Remove ${title}? ${usersOf(game, presets, templates)}`,
-  confirmLabel: 'Remove',
-  variant: 'danger',
+): ConfirmDeleteOptions => ({
+  what: title,
+  consequence: `Its world leaves the engine. ${usersOf(game, presets, templates)}`,
 });
 
 export { removeGameConfirm };

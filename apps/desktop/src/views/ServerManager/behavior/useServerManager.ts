@@ -2,7 +2,7 @@
 import type { ServerEntry } from '@archipelia/model';
 import { secretsApi } from '@drizztdourden08/brock-secrets/renderer';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { confirmAction, useKeyedGuard } from '@drizztdourden08/brock-react';
+import { confirmDelete, useKeyedGuard } from '@drizztdourden08/brock-react';
 import type { SecretInputs } from '../ServerManager.type';
 import { passwordSecret } from './password-secret';
 import { passphraseSecret } from './passphrase-secret';
@@ -75,7 +75,7 @@ const useServerManager = () => {
   const remove = useCallback(() => {
     if (!draft?.id) return;
     const { id } = draft;
-    void confirmAction(removeServerConfirm(draft)).then((confirmed) => {
+    void confirmDelete(removeServerConfirm(draft)).then((confirmed) => {
       if (!confirmed) return;
       void guard('remove', async () => {
         await removeServer(id);
