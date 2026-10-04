@@ -4,7 +4,7 @@ import type { HostTarget } from '@archipelia/model';
 import { createGgHost, createLocalHost, createRemoteHost } from '@archipelia/hosts';
 import type { SessionHost } from '@archipelia/hosts';
 import type { HostFactoryDeps, SecretStore } from './host-factory.type';
-import { GG_OWNER_SECRET } from '../../src/ipc/secret-names.constants';
+import { GG_OWNER_SECRET } from '../../src/secrets/secret-names.constants';
 import { lanAddress } from './lan-address';
 import { credentialsOf } from './server-credentials';
 

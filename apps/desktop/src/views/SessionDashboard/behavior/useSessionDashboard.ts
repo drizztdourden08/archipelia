@@ -1,9 +1,8 @@
 /* @layer renderer-app @kind hook */
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { confirmAction, useNow } from '@drizztdourden08/brock-react';
-import { relaySessionView } from '../../../state/relay-session-view';
-import { useRunsStore } from '../../../state/useRunsStore';
-import { useSessionViewStore } from '../../../state/useSessionViewStore';
+import { useRunsStore } from '../../../stores/useRunsStore';
+import { useSessionViewStore } from '../../../stores/useSessionViewStore';
 import { pickSession } from './pick-session';
 import { COPIED_MS, NO_LINES, TICK_MS } from '../SessionDashboard.constants';
 import { addressOf } from './address-of';
@@ -31,7 +30,6 @@ const useSessionDashboard = (sessionId: string) => {
 
   useEffect(() => useSessionViewStore.getState().show({ session, lines, loaded }), [session, lines, loaded]);
 
-  useEffect(relaySessionView, []);
   const now = useNow(TICK_MS, session?.status === 'hosting');
   const address = addressOf(session?.endpoint);
 

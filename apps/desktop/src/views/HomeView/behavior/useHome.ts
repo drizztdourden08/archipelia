@@ -1,10 +1,10 @@
 /* @layer renderer-app @kind hook */
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { ROUTE } from '../../../navigation/app-navigation.constants';
-import { useAppNavigation } from '../../../navigation/useAppNavigation';
-import { useEngineStore } from '../../../state/useEngineStore';
-import { useLibraryStore } from '../../../state/useLibraryStore';
-import { useRunsStore } from '../../../state/useRunsStore';
+import { ROUTE } from '../../../hooks/app-navigation.constants';
+import { useAppNavigation } from '../../../hooks/useAppNavigation';
+import { useEngineStore } from '../../../stores/useEngineStore';
+import { useLibraryStore } from '../../../stores/useLibraryStore';
+import { useRunsStore } from '../../../stores/useRunsStore';
 import { newestRuns } from './newest-runs';
 import { RECENT_COUNT } from '../HomeView.constants';
 import { needsEngineSetup } from './needs-engine-setup';

@@ -2,7 +2,7 @@
 import type { Session } from '@archipelia/model';
 import { Stack, StatRow, Text } from '@drizztdourden08/tessera/primitives';
 import type { RoomWidgetProps } from './RoomWidget.type';
-import { hostLabel } from '../../behavior/host-label';
+import { hostLabel } from '../../../../hosts/host-label';
 import { addressOf } from '../../behavior/address-of';
 
 const passwordText = (session: Session, passwordRequired: boolean) =>

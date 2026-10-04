@@ -1,8 +1,8 @@
 /* @layer renderer-app @kind hook */
 import { useKeyedGuard, usePlatform } from '@drizztdourden08/brock-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { lastGuardError } from '../../../state/last-guard-error';
-import { useLibraryStore } from '../../../state/useLibraryStore';
+import { lastGuardError } from '../../../keyed-guard/last-guard-error';
+import { useLibraryStore } from '../../../stores/useLibraryStore';
 import type { GameTab } from '../GameStore.type';
 import { buildRows } from './build-rows';
 import { filterRows } from './filter-rows';

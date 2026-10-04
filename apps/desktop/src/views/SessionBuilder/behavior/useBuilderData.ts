@@ -2,8 +2,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { SelectOption } from '@drizztdourden08/tessera/primitives';
 import type { ServerEntry } from '@archipelia/model';
-import { archipeliaApi } from '../../../ipc/archipelia-api';
-import { useLibraryStore } from '../../../state/useLibraryStore';
+import { appApi } from '../../../ipc/app-api';
+import { useLibraryStore } from '../../../stores/useLibraryStore';
 
 const useBuilderData = (onError: (message: string) => void) => {
   const { installed, presets, templates, loadInstalled, loadPresets, loadTemplates, createPreset, saveTemplate } = useLibraryStore();
@@ -14,7 +14,7 @@ const useBuilderData = (onError: (message: string) => void) => {
     loadPresets().catch(fail);
     loadTemplates().catch(fail);
     loadInstalled().catch(fail);
-    archipeliaApi().serversList().then(setServers, fail);
+    appApi().serversList().then(setServers, fail);
   }, []);
 
   const serverOptions = useMemo<SelectOption[]>(

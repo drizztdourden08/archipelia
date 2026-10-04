@@ -1,7 +1,7 @@
 /* @layer renderer-app @kind hook */
 import { useCallback, useEffect, useMemo } from 'react';
-import { useAppNavigation } from '../../../navigation/useAppNavigation';
-import { useRunsStore } from '../../../state/useRunsStore';
+import { useAppNavigation } from '../../../hooks/useAppNavigation';
+import { useRunsStore } from '../../../stores/useRunsStore';
 import { generateTextOf } from './generate-text-of';
 import { hostLinesOf } from './host-lines-of';
 import { runLogRows } from './run-log-rows';

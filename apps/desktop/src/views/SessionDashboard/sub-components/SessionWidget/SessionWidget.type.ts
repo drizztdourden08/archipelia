@@ -1,5 +1,5 @@
 /* @layer renderer-app @kind types */
-import type { SessionWidgetId } from '../../../../widgets/session-widget.type';
+import type { SessionWidgetId } from '../../../../session-widgets/session-widget.type';
 
 type SessionWidgetProps = { id: SessionWidgetId };
 

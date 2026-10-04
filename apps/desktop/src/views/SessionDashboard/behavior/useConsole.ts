@@ -1,7 +1,7 @@
 /* @layer renderer-app @kind hook */
 import { useCallback, useState } from 'react';
 import { confirmAction } from '@drizztdourden08/brock-react';
-import { useRunsStore } from '../../../state/useRunsStore';
+import { useRunsStore } from '../../../stores/useRunsStore';
 import { MAX_SENT } from '../SessionDashboard.constants';
 
 const useConsole = (sessionId: string) => {

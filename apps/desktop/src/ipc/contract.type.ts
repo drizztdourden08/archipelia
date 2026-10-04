@@ -1,13 +1,14 @@
 /* @layer renderer-app @kind types */
-import type { EventContract, InvokeContract } from '@drizztdourden08/brock-core/augment';
-import type { EventApi, InvokeApi } from '@drizztdourden08/brock-core/ipc';
+import type { BASE_EVENT_MAP, BASE_INVOKE_MAP, BASE_SEND_MAP } from '@drizztdourden08/brock-core';
+import type { EventContract, InvokeContract, SendContract } from '@drizztdourden08/brock-core/augment';
+import type { IpcApi } from '@drizztdourden08/brock-core/ipc';
 import type {
   CatalogEntry, EngineStatus, GamePreset, InstalledGame, ServerEntry, ServerTest, Session, SessionTemplate,
 } from '@archipelia/model';
 import type { HostLogLine } from '@archipelia/hosts';
 import type { PresetInput } from '@archipelia/presets';
 import type { SessionEvent } from '@archipelia/sessions';
-import type { ARCHIPELIA_EVENT_MAP, ARCHIPELIA_INVOKE_MAP } from './contract.constants';
+import type { APP_EVENT_MAP, APP_INVOKE_MAP, APP_SEND_MAP } from './contract.constants';
 
 declare module '@drizztdourden08/brock-core/augment' {
   interface InvokeContract {
@@ -44,10 +45,6 @@ declare module '@drizztdourden08/brock-core/augment' {
     'ap:data:import': (bytes: Uint8Array) => Promise<DataImportResult>;
   }
 
-  interface IpcNamespaces {
-    archipelia: ArchipeliaApi;
-  }
-
   interface EventContract {
     'ap:sessions:event': (event: SessionEvent) => void;
     'ap:engine:progress': (line: string) => void;
@@ -65,6 +62,10 @@ type DataImportResult = { presets: number; templates: number };
 
 type ServerTestResult = ServerTest & { hostKey?: string };
 
-type ArchipeliaApi = InvokeApi<typeof ARCHIPELIA_INVOKE_MAP> & EventApi<typeof ARCHIPELIA_EVENT_MAP>;
+type AppApi = IpcApi<
+  typeof BASE_INVOKE_MAP & typeof APP_INVOKE_MAP,
+  typeof BASE_SEND_MAP & typeof APP_SEND_MAP,
+  typeof BASE_EVENT_MAP & typeof APP_EVENT_MAP
+>;
 
-export type { ArchipeliaApi, CatalogView, EventContract, InstallRequest, InvokeContract, ServerTestResult };
+export type { AppApi, CatalogView, EventContract, InstallRequest, InvokeContract, SendContract, ServerTestResult };

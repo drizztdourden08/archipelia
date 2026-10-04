@@ -1,7 +1,7 @@
 /* @layer renderer-app @kind hook */
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { EditorParams, EditorStatus } from '../PresetEditor.type';
-import { useLibraryStore } from '../../../state/useLibraryStore';
+import { useLibraryStore } from '../../../stores/useLibraryStore';
 import { usePresetDraft } from './usePresetDraft';
 import { useOptionFilter } from './useOptionFilter';
 import { useYamlTransfer } from './useYamlTransfer';

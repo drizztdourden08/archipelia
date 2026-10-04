@@ -3,11 +3,11 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { dialogs, useKeyedGuard } from '@drizztdourden08/brock-react';
 import { secretsApi } from '@drizztdourden08/brock-secrets/renderer';
 import type { ServerEntry, SessionTemplate } from '@archipelia/model';
-import { archipeliaApi } from '../../../ipc/archipelia-api';
-import { useAppNavigation } from '../../../navigation/useAppNavigation';
-import { lastGuardError } from '../../../state/last-guard-error';
-import { useLibraryStore } from '../../../state/useLibraryStore';
-import { useRunsStore } from '../../../state/useRunsStore';
+import { appApi } from '../../../ipc/app-api';
+import { useAppNavigation } from '../../../hooks/useAppNavigation';
+import { lastGuardError } from '../../../keyed-guard/last-guard-error';
+import { useLibraryStore } from '../../../stores/useLibraryStore';
+import { useRunsStore } from '../../../stores/useRunsStore';
 import { duplicateTemplate, newTemplate, passwordNameOf, useHostingDefaults } from '../../SessionBuilder';
 import { matchesRun } from './matches-run';
 import { matchesTemplate } from './matches-template';
@@ -28,7 +28,7 @@ const useSessionsLibrary = () => {
   useEffect(() => {
     void guard('load', async () => {
       await Promise.all([loadTemplates(), loadRuns()]);
-      setServers(await archipeliaApi().serversList());
+      setServers(await appApi().serversList());
     });
   }, [guard, loadRuns, loadTemplates]);
 

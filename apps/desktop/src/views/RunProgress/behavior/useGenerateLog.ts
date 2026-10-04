@@ -1,7 +1,7 @@
 /* @layer renderer-app @kind hook */
 import { useCallback, useEffect, useState } from 'react';
 import type { GenerateLogParams } from '../RunProgress.type';
-import { archipeliaApi } from '../../../ipc/archipelia-api';
+import { appApi } from '../../../ipc/app-api';
 import { GENERATE_LOG } from '../RunProgress.constants';
 
 const useGenerateLog = ({ sessionId, startedAt, failed }: GenerateLogParams) => {
@@ -11,7 +11,7 @@ const useGenerateLog = ({ sessionId, startedAt, failed }: GenerateLogParams) => 
   const readLog = useCallback(async () => {
     if (!sessionId) return;
     try {
-      setLogText(await archipeliaApi().sessionsReadText(sessionId, GENERATE_LOG));
+      setLogText(await appApi().sessionsReadText(sessionId, GENERATE_LOG));
     } catch {
       setLogText(null);
     }

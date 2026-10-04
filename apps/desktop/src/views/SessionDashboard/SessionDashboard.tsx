@@ -1,24 +1,26 @@
 /* @layer renderer-app @kind component */
 import { useCallback } from 'react';
 import { Stack, Text } from '@drizztdourden08/tessera/primitives';
-import { ROUTE } from '../../navigation/app-navigation.constants';
-import { useAppNavigation } from '../../navigation/useAppNavigation';
+import { ROUTE } from '../../hooks/app-navigation.constants';
+import { useAppNavigation } from '../../hooks/useAppNavigation';
 import type { SessionDashboardProps } from './SessionDashboard.type';
 import { useSessionDashboard } from './behavior/useSessionDashboard';
 import { useLiveRoom } from './behavior/useLiveRoom';
 import { useSessionLayoutSeed } from './behavior/useSessionLayoutSeed';
 import { canStop } from './behavior/can-stop';
-import { hostLabel } from './behavior/host-label';
+import { hostLabel } from '../../hosts/host-label';
 import { progressLabel } from './behavior/progress-label';
 import { statusView } from './behavior/status-view';
 import { SessionStatusBar } from '@archipelia/design';
 import { IdleBase } from './sub-components/IdleBase';
 import { SessionSummary } from './sub-components/SessionSummary';
-import { resetSessionWidgets } from '../../widgets/reset-session-widgets';
+import { resetSessionWidgets } from '../../session-widgets/reset-session-widgets';
+import { useFocusStore } from '../../stores/useFocusStore';
 import './SessionDashboard.css';
 
 const SessionDashboard = ({ sessionId }: SessionDashboardProps) => {
-  const board = useSessionDashboard(sessionId);
+  const focused = useFocusStore((state) => state.sessionId);
+  const board = useSessionDashboard(sessionId ?? focused);
   const live = useLiveRoom(board.session, board.lines);
   useSessionLayoutSeed(board.session !== null);
   const { open } = useAppNavigation();

@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import type { SessionText } from '../SessionDashboard.type';
 import { IDLE } from '../SessionDashboard.constants';
-import { archipeliaApi } from '../../../ipc/archipelia-api';
+import { appApi } from '../../../ipc/app-api';
 
 const useSessionText = (sessionId: string, file: string | null): SessionText => {
   const [text, setText] = useState<SessionText>(IDLE);
@@ -13,7 +13,7 @@ const useSessionText = (sessionId: string, file: string | null): SessionText => 
     }
     let alive = true;
     setText({ value: null, loading: true });
-    archipeliaApi().sessionsReadText(sessionId, file)
+    appApi().sessionsReadText(sessionId, file)
       .then((value) => { if (alive) setText({ value, loading: false }); })
       .catch(() => { if (alive) setText(IDLE); });
     return () => { alive = false; };

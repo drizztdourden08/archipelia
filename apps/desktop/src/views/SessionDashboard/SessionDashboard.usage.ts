@@ -11,7 +11,7 @@ const usage = {
     { case: 'Past runs of a session.', use: 'RunRow' },
   ],
   rules: [
-    'Pass an empty sessionId to show the newest hosting run.',
+    'Leave sessionId out to follow the focused session; an empty focus shows the newest hosting run.',
     'Load the runs when it opens; the runs boot task loads them first.',
     'Ask before stopping a room.',
   ],
@@ -26,9 +26,9 @@ const usage = {
   },
   example: `import { SessionDashboard } from '../SessionDashboard';
 
-const SessionDashboardSample = () => <SessionDashboard sessionId="" />;
+const SessionDashboardSample = () => <SessionDashboard />;
 `,
-  propsHash: '5f4da8e951b3a87c',
+  propsHash: '57103017f1f0919e',
 } satisfies ComponentUsage;
 
 export { usage };

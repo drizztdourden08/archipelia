@@ -3,7 +3,7 @@ import type { HandlerGroup } from '@drizztdourden08/brock-electron/main';
 import { shell } from 'electron';
 import { servicesOf } from '../services/services-of';
 import { HTTPS } from './gg-handlers.constants';
-import { GG_OWNER_SECRET } from '../../src/ipc/secret-names.constants';
+import { GG_OWNER_SECRET } from '../../src/secrets/secret-names.constants';
 
 const ggHandlers: HandlerGroup = {
   id: 'archipelia-gg',

@@ -1,8 +1,8 @@
 /* @layer renderer-app @kind hook */
 import { useEffect } from 'react';
 import { useWidgetPref } from '@drizztdourden08/brock-react';
-import { resetSessionWidgets } from '../../../widgets/reset-session-widgets';
-import { LAYOUT_SEEDED_PREF } from '../../../widgets/session-layout.constants';
+import { resetSessionWidgets } from '../../../session-widgets/reset-session-widgets';
+import { LAYOUT_SEEDED_PREF } from '../../../session-widgets/session-layout.constants';
 
 const useSessionLayoutSeed = (hasSession: boolean) => {
   const [seeded, setSeeded] = useWidgetPref(LAYOUT_SEEDED_PREF.owner, LAYOUT_SEEDED_PREF.key, false);

@@ -1,7 +1,7 @@
 /* @layer renderer-app @kind hook */
 import { useCallback, useMemo, useState } from 'react';
 import type { PresetCreatorParams } from '../PresetsHub.type';
-import { useLibraryStore } from '../../../state/useLibraryStore';
+import { useLibraryStore } from '../../../stores/useLibraryStore';
 import { DEFAULTS } from '../PresetsHub.constants';
 import { schemaFor } from './schema-for';
 import { startFromOptions } from './start-from-options';

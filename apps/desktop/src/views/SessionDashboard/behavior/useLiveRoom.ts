@@ -2,14 +2,14 @@
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 import type { Session } from '@archipelia/model';
 import type { HostLogLine } from '@archipelia/hosts';
-import { holdLiveRoom } from '../../../state/hold-live-room';
-import { useLiveRoomStore } from '../../../state/useLiveRoomStore';
-import { checksFromLog } from '../../../widgets/live-room/log-checks';
-import { playerRows } from '../../../widgets/live-room/player-rows';
-import { presenceOf } from '../../../widgets/live-room/presence-of';
-import { roomPlayersOf } from '../../../widgets/live-room/room-players-of';
-import { targetKey } from '../../../widgets/live-room/target-key';
-import { watchTarget } from '../../../widgets/live-room/watch-target';
+import { holdLiveRoom } from '../../../live-room/hold-live-room';
+import { useLiveRoomStore } from '../../../stores/useLiveRoomStore';
+import { checksFromLog } from '../../../live-room/log-checks';
+import { playerRows } from '../../../live-room/player-rows';
+import { presenceOf } from '../../../live-room/presence-of';
+import { roomPlayersOf } from '../../../live-room/room-players-of';
+import { targetKey } from '../../../live-room/target-key';
+import { watchTarget } from '../../../live-room/watch-target';
 
 const useLiveRoom = (session: Session | null, lines: readonly HostLogLine[]) => {
   const { phase, error, players, statuses, watched, hints, passwordRequired, connect } = useLiveRoomStore();

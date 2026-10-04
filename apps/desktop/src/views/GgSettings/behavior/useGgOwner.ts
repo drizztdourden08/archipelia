@@ -1,8 +1,8 @@
 /* @layer renderer-app @kind hook */
 import { useCallback, useEffect, useState } from 'react';
 import { secretsApi } from '@drizztdourden08/brock-secrets/renderer';
-import { archipeliaApi } from '../../../ipc/archipelia-api';
-import { GG_OWNER_SECRET } from '../../../ipc/secret-names.constants';
+import { appApi } from '../../../ipc/app-api';
+import { GG_OWNER_SECRET } from '../../../secrets/secret-names.constants';
 
 const useGgOwner = (baseUrl: string) => {
   const [hasOwner, setHasOwner] = useState(false);
@@ -25,7 +25,7 @@ const useGgOwner = (baseUrl: string) => {
     }
   }, [check]);
 
-  const openRooms = useCallback(() => { void guard(() => archipeliaApi().ggOpenRooms(baseUrl)); }, [guard, baseUrl]);
+  const openRooms = useCallback(() => { void guard(() => appApi().ggOpenRooms(baseUrl)); }, [guard, baseUrl]);
   const resetOwner = useCallback(() => { void guard(async () => secretsApi()?.delete(GG_OWNER_SECRET)); }, [guard]);
 
   return { busy, error, hasOwner, openRooms, resetOwner };

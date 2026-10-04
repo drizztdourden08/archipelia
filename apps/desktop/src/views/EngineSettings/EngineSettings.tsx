@@ -2,7 +2,7 @@
 import { useEffect, useMemo } from 'react';
 import { LogPanel } from '@drizztdourden08/tessera/composites';
 import { Button, ButtonRow, Stack, StatRow, Status, Text } from '@drizztdourden08/tessera/primitives';
-import { useEngineStore } from '../../state/useEngineStore';
+import { useEngineStore } from '../../stores/useEngineStore';
 import { engineLogRows } from './behavior/engine-log-rows';
 import { engineView } from './behavior/engine-view';
 

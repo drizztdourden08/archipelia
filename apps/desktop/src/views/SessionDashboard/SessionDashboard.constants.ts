@@ -1,6 +1,6 @@
 /* @layer renderer-app @kind config */
 import type { HostLogLine } from '@archipelia/hosts';
-import type { HostTarget, SessionStatus } from '@archipelia/model';
+import type { SessionStatus } from '@archipelia/model';
 import type { LogTab, SessionText, StatusView } from './SessionDashboard.type';
 
 const IDLE: SessionText = { value: null, loading: false };
@@ -10,8 +10,6 @@ const TICK_MS = 1000;
 const COPIED_MS = 2000;
 
 const NO_LINES: HostLogLine[] = [];
-
-const HOST_LABEL: Record<HostTarget['kind'], string> = { local: 'local', 'archipelago-gg': 'archipelago.gg', remote: 'remote' };
 
 const STATUS_VIEW: Record<SessionStatus, StatusView> = {
   draft: { label: 'DRAFT', tone: 'neutral' },
@@ -35,4 +33,4 @@ const KIND_RULES: readonly [RegExp, string][] = [
 
 const MAX_SENT = 40;
 
-export { COPIED_MS, GENERATE_LOG, HOST_LABEL, IDLE, KIND_RULES, LOG_TAB_LABEL, MAX_SENT, NO_LINES, STATUS_VIEW, TICK_MS };
+export { COPIED_MS, GENERATE_LOG, IDLE, KIND_RULES, LOG_TAB_LABEL, MAX_SENT, NO_LINES, STATUS_VIEW, TICK_MS };

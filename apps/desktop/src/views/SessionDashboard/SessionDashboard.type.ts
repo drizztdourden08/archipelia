@@ -5,7 +5,7 @@ type SessionText = { value: string | null; loading: boolean };
 
 type LogTab = 'server' | 'generate' | 'spoiler';
 
-type SessionDashboardProps = { sessionId: string };
+type SessionDashboardProps = { sessionId?: string };
 
 type StatusView = { label: string; tone: StatusTone };
 

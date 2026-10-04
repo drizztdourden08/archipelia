@@ -1,5 +1,5 @@
 /* @layer renderer-app @kind types */
-import type { LiveRoomPhase, PlayerView } from '../../../../widgets/live-room/live-room.type';
+import type { LiveRoomPhase, PlayerView } from '../../../../live-room/live-room.type';
 
 type PlayersPanelProps = {
   rows: PlayerView[];

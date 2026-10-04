@@ -1,14 +1,16 @@
 /* @layer renderer-app @kind component */
 import { EmptyState } from '@drizztdourden08/tessera/primitives';
-import { useSessionViewStore } from '../../../../state/useSessionViewStore';
+import { useSessionViewStore } from '../../../../stores/useSessionViewStore';
 import type { SessionWidgetProps } from './SessionWidget.type';
 import { LOADING_TEXT, NO_SESSION_TEXT } from './SessionWidget.constants';
 import { ConsoleWidget } from '../ConsoleWidget';
 import { LiveWidget } from '../LiveWidget';
 import { LogWidget } from '../LogWidget';
 import { SpoilerWidget } from '../SpoilerWidget';
+import { useSessionViewListener } from '../../behavior/useSessionViewListener';
 
 const SessionWidget = ({ id }: SessionWidgetProps) => {
+  useSessionViewListener();
   const session = useSessionViewStore((state) => state.session);
   const lines = useSessionViewStore((state) => state.lines);
   const loaded = useSessionViewStore((state) => state.loaded);

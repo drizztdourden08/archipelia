@@ -1,5 +1,5 @@
 /* @layer renderer-app @kind types */
-import type { HintView, LiveRoomPhase } from '../../../../widgets/live-room/live-room.type';
+import type { HintView, LiveRoomPhase } from '../../../../live-room/live-room.type';
 
 type HintsPanelProps = {
   rows: HintView[];

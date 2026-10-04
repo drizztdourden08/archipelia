@@ -2,7 +2,7 @@
 import { useCallback, useState } from 'react';
 import type { GamePreset } from '@archipelia/model';
 import type { ActionParams } from '../PresetsHub.type';
-import { useLibraryStore } from '../../../state/useLibraryStore';
+import { useLibraryStore } from '../../../stores/useLibraryStore';
 
 const usePresetActions = ({ select, report }: ActionParams) => {
   const { duplicatePreset, removePreset } = useLibraryStore();

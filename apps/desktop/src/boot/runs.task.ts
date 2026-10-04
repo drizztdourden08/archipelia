@@ -1,6 +1,6 @@
 /* @layer renderer-app @kind logic */
 import { defineBootTask } from '@drizztdourden08/brock-react';
-import { useRunsStore } from '../state/useRunsStore';
+import { useRunsStore } from '../stores/useRunsStore';
 
 export default defineBootTask({
   label: 'Loading sessions',

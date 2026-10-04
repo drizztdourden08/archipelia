@@ -19,7 +19,7 @@
         "src/main.tsx",
         "src/screens/**/*.custom.tsx",
         "src/views/*/*.usage.ts",
-        "src/guide/*.type.ts",
+        "src/view-parts.type.ts",
         ".brock/*.ts",
         "brock.config.ts",
         "*.config.{cjs,ts,mjs}",

@@ -1,7 +1,7 @@
 /* @layer renderer-app @kind hook */
 import { useCallback, useState } from 'react';
 import type { Session, SessionTemplate } from '@archipelia/model';
-import { useRunsStore } from '../../../state/useRunsStore';
+import { useRunsStore } from '../../../stores/useRunsStore';
 import type { RunLaunch } from '../RunProgress.type';
 
 const useRunLauncher = () => {

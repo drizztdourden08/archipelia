@@ -1,6 +1,6 @@
 /* @layer renderer-app @kind logic */
 import type { ServerEntry, SessionTemplate } from '@archipelia/model';
-import { hostLabel } from './host-label';
+import { hostLabel } from '../../../hosts/host-label';
 import { SPOILER_LABEL } from '../SessionsLibrary.constants';
 
 const templateMeta = (template: SessionTemplate, servers: ServerEntry[] = []) => {

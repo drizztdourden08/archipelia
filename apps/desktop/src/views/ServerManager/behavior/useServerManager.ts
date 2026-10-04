@@ -7,7 +7,7 @@ import { passwordSecret } from './password-secret';
 import { passphraseSecret } from './passphrase-secret';
 import { EMPTY_INPUTS } from '../ServerManager.constants';
 import type { ServerTestResult } from '../../../ipc/contract.type';
-import { archipeliaApi } from '../../../ipc/archipelia-api';
+import { appApi } from '../../../ipc/app-api';
 import { newServerEntry } from './new-server-entry';
 import { draftProblems } from './draft-problems';
 import { withSecretRefs } from './with-secret-refs';
@@ -27,7 +27,7 @@ const useServerManager = () => {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const load = useCallback(async () => setServers(await archipeliaApi().serversList()), []);
+  const load = useCallback(async () => setServers(await appApi().serversList()), []);
   useEffect(() => { void load(); }, [load]);
 
   const guard = useCallback(async (work: () => Promise<void>) => {
@@ -49,21 +49,21 @@ const useServerManager = () => {
 
   const save = useCallback(() => guard(async () => {
     if (!draft || problems.length) return;
-    const saved = draft.id ? draft : await archipeliaApi().serversSave(draft);
+    const saved = draft.id ? draft : await appApi().serversSave(draft);
     await storeSecrets(saved, inputs);
-    setDraft(await archipeliaApi().serversSave(withSecretRefs({ ...draft, id: saved.id }, inputs)));
+    setDraft(await appApi().serversSave(withSecretRefs({ ...draft, id: saved.id }, inputs)));
     setInputs(EMPTY_INPUTS);
   }), [draft, guard, inputs, problems]);
 
-  const runTest = useCallback(() => guard(async () => { if (draft?.id) setTest(await archipeliaApi().serversTest(draft.id)); }), [draft, guard]);
+  const runTest = useCallback(() => guard(async () => { if (draft?.id) setTest(await appApi().serversTest(draft.id)); }), [draft, guard]);
   const trust = useCallback((sha: string) => guard(async () => {
     if (!draft?.id) return;
-    setDraft(await archipeliaApi().serversTrustKey(draft.id, sha));
-    setTest(await archipeliaApi().serversTest(draft.id));
+    setDraft(await appApi().serversTrustKey(draft.id, sha));
+    setTest(await appApi().serversTest(draft.id));
   }), [draft, guard]);
   const remove = useCallback(() => guard(async () => {
     if (!draft?.id) return;
-    await archipeliaApi().serversRemove(draft.id);
+    await appApi().serversRemove(draft.id);
     const vault = secretsApi();
     if (vault) await Promise.all([passwordSecret(draft.id), passphraseSecret(draft.id)].map((name) => vault.delete(name)));
     setDraft(null);
