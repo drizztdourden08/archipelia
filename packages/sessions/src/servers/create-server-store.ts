@@ -1,12 +1,10 @@
 /* @layer core @kind logic */
-import type { FileStore } from '@drizztdourden08/brock-core/platform';
 import { createRecordStore } from '@archipelia/presets';
-import type { ServerEntry } from '@archipelia/model';
+import type { DataFiles, ServerEntry } from '@archipelia/model';
 import { newId } from '@drizztdourden08/brock-core/storage';
-import { SERVERS_DIR } from './server-store.constants';
 
-const createServerStore = (files: FileStore) => {
-  const records = createRecordStore<ServerEntry>(files, SERVERS_DIR);
+const createServerStore = (files: DataFiles) => {
+  const records = createRecordStore<ServerEntry>(files);
 
   const save = (entry: ServerEntry) => records.put(entry.id ? entry : { ...entry, id: newId() });
 

@@ -19,10 +19,6 @@ export default defineScreens({
       title: 'Data',
       icon: 'hard-drive',
       menu: 'entry',
-      groups: [
-        { id: 'storage', label: 'Storage' },
-        { id: 'transfer', label: 'Transfer' },
-      ],
     },
   ],
   home: 'multiworld',

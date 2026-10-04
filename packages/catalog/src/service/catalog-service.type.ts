@@ -1,6 +1,5 @@
 /* @layer core @kind types */
-import type { CatalogEntry } from '@archipelia/model';
-import type { FileStore } from '@drizztdourden08/brock-core/platform';
+import type { CatalogEntry, DataFiles } from '@archipelia/model';
 
 type CatalogView = { apVersion: string; entries: CatalogEntry[]; problems: number; fetchedAt: number };
 
@@ -9,6 +8,6 @@ type InstallRequest =
   | { kind: 'official'; apworld: string }
   | { kind: 'file'; fileName: string; bytes: Uint8Array };
 
-type CatalogServiceDeps = { files: FileStore; engineDir: () => string };
+type CatalogServiceDeps = { games: DataFiles; cache: DataFiles; engineDir: () => string };
 
 export type { CatalogServiceDeps, CatalogView, InstallRequest };

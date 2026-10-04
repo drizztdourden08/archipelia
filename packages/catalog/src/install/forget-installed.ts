@@ -1,7 +1,7 @@
 /* @layer core @kind logic */
-import type { FileStore } from '@drizztdourden08/brock-core/platform';
+import type { DataFiles } from '@archipelia/model';
 import { recordPath } from './record-path';
 
-const forgetInstalled = (files: FileStore, apworld: string) => files.remove(recordPath(apworld));
+const forgetInstalled = (files: DataFiles, apworld: string) => files.remove(recordPath(apworld));
 
 export { forgetInstalled };

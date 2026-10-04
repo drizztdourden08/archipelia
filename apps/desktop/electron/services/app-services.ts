@@ -10,31 +10,32 @@ import type { GameSchema } from '@archipelia/model';
 import { createPresetStore } from '@archipelia/presets';
 import { createRunStore, createServerStore, createSessionService, createTemplateStore } from '@archipelia/sessions';
 import { engineDirOf } from '../engine/engine-dir-of';
+import { DOMAIN } from '../../src/storage/domains.constants';
 
 const advertiseHost = () => lanAddresses().find((lan) => lan.family === 'IPv4')?.address ?? '127.0.0.1';
 
 const createAppServices = (ctx: MainContext) => {
-  const { files } = ctx;
+  const sessionFiles = ctx.storage.domain(DOMAIN.sessions);
+  const games = ctx.storage.domain(DOMAIN.games);
   const engineDir = () => engineDirOf(ctx);
-  const presets = createPresetStore(files);
-  const templates = createTemplateStore(files);
-  const runs = createRunStore(files);
-  const servers = createServerStore(files);
-  const catalog = createCatalogService({ files, engineDir });
+  const presets = createPresetStore(ctx.storage.domain(DOMAIN.presets));
+  const templates = createTemplateStore(sessionFiles);
+  const runs = createRunStore(sessionFiles);
+  const servers = createServerStore(ctx.storage.domain(DOMAIN.servers));
+  const catalog = createCatalogService({ games, cache: ctx.storage.domain(DOMAIN.cache), engineDir });
   const secrets = getSecrets(ctx);
   const runtime = () => loadRuntime(engineDir());
-  const installed = () => listInstalled(files);
+  const installed = () => listInstalled(games);
   const schemaOf = async (game: string): Promise<GameSchema | undefined> =>
     (await installed()).find((record) => record.game === game)?.schema;
   const sessions = createSessionService({
-    files, presets, runs, runtime, schemaOf,
-    dataRoot: ctx.paths.data(),
+    files: sessionFiles, presets, runs, runtime, schemaOf,
     hostFor: createHostFactory({ runtime, secrets, servers, advertiseHost, ggOwnerSecret: GG_OWNER_SECRET }),
     resolveSecret: (ref) => secrets.get(ref),
     emit: (event) => ctx.emit(APP_CHANNELS.onSessionEvent, event),
   });
   const dispose = () => sessions.stopLocal();
-  return { catalog, dispose, installed, presets, runs, runtime, secrets, servers, sessions, templates };
+  return { catalog, dispose, installed, presets, runs, runtime, secrets, servers, sessionFiles, sessions, templates };
 };
 
 export { createAppServices };

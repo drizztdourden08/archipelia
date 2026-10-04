@@ -1,6 +1,6 @@
 /* @layer core @kind types */
-import type { FileStore } from '@drizztdourden08/brock-core/platform';
+import type { DataFiles } from '@archipelia/model';
 
-type RemoveWorldParams = { engineDir: string; files: FileStore; apworld: string };
+type RemoveWorldParams = { engineDir: string; files: DataFiles; apworld: string };
 
 export type { RemoveWorldParams };

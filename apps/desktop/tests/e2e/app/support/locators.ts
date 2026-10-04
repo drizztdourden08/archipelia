@@ -22,7 +22,7 @@ const PAGE_OF: Record<MenuEntry, string> = {
   Presets: 'Presets',
   Servers: 'Servers',
   Settings: 'General',
-  Data: 'Overview',
+  Data: 'Storage',
 };
 
 const dialogOf = (page: Page, title: string) => page.getByRole('dialog', { name: title, exact: true });

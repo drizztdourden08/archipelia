@@ -1,12 +1,11 @@
 /* @layer core @kind logic */
-import type { FileStore } from '@drizztdourden08/brock-core/platform';
 import { unzipSync } from 'fflate';
-import type { SessionOutput } from '@archipelia/model';
+import type { DataFiles, SessionOutput } from '@archipelia/model';
 import { SEED, SPOILER } from './read-output.constants';
 
 const baseName = (path: string) => path.split(/[\\/]/).pop() ?? path;
 
-const readOutput = async (files: FileStore, outputDir: string, zipPath: string, generateLog: string) => {
+const readOutput = async (files: DataFiles, outputDir: string, zipPath: string, generateLog: string) => {
   const zipName = baseName(zipPath);
   const bytes = await files.readBytes(`${outputDir}/${zipName}`);
   if (!bytes) throw new Error(`generator output ${zipName} is missing`);

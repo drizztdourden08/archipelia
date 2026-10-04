@@ -6,7 +6,6 @@ import type { RunStore } from '../store/session-stores.type';
 import type { SessionEvent } from './session-event.type';
 
 type ServiceDeps = PlayerDeps & {
-  dataRoot: string;
   runtime: () => Promise<EngineRuntime>;
   runs: RunStore;
   hostFor: (target: HostTarget) => Promise<SessionHost>;

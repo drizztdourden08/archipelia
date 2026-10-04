@@ -4,7 +4,6 @@ import { join } from 'node:path';
 import type { HostRun } from './host-session.type';
 import type { LiveSession } from './service-deps.type';
 import { MAX_LOG_LINES } from './host-session.constants';
-import { sessionDirOf } from '../store/session-dir-of';
 import { bakesPassword } from './bakes-password';
 import { roomPasswordOf } from './room-password';
 
@@ -17,7 +16,7 @@ const hostSession = async ({ deps, live, signal }: HostRun, session: Session) =>
     if (entry.log.length > MAX_LOG_LINES) entry.log.shift();
     deps.emit({ type: 'log', sessionId: session.id, line });
   });
-  const sessionDir = join(deps.dataRoot, sessionDirOf(session.id));
+  const sessionDir = deps.files.path(session.id);
   const seedFile = join(sessionDir, `output/${session.output?.zip}`);
   const { server, host: hostTarget } = session.snapshot;
   const password = bakesPassword(hostTarget) ? undefined : await roomPasswordOf(deps, session);

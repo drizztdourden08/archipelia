@@ -2,10 +2,8 @@
 import { buildScreenTree } from '@drizztdourden08/brock-react';
 import config from '../src/screens/screens.config';
 import { searchIndex } from './search';
-import DataOverviewPage, { meta as dataOverviewPageMeta } from '../src/screens/data/overview.page';
-import DataStorageSessionRunsPage, { meta as dataStorageSessionRunsPageMeta } from '../src/screens/data/storage/session-runs.page';
-import DataTransferExportPage, { meta as dataTransferExportPageMeta } from '../src/screens/data/transfer/export.page';
-import DataTransferImportPage, { meta as dataTransferImportPageMeta } from '../src/screens/data/transfer/import.page';
+import DataOldRunsPage, { meta as dataOldRunsPageMeta } from '../src/screens/data/old-runs.page';
+import DataStoragePage, { meta as dataStoragePageMeta } from '../src/screens/data/storage.page';
 import MultiworldAppEnginePage, { meta as multiworldAppEnginePageMeta } from '../src/screens/multiworld/app/engine.page';
 import MultiworldAppGeneralSettings, { meta as multiworldAppGeneralSettingsMeta } from '../src/screens/multiworld/app/general.settings';
 import MultiworldHomeHero, { meta as multiworldHomeHeroMeta } from '../src/screens/multiworld/home.hero';
@@ -24,10 +22,8 @@ import MultiworldLibrarySessionsPage, { meta as multiworldLibrarySessionsPageMet
 import SessionBase, { meta as sessionBaseMeta } from '../src/screens/session.base';
 
 const screenTree = buildScreenTree(config, [
-  { kind: 'page', bucket: 'data', id: 'overview', component: DataOverviewPage, meta: dataOverviewPageMeta },
-  { kind: 'page', bucket: 'data', group: 'storage', id: 'session-runs', component: DataStorageSessionRunsPage, meta: dataStorageSessionRunsPageMeta },
-  { kind: 'page', bucket: 'data', group: 'transfer', id: 'export', component: DataTransferExportPage, meta: dataTransferExportPageMeta },
-  { kind: 'page', bucket: 'data', group: 'transfer', id: 'import', component: DataTransferImportPage, meta: dataTransferImportPageMeta },
+  { kind: 'page', bucket: 'data', id: 'old-runs', component: DataOldRunsPage, meta: dataOldRunsPageMeta },
+  { kind: 'page', bucket: 'data', id: 'storage', component: DataStoragePage, meta: dataStoragePageMeta },
   { kind: 'page', bucket: 'multiworld', group: 'app', id: 'engine', component: MultiworldAppEnginePage, meta: multiworldAppEnginePageMeta },
   { kind: 'settings', bucket: 'multiworld', group: 'app', id: 'general', sections: MultiworldAppGeneralSettings, meta: multiworldAppGeneralSettingsMeta },
   { kind: 'hero', bucket: 'multiworld', id: 'home', component: MultiworldHomeHero, meta: multiworldHomeHeroMeta },

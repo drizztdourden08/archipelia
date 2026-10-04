@@ -1,10 +1,10 @@
 /* @layer tests @kind helper */
+import { join } from 'node:path';
 import { afterAll, beforeAll, describe, expect, test } from 'vitest';
-import type { FileStore } from '@drizztdourden08/brock-core/platform';
 import { listInstalled, removeWorld } from '@archipelia/catalog';
 import { readRuntime } from '@archipelia/engine';
 import { createLocalHost } from '@archipelia/hosts';
-import type { Session, SessionPlayer } from '@archipelia/model';
+import type { DataFiles, Session, SessionPlayer } from '@archipelia/model';
 import { createPresetStore } from '@archipelia/presets';
 import type { PresetStore } from '@archipelia/presets';
 import { createRunStore, createSessionService } from '@archipelia/sessions';
@@ -13,9 +13,9 @@ import type { Client } from 'archipelago.js';
 import { checkAll, checkSome, joinAs, reachGoal, waitFor, waitForItems } from './ap-player';
 import { ENGINE_DIR } from './e2e-inputs';
 import { required } from './required';
-import { fileStoreAt, tempDataRoot } from './temp-file-store';
+import { dataFilesAt, tempDataRoot } from './temp-file-store';
 
-type RigContext = { files: FileStore; presets: PresetStore };
+type RigContext = { games: DataFiles; cache: DataFiles; presets: PresetStore };
 type Multiworld = { title: string; port: number; setup: (ctx: RigContext) => Promise<SessionPlayer[]> };
 type RigState = { root: string; session?: Session; service?: SessionService; players: SessionPlayer[]; clients: Client[]; log: string[] };
 
@@ -23,13 +23,14 @@ const serverOptions = { hintCost: 10, releaseMode: 'auto', collectMode: 'auto', 
 
 const startRig = async (state: RigState, { title, port, setup }: Multiworld) => {
   state.root = await tempDataRoot();
-  const files = fileStoreAt(state.root);
+  const files = dataFilesAt(join(state.root, 'sessions'));
+  const games = dataFilesAt(join(state.root, 'games'));
   const runtime = await readRuntime(ENGINE_DIR);
-  const presets = createPresetStore(files);
-  state.players = await setup({ files, presets });
-  const installed = await listInstalled(files);
+  const presets = createPresetStore(dataFilesAt(join(state.root, 'presets')));
+  state.players = await setup({ games, cache: dataFilesAt(join(state.root, 'cache')), presets });
+  const installed = await listInstalled(games);
   state.service = createSessionService({
-    files, presets, dataRoot: state.root, runs: createRunStore(files), runtime: () => Promise.resolve(runtime),
+    files, presets, runs: createRunStore(files), runtime: () => Promise.resolve(runtime),
     schemaOf: (game) => Promise.resolve(installed.find((record) => record.game === game)?.schema),
     hostFor: () => Promise.resolve(createLocalHost({ runtime, port, bindHost: '127.0.0.1', advertiseHost: '127.0.0.1' })),
     resolveSecret: () => Promise.resolve(null),
@@ -44,7 +45,7 @@ const startRig = async (state: RigState, { title, port, setup }: Multiworld) => 
 const stopRig = async (state: RigState) => {
   state.clients.forEach((client) => client.socket.disconnect());
   if (state.service && state.session?.status === 'hosting') await state.service.stop(state.session.id);
-  const files = fileStoreAt(state.root);
+  const files = dataFilesAt(join(state.root, 'games'));
   for (const game of await listInstalled(files)) await removeWorld({ engineDir: ENGINE_DIR, files, apworld: game.apworld });
 };
 

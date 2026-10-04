@@ -17,10 +17,7 @@ const APP_TREE = [
           'one preset being edited': null,
           'the saved servers': null,
           'the engine': null,
-          'the data on disk': {
-            question: 'Which part of it?',
-            answers: { 'the folder sizes': null, 'the old runs to clean': null, 'a library export': null, 'a library import': null },
-          },
+          'the old runs to clean': null,
         },
       },
     },

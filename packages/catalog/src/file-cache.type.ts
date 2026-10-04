@@ -1,8 +1,8 @@
 /* @layer core @kind types */
-import type { FileStore } from '@drizztdourden08/brock-core/platform';
+import type { DataFiles } from '@archipelia/model';
 
 type FetchResult = { text: string; fromCache: boolean };
 
-type CacheTarget = { files: FileStore; cacheDir: string };
+type CacheTarget = { files: DataFiles; cacheDir: string };
 
 export type { CacheTarget, FetchResult };

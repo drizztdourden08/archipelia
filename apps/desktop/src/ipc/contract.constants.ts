@@ -4,7 +4,7 @@ import type { CatalogView, InstallRequest } from '@archipelia/catalog';
 import type { CatalogEntry, EngineStatus, GamePreset, InstalledGame, ServerEntry, Session, SessionTemplate } from '@archipelia/model';
 import type { HostLogLine, ServerTestResult } from '@archipelia/hosts';
 import type { PresetInput } from '@archipelia/presets';
-import type { LibraryImportResult, SessionEvent } from '@archipelia/sessions';
+import type { SessionEvent } from '@archipelia/sessions';
 
 const APP_CHANNELS = defineChannels({
   engineStatus: invoke<() => Promise<EngineStatus>>()('ap:engine:status'),
@@ -28,7 +28,6 @@ const APP_CHANNELS = defineChannels({
   sessionsCancel: invoke<(id: string) => Promise<void>>()('ap:sessions:cancel'),
   sessionsCommand: invoke<(id: string, cmd: string) => Promise<void>>()('ap:sessions:command'),
   sessionsLog: invoke<(id: string) => Promise<HostLogLine[]>>()('ap:sessions:log'),
-  sessionsReadText: invoke<(id: string, file: string) => Promise<string | null>>()('ap:sessions:readText'),
   sessionsRemove: invoke<(id: string) => Promise<void>>()('ap:sessions:remove'),
   serversList: invoke<() => Promise<ServerEntry[]>>()('ap:servers:list'),
   serversSave: invoke<(entry: ServerEntry) => Promise<ServerEntry>>()('ap:servers:save'),
@@ -36,8 +35,6 @@ const APP_CHANNELS = defineChannels({
   serversTest: invoke<(id: string) => Promise<ServerTestResult>>()('ap:servers:test'),
   serversTrustKey: invoke<(id: string, sha256: string) => Promise<ServerEntry>>()('ap:servers:trustKey'),
   ggOpenRooms: invoke<(baseUrl: string) => Promise<void>>()('ap:gg:openRooms'),
-  dataExport: invoke<() => Promise<Uint8Array>>()('ap:data:export'),
-  dataImport: invoke<(bytes: Uint8Array) => Promise<LibraryImportResult>>()('ap:data:import'),
   onSessionEvent: event<(event: SessionEvent) => void>()('ap:sessions:event'),
   onEngineProgress: event<(line: string) => void>()('ap:engine:progress'),
 });

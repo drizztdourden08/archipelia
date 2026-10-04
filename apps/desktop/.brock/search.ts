@@ -3,10 +3,8 @@ import { buildSearchIndex } from '@drizztdourden08/brock-react';
 import config from '../src/screens/screens.config';
 
 const searchIndex = buildSearchIndex(config, [
-  {"kind":"page","id":"overview","bucket":"data","title":"Overview","icon":"hard-drive","keywords":["sizes","folder","disk"]},
-  {"kind":"page","id":"session-runs","bucket":"data","group":"storage","title":"Runs","icon":"history","keywords":["session","runs","clean","old"]},
-  {"kind":"page","id":"export","bucket":"data","group":"transfer","title":"Export","icon":"upload","keywords":["backup","zip","library"]},
-  {"kind":"page","id":"import","bucket":"data","group":"transfer","title":"Import","icon":"download","keywords":["restore","zip","library"]},
+  {"kind":"page","id":"old-runs","bucket":"data","title":"Old runs","icon":"history","keywords":["session","runs","clean","old"]},
+  {"kind":"page","id":"storage","bucket":"data","title":"Storage","icon":"hard-drive","keywords":["sizes","folder","disk","export","import","backup","zip"]},
   {"kind":"page","id":"engine","bucket":"multiworld","group":"app","title":"Engine","icon":"cpu","keywords":["archipelago","python","generator","setup","rebuild"]},
   {"kind":"settings","id":"general","bucket":"multiworld","group":"app","title":"General","icon":"settings","keywords":["window","fullscreen","developer","logging"],"sections":[{"id":"window","title":"Window","rows":[{"key":"windowMode","label":"Window mode","description":"Windowed, borderless or fullscreen.","hint":"Borderless and fullscreen hide the title bar.","keywords":[]},{"key":"startFullscreen","label":"Start fullscreen","description":"Open in fullscreen on launch.","hint":"Applies the next time Archipelia starts.","keywords":[]}]},{"id":"developer","title":"Developer","rows":[{"key":"developerToolsEnabled","label":"Developer tools","description":"Allow opening the developer tools.","hint":"Adds the developer console to the menu.","keywords":[]},{"key":"allowDebugLogging","label":"Debug logging","description":"Write debug lines to the session log.","hint":"Makes the log larger; turn it on to report a problem.","keywords":[]}]}]},
   {"kind":"hero","id":"home","bucket":"multiworld","title":"Home","icon":"house","keywords":["overview","engine","recent","runs","run","again"]},

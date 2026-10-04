@@ -10,7 +10,7 @@ import type { EngineRuntime } from '@archipelia/model';
 import { waitFor } from './support/ap-player';
 import { ENGINE_DIR } from './support/e2e-inputs';
 import { required } from './support/required';
-import { fileStoreAt } from './support/temp-file-store';
+import { dataFilesAt } from './support/temp-file-store';
 
 type RoomInfo = { cmd: string; password: boolean };
 
@@ -37,13 +37,13 @@ describe('room passwords never travel on a command line', () => {
   beforeAll(async () => {
     state.dir = await mkdtemp(join(tmpdir(), 'archipelia-pw-'));
     state.runtime = await readRuntime(ENGINE_DIR);
-    await installOfficial({ engineDir: ENGINE_DIR, files: fileStoreAt(state.dir), apworld: 'timespinner' });
+    await installOfficial({ engineDir: ENGINE_DIR, files: dataFilesAt(join(state.dir, 'games')), apworld: 'timespinner' });
     await mkdir(join(state.dir, 'players'));
     await writeFile(join(state.dir, 'players', 'p1.yaml'), 'name: Lunais\ngame: Timespinner\nTimespinner: {}\n');
   });
 
   afterAll(async () => {
-    const files = fileStoreAt(state.dir);
+    const files = dataFilesAt(join(state.dir, 'games'));
     for (const game of await listInstalled(files)) await removeWorld({ engineDir: ENGINE_DIR, files, apworld: game.apworld });
   });
 

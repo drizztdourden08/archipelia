@@ -1,12 +1,11 @@
 /* @layer core @kind types */
-import type { EngineRuntime, GameSource, WorldLayout } from '@archipelia/model';
-import type { FileStore } from '@drizztdourden08/brock-core/platform';
+import type { DataFiles, EngineRuntime, GameSource, WorldLayout } from '@archipelia/model';
 import type { ApworldInfo } from './read-apworld.type';
 import type { HashDecision } from './hash-decision.type';
 
 type InstallJob = {
   runtime: EngineRuntime;
-  files: FileStore;
+  files: DataFiles;
   file: string;
   info: ApworldInfo;
   apworld: string;

@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import type { SessionText } from '../SessionDashboard.type';
 import { IDLE } from '../SessionDashboard.constants';
-import { appApi } from '../../../ipc/app-api';
+import { readRunText } from '../../../storage/read-run-text';
 
 const useSessionText = (sessionId: string, file: string | null): SessionText => {
   const [text, setText] = useState<SessionText>(IDLE);
@@ -13,7 +13,7 @@ const useSessionText = (sessionId: string, file: string | null): SessionText => 
     }
     let alive = true;
     setText({ value: null, loading: true });
-    appApi().sessionsReadText(sessionId, file)
+    readRunText(sessionId, file)
       .then((value) => { if (alive) setText({ value, loading: false }); })
       .catch(() => { if (alive) setText(IDLE); });
     return () => { alive = false; };

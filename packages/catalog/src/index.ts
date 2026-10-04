@@ -3,7 +3,6 @@ export { DEFAULT_INDEX } from './index-source.constants';
 export type { IndexSource } from './index-source.type';
 export { readCatalog } from './read-catalog';
 export type { Catalog, CatalogOptions, CatalogProblem } from './read-catalog.type';
-export { GAMES_DIR } from './install/game-records.constants';
 export { listInstalled } from './install/list-installed';
 export { readInstalled } from './install/read-installed';
 export { installFromFile } from './install/install-from-file';

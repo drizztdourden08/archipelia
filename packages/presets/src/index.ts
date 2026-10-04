@@ -1,6 +1,5 @@
 /* @layer core @kind barrel */
 export { createPresetStore } from './store/preset-store';
-export { PRESETS_DIR } from './store/preset-store.constants';
 export type { PresetInput, PresetStore } from './store/preset-store.type';
 export { createRecordStore } from './store/record-store';
 export type { RecordStore, StoredRecord } from './store/record-store.type';

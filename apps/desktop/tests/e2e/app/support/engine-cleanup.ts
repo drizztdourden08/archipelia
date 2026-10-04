@@ -3,12 +3,12 @@ import { readdir } from 'node:fs/promises';
 import { join } from 'node:path';
 import { listInstalled, removeWorld } from '@archipelia/catalog';
 import { ENGINE_DIR } from '../../support/e2e-inputs';
-import { fileStoreAt } from '../../support/temp-file-store';
+import { dataFilesAt } from '../../support/temp-file-store';
 
 const BASE_WORLDS = ['_bizhawk', '_sc2common', 'generic'];
 
 const removeLeftWorlds = async (userData: string) => {
-  const files = fileStoreAt(join(userData, 'Data'));
+  const files = dataFilesAt(join(userData, 'Data', 'games'));
   const left = await listInstalled(files);
   for (const game of left) await removeWorld({ engineDir: ENGINE_DIR, files, apworld: game.apworld });
   return left.map((game) => game.apworld);

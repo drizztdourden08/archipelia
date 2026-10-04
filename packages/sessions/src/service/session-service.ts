@@ -5,7 +5,6 @@ import type { LiveSession, ServiceDeps } from './service-deps.type';
 import { produceSession } from './produce-session';
 import { hostSession } from './host-session';
 import { CANCELLED } from './session-service.constants';
-import { sessionDirOf } from '../store/session-dir-of';
 
 const createSessionService = (deps: ServiceDeps) => {
   const { files, runs, emit } = deps;
@@ -47,7 +46,7 @@ const createSessionService = (deps: ServiceDeps) => {
     const entry = liveOf(id);
     await entry.host.stop();
     live.delete(id);
-    await files.writeText(`${sessionDirOf(id)}/server.log`, entry.log.map((line) => line.text).join('\n'));
+    await files.writeText(`${id}/server.log`, entry.log.map((line) => line.text).join('\n'));
     const session = await runs.get(id);
     return session ? update(session, { status: 'stopped', serverLog: 'server.log' }) : undefined;
   };

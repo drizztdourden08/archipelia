@@ -6,8 +6,8 @@ import type { RigContext } from './multiworld-rig';
 
 const SOH = 'oot_soh';
 
-const sohPlayer = async ({ files, presets }: RigContext, slot: number, name: string): Promise<SessionPlayer> => {
-  const catalog = await readCatalog({ files, cacheDir: 'cache/catalog' });
+const sohPlayer = async ({ games: files, cache, presets }: RigContext, slot: number, name: string): Promise<SessionPlayer> => {
+  const catalog = await readCatalog({ files: cache, cacheDir: 'catalog' });
   const entry = catalog.entries.find((candidate) => candidate.apworld === SOH);
   const latest = entry?.versions.at(-1);
   if (!entry || !latest) throw new Error('the index has no Ship of Harkinian version');

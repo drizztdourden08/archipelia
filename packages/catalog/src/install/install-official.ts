@@ -1,6 +1,5 @@
 /* @layer core @kind logic */
-import type { EngineRuntime, InstalledGame } from '@archipelia/model';
-import type { FileStore } from '@drizztdourden08/brock-core/platform';
+import type { DataFiles, EngineRuntime, InstalledGame } from '@archipelia/model';
 import { join } from 'node:path';
 import { readRuntime } from '@archipelia/engine';
 import { officialDir } from '../official/official-dir';
@@ -14,7 +13,7 @@ import type { InstallOfficialParams } from './install-official.type';
 import { listInstalled } from './list-installed';
 import { installOrder } from '../official/install-order';
 
-const installOne = async (runtime: EngineRuntime, files: FileStore, dir: string, world: OfficialWorld) => {
+const installOne = async (runtime: EngineRuntime, files: DataFiles, dir: string, world: OfficialWorld) => {
   const file = join(dir, world.file);
   const hash = hashDecision(world.sha256, await hashFile(file), world.file);
   return commitInstall({

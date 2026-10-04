@@ -14,11 +14,11 @@ import { officialEntries } from '../official/official-entries';
 import type { CatalogServiceDeps, CatalogView, InstallRequest } from './catalog-service.type';
 import { CACHE_DIR } from './catalog-service.constants';
 
-const createCatalogService = ({ files, engineDir }: CatalogServiceDeps) => {
+const createCatalogService = ({ games: files, cache, engineDir }: CatalogServiceDeps) => {
   let latest: (Catalog & { fetchedAt: number }) | undefined;
 
   const read = async (refresh: boolean): Promise<CatalogView> => {
-    if (!latest || refresh) latest = { ...(await readCatalog({ files, cacheDir: CACHE_DIR })), fetchedAt: Date.now() };
+    if (!latest || refresh) latest = { ...(await readCatalog({ files: cache, cacheDir: CACHE_DIR })), fetchedAt: Date.now() };
     return { apVersion: latest.apVersion, entries: latest.entries.filter((e) => e.source === 'index'), problems: latest.problems.length, fetchedAt: latest.fetchedAt };
   };
 

@@ -1,6 +1,6 @@
 /* @layer core @kind types */
-import type { FileStore } from '@drizztdourden08/brock-core/platform';
+import type { DataFiles } from '@archipelia/model';
 
-type InstallOfficialParams = { engineDir: string; files: FileStore; apworld: string };
+type InstallOfficialParams = { engineDir: string; files: DataFiles; apworld: string };
 
 export type { InstallOfficialParams };
