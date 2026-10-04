@@ -3,7 +3,7 @@ import '@drizztdourden08/tessera/tokens.css';
 import './theme.css';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { BrockApp } from '@drizztdourden08/brock-react';
+import { BrockApp, registerWidgets } from '@drizztdourden08/brock-react';
 import { rendererBootTasks } from '../.brock/boot.renderer';
 import { rendererModules } from '../.brock/modules.renderer';
 import { screenTree } from '../.brock/screens';
@@ -12,9 +12,13 @@ import { MENU } from './menu.constants';
 import { BASE_SCREEN } from './navigation/app-navigation.constants';
 import { product } from './product';
 import { listenToRuns } from './state/listen-to-runs';
+import { listenToSessionView } from './state/listen-to-session-view';
+import { SESSION_WIDGETS } from './widgets/session-widgets.constants';
 import type { AppSettings } from './settings.type';
 
 listenToRuns();
+listenToSessionView();
+registerWidgets(SESSION_WIDGETS);
 
 const root = document.getElementById('root');
 if (!root) throw new Error('index.html has no #root element');

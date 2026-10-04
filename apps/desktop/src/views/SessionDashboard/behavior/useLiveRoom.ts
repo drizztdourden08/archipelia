@@ -2,6 +2,7 @@
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 import type { Session } from '@archipelia/model';
 import type { HostLogLine } from '@archipelia/hosts';
+import { holdLiveRoom } from '../../../state/hold-live-room';
 import { useLiveRoomStore } from '../../../state/useLiveRoomStore';
 import { checksFromLog } from '../../../widgets/live-room/log-checks';
 import { playerRows } from '../../../widgets/live-room/player-rows';
@@ -11,18 +12,13 @@ import { targetKey } from '../../../widgets/live-room/target-key';
 import { watchTarget } from '../../../widgets/live-room/watch-target';
 
 const useLiveRoom = (session: Session | null, lines: readonly HostLogLine[]) => {
-  const { phase, error, players, statuses, watched, hints, passwordRequired, connect, disconnect } = useLiveRoomStore();
+  const { phase, error, players, statuses, watched, hints, passwordRequired, connect } = useLiveRoomStore();
   const target = useMemo(() => (session ? watchTarget(session) : null), [session]);
   const targetRef = useRef(target);
   targetRef.current = target;
   const key = targetKey(target);
 
-  useEffect(() => {
-    const current = targetRef.current;
-    if (!current) return undefined;
-    void connect(current);
-    return () => disconnect();
-  }, [key, connect, disconnect]);
+  useEffect(() => (targetRef.current ? holdLiveRoom(targetRef.current) : undefined), [key]);
 
   const submitPassword = useCallback((password: string) => {
     if (targetRef.current) void connect(targetRef.current, password);

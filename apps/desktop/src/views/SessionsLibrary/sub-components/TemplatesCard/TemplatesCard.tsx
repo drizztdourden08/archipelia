@@ -5,7 +5,7 @@ import { TemplateRow } from '@archipelia/design';
 import { templateMeta } from '../../behavior/template-meta';
 import { playersLabel } from '../../behavior/players-label';
 
-const TemplatesCard = ({ templates, total, servers, busy, onEdit, onRun, onDuplicate, onDelete }: TemplatesCardProps) => (
+const TemplatesCard = ({ templates, total, servers, isBusy, onEdit, onRun, onDuplicate, onDelete }: TemplatesCardProps) => (
   <Card>
     <Stack gap="sm">
       <SectionHeader title={`Templates · ${total}`} />
@@ -18,7 +18,7 @@ const TemplatesCard = ({ templates, total, servers, busy, onEdit, onRun, onDupli
             name={template.name}
             meta={templateMeta(template, servers)}
             playersLabel={playersLabel(template.players.length)}
-            busy={busy === template.id}
+            busy={isBusy(template.id)}
             onEdit={onEdit}
             onRun={onRun}
             onDuplicate={onDuplicate}

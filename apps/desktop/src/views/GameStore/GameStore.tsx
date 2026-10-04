@@ -10,7 +10,7 @@ import { cardPropsOf } from './behavior/card-props';
 const GameStore = ({ tab }: GameStoreProps) => {
   const store = useGameStore(tab);
   const openHome = useCallback((url: string) => { window.open(url, '_blank', 'noopener'); }, []);
-  const handlers = { busy: store.busy, installWorld: store.installWorld, remove: store.remove, openHome };
+  const handlers = { isBusy: store.isBusy, installWorld: store.installWorld, remove: store.remove, openHome };
 
   return (
     <Stack>
@@ -20,13 +20,13 @@ const GameStore = ({ tab }: GameStoreProps) => {
         </Text>
         <ButtonRow>
           <TextInput placeholder="Search worlds" value={store.query} onChange={(e) => store.setQuery(e.target.value)} />
-          <Button variant="secondary" disabled={store.busy !== null} onClick={store.refresh}><Icon name="refresh-cw" />Refresh index</Button>
-          <Button variant="secondary" disabled={store.busy !== null} onClick={store.addFromFile}><Icon name="plus" />Add from file</Button>
+          <Button variant="secondary" disabled={store.isBusy()} onClick={store.refresh}><Icon name="refresh-cw" />Refresh index</Button>
+          <Button variant="secondary" disabled={store.isBusy()} onClick={store.addFromFile}><Icon name="plus" />Add from file</Button>
         </ButtonRow>
       </Flex>
       {store.error && <Text variant="body" role="alert">{store.error}</Text>}
       {store.visible.length === 0
-        ? <EmptyState message={store.busy === 'load' ? 'Loading the catalog' : 'No world matches'} />
+        ? <EmptyState message={store.isBusy('load') ? 'Loading the catalog' : 'No world matches'} />
         : (
           <Grid minColWidth={260} gap="md">
             {store.visible.slice(0, MAX_CARDS).map((row) => <GameCard key={`${row.entry.source}:${row.entry.apworld}`} {...cardPropsOf(row, handlers)} />)}

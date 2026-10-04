@@ -1,11 +1,12 @@
 /* @layer renderer-app @kind hook */
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { confirmAction, useNow } from '@drizztdourden08/brock-react';
+import { relaySessionView } from '../../../state/relay-session-view';
 import { useRunsStore } from '../../../state/useRunsStore';
+import { useSessionViewStore } from '../../../state/useSessionViewStore';
 import { pickSession } from './pick-session';
 import { COPIED_MS, NO_LINES, TICK_MS } from '../SessionDashboard.constants';
-import { useNow } from './useNow';
 import { addressOf } from './address-of';
-import { confirmAction } from './confirm-action';
 import { uptimeOf } from './uptime-of';
 
 const useSessionDashboard = (sessionId: string) => {
@@ -27,6 +28,10 @@ const useSessionDashboard = (sessionId: string) => {
   }, [copied]);
 
   const lines = (id ? logs[id] : undefined) ?? NO_LINES;
+
+  useEffect(() => useSessionViewStore.getState().show({ session, lines, loaded }), [session, lines, loaded]);
+
+  useEffect(relaySessionView, []);
   const now = useNow(TICK_MS, session?.status === 'hosting');
   const address = addressOf(session?.endpoint);
 
@@ -37,11 +42,13 @@ const useSessionDashboard = (sessionId: string) => {
 
   const stopSession = useCallback(() => {
     if (!id) return;
-    confirmAction({
+    void confirmAction({
       title: 'Stop the room',
       message: 'The server stops and every player is disconnected.',
       confirmLabel: 'Stop',
-      run: () => { stop(id).catch((err: Error) => setError(err.message)); },
+      variant: 'danger',
+    }).then((confirmed) => {
+      if (confirmed) stop(id).catch((err: Error) => setError(err.message));
     });
   }, [id, stop]);
 

@@ -9,17 +9,6 @@
   flex-shrink: 0;
 }
 
-.session-dashboard__dock {
-  position: relative;
-  isolation: isolate;
-  flex: 1 0 auto;
-  min-height: calc(var(--size-256) + var(--size-320));
-  overflow: hidden;
-  background: var(--c-bg);
-  border: var(--border-width-thin) solid var(--c-hairline);
-  border-radius: var(--radius-lg);
-}
-
 .session-panel {
   padding: var(--space-sm);
 }

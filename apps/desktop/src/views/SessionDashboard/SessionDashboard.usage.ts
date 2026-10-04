@@ -2,7 +2,7 @@
 import type { ComponentUsage } from '@drizztdourden08/tessera';
 
 const usage = {
-  job: 'The base screen: the room that is hosting with its status bar, players, hints and dock widgets, or the idle state when none is.',
+  job: 'The base screen: the room that is hosting with its status bar and summary, under the session widgets Brock docks around it, or the idle state when none is.',
   useWhen: [
     'The base layer under every hub, drawn by the session screen.',
   ],

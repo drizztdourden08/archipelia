@@ -1,7 +1,6 @@
 /* @layer renderer-app @kind config */
 import type { HostLogLine } from '@archipelia/hosts';
 import type { HostTarget, SessionStatus } from '@archipelia/model';
-import type { WidgetPersistenceIO } from '@drizztdourden08/tessera/composites';
 import type { LogTab, SessionText, StatusView } from './SessionDashboard.type';
 
 const IDLE: SessionText = { value: null, loading: false };
@@ -36,6 +35,4 @@ const KIND_RULES: readonly [RegExp, string][] = [
 
 const MAX_SENT = 40;
 
-const LOCAL_ONLY: WidgetPersistenceIO = { load: () => Promise.resolve(null), save: () => Promise.resolve() };
-
-export { COPIED_MS, GENERATE_LOG, HOST_LABEL, IDLE, KIND_RULES, LOCAL_ONLY, LOG_TAB_LABEL, MAX_SENT, NO_LINES, STATUS_VIEW, TICK_MS };
+export { COPIED_MS, GENERATE_LOG, HOST_LABEL, IDLE, KIND_RULES, LOG_TAB_LABEL, MAX_SENT, NO_LINES, STATUS_VIEW, TICK_MS };

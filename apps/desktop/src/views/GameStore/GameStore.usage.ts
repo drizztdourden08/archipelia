@@ -12,7 +12,7 @@ const usage = {
   ],
   rules: [
     'Pick the tab from the page tab; the view filters the rows for it.',
-    'Keep the busy key in useGameStore so one install at a time runs.',
+    'Guard each install with its world as the key, through useKeyedGuard, so its card shows it working.',
     'Cap the number of cards drawn and let search narrow the rest.',
   ],
   a11y: [

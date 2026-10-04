@@ -2,13 +2,12 @@
 import { Button, ButtonRow, Flex, Status, Text } from '@drizztdourden08/tessera/primitives';
 import type { SessionStatusBarProps } from './SessionStatusBar.type';
 import { StatusFact } from './sub-components/StatusFact';
-import { WidgetToggle } from './sub-components/WidgetToggle';
 import './SessionStatusBar.css';
 
 const SessionStatusBar = (props: SessionStatusBarProps) => {
   const {
     status, statusTone, name, host, address, roomUrl, seed, uptime, progress, copied, stoppable,
-    widgets, onToggleWidget, onResetLayout, onCopy, onStop,
+    onResetLayout, onCopy, onStop,
   } = props;
   return (
     <Flex className="session-status-bar" align="center" justify="between" wrap gap="sm">
@@ -22,7 +21,6 @@ const SessionStatusBar = (props: SessionStatusBarProps) => {
         {progress && <StatusFact label="stage" value={progress} />}
       </Flex>
       <ButtonRow gap="xs">
-        {widgets.map((widget) => <WidgetToggle key={widget.id} {...widget} onToggle={onToggleWidget} />)}
         <Button size="sm" variant="ghost" onClick={onResetLayout}>Reset layout</Button>
         <Button size="sm" variant="secondary" disabled={!address} onClick={onCopy}>{copied ? 'Copied' : 'Copy address'}</Button>
         <Button size="sm" variant="danger" disabled={!stoppable} onClick={onStop}>Stop</Button>

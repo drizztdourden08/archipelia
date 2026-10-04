@@ -51,7 +51,7 @@ const SessionsLibrary = () => {
           templates={hub.visibleTemplates}
           total={hub.templates.length}
           servers={hub.servers}
-          busy={hub.busy}
+          isBusy={hub.isBusy}
           onEdit={hub.edit}
           onRun={runTemplate}
           onDuplicate={hub.duplicate}
@@ -60,7 +60,7 @@ const SessionsLibrary = () => {
         <HistoryCard
           runs={hub.visibleRuns}
           total={hub.runs.length}
-          busy={hub.busy}
+          isBusy={hub.isBusy}
           onOpen={open}
           onShowLog={showLog}
           onDelete={hub.deleteRun}

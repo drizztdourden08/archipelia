@@ -1,8 +1,8 @@
 /* @layer renderer-app @kind hook */
 import { useCallback, useState } from 'react';
+import { confirmAction } from '@drizztdourden08/brock-react';
 import { useRunsStore } from '../../../state/useRunsStore';
 import { MAX_SENT } from '../SessionDashboard.constants';
-import { confirmAction } from './confirm-action';
 
 const useConsole = (sessionId: string) => {
   const command = useRunsStore((s) => s.command);
@@ -28,7 +28,9 @@ const useConsole = (sessionId: string) => {
   }, [draft, send]);
 
   const confirmSend = useCallback((cmd: string, title: string, message: string) => {
-    confirmAction({ title, message, confirmLabel: 'Send', run: () => { void send(cmd); } });
+    void confirmAction({ title, message, confirmLabel: 'Send', variant: 'danger' }).then((confirmed) => {
+      if (confirmed) void send(cmd);
+    });
   }, [send]);
 
   return { confirmSend, draft, error, send, sent, setDraft, submit };

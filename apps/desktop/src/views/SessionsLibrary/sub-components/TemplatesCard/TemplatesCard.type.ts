@@ -5,7 +5,7 @@ type TemplatesCardProps = {
   templates: SessionTemplate[];
   total: number;
   servers: ServerEntry[];
-  busy: string | null;
+  isBusy: (key: string) => boolean;
   onEdit: (id: string) => void;
   onRun: (id: string) => void;
   onDuplicate: (id: string) => void;

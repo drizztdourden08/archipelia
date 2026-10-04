@@ -6,7 +6,7 @@ import { useAppNavigation } from '../../navigation/useAppNavigation';
 import type { SessionDashboardProps } from './SessionDashboard.type';
 import { useSessionDashboard } from './behavior/useSessionDashboard';
 import { useLiveRoom } from './behavior/useLiveRoom';
-import { useSessionDock } from './behavior/useSessionDock';
+import { useSessionLayoutSeed } from './behavior/useSessionLayoutSeed';
 import { canStop } from './behavior/can-stop';
 import { hostLabel } from './behavior/host-label';
 import { progressLabel } from './behavior/progress-label';
@@ -14,13 +14,13 @@ import { statusView } from './behavior/status-view';
 import { SessionStatusBar } from '@archipelia/design';
 import { IdleBase } from './sub-components/IdleBase';
 import { SessionSummary } from './sub-components/SessionSummary';
-import { SessionWidgets } from './sub-components/SessionWidgets';
+import { resetSessionWidgets } from '../../widgets/reset-session-widgets';
 import './SessionDashboard.css';
 
 const SessionDashboard = ({ sessionId }: SessionDashboardProps) => {
   const board = useSessionDashboard(sessionId);
   const live = useLiveRoom(board.session, board.lines);
-  const dock = useSessionDock();
+  useSessionLayoutSeed(board.session !== null);
   const { open } = useAppNavigation();
   const openSessions = useCallback(() => open(ROUTE.sessions), [open]);
 
@@ -42,16 +42,13 @@ const SessionDashboard = ({ sessionId }: SessionDashboardProps) => {
         progress={progressLabel(board.progress)}
         copied={board.copied}
         stoppable={canStop(session.status)}
-        widgets={dock.toggles}
-        onToggleWidget={dock.toggle}
-        onResetLayout={dock.reset}
+        onResetLayout={resetSessionWidgets}
         onCopy={board.copyAddress}
         onStop={board.stopSession}
       />
       {board.error && <Text variant="body" role="alert">{board.error}</Text>}
       {session.error && <Text variant="body" role="alert">{session.error}</Text>}
       <SessionSummary players={live.players} hints={live.hints} phase={live.phase} uptime={board.uptime} status={status.label} />
-      <SessionWidgets session={session} lines={board.lines} live={live} layout={dock.layout} onLayoutChange={dock.setLayout} />
     </Stack>
   );
 };

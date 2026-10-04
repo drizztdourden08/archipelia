@@ -1,9 +1,9 @@
 /* @layer renderer-app @kind hook */
-import { usePlatform } from '@drizztdourden08/brock-react';
+import { useKeyedGuard, usePlatform } from '@drizztdourden08/brock-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { lastGuardError } from '../../../state/last-guard-error';
 import { useLibraryStore } from '../../../state/useLibraryStore';
 import type { GameTab } from '../GameStore.type';
-import { useKeyedGuard } from '../../../state/useKeyedGuard';
 import { buildRows } from './build-rows';
 import { filterRows } from './filter-rows';
 import type { InstallRequest } from '../../../ipc/contract.type';
@@ -13,7 +13,9 @@ const useGameStore = (tab: GameTab) => {
   const { catalog, official, installed, loadGames, install, removeGame } = useLibraryStore();
   const { filePicker } = usePlatform();
   const [query, setQuery] = useState('');
-  const { busy, error, guard } = useKeyedGuard();
+  const guarded = useKeyedGuard();
+  const { guard, isBusy } = guarded;
+  const error = lastGuardError(guarded);
 
   useEffect(() => { void guard('load', () => loadGames(false)); }, [guard, loadGames]);
 
@@ -28,7 +30,7 @@ const useGameStore = (tab: GameTab) => {
     if (picked) await install({ kind: 'file', fileName: picked.name, bytes: picked.bytes });
   }), [guard, filePicker, install]);
 
-  return { addFromFile, busy, catalog, error, installWorld, installed, query, refresh, remove, rows, setQuery, visible };
+  return { addFromFile, catalog, error, installWorld, installed, isBusy, query, refresh, remove, rows, setQuery, visible };
 };
 
 export { useGameStore };

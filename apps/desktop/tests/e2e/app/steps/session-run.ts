@@ -4,7 +4,7 @@ import type { Locator, Page } from 'playwright-core';
 import type { LaunchedApp } from '../support/launch-app';
 import { settledProof } from '../support/settled-proof';
 import { LOCAL_PORT, SOH, TEMPLATE, TIMESPINNER } from '../support/flow-constants';
-import { base, hub, openScreen, pickOption, playerRowOf } from '../support/locators';
+import { base, docked, hub, openScreen, pickOption, playerRowOf } from '../support/locators';
 
 const RUN_TIMEOUT = 300000;
 
@@ -55,7 +55,7 @@ const runSession = async (launched: LaunchedApp, sessions: Locator) => {
   const dashboard = base(page);
   await dashboard.getByText(/^hosting$/i).first().waitFor({ timeout: RUN_TIMEOUT });
   await dashboard.getByText(new RegExp(`^[\\w.-]+:${LOCAL_PORT}$`)).first().waitFor();
-  await dashboard.getByText(/_Spoiler\.txt$/).waitFor();
+  await docked(page).getByText(/_Spoiler\.txt$/).waitFor();
   await settledProof(launched, '22-dashboard-hosting');
   return dashboard;
 };

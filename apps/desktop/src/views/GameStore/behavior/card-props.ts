@@ -27,9 +27,9 @@ const checksumWarning = ({ entry, latest }: GameRow) =>
 
 const detailsOf = (row: GameRow) => [versionLine(row), ...checksumWarning(row)];
 
-const cardPropsOf = (row: GameRow, { busy, installWorld, remove, openHome }: CardHandlers): GameCardProps => {
+const cardPropsOf = (row: GameRow, { isBusy, installWorld, remove, openHome }: CardHandlers): GameCardProps => {
   const request = requestOf(row);
-  const working = busy === row.entry.apworld;
+  const working = isBusy(row.entry.apworld);
   const install = request && row.state !== 'installed'
     ? [{ label: row.state === 'update' ? 'Update' : 'Add', primary: true, disabled: working, onClick: () => installWorld(request, row.entry.apworld) }]
     : [];

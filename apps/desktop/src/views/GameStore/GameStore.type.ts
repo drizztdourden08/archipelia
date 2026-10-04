@@ -3,7 +3,7 @@ import type { CatalogEntry, CatalogVersion, InstalledGame } from '@archipelia/mo
 import type { InstallRequest } from '../../ipc/contract.type';
 
 type CardHandlers = {
-  busy: string | null;
+  isBusy: (key?: string) => boolean;
   installWorld: (request: InstallRequest, key: string) => void;
   remove: (apworld: string) => void;
   openHome: (url: string) => void;

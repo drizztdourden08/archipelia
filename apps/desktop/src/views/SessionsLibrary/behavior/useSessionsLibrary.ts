@@ -1,13 +1,13 @@
 /* @layer renderer-app @kind hook */
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { dialogs } from '@drizztdourden08/brock-react';
+import { dialogs, useKeyedGuard } from '@drizztdourden08/brock-react';
 import { secretsApi } from '@drizztdourden08/brock-secrets/renderer';
 import type { ServerEntry, SessionTemplate } from '@archipelia/model';
 import { archipeliaApi } from '../../../ipc/archipelia-api';
 import { useAppNavigation } from '../../../navigation/useAppNavigation';
+import { lastGuardError } from '../../../state/last-guard-error';
 import { useLibraryStore } from '../../../state/useLibraryStore';
 import { useRunsStore } from '../../../state/useRunsStore';
-import { useKeyedGuard } from '../../../state/useKeyedGuard';
 import { duplicateTemplate, newTemplate, passwordNameOf, useHostingDefaults } from '../../SessionBuilder';
 import { matchesRun } from './matches-run';
 import { matchesTemplate } from './matches-template';
@@ -21,7 +21,9 @@ const useSessionsLibrary = () => {
   const [editing, setEditing] = useState<SessionTemplate | null>(null);
   const [servers, setServers] = useState<ServerEntry[]>([]);
   const [query, setQuery] = useState('');
-  const { busy, error, guard } = useKeyedGuard();
+  const guarded = useKeyedGuard();
+  const { guard, isBusy } = guarded;
+  const error = lastGuardError(guarded);
 
   useEffect(() => {
     void guard('load', async () => {
@@ -66,7 +68,7 @@ const useSessionsLibrary = () => {
   const visibleRuns = useMemo(() => runs.filter((run) => matchesRun(run, query)), [runs, query]);
 
   return {
-    busy, byId, closeBuilder, createNew, deleteRun, deleteTemplate, duplicate, edit, editing, error, openRun, query,
+    byId, closeBuilder, createNew, deleteRun, deleteTemplate, duplicate, edit, editing, error, isBusy, openRun, query,
     runs, servers, setEditing, setQuery, templates, visibleRuns, visibleTemplates,
   };
 };

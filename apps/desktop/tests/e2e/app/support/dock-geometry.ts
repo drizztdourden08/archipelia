@@ -8,7 +8,7 @@ const MIN_WIDTH = 240;
 const MIN_HEIGHT = 200;
 
 const readFrames = (page: Page) => page.evaluate(() => {
-  const dock = document.querySelector('[aria-label="Session widgets"]');
+  const dock = document.querySelector('[data-testid="dock-layout"]');
   if (!dock) return null;
   const box = dock.getBoundingClientRect();
   const frames = [...dock.querySelectorAll('.dock-layout__pane .widget')].map((node) => {

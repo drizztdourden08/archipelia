@@ -4,7 +4,7 @@ import type { HistoryCardProps } from './HistoryCard.type';
 import { RunRow } from '@archipelia/design';
 import { runSummary } from '../../behavior/run-summary';
 
-const HistoryCard = ({ runs, total, busy, onOpen, onShowLog, onDelete }: HistoryCardProps) => (
+const HistoryCard = ({ runs, total, isBusy, onOpen, onShowLog, onDelete }: HistoryCardProps) => (
   <Card>
     <Stack gap="sm">
       <SectionHeader title={`History · ${total}`} />
@@ -13,7 +13,7 @@ const HistoryCard = ({ runs, total, busy, onOpen, onShowLog, onDelete }: History
         : (
           <Stack gap="sm" role="list" aria-label="Runs">
             {runs.map((run) => (
-              <RunRow key={run.id} {...runSummary(run)} busy={busy === run.id} onOpen={onOpen} onShowLog={onShowLog} onDelete={onDelete} />
+              <RunRow key={run.id} {...runSummary(run)} busy={isBusy(run.id)} onOpen={onOpen} onShowLog={onShowLog} onDelete={onDelete} />
             ))}
           </Stack>
         )}

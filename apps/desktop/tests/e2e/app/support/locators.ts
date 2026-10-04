@@ -31,6 +31,8 @@ const hub = (page: Page, title: HubTitle) => dialogOf(page, title);
 
 const base = (page: Page) => page.locator('.session-dashboard, .idle-base');
 
+const docked = (page: Page) => page.getByTestId('dock-layout').locator('.dock-layout__pane');
+
 const sectionsNav = (scope: Locator) => scope.getByRole('navigation', { name: 'Sections' });
 
 const currentPage = (scope: Locator, label: string) =>
@@ -76,5 +78,5 @@ const shownOpacity = (target: Locator) => target.evaluate((node) => {
   return opacity;
 });
 
-export { base, cardOf, closeHub, dialogOf, hub, nestedButtons, openScreen, openSection, optionRowOf, pickOption, playerRowOf, shownOpacity };
+export { base, cardOf, docked, closeHub, dialogOf, hub, nestedButtons, openScreen, openSection, optionRowOf, pickOption, playerRowOf, shownOpacity };
 export type { HubTitle };
