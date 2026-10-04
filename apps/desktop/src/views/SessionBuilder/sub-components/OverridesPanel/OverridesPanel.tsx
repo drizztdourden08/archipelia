@@ -1,7 +1,8 @@
 /* @layer renderer-app @kind component */
 import { useCallback, useMemo, useState } from 'react';
 import type { OptionValue } from '@archipelia/model';
-import { Box, Button, ButtonRow, Card, EmptyState, Flex, SectionHeader, Stack, TextInput, Toggle } from '@drizztdourden08/tessera/primitives';
+import { FilterBar } from '@drizztdourden08/tessera/composites';
+import { Box, Button, ButtonRow, Card, EmptyState, SectionHeader, Stack, Toggle } from '@drizztdourden08/tessera/primitives';
 import type { OverridesPanelProps } from './OverridesPanel.type';
 import { overridesOf } from '../../behavior/overrides-of';
 import { overrideRows } from '../../behavior/override-rows';
@@ -36,10 +37,13 @@ const OverridesPanel = ({ player, game, preset, onValue, onReset, onResetAll, on
           subtitle={`${player.name || 'unnamed'} · ${player.game || 'no game'} · ${preset?.name ?? 'no preset'}`}
           action={actions}
         />
-        <Flex gap="sm" align="center" wrap>
-          <TextInput placeholder="Filter options" value={query} onChange={(event) => setQuery(event.target.value)} />
-          <Toggle label="Changed only" checked={changedOnly} onChange={setChangedOnly} />
-        </Flex>
+        <FilterBar
+          search={query}
+          onSearchChange={setQuery}
+          searchPlaceholder="Filter options"
+          searchLabel="Filter options"
+          extra={<Toggle label="Changed only" checked={changedOnly} onChange={setChangedOnly} />}
+        />
         {!game || !preset
           ? <EmptyState message="Pick an installed game and a preset to change its options." />
           : (
