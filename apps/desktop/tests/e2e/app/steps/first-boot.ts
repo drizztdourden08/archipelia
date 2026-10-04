@@ -33,8 +33,8 @@ const openSettingsTab = (launched: LaunchedApp, tab: string) => openSection(hub(
 
 const visitSettingsTabs = async (launched: LaunchedApp) => {
   const settings = await openScreen(launched.page, 'Settings');
-  const first = settings.getByRole('navigation', { name: 'Sections' }).getByRole('button', { name: 'Hosting', exact: true });
-  expect(await first.getAttribute('aria-current'), 'Settings opens Multiworld at its first settings page').toBe('page');
+  const first = settings.getByRole('navigation', { name: 'Sections' }).getByRole('button', { name: 'General', exact: true });
+  expect(await first.getAttribute('aria-current'), 'Settings opens Multiworld at the General page').toBe('page');
   for (const [index, [tab, text]] of SETTINGS_TABS.entries()) {
     const view = await openSettingsTab(launched, tab);
     await view.getByText(text, { exact: true }).waitFor();

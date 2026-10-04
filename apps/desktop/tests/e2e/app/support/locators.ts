@@ -21,7 +21,7 @@ const PAGE_OF: Record<MenuEntry, string> = {
   Games: 'Games',
   Presets: 'Presets',
   Servers: 'Servers',
-  Settings: 'Hosting',
+  Settings: 'General',
   Data: 'Overview',
 };
 
