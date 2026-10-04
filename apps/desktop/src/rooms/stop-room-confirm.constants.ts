@@ -8,4 +8,6 @@ const STOP_ROOM_CONFIRM: ConfirmActionOptions = {
   variant: 'danger',
 };
 
-export { STOP_ROOM_CONFIRM };
+const HOSTING_QUIT_MESSAGE = 'A room is hosting. Quitting stops its server and every player is disconnected.';
+
+export { HOSTING_QUIT_MESSAGE, STOP_ROOM_CONFIRM };

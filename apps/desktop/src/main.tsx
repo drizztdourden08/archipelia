@@ -10,6 +10,7 @@ import { appWidgets } from '../.brock/widgets';
 import { BASE_SCREEN } from './hooks/app-navigation.constants';
 import { MENU, SCREENS, SETTINGS } from './main.constants';
 import { product } from './product';
+import { quitWhileHosting } from './rooms/quit-while-hosting';
 import type { AppSettings } from './settings.type';
 
 const root = document.getElementById('root');
@@ -27,6 +28,7 @@ createRoot(root).render(
       modules={rendererModules}
       menu={MENU}
       widgets={appWidgets}
+      beforeQuit={quitWhileHosting}
     />
   </StrictMode>,
 );
