@@ -32,7 +32,7 @@ const EngineSettings = () => {
         <Button variant={ready ? 'primary' : 'secondary'} disabled={building} onClick={() => { void refresh(); }}>Check again</Button>
         {ready && <Button variant="danger" onClick={rebuild}>Rebuild engine</Button>}
       </ButtonRow>
-      {rows.length > 0 && <LogPanel rows={rows} countLabel={`${rows.length} lines`} emptyLabel="No output yet" />}
+      {rows.length > 0 && <LogPanel rows={rows} countLabel="lines" emptyLabel="No output yet" />}
     </Stack>
   );
 };
