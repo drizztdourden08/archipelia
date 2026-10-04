@@ -17,4 +17,4 @@ type RunProgressPanelProps = {
   logEmpty: string;
 };
 
-export type { RunProgressPanelProps, RunStepState };
+export type { RunProgressPanelProps, RunProgressStep, RunStepState };

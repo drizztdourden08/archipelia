@@ -3,26 +3,6 @@
   font-family: var(--font-mono);
 }
 
-.run-progress-panel__step {
-  font-family: var(--font-mono);
-}
-
-.run-progress-panel__step--done {
-  color: var(--c-success);
-}
-
-.run-progress-panel__step--current {
-  color: var(--c-primary-bright);
-}
-
-.run-progress-panel__step--pending {
-  color: var(--c-text-faint);
-}
-
-.run-progress-panel__step--failed {
-  color: var(--c-danger);
-}
-
 .run-progress-panel__log {
   display: flex;
   flex-direction: column;

@@ -20,7 +20,7 @@ const usage = {
   a11y: [
     'The bar is a live progress bar while the run goes on.',
     'The error is an alert.',
-    'Each step reads its label after a mark for done, current or pending.',
+    'The steps are a vertical Stepper: each step reads its number, its label and whether it is done, current or failed.',
   ],
   tree: {
     path: ['feedback', 'a session as it generates and starts'],
