@@ -59,6 +59,6 @@ describe('home summary', () => {
     expect(relativeTime(now - (2 * DAY), now)).toBe('2 d ago');
     const runs = [run('a', 1), run('b', 4), run('c', 3), run('d', 2)];
     expect(newestRuns(runs, 3).map((r) => r.id)).toEqual(['b', 'c', 'd']);
-    expect(sessionMeta(run('a', now - (2 * DAY)), now)).toBe('archipelago.gg · 1 player · stopped 2 d ago');
+    expect(sessionMeta(run('a', now - (2 * DAY)), now)).toBe('archipelago.gg · 1 player · 2 d ago');
   });
 });

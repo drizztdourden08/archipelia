@@ -20,7 +20,7 @@ const checkHistory = async (launched: LaunchedApp) => {
   const run = sessions.getByRole('list', { name: 'Runs', exact: true }).getByRole('listitem').filter({ hasText: TEMPLATE });
   await run.getByRole('button', { name: new RegExp(`^${TEMPLATE} .* · local`) }).waitFor();
   const open = run.getByRole('button', { name: 'Open', exact: true });
-  for (const shown of [run.getByText('stopped', { exact: true }), run.getByRole('button', { name: 'Delete', exact: true }), open]) {
+  for (const shown of [run.getByText('Stopped', { exact: true }), run.getByRole('button', { name: 'Delete', exact: true }), open]) {
     await expect.poll(() => shownOpacity(shown), { message: 'history row status and actions show without hover' }).toBe(1);
   }
   expect(await nestedButtons(page), 'no button inside a button on Home or Sessions').toBe(0);

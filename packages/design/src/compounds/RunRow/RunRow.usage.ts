@@ -19,7 +19,7 @@ const usage = {
   ],
   a11y: [
     'The row is a list item; double click and the Open button do the same.',
-    'The status is text in a Status.',
+    'The status is text in a Status, from RUN_STATUS, the one status map the status bar and Home use too.',
   ],
   tree: {
     path: ['data', 'a past run of a session'],
@@ -36,7 +36,7 @@ const RunRowSample = () => (
       when="2 hours ago"
       name="Friday run"
       host="This computer"
-      status={{ label: 'stopped', tone: 'neutral' }}
+      status={{ label: 'Stopped', tone: 'neutral' }}
       hasLog
       canDelete
       onOpen={noop}
@@ -46,7 +46,7 @@ const RunRowSample = () => (
   </div>
 );
 `,
-  propsHash: '086d8d975f593478',
+  propsHash: '1b5d21c26ba72b33',
 } satisfies ComponentUsage;
 
 export { usage };

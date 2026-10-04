@@ -4,7 +4,7 @@ import type { Session } from '@archipelia/model';
 import { clockOf } from '../../src/views/SessionDashboard/behavior/clock-of';
 import { kindOf } from '../../src/views/SessionDashboard/behavior/kind-of';
 import { logTabsFor } from '../../src/views/SessionDashboard/behavior/log-tabs-for';
-import { logCopyText } from '@archipelia/design';
+import { logCopyText, RUN_STATUS } from '@archipelia/design';
 import { serverRows } from '../../src/views/SessionDashboard/behavior/server-rows';
 import { textFileFor } from '../../src/views/SessionDashboard/behavior/text-file-for';
 import { textRows } from '../../src/views/SessionDashboard/behavior/text-rows';
@@ -14,7 +14,6 @@ import { canStop } from '../../src/views/SessionDashboard/behavior/can-stop';
 import { formatDuration } from '../../src/views/SessionDashboard/behavior/format-duration';
 import { hostLabel } from '@archipelia/model';
 import { progressLabel } from '../../src/views/SessionDashboard/behavior/progress-label';
-import { statusView } from '../../src/views/SessionDashboard/behavior/status-view';
 import { uptimeOf } from '../../src/views/SessionDashboard/behavior/uptime-of';
 import { templateOf } from './session-fixtures';
 
@@ -28,9 +27,9 @@ const run = (id: string, createdAt: number, patch: Partial<Session> = {}): Sessi
 
 describe('session status', () => {
   test('labels and status tones', () => {
-    expect(statusView('hosting')).toEqual({ label: 'HOSTING', tone: 'success' });
-    expect(statusView('failed')).toEqual({ label: 'FAILED', tone: 'danger' });
-    expect(statusView('stopped').label).toBe('STOPPED');
+    expect(RUN_STATUS.hosting).toEqual({ label: 'Hosting', tone: 'success' });
+    expect(RUN_STATUS.failed).toEqual({ label: 'Failed', tone: 'danger' });
+    expect(RUN_STATUS.stopped).toEqual({ label: 'Stopped', tone: 'neutral' });
   });
 
   test('uptime counts from the first server line while hosting', () => {

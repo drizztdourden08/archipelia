@@ -1,12 +1,14 @@
 /* @layer renderer-app @kind types */
 import type { StatusTone } from '@drizztdourden08/tessera/primitives';
 
+type RunStatusView = { label: string; tone: StatusTone };
+
 type RunRowProps = {
   id: string;
   when: string;
   name: string;
   host: string;
-  status: { label: string; tone: StatusTone };
+  status: RunStatusView;
   error?: string;
   hasLog: boolean;
   canDelete: boolean;
@@ -16,4 +18,4 @@ type RunRowProps = {
   onDelete: (id: string) => void;
 };
 
-export type { RunRowProps };
+export type { RunRowProps, RunStatusView };

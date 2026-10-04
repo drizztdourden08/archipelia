@@ -10,8 +10,7 @@ import { useSessionLayoutSeed } from './behavior/useSessionLayoutSeed';
 import { canStop } from './behavior/can-stop';
 import { hostLabel } from '@archipelia/model';
 import { progressLabel } from './behavior/progress-label';
-import { statusView } from './behavior/status-view';
-import { SessionStatusBar } from '@archipelia/design';
+import { RUN_STATUS, SessionStatusBar } from '@archipelia/design';
 import { IdleBase } from './sub-components/IdleBase';
 import { SessionSummary } from './sub-components/SessionSummary';
 import { resetSessionWidgets } from '../../session-widgets/reset-session-widgets';
@@ -29,7 +28,7 @@ const SessionDashboard = ({ sessionId }: SessionDashboardProps) => {
   const { session } = board;
   if (!session) return <IdleBase loaded={board.loaded} onOpenSessions={openSessions} />;
 
-  const status = statusView(session.status);
+  const status = RUN_STATUS[session.status];
   return (
     <Stack gap="md" className="session-dashboard">
       <SessionStatusBar

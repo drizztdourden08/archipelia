@@ -1,13 +1,14 @@
 /* @layer renderer-app @kind logic */
 import type { Session } from '@archipelia/model';
-import type { RunStatusView } from '../SessionsLibrary.type';
-import { DATE_FORMAT, LIVE, STATUS_VIEW } from '../SessionsLibrary.constants';
+import type { RunStatusView } from '@archipelia/design';
+import { RUN_STATUS } from '@archipelia/design';
+import { DATE_FORMAT, LIVE } from '../SessionsLibrary.constants';
 import { hostTag } from './host-tag';
 
 const statusOf = (session: Session): RunStatusView => {
-  const view = STATUS_VIEW[session.status];
+  const view = RUN_STATUS[session.status];
   if (session.status !== 'failed') return view;
-  return { ...view, label: session.output ? 'failed' : 'generation failed' };
+  return { ...view, label: session.output ? view.label : 'Generation failed' };
 };
 
 const runSummary = (session: Session) => ({

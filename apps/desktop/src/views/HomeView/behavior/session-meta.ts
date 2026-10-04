@@ -5,6 +5,6 @@ import { plural } from './plural';
 import { relativeTime } from './relative-time';
 
 const sessionMeta = (session: Session, now: number) =>
-  `${HOST_LABEL[session.snapshot.host.kind]} · ${plural(session.snapshot.players.length, 'player')} · ${session.status} ${relativeTime(session.createdAt, now)}`;
+  `${HOST_LABEL[session.snapshot.host.kind]} · ${plural(session.snapshot.players.length, 'player')} · ${relativeTime(session.createdAt, now)}`;
 
 export { sessionMeta };

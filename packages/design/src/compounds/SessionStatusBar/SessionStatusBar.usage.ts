@@ -18,7 +18,7 @@ const usage = {
     'Pass each fact as text ready to show; leave out the ones the room has not reported.',
   ],
   a11y: [
-    'The status is a pill with text, read first.',
+    'The status is a pill with text, read first; pass the label and tone of RUN_STATUS, and the pill sets the case.',
     'The copy button reads Copied once the address is on the clipboard.',
   ],
   tree: {
@@ -31,7 +31,7 @@ const noop = () => {};
 
 const SessionStatusBarSample = () => (
   <SessionStatusBar
-    status="hosting"
+    status="Hosting"
     statusTone="success"
     name="Friday run"
     host="This computer"
