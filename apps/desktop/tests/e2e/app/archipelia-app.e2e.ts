@@ -2,11 +2,10 @@
 import { afterAll, beforeAll, describe, expect, test } from 'vitest';
 import type { Client } from 'archipelago.js';
 import { addBothWorlds, removeBothWorlds } from './steps/games';
-import { checkEngineTab, createProfile, setLocalPort, visitSettingsTabs } from './steps/first-boot';
-import { checkDataAndExport, checkHistory } from './steps/library-data';
+import { createProfile, setLocalPort } from './steps/first-boot';
+import { checkHistory, exportData } from './steps/library-data';
 import { playLiveRoom, stopFromDashboard } from './steps/live-room';
 import { buildPresets } from './steps/presets';
-import { manageServer } from './steps/servers';
 import { buildAndRun } from './steps/session-run';
 import { engineLeftovers } from './support/engine-cleanup';
 import { PROOF_DIR } from './support/flow-constants';
@@ -34,11 +33,7 @@ describe('Archipelia app, headless, every screen end to end', () => {
 
   test('1. first boot: create a profile, Home opens with the engine ready and the setup checklist, the base screen is idle behind it', () => createProfile(app()));
 
-  test('2a. settings: every tab opens', () => visitSettingsTabs(app()));
-
-  test('2b. settings: the engine tab shows Ready and AP 0.6.7', () => checkEngineTab(app()));
-
-  test('2c. settings: the local port persists after reopening', () => setLocalPort(app()));
+  test('2. settings: the local port persists after reopening', () => setLocalPort(app()));
 
   test('3. games: add Timespinner and Ship of Harkinian', () => addBothWorlds(app()));
 
@@ -52,11 +47,9 @@ describe('Archipelia app, headless, every screen end to end', () => {
 
   test('7b. sessions: Runs shows the stopped run and Open returns to it', () => checkHistory(app()));
 
-  test('7c. data: sizes per area and a library export', () => checkDataAndExport(app()));
+  test('7c. data: a zip export of the data folders', () => exportData(app()));
 
-  test('8. servers: validation, save, remove', () => manageServer(app()));
-
-  test('9. games: remove both worlds and the engine is clean', async () => {
+  test('8. games: remove both worlds and the engine is clean', async () => {
     await removeBothWorlds(app());
     expect(await engineLeftovers()).toEqual([]);
   });

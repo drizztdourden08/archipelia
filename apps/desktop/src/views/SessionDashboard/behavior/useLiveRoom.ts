@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 import type { Session } from '@archipelia/model';
 import type { HostLogLine } from '@archipelia/hosts';
-import { checksFromLog, playerRows, presenceOf, roomPlayersOf, targetKey, watchTarget } from '@archipelia/sessions/live-room';
+import { checksFromLog, hintsFromLog, playerRows, presenceOf, roomPlayersOf, targetKey, watchTarget } from '@archipelia/sessions/live-room';
 import { holdLiveRoom } from './hold-live-room';
 import { useLiveRoomStore } from '../../../stores/useLiveRoomStore';
 
@@ -30,7 +30,9 @@ const useLiveRoom = (session: Session | null, lines: readonly HostLogLine[]) => 
     [live, players, planned, statuses, watched, logChecks, online],
   );
 
-  return { error, hints, passwordRequired, phase, players: rows, submitPassword };
+  const logHints = useMemo(() => (phase === 'live' ? [] : hintsFromLog(texts)), [phase, texts]);
+
+  return { error, hints: phase === 'live' ? hints : logHints, passwordRequired, phase, players: rows, submitPassword };
 };
 
 export { useLiveRoom };

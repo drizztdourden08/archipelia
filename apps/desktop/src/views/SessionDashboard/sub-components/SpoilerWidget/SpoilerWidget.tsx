@@ -4,11 +4,12 @@ import { useWidgetState } from '@drizztdourden08/brock-react';
 import { Box, EmptyState } from '@drizztdourden08/tessera/primitives';
 import type { SpoilerWidgetProps } from './SpoilerWidget.type';
 import { useSessionText } from '../../behavior/useSessionText';
+import { spoilerFileOf } from '../../behavior/spoiler-file-of';
 import { textRows } from '../../behavior/text-rows';
 import { LogLines } from '@archipelia/design';
 
 const SpoilerWidget = ({ session }: SpoilerWidgetProps) => {
-  const file = session.output?.spoiler ?? null;
+  const file = spoilerFileOf(session);
   const text = useSessionText(session.id, file);
   const [search, setSearch] = useWidgetState('search', '');
   const rows = useMemo(() => textRows(text.value), [text.value]);

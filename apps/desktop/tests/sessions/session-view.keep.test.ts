@@ -78,7 +78,7 @@ describe('log tabs', () => {
     expect(logTabsFor(run('a', 1))).toEqual(['server', 'generate']);
     const withSpoiler = run('a', 1, { output: { zip: 'AP_1.zip', files: [], spoiler: 'AP_1_Spoiler.txt', generateLog: 'generate.log' } });
     expect(logTabsFor(withSpoiler)).toEqual(['server', 'generate', 'spoiler']);
-    expect(textFileFor('spoiler', withSpoiler)).toBe('AP_1_Spoiler.txt');
+    expect(textFileFor('spoiler', withSpoiler)).toBe('output/AP_1_Spoiler.txt');
     expect(textFileFor('generate', withSpoiler)).toBe('generate.log');
     expect(textFileFor('server', withSpoiler)).toBeNull();
   });

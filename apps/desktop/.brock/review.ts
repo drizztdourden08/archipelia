@@ -2,8 +2,17 @@
 import type { AppReview } from '@drizztdourden08/brock-react';
 
 const appReview: AppReview = {
-  seed: null,
-  steps: [],
+  seed: () => import('../src/review/seed'),
+  steps: [
+    { id: 'dashboard', load: () => import('../src/review/dashboard.step') },
+    { id: 'engine', load: () => import('../src/review/engine.step') },
+    { id: 'live-room', load: () => import('../src/review/live-room.step') },
+    { id: 'presets', load: () => import('../src/review/presets.step') },
+    { id: 'servers', load: () => import('../src/review/servers.step') },
+    { id: 'sessions', load: () => import('../src/review/sessions.step') },
+    { id: 'storage', load: () => import('../src/review/storage.step') },
+    { id: 'teardown', load: () => import('../src/review/teardown.step') },
+  ],
 };
 
 export { appReview };

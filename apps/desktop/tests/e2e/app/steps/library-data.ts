@@ -7,8 +7,6 @@ import { exportPath, LOCAL_PORT, TEMPLATE } from '../support/flow-constants';
 import { base, closeHub, dialogOf, hub, nestedButtons, openScreen, shownOpacity } from '../support/locators';
 import { answerSaveDialogWith } from '../support/save-dialog';
 
-const DATA_ROWS = ['Sessions', 'Presets', 'Installed games'];
-
 const checkHistory = async (launched: LaunchedApp) => {
   const { page } = launched;
   const sessions = await openScreen(page, 'Sessions');
@@ -30,13 +28,9 @@ const checkHistory = async (launched: LaunchedApp) => {
   await base(page).getByText(TEMPLATE, { exact: true }).first().waitFor();
 };
 
-const sizeOfRow = async (launched: LaunchedApp, row: string) => {
-  const text = (await hub(launched.page, 'Data').innerText()).replace(/\s+/g, ' ');
-  return new RegExp(`${row} ([\\d.]+ [KMG]?B) · (\\d+) items?`).exec(text);
-};
-
-const exportLibrary = async (launched: LaunchedApp) => {
+const exportData = async (launched: LaunchedApp) => {
   const { page } = launched;
+  await openScreen(page, 'Data');
   const target = exportPath(launched.userData, 'archipelia-data.zip');
   await answerSaveDialogWith(launched.app, target);
   await hub(page, 'Data').getByRole('button', { name: 'Export to zip', exact: true }).click();
@@ -45,19 +39,7 @@ const exportLibrary = async (launched: LaunchedApp) => {
   await settledProof(launched, '30-data-exported');
   const job = dialogOf(page, 'Exporting data');
   if (await job.count()) await job.getByRole('button', { name: 'Close', exact: true }).click();
+  await closeHub(page, 'Data');
 };
 
-const checkDataAndExport = async (launched: LaunchedApp) => {
-  const data = await openScreen(launched.page, 'Data');
-  await data.getByRole('button', { name: 'Open folder' }).first().waitFor();
-  await data.getByText('Installed games', { exact: true }).waitFor();
-  for (const row of DATA_ROWS) {
-    await expect.poll(() => sizeOfRow(launched, row), { message: `${row} row` }).not.toBeNull();
-    expect(Number((await sizeOfRow(launched, row))?.[2])).toBeGreaterThan(0);
-  }
-  await settledProof(launched, '29-data-sizes');
-  await exportLibrary(launched);
-  await closeHub(launched.page, 'Data');
-};
-
-export { checkDataAndExport, checkHistory };
+export { checkHistory, exportData };

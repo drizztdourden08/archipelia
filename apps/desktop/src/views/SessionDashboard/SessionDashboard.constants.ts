@@ -21,4 +21,6 @@ const KIND_RULES: readonly [RegExp, string][] = [
 
 const MAX_SENT = 40;
 
-export { GENERATE_LOG, IDLE, KIND_RULES, LOG_TAB_LABEL, MAX_SENT, NO_LINES, TICK_MS };
+const OUTPUT_DIR = 'output';
+
+export { GENERATE_LOG, IDLE, KIND_RULES, LOG_TAB_LABEL, MAX_SENT, NO_LINES, OUTPUT_DIR, TICK_MS };

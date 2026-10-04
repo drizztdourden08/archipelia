@@ -5,13 +5,6 @@ import { settledProof } from '../support/settled-proof';
 import { LOCAL_PORT, PROFILE } from '../support/flow-constants';
 import { base, closeHub, dialogOf, hub, nestedButtons, openScreen, openSection } from '../support/locators';
 
-const SETTINGS_TABS: [string, string][] = [
-  ['General', 'Open in fullscreen on launch.'],
-  ['Engine', 'Archipelago'],
-  ['Hosting', 'Players connect to this computer on this port.'],
-  ['archipelago.gg', 'The Archipelago website that hosts the rooms of sessions run there.'],
-];
-
 const SETUP_STEPS: [string, string][] = [['Engine', 'Done'], ['Games', 'To do'], ['Preset', 'To do'], ['Session', 'To do']];
 
 const createProfile = async (launched: LaunchedApp) => {
@@ -42,24 +35,6 @@ const createProfile = async (launched: LaunchedApp) => {
 
 const openSettingsTab = (launched: LaunchedApp, tab: string) => openSection(hub(launched.page, 'Multiworld'), tab);
 
-const visitSettingsTabs = async (launched: LaunchedApp) => {
-  const settings = await openScreen(launched.page, 'Settings');
-  const first = settings.getByRole('navigation', { name: 'Sections' }).getByRole('button', { name: 'General', exact: true });
-  expect(await first.getAttribute('aria-current'), 'Settings opens Multiworld at the General page').toBe('page');
-  for (const [index, [tab, text]] of SETTINGS_TABS.entries()) {
-    const view = await openSettingsTab(launched, tab);
-    await view.getByText(text, { exact: true }).waitFor();
-    await settledProof(launched, `03-settings-${index + 1}-${tab.replace(/\W+/g, '-').toLowerCase()}`);
-  }
-};
-
-const checkEngineTab = async (launched: LaunchedApp) => {
-  const view = await openSettingsTab(launched, 'Engine');
-  await view.getByText('Ready', { exact: true }).waitFor();
-  await expect.poll(() => view.getByText('0.6.7', { exact: true }).count()).toBe(1);
-  await view.getByRole('button', { name: 'Check again' }).waitFor();
-};
-
 const localPortInput = async (launched: LaunchedApp) =>
   (await openSettingsTab(launched, 'Hosting')).getByRole('spinbutton', { name: 'Local port', exact: true });
 
@@ -76,4 +51,4 @@ const setLocalPort = async (launched: LaunchedApp) => {
   await closeHub(launched.page, 'Multiworld');
 };
 
-export { checkEngineTab, createProfile, setLocalPort, visitSettingsTabs };
+export { createProfile, setLocalPort };

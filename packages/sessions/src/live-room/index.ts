@@ -4,6 +4,7 @@ export { checksLabel } from './checks-label';
 export { connectedCount } from './connected-count';
 export { hintCounts } from './hint-counts';
 export { hintRows } from './hint-rows';
+export { hintsFromLog } from './hints-from-log';
 export { hintsKey } from './hints-key';
 export { checksFromLog } from './log-checks';
 export { onlineFromLog } from './online-from-log';

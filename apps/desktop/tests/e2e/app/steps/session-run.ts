@@ -4,7 +4,7 @@ import type { Locator, Page } from 'playwright-core';
 import type { LaunchedApp } from '../support/launched-app.type';
 import { settledProof } from '../support/settled-proof';
 import { LOCAL_PORT, SOH, TEMPLATE, TIMESPINNER } from '../support/flow-constants';
-import { base, dialogOf, docked, hub, openScreen, pickOption, playerRowOf } from '../support/locators';
+import { base, docked, hub, openScreen, pickOption, playerRowOf } from '../support/locators';
 
 const RUN_TIMEOUT = 300000;
 
@@ -26,23 +26,6 @@ const fillPlayer = async (page: Page, builder: Locator, { slot, name, game, pres
   }
 };
 
-const DISCARD_TEXT = 'This page has changes that are not saved. Leave it and lose them?';
-
-const keepEditing = async (page: Page, sessions: Locator) => {
-  const back = sessions.getByRole('button', { name: 'Back to Sessions', exact: true });
-  const discard = dialogOf(page, 'Discard changes?');
-  await back.click();
-  await discard.getByText(DISCARD_TEXT).waitFor();
-  await discard.getByRole('button', { name: 'Keep editing', exact: true }).click();
-  await discard.waitFor({ state: 'detached' });
-  await back.focus();
-  await page.keyboard.press('Escape');
-  await discard.getByText(DISCARD_TEXT).waitFor();
-  await page.keyboard.press('Escape');
-  await discard.waitFor({ state: 'detached' });
-  await hub(page, 'Multiworld').waitFor();
-};
-
 const buildSession = async (launched: LaunchedApp) => {
   const { page } = launched;
   const sessions = await openScreen(page, 'Sessions');
@@ -51,7 +34,6 @@ const buildSession = async (launched: LaunchedApp) => {
   await sessions.getByText('Add at least one player').waitFor();
   await settledProof(launched, '18-sessions-new');
   for (const player of PLAYERS) await fillPlayer(page, sessions, player);
-  await keepEditing(page, sessions);
   expect(await sessions.getByRole('spinbutton', { name: 'Local port', exact: true }).inputValue()).toBe(String(LOCAL_PORT));
   const host = sessions.getByRole('radiogroup', { name: 'Host', exact: true });
   expect(await host.getByRole('radio', { name: 'This computer', exact: true }).getAttribute('aria-checked')).toBe('true');

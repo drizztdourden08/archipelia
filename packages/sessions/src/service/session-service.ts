@@ -1,10 +1,11 @@
 /* @layer core @kind logic */
 import type { Session, SessionTemplate } from '@archipelia/model';
+import type { HostLogLine } from '@archipelia/hosts';
 import { newId } from '@drizztdourden08/brock-core/storage';
 import type { LiveSession, ServiceDeps } from './service-deps.type';
 import { produceSession } from './produce-session';
 import { hostSession } from './host-session';
-import { CANCELLED } from './session-service.constants';
+import { CANCELLED, SERVER_LINES, SERVER_LOG } from './session-service.constants';
 
 const createSessionService = (deps: ServiceDeps) => {
   const { files, runs, emit } = deps;
@@ -46,14 +47,16 @@ const createSessionService = (deps: ServiceDeps) => {
     const entry = liveOf(id);
     await entry.host.stop();
     live.delete(id);
-    await files.writeText(`${id}/server.log`, entry.log.map((line) => line.text).join('\n'));
+    await files.writeText(`${id}/${SERVER_LOG}`, entry.log.map((line) => line.text).join('\n'));
+    await files.writeJson(`${id}/${SERVER_LINES}`, entry.log);
     const session = await runs.get(id);
-    return session ? update(session, { status: 'stopped', serverLog: 'server.log' }) : undefined;
+    return session ? update(session, { status: 'stopped', serverLog: SERVER_LOG }) : undefined;
   };
 
   const command = (id: string, cmd: string) => liveOf(id).host.command(cmd);
 
-  const logOf = (id: string) => live.get(id)?.log ?? [];
+  const logOf = async (id: string): Promise<HostLogLine[]> =>
+    live.get(id)?.log ?? files.readJson<HostLogLine[]>(`${id}/${SERVER_LINES}`, []).catch(() => []);
 
   const cancel = async (id: string) => {
     const running = pending.get(id);
