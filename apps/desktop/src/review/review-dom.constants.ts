@@ -8,7 +8,6 @@ const SELECTOR = {
   status: '[role="status"]',
   toggle: '[role="switch"]',
   tab: '[role="tab"]',
-  status: '[role="status"]',
   paletteInput: '.command-palette--open input.command-palette__input, .command-palette--open .command-palette__input input',
   paletteRow: '.command-palette--open .command-palette-row',
   dashboard: '.session-dashboard',
