@@ -32,8 +32,8 @@ const popIn = async (popped: Page) => {
 const resetLayout = async (page: Page) => {
   await page.getByRole('button', { name: 'Menu', exact: true }).click();
   await page.getByRole('menuitem', { name: 'Widgets', exact: true }).click();
-  await page.locator('[role^="menuitem"]', { hasText: /^Reset layout$/ }).click();
-  await page.locator('[role^="menuitem"]', { hasText: /^Click again to reset$/ }).click();
+  await page.locator('[role^="menuitem"]', { hasText: /Reset layout/ }).click();
+  await page.locator('[role^="menuitem"]', { hasText: /Click again to reset/ }).click();
 };
 
 const popPlayersOut = async (launched: LaunchedApp) => {
