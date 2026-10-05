@@ -8,7 +8,7 @@ const meta: WidgetMeta = {
   order: 6,
   icon: 'eye-off',
   popOut: true,
-  padding: 'md',
+  padding: 'none',
   fill: true,
   defaultVisibility: 'context-only',
   defaultOpen: false,
