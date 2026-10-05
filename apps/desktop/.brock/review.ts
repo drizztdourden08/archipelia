@@ -13,6 +13,7 @@ const appReview: AppReview = {
     { id: 'storage', load: () => import('../src/review/storage.step') },
     { id: 'teardown', load: () => import('../src/review/teardown.step') },
   ],
+  fixtures: [],
 };
 
 export { appReview };
