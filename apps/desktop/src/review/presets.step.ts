@@ -3,7 +3,7 @@ import { defineReviewStep, nav } from '@drizztdourden08/brock-react';
 import type { AppReviewTour } from '@drizztdourden08/brock-react';
 import { ROUTE } from '../hooks/app-navigation.constants';
 import { appApi } from '../ipc/app-api';
-import { REVIEW_PRESET } from './review.constants';
+import { REVIEW_PRESET, GUARD_DIALOG } from './review.constants';
 import { SELECTOR } from './review-dom.constants';
 import { named } from './named';
 import { pickInPalette } from './pick-in-palette';
@@ -26,13 +26,13 @@ const showsUnsaved = async (tour: AppReviewTour) => {
 const guardOnClose = async (tour: AppReviewTour) => {
   const close = tour.find(SELECTOR.layerClose);
   if (close) tour.click(close);
-  const discard = await waitNamed(tour, SELECTOR.dialog, 'Discard changes?');
-  tour.check('leave-guard-asks', discard !== null, 'closing the hub with an unsaved preset asks Discard changes?', 'the hub closed over an unsaved preset without asking');
+  const discard = await waitNamed(tour, SELECTOR.dialog, GUARD_DIALOG);
+  tour.check('leave-guard-asks', discard !== null, 'closing the hub with an unsaved preset asks about unsaved changes', 'the hub closed over an unsaved preset without asking');
   if (!discard) return;
   await tour.capture('leave-guard');
   const keep = named(tour, SELECTOR.button, 'Keep editing', discard);
   if (keep) tour.click(keep);
-  const kept = await tour.waitFor(() => !named(tour, SELECTOR.dialog, 'Discard changes?') && tour.find(SELECTOR.layer) !== null);
+  const kept = await tour.waitFor(() => !named(tour, SELECTOR.dialog, GUARD_DIALOG) && tour.find(SELECTOR.layer) !== null);
   tour.check('leave-guard-keeps', kept === true, 'Keep editing leaves the preset editor open with its edit', 'Keep editing did not return to the editor');
 };
 
@@ -57,7 +57,7 @@ export default defineReviewStep({
     await tour.settle();
     const close = tour.find(SELECTOR.layerClose);
     if (close) tour.click(close);
-    const closed = await tour.waitFor(() => tour.find(SELECTOR.layer) === null && !named(tour, SELECTOR.dialog, 'Discard changes?'));
+    const closed = await tour.waitFor(() => tour.find(SELECTOR.layer) === null && !named(tour, SELECTOR.dialog, GUARD_DIALOG));
     return tour.check('leave-guard-clean', closed === true, 'with the edit undone the hub closes without asking', 'the hub asked or stayed open with no unsaved edit');
   },
 });

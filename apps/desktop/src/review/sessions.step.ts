@@ -4,7 +4,7 @@ import type { AppReviewTour } from '@drizztdourden08/brock-react';
 import { ROUTE } from '../hooks/app-navigation.constants';
 import { showRunJob } from '../runs/show-run-job';
 import { useRunsStore } from '../stores/useRunsStore';
-import { REVIEW_SESSION } from './review.constants';
+import { REVIEW_SESSION, GUARD_DIALOG } from './review.constants';
 import { SELECTOR } from './review-dom.constants';
 import { clickNamed } from './click-named';
 import { named } from './named';
@@ -41,7 +41,7 @@ const openDraft = async (tour: AppReviewTour) => {
 
 const discardDraft = async (tour: AppReviewTour, backButton: HTMLElement | null, asked: HTMLElement | null) => {
   if (!asked && backButton) tour.click(backButton);
-  const last = asked ?? await waitNamed(tour, SELECTOR.dialog, 'Discard changes?');
+  const last = asked ?? await waitNamed(tour, SELECTOR.dialog, GUARD_DIALOG);
   if (last) await clickNamed(tour, SELECTOR.button, 'Discard', last);
   const back = await waitText(tour, /sessions · [0-9]/i, () => layer(tour));
   tour.check('builder-guard-discard', back, 'Discard goes back to Sessions', 'Discard did not return to Sessions');
@@ -51,13 +51,13 @@ const guardBuilder = async (tour: AppReviewTour) => {
   await openDraft(tour);
   const backButton = await waitNamed(tour, SELECTOR.button, /^Back( to Sessions)?$/, layer(tour) ?? undefined);
   if (backButton) tour.click(backButton);
-  const discard = await waitNamed(tour, SELECTOR.dialog, 'Discard changes?');
-  tour.check('builder-guard-back', discard !== null, 'Back from a new session with a player asks Discard changes?', 'Back left the unsaved session without asking');
+  const discard = await waitNamed(tour, SELECTOR.dialog, GUARD_DIALOG);
+  tour.check('builder-guard-back', discard !== null, 'Back from a new session with a player asks about unsaved changes', 'Back left the unsaved session without asking');
   if (discard) await clickNamed(tour, SELECTOR.button, 'Keep editing', discard);
-  await tour.waitFor(() => !named(tour, SELECTOR.dialog, 'Discard changes?'));
+  await tour.waitFor(() => !named(tour, SELECTOR.dialog, GUARD_DIALOG));
   backButton?.focus();
   tour.press({ key: 'Escape' });
-  const again = await waitNamed(tour, SELECTOR.dialog, 'Discard changes?');
+  const again = await waitNamed(tour, SELECTOR.dialog, GUARD_DIALOG);
   tour.check('builder-guard-escape', again !== null, 'Escape asks the same question', 'Escape left the unsaved session without asking');
   await tour.capture('builder-guard');
   await discardDraft(tour, backButton, again);

@@ -1,6 +1,6 @@
 /* @layer renderer-app @kind component */
 import { openExternal, SearchAnchor } from '@drizztdourden08/brock-react';
-import { Button, ButtonRow, EmptyState, Flex, Grid, Icon, SearchInput, Spinner, Stack, Text } from '@drizztdourden08/tessera/primitives';
+import { Box, Button, ButtonRow, EmptyState, Flex, Grid, Icon, SearchInput, Spinner, Stack, Text } from '@drizztdourden08/tessera/primitives';
 import { useGameStore } from './behavior/useGameStore';
 import type { GameStoreProps } from './GameStore.type';
 import { ErrorCallout, GameCard } from '@archipelia/design';
@@ -21,11 +21,13 @@ const GameStore = ({ tab }: GameStoreProps) => {
             {store.rows.length} worlds · {store.installed.length} installed{store.catalog ? ` · index for AP ${store.catalog.apVersion}` : ''}
           </Text>
         )}
-        <ButtonRow>
-          <SearchInput placeholder="Search worlds" aria-label="Search worlds" value={store.query} onChange={store.setQuery} />
-          <Button variant="secondary" loading={store.isBusy('load')} onClick={store.refresh} icon={<Icon name="refresh-cw" />}>Refresh index</Button>
-          <Button variant="secondary" loading={store.isBusy('file')} onClick={store.addFromFile} icon={<Icon name="plus" />}>Add from file</Button>
-        </ButtonRow>
+        <Box data-tour="game-store-tools">
+          <ButtonRow>
+            <SearchInput placeholder="Search worlds" aria-label="Search worlds" value={store.query} onChange={store.setQuery} />
+            <Button variant="secondary" loading={store.isBusy('load')} onClick={store.refresh} icon={<Icon name="refresh-cw" />}>Refresh index</Button>
+            <Button variant="secondary" loading={store.isBusy('file')} onClick={store.addFromFile} icon={<Icon name="plus" />}>Add from file</Button>
+          </ButtonRow>
+        </Box>
       </Flex>
       {store.error && <ErrorCallout message={store.error} onRetry={store.loadFailed ? store.retry : undefined} />}
       {store.visible.length === 0
