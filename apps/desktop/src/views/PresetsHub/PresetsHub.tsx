@@ -1,6 +1,6 @@
 /* @layer renderer-app @kind component */
 import { Box, Button, EmptyState } from '@drizztdourden08/tessera/primitives';
-import { MasterDetail } from '@drizztdourden08/tessera/composites';
+import { ListDetail } from '@drizztdourden08/tessera/composites';
 import { usePresetsHub } from './behavior/usePresetsHub';
 import { PresetDetail } from './sub-components/PresetDetail';
 import { CreatePresetForm } from './sub-components/CreatePresetForm';
@@ -16,7 +16,7 @@ const PresetsHub = () => {
 
   return (
     <Box className="presets-hub">
-      <MasterDetail
+      <ListDetail
         list={{
           ...PRESET_ROWS,
           title: 'Presets',

@@ -1,8 +1,8 @@
 /* @layer renderer-app @kind component */
 import type { ServerEntry } from '@archipelia/model';
 import { SearchAnchor } from '@drizztdourden08/brock-react';
-import { InlineCreateForm, MasterDetail } from '@drizztdourden08/tessera/composites';
-import type { ManagedListRowParts } from '@drizztdourden08/tessera/composites';
+import { InlineCreateForm, ListDetail } from '@drizztdourden08/tessera/composites';
+import type { ItemListRowParts } from '@drizztdourden08/tessera/composites';
 import { EmptyState, Icon, Stack, Status } from '@drizztdourden08/tessera/primitives';
 import { ErrorCallout } from '@archipelia/design';
 import { LIST, NO_SERVER_TEXT } from './ServerManager.constants';
@@ -14,7 +14,7 @@ import { testStatus } from './behavior/test-status';
 import { useServerManager } from './behavior/useServerManager';
 import { ServerEditor } from './sub-components/ServerEditor';
 
-const rowParts = (entry: ServerEntry): ManagedListRowParts => {
+const rowParts = (entry: ServerEntry): ItemListRowParts => {
   const status = testStatus(entry);
   const icon = <Icon name="server" />;
   return {
@@ -28,7 +28,7 @@ const ServerManager = () => {
   const manager = useServerManager();
   const { draft } = manager;
   return (
-    <MasterDetail
+    <ListDetail
       list={{
         title: LIST.title,
         items: manager.rows,

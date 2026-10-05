@@ -61,9 +61,9 @@ describe('labels and hints', () => {
     ]);
   });
 
-  test('named values become the names of a range, one per number', () => {
-    expect(rangeNames(defOf('pieces'))).toEqual([{ label: 'Easy', value: 20 }, { label: 'Normal', value: 30 }]);
-    expect(rangeNames(option({ key: 'n', kind: 'named-range', default: 1, namedValues: { normal: 1, default: 1 } }))).toEqual([{ label: 'Normal', value: 1 }]);
+  test('named values become the labels of a slider, one per number', () => {
+    expect(rangeNames(defOf('pieces'))).toEqual([[20, 'Easy'], [30, 'Normal']]);
+    expect(rangeNames(option({ key: 'n', kind: 'named-range', default: 1, namedValues: { normal: 1, default: 1 } }))).toEqual([[1, 'Normal']]);
   });
 
   test('the bounds of a named range come from its range, else from its names', () => {

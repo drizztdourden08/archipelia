@@ -2,7 +2,7 @@
 import type { ComponentUsage } from '@drizztdourden08/tessera';
 
 const usage = {
-  job: 'The Servers page: a MasterDetail of the saved SSH servers beside the editor of the picked one, with test, trust, a SaveBar and remove.',
+  job: 'The Servers page: a ListDetail of the saved SSH servers beside the editor of the picked one, with test, trust, a SaveBar and remove.',
   useWhen: [
     'The Servers page of the Hosting group.',
   ],
@@ -23,7 +23,7 @@ const usage = {
     'Remove is a danger button that asks first and names what loses the server; the delete of a row asks in the row.',
   ],
   a11y: [
-    'The server list is a ManagedList: the rows are buttons, pressed while selected, with rename and delete on each row.',
+    'The server list is an ItemList: the rows are buttons, pressed while selected, with rename and delete on each row.',
     'The heading of the detail names the server.',
     'An error is an alert with one plain sentence; the raw error goes to the app log.',
     'A field problem is the error note of its field, so the control is marked invalid and described by it.',

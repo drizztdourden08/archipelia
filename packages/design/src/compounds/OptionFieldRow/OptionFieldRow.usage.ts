@@ -15,7 +15,7 @@ const usage = {
     'Pass the definition and the current value; the row takes the label, the description and the advanced tag from the definition.',
     'Compute changed against what reset goes back to.',
     'Pass a hint only when it adds something the description does not say.',
-    'Pass onProblem with a stable callback to hold a save while a JSON option does not parse.',
+    'The row writes the problem of a JSON option that does not parse under the field; pass onProblem with a stable callback to hold a save meanwhile.',
   ],
   a11y: [
     'The name of the row is the label of its control, so the control is named after the option display name.',

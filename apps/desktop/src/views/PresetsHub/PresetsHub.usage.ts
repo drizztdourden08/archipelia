@@ -2,7 +2,7 @@
 import type { ComponentUsage } from '@drizztdourden08/tessera';
 
 const usage = {
-  job: 'The Presets page: a MasterDetail with every preset grouped by game in a ManagedList beside the editor of the picked one, with the create form in the list and a question over the editor before unsaved edits are lost.',
+  job: 'The Presets page: a ListDetail with every preset grouped by game in an ItemList beside the editor of the picked one, with the create form in the list and a question over the editor before unsaved edits are lost.',
   useWhen: [
     'The Presets page of the Library group.',
   ],

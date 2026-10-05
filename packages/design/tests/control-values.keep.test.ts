@@ -10,6 +10,7 @@ import { scalarsOf } from '../src/compounds/OptionControl/behavior/scalars-of';
 import { keyValueLook } from '../src/compounds/OptionControl/behavior/key-value-look';
 import { customNumber } from '../src/compounds/OptionControl/behavior/custom-number';
 import { numberShown } from '../src/compounds/OptionControl/behavior/number-shown';
+import { readJsonText } from '../src/compounds/OptionControl/behavior/read-json-text';
 import { defOf } from './option-defs';
 
 describe('values read back from controls', () => {
@@ -59,5 +60,24 @@ describe('key values', () => {
   test('only names with a number or a text reach the editor', () => {
     expect(scalarsOf({ a: 1, b: 'x', c: [1], d: null })).toEqual({ a: 1, b: 'x' });
     expect(scalarsOf('text')).toEqual({});
+  });
+});
+
+describe('json text', () => {
+  test('text that parses to the right shape is the value', () => {
+    expect(readJsonText('{ "Bow": [1, 2] }', 'object')).toEqual({ value: { Bow: [1, 2] }, problem: null });
+    expect(readJsonText('[{ "item": "Bow" }]', 'array')).toEqual({ value: [{ item: 'Bow' }], problem: null });
+  });
+
+  test('a list where an object is wanted, or the other way round, is a problem on the first line', () => {
+    expect(readJsonText('[]', 'object')).toEqual({ problem: { message: 'Write an object in braces { }', line: 1 } });
+    expect(readJsonText('{}', 'array')).toEqual({ problem: { message: 'Write a list in brackets [ ]', line: 1 } });
+  });
+
+  test('empty text asks for a value, and broken text keeps what JSON.parse says', () => {
+    expect(readJsonText('  ', 'object').problem).toEqual({ message: 'Write a JSON value, such as {}', line: 1 });
+    const broken = readJsonText('{\n  "Bow": 1,\n}', 'object').problem;
+    expect(broken?.message).toMatch(/line 3/);
+    expect(broken?.line).toBe(3);
   });
 });

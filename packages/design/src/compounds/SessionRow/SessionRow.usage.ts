@@ -9,7 +9,7 @@ const usage = {
   ],
   avoidWhen: [
     { case: 'A past run of a session.', use: 'RunRow' },
-    { case: 'The presets of every game.', use: 'ManagedList' },
+    { case: 'The presets of every game.', use: 'ItemList' },
   ],
   rules: [
     'Write meta as the games of the session; playersLabel as the count, such as 3 players.',

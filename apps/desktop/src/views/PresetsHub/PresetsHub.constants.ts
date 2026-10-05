@@ -1,5 +1,5 @@
 /* @layer renderer-app @kind config */
-import type { ManagedListProps } from '@drizztdourden08/tessera/composites';
+import type { ItemListProps } from '@drizztdourden08/tessera/composites';
 import type { PresetRow } from './PresetsHub.type';
 
 const RECENT_DAYS = 7;
@@ -17,7 +17,7 @@ const PRESET_ROWS = {
   getName: (row: PresetRow) => row.preset.name,
   render: (row: PresetRow) => ({ meta: row.meta }),
   groupBy: (row: PresetRow) => row.group,
-} satisfies Pick<ManagedListProps<PresetRow>, 'getId' | 'getName' | 'render' | 'groupBy'>;
+} satisfies Pick<ItemListProps<PresetRow>, 'getId' | 'getName' | 'render' | 'groupBy'>;
 
 const FAILURE = {
   load: 'Could not load your presets.',
