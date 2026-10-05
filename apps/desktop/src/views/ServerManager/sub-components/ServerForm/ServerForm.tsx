@@ -1,13 +1,16 @@
 /* @layer renderer-app @kind component */
-import { Field, NumberInput, RadioGroup, Stack, TextInput } from '@drizztdourden08/tessera/primitives';
-import { PasswordInput } from '@drizztdourden08/tessera/composites';
+import { usePlatform } from '@drizztdourden08/brock-react';
+import { Box, Field, NumberInput, RadioGroup, Stack, Text, TextInput } from '@drizztdourden08/tessera/primitives';
+import { PasswordInput, PathInput } from '@drizztdourden08/tessera/composites';
 import { PORT_RANGE } from '@archipelia/design';
 import type { ServerFormProps } from './ServerForm.type';
 import { AUTH_OPTIONS, KEY_PLACEHOLDER, SSH_PORT_RANGE } from './ServerForm.constants';
+import { VAULT_NOTE } from '../../ServerManager.constants';
 import { switchAuth } from '../../behavior/switch-auth';
 
 const ServerForm = ({ entry, inputs, errors, onEntry, onInputs, onTouch }: ServerFormProps) => {
   const { auth } = entry;
+  const { pickPath, pathOf } = usePlatform().filePicker;
   return (
     <Stack gap="sm">
       <Field label="Label" error={errors.label}>
@@ -27,8 +30,10 @@ const ServerForm = ({ entry, inputs, errors, onEntry, onInputs, onTouch }: Serve
       {auth.kind === 'ssh-key' && (
         <>
           <Field label="Key file" hint="Only the path is stored." error={errors.keyPath}>
-            <TextInput value={auth.keyPath} placeholder={KEY_PLACEHOLDER} onBlur={() => onTouch('keyPath')}
-              onChange={(e) => onEntry({ ...entry, auth: { ...auth, keyPath: e.target.value } })} />
+            <Box onBlur={() => onTouch('keyPath')}>
+              <PathInput value={auth.keyPath || null} placeholder={KEY_PLACEHOLDER} resolvePath={pathOf} onBrowse={pickPath && (() => pickPath())}
+                onChange={(keyPath) => onEntry({ ...entry, auth: { ...auth, keyPath: keyPath ?? '' } })} />
+            </Box>
           </Field>
           <Field label="Key passphrase" hint={auth.passphraseRef ? 'Stored in the vault. Type to replace it.' : 'Leave empty for a key without one.'}>
             <PasswordInput mode="new" value={inputs.passphrase} onChange={(passphrase) => onInputs({ ...inputs, passphrase })} />
@@ -40,6 +45,7 @@ const ServerForm = ({ entry, inputs, errors, onEntry, onInputs, onTouch }: Serve
           <PasswordInput mode="new" value={inputs.password} onBlur={() => onTouch('password')} onChange={(password) => onInputs({ ...inputs, password })} />
         </Field>
       )}
+      <Text variant="caption">{VAULT_NOTE}</Text>
       <Field label="Archipelago path on the host" hint="The source folder of Archipelago 0.6.7." error={errors.apPath}>
         <TextInput value={entry.apPath} onBlur={() => onTouch('apPath')} onChange={(e) => onEntry({ ...entry, apPath: e.target.value })} />
       </Field>
