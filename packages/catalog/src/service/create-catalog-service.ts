@@ -16,9 +16,17 @@ import { CACHE_DIR } from './catalog-service.constants';
 
 const createCatalogService = ({ games: files, cache, engineDir }: CatalogServiceDeps) => {
   let latest: (Catalog & { fetchedAt: number }) | undefined;
+  let pending: Promise<Catalog & { fetchedAt: number }> | undefined;
+
+  const fetchOnce = () => {
+    pending ??= readCatalog({ files: cache, cacheDir: CACHE_DIR })
+      .then((catalog) => ({ ...catalog, fetchedAt: Date.now() }))
+      .finally(() => { pending = undefined; });
+    return pending;
+  };
 
   const read = async (refresh: boolean): Promise<CatalogView> => {
-    if (!latest || refresh) latest = { ...(await readCatalog({ files: cache, cacheDir: CACHE_DIR })), fetchedAt: Date.now() };
+    if (!latest || refresh || pending) latest = await fetchOnce();
     return { apVersion: latest.apVersion, entries: latest.entries.filter((e) => e.source === 'index'), problems: latest.problems.length, fetchedAt: latest.fetchedAt };
   };
 
