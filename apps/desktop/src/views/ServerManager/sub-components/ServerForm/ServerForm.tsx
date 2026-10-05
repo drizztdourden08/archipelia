@@ -1,5 +1,6 @@
 /* @layer renderer-app @kind component */
-import { Field, NumberInput, PasswordInput, RadioGroup, Stack, TextInput } from '@drizztdourden08/tessera/primitives';
+import { Field, NumberInput, RadioGroup, Stack, TextInput } from '@drizztdourden08/tessera/primitives';
+import { PasswordInput } from '@drizztdourden08/tessera/composites';
 import { PORT_RANGE } from '@archipelia/design';
 import type { ServerFormProps } from './ServerForm.type';
 import { AUTH_OPTIONS, KEY_PLACEHOLDER, SSH_PORT_RANGE } from './ServerForm.constants';

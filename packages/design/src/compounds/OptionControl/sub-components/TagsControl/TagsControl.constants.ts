@@ -1,5 +1,5 @@
 /* @layer renderer-app @kind config */
-import type { TagValidator } from '@drizztdourden08/tessera/primitives';
+import type { TagValidator } from '@drizztdourden08/tessera/composites';
 
 const ANY_TAG: TagValidator = () => true;
 

@@ -1,7 +1,8 @@
 /* @layer renderer-app @kind component */
 import { useCallback, useState } from 'react';
 import type { KeyboardEvent } from 'react';
-import { Box, Button, Callout, Flex, PasswordInput, Stack, Text } from '@drizztdourden08/tessera/primitives';
+import { Box, Button, Callout, Flex, Stack, Text } from '@drizztdourden08/tessera/primitives';
+import { PasswordInput } from '@drizztdourden08/tessera/composites';
 import type { PasswordPromptProps } from './PasswordPrompt.type';
 
 const PasswordPrompt = ({ error, onSubmit }: PasswordPromptProps) => {

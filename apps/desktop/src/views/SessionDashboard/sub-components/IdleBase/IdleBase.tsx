@@ -1,6 +1,6 @@
 /* @layer renderer-app @kind component */
 import { useCallback } from 'react';
-import { ChosenMascot } from '@drizztdourden08/tessera/brand';
+import { AnimatedMascot } from '@drizztdourden08/tessera/brand';
 import { Button, ButtonRow, EmptyState, Flex, Icon, Shortcut, Spinner, Stack, Text } from '@drizztdourden08/tessera/primitives';
 import { ErrorCallout } from '@archipelia/design';
 import { ROUTE } from '../../../../hooks/app-navigation.constants';
@@ -28,7 +28,7 @@ const IdleBase = ({ loaded, failed }: IdleBaseProps) => {
         ? <Stack gap="md" align="center"><ErrorCallout message={RUNS_FAILED} onRetry={reloadRuns} />{actions}</Stack>
         : (
           <EmptyState
-            icon={loaded ? <ChosenMascot mascot="pelago" animation="idle" loop size="xl" /> : <Spinner />}
+            icon={loaded ? <AnimatedMascot brand="auto" animation="idle" loop size="xl" /> : <Spinner />}
             message={loaded ? 'No room is hosting right now.' : 'Loading runs'}
             action={actions}
           />

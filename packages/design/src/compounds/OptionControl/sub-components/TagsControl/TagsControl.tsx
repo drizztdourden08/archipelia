@@ -1,7 +1,8 @@
 /* @layer renderer-app @kind component */
 import { useCallback, useMemo } from 'react';
-import { Box, TagInput } from '@drizztdourden08/tessera/primitives';
-import type { TagValidator } from '@drizztdourden08/tessera/primitives';
+import { Box } from '@drizztdourden08/tessera/primitives';
+import { TagInput } from '@drizztdourden08/tessera/composites';
+import type { TagValidator } from '@drizztdourden08/tessera/composites';
 import type { OptionControlProps } from '../../OptionControl.type';
 import { ANY_TAG, NO_SUGGESTIONS } from './TagsControl.constants';
 import { stringList } from '../../behavior/string-list';

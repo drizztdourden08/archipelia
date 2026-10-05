@@ -1,5 +1,6 @@
 /* @layer renderer-app @kind component */
-import { Button, Flex, PasswordInput } from '@drizztdourden08/tessera/primitives';
+import { Button, Flex } from '@drizztdourden08/tessera/primitives';
+import { PasswordInput } from '@drizztdourden08/tessera/composites';
 import type { RoomPasswordProps } from './RoomPassword.type';
 import { HOST_TEXT } from '../../ServerOptionsForm.constants';
 
