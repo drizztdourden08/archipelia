@@ -1,0 +1,6 @@
+/* @layer renderer-app @kind style */
+.option-field-row__description,
+.option-field-row__hint {
+  display: block;
+  white-space: pre-line;
+}

@@ -2,24 +2,25 @@
 import type { ComponentUsage } from '@drizztdourden08/tessera';
 
 const usage = {
-  job: 'One game option drawn from its definition: the frame with label and reset around the control that fits its kind.',
+  job: 'One game option drawn from its definition: a FormRow with its name, its description that folds when long, its hint, the changed mark and reset, around the input that fits its kind.',
   useWhen: [
     'Each option of a preset editor.',
     'Each override row in the session builder.',
   ],
   avoidWhen: [
-    { case: 'An option whose control is built by hand.', use: 'OptionField' },
-    { case: 'The bare input without a frame.', use: 'OptionControl' },
+    { case: 'An option row whose control is built by hand.', use: 'FormRow' },
+    { case: 'The bare input without a row.', use: 'OptionControl' },
   ],
   rules: [
-    'Pass the definition and the current value; the row takes the label and description from the definition.',
+    'Pass the definition and the current value; the row takes the label, the description and the advanced tag from the definition.',
     'Compute changed against what reset goes back to.',
     'Pass a hint only when it adds something the description does not say.',
+    'Pass onProblem with a stable callback to hold a save while a JSON option does not parse.',
   ],
   a11y: [
-    'The row is a group named after the option display name.',
-    'The reset button and the problem line follow OptionField.',
-    'The control is named by the visible label through the label id of OptionField.',
+    'The name of the row is the label of its control, so the control is named after the option display name.',
+    'The reset button is named Reset and the label, and the problem line is an alert.',
+    'The More and Less button reports whether the description is expanded and is named after the label, such as More about Starting hearts.',
   ],
   tree: {
     path: ['a value the user sets', 'a game option', 'the whole row from its definition'],
@@ -35,7 +36,7 @@ const OptionFieldRowSample = ({ def, value, onChange, onReset }: {
   onReset: () => void;
 }) => <OptionFieldRow def={def} value={value} changed={false} onChange={onChange} onReset={onReset} />;
 `,
-  propsHash: 'f4f59a21a2996aeb',
+  propsHash: '75283e39062d4e64',
 } satisfies ComponentUsage;
 
 export { usage };

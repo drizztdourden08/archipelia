@@ -2,6 +2,7 @@
 import { isStringList } from '@archipelia/model';
 import type { OptionDef, OptionKind, OptionValue } from '@archipelia/model';
 import type { ControlKind } from './control-kind.type';
+import { dictValueKind } from './dict-value-kind';
 import { setKind } from './set-kind';
 
 const CONTROL_OF: Record<OptionKind, (def: OptionDef, value: OptionValue) => ControlKind> = {
@@ -13,7 +14,7 @@ const CONTROL_OF: Record<OptionKind, (def: OptionDef, value: OptionValue) => Con
   set: setKind,
   list: (def, value) => (isStringList(value) && isStringList(def.default) ? 'tags' : 'json-list'),
   counter: () => 'counter',
-  dict: () => 'json-object',
+  dict: (def, value) => (dictValueKind(def, value) ? 'key-values' : 'json-object'),
 };
 
 export { CONTROL_OF };

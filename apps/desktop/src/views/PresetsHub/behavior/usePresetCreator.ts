@@ -7,11 +7,10 @@ import { schemaFor } from './schema-for';
 import { startFromOptions } from './start-from-options';
 import { newPresetValues } from './new-preset-values';
 
-const usePresetCreator = ({ installed, onCreated }: PresetCreatorParams) => {
+const usePresetCreator = ({ installed, preferredGame, onCreated }: PresetCreatorParams) => {
   const { createPreset } = useLibraryStore();
-  const [open, setOpen] = useState(false);
+  const [open, setOpenState] = useState(false);
   const [game, setGame] = useState('');
-  const [name, setName] = useState('');
   const [startFrom, setStartFrom] = useState(DEFAULTS);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -23,38 +22,36 @@ const usePresetCreator = ({ installed, onCreated }: PresetCreatorParams) => {
   const schema = schemaFor(installed, game);
   const startOptions = useMemo(() => startFromOptions(schema), [schema]);
 
-  const openFor = useCallback((preferred?: string) => {
-    setGame(preferred && schemaFor(installed, preferred) ? preferred : gameOptions[0]?.value ?? '');
-    setName('');
-    setStartFrom(DEFAULTS);
-    setError(null);
-    setOpen(true);
-  }, [installed, gameOptions]);
+  const setOpen = useCallback((next: boolean) => {
+    if (next) {
+      setGame(preferredGame && schemaFor(installed, preferredGame) ? preferredGame : gameOptions[0]?.value ?? '');
+      setStartFrom(DEFAULTS);
+      setError(null);
+    }
+    setOpenState(next);
+  }, [installed, gameOptions, preferredGame]);
 
-  const close = useCallback(() => setOpen(false), []);
   const pickGame = useCallback((next: string) => { setGame(next); setStartFrom(DEFAULTS); }, []);
-  const pickStart = useCallback((next: string) => {
-    setStartFrom(next);
-    setName((current) => (current.trim() ? current : next));
-  }, []);
 
-  const create = useCallback(async () => {
-    if (!schema || !name.trim()) return;
+  const create = useCallback(async (name: string) => {
+    if (!schema) return false;
     setBusy(true);
+    setError(null);
     try {
-      const preset = await createPreset({ game, name: name.trim(), values: newPresetValues(schema, startFrom) });
-      setOpen(false);
+      const preset = await createPreset({ game, name, values: newPresetValues(schema, startFrom) });
       onCreated(preset.id);
+      return true;
     } catch (err) {
       setError((err as Error).message);
+      return false;
     } finally {
       setBusy(false);
     }
-  }, [schema, name, game, startFrom, createPreset, onCreated]);
+  }, [schema, game, startFrom, createPreset, onCreated]);
 
-  const canCreate = Boolean(schema) && name.trim() !== '' && !busy;
+  const canCreate = Boolean(schema) && !busy;
 
-  return { busy, canCreate, close, create, error, game, gameOptions, name, open, openFor, pickGame, pickStart, setName, startFrom, startOptions };
+  return { canCreate, create, error, game, gameOptions, open, pickGame, setOpen, setStartFrom, startFrom, startOptions };
 };
 
 export { usePresetCreator };

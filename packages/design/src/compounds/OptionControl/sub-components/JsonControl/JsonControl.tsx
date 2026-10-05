@@ -1,47 +1,22 @@
 /* @layer renderer-app @kind component */
-import { useEffect, useState } from 'react';
-import type { ChangeEvent } from 'react';
-import { Stack, Text, Textarea } from '@drizztdourden08/tessera/primitives';
+import { useCallback, useEffect } from 'react';
+import { JsonInput } from '@drizztdourden08/tessera/primitives';
+import type { JsonProblem } from '@drizztdourden08/tessera/primitives';
+import type { OptionValue } from '@archipelia/model';
 import type { OptionControlProps } from '../../OptionControl.type';
-import { formatJson } from '../../behavior/format-json';
-import { parseJson } from '../../behavior/parse-json';
-import { sameJson } from '../../behavior/same-json';
-import { MAX_ROWS } from './JsonControl.constants';
 
-const JsonControl = ({ def, value, onChange, disabled, labelId }: OptionControlProps) => {
-  const shape = def.kind === 'dict' ? 'object' : 'list';
-  const [draft, setDraft] = useState(() => formatJson(value));
-  const [error, setError] = useState<string | null>(null);
-  const external = JSON.stringify(value);
-
-  useEffect(() => {
-    if (!sameJson(draft, value, shape)) {
-      setDraft(formatJson(value));
-      setError(null);
-    }
-  }, [external]);
-
-  const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-    const text = event.target.value;
-    setDraft(text);
-    const parsed = parseJson(text, shape);
-    setError(parsed.error ?? null);
-    if (parsed.value !== undefined) onChange(parsed.value);
-  };
-
+const JsonControl = ({ def, value, onChange, onProblem, disabled }: OptionControlProps) => {
+  const handleChange = useCallback((next: unknown) => onChange(next as OptionValue), [onChange]);
+  const handleProblem = useCallback((problem: JsonProblem | null) => onProblem?.(problem?.message ?? null), [onProblem]);
+  useEffect(() => () => onProblem?.(null), [onProblem]);
   return (
-    <Stack gap="xs">
-      <Textarea
-        className="option-control__json"
-        value={draft}
-        onChange={handleChange}
-        disabled={disabled}
-        aria-labelledby={labelId}
-        spellCheck={false}
-        rows={Math.min(MAX_ROWS, draft.split('\n').length + 1)}
-      />
-      {error && <Text variant="caption" role="alert">{error}</Text>}
-    </Stack>
+    <JsonInput
+      value={value}
+      onChange={handleChange}
+      onProblem={handleProblem}
+      shape={def.kind === 'dict' ? 'object' : 'array'}
+      disabled={disabled}
+    />
   );
 };
 

@@ -1,5 +1,5 @@
 /* @layer renderer-app @kind logic */
-import type { Counts } from './counter-entries.type';
+import type { Counts } from './counts-of.type';
 
 const countsOf = (value: unknown): Counts => {
   if (typeof value !== 'object' || value === null || Array.isArray(value)) return {};

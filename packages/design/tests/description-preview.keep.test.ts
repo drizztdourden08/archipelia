@@ -1,6 +1,6 @@
 /* @layer tests @kind test */
 import { describe, expect, test } from 'vitest';
-import { descriptionPreview } from '../src/compounds/OptionField/behavior/description-preview';
+import { descriptionPreview } from '../src/compounds/OptionFieldRow/behavior/description-preview';
 
 describe('descriptionPreview', () => {
   test('long descriptions get a preview', () => {

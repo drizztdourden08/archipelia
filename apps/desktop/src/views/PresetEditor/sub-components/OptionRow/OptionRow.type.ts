@@ -7,6 +7,7 @@ type OptionRowProps = {
   problem?: string;
   onValue: (key: string, value: OptionValue) => void;
   onReset: (key: string) => void;
+  onProblem: (key: string, problem: string | null) => void;
 };
 
 export type { OptionRowProps };

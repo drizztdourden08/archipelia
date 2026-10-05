@@ -1,17 +1,17 @@
 /* @layer renderer-app @kind types */
-import type { GamePreset, GameSchema, InstalledGame } from '@archipelia/model';
+import type { GamePreset, InstalledGame } from '@archipelia/model';
 import type { usePresetCreator } from './behavior/usePresetCreator';
 
-type ActionParams = { select: (id: string | null) => void; report: (message: string | null) => void };
+type ActionParams = { selectedId: string | null; select: (id: string | null) => void; follow: (id: string) => void };
 
 type StartOption = { value: string; label: string };
 
-type PresetRow = { preset: GamePreset; changed: number; meta: string };
+type PresetRow = { preset: GamePreset; meta: string; group: string };
 
-type PresetGroup = { game: string; schema?: GameSchema; rows: PresetRow[] };
-
-type PresetCreatorParams = { installed: InstalledGame[]; onCreated: (id: string) => void };
+type PresetCreatorParams = { installed: InstalledGame[]; preferredGame?: string; onCreated: (id: string) => void };
 
 type PresetCreator = ReturnType<typeof usePresetCreator>;
 
-export type { ActionParams, PresetCreator, PresetCreatorParams, PresetGroup, PresetRow, StartOption };
+type PresetSave = () => Promise<boolean>;
+
+export type { ActionParams, PresetCreator, PresetCreatorParams, PresetRow, PresetSave, StartOption };

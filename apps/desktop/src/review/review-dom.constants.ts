@@ -7,10 +7,12 @@ const SELECTOR = {
   field: 'input, textarea',
   toggle: '[role="switch"]',
   tab: '[role="tab"]',
+  status: '[role="status"]',
   paletteInput: '.command-palette--open input.command-palette__input, .command-palette--open .command-palette__input input',
   paletteRow: '.command-palette--open .command-palette-row',
   dashboard: '.session-dashboard',
   presetName: 'input[aria-label="Preset name"]',
+  presetList: 'section[aria-label="Presets"]',
   runJob: '.job-dialog .task-progress[aria-label^="Running "]',
 } as const;
 

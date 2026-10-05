@@ -2,9 +2,9 @@
 import type { ComponentUsage } from '@drizztdourden08/tessera';
 
 const usage = {
-  job: 'The input for one game option, picked from the option definition: a toggle, a choice, a range, a counter, tags, a kit or JSON.',
+  job: 'The input for one game option, picked from the option definition: a Toggle, a Select, a Slider, a NamedRange, a SetPicker, a TagInput, a KeyValueEditor or a JsonInput.',
   useWhen: [
-    'Editing one option value inside a frame that already shows its label.',
+    'Editing one option value inside a FormRow or a Field that already shows its label.',
     'A preset editor or a session override that needs the right input for each option kind.',
   ],
   avoidWhen: [
@@ -14,27 +14,31 @@ const usage = {
   rules: [
     'Pass the definition from the game schema; the control picks its input from the kind and the value.',
     'Pass the current value, never the default, and write the new value back through onChange.',
-    'Draw the label outside it, usually through OptionField, and pass the id of that label as labelId.',
+    'Draw it inside a FormRow or a Field, usually through OptionFieldRow, so the row names the input.',
+    'A counter, and a dict one level deep of numbers or of text, is a KeyValueEditor; any other dict or list that is not text is a JsonInput.',
+    'Pass onProblem to hear while a JSON input does not parse; it hears null once the text parses or the input goes away.',
   ],
   a11y: [
-    'With labelId, each input points at the visible label through aria-labelledby; where the Tessera input cannot take it, the input sits in a group named by the label or takes the display name.',
-    'Without labelId, each input is labelled from the option display name.',
-    'The counter add field, its name picker and its Add button name the option, such as New name for Starting items.',
-    'A counter row is named by the option label and its name, and its Remove button by the name, such as Remove Bombs.',
+    'Each input takes the id and the label of its FormRow or Field, so it is named after the option display name.',
+    'A NamedRange, a SetPicker and a KeyValueEditor are groups named by the label.',
+    'The Slider of a range and its number field take the option display name.',
     'A disabled control stays visible and readable.',
   ],
   tree: {
     path: ['a value the user sets', 'a game option', 'its control alone'],
-    rule: 'The input of one option, without its frame.',
+    rule: 'The input of one option, without its row.',
   },
   example: `import type { OptionDef, OptionValue } from '@archipelia/model';
+import { FormRow } from '@drizztdourden08/tessera/composites';
 import { OptionControl } from '@archipelia/design';
 
 const OptionControlSample = ({ def, value, onChange }: { def: OptionDef; value: OptionValue; onChange: (next: OptionValue) => void }) => (
-  <OptionControl def={def} value={value} onChange={onChange} />
+  <FormRow label={def.displayName}>
+    <OptionControl def={def} value={value} onChange={onChange} />
+  </FormRow>
 );
 `,
-  propsHash: '5bbe2fc25df75fbb',
+  propsHash: 'ec5bd1132a0d591a',
 } satisfies ComponentUsage;
 
 export { usage };

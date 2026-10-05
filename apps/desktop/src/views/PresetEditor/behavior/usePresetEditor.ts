@@ -7,39 +7,52 @@ import { usePresetDraft } from './usePresetDraft';
 import { useOptionFilter } from './useOptionFilter';
 import { useYamlTransfer } from './useYamlTransfer';
 import { problemMap } from './problem-map';
-import { problemSummary } from './problem-summary';
+import { saveBlock } from './save-block';
+import { saveState } from './save-state';
 import { UNSAVED_PRESET } from '../PresetEditor.constants';
 
-const usePresetEditor = ({ preset, schema, onDirtyChange }: EditorParams) => {
+const usePresetEditor = ({ preset, schema, onDirtyChange, onSaveChange }: EditorParams) => {
   const { savePreset } = useLibraryStore();
   const draft = usePresetDraft(preset, schema);
-  const filter = useOptionFilter(schema);
+  const filter = useOptionFilter(schema, draft.changed);
   const [status, setStatus] = useState<EditorStatus | null>(null);
   const [busy, setBusy] = useState(false);
+  const [failure, setFailure] = useState<string | null>(null);
+  const [saved, setSaved] = useState(false);
   const transfer = useYamlTransfer({ schema, name: draft.name, values: draft.values, replaceValues: draft.replaceValues, report: setStatus });
+
+  const problems = useMemo(() => problemMap(draft.problems), [draft.problems]);
+  const block = useMemo(() => saveBlock(schema, draft.name, draft.problems, draft.unparsed), [schema, draft.name, draft.problems, draft.unparsed]);
+  const name = draft.name.trim();
+
+  const save = useCallback(async () => {
+    if (!draft.dirty) return true;
+    if (block !== null) return false;
+    setBusy(true);
+    setFailure(null);
+    try {
+      await savePreset({ ...preset, name, values: draft.changed });
+      setSaved(true);
+      toast(`Saved the preset ${name}`, { variant: 'success' });
+      return true;
+    } catch (err) {
+      setFailure((err as Error).message);
+      toast(`The preset ${name} was not saved: ${(err as Error).message}`, { variant: 'danger' });
+      return false;
+    } finally {
+      setBusy(false);
+    }
+  }, [savePreset, preset, name, draft.changed, draft.dirty, block]);
 
   useUnsavedChanges(draft.dirty, UNSAVED_PRESET);
   useEffect(() => { onDirtyChange(draft.dirty); }, [draft.dirty]);
   useEffect(() => () => onDirtyChange(false), []);
-
-  const problems = useMemo(() => problemMap(draft.problems), [draft.problems]);
-  const summary = useMemo(() => problemSummary(schema, draft.problems), [schema, draft.problems]);
-  const name = draft.name.trim();
-  const canSave = draft.dirty && !draft.problems.length && name !== '' && !busy;
-
-  const save = useCallback(async () => {
-    setBusy(true);
-    try {
-      await savePreset({ ...preset, name, values: draft.changed });
-      setStatus({ tone: 'info', text: 'Saved.' });
-      toast(`Saved the preset ${name}`, { variant: 'success' });
-    } catch (err) {
-      setStatus({ tone: 'error', text: (err as Error).message });
-      toast(`The preset ${name} was not saved: ${(err as Error).message}`, { variant: 'danger' });
-    } finally {
-      setBusy(false);
-    }
-  }, [savePreset, preset, name, draft.changed]);
+  useEffect(() => { onSaveChange(save); }, [save]);
+  useEffect(() => () => onSaveChange(null), []);
+  useEffect(() => {
+    if (draft.dirty) setSaved(false);
+    else setFailure(null);
+  }, [draft.dirty]);
 
   const resetAll = useCallback(() => {
     draft.resetAll();
@@ -48,10 +61,12 @@ const usePresetEditor = ({ preset, schema, onDirtyChange }: EditorParams) => {
 
   const revert = useCallback(() => {
     draft.revert();
-    setStatus({ tone: 'info', text: 'Back to the last saved version.' });
+    setStatus(null);
   }, [draft.revert]);
 
-  return { busy, canSave, draft, filter, problems, resetAll, revert, save, status, summary, transfer };
+  const bar = { state: saveState({ busy, dirty: draft.dirty, block, failure, saved }), error: block ?? failure ?? undefined };
+
+  return { bar, busy, draft, filter, problems, resetAll, revert, save, status, transfer };
 };
 
 export { usePresetEditor };

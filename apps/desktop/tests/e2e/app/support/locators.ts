@@ -40,8 +40,6 @@ const currentPage = (scope: Locator, label: string) =>
 
 const cardOf = (scope: Locator, title: string) => scope.getByRole('group', { name: title, exact: true });
 
-const optionRowOf = (scope: Locator, label: string) => scope.getByRole('group', { name: label, exact: true });
-
 const playerRowOf = (scope: Locator, slot: number) => scope.getByRole('group', { name: `Player ${slot}`, exact: true });
 
 const openScreen = async (page: Page, entry: MenuEntry) => {
@@ -78,5 +76,5 @@ const shownOpacity = (target: Locator) => target.evaluate((node) => {
   return opacity;
 });
 
-export { base, cardOf, docked, closeHub, dialogOf, hub, nestedButtons, openScreen, openSection, optionRowOf, pickOption, playerRowOf, shownOpacity };
+export { base, cardOf, docked, closeHub, dialogOf, hub, nestedButtons, openScreen, openSection, pickOption, playerRowOf, shownOpacity };
 export type { HubTitle };
