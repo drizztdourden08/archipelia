@@ -8,6 +8,7 @@ const meta: WidgetMeta = {
   order: 3,
   icon: 'house',
   popOut: true,
+  context: 'session',
   defaultVisibility: 'context-only',
   defaultOpen: true,
   defaultSide: 'top',

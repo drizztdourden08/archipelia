@@ -10,6 +10,7 @@ const meta: WidgetMeta = {
   popOut: true,
   padding: 'md',
   fill: true,
+  context: 'session',
   defaultVisibility: 'context-only',
   defaultOpen: false,
   defaultSide: 'right',

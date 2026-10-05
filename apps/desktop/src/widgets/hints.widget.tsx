@@ -8,6 +8,7 @@ const meta: WidgetMeta = {
   order: 2,
   icon: 'compass',
   popOut: true,
+  context: 'session',
   defaultVisibility: 'context-only',
   defaultOpen: true,
   defaultSide: 'top',
