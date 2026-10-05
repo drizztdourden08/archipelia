@@ -2,14 +2,12 @@
 import type { RendererBootTask } from '@drizztdourden08/brock-react';
 import runsTask from '../src/boot/runs.task';
 import searchActionsTask from '../src/boot/search-actions.task';
-import sessionContextTask from '../src/boot/session-context.task';
 import sessionEventsTask from '../src/boot/session-events.task';
 import shareSessionViewTask from '../src/boot/share-session-view.task';
 
 const rendererBootTasks: RendererBootTask[] = [
   { ...runsTask, id: 'runs' },
   { ...searchActionsTask, id: 'search-actions' },
-  { ...sessionContextTask, id: 'session-context' },
   { ...sessionEventsTask, id: 'session-events' },
   { ...shareSessionViewTask, id: 'share-session-view' },
 ];

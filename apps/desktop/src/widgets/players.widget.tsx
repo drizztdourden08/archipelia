@@ -8,7 +8,6 @@ const meta: WidgetMeta = {
   order: 1,
   icon: 'users',
   popOut: true,
-  context: 'session',
   defaultVisibility: 'context-only',
   defaultOpen: true,
   defaultSide: 'top',
