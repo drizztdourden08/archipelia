@@ -1,16 +1,16 @@
 {
-  "brock": "0.31.0",
-  "generatedAt": "2026-10-07T12:04:02.847Z",
+  "brock": "0.35.0",
+  "generatedAt": "2026-10-07T23:40:20.409Z",
   "modules": [
     {
       "id": "secrets",
       "package": "@drizztdourden08/brock-secrets",
-      "version": "0.31.0"
+      "version": "0.35.0"
     },
     {
       "id": "updater",
       "package": "@drizztdourden08/brock-updater",
-      "version": "0.31.0"
+      "version": "0.35.0"
     }
   ]
 }
