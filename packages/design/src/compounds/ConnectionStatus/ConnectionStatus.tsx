@@ -1,5 +1,6 @@
 /* @layer renderer-app @kind component */
-import { Card, Flex, RetryButton, Stack, Status, Text } from '@drizztdourden08/tessera/primitives';
+import { Card, Flex, Stack, Status, Text } from '@drizztdourden08/tessera/primitives';
+import { RetryButton } from '@drizztdourden08/tessera/composites';
 import { CONNECTION_STATUS, RETRY_PHASES } from './ConnectionStatus.constants';
 import type { ConnectionStatusProps } from './ConnectionStatus.type';
 

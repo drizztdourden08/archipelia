@@ -1,7 +1,7 @@
 /* @layer renderer-app @kind component */
 import { useMemo } from 'react';
-import { LogPanel } from '@drizztdourden08/tessera/composites';
-import { CommandInput, Stack } from '@drizztdourden08/tessera/primitives';
+import { CommandInput, LogPanel } from '@drizztdourden08/tessera/composites';
+import { Stack } from '@drizztdourden08/tessera/primitives';
 import { CONSOLE_KINDS, CONSOLE_ROW_LIMIT } from './CommandConsole.constants';
 import { lastRows } from './behavior/last-rows';
 import type { CommandConsoleProps } from './CommandConsole.type';
