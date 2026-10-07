@@ -82,7 +82,7 @@ const joinPlayers = async (launched: LaunchedApp, clients: Client[]) => {
 const askForPlayers = async (launched: LaunchedApp) => {
   await filterLog(docked(launched.page), '');
   const consoleWidget = serverConsole(launched.page);
-  const command = consoleWidget.getByRole('textbox', { name: 'Server command', exact: true });
+  const command = consoleWidget.getByRole('combobox', { name: 'Server command', exact: true });
   await command.fill('/players');
   await command.press('Enter');
   await consoleWidget.getByText('> /players', { exact: true }).waitFor();
