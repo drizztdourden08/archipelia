@@ -12,7 +12,6 @@ import { appTitleBar } from '../.brock/title-bar';
 import { appTours } from '../.brock/tours';
 import { SETTINGS } from './main.constants';
 import { product } from './product';
-import { useSessionContext } from './hooks/useSessionContext';
 import { quitWhileHosting } from './rooms/quit-while-hosting';
 import type { AppSettings } from './settings.type';
 
@@ -29,7 +28,6 @@ createRoot(root).render(
       modules={rendererModules}
       widgets={appWidgets}
       widgetLayout={appWidgetLayout}
-      widgetContext={useSessionContext}
       beforeQuit={quitWhileHosting}
       review={appReview}
       titleBar={appTitleBar}
