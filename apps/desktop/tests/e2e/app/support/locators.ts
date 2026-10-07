@@ -41,49 +41,7 @@ const currentPage = (scope: Locator, label: string) =>
 const cardOf = (scope: Locator, title: string) => scope.getByRole('group', { name: title, exact: true });
 
 const playerRowOf = (scope: Locator, slot: number) =>
-  scope.getByRole('region', { name: 'Players', exact: true }).getByRole('group', { name: new RegExp(`, row ${slot}/* @layer tests @kind helper */
-import type { Locator, Page } from 'playwright-core';
-
-type HubTitle = 'Multiworld' | 'Data';
-
-type MenuEntry = 'Home' | 'Sessions' | 'Games' | 'Presets' | 'Servers' | 'Data' | 'Settings';
-
-const HUB_OF: Record<MenuEntry, HubTitle> = {
-  Home: 'Multiworld',
-  Sessions: 'Multiworld',
-  Games: 'Multiworld',
-  Presets: 'Multiworld',
-  Servers: 'Multiworld',
-  Settings: 'Multiworld',
-  Data: 'Data',
-};
-
-const PAGE_OF: Record<MenuEntry, string> = {
-  Home: 'Home',
-  Sessions: 'Sessions',
-  Games: 'Games',
-  Presets: 'Presets',
-  Servers: 'Servers',
-  Settings: 'General',
-  Data: 'Storage',
-};
-
-const dialogOf = (page: Page, title: string) => page.getByRole('dialog', { name: title, exact: true });
-
-const hub = (page: Page, title: HubTitle) => page.getByRole('dialog', { name: new RegExp(`^(Back )?${title}$`) });
-
-const base = (page: Page) => page.locator('.session-dashboard, .idle-base');
-
-const docked = (page: Page) => page.locator('[data-widget-id]');
-
-const sectionsNav = (scope: Locator) => scope.getByRole('navigation', { name: 'Sections' });
-
-const currentPage = (scope: Locator, label: string) =>
-  sectionsNav(scope).getByRole('button', { name: label, exact: true }).and(scope.locator('[aria-current="page"]'));
-
-const cardOf = (scope: Locator, title: string) => scope.getByRole('group', { name: title, exact: true });
-
-) });
+  scope.getByRole('region', { name: 'Players', exact: true }).getByRole('group', { name: new RegExp(`, row ${slot}$`) });
 
 const openScreen = async (page: Page, entry: MenuEntry) => {
   await page.getByRole('button', { name: 'Menu', exact: true }).click();
