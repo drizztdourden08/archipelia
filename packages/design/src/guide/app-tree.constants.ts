@@ -36,10 +36,7 @@ const APP_TREE = [
     at: ['data'],
     answers: {
       'a game in the store': null,
-      'a player of a session': {
-        question: 'Where is the player?',
-        answers: { 'in the session builder': null, 'in a live room': null },
-      },
+      'a player of a live room': null,
       'a hint in a live room': null,
       'a past run of a session': null,
       'a saved session': null,

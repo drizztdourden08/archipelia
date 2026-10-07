@@ -1,60 +1,62 @@
 /* @layer renderer-app @kind component */
-import { useCallback } from 'react';
-import { Button, ButtonRow, Card, EmptyState, SectionHeader, Stack } from '@drizztdourden08/tessera/primitives';
+import { useCallback, useMemo } from 'react';
+import type { SessionPlayer } from '@archipelia/model';
+import { RowGrid } from '@drizztdourden08/tessera/composites';
+import type { MenuItem, RowGridColumn } from '@drizztdourden08/tessera/composites';
+import { Card, SectionHeader, Select, Stack, TextInput } from '@drizztdourden08/tessera/primitives';
 import type { PlayersCardProps } from './PlayersCard.type';
-import { PlayerRow, PlayerRowHeader } from '@archipelia/design';
-import { sourceValueOf } from '../../behavior/source-value-of';
+import { PlayerOverridesCell } from '../PlayerOverridesCell';
+import { PlayerSourceCell } from '../PlayerSourceCell';
 import { gameOptionsOf } from '../../behavior/game-options-of';
-import { sourceOptionsOf } from '../../behavior/source-options-of';
-import { overridesLabel } from '../../behavior/overrides-label';
+import { playerLabel } from '../../behavior/player-label';
+import { NAME_LIMIT, PLAYER_GRID_CLASS } from '../../SessionBuilder.constants';
+
+const slotKey = (player: SessionPlayer) => String(player.slot);
 
 const PlayersCard = ({ players, installed, presets, selectedSlot, busy, actions, onEdit }: PlayersCardProps) => {
-  const { setSource } = actions;
-  const pickSource = useCallback((slot: number, value: string) => {
-    setSource(slot, value, players.find((player) => player.slot === slot)?.game ?? '');
-  }, [players, setSource]);
-  const last = players[players.length - 1];
-  const duplicateLast = useCallback(() => { if (last) actions.duplicate(last.slot); }, [actions, last]);
+  const columns = useMemo((): RowGridColumn<SessionPlayer>[] => [
+    {
+      id: 'name', label: 'Name', min: 120, max: 220,
+      cell: (player) => <TextInput value={player.name} placeholder="Name" maxLength={NAME_LIMIT} onChange={(event) => actions.rename(player.slot, event.target.value)} />,
+    },
+    {
+      id: 'game', label: 'Game', min: 160, max: 280,
+      cell: (player) => (
+        <Select value={player.game} options={gameOptionsOf(installed, player.game)} placeholder="Pick a game" searchable onChange={(game: string) => actions.setGame(player.slot, game)} />
+      ),
+    },
+    {
+      id: 'source', label: 'Preset', min: 160, max: 280,
+      cell: (player) => <PlayerSourceCell player={player} presets={presets} busy={busy} onSource={actions.setSource} onImport={actions.importYaml} />,
+    },
+    {
+      id: 'overrides', label: 'Overrides', min: 160, max: 220, fold: true,
+      cell: (player) => <PlayerOverridesCell player={player} selected={player.slot === selectedSlot} onEdit={onEdit} />,
+    },
+  ], [actions, busy, installed, onEdit, presets, selectedSlot]);
+  const remove = useCallback((key: string) => actions.remove(Number(key)), [actions]);
+  const rowMenu = useCallback((player: SessionPlayer): MenuItem[] => [
+    { id: 'duplicate', label: 'Duplicate', icon: 'copy', onSelect: () => actions.duplicate(player.slot) },
+  ], [actions]);
 
   return (
     <Card>
       <Stack gap="sm">
         <SectionHeader title={`Players · ${players.length}`} subtitle="A player picks any installed game, then one of its presets or an imported file." />
-        {players.length === 0
-          ? <EmptyState message={installed.length ? 'No player yet.' : 'No game installed yet. Add games in Games first.'} />
-          : (
-            <Stack gap="xs">
-              <PlayerRowHeader />
-              {players.map((player) => (
-                <PlayerRow
-                  key={player.slot}
-                  slot={player.slot}
-                  name={player.name}
-                  game={player.game}
-                  source={sourceValueOf(player)}
-                  gameOptions={gameOptionsOf(installed, player.game)}
-                  sourceOptions={sourceOptionsOf(player.game, presets)}
-                  overrides={overridesLabel(player)}
-                  changed={player.source.kind === 'preset' && Object.keys(player.source.overrides).length > 0}
-                  fileName={player.source.kind === 'yaml' ? player.source.fileName : undefined}
-                  selected={player.slot === selectedSlot}
-                  canEdit={player.source.kind === 'preset'}
-                  busy={busy}
-                  onName={actions.rename}
-                  onGame={actions.setGame}
-                  onSource={pickSource}
-                  onImport={actions.importYaml}
-                  onEdit={onEdit}
-                  onDuplicate={actions.duplicate}
-                  onRemove={actions.remove}
-                />
-              ))}
-            </Stack>
-          )}
-        <ButtonRow align="start">
-          <Button variant="secondary" data-problem-target="players" onClick={actions.add}>Add player</Button>
-          {last && <Button variant="ghost" onClick={duplicateLast}>Duplicate player {last.slot}</Button>}
-        </ButtonRow>
+        <RowGrid
+          label="Players"
+          className={PLAYER_GRID_CLASS}
+          rows={players}
+          columns={columns}
+          rowKey={slotKey}
+          rowLabel={playerLabel}
+          numbered
+          onAdd={actions.add}
+          addLabel="Add player"
+          onRemove={remove}
+          rowMenu={rowMenu}
+          empty={installed.length ? 'No player yet.' : 'No game installed yet. Add games in Games first.'}
+        />
       </Stack>
     </Card>
   );

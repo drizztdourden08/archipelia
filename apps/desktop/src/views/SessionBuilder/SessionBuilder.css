@@ -7,6 +7,11 @@
   color: var(--c-danger);
 }
 
+.session-builder__file {
+  font-family: var(--font-mono);
+  overflow-wrap: anywhere;
+}
+
 .session-builder__override-rows {
   max-height: var(--size-512);
 }

@@ -14,10 +14,12 @@ const usage = {
     'When a profile starts with no run hosting and none focused, open the Multiworld home over it instead of leaving the idle state in front.',
     'Load the runs when it opens; the runs boot task loads them first.',
     'Ask before stopping a room.',
+    'Draw a summary tile that sums up a widget as an ActionTile that opens it, Players and Hints; keep a tile that only reads a value, Checks and Uptime, a StatTile.',
   ],
   a11y: [
     'The status bar comes first, with the status as text.',
     'Errors are alerts.',
+    'Each summary tile that opens a widget names its chevron after it, such as Show the Players widget.',
     'The idle state names what to do next.',
   ],
   tree: {

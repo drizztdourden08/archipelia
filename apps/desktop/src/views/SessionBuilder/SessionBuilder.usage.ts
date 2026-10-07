@@ -12,6 +12,7 @@ const usage = {
   ],
   rules: [
     'Pass no templateId for a new session, or the id of the saved one to edit; the builder loads it and says when it is gone.',
+    'Draw the players with RowGrid, one column per field, and keep the rows in the draft: add, duplicate and remove change the draft and renumber the slots.',
     'Keep the problem list hidden until the first Run; a Run with problems shows the list and runs nothing.',
     'Save the session before running it.',
     'Guard unsaved edits with useUnsavedChanges, so Back, Escape, the hub switch, the close button and Quit ask first.',
@@ -19,7 +20,7 @@ const usage = {
   ],
   a11y: [
     'The session name field is labelled.',
-    'Each player row is a group named after its slot.',
+    'The players are a RowGrid named Players: each row is a group named after the player and its row, each input is named by its column, and Edit overrides, More and Remove carry the player name.',
     'An error is an alert with one plain sentence, and Retry when a load failed.',
     'The problem list is a status region; each problem is a button that selects its player and focuses the field to fix.',
   ],

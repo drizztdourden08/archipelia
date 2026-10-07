@@ -11,12 +11,13 @@ const usage = {
   ],
   rules: [
     'A run is old after the clean age and only when it no longer generates, starts or hosts.',
-    'Removing old runs is a danger button that asks first with the count and says the output files go too.',
-    'Report the result in the status line under the card, or a failure as one plain sentence in an alert.',
+    'Show the counts in an ActionTile: the old runs as its value, the kept runs as its meta line, and removing them as its one danger action.',
+    'Removing old runs asks first with the count and says the output files go too.',
+    'Report the result in the status line under the tile, or a failure as one plain sentence in an alert.',
   ],
   a11y: [
     'The result is a status line, read when it changes.',
-    'The button names the age it removes, such as Remove runs older than 30 days.',
+    'The tile is a group named Old runs, and its button names the age it removes, such as Remove runs older than 30 days.',
   ],
   tree: {
     path: ['a full screen view', 'a page of the multiworld app', 'the old runs to clean'],

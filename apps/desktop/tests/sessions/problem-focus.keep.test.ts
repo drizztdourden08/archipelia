@@ -9,14 +9,14 @@ const yamlPlayer = { slot: 2, name: 'B', game: 'Demo', source: { kind: 'yaml' as
 describe('problem focus', () => {
   test('a session problem points at its field', () => {
     expect(problemTarget({ field: 'session-name', message: 'The session needs a name' })).toBe('[data-problem-target="session-name"]');
-    expect(problemTarget({ field: 'players', message: 'Add at least one player' })).toBe('[data-problem-target="players"]');
+    expect(problemTarget({ field: 'players', message: 'Add at least one player' })).toBe('.session-builder__players');
     expect(problemTarget({ field: 'host', message: 'Pick a server to host on' })).toBe('[data-section="host"]');
   });
 
   test('a player problem points at the field of its row', () => {
-    expect(problemTarget({ slot: 3, field: 'name', message: '' })).toBe('[role="group"][aria-label="Player 3"] input[aria-label="Name of player 3"]');
-    expect(problemTarget({ slot: 3, field: 'game', message: '' })).toBe('[role="group"][aria-label="Player 3"] [aria-label^="Game of player 3:"]');
-    expect(problemTarget({ slot: 3, field: 'source', message: '' })).toBe('[role="group"][aria-label="Player 3"] [aria-label^="Preset of player 3:"]');
+    expect(problemTarget({ slot: 3, field: 'name', message: '' })).toBe('.session-builder__players [data-row-key="3"] [data-cell="name"]');
+    expect(problemTarget({ slot: 3, field: 'game', message: '' })).toBe('.session-builder__players [data-row-key="3"] [data-cell="game"]');
+    expect(problemTarget({ slot: 3, field: 'source', message: '' })).toBe('.session-builder__players [data-row-key="3"] [data-cell="source"]');
   });
 
   test('an option problem points at the option row of the overrides', () => {

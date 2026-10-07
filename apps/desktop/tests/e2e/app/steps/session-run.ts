@@ -18,11 +18,11 @@ const PLAYERS: PlayerPlan[] = [
 const fillPlayer = async (page: Page, builder: Locator, { slot, name, game, preset }: PlayerPlan) => {
   await builder.getByRole('button', { name: 'Add player' }).click();
   const row = playerRowOf(builder, slot);
-  await row.getByRole('textbox', { name: `Name of player ${slot}`, exact: true }).fill(name);
-  await pickOption(page, row.getByRole('combobox', { name: `Game of player ${slot}: none`, exact: true }), game);
-  await row.getByRole('combobox', { name: `Preset of player ${slot}: ${preset}`, exact: true }).waitFor();
-  for (const action of ['Edit', 'Duplicate', 'Remove']) {
-    await row.getByRole('button', { name: `${action} player ${slot}`, exact: true }).waitFor();
+  await row.getByRole('textbox', { name: 'Name', exact: true }).fill(name);
+  await pickOption(page, row.getByRole('combobox', { name: 'Game', exact: true }), game);
+  await row.getByRole('combobox', { name: 'Preset', exact: true }).filter({ hasText: preset }).waitFor();
+  for (const action of [`Edit overrides of ${name}`, `More for ${name}`, `Remove ${name}`]) {
+    await row.getByRole('button', { name: action, exact: true }).waitFor();
   }
 };
 

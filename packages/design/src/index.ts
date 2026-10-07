@@ -9,7 +9,6 @@ export { OptionControl, coercePresetValues, hintOf, isChangedValue, isLoose } fr
 export { OptionField } from './compounds/OptionField';
 export type { CoercedValues } from './compounds/OptionControl';
 export { OptionFieldRow } from './compounds/OptionFieldRow';
-export { PlayerRow, PlayerRowHeader } from './compounds/PlayerRow';
 export { PlayerStatusRow } from './compounds/PlayerStatusRow';
 export { PresetListItem } from './compounds/PresetListItem';
 export { RUN_STATUS, RunRow } from './compounds/RunRow';

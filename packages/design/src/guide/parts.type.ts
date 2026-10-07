@@ -11,7 +11,6 @@ declare module '@drizztdourden08/tessera' {
         | 'OptionField'
         | 'OptionFieldRow'
         | 'OptionGroupTabs'
-        | 'PlayerRow'
         | 'PlayerStatusRow'
         | 'PresetListItem'
         | 'RunRow'

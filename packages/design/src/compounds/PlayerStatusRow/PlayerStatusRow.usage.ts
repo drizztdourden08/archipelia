@@ -8,7 +8,7 @@ const usage = {
     'Any read only view of who is in a room and how far they are.',
   ],
   avoidWhen: [
-    { case: 'A player slot being set up before the run.', use: 'PlayerRow' },
+    { case: 'A player slot being set up before the run.', use: 'RowGrid' },
     { case: 'A single number with a label.', use: 'StatRow' },
   ],
   rules: [
@@ -21,7 +21,7 @@ const usage = {
     'The status is text, so it reads without its colour.',
   ],
   tree: {
-    path: ['data', 'a player of a session', 'in a live room'],
+    path: ['data', 'a player of a live room'],
     rule: 'One player of a running room with progress.',
   },
   example: `import { PlayerStatusRow } from '@archipelia/design';

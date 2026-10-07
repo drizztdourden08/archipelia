@@ -42,7 +42,8 @@ const cardOf = (scope: Locator, title: string) => scope.getByRole('group', { nam
 
 const optionRowOf = (scope: Locator, label: string) => scope.getByRole('group', { name: label, exact: true });
 
-const playerRowOf = (scope: Locator, slot: number) => scope.getByRole('group', { name: `Player ${slot}`, exact: true });
+const playerRowOf = (scope: Locator, slot: number) =>
+  scope.getByRole('region', { name: 'Players', exact: true }).getByRole('group', { name: new RegExp(`, row ${slot}$`) });
 
 const openScreen = async (page: Page, entry: MenuEntry) => {
   await page.getByRole('button', { name: 'Menu', exact: true }).click();
