@@ -1,12 +1,10 @@
 /* @layer renderer-app @kind types */
-import type { HintView, LiveRoomPhase } from '@archipelia/sessions/live-room';
+import type { HintView } from '@archipelia/sessions/live-room';
+import type { LiveConnection } from '../../SessionDashboard.type';
 
 type HintsPanelProps = {
   rows: HintView[];
-  phase: LiveRoomPhase;
-  error: string | null;
-  onPassword: (password: string) => void;
-  onRetry: () => void;
+  connection: LiveConnection;
 };
 
 export type { HintsPanelProps };

@@ -17,3 +17,8 @@
   font-family: var(--font-mono);
   overflow-wrap: anywhere;
 }
+
+.console-widget {
+  flex: 1;
+  min-block-size: 0;
+}

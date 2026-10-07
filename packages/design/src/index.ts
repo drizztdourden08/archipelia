@@ -1,4 +1,7 @@
 /* @layer renderer-app @kind barrel */
+export { CommandConsole } from './compounds/CommandConsole';
+export { CONNECTION_STATUS, ConnectionStatus } from './compounds/ConnectionStatus';
+export type { ConnectionPhase } from './compounds/ConnectionStatus';
 export { ErrorCallout } from './compounds/ErrorCallout';
 export { GameCard } from './compounds/GameCard';
 export type { GameCardProps } from './compounds/GameCard';

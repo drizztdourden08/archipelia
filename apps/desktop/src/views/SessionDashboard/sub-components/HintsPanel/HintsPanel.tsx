@@ -1,14 +1,14 @@
 /* @layer renderer-app @kind component */
 import { EmptyState, Stack } from '@drizztdourden08/tessera/primitives';
 import type { HintsPanelProps } from './HintsPanel.type';
-import { LiveNotice } from '../LiveNotice';
+import { LiveStatus } from '../LiveStatus';
 import { HintRow } from '@archipelia/design';
 import { HINT_TONE } from './HintsPanel.constants';
 
-const HintsPanel = ({ rows, phase, error, onPassword, onRetry }: HintsPanelProps) => (
+const HintsPanel = ({ rows, connection }: HintsPanelProps) => (
   <Stack gap="sm" className="session-panel">
-    {phase !== 'live' && <LiveNotice phase={phase} error={error} onPassword={onPassword} onRetry={onRetry} />}
-    {phase === 'live' && rows.length === 0 && <EmptyState message="No hints yet." />}
+    {connection.phase !== 'live' && <LiveStatus connection={connection} />}
+    {connection.phase === 'live' && rows.length === 0 && <EmptyState message="No hints yet." />}
     {rows.length > 0 && (
       <Stack gap="sm" role="list" aria-label="Hints">
         {rows.map((row) => (

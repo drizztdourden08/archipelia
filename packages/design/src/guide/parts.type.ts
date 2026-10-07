@@ -3,6 +3,8 @@ declare module '@drizztdourden08/tessera' {
   interface TesseraApps {
     '@archipelia/design': {
       parts:
+        | 'CommandConsole'
+        | 'ConnectionStatus'
         | 'ErrorCallout'
         | 'GameCard'
         | 'HintRow'

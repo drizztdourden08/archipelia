@@ -21,6 +21,10 @@ const playerItem = (widgets: Locator, game: string) =>
 
 const filterLog = (widgets: Locator, text: string) => widgets.getByRole('searchbox', { name: 'Filter the log' }).fill(text);
 
+const liveStatus = (scope: Locator, text: string | RegExp) => scope.getByRole('status').filter({ hasText: text });
+
+const serverConsole = (page: Page) => page.locator('[data-widget-id="console"]');
+
 const popOutButton = (page: Page, label: string) => page.getByRole('button', { name: `Pop out ${label}`, exact: true });
 
 const popIn = async (popped: Page) => {
@@ -53,6 +57,7 @@ const joinPlayers = async (launched: LaunchedApp, clients: Client[]) => {
   const dashboard = base(launched.page);
   const widgets = docked(launched.page);
   await playerItem(widgets, TIMESPINNER.game).getByText('offline').waitFor();
+  await liveStatus(widgets, /^Live$/).first().waitFor();
   const url = `ws://127.0.0.1:${LOCAL_PORT}`;
   const link = await joinAs({ url, slot: SOH.slot, game: SOH.game });
   clients.push(link);
@@ -75,15 +80,19 @@ const joinPlayers = async (launched: LaunchedApp, clients: Client[]) => {
 };
 
 const askForPlayers = async (launched: LaunchedApp) => {
-  const widgets = docked(launched.page);
-  await filterLog(widgets, '');
-  await widgets.getByRole('textbox', { name: 'Server command', exact: true }).fill('/players');
-  await widgets.getByRole('button', { name: 'Send', exact: true }).click();
-  await filterLog(widgets, 'players of');
-  await widgets.getByText(/2 players of 2 connected/).first().waitFor();
+  await filterLog(docked(launched.page), '');
+  const consoleWidget = serverConsole(launched.page);
+  const command = consoleWidget.getByRole('textbox', { name: 'Server command', exact: true });
+  await command.fill('/players');
+  await command.press('Enter');
+  await consoleWidget.getByText('> /players', { exact: true }).waitFor();
+  await consoleWidget.getByText(/2 players of 2 connected/).first().waitFor();
   await settledProof(launched, '25-live-console-players');
-  await proofText(launched, '25-live-console-players', widgets.getByText(/players of \d+ connected/));
-  await filterLog(widgets, '');
+  await proofText(launched, '25-live-console-players', consoleWidget.getByText(/players of \d+ connected/));
+  await command.press('ArrowUp');
+  expect(await command.inputValue(), 'Up brings back the last command').toBe('/players');
+  await consoleWidget.getByRole('button', { name: 'Send', exact: true }).click();
+  await expect.poll(() => consoleWidget.getByText('> /players', { exact: true }).count()).toBe(2);
 };
 
 const stopFromDashboard = async (launched: LaunchedApp, clients: Client[]) => {
@@ -95,7 +104,7 @@ const stopFromDashboard = async (launched: LaunchedApp, clients: Client[]) => {
   await settledProof(launched, '26-dashboard-stop-confirm');
   await confirm.getByRole('button', { name: 'Stop', exact: true }).click();
   await dashboard.getByText(/^stopped$/i).first().waitFor({ timeout: 30000 });
-  await docked(launched.page).getByText('Live data shows while the room is hosting.').first().waitFor();
+  await liveStatus(docked(launched.page), 'Not connected').first().waitFor();
   await expectReadableDock(launched.page, DOCKED);
   await settledProof(launched, '27-dashboard-stopped');
 };

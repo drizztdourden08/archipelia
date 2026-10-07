@@ -1,7 +1,14 @@
 /* @layer renderer-app @kind types */
 import type { HintView, LiveRoomPhase, LiveRoomTarget, RoomPlayer, WatchedChecks } from '@archipelia/sessions/live-room';
 
-type LiveRoomData = {
+type LiveRoomRetry = {
+  retryAt: number | null;
+  attempt: number;
+  attempts: number;
+  retrying: boolean;
+};
+
+type LiveRoomData = LiveRoomRetry & {
   sessionId: string | null;
   phase: LiveRoomPhase;
   error: string | null;
@@ -14,7 +21,12 @@ type LiveRoomData = {
 
 type LiveRoomState = LiveRoomData & {
   connect: (target: LiveRoomTarget, password?: string) => Promise<void>;
+  retry: () => void;
   disconnect: () => void;
 };
 
-export type { LiveRoomData, LiveRoomState };
+type LiveRoomPatch = Partial<LiveRoomData>;
+
+type LiveRoomSet = (patch: LiveRoomPatch | ((state: LiveRoomState) => LiveRoomPatch)) => void;
+
+export type { LiveRoomData, LiveRoomRetry, LiveRoomSet, LiveRoomState };

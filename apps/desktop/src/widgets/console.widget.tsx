@@ -8,6 +8,8 @@ const meta: WidgetMeta = {
   order: 5,
   icon: 'send',
   popOut: true,
+  padding: 'md',
+  fill: true,
   defaultVisibility: 'context-only',
   defaultOpen: true,
   defaultSide: 'bottom',
@@ -16,8 +18,8 @@ const meta: WidgetMeta = {
 };
 
 const Console = () => {
-  const { session } = useSessionView();
-  return session ? <ConsoleWidget session={session} enabled={session.status === 'hosting'} /> : <NoSession />;
+  const { session, lines } = useSessionView();
+  return session ? <ConsoleWidget session={session} lines={lines} enabled={session.status === 'hosting'} /> : <NoSession />;
 };
 
 export default Console;
