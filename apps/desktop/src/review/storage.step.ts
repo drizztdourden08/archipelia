@@ -16,7 +16,7 @@ export default defineReviewStep({
     tour.check('storage-transfer', transfer, 'the Storage page offers the zip and folder export and import', 'the Storage page has no export');
     await tour.capture('storage');
     nav.open('data/old-runs');
-    const kept = await waitText(tour, /[1-9]\d* runs kept/, layer);
+    const kept = await waitText(tour, /[1-9]\d* runs? kept/, layer);
     tour.check('old-runs', kept, 'the Old runs page counts the kept runs', 'the Old runs page counts no run');
     await tour.capture('old-runs');
   },
