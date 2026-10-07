@@ -1,101 +1,68 @@
 /* @layer renderer-app @kind hook */
 import type { ServerEntry } from '@archipelia/model';
-import { secretsApi } from '@drizztdourden08/brock-secrets/renderer';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { confirmDelete, useKeyedGuard } from '@drizztdourden08/brock-react';
-import type { SecretInputs } from '../ServerManager.type';
-import { passwordSecret } from './password-secret';
-import { passphraseSecret } from './passphrase-secret';
-import { EMPTY_INPUTS, FAILURE } from '../ServerManager.constants';
+import { useCallback, useEffect, useState } from 'react';
+import { useKeyedGuard } from '@drizztdourden08/brock-react';
+import type { FailureKey } from '../ServerManager.type';
+import { EMPTY_INPUTS, FAILURE, OTHER_FAILURES } from '../ServerManager.constants';
 import { failWith } from '../../../hooks/fail-with';
-import type { ServerTestResult } from '@archipelia/hosts';
 import { appApi } from '../../../ipc/app-api';
-import { newServerEntry } from './new-server-entry';
-import { draftProblems } from './draft-problems';
-import { useDraftErrors } from './useDraftErrors';
-import { withSecretRefs } from './with-secret-refs';
-import { removeServerConfirm } from './remove-server-confirm';
-import { toastTest } from './toast-test';
+import { rowId } from './row-id';
+import { saveState } from './save-state';
+import { storeSecrets } from './store-secrets';
+import { useServerChecks } from './useServerChecks';
+import { useServerDraft } from './useServerDraft';
 import { useServerEntries } from './useServerEntries';
-
-const storeSecrets = async (entry: ServerEntry, inputs: SecretInputs) => {
-  const secrets = secretsApi();
-  if (!secrets) throw new Error('the vault is not available');
-  if (inputs.password) await secrets.set(passwordSecret(entry.id), inputs.password, `SSH password for ${entry.label}`);
-  if (inputs.passphrase) await secrets.set(passphraseSecret(entry.id), inputs.passphrase, `Key passphrase for ${entry.label}`);
-};
-
-const removeServer = async (id: string) => {
-  await appApi().serversRemove(id);
-  const vault = secretsApi();
-  if (vault) await Promise.all([passwordSecret(id), passphraseSecret(id)].map((name) => vault.delete(name)));
-};
+import { useServerRows } from './useServerRows';
+import { withSecretRefs } from './with-secret-refs';
 
 const useServerManager = () => {
   const [servers, setServers] = useState<ServerEntry[]>([]);
-  const [draft, setDraft] = useState<ServerEntry | null>(null);
-  const [inputs, setInputs] = useState<SecretInputs>(EMPTY_INPUTS);
-  const [test, setTest] = useState<ServerTestResult | null>(null);
-  const { guard: keyed, isBusy, clearError, lastError } = useKeyedGuard();
+  const [savedDraft, setSavedDraft] = useState<ServerEntry | null>(null);
+  const { guard: keyed, isBusy, clearError, errorOf } = useKeyedGuard();
 
   useServerEntries(servers);
 
   const load = useCallback(async () => setServers(await appApi().serversList()), []);
   useEffect(() => { void load(); }, [load]);
 
-  const guard = useCallback((key: keyof typeof FAILURE, work: () => Promise<void>) => {
+  const guard = useCallback(<T,>(key: FailureKey, work: () => Promise<T>) => {
     clearError();
     return keyed(key, failWith(FAILURE[key], async () => {
-      await work();
+      const result = await work();
       await load();
+      return result;
     }));
   }, [clearError, keyed, load]);
 
-  const problems = useMemo(() => (draft ? draftProblems(draft, inputs) : []), [draft, inputs]);
-  const { attempt, errors, reset, touch } = useDraftErrors(problems);
-  const select = useCallback((entry: ServerEntry) => {
-    setDraft(entry);
-    setInputs(EMPTY_INPUTS);
-    setTest(entry.lastTest ?? null);
-    reset();
-  }, [reset]);
-  const create = useCallback(() => select(newServerEntry()), [select]);
+  const onPick = useCallback(() => clearError(), [clearError]);
+  const editor = useServerDraft(servers, onPick);
+  const { attempt, dirty, draft, inputs, problems, setDraft, setInputs } = editor;
+  const rows = useServerRows({ servers, editor, guard });
+  const checks = useServerChecks({ draft, guard, setDraft, setTest: editor.setTest });
 
-  const save = useCallback(() => {
+  const save = useCallback(async (): Promise<boolean> => {
     attempt();
-    if (!draft || problems.length) return;
-    void guard('save', async () => {
-      const saved = draft.id ? draft : await appApi().serversSave(draft);
-      await storeSecrets(saved, inputs);
-      setDraft(await appApi().serversSave(withSecretRefs({ ...draft, id: saved.id }, inputs)));
+    if (!draft || problems.length) return false;
+    const done = await guard('save', async () => {
+      const first = draft.id ? draft : await appApi().serversSave(draft);
+      await storeSecrets(first, inputs);
+      const stored = await appApi().serversSave(withSecretRefs({ ...draft, id: first.id }, inputs));
+      setDraft(stored);
+      setSavedDraft(stored);
       setInputs(EMPTY_INPUTS);
+      return true;
     });
-  }, [attempt, draft, guard, inputs, problems]);
+    return done === true;
+  }, [attempt, draft, guard, inputs, problems, setDraft, setInputs]);
 
-  const runTest = useCallback(() => guard('test', async () => {
-    if (!draft?.id) return;
-    const result = await appApi().serversTest(draft.id);
-    setTest(result);
-    toastTest(draft.label, result);
-  }), [draft, guard]);
-  const trust = useCallback((sha: string) => guard('trust', async () => {
-    if (!draft?.id) return;
-    setDraft(await appApi().serversTrustKey(draft.id, sha));
-    setTest(await appApi().serversTest(draft.id));
-  }), [draft, guard]);
-  const remove = useCallback(() => {
-    if (!draft?.id) return;
-    const { id } = draft;
-    void confirmDelete(removeServerConfirm(draft)).then((confirmed) => {
-      if (!confirmed) return;
-      void guard('remove', async () => {
-        await removeServer(id);
-        setDraft(null);
-      });
-    });
-  }, [draft, guard]);
+  const failed = errorOf('save');
+  const saveBar = {
+    state: saveState({ saving: isBusy('save'), failed: failed !== null, dirty, saved: draft !== null && draft === savedDraft }),
+    error: failed ?? undefined,
+  };
+  const error = OTHER_FAILURES.map(errorOf).find((message) => message !== null) ?? null;
 
-  return { busy: isBusy(), create, draft, error: lastError, errors, inputs, remove, runTest, save, select, servers, setDraft, setInputs, test, touch, trust };
+  return { ...editor, ...rows, ...checks, busy: isBusy(), error, save, saveBar, selectedId: draft ? rowId(draft) : null };
 };
 
 export { useServerManager };

@@ -2,7 +2,6 @@
 import type { OptionControlProps } from './OptionControl.type';
 import { CONTROLS } from './OptionControl.constants';
 import { controlKindOf } from './behavior/control-kind';
-import './OptionControl.css';
 
 const OptionControl = (props: OptionControlProps) => {
   const { def, value } = props;

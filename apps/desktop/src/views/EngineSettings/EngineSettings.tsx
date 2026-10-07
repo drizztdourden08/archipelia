@@ -30,9 +30,11 @@ const EngineSettings = () => {
         The engine is a private Python with the pinned Archipelago source. It generates seeds and runs the servers,
         out of sight. Setting it up downloads about 90 MB once.
       </Text>
-      <Status tone={state.tone}>{state.label}</Status>
-      {progress && <ProgressBar value={progress.percent} label="Engine setup" showValue live />}
-      {progress && <Text variant="caption">{progress.step}</Text>}
+      <Stack gap="xs" data-tour="engine-status">
+        <Status tone={state.tone}>{state.label}</Status>
+        {progress && <ProgressBar value={progress.percent} label="Engine setup" showValue live />}
+        {progress && <Text variant="caption">{progress.step}</Text>}
+      </Stack>
       <StatRow label="Archipelago" value={apVersion} />
       <Flex gap="sm" align="center" wrap>
         <StatRow label="Folder" value={dir} />

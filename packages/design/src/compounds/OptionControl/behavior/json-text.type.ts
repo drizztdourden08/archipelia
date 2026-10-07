@@ -1,8 +1,17 @@
 /* @layer renderer-app @kind types */
-import type { OptionValue } from '@archipelia/model';
+type JsonShape = 'object' | 'array';
 
-type JsonShape = 'object' | 'list';
+type JsonProblem = {
+  message: string;
+  line: number | undefined;
+};
 
-type JsonParse = { value: OptionValue; error?: undefined } | { value?: undefined; error: string };
+type JsonRead = { value: unknown; problem: null } | { value?: never; problem: JsonProblem };
 
-export type { JsonParse, JsonShape };
+type JsonText = {
+  text: string;
+  edit: (text: string) => void;
+  problem: JsonProblem | null;
+};
+
+export type { JsonProblem, JsonRead, JsonShape, JsonText };

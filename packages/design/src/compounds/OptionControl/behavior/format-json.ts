@@ -1,6 +1,9 @@
 /* @layer renderer-app @kind logic */
-import type { OptionValue } from '@archipelia/model';
+import { JSON_INDENT } from './json-text.constants';
 
-const formatJson = (value: OptionValue) => JSON.stringify(value, null, 2);
+const formatJson = (value: unknown): string => {
+  const text = JSON.stringify(value, null, JSON_INDENT) as string | undefined;
+  return text ?? '';
+};
 
 export { formatJson };

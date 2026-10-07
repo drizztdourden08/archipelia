@@ -34,7 +34,7 @@ const sections = (settings: AppSettings): Section[] => [
         keywords: 'rooms browser open forget reset vault',
         actions: [
           { id: 'open-rooms', label: 'Open my rooms', icon: 'external-link', onSelect: () => openGgRooms(settings.ggBaseUrl) },
-          { id: 'forget-owner', label: 'Forget the owner id', icon: 'trash-2', variant: 'danger', confirm: FORGET_OWNER_CONFIRM, onSelect: forgetGgOwner },
+          { id: 'forget-owner', label: 'Forget the owner id', icon: 'trash-2', tone: 'danger', confirm: FORGET_OWNER_CONFIRM, onSelect: forgetGgOwner },
         ],
       },
     ],

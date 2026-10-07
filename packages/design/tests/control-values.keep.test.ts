@@ -1,32 +1,20 @@
 /* @layer tests @kind test */
 import { describe, expect, test } from 'vitest';
-import { CUSTOM_NUMBER } from '../src/compounds/OptionControl/behavior/choice-options.constants';
+import { optionDef as option } from '@archipelia/model';
 import { isChangedValue } from '../src/compounds/OptionControl/behavior/is-changed-value';
 import { numberValue } from '../src/compounds/OptionControl/behavior/number-value';
 import { stringList } from '../src/compounds/OptionControl/behavior/string-list';
 import { tagsValue } from '../src/compounds/OptionControl/behavior/tags-value';
-import { textValue } from '../src/compounds/OptionControl/behavior/text-value';
-import { toggleValue } from '../src/compounds/OptionControl/behavior/toggle-value';
-import { addCount } from '../src/compounds/OptionControl/behavior/add-count';
-import { counterEntries } from '../src/compounds/OptionControl/behavior/counter-entries';
-import { removeCount } from '../src/compounds/OptionControl/behavior/remove-count';
-import { setCount } from '../src/compounds/OptionControl/behavior/set-count';
-import { unusedKeys } from '../src/compounds/OptionControl/behavior/unused-keys';
-import { formatJson } from '../src/compounds/OptionControl/behavior/format-json';
-import { parseJson } from '../src/compounds/OptionControl/behavior/parse-json';
-import { sameJson } from '../src/compounds/OptionControl/behavior/same-json';
+import { countsOf } from '../src/compounds/OptionControl/behavior/counts-of';
+import { scalarsOf } from '../src/compounds/OptionControl/behavior/scalars-of';
+import { keyValueLook } from '../src/compounds/OptionControl/behavior/key-value-look';
 import { customNumber } from '../src/compounds/OptionControl/behavior/custom-number';
-import { namedPick } from '../src/compounds/OptionControl/behavior/named-pick';
-import { namedSelection } from '../src/compounds/OptionControl/behavior/named-selection';
 import { numberShown } from '../src/compounds/OptionControl/behavior/number-shown';
+import { readJsonText } from '../src/compounds/OptionControl/behavior/read-json-text';
 import { defOf } from './option-defs';
 
 describe('values read back from controls', () => {
-  test('toggle, text and number', () => {
-    expect(toggleValue(true)).toBe(true);
-    expect(toggleValue('yes')).toBe(false);
-    expect(textValue(null)).toBe('');
-    expect(textValue(12)).toBe('12');
+  test('numbers', () => {
     expect(numberValue(4)).toBe(4);
     expect(numberValue(Number.NaN)).toBeUndefined();
     expect(numberValue(null)).toBeUndefined();
@@ -48,53 +36,48 @@ describe('values read back from controls', () => {
 describe('named range', () => {
   const def = defOf('pieces');
 
-  test('the selection follows a name or a matching number', () => {
-    expect(namedSelection(def, 'easy')).toBe('easy');
-    expect(namedSelection(def, 30)).toBe('normal');
-    expect(namedSelection(def, 44)).toBe(CUSTOM_NUMBER);
-  });
-
-  test('a pick stores the number; custom keeps a number in range', () => {
-    expect(namedPick(def, 'easy', 30)).toBe(20);
-    expect(namedPick(def, CUSTOM_NUMBER, 44)).toBe(44);
-    expect(namedPick(def, CUSTOM_NUMBER, 'easy')).toBe(30);
-    expect(customNumber({ ...def, default: 0 }, 500)).toBe(1);
+  test('the number shown follows a name, a number or the default', () => {
     expect(numberShown(def, 'easy')).toBe(20);
+    expect(numberShown(def, 44)).toBe(44);
+    expect(numberShown(def, 'unknown')).toBe(30);
+    expect(customNumber({ ...def, default: 0 }, 500)).toBe(1);
   });
 });
 
-describe('counter entries', () => {
-  const def = defOf('start_inventory');
-
-  test('set, add and remove keep counts', () => {
-    expect(setCount({ Bombs: 1 }, 'Bombs', 3)).toEqual({ Bombs: 3 });
-    expect(addCount({ Bombs: 1 }, ' Arrows ')).toEqual({ Bombs: 1, Arrows: 1 });
-    expect(addCount({ Bombs: 1 }, 'Bombs')).toEqual({ Bombs: 1 });
-    expect(addCount({}, '  ')).toEqual({});
-    expect(removeCount({ Bombs: 1, Arrows: 2 }, 'Bombs')).toEqual({ Arrows: 2 });
+describe('key values', () => {
+  test('a counter counts from 0 over its valid names, and keeps only counts', () => {
+    expect(keyValueLook(defOf('start_inventory'), {})).toEqual({ valueKind: 'count', keys: ['Arrows', 'Bombs'], min: 0, newValue: 1 });
+    expect(countsOf({ Bombs: 2, Bad: 'x' })).toEqual({ Bombs: 2 });
+    expect(countsOf(['a'])).toEqual({});
   });
 
-  test('entries skip anything that is not a count, unused keys come from the schema', () => {
-    expect(counterEntries({ Bombs: 2, Bad: 'x' })).toEqual([['Bombs', 2]]);
-    expect(counterEntries(['a'])).toEqual([]);
-    expect(unusedKeys(def, { Bombs: 1 })).toEqual(['Arrows']);
+  test('a dict of text or of numbers edits its own kind of value', () => {
+    expect(keyValueLook(defOf('bosses'), { Moldorm: 'Helmasaur' })).toEqual({ valueKind: 'text', keys: undefined, newValue: '' });
+    const weights = option({ key: 'w', kind: 'dict', default: { a: 1 } });
+    expect(keyValueLook(weights, {})).toEqual({ valueKind: 'number', keys: undefined, newValue: 0 });
+  });
+
+  test('only names with a number or a text reach the editor', () => {
+    expect(scalarsOf({ a: 1, b: 'x', c: [1], d: null })).toEqual({ a: 1, b: 'x' });
+    expect(scalarsOf('text')).toEqual({});
   });
 });
 
-describe('JSON text', () => {
-  test('a table and a list parse into their shape', () => {
-    expect(parseJson('{"Moldorm": "Helmasaur"}', 'object')).toEqual({ value: { Moldorm: 'Helmasaur' } });
-    expect(parseJson('[1, 2]', 'list')).toEqual({ value: [1, 2] });
+describe('json text', () => {
+  test('text that parses to the right shape is the value', () => {
+    expect(readJsonText('{ "Bow": [1, 2] }', 'object')).toEqual({ value: { Bow: [1, 2] }, problem: null });
+    expect(readJsonText('[{ "item": "Bow" }]', 'array')).toEqual({ value: [{ item: 'Bow' }], problem: null });
   });
 
-  test('the wrong shape or broken text is an error', () => {
-    expect(parseJson('[1]', 'object').error).toMatch(/JSON table/);
-    expect(parseJson('{', 'object').error).toMatch(/Not valid JSON/);
+  test('a list where an object is wanted, or the other way round, is a problem on the first line', () => {
+    expect(readJsonText('[]', 'object')).toEqual({ problem: { message: 'Write an object in braces { }', line: 1 } });
+    expect(readJsonText('{}', 'array')).toEqual({ problem: { message: 'Write a list in brackets [ ]', line: 1 } });
   });
 
-  test('formatting round trips and sameJson ignores spacing', () => {
-    expect(sameJson(formatJson({ a: 1 }), { a: 1 }, 'object')).toBe(true);
-    expect(sameJson('{"a":1}', { a: 1 }, 'object')).toBe(true);
-    expect(sameJson('{"a":2}', { a: 1 }, 'object')).toBe(false);
+  test('empty text asks for a value, and broken text keeps what JSON.parse says', () => {
+    expect(readJsonText('  ', 'object').problem).toEqual({ message: 'Write a JSON value, such as {}', line: 1 });
+    const broken = readJsonText('{\n  "Bow": 1,\n}', 'object').problem;
+    expect(broken?.message).toMatch(/line 3/);
+    expect(broken?.line).toBe(3);
   });
 });

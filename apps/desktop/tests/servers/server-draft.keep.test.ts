@@ -7,6 +7,10 @@ import { shownErrors } from '../../src/views/ServerManager/behavior/shown-errors
 import { newServerEntry } from '../../src/views/ServerManager/behavior/new-server-entry';
 import { switchAuth } from '../../src/views/ServerManager/behavior/switch-auth';
 import { withSecretRefs } from '../../src/views/ServerManager/behavior/with-secret-refs';
+import { serverDirty } from '../../src/views/ServerManager/behavior/server-dirty';
+import { saveState } from '../../src/views/ServerManager/behavior/save-state';
+import { listRows } from '../../src/views/ServerManager/behavior/list-rows';
+import { rowId } from '../../src/views/ServerManager/behavior/row-id';
 
 const NO_INPUTS = { password: '', passphrase: '' };
 
@@ -52,5 +56,28 @@ describe('server drafts', () => {
     const entry = withSecretRefs(switchAuth(filled(), 'ssh-password'), { password: 'hunter2', passphrase: '' });
     expect(entry.auth).toEqual({ kind: 'ssh-password', username: 'me', passwordRef: 'server-abc-password' });
     expect(JSON.stringify(entry)).not.toContain('hunter2');
+  });
+
+  test('only an edit or a typed secret makes a saved server dirty, and a new one is dirty until saved', () => {
+    const saved = filled();
+    expect(serverDirty(null, undefined, NO_INPUTS)).toBe(false);
+    expect(serverDirty(newServerEntry(), undefined, NO_INPUTS)).toBe(true);
+    expect(serverDirty({ ...saved, lastTest: { at: 1, ok: true, message: 'ok' }, hostKeySha256: 'sha' }, saved, NO_INPUTS)).toBe(false);
+    expect(serverDirty({ ...saved, host: 'other.example.net' }, saved, NO_INPUTS)).toBe(true);
+    expect(serverDirty(saved, saved, { password: '', passphrase: 'typed' })).toBe(true);
+  });
+
+  test('the save bar shows saving first, then a failure, then edits', () => {
+    expect(saveState({ saving: true, failed: true, dirty: true, saved: false })).toBe('saving');
+    expect(saveState({ saving: false, failed: true, dirty: true, saved: false })).toBe('error');
+    expect(saveState({ saving: false, failed: false, dirty: true, saved: true })).toBe('dirty');
+    expect(saveState({ saving: false, failed: false, dirty: false, saved: true })).toBe('saved');
+    expect(saveState({ saving: false, failed: false, dirty: false, saved: false })).toBe('clean');
+  });
+
+  test('a server not saved yet is the first row of the list, under its own id', () => {
+    const fresh = newServerEntry();
+    expect(listRows([filled()], fresh).map(rowId)).toEqual(['new-server', 'abc']);
+    expect(listRows([filled()], filled()).map(rowId)).toEqual(['abc']);
   });
 });

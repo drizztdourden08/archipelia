@@ -1,47 +1,32 @@
 /* @layer renderer-app @kind component */
-import { useEffect, useState } from 'react';
-import type { ChangeEvent } from 'react';
-import { Stack, Text, Textarea } from '@drizztdourden08/tessera/primitives';
+import { useCallback, useEffect } from 'react';
+import { CodeBlock } from '@drizztdourden08/tessera/composites';
+import { useFieldControl } from '@drizztdourden08/tessera/primitives';
+import type { OptionValue } from '@archipelia/model';
 import type { OptionControlProps } from '../../OptionControl.type';
-import { formatJson } from '../../behavior/format-json';
-import { parseJson } from '../../behavior/parse-json';
-import { sameJson } from '../../behavior/same-json';
-import { MAX_ROWS } from './JsonControl.constants';
+import { useJsonText } from '../../behavior/useJsonText';
 
-const JsonControl = ({ def, value, onChange, disabled, labelId }: OptionControlProps) => {
-  const shape = def.kind === 'dict' ? 'object' : 'list';
-  const [draft, setDraft] = useState(() => formatJson(value));
-  const [error, setError] = useState<string | null>(null);
-  const external = JSON.stringify(value);
-
+const JsonControl = ({ def, value, onChange, onProblem, disabled }: OptionControlProps) => {
+  const control = useFieldControl();
+  const handleChange = useCallback((next: unknown) => onChange(next as OptionValue), [onChange]);
+  const { text, edit, problem } = useJsonText(value, handleChange, def.kind === 'dict' ? 'object' : 'array');
+  const message = problem?.message ?? null;
   useEffect(() => {
-    if (!sameJson(draft, value, shape)) {
-      setDraft(formatJson(value));
-      setError(null);
-    }
-  }, [external]);
-
-  const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-    const text = event.target.value;
-    setDraft(text);
-    const parsed = parseJson(text, shape);
-    setError(parsed.error ?? null);
-    if (parsed.value !== undefined) onChange(parsed.value);
-  };
-
+    onProblem?.(message);
+  }, [message, onProblem]);
+  useEffect(() => () => onProblem?.(null), [onProblem]);
   return (
-    <Stack gap="xs">
-      <Textarea
-        className="option-control__json"
-        value={draft}
-        onChange={handleChange}
-        disabled={disabled}
-        aria-labelledby={labelId}
-        spellCheck={false}
-        rows={Math.min(MAX_ROWS, draft.split('\n').length + 1)}
-      />
-      {error && <Text variant="caption" role="alert">{error}</Text>}
-    </Stack>
+    <CodeBlock
+      editable
+      language="json"
+      value={text}
+      onChange={edit}
+      invalid={problem !== null}
+      problemLine={problem?.line}
+      disabled={disabled}
+      id={control.id}
+      aria-describedby={control.describedBy}
+    />
   );
 };
 

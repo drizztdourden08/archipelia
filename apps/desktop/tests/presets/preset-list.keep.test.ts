@@ -10,7 +10,10 @@ import { problemMap } from '../../src/views/PresetEditor/behavior/problem-map';
 import { problemSummary } from '../../src/views/PresetEditor/behavior/problem-summary';
 import { sameValues } from '../../src/views/PresetEditor/behavior/same-values';
 import { editedLabel } from '../../src/views/PresetsHub/behavior/edited-label';
-import { buildPresetGroups } from '../../src/views/PresetsHub/behavior/build-preset-groups';
+import { buildPresetRows } from '../../src/views/PresetsHub/behavior/build-preset-rows';
+import { saveBlock } from '../../src/views/PresetEditor/behavior/save-block';
+import { saveState } from '../../src/views/PresetEditor/behavior/save-state';
+import { withProblem } from '../../src/views/PresetEditor/behavior/with-problem';
 import { changedCount } from '../../src/views/PresetsHub/behavior/changed-count';
 import { DEMO } from './demo-schema';
 
@@ -33,18 +36,15 @@ describe('preset groups', () => {
     expect(changedCount(preset('b', 'Gone', { x: 1, y: 2 }), undefined)).toBe(2);
   });
 
-  test('groups installed games and preset games, sorted, with meta lines', () => {
-    const groups = buildPresetGroups(INSTALLED, [
+  test('rows sort by game then name, with a meta line and the group of their game', () => {
+    const rows = buildPresetRows(INSTALLED, [
       preset('2', 'Demo', { crystals: 1 }, 'Zed'), preset('1', 'Demo', {}, 'Alpha'), preset('3', 'Aardvark', { a: 1 }),
     ], NOW);
-    expect(groups.map((group) => [group.game, Boolean(group.schema)])).toEqual([['Aardvark', false], ['Demo', true]]);
-    expect(groups[1]?.rows.map((row) => [row.preset.name, row.meta])).toEqual([
-      ['Alpha', '0 changed · edited today'], ['Zed', '1 changed · edited today'],
+    expect(rows.map((row) => [row.preset.name, row.meta, row.group])).toEqual([
+      ['3', '1 changed · edited today', 'Aardvark · game not installed'],
+      ['Alpha', '0 changed · edited today', 'Demo'],
+      ['Zed', '1 changed · edited today', 'Demo'],
     ]);
-  });
-
-  test('an installed game with no preset still shows', () => {
-    expect(buildPresetGroups(INSTALLED, [], NOW)).toEqual([{ game: 'Demo', schema: DEMO, rows: [] }]);
   });
 
   test('edited labels read in days', () => {
@@ -63,9 +63,11 @@ describe('option filter', () => {
   });
 
   test('tabs count what the search leaves, All counts everything', () => {
-    const tabs = optionTabs(DEMO, { query: 'crys', showAdvanced: false });
+    const tabs = optionTabs(DEMO, { query: 'crys', showAdvanced: false }, new Set(['goal', 'exclude']));
     expect(tabs).toEqual([
-      { id: 'Game Options', label: 'Game Options', count: 1 }, { id: 'Items', label: 'Items', count: 0 }, { id: ALL_TAB, label: 'All', count: 1 },
+      { id: 'Game Options', label: 'Game Options', count: 1, changed: 1 },
+      { id: 'Items', label: 'Items', count: 0, changed: 1 },
+      { id: ALL_TAB, label: 'All', count: 1, changed: 2 },
     ]);
     expect(firstTab(DEMO)).toBe('Game Options');
     expect(firstTab({ ...DEMO, groups: [] })).toBe(ALL_TAB);
@@ -84,5 +86,33 @@ describe('editor helpers', () => {
     expect(problemMap(problems).get('goal')).toBe('Expected one of the listed choices.');
     expect(problemSummary(DEMO, problems)).toBe('1 option needs a fix before saving: Goal.');
     expect(problemSummary(DEMO, [])).toBeNull();
+  });
+});
+
+describe('save bar', () => {
+  const facts = { busy: false, dirty: true, block: null, failure: null, saved: false };
+
+  test('the state follows the edits, the save and what blocks it', () => {
+    expect(saveState({ ...facts, dirty: false })).toBe('clean');
+    expect(saveState(facts)).toBe('dirty');
+    expect(saveState({ ...facts, busy: true })).toBe('saving');
+    expect(saveState({ ...facts, dirty: false, saved: true })).toBe('saved');
+    expect(saveState({ ...facts, failure: 'Disk full' })).toBe('error');
+    expect(saveState({ ...facts, dirty: false, failure: 'Disk full' })).toBe('clean');
+    expect(saveState({ ...facts, block: 'Give the preset a name before saving.' })).toBe('error');
+  });
+
+  test('a save is blocked by an empty name, JSON that does not parse, then refused values', () => {
+    const problems = [{ key: 'goal', expected: 'one of the listed choices' }];
+    expect(saveBlock(DEMO, ' ', problems, ['bosses'])).toBe('Give the preset a name before saving.');
+    expect(saveBlock(DEMO, 'Fast', problems, ['bosses'])).toBe('Fix the JSON of bosses before saving.');
+    expect(saveBlock(DEMO, 'Fast', problems, [])).toBe('1 option needs a fix before saving: Goal.');
+    expect(saveBlock(DEMO, 'Fast', [], [])).toBeNull();
+  });
+
+  test('a JSON problem is held once per option until it clears', () => {
+    expect(withProblem([], 'bosses', 'Expected a value')).toEqual(['bosses']);
+    expect(withProblem(['bosses'], 'bosses', 'Expected a value')).toEqual(['bosses']);
+    expect(withProblem(['bosses', 'plando'], 'bosses', null)).toEqual(['plando']);
   });
 });

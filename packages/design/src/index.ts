@@ -4,13 +4,10 @@ export { GameCard } from './compounds/GameCard';
 export type { GameCardProps } from './compounds/GameCard';
 export { HintRow } from './compounds/HintRow';
 export { LogLines, logCopyText } from './compounds/LogLines';
-export { OptionGroupTabs } from './compounds/OptionGroupTabs';
 export { OptionControl, coercePresetValues, hintOf, isChangedValue, isLoose } from './compounds/OptionControl';
-export { OptionField } from './compounds/OptionField';
 export type { CoercedValues } from './compounds/OptionControl';
 export { OptionFieldRow } from './compounds/OptionFieldRow';
 export { PlayerStatusRow } from './compounds/PlayerStatusRow';
-export { PresetListItem } from './compounds/PresetListItem';
 export { RUN_STATUS, RunRow } from './compounds/RunRow';
 export type { RunStatusView } from './compounds/RunRow';
 export {

@@ -2,7 +2,7 @@
 import type { ComponentUsage } from '@drizztdourden08/tessera';
 
 const usage = {
-  job: 'The Servers page: the saved SSH servers beside the form of the picked one, with test, trust, save and remove.',
+  job: 'The Servers page: a ListDetail of the saved SSH servers beside the editor of the picked one, with test, trust, a SaveBar and remove.',
   useWhen: [
     'The Servers page of the Hosting group.',
   ],
@@ -12,14 +12,18 @@ const usage = {
   ],
   rules: [
     'Put each saved server in search while the page is open.',
+    'Add server opens a create form at the top of the list for the label; the new server is a row marked Not saved yet until Save stores it.',
+    'Picking another server or Back with unsaved edits asks in the bar over the editor; Add with unsaved edits says to save or discard them first.',
+    'The editor ends in a SaveBar: Save and Discard, and whether the server is saved.',
+    'The key file is a PathInput: type it, drop it from the desktop or Browse with the file dialog of the app.',
     'Keep passwords and passphrases in the vault; the form holds them only while typed.',
     'Show each problem as the error of its field, once the field was left or Save was pressed; Save with a problem saves nothing.',
     'The game port takes the hosting range, 1024 to 65535, with the same message as the builder; the SSH port takes any port, so 22 works.',
     'Test a server before trusting its host key, and toast whether it is ready.',
-    'Remove is a danger button that asks first and names what loses the server.',
+    'Remove is a danger button that asks first and names what loses the server; the delete of a row asks in the row.',
   ],
   a11y: [
-    'The server list rows are buttons, pressed while selected.',
+    'The server list is an ItemList: the rows are buttons, pressed while selected, with rename and delete on each row.',
     'The heading of the detail names the server.',
     'An error is an alert with one plain sentence; the raw error goes to the app log.',
     'A field problem is the error note of its field, so the control is marked invalid and described by it.',

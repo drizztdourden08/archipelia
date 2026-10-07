@@ -5,10 +5,6 @@ type EditorHeaderProps = MoreActions & {
   name: string;
   onNameChange: (name: string) => void;
   gameLabel: string;
-  canSave: boolean;
-  dirty: boolean;
-  onSave: () => void;
-  onRevert: () => void;
 };
 
 export type { EditorHeaderProps };

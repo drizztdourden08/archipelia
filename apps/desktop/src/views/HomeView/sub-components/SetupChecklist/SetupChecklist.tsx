@@ -4,7 +4,7 @@ import type { SetupChecklistProps } from './SetupChecklist.type';
 import { SetupStepRow } from '../SetupStepRow';
 
 const SetupChecklist = ({ steps, onStep }: SetupChecklistProps) => (
-  <Stack gap="sm">
+  <Stack gap="sm" data-tour="setup-checklist">
     <Text variant="label">Before the first run</Text>
     <Stack gap="sm" role="list" aria-label="Setup steps">
       {steps.map((step, index) => <SetupStepRow key={step.id} step={step} index={index} onStep={onStep} />)}

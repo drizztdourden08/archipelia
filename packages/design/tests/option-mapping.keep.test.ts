@@ -1,14 +1,14 @@
 /* @layer tests @kind test */
 import { describe, expect, test } from 'vitest';
 import { choiceOptions } from '../src/compounds/OptionControl/behavior/choice-options';
-import { CUSTOM_NUMBER } from '../src/compounds/OptionControl/behavior/choice-options.constants';
-import { namedOptions } from '../src/compounds/OptionControl/behavior/named-options';
+import { rangeNames } from '../src/compounds/OptionControl/behavior/range-names';
+import { rangeBounds } from '../src/compounds/OptionControl/behavior/range-bounds';
 import { titleCase } from '../src/compounds/OptionControl/behavior/title-case';
 import { controlKindOf } from '../src/compounds/OptionControl/behavior/control-kind';
 import { PICKER_MAX } from '../src/compounds/OptionControl/behavior/set-kind.constants';
-import { optionDescriptor } from '../src/compounds/OptionControl/behavior/option-descriptor';
 import { hintOf } from '../src/compounds/OptionControl/behavior/option-hint';
 import { optionDef as option } from '@archipelia/model';
+import type { OptionValue } from '@archipelia/model';
 import { defOf } from './option-defs';
 
 describe('controlKindOf', () => {
@@ -20,7 +20,7 @@ describe('controlKindOf', () => {
     expect(controlKindOf(defOf('seed_name'), '')).toBe('text');
     expect(controlKindOf(defOf('start_inventory'), {})).toBe('counter');
     expect(controlKindOf(defOf('exclude'), [])).toBe('set-picker');
-    expect(controlKindOf(defOf('bosses'), {})).toBe('json-object');
+    expect(controlKindOf(defOf('bosses'), {})).toBe('key-values');
   });
 
   test('a named range without names is a plain range', () => {
@@ -37,21 +37,15 @@ describe('controlKindOf', () => {
     expect(controlKindOf(defOf('plando'), ['a'])).toBe('tags');
     expect(controlKindOf(defOf('plando'), [{ item: 'Bow' }])).toBe('json-list');
   });
-});
 
-describe('optionDescriptor', () => {
-  test('maps option kinds to field kit kinds', () => {
-    expect(optionDescriptor(defOf('death_link'))).toMatchObject({ path: 'death_link', label: 'Death link', kind: 'boolean' });
-    expect(optionDescriptor(defOf('goal'))).toMatchObject({ kind: 'enum', options: ['ganon', 'crystals_only'] });
-    expect(optionDescriptor(defOf('crystals')).kind).toBe('number');
-    expect(optionDescriptor(defOf('seed_name')).kind).toBe('string');
-    expect(optionDescriptor(defOf('bosses')).kind).toBe('object');
-  });
-
-  test('a set carries its element kind, and hidden follows visibility', () => {
-    expect(optionDescriptor(defOf('exclude')).of).toMatchObject({ kind: 'enum', options: ['Bow', 'Hookshot'] });
-    expect(optionDescriptor(defOf('exclude')).hidden).toBe(false);
-    expect(optionDescriptor(defOf('plando')).hidden).toBe(true);
+  test('a dict one level deep of numbers or of text is key values, anything deeper or empty is JSON', () => {
+    const plain = option({ key: 'd', kind: 'dict', default: {} });
+    const dict = (value: OptionValue) => controlKindOf(plain, value);
+    expect(dict({ Bow: 2 })).toBe('key-values');
+    expect(dict({ Bow: 'Hookshot' })).toBe('key-values');
+    expect(dict({ Bow: 2, Hookshot: 'left' })).toBe('json-object');
+    expect(dict({ Bow: { count: 2 } })).toBe('json-object');
+    expect(dict({})).toBe('json-object');
   });
 });
 
@@ -67,10 +61,14 @@ describe('labels and hints', () => {
     ]);
   });
 
-  test('named options end with a custom number entry', () => {
-    const options = namedOptions(defOf('pieces'));
-    expect(options[0]).toEqual({ value: 'easy', label: 'Easy (20)' });
-    expect(options.at(-1)?.value).toBe(CUSTOM_NUMBER);
+  test('named values become the labels of a slider, one per number', () => {
+    expect(rangeNames(defOf('pieces'))).toEqual([[20, 'Easy'], [30, 'Normal']]);
+    expect(rangeNames(option({ key: 'n', kind: 'named-range', default: 1, namedValues: { normal: 1, default: 1 } }))).toEqual([[1, 'Normal']]);
+  });
+
+  test('the bounds of a named range come from its range, else from its names', () => {
+    expect(rangeBounds(defOf('pieces'))).toEqual({ min: 1, max: 90 });
+    expect(rangeBounds(option({ key: 'n', kind: 'named-range', default: 1, namedValues: { low: 2, high: 9 } }))).toEqual({ min: 2, max: 9 });
   });
 
   test('hints show the bounds and the default', () => {

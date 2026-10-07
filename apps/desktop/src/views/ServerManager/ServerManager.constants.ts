@@ -20,11 +20,29 @@ const EMPTY_INPUTS: SecretInputs = { password: '', passphrase: '' };
 
 const NO_SERVER_TEXT = 'Add a remote machine you reach over SSH. Hosting on this computer needs no server.';
 
+const VAULT_NOTE = 'Passwords and key passphrases stay encrypted in the vault and are only used by the app itself.';
+
+const LIST = {
+  title: 'Servers',
+  add: 'Add server',
+  nameLabel: 'Server label',
+  submit: 'Add',
+  width: 'servers.list-width',
+  empty: 'No server yet.',
+} as const;
+
+const NEW_SERVER = { id: 'new-server', label: 'New server', meta: 'Not saved yet' } as const;
+
+const finishFirst = (label: string) => `Save or discard the changes to ${label} first.`;
+
 const FAILURE = {
   save: 'Could not save the server.',
   test: 'Could not test the connection.',
   trust: 'Could not trust the host key.',
   remove: 'Could not remove the server.',
+  rename: 'Could not rename the server.',
 } as const;
 
-export { DEFAULT_GAME_PORT, DRAFT_RULES, EMPTY_INPUTS, FAILURE, NO_SERVER_TEXT };
+const OTHER_FAILURES = ['test', 'trust', 'remove', 'rename'] as const;
+
+export { DEFAULT_GAME_PORT, DRAFT_RULES, EMPTY_INPUTS, FAILURE, finishFirst, LIST, NEW_SERVER, NO_SERVER_TEXT, OTHER_FAILURES, VAULT_NOTE };

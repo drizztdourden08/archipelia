@@ -1,5 +1,6 @@
 /* @layer renderer-app @kind config */
-import type { ConfirmActionOptions } from '@drizztdourden08/brock-react';
+import type { ItemListProps } from '@drizztdourden08/tessera/composites';
+import type { PresetRow } from './PresetsHub.type';
 
 const RECENT_DAYS = 7;
 
@@ -7,12 +8,16 @@ const DAY_MS = 86_400_000;
 
 const DEFAULTS = '';
 
-const DISCARD_CONFIRM: ConfirmActionOptions = {
-  title: 'Discard changes',
-  message: 'This preset has unsaved changes. Leave it and lose them?',
-  confirmLabel: 'Discard',
-  variant: 'danger',
-};
+const NO_GAME = 'No game is installed yet, so there is nothing to make a preset for.';
+
+const NO_PRESET = 'No preset yet. Press New preset to make one.';
+
+const PRESET_ROWS = {
+  getId: (row: PresetRow) => row.preset.id,
+  getName: (row: PresetRow) => row.preset.name,
+  render: (row: PresetRow) => ({ meta: row.meta }),
+  groupBy: (row: PresetRow) => row.group,
+} satisfies Pick<ItemListProps<PresetRow>, 'getId' | 'getName' | 'render' | 'groupBy'>;
 
 const FAILURE = {
   load: 'Could not load your presets.',
@@ -20,4 +25,4 @@ const FAILURE = {
   remove: 'Could not delete the preset.',
 } as const;
 
-export { DAY_MS, DEFAULTS, DISCARD_CONFIRM, FAILURE, RECENT_DAYS };
+export { DAY_MS, DEFAULTS, FAILURE, NO_GAME, NO_PRESET, PRESET_ROWS, RECENT_DAYS };

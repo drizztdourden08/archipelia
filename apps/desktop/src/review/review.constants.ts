@@ -21,6 +21,10 @@ const SERVER_PROBLEMS = ['Give the server a label.', 'Enter the host name or add
 
 const SERVER_UNTOUCHED = 'Enter the host name or address.';
 
+const SERVER_UI = { add: 'Add server', name: 'Server label', create: 'Add', save: 'Save', discard: 'Discard', remove: 'Remove', host: 'Host' } as const;
+
+const SAVE_STATE = { dirty: /^Unsaved changes/, saved: /^Saved/, clean: /^No changes/ } as const;
+
 const SERVER_FIELDS: [string, string][] = [
   ['Label', REVIEW_SERVER.label], ['Host', REVIEW_SERVER.host], ['User name', REVIEW_SERVER.user],
   ['Key file', REVIEW_SERVER.keyPath], ['Archipelago path on the host', REVIEW_SERVER.apPath],
@@ -28,7 +32,9 @@ const SERVER_FIELDS: [string, string][] = [
 
 const STORAGE_FOLDERS = ['Sessions', 'Presets', 'Installed games'];
 
+const GUARD_DIALOG = 'Unsaved changes';
+
 export {
-  HEARTBEAT_MS, REVIEW_CHECKS, REVIEW_GAME, REVIEW_PLAYERS, REVIEW_PORT, REVIEW_PRESET, REVIEW_SERVER, REVIEW_SESSION, RUN_TIMEOUT_MS, SERVER_FIELDS, SERVER_PROBLEMS, SERVER_UNTOUCHED,
-  STORAGE_FOLDERS,
+  GUARD_DIALOG, HEARTBEAT_MS, REVIEW_CHECKS, REVIEW_GAME, REVIEW_PLAYERS, REVIEW_PORT, REVIEW_PRESET, REVIEW_SERVER, REVIEW_SESSION, RUN_TIMEOUT_MS, SAVE_STATE, SERVER_FIELDS, SERVER_PROBLEMS,
+  SERVER_UI, SERVER_UNTOUCHED, STORAGE_FOLDERS,
 };
