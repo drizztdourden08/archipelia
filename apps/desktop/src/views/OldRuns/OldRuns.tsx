@@ -15,8 +15,8 @@ const OldRuns = () => {
           icon="history"
           value={stale}
           unit={`older than ${CLEAN_DAYS} days`}
-          meta={`${kept} runs kept`}
-          action={{ label: `Remove runs older than ${CLEAN_DAYS} days`, icon: 'trash-2', variant: 'danger', disabled: busy || stale === 0, onSelect: clean }}
+          meta={`${kept} ${kept === 1 ? 'run' : 'runs'} kept`}
+          action={{ label: `Remove runs older than ${CLEAN_DAYS} days`, icon: 'trash-2', tone: 'danger', disabled: busy || stale === 0, onSelect: clean }}
         />
       </Grid>
       {error && <ErrorCallout message={error} />}
