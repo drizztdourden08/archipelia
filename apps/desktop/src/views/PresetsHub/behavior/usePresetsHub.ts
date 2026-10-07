@@ -36,7 +36,7 @@ const usePresetsHub = () => {
   const selection = usePresetSelection(requestedId);
   const selected = presets.find((preset) => preset.id === selection.selectedId) ?? null;
   const actions = usePresetActions({ selectedId: selected?.id ?? null, select: selection.select, follow: selection.follow });
-  const creator = usePresetCreator({ installed, preferredGame: selected?.game, onCreated: selection.follow });
+  const creator = usePresetCreator({ installed, preferredGame: selected?.game, onCreated: selection.select });
   const schema = selected ? schemaFor(installed, selected.game) : undefined;
   const openGames = useCallback(() => open(ROUTE.games), [open]);
 

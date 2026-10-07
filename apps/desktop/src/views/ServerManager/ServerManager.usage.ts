@@ -13,7 +13,7 @@ const usage = {
   rules: [
     'Put each saved server in search while the page is open.',
     'Add server opens a create form at the top of the list for the label; the new server is a row marked Not saved yet until Save stores it.',
-    'Picking another server or Back with unsaved edits asks in the bar over the editor; Add with unsaved edits says to save or discard them first.',
+    'Picking another server, Back or Add server with unsaved edits asks in the bar over the editor first.',
     'The editor ends in a SaveBar: Save and Discard, and whether the server is saved.',
     'The key file is a PathInput: type it, drop it from the desktop or Browse with the file dialog of the app.',
     'Keep passwords and passphrases in the vault; the form holds them only while typed.',

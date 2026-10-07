@@ -1,18 +1,16 @@
 /* @layer renderer-app @kind hook */
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 import { confirmDelete } from '@drizztdourden08/brock-react';
 import type { RowsOptions } from '../ServerManager.type';
-import { finishFirst, NEW_SERVER } from '../ServerManager.constants';
+import { NEW_SERVER } from '../ServerManager.constants';
 import { appApi } from '../../../ipc/app-api';
 import { listRows } from './list-rows';
 import { newServerEntry } from './new-server-entry';
 import { removeServer } from './remove-server';
 import { removeServerConfirm } from './remove-server-confirm';
-import { rowName } from './row-name';
 
 const useServerRows = ({ servers, editor, guard }: RowsOptions) => {
-  const { draft, dirty, select, setDraft } = editor;
-  const [createError, setCreateError] = useState<string | null>(null);
+  const { draft, select, setDraft } = editor;
   const rows = useMemo(() => listRows(servers, draft), [servers, draft]);
 
   const pick = useCallback((id: string | null) => {
@@ -21,18 +19,9 @@ const useServerRows = ({ servers, editor, guard }: RowsOptions) => {
   }, [servers, select]);
 
   const create = useCallback((label: string, close: () => void) => {
-    if (draft && dirty) {
-      setCreateError(finishFirst(rowName(draft)));
-      return;
-    }
-    setCreateError(null);
     select({ ...newServerEntry(), label });
     close();
-  }, [dirty, draft, select]);
-  const cancelCreate = useCallback((close: () => void) => {
-    setCreateError(null);
-    close();
-  }, []);
+  }, [select]);
 
   const rename = useCallback((id: string, label: string) => {
     const entry = servers.find((server) => server.id === id);
@@ -57,7 +46,7 @@ const useServerRows = ({ servers, editor, guard }: RowsOptions) => {
     });
   }, [draft, removeRow]);
 
-  return { cancelCreate, create, createError, pick, remove, removeRow, rename, rows };
+  return { create, pick, remove, removeRow, rename, rows };
 };
 
 export { useServerRows };

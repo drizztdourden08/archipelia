@@ -15,7 +15,7 @@ const usage = {
     'Group the presets by game, and name a group whose game is not installed.',
     'Open the create form from New preset; when no game is installed, say so in the form and offer Open Games.',
     'Pass the dirty state and the save of the editor, so picking another preset, New preset or Back asks over the editor first; leaving the page asks through the leave guard of the editor.',
-    'After a create or a duplicate, open the new preset only when the editor holds no unsaved edit.',
+    'New preset with unsaved edits asks in the bar over the editor first, then opens the new preset; a duplicate opens only when the editor holds no unsaved edit.',
     'Ask before deleting a preset: the trash of a row asks in place, the Delete of the editor names what uses it.',
   ],
   a11y: [

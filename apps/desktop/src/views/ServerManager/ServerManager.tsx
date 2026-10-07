@@ -36,8 +36,8 @@ const ServerManager = () => {
         getName: rowName,
         render: rowParts,
         create: (close) => (
-          <InlineCreateForm label={LIST.nameLabel} placeholder={LIST.nameLabel} submitLabel={LIST.submit} error={manager.createError ?? undefined}
-            onCreate={(label) => manager.create(label, close)} onCancel={() => manager.cancelCreate(close)} />
+          <InlineCreateForm label={LIST.nameLabel} placeholder={LIST.nameLabel} submitLabel={LIST.submit}
+            onCreate={(label) => manager.create(label, close)} onCancel={close} />
         ),
         createLabel: LIST.add,
         onRename: manager.rename,

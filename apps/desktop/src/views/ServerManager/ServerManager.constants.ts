@@ -33,7 +33,6 @@ const LIST = {
 
 const NEW_SERVER = { id: 'new-server', label: 'New server', meta: 'Not saved yet' } as const;
 
-const finishFirst = (label: string) => `Save or discard the changes to ${label} first.`;
 
 const FAILURE = {
   save: 'Could not save the server.',
@@ -45,4 +44,4 @@ const FAILURE = {
 
 const OTHER_FAILURES = ['test', 'trust', 'remove', 'rename'] as const;
 
-export { DEFAULT_GAME_PORT, DRAFT_RULES, EMPTY_INPUTS, FAILURE, finishFirst, LIST, NEW_SERVER, NO_SERVER_TEXT, OTHER_FAILURES, VAULT_NOTE };
+export { DEFAULT_GAME_PORT, DRAFT_RULES, EMPTY_INPUTS, FAILURE, LIST, NEW_SERVER, NO_SERVER_TEXT, OTHER_FAILURES, VAULT_NOTE };
