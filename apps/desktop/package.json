@@ -3,6 +3,11 @@
   "version": "0.2.0-beta.1",
   "private": true,
   "description": "Archipelia desktop app: the Archipelago multiworld workflow in one window.",
+  "homepage": "https://github.com/drizztdourden08/archipelia",
+  "author": {
+    "name": "drizztdourden_",
+    "email": "drizztdourden08@users.noreply.github.com"
+  },
   "type": "module",
   "main": "dist/electron/main.js",
   "engines": {
