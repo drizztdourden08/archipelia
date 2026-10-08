@@ -11,11 +11,20 @@ import { answerSaveDialogWith } from '../support/save-dialog';
 const rowOf = (presets: Locator, name: string, changed: number) =>
   presets.getByRole('button', { name: new RegExp(`^${name} ${changed} changed`) });
 
-const newPreset = async (launched: LaunchedApp, presets: Locator, game: string, name: string) => {
-  const { page } = launched;
-  await presets.getByRole('button', { name: 'New preset', exact: true }).click();
-  const form = presets.getByRole('group', { name: 'New preset', exact: true });
-  await pickOption(page, form.getByRole('combobox', { name: 'Game', exact: true }), game);
+const createForm = (presets: Locator) => presets.getByRole('group', { name: 'New preset', exact: true });
+
+const newPresetFor = async (presets: Locator, game: string) => {
+  await presets.getByRole('group', { name: game, exact: true }).getByRole('button', { name: 'New preset', exact: true }).click();
+  await createForm(presets).getByRole('combobox', { name: 'Game', exact: true }).filter({ hasText: game }).waitFor();
+};
+
+const newPresetPicking = async (launched: LaunchedApp, presets: Locator, game: string) => {
+  await presets.locator('[data-tour="new-preset"]').click();
+  await pickOption(launched.page, createForm(presets).getByRole('combobox', { name: 'Game', exact: true }), game);
+};
+
+const createPreset = async (presets: Locator, name: string) => {
+  const form = createForm(presets);
   await form.getByRole('textbox', { name: 'Name', exact: true }).fill(name);
   await form.getByRole('button', { name: 'Create', exact: true }).click();
   await form.waitFor({ state: 'detached' });
@@ -38,7 +47,8 @@ const save = async (presets: Locator, name: string) => {
 };
 
 const sohPreset = async (launched: LaunchedApp, presets: Locator) => {
-  await newPreset(launched, presets, SOH.game, SOH.preset);
+  await newPresetFor(presets, SOH.game);
+  await createPreset(presets, SOH.preset);
   await settledProof(launched, '12-presets-soh-created');
   await findOption(presets, SOH.toggle);
   const toggle = presets.getByRole('switch', { name: SOH.toggle, exact: true });
@@ -51,7 +61,8 @@ const sohPreset = async (launched: LaunchedApp, presets: Locator) => {
 };
 
 const timespinnerPreset = async (launched: LaunchedApp, presets: Locator) => {
-  await newPreset(launched, presets, TIMESPINNER.game, TIMESPINNER.preset);
+  await newPresetPicking(launched, presets, TIMESPINNER.game);
+  await createPreset(presets, TIMESPINNER.preset);
   await findOption(presets, TIMESPINNER.choice);
   await pickOption(launched.page, presets.getByRole('combobox', { name: TIMESPINNER.choice, exact: true }), TIMESPINNER.value);
   await markedChanged(presets, TIMESPINNER.choice);

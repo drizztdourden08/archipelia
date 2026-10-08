@@ -11,6 +11,7 @@ import { problemSummary } from '../../src/views/PresetEditor/behavior/problem-su
 import { sameValues } from '../../src/views/PresetEditor/behavior/same-values';
 import { editedLabel } from '../../src/views/PresetsHub/behavior/edited-label';
 import { buildPresetRows } from '../../src/views/PresetsHub/behavior/build-preset-rows';
+import { buildPresetGroups } from '../../src/views/PresetsHub/behavior/build-preset-groups';
 import { saveBlock } from '../../src/views/PresetEditor/behavior/save-block';
 import { saveState } from '../../src/views/PresetEditor/behavior/save-state';
 import { withProblem } from '../../src/views/PresetEditor/behavior/with-problem';
@@ -45,6 +46,19 @@ describe('preset groups', () => {
       ['Alpha', '0 changed · edited today', 'Demo'],
       ['Zed', '1 changed · edited today', 'Demo'],
     ]);
+  });
+
+  test('every installed game has a group in game order, an empty one with New preset for its game', () => {
+    const rows = buildPresetRows(INSTALLED, [preset('1', 'Demo', {}, 'Alpha'), preset('3', 'Aardvark', { a: 1 })], NOW);
+    const opened: string[] = [];
+    const groups = buildPresetGroups(['Demo', 'Zork'], rows, (game) => opened.push(game));
+    expect(groups.map((group) => [group.name, group.action?.label ?? null])).toEqual([
+      ['Aardvark · game not installed', null],
+      ['Demo', 'New preset'],
+      ['Zork', 'New preset'],
+    ]);
+    groups[2]?.action?.onSelect();
+    expect(opened).toEqual(['Zork']);
   });
 
   test('edited labels read in days', () => {

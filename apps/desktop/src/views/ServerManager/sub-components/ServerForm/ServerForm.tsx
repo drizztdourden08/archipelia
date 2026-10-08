@@ -1,6 +1,6 @@
 /* @layer renderer-app @kind component */
 import { usePlatform } from '@drizztdourden08/brock-react';
-import { Box, Field, NumberInput, RadioGroup, Stack, Text, TextInput } from '@drizztdourden08/tessera/primitives';
+import { Field, NumberInput, RadioGroup, Stack, Text, TextInput } from '@drizztdourden08/tessera/primitives';
 import { PasswordInput, PathInput } from '@drizztdourden08/tessera/composites';
 import { PORT_RANGE } from '@archipelia/design';
 import type { ServerFormProps } from './ServerForm.type';
@@ -10,7 +10,7 @@ import { switchAuth } from '../../behavior/switch-auth';
 
 const ServerForm = ({ entry, inputs, errors, onEntry, onInputs, onTouch }: ServerFormProps) => {
   const { auth } = entry;
-  const { pickPath, pathOf } = usePlatform().filePicker;
+  const { pickPath, pathOf, revealPath } = usePlatform().filePicker;
   return (
     <Stack gap="sm">
       <Field label="Label" error={errors.label}>
@@ -30,10 +30,9 @@ const ServerForm = ({ entry, inputs, errors, onEntry, onInputs, onTouch }: Serve
       {auth.kind === 'ssh-key' && (
         <>
           <Field label="Key file" hint="Only the path is stored." error={errors.keyPath}>
-            <Box onBlur={() => onTouch('keyPath')}>
-              <PathInput value={auth.keyPath || null} placeholder={KEY_PLACEHOLDER} resolvePath={pathOf} onBrowse={pickPath && (() => pickPath())}
-                onChange={(keyPath) => onEntry({ ...entry, auth: { ...auth, keyPath: keyPath ?? '' } })} />
-            </Box>
+            <PathInput value={auth.keyPath || null} placeholder={KEY_PLACEHOLDER} resolvePath={pathOf} onBrowse={pickPath && (() => pickPath())}
+              onReveal={revealPath && ((path) => { void revealPath(path); })} onBlur={() => onTouch('keyPath')}
+              onChange={(keyPath) => onEntry({ ...entry, auth: { ...auth, keyPath: keyPath ?? '' } })} />
           </Field>
           <Field label="Key passphrase" hint={auth.passphraseRef ? 'Stored in the vault. Type to replace it.' : 'Leave empty for a key without one.'}>
             <PasswordInput mode="new" value={inputs.passphrase} onChange={(passphrase) => onInputs({ ...inputs, passphrase })} />

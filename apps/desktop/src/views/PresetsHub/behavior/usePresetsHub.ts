@@ -3,6 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigation } from '@drizztdourden08/brock-react';
 import { ROUTE } from '../../../hooks/app-navigation.constants';
 import { useLibraryStore } from '../../../stores/useLibraryStore';
+import { buildPresetGroups } from './build-preset-groups';
 import { buildPresetRows } from './build-preset-rows';
 import { schemaFor } from './schema-for';
 import { usePresetCreator } from './usePresetCreator';
@@ -37,11 +38,13 @@ const usePresetsHub = () => {
   const selected = presets.find((preset) => preset.id === selection.selectedId) ?? null;
   const actions = usePresetActions({ selectedId: selected?.id ?? null, select: selection.select, follow: selection.follow });
   const creator = usePresetCreator({ installed, preferredGame: selected?.game, onCreated: selection.select });
+  const { gameOptions, openFor } = creator;
+  const groups = useMemo(() => buildPresetGroups(gameOptions.map((option) => option.value), rows, openFor), [gameOptions, rows, openFor]);
   const schema = selected ? schemaFor(installed, selected.game) : undefined;
   const openGames = useCallback(() => open(ROUTE.games), [open]);
 
   return {
-    actions, creator, loadFailed, loading: loading && rows.length === 0, openGames, retry: load, rows, schema, selected, selection,
+    actions, creator, groups, loadFailed, loading: loading && rows.length === 0, openGames, retry: load, rows, schema, selected, selection,
   };
 };
 

@@ -15,7 +15,7 @@ const usage = {
     'Add server opens a create form at the top of the list for the label; the new server is a row marked Not saved yet until Save stores it.',
     'Picking another server, Back or Add server with unsaved edits asks in the bar over the editor first.',
     'The editor ends in a SaveBar: Save and Discard, and whether the server is saved.',
-    'The key file is a PathInput: type it, drop it from the desktop or Browse with the file dialog of the app.',
+    'The key file is a PathInput: type it, drop it from the desktop or Browse with the file dialog of the app; Reveal shows it in its folder, and leaving the box marks it touched.',
     'Keep passwords and passphrases in the vault; the form holds them only while typed.',
     'Show each problem as the error of its field, once the field was left or Save was pressed; Save with a problem saves nothing.',
     'The game port takes the hosting range, 1024 to 65535, with the same message as the builder; the SSH port takes any port, so 22 works.',

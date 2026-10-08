@@ -14,7 +14,7 @@ const usage = {
     'Report dirty changes through onDirtyChange and the save through onSaveChange, so the hub asks over the editor before it shows another preset, and guard them with useUnsavedChanges so a page switch, Back, Escape, the hub switch, the close button and Quit ask first.',
     'Put the SaveBar last: Not saved with the reason while a value would be refused by the generator, the name is empty or a JSON option does not parse, and Save does nothing until it is fixed.',
     'Discard goes back to the last saved version and is off while nothing changed.',
-    'Put Duplicate, Import YAML, Export YAML, Reset all to defaults and Delete in the More actions menu.',
+    'Put Duplicate, Import YAML, Export YAML, Reset all to defaults and Delete in the More actions menu, Delete in the danger tone.',
     'Take duplicate and delete from the hub, which asks before it deletes.',
     'Toast the outcome of a save, saved or not saved with the reason.',
   ],

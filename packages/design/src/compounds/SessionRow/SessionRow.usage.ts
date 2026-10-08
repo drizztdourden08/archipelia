@@ -15,7 +15,7 @@ const usage = {
     'Write meta as the games of the session; playersLabel as the count, such as 3 players.',
     'Set busy while any action of the list runs, so nothing runs twice.',
     'Every callback takes the session id; double click edits.',
-    'Edit and Run stay on the row; Duplicate and Delete sit in the More actions menu. The caller asks before Delete removes anything.',
+    'Edit and Run stay on the row; Duplicate and Delete sit in the More actions menu, Delete in the danger tone. The caller asks before Delete removes anything.',
   ],
   a11y: [
     'Each button is named after the session, such as Run Friday run, Edit session Friday run and More actions for Friday run.',

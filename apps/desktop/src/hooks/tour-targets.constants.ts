@@ -1,4 +1,6 @@
 /* @layer renderer-app @kind config */
-const NEW_PRESET = '.presets-hub .item-list__head button';
+const NEW_PRESET_TOUR = 'new-preset';
 
-export { NEW_PRESET };
+const NEW_PRESET = { tour: NEW_PRESET_TOUR } as const;
+
+export { NEW_PRESET, NEW_PRESET_TOUR };

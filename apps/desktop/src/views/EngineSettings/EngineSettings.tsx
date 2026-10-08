@@ -16,7 +16,7 @@ const EngineSettings = () => {
   const { status, refresh, setup } = useEngineStore();
   const { job, open } = useJob(ENGINE_JOB);
   useEffect(() => { void refresh(); }, [refresh]);
-  const { state, building, ready, apVersion, dir, error } = engineView(status);
+  const { state, building, ready, apVersion, dir, openable, error } = engineView(status);
   const failure = useLoggedFailure(error, FAILURE.setup);
   const progress = setupProgress(job);
   const actions = useMemo(
@@ -38,7 +38,7 @@ const EngineSettings = () => {
       <StatRow label="Archipelago" value={apVersion} />
       <Flex gap="sm" align="center" wrap>
         <StatRow label="Folder" value={dir} />
-        <Button size="sm" variant="secondary" icon={<Icon name="folder-open" />} disabled={!dir} onClick={openEngineFolder}>Open folder</Button>
+        <Button size="sm" variant="secondary" icon={<Icon name="folder-open" />} disabled={!openable} onClick={() => { void openEngineFolder(dir); }}>Open folder</Button>
       </Flex>
       {failure && <ErrorCallout message={failure} />}
       <SettingActions actions={actions} align="start" />

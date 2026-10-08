@@ -16,7 +16,7 @@ const usage = {
     'Once ready, Check again is the primary action and Rebuild is a danger action whose confirm focuses Cancel.',
     'Set up and Rebuild open the job dialog with the steps and the log; Show progress, or Show the last set up once it ended, opens that dialog again.',
     'While the set up runs, show its progress bar and current step on the page too.',
-    'Open folder sits next to the folder path and opens it in the file manager.',
+    'Open folder sits next to the folder path and opens that folder in the file manager; it is off while the engine is not set up.',
     'A failed set up is one plain sentence; its raw error goes to the app log.',
   ],
   a11y: [

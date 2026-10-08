@@ -9,7 +9,7 @@ import { stringList } from '../../behavior/string-list';
 import { tagsValue } from '../../behavior/tags-value';
 
 const TagsControl = ({ def, value, onChange, disabled }: OptionControlProps) => {
-  const { id } = useFieldControl();
+  const { labelId } = useFieldControl();
   const known = def.validKeys?.length ? def.validKeys : undefined;
   const validate = useMemo<TagValidator>(
     () => (known ? (raw) => known.includes(raw) || 'Not a name this option knows' : ANY_TAG),
@@ -19,7 +19,7 @@ const TagsControl = ({ def, value, onChange, disabled }: OptionControlProps) => 
   const handleChange = useCallback((next: readonly string[]) => onChange(tagsValue(def.kind, next)), [def.kind, onChange]);
   return (
     <TagInput
-      id={id}
+      aria-labelledby={labelId}
       value={selected}
       onChange={handleChange}
       suggestions={known ?? NO_SUGGESTIONS}

@@ -15,7 +15,7 @@ const moreActions = ({ busy, onDuplicate, onImport, onExport, onResetAll, onDele
     id: 'reset',
     items: [
       { id: 'reset', label: 'Reset all to defaults', icon: 'rotate-ccw', disabled: busy, onSelect: onResetAll },
-      { id: 'delete', label: 'Delete', icon: 'trash-2', disabled: busy, onSelect: onDelete },
+      { id: 'delete', label: 'Delete', icon: 'trash-2', tone: 'danger', disabled: busy, onSelect: onDelete },
     ],
   },
 ];

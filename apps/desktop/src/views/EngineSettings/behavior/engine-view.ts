@@ -12,6 +12,7 @@ const engineView = (status: EngineStatus | null) => {
     ready: state === 'ready',
     apVersion: status?.apVersion ?? 'not installed',
     dir: status?.dir ?? '',
+    openable: Boolean(status?.dir) && state !== undefined && state !== 'missing',
     error: status?.error,
   };
 };

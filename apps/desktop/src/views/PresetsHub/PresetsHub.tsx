@@ -4,11 +4,12 @@ import { ListDetail } from '@drizztdourden08/tessera/composites';
 import { usePresetsHub } from './behavior/usePresetsHub';
 import { PresetDetail } from './sub-components/PresetDetail';
 import { CreatePresetForm } from './sub-components/CreatePresetForm';
-import { FAILURE, NO_GAME, NO_PRESET, PRESET_ROWS } from './PresetsHub.constants';
+import { NEW_PRESET_TOUR } from '../../hooks/tour-targets.constants';
+import { FAILURE, NO_GAME, PRESET_ROWS } from './PresetsHub.constants';
 import './PresetsHub.css';
 
 const PresetsHub = () => {
-  const { actions, creator, loadFailed, loading, openGames, retry, rows, schema, selected, selection } = usePresetsHub();
+  const { actions, creator, groups, loadFailed, loading, openGames, retry, rows, schema, selected, selection } = usePresetsHub();
   const create = (close: () => void) => <CreatePresetForm creator={creator} close={close} onOpenGames={openGames} />;
   const error = loadFailed
     ? <>{FAILURE.load} <Button size="sm" variant="secondary" onClick={retry}>Retry</Button></>
@@ -21,14 +22,16 @@ const PresetsHub = () => {
           ...PRESET_ROWS,
           title: 'Presets',
           items: rows,
+          groups,
           create,
           createOpen: creator.open,
           onCreateOpenChange: creator.setOpen,
           createLabel: 'New preset',
+          createTour: NEW_PRESET_TOUR,
           onDelete: actions.removeNow,
           loading,
           error,
-          empty: creator.gameOptions.length ? NO_PRESET : NO_GAME,
+          empty: NO_GAME,
         }}
         selectedId={selected?.id ?? null}
         onSelect={selection.select}

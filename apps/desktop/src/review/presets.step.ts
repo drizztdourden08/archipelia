@@ -6,6 +6,7 @@ import { appApi } from '../ipc/app-api';
 import { REVIEW_PRESET, GUARD_DIALOG } from './review.constants';
 import { SELECTOR } from './review-dom.constants';
 import { named } from './named';
+import { nameOf } from './name-of';
 import { pickInPalette } from './pick-in-palette';
 import { waitNamed } from './wait-named';
 
@@ -43,7 +44,8 @@ export default defineReviewStep({
     nav.open(ROUTE.presets, { presetId: preset.id });
     tour.check('preset-param', await showsName(tour, REVIEW_PRESET) === true, 'the presetId param selects the review preset', 'the presetId param did not select the review preset');
     const list = tour.find(SELECTOR.presetList);
-    tour.check('preset-list', list !== null && named(tour, SELECTOR.button, 'New preset', list) !== null, 'the presets sit in a list named Presets with New preset', 'the presets list or its New preset button is missing');
+    const create = list && tour.find(SELECTOR.newPreset, list);
+    tour.check('preset-list', create instanceof HTMLElement && nameOf(create) === 'New preset', 'the presets sit in a list named Presets with New preset, marked for the tour', 'the presets list or its marked New preset button is missing');
     const picked = await pickInPalette(tour, REVIEW_PRESET);
     tour.check('preset-search-entry', picked && await showsName(tour, REVIEW_PRESET) === true, 'the palette lists the preset by name and picking it opens it', 'the palette did not offer the review preset');
     const field = await nameField(tour);

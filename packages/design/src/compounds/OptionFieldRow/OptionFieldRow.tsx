@@ -1,9 +1,9 @@
 /* @layer renderer-app @kind component */
 import { useCallback, useState } from 'react';
 import { FormRow } from '@drizztdourden08/tessera/composites';
+import { Text } from '@drizztdourden08/tessera/primitives';
 import type { OptionFieldRowProps } from './OptionFieldRow.type';
 import { OptionControl } from '../OptionControl';
-import { OptionAbout } from './sub-components/OptionAbout';
 import './OptionFieldRow.css';
 
 const OptionFieldRow = ({ def, value, hint, changed, problem, onChange, onReset, onProblem }: OptionFieldRowProps) => {
@@ -12,10 +12,16 @@ const OptionFieldRow = ({ def, value, hint, changed, problem, onChange, onReset,
     setJsonProblem(next);
     onProblem?.(next);
   }, [onProblem]);
+  const about = def.description.trim();
   return (
     <FormRow
       label={def.displayName}
-      description={def.description.trim() || hint ? <OptionAbout label={def.displayName} description={def.description} hint={hint} /> : undefined}
+      description={about || hint ? (
+        <>
+          {hint && <Text className="option-field-row__hint">{hint}</Text>}
+          {about && <Text className="option-field-row__description">{about}</Text>}
+        </>
+      ) : undefined}
       changed={changed}
       advanced={def.visibility.length === 0}
       problem={problem ?? jsonProblem ?? undefined}

@@ -12,7 +12,7 @@ const SessionRow = ({ id, name, meta, playersLabel, busy, onEdit, onRun, onDupli
     id: 'session',
     items: [
       { id: 'duplicate', label: 'Duplicate', icon: 'copy', disabled: busy, onSelect: () => onDuplicate(id) },
-      { id: 'delete', label: 'Delete', icon: 'trash-2', disabled: busy, onSelect: () => onDelete(id) },
+      { id: 'delete', label: 'Delete', icon: 'trash-2', tone: 'danger', disabled: busy, onSelect: () => onDelete(id) },
     ],
   }], [busy, id, onDelete, onDuplicate]);
   const actions = (

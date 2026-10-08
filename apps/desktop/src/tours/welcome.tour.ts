@@ -36,7 +36,7 @@ export default defineTour({
       id: 'preset',
       title: '3. A preset',
       body: 'A preset holds one game\'s options, ready to reuse. Press New preset to make your first one.',
-      target: { selector: NEW_PRESET },
+      target: NEW_PRESET,
       advanceOn: { click: NEW_PRESET },
       mascot: 'point',
       open: ROUTE.presets,

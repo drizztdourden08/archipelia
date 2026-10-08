@@ -20,7 +20,6 @@ const RangeControl = ({ def, value, onChange, disabled }: OptionControlProps) =>
       input
       onChange={handleChange}
       disabled={disabled}
-      aria-label={def.displayName}
     />
   );
 };

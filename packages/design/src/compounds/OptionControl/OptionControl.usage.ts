@@ -19,11 +19,12 @@ const usage = {
     'Pass onProblem to hear while the JSON text does not parse or is not the right shape; it hears null once the text parses or the input goes away.',
   ],
   a11y: [
-    'Each input takes the id and the label of its FormRow or Field, so it is named after the option display name.',
+    'Each input is named by the label of its FormRow or Field, through aria-labelledby or the id of the row, so it is named after the option display name.',
+    'A Toggle and a TagInput take aria-labelledby with the label id of the row.',
     'A named range is a Slider with labels at the named values and a number field for any other value, both named by the label.',
     'A set with few names is a Combobox that draws the picks as removable tags and searches as you type, named by the label.',
     'A KeyValueEditor is a group named by the label.',
-    'The Slider of a range and its number field take the option display name.',
+    'The Slider of a range and its number field are named by the label of the row, the same as a named range.',
     'A disabled control stays visible and readable.',
   ],
   tree: {

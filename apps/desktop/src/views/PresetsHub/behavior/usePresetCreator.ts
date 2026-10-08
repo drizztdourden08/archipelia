@@ -22,14 +22,17 @@ const usePresetCreator = ({ installed, preferredGame, onCreated }: PresetCreator
   const schema = schemaFor(installed, game);
   const startOptions = useMemo(() => startFromOptions(schema), [schema]);
 
+  const openFor = useCallback((pick: string | undefined) => {
+    setGame(pick && schemaFor(installed, pick) ? pick : gameOptions[0]?.value ?? '');
+    setStartFrom(DEFAULTS);
+    setError(null);
+    setOpenState(true);
+  }, [installed, gameOptions]);
+
   const setOpen = useCallback((next: boolean) => {
-    if (next) {
-      setGame(preferredGame && schemaFor(installed, preferredGame) ? preferredGame : gameOptions[0]?.value ?? '');
-      setStartFrom(DEFAULTS);
-      setError(null);
-    }
-    setOpenState(next);
-  }, [installed, gameOptions, preferredGame]);
+    if (next) openFor(preferredGame);
+    else setOpenState(false);
+  }, [openFor, preferredGame]);
 
   const pickGame = useCallback((next: string) => { setGame(next); setStartFrom(DEFAULTS); }, []);
 
@@ -51,7 +54,7 @@ const usePresetCreator = ({ installed, preferredGame, onCreated }: PresetCreator
 
   const canCreate = Boolean(schema) && !busy;
 
-  return { canCreate, create, error, game, gameOptions, open, pickGame, setOpen, setStartFrom, startFrom, startOptions };
+  return { canCreate, create, error, game, gameOptions, open, openFor, pickGame, setOpen, setStartFrom, startFrom, startOptions };
 };
 
 export { usePresetCreator };

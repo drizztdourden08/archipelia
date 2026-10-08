@@ -12,6 +12,4 @@ type OptionFieldRowProps = {
   onProblem?: (problem: string | null) => void;
 };
 
-type DescriptionPreview = { preview: string; long: boolean };
-
-export type { DescriptionPreview, OptionFieldRowProps };
+export type { OptionFieldRowProps };

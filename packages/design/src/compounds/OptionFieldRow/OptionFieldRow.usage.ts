@@ -20,7 +20,7 @@ const usage = {
   a11y: [
     'The name of the row is the label of its control, so the control is named after the option display name.',
     'The reset button is named Reset and the label, and the problem line is an alert.',
-    'The More and Less button reports whether the description is expanded and is named after the label, such as More about Starting hearts.',
+    'A description past two lines folds behind the More and Less of FormRow, a button that reports whether it is expanded and controls the folded text; the hint comes first, so it stays in view.',
   ],
   tree: {
     path: ['a value the user sets', 'a game option', 'the whole row from its definition'],

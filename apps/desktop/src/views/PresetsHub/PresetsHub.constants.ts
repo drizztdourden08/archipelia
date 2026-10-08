@@ -10,7 +10,7 @@ const DEFAULTS = '';
 
 const NO_GAME = 'No game is installed yet, so there is nothing to make a preset for.';
 
-const NO_PRESET = 'No preset yet. Press New preset to make one.';
+const GAME_GROUP = { empty: 'No preset for this game yet.', action: 'New preset' } as const;
 
 const PRESET_ROWS = {
   getId: (row: PresetRow) => row.preset.id,
@@ -25,4 +25,4 @@ const FAILURE = {
   remove: 'Could not delete the preset.',
 } as const;
 
-export { DAY_MS, DEFAULTS, FAILURE, NO_GAME, NO_PRESET, PRESET_ROWS, RECENT_DAYS };
+export { DAY_MS, DEFAULTS, FAILURE, GAME_GROUP, NO_GAME, PRESET_ROWS, RECENT_DAYS };
