@@ -3,6 +3,7 @@
 # here. Never add a line for a single dot-folder: .*/ already covers it.
 .*/
 !.brock/
+!.github/
 .brock/profile-config.json
 
 node_modules/
