@@ -1,10 +1,10 @@
 /* @layer tooling-scripts @kind logic */
-import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
+import ENGINE_PINS from '../engine-pins.json' with { type: 'json' };
 
 const BUNDLE_DIR = join(import.meta.dirname, '..');
 
-const readPins = async () => JSON.parse(await readFile(join(BUNDLE_DIR, 'engine-pins.json'), 'utf8'));
+const readPins = async () => ENGINE_PINS;
 
 const pythonUrl = (pins, target) =>
   `https://github.com/astral-sh/python-build-standalone/releases/download/${pins.python.release}/${encodeURIComponent(target.file)}`;
