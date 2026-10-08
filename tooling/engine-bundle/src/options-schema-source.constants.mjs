@@ -1,4 +1,6 @@
-"""Prints every loaded world's options as JSON, the GameSchema shape in packages/model/src/options.type.ts.
+/* @layer tooling-scripts @kind data */
+
+const OPTIONS_SCHEMA_SOURCE = `"""Prints every loaded world's options as JSON, the GameSchema shape in packages/model/src/options.type.ts.
 
 Run inside the pinned engine with the AP source as the working directory:
     python -X utf8 options_schema.py --out schema.json [--game "A Link to the Past"]
@@ -103,3 +105,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+`;
+
+export { OPTIONS_SCHEMA_SOURCE };
