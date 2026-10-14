@@ -1,9 +1,8 @@
 {
   "name": "@archipelia/desktop",
-  "version": "0.2.0-beta.2",
+  "version": "0.1.0",
   "private": true,
   "description": "Archipelia desktop app: the Archipelago multiworld workflow in one window.",
-  "homepage": "https://github.com/drizztdourden08/archipelia",
   "author": {
     "name": "drizztdourden_",
     "email": "drizztdourden08@users.noreply.github.com"
@@ -33,12 +32,12 @@
     "@archipelia/model": "workspace:*",
     "@archipelia/presets": "workspace:*",
     "@archipelia/sessions": "workspace:*",
-    "@drizztdourden08/brock-core": "^0.36.0",
-    "@drizztdourden08/brock-electron": "^0.36.0",
-    "@drizztdourden08/brock-react": "^0.36.0",
-    "@drizztdourden08/brock-secrets": "^0.36.0",
-    "@drizztdourden08/brock-updater": "^0.36.0",
-    "@drizztdourden08/tessera": "^0.30.1",
+    "@drizztdourden08/brock-core": "^0.37.0",
+    "@drizztdourden08/brock-electron": "^0.37.0",
+    "@drizztdourden08/brock-react": "^0.37.0",
+    "@drizztdourden08/brock-secrets": "^0.37.0",
+    "@drizztdourden08/brock-updater": "^0.37.0",
+    "@drizztdourden08/tessera": "^0.31.0",
     "@electron-toolkit/utils": "catalog:",
     "archipelago.js": "catalog:",
     "fflate": "catalog:",
@@ -51,8 +50,8 @@
     "zustand": "catalog:"
   },
   "devDependencies": {
-    "@drizztdourden08/brock-build": "^0.36.0",
-    "@drizztdourden08/brock-lint-config": "^0.36.0",
+    "@drizztdourden08/brock-build": "^0.37.0",
+    "@drizztdourden08/brock-lint-config": "^0.37.0",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
@@ -68,7 +67,7 @@
     "vite": "catalog:"
   },
   "brock": {
-    "tessera": "0.30.2",
-    "version": "0.36.0"
+    "tessera": "0.31.0",
+    "version": "0.37.0"
   }
 }
