@@ -5,6 +5,10 @@ run-name: Release ${{ inputs.version }}${{ inputs.prerelease && ' (pre-release)'
 # Run it from the Actions tab or with `<repo> release <version> [--latest | --prerelease]`.
 # release-notes/v<version>.md must be on the default branch first and pass `brock release-notes check`:
 # it is the release body, and the updater shows it. Tags are v<version>.
+# Every build runs from the commit prepare checked; the release job commits the version, tags it
+# and publishes only once every build succeeded, so a failed build leaves no tag and the same
+# version can run again. The builds fetch the previous release for the Velopack delta before
+# this one exists.
 on:
   workflow_dispatch:
     inputs:
@@ -43,8 +47,9 @@ jobs:
       tag: ${{ steps.resolve.outputs.tag }}
       version: ${{ steps.resolve.outputs.version }}
       full: ${{ steps.resolve.outputs.full }}
+      sha: ${{ github.sha }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -76,10 +81,8 @@ jobs:
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           echo "full=$FULL" >> "$GITHUB_OUTPUT"
 
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 10
-      - uses: actions/setup-node@v4
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: 24
           cache: pnpm
@@ -97,33 +100,23 @@ jobs:
       - name: Lint
         run: pnpm lint
 
-      - name: Commit the version and tag it
-        shell: bash
-        run: |
-          TAG="${{ steps.resolve.outputs.tag }}"
-          node -e "const f=process.argv[1];const p=JSON.parse(require('fs').readFileSync(f,'utf8'));p.version=process.argv[2];require('fs').writeFileSync(f,JSON.stringify(p,null,2)+'\n')" "$APP_DIR/package.json" "${{ steps.resolve.outputs.version }}"
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add "$APP_DIR/package.json"
-          if ! git diff --cached --quiet; then
-            git commit -m "release: $TAG"
-            git push origin "HEAD:${{ github.event.repository.default_branch }}"
-          fi
-          git tag "$TAG"
-          git push origin "$TAG"
-
   build-windows:
     needs: prepare
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
-          ref: ${{ needs.prepare.outputs.tag }}
+          ref: ${{ needs.prepare.outputs.sha }}
 
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 10
-      - uses: actions/setup-node@v4
+      # The tag and the version commit wait for every build: the release job makes them.
+      - name: Set the release version
+        shell: bash
+        run: node -e "const f=process.argv[1];const p=JSON.parse(require('fs').readFileSync(f,'utf8'));p.version=process.argv[2];require('fs').writeFileSync(f,JSON.stringify(p,null,2)+'\n')" "$APP_DIR/package.json" "${{ needs.prepare.outputs.version }}"
+
+      # pnpm/action-setup takes the version from packageManager in the root package.json.
+      # Naming a version here as well fails the step.
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: 24
           cache: pnpm
@@ -136,7 +129,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.PACKAGES_TOKEN || secrets.GITHUB_TOKEN }}
 
       - name: Set up .NET for vpk
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: '8.0.x'
 
@@ -172,7 +165,7 @@ jobs:
           cp "$APP_DIR"/release/velopack/* upload/
           ls -l upload
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: release-windows
           path: upload/*
@@ -181,14 +174,19 @@ jobs:
     needs: prepare
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
-          ref: ${{ needs.prepare.outputs.tag }}
+          ref: ${{ needs.prepare.outputs.sha }}
 
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 10
-      - uses: actions/setup-node@v4
+      # The tag and the version commit wait for every build: the release job makes them.
+      - name: Set the release version
+        shell: bash
+        run: node -e "const f=process.argv[1];const p=JSON.parse(require('fs').readFileSync(f,'utf8'));p.version=process.argv[2];require('fs').writeFileSync(f,JSON.stringify(p,null,2)+'\n')" "$APP_DIR/package.json" "${{ needs.prepare.outputs.version }}"
+
+      # pnpm/action-setup takes the version from packageManager in the root package.json.
+      # Naming a version here as well fails the step.
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: 24
           cache: pnpm
@@ -217,7 +215,7 @@ jobs:
           cp "$APP_DIR"/release/*.zip upload/
           ls -l upload
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: release-macos
           path: upload/*
@@ -226,14 +224,19 @@ jobs:
     needs: prepare
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
-          ref: ${{ needs.prepare.outputs.tag }}
+          ref: ${{ needs.prepare.outputs.sha }}
 
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 10
-      - uses: actions/setup-node@v4
+      # The tag and the version commit wait for every build: the release job makes them.
+      - name: Set the release version
+        shell: bash
+        run: node -e "const f=process.argv[1];const p=JSON.parse(require('fs').readFileSync(f,'utf8'));p.version=process.argv[2];require('fs').writeFileSync(f,JSON.stringify(p,null,2)+'\n')" "$APP_DIR/package.json" "${{ needs.prepare.outputs.version }}"
+
+      # pnpm/action-setup takes the version from packageManager in the root package.json.
+      # Naming a version here as well fails the step.
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: 24
           cache: pnpm
@@ -246,7 +249,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.PACKAGES_TOKEN || secrets.GITHUB_TOKEN }}
 
       - name: Set up .NET for vpk
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: '8.0.x'
 
@@ -283,7 +286,7 @@ jobs:
           cp "$APP_DIR"/release/*.deb upload/
           ls -l upload
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: release-linux
           path: upload/*
@@ -292,11 +295,12 @@ jobs:
     needs: [prepare, build-windows, build-macos, build-linux]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
-          ref: ${{ needs.prepare.outputs.tag }}
+          ref: ${{ needs.prepare.outputs.sha }}
+          fetch-depth: 0
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           path: artifacts
 
@@ -333,7 +337,29 @@ jobs:
           echo "title=$(grep -m 1 '^# ' "$NOTES" | sed 's/^# //')" >> "$GITHUB_OUTPUT"
           cat release-body.md
 
-      - uses: softprops/action-gh-release@v2
+      # Every build succeeded: commit the version on the commit they built, tag it, then move the
+      # default branch to it. When the branch moved meanwhile, the bump goes on top of it instead.
+      - name: Commit the version and tag it
+        shell: bash
+        env:
+          BRANCH: ${{ github.event.repository.default_branch }}
+        run: |
+          TAG="${{ needs.prepare.outputs.tag }}"
+          node -e "const f=process.argv[1];const p=JSON.parse(require('fs').readFileSync(f,'utf8'));p.version=process.argv[2];require('fs').writeFileSync(f,JSON.stringify(p,null,2)+'\n')" "$APP_DIR/package.json" "${{ needs.prepare.outputs.version }}"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$APP_DIR/package.json"
+          BUMPED=""
+          if ! git diff --cached --quiet; then git commit -m "release: $TAG"; BUMPED=1; fi
+          git tag "$TAG"
+          git push origin "$TAG"
+          if [ -n "$BUMPED" ] && ! git push origin "HEAD:$BRANCH"; then
+            git fetch origin "$BRANCH"
+            git checkout -B release-bump "origin/$BRANCH"
+            { git cherry-pick "$TAG" && git push origin "HEAD:$BRANCH"; } || echo "::warning::$TAG is tagged, but the version bump could not reach $BRANCH. Commit $APP_DIR/package.json at ${{ needs.prepare.outputs.version }} by hand."
+          fi
+
+      - uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ needs.prepare.outputs.tag }}
           name: ${{ steps.body.outputs.title }}
