@@ -32,6 +32,7 @@
     "@archipelia/presets": "workspace:*",
     "@archipelia/server": "workspace:*",
     "@archipelia/sessions": "workspace:*",
+    "@drizztdourden08/archipelia-lobby-protocol": "workspace:*",
     "@drizztdourden08/brock-core": "^0.85.0",
     "@drizztdourden08/brock-electron": "^0.85.0",
     "@drizztdourden08/brock-react": "^0.85.0",

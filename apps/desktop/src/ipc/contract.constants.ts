@@ -2,12 +2,15 @@
 import { defineChannels, event, invoke } from '@drizztdourden08/brock-core';
 import type { CatalogView, InstallRequest } from '@archipelia/catalog';
 import type {
-  CatalogEntry, EngineChoice, EngineEvent, EngineInstallResult, EngineOverview, EngineStatus, GamePreset,
-  InstalledGame, ServerEntry, Session, SessionTemplate, StartupDecision,
+  AdminLobby, CatalogEntry, EngineChoice, EngineEvent, EngineInstallResult, EngineOverview, EngineStatus, GamePreset,
+  InstalledGame, LobbyServerEntry, ServerEntry, Session, SessionTemplate, StartupDecision,
 } from '@archipelia/model';
 import type { HostLogLine, ServerTestResult } from '@archipelia/hosts';
 import type { PresetInput } from '@archipelia/presets';
 import type { SessionEvent } from '@archipelia/sessions';
+import type {
+  LanEntry, LobbyEvent, LobbyRequest, LobbyReviewHost, LobbyReviewPlay, LobbyServerOptions, LobbyServerStatus, LobbyServerTest, LobbyServerView,
+} from '../lobbies/lobbies.type';
 
 const APP_CHANNELS = defineChannels({
   engineStatus: invoke<() => Promise<EngineStatus>>()('ap:engine:status'),
@@ -45,8 +48,23 @@ const APP_CHANNELS = defineChannels({
   serversTest: invoke<(id: string) => Promise<ServerTestResult>>()('ap:servers:test'),
   serversTrustKey: invoke<(id: string, sha256: string) => Promise<ServerEntry>>()('ap:servers:trustKey'),
   ggOpenRooms: invoke<(baseUrl: string) => Promise<void>>()('ap:gg:openRooms'),
+  lobbyServerStatus: invoke<() => Promise<LobbyServerStatus>>()('ap:lobby:serverStatus'),
+  lobbyServerApply: invoke<(options: LobbyServerOptions) => Promise<LobbyServerStatus>>()('ap:lobby:serverApply'),
+  lobbyServerView: invoke<(serverId: string) => Promise<LobbyServerView>>()('ap:lobby:serverView'),
+  lobbyList: invoke<(serverId: string) => Promise<AdminLobby[]>>()('ap:lobby:list'),
+  lobbyAct: invoke<(serverId: string, request: LobbyRequest) => Promise<AdminLobby>>()('ap:lobby:act'),
+  lobbyServersList: invoke<() => Promise<LobbyServerEntry[]>>()('ap:lobby:servers'),
+  lobbyServersSave: invoke<(entry: LobbyServerEntry) => Promise<LobbyServerEntry>>()('ap:lobby:serversSave'),
+  lobbyServersRemove: invoke<(id: string) => Promise<void>>()('ap:lobby:serversRemove'),
+  lobbyServersTest: invoke<(id: string) => Promise<LobbyServerTest>>()('ap:lobby:serversTest'),
+  lanBrowse: invoke<(on: boolean) => Promise<LanEntry[]>>()('ap:lan:browse'),
+  lobbyReviewPlay: invoke<(request: LobbyReviewPlay) => Promise<{ ok: boolean; failure?: string }>>()('ap:lobby:reviewPlay'),
+  lobbyReviewHostDone: invoke<(id: number) => Promise<void>>()('ap:lobby:reviewHostDone'),
   onEngineEvent: event<(event: EngineEvent) => void>()('ap:engine:event'),
   onSessionEvent: event<(event: SessionEvent) => void>()('ap:sessions:event'),
+  onLobbyEvent: event<(event: LobbyEvent) => void>()('ap:lobby:event'),
+  onLanServers: event<(servers: LanEntry[]) => void>()('ap:lan:servers'),
+  onLobbyReviewHost: event<(host: LobbyReviewHost) => void>()('ap:lobby:reviewHost'),
 });
 
 const APP_INVOKE_MAP = APP_CHANNELS.maps.invoke;

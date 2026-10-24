@@ -78,7 +78,7 @@ const removeServer = async (tour: AppReviewTour) => {
 
 export default defineReviewStep({
   run: async (tour) => {
-    nav.open('multiworld/servers');
+    nav.open('multiworld/servers/machines');
     const opened = await waitText(tour, /servers · [0-9]/i, () => layer(tour) ?? null);
     tour.check('servers-open', opened, 'the Servers page lists the saved servers', 'the Servers page did not open');
     await showProblems(tour);

@@ -30,11 +30,17 @@ const SERVER_FIELDS: [string, string][] = [
   ['Key file', REVIEW_SERVER.keyPath], ['Archipelago path on the host', REVIEW_SERVER.apPath],
 ];
 
+const REVIEW_LOBBY = 'Review lobby';
+
+const REVIEW_PLAYER = 'Zelda';
+
+const LOBBY_UI = { create: 'New lobby', submit: 'Create lobby', unlisted: 'Allow unlisted clients', start: 'Start', close: 'Close lobby' } as const;
+
 const STORAGE_FOLDERS = ['Sessions', 'Presets', 'Installed games'];
 
 const GUARD_DIALOG = 'Unsaved changes';
 
 export {
-  GUARD_DIALOG, HEARTBEAT_MS, REVIEW_CHECKS, REVIEW_GAME, REVIEW_PLAYERS, REVIEW_PORT, REVIEW_PRESET, REVIEW_SERVER, REVIEW_SESSION, RUN_TIMEOUT_MS, SAVE_STATE, SERVER_FIELDS, SERVER_PROBLEMS,
+  GUARD_DIALOG, HEARTBEAT_MS, LOBBY_UI, REVIEW_CHECKS, REVIEW_GAME, REVIEW_LOBBY, REVIEW_PLAYER, REVIEW_PLAYERS, REVIEW_PORT, REVIEW_PRESET, REVIEW_SERVER, REVIEW_SESSION, RUN_TIMEOUT_MS, SAVE_STATE, SERVER_FIELDS, SERVER_PROBLEMS,
   SERVER_UI, SERVER_UNTOUCHED, STORAGE_FOLDERS,
 };

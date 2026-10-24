@@ -10,7 +10,9 @@ const searchIndex = buildSearchIndex(config, [
   {"kind":"hero","id":"home","bucket":"multiworld","title":"Home","icon":"house","keywords":["overview","engine","recent","runs","run","again"]},
   {"kind":"settings","id":"archipelago-gg","bucket":"multiworld","group":"hosting","title":"archipelago.gg","icon":"globe","keywords":["website","rooms","owner","online","host"],"sections":[{"id":"website","title":"Website","rows":[{"key":"ggBaseUrl","label":"Site","description":"The Archipelago website that hosts the rooms of sessions run there.","hint":"Change only for a self-hosted copy of the Archipelago website.","keywords":["url","self-hosted","website","address"]}]},{"id":"owner","title":"Owner id","rows":[{"key":"ggOwner","label":"Owner id","description":"The site has no accounts: rooms belong to a private owner id that Archipelia keeps in the vault, so only this app can command them or read their logs.","hint":"Forgetting the owner id loses control of its rooms. One is made the first time a session runs there.","keywords":["rooms","browser","open","forget","reset","vault"]}]}]},
   {"kind":"settings","id":"hosting","bucket":"multiworld","group":"hosting","title":"Hosting","icon":"radio","keywords":["defaults","port","server","release","collect","hints"],"sections":[{"id":"new-sessions","title":"New sessions","rows":[{"key":"hostingDefaultHost","label":"Default host","description":"Where a new session runs its server.","hint":"Each session keeps its own copy, so changing this never rewrites one.","keywords":["local","archipelago.gg"]}]},{"id":"server-rules","title":"Server rules","rows":[]}]},
-  {"kind":"page","id":"servers","bucket":"multiworld","group":"hosting","title":"Servers","icon":"server","keywords":["ssh","remote","host","machine"]},
+  {"kind":"tab","id":"archipelia","bucket":"multiworld","group":"hosting","page":"servers","title":"Archipelia servers","icon":"network","keywords":["lobby","lan","network","admin","token","certificate","reach","router"]},
+  {"kind":"tab","id":"machines","bucket":"multiworld","group":"hosting","page":"servers","title":"Machines","icon":"hard-drive","keywords":["ssh","remote","host","machine"]},
+  {"kind":"page-meta","id":"servers","bucket":"multiworld","group":"hosting","title":"Servers","icon":"server","keywords":["ssh","remote","host","machine","archipelia","lobby","network","lan"]},
   {"kind":"tab","id":"community","bucket":"multiworld","group":"library","page":"games","title":"Community","icon":"gamepad-2","keywords":["games","apworld","catalog"]},
   {"kind":"tab","id":"installed","bucket":"multiworld","group":"library","page":"games","title":"Installed","icon":"gamepad-2","keywords":["games","apworld","installed","worlds"]},
   {"kind":"tab","id":"official","bucket":"multiworld","group":"library","page":"games","title":"Official","icon":"gamepad-2","keywords":["games","apworld","catalog"]},
@@ -20,6 +22,9 @@ const searchIndex = buildSearchIndex(config, [
   {"kind":"sub","id":"edit","bucket":"multiworld","group":"library","page":"sessions","title":"Edit session","icon":"pencil","path":":id/edit"},
   {"kind":"sub","id":"new","bucket":"multiworld","group":"library","page":"sessions","title":"New session","icon":"plus","path":"new","keywords":["builder","players","create","session"]},
   {"kind":"page","id":"sessions","bucket":"multiworld","group":"library","title":"Sessions","icon":"layers","keywords":["saved","sessions","runs","new","session","builder"]},
+  {"kind":"sub","id":"detail","bucket":"multiworld","group":"lobbies","page":"lobbies","title":"Lobby","icon":"users","path":":serverId/:id"},
+  {"kind":"sub","id":"new","bucket":"multiworld","group":"lobbies","page":"lobbies","title":"New lobby","icon":"plus","path":"new","keywords":["create","lobby","open"]},
+  {"kind":"page","id":"lobbies","bucket":"multiworld","group":"lobbies","title":"Lobbies","icon":"users","keywords":["lobby","players","join","code","approve","host","approval"]},
   {"kind":"base","id":"session","title":"Session","icon":"radio"},
 ]);
 
