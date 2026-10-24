@@ -11,6 +11,7 @@ interface AppSettings extends BaseSettings {
   hostingRemainingMode: RemainingMode;
   hostingAutoShutdownMinutes: number;
   ggBaseUrl: string;
+  engineCheckAtStart: boolean;
 }
 
 export type { AppSettings };

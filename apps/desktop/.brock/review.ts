@@ -6,6 +6,7 @@ const appReview: AppReview = {
   steps: [
     { id: 'dashboard', load: () => import('../src/review/dashboard.step') },
     { id: 'engine', load: () => import('../src/review/engine.step') },
+    { id: 'engine-startup', load: () => import('../src/review/engine-startup.step') },
     { id: 'live-room', load: () => import('../src/review/live-room.step') },
     { id: 'presets', load: () => import('../src/review/presets.step') },
     { id: 'servers', load: () => import('../src/review/servers.step') },

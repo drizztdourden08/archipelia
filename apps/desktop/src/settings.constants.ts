@@ -12,6 +12,7 @@ const DEFAULT_SETTINGS: AppSettings = {
   hostingRemainingMode: 'goal',
   hostingAutoShutdownMinutes: 0,
   ggBaseUrl: 'https://archipelago.gg',
+  engineCheckAtStart: true,
 };
 
 export { DEFAULT_SETTINGS };
