@@ -6,10 +6,10 @@ import { verifyWorld } from '../src/verify/verify-world';
 import type { RegistryClient } from '../src/registry/registry.type';
 import { makeApworld } from './make-apworld';
 import { memoryFiles } from './memory-files';
-import type { Identity, MintedSigstore } from './mint.type';
-import { mintSigstore } from './mint-sigstore';
+import type { Identity, MintedSigstore } from '../src/testing/mint.type';
+import { mintSigstore } from '../src/testing/mint-sigstore';
 import { rotpClient } from './rotp-client';
-import { statementOf } from './statement-of';
+import { statementOf } from '../src/testing/statement-of';
 
 const IDENTITY: Identity = {
   repo: 'drizztdourden08/relic-of-the-past',

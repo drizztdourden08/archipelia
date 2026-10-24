@@ -1,5 +1,5 @@
-/* @layer tests @kind helper */
-import { GITHUB_ISSUER } from '../src/registry/registry.constants';
+/* @layer testing @kind logic */
+import { GITHUB_ISSUER } from '../registry/registry.constants';
 import type { Identity } from './mint.type';
 
 const encode = (value: unknown) => Buffer.from(JSON.stringify(value)).toString('base64url');
