@@ -6,7 +6,7 @@ import { STATE_VIEW } from '../../src/views/EngineSettings/EngineSettings.consta
 
 const job = (patch: Partial<JobSnapshot>): JobSnapshot => ({
   id: 'archipelia-engine-setup', title: 'Engine', state: 'running', currentStep: 'python', progress: 0.42, stepProgress: 0.5, line: null, error: null,
-  log: [], startedAt: 0, endedAt: null, cancellable: false,
+  log: [], startedAt: 0, endedAt: null, cancellable: false, visible: true,
   steps: [
     { id: 'python', label: 'Download Python', weight: 1, state: 'current' },
     { id: 'source', label: 'Fetch Archipelago', weight: 1, state: 'upcoming' },

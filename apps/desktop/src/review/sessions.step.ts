@@ -43,6 +43,11 @@ const discardDraft = async (tour: AppReviewTour, backButton: HTMLElement | null,
   if (!asked && backButton) tour.click(backButton);
   const last = asked ?? await waitNamed(tour, SELECTOR.dialog, GUARD_DIALOG);
   if (last) await clickNamed(tour, SELECTOR.button, 'Discard', last);
+  if (asked) {
+    const closed = await tour.waitFor(() => layer(tour) === null);
+    tour.check('builder-guard-discard', closed === true, 'Discard after Escape closes the window, as Escape does', 'Discard after Escape left the window open');
+    return;
+  }
   const back = await waitText(tour, /sessions · [0-9]/i, () => layer(tour));
   tour.check('builder-guard-discard', back, 'Discard goes back to Sessions', 'Discard did not return to Sessions');
 };

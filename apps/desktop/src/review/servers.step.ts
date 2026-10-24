@@ -1,6 +1,7 @@
 /* @layer renderer-app @kind logic */
 import { defineReviewStep, nav } from '@drizztdourden08/brock-react';
 import type { AppReviewTour } from '@drizztdourden08/brock-react';
+import { appApi } from '../ipc/app-api';
 import { REVIEW_SERVER, SAVE_STATE, SERVER_FIELDS, SERVER_PROBLEMS, SERVER_UI, SERVER_UNTOUCHED } from './review.constants';
 import { SELECTOR } from './review-dom.constants';
 import { clickNamed } from './click-named';
@@ -16,7 +17,7 @@ const fill = (tour: AppReviewTour, label: string, value: string) => {
   return field !== null;
 };
 
-const serverCount = (tour: AppReviewTour) => layer(tour)?.innerText.match(/servers · [0-9]+/i)?.[0];
+const savedCount = async () => (await appApi().serversList()).length;
 
 const shows = (tour: AppReviewTour, problem: string) => layer(tour)?.innerText.includes(problem) === true;
 
@@ -38,11 +39,11 @@ const showProblems = async (tour: AppReviewTour) => {
   fill(tour, 'Archipelago path on the host', 'opt/archipelago');
   await tour.settle();
   tour.check('server-problems-wait', !shows(tour, SERVER_UNTOUCHED), 'a field the user has not reached shows no problem yet', 'an untouched field showed its problem');
-  const before = serverCount(tour);
+  const before = await savedCount();
   await clickNamed(tour, SELECTOR.button, SERVER_UI.save, layer(tour));
   const shown = await tour.waitFor(() => SERVER_PROBLEMS.every((problem) => shows(tour, problem)));
   tour.check('server-problems', shown === true, 'Save names every problem under its field', 'Save did not name every problem in the form');
-  tour.check('server-save-refused', serverCount(tour) === before, 'Save with problems saves nothing', 'Save stored a server with problems');
+  tour.check('server-save-refused', await savedCount() === before, 'Save with problems saves nothing', 'Save stored a server with problems');
   await tour.capture('validation');
 };
 

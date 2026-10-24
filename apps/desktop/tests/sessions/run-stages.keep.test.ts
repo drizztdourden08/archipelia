@@ -17,12 +17,13 @@ const fakeJobs = () => {
   const job: StartJob = (id, steps, options) => {
     calls.push(`start ${id} ${options?.title ?? ''} ${steps.map((step) => step.id).join(',')}`);
     const handle: JobHandle = {
-      id, signal: new AbortController().signal,
+      id, signal: new AbortController().signal, started: Promise.resolve(), ended: Promise.resolve('done'),
       step: (step, line) => calls.push(`step ${step}${line ? ` ${line}` : ''}`),
       progress: (fraction, line) => calls.push(`progress ${fraction.toFixed(2)} ${line ?? ''}`),
       line: (text) => calls.push(`line ${text}`),
       log: (message) => calls.push(`log ${message}`),
       skip: (step) => calls.push(`skip ${step}`),
+      setCancellable: (on) => calls.push(`cancellable ${on}`),
       done: (line) => calls.push(`done ${line ?? ''}`),
       fail: (error) => calls.push(`fail ${(error as Error).message}`),
       run: (work) => work(handle),
