@@ -1,0 +1,41 @@
+{
+  "name": "@archipelia/trust",
+  "version": "0.1.0",
+  "description": "Archipelia trust: the client registry (loader, cache, bundled floor) and the Sigstore verifier for apworld attestations.",
+  "type": "module",
+  "private": true,
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=24"
+  },
+  "exports": {
+    ".": "./src/index.ts",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "src"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "lint": "tsc --noEmit && eslint ."
+  },
+  "devDependencies": {
+    "@drizztdourden08/brock-lint-config": "^0.79.0",
+    "@sigstore/mock": "catalog:",
+    "ajv": "catalog:",
+    "nock": "catalog:",
+    "@sigstore/sign": "catalog:",
+    "@types/node": "catalog:",
+    "eslint": "catalog:",
+    "typescript": "catalog:"
+  },
+  "dependencies": {
+    "archipelia": "workspace:*",
+    "@archipelia/model": "workspace:*",
+    "@sigstore/bundle": "catalog:",
+    "@sigstore/protobuf-specs": "catalog:",
+    "@sigstore/tuf": "catalog:",
+    "@sigstore/verify": "catalog:",
+    "fflate": "catalog:"
+  }
+}
