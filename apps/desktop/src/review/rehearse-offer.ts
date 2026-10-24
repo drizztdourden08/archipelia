@@ -18,8 +18,10 @@ const rehearseOffer = async (tour: AppReviewTour, overview: EngineOverview): Pro
   const declined = offer();
   const opened = await waitText(tour, new RegExp(`archipelago ${REHEARSED.latest} is out`, 'i'), dialog);
   tour.check('offer-dialog', opened, 'the upgrade offer opens', 'the upgrade offer never opened');
-  const notes = await waitText(tour, /release notes/i, dialog);
-  tour.check('offer-notes', notes, 'the offer shows where the release notes are', 'the offer does not show the release notes');
+  const notes = await clickNamed(tour, SELECTOR.button, 'Release notes', dialog() ?? undefined);
+  tour.check('offer-notes', notes, 'the offer has a Release notes button', 'the offer has no Release notes button');
+  const stillOpen = dialog() !== null && declined.opened.join() === REHEARSED_NOTES;
+  tour.check('offer-notes-open', stillOpen, 'Release notes opens the release page and keeps the offer open', `Release notes opened ${declined.opened.join() || 'nothing'}, the offer is ${dialog() ? 'open' : 'closed'}`);
   await tour.capture('offer');
   const notNow = await clickNamed(tour, SELECTOR.button, 'Not now', dialog() ?? undefined);
   tour.check('offer-not-now', notNow, 'the offer can be declined', 'the offer has no Not now button');

@@ -1,5 +1,5 @@
 /* @layer tests @kind test */
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test, vi } from 'vitest';
 import { firstRunDialog } from '../../src/hooks/engine-startup/first-run-dialog';
 import { listlessDialog } from '../../src/hooks/engine-startup/listless-dialog';
 import { offerDialog } from '../../src/hooks/engine-startup/offer-dialog';
@@ -77,7 +77,7 @@ describe('the release the owner picks', () => {
 
 describe('the upgrade offer dialog', () => {
   test('names the new version and says what happens', () => {
-    const dialog = offerDialog(offer);
+    const dialog = offerDialog(offer, vi.fn());
     expect(dialog.title).toBe('Archipelago 0.6.8 is out');
     expect(dialog.message).toContain('You run Archipelago 0.6.7');
     expect(dialog.message).toContain('Python 3.12.15');
@@ -85,7 +85,12 @@ describe('the upgrade offer dialog', () => {
     expect(dialog.cancelLabel).toBe('Not now');
   });
 
-  test('carries the release notes address', () => {
-    expect(offerDialog(offer).facts).toEqual([{ label: 'Release notes', value: 'https://example.test/0.6.8' }]);
+  test('has a neutral Release notes button that opens the release page and keeps the dialog open', () => {
+    const open = vi.fn();
+    const dialog = offerDialog(offer, open);
+    expect(dialog.facts).toBeUndefined();
+    expect(dialog.alternate).toMatchObject({ label: 'Release notes', tone: 'neutral', closes: false });
+    dialog.alternate?.onSelect();
+    expect(open).toHaveBeenCalledExactlyOnceWith('https://example.test/0.6.8');
   });
 });

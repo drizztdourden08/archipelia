@@ -71,6 +71,14 @@ describe('running the upgrade offer prompt', () => {
     expect(calls).toEqual(['offerShown 0.6.8']);
   });
 
+  test('the Release notes button opens the release page and leaves the offer to the answer', async () => {
+    const { ctx, actions } = ctxOf(true, { action: false });
+    const { deps, calls } = depsOf(withOffer());
+    await runEngineStartup(ctx, deps);
+    actions[0]?.alternate?.onSelect();
+    expect(calls).toEqual(['offerShown 0.6.8', 'openNotes https://example.test/0.6.8']);
+  });
+
   test('nothing to offer shows nothing', async () => {
     const { ctx, choices, actions } = ctxOf(true, { action: true });
     const { deps, calls } = depsOf(quiet(ready));
