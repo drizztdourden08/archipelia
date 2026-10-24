@@ -1,6 +1,9 @@
 /* @layer core @kind types */
+import type { SpawnWrap } from '@archipelia/engine';
 import type { EngineRuntime } from '@archipelia/model';
 
-type GenerateRun = { runtime: EngineRuntime; settingsDir: string | undefined; signal?: AbortSignal };
+type ProduceRun = { runtime: EngineRuntime; signal?: AbortSignal; wrap?: SpawnWrap | undefined };
 
-export type { GenerateRun };
+type GenerateRun = ProduceRun & { settingsDir: string | undefined };
+
+export type { GenerateRun, ProduceRun };

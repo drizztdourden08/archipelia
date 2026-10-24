@@ -12,7 +12,7 @@ const generateArgs = ({ runtime, playersDir, outDir, spoiler, race, skipBalancin
 ];
 
 const generate = async (params: GenerateParams): Promise<GenerateResult> => {
-  const { runtime, settingsDir, onProgress, onLine: onRawLine, signal } = params;
+  const { runtime, settingsDir, onProgress, onLine: onRawLine, signal, wrap } = params;
   let zip: string | undefined;
   const onLine = (line: string) => {
     onRawLine?.(line);
@@ -21,7 +21,7 @@ const generate = async (params: GenerateParams): Promise<GenerateResult> => {
     if (progress.stage === 'archive') zip = progress.detail;
     onProgress?.(progress);
   };
-  const { code, lines } = await runPython(runtime, { args: generateArgs(params), cwd: settingsDir ?? apRoot(runtime), onLine, signal });
+  const { code, lines } = await runPython(runtime, { args: generateArgs(params), cwd: settingsDir ?? apRoot(runtime), onLine, signal, wrap });
   return { ok: code === 0 && zip !== undefined, zip, lines };
 };
 
