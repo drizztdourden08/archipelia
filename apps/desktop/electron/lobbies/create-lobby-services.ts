@@ -9,7 +9,7 @@ import type { LobbyServicesDeps } from './lobbies.type';
 
 const createLobbyServices = async (deps: LobbyServicesDeps) => {
   const { core, domain, automation, log } = deps;
-  const lobbyServer = createLobbyServer({ listen: deps.listen, files: domain(DOMAIN.server), automation, lanHost: deps.lanHost, version: deps.version, log });
+  const lobbyServer = createLobbyServer({ listen: deps.listen, files: domain(DOMAIN.server), automation, canStoreSecrets: deps.canStoreSecrets, lanHost: deps.lanHost, version: deps.version, log });
   const local = createLocalChannel({ service: core.lobbies, token: core.adminToken, watch: core.watchLobbies, sandbox: (await core.sandbox()).mode, info: lobbyServer.info, engines: () => core.engine.overview() });
   const lobbyServers = createLobbyServerStore(domain(DOMAIN.lobbyServers));
   const admins = createAdminRegistry({ local, store: lobbyServers, secrets: deps.secrets, onLobby: deps.onLobby });

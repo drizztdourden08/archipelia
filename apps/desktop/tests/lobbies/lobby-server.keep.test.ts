@@ -19,8 +19,8 @@ const serve = async () => {
   return fixture;
 };
 
-const serverOf = ({ started, host }: Fixture, listen = started.listen) =>
-  createLobbyServer({ listen, files: (host.domains as NonNullable<typeof host.domains>).domain(DOMAIN.server), automation: true, lanHost: () => '192.168.1.5', version: '1.2.3', log: () => undefined });
+const serverOf = ({ started, host }: Fixture, listen = started.listen, canStoreSecrets = () => true) =>
+  createLobbyServer({ listen, files: (host.domains as NonNullable<typeof host.domains>).domain(DOMAIN.server), automation: true, canStoreSecrets, lanHost: () => '192.168.1.5', version: '1.2.3', log: () => undefined });
 
 afterEach(async () => {
   await Promise.all(running.splice(0).map((fixture) => fixture.stop()));
@@ -33,6 +33,7 @@ describe('the embedded lobby server', () => {
     await server.start();
     expect(server.status()).toMatchObject({ state: 'listening', options: { mode: 'off', publicLookup: true }, lanAddress: '192.168.1.5', automation: true });
     expect(server.status().serverId).toMatch(/^srv_/);
+    expect(server.status().roomPasswords).toBe('vault');
     const applied = await server.apply({ mode: 'lan-and-internet', publicLookup: false });
     expect(applied).toMatchObject({ state: 'listening', options: { mode: 'lan-and-internet', publicLookup: false }, reach: { mode: 'lan-and-internet', cgnat: null } });
     expect(applied.reach?.lobbyPort).toContain('local network');
@@ -80,5 +81,15 @@ describe('the embedded lobby server', () => {
     expect(seen).toContain('closed');
     await expect(ops.act({ type: 'engine.install' as 'lobby.lock', params: {} })).rejects.toThrow('not a lobby request');
     expect((await ops.view()).info).toEqual({});
+  });
+});
+
+describe('the embedded lobby server without a keyring', () => {
+  test('says the room passwords live in memory when the vault cannot encrypt', async () => {
+    const fixture = await serve();
+    const server = serverOf(fixture, fixture.started.listen, () => false);
+    await server.start();
+    expect(server.status().roomPasswords).toBe('memory');
+    await server.stop();
   });
 });

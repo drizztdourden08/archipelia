@@ -13,9 +13,11 @@ import { createFeedStore } from '@archipelia/engine/install';
 import { createRunJobs } from './runs/create-run-jobs';
 import { createCoreLobbies } from './create-core-lobbies';
 import { coreSandbox } from './core-sandbox';
+import { createRoomSecrets } from './room-secrets/create-room-secrets';
 
 const createCore = (ports: CorePorts) => {
-  const { domain, job, emit, secrets, log, network, environment = {} } = ports;
+  const { domain, job, emit, log, network, environment = {} } = ports;
+  const secrets = createRoomSecrets({ vault: ports.secrets, canStore: ports.canStoreSecrets ?? (() => true), log });
   const binding = hostBinding(network.automation, network.lanHost);
   const sessionFiles = domain(DOMAIN.sessions);
   const games = domain(DOMAIN.games);
@@ -51,7 +53,7 @@ const createCore = (ports: CorePorts) => {
     },
   });
   const sandbox = coreSandbox(environment.platform ?? process.platform, log);
-  const { lobbies, watchLobbies, adminToken } = createCoreLobbies({ ports, sessions: () => sessions, runtime, runtimeFor, sessionFiles, sandbox });
+  const { lobbies, watchLobbies, adminToken } = createCoreLobbies({ ports: { ...ports, secrets }, sessions: () => sessions, runtime, runtimeFor, sessionFiles, sandbox });
   const dispose = () => sessions.stopLocal().catch((err: unknown) => log(`the core did not stop its local servers: ${String(err)}`, 'error'));
   return { adminToken, catalog, dispose, engine, installed, lobbies, presets, runJobs, runs, runtime, sandbox, servers, sessionFiles, sessions, templates, watchLobbies };
 };
