@@ -16,6 +16,7 @@ type HostFactoryDeps = {
   secrets: SecretStore;
   servers: ServerLookup;
   advertiseHost: () => string;
+  bindHost?: string;
   ggOwnerSecret: string;
 };
 

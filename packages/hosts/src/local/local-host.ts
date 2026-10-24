@@ -5,6 +5,7 @@ import { spawnPython } from '@archipelia/engine';
 import { once } from 'node:events';
 import { createLogHub } from './log-hub';
 import type { LogHub } from './log-hub.type';
+import { ALL_INTERFACES } from '../servers/host-binding.constants';
 import { HOSTING } from './local-host.constants';
 import type { LocalHostOptions } from './local-host.type';
 import type { HostStart, SessionHost } from '../session-host.type';
@@ -24,7 +25,7 @@ const waitForHosting = (child: ChildProcess, hub: LogHub, advertiseHost: string)
     child.once('error', reject);
   });
 
-const createLocalHost = ({ runtime, port, bindHost = '0.0.0.0', advertiseHost, stopTimeoutMs = 10000 }: LocalHostOptions): SessionHost => {
+const createLocalHost = ({ runtime, port, bindHost = ALL_INTERFACES, advertiseHost, stopTimeoutMs = 10000 }: LocalHostOptions): SessionHost => {
   const hub = createLogHub();
   let child: ChildProcess | undefined;
 

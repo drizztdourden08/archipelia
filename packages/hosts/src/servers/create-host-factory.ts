@@ -16,10 +16,10 @@ const ggOwnerId = async (secrets: SecretStore, name: string) => {
   return created;
 };
 
-const createHostFactory = ({ runtime, secrets, servers, advertiseHost, ggOwnerSecret }: HostFactoryDeps) =>
+const createHostFactory = ({ runtime, secrets, servers, advertiseHost, bindHost, ggOwnerSecret }: HostFactoryDeps) =>
   async (target: HostTarget, own?: EngineRuntime): Promise<SessionHost> => {
     if (target.kind === 'local') {
-      return createLocalHost({ runtime: own ?? await runtime(), port: target.port, advertiseHost: advertiseHost() });
+      return createLocalHost({ runtime: own ?? await runtime(), port: target.port, bindHost, advertiseHost: advertiseHost() });
     }
     if (target.kind === 'archipelago-gg') {
       return createGgHost({ ownerId: await ggOwnerId(secrets, ggOwnerSecret), baseUrl: target.baseUrl });
