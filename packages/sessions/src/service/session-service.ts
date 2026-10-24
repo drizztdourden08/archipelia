@@ -29,10 +29,10 @@ const createSessionService = (deps: ServiceDeps) => {
     pending.set(session.id, controller);
     const signal = outer ? AbortSignal.any([outer, controller.signal]) : controller.signal;
     try {
-      const engines = lobbyEngines(lobby, files.path(session.id));
+      const engines = lobbyEngines(lobby);
       const runtime = engines.runtime ?? await deps.runtime();
       session = await update(session, { engine: sessionEngineOf(runtime) });
-      const { output, seed } = await produceSession(deps, session, { runtime, signal, wrap: engines.wrap });
+      const { output, seed } = await produceSession(deps, session, { runtime, signal, confine: engines.confine, timeoutMs: engines.timeoutMs });
       session = await update(session, { status: 'starting', output, seed });
       return await update(session, { status: 'hosting', endpoint: await hostSession({ deps, live, signal, runtime: engines.host }, session) });
     } catch (err) {

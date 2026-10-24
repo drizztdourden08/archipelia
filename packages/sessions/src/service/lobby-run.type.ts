@@ -8,6 +8,7 @@ type LobbyRun = {
   runtime: EngineRuntime;
   hostRuntime?: EngineRuntime;
   confine?: (runDir: string) => SpawnWrap | undefined;
+  timeoutMs?: number;
 };
 
 export type { LobbyRun };
