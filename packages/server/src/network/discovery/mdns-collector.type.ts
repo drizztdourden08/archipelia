@@ -1,5 +1,5 @@
 /* @layer core @kind types */
-import type { DiscoveryParse, DiscoveryRecord } from '@archipelia/lobby-protocol';
+import type { DiscoveryParse, DiscoveryRecord } from '@drizztdourden08/archipelia-lobby-protocol';
 
 type MdnsFound = {
   kind: 'found';

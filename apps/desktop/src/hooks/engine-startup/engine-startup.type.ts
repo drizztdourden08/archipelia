@@ -13,6 +13,7 @@ type EngineStartupDeps = {
   switchTo: (id: string) => Promise<void>;
   finish: FinishInstall;
   tell: (sentence: string) => void;
+  openNotes: (url: string) => void;
 };
 
 type StartupCtx = Pick<StartupPromptContext<AppSettings>, 'confirmAction' | 'confirmChoice'> & {

@@ -1,5 +1,5 @@
 /* @layer core @kind config */
-import { DISCOVERY_SERVICE } from '@archipelia/lobby-protocol';
+import { DISCOVERY_SERVICE } from '@drizztdourden08/archipelia-lobby-protocol';
 
 const SERVICE_DOMAIN = `${DISCOVERY_SERVICE}.local`;
 const SERVICE_ENUMERATION = '_services._dns-sd._udp.local';

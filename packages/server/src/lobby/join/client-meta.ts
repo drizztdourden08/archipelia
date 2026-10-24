@@ -1,5 +1,5 @@
 /* @layer core @kind logic */
-import type { Hello } from '@archipelia/lobby-protocol';
+import type { Hello } from '@drizztdourden08/archipelia-lobby-protocol';
 import type { ClientMeta } from '@archipelia/model';
 
 const clientMeta = ({ client, archipelago, capabilities }: Hello): ClientMeta => ({

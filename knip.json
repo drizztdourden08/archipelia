@@ -49,6 +49,21 @@
         "tests/**/*.ts"
       ]
     },
+    "packages/client-kit": {
+      "entry": [
+        "src/index.ts",
+        "src/node/index.ts",
+        "src/cli/main.ts",
+        "bin/*.mjs",
+        "tests/**/*.keep.test.ts"
+      ],
+      "project": [
+        "src/**/*.ts",
+        "scripts/*.mjs",
+        "bin/*.mjs",
+        "tests/**/*.ts"
+      ]
+    },
     "tooling/engine-bundle": {
       "entry": [
         "bin/*.mjs",

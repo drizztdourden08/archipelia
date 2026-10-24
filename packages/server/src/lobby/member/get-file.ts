@@ -1,7 +1,7 @@
 /* @layer core @kind logic */
 import { unzipSync } from 'fflate';
-import type { FileGet, ServerMessage } from '@archipelia/lobby-protocol';
-import { createError, DEFAULT_LIMITS } from '@archipelia/lobby-protocol';
+import type { FileGet, ServerMessage } from '@drizztdourden08/archipelia-lobby-protocol';
+import { createError, DEFAULT_LIMITS } from '@drizztdourden08/archipelia-lobby-protocol';
 import type { Lobby, LobbyRoomFile } from '@archipelia/model';
 import type { LobbyContext } from '../lobby-context.type';
 import type { MemberRef } from '../lobby-service.type';

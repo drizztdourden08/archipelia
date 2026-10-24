@@ -1,5 +1,5 @@
 /* @layer core @kind logic */
-import { HELLO_TIMEOUT_MS } from '@archipelia/lobby-protocol';
+import { HELLO_TIMEOUT_MS } from '@drizztdourden08/archipelia-lobby-protocol';
 import { HELLO_DEADLINE_MS } from './link.constants';
 
 const helloClock = (onLate: () => void) => {

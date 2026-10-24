@@ -1,6 +1,6 @@
 /* @layer core @kind logic */
 import { chmod } from 'node:fs/promises';
-import { newToken } from '@archipelia/lobby-protocol/node';
+import { newToken } from '@drizztdourden08/archipelia-lobby-protocol/node';
 import type { DataFiles } from '@archipelia/model';
 import { ADMIN_TOKEN_FILE, OWNER_ONLY } from './admin.constants';
 

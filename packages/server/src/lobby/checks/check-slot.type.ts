@@ -1,5 +1,5 @@
 /* @layer core @kind types */
-import type { Failure } from '@archipelia/lobby-protocol';
+import type { Failure } from '@drizztdourden08/archipelia-lobby-protocol';
 import type { Lobby, LobbyMember, SlotState, SlotUpload } from '@archipelia/model';
 
 type WorldVerdict = { failure: Failure; fatal: boolean } | null;

@@ -1,6 +1,6 @@
 /* @layer core @kind logic */
-import type { LobbyInfoReply, LobbyInfoRequest } from '@archipelia/lobby-protocol';
-import { lobbyNotFoundFailure, negotiateProtocol, normalizeLobbyCode } from '@archipelia/lobby-protocol';
+import type { LobbyInfoReply, LobbyInfoRequest } from '@drizztdourden08/archipelia-lobby-protocol';
+import { lobbyNotFoundFailure, negotiateProtocol, normalizeLobbyCode } from '@drizztdourden08/archipelia-lobby-protocol';
 import { LOBBY_CLOSED } from '../join/join.constants';
 import type { LobbyContext } from '../lobby-context.type';
 import type { Outcome } from '../lobby-service.type';

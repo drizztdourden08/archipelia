@@ -1,5 +1,5 @@
 /* @layer core @kind config */
-import type { Failure, Hello } from '@archipelia/lobby-protocol';
+import type { Failure, Hello } from '@drizztdourden08/archipelia-lobby-protocol';
 
 const NORMAL_CLOSE = 1000;
 

@@ -1,7 +1,7 @@
 /* @layer core @kind logic */
-import type { ClientMessage, Failure } from '@archipelia/lobby-protocol';
-import type { TransportEvent } from '@archipelia/lobby-protocol/node';
-import { closeCodeOf, createError, decodeMessage, DEFAULT_LIMITS, encodeMessage, PRE_WELCOME_MAX_MESSAGE_BYTES } from '@archipelia/lobby-protocol';
+import type { ClientMessage, Failure } from '@drizztdourden08/archipelia-lobby-protocol';
+import type { TransportEvent } from '@drizztdourden08/archipelia-lobby-protocol/node';
+import { closeCodeOf, createError, decodeMessage, DEFAULT_LIMITS, encodeMessage, PRE_WELCOME_MAX_MESSAGE_BYTES } from '@drizztdourden08/archipelia-lobby-protocol';
 import type { LobbyLink } from '../lobby-service.type';
 import { answerFirst } from './answer-first';
 import { answerMember } from './answer-member';

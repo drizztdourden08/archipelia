@@ -1,6 +1,6 @@
 /* @layer core @kind logic */
-import { HELLO_TIMEOUT_MS } from '@archipelia/lobby-protocol';
-import type { Transport } from '@archipelia/lobby-protocol/node';
+import { HELLO_TIMEOUT_MS } from '@drizztdourden08/archipelia-lobby-protocol';
+import type { Transport } from '@drizztdourden08/archipelia-lobby-protocol/node';
 import { isRecord } from '@archipelia/model';
 import { LOOPBACK_ADDRESSES } from '../listener.constants';
 import type { AdminConnectionDeps, Peer } from '../listener.type';

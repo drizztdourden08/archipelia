@@ -1,5 +1,5 @@
 /* @layer renderer-app @kind logic */
-import { toast } from '@drizztdourden08/brock-react';
+import { openExternal, toast } from '@drizztdourden08/brock-react';
 import { appApi } from '../../ipc/app-api';
 import { useEngineStore } from '../../stores/useEngineStore';
 import { finishInstall } from '../../views/EngineSettings/behavior/finish-install';
@@ -16,6 +16,7 @@ const engineStartupDeps = (): EngineStartupDeps => {
     switchTo: (id) => store.switchTo(id),
     finish: finishInstall,
     tell: (sentence) => toast(sentence, { variant: 'danger' }),
+    openNotes: openExternal,
   };
 };
 

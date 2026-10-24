@@ -2,8 +2,8 @@
 import { mkdtemp, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import type { Hello, ServerMessage } from '@archipelia/lobby-protocol';
-import { createScenarioKit } from '@archipelia/lobby-protocol/testing';
+import type { Hello, ServerMessage } from '@drizztdourden08/archipelia-lobby-protocol';
+import { createScenarioKit } from '@drizztdourden08/archipelia-lobby-protocol/testing';
 import type { Session, SessionTemplate } from '@archipelia/model';
 import type { LobbyRun } from '@archipelia/sessions';
 import { createLobbyService } from '../../src/lobby/create-lobby-service';

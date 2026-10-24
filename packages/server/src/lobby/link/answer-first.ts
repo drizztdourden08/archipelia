@@ -1,6 +1,6 @@
 /* @layer core @kind logic */
-import type { Hello, LobbyInfoRequest } from '@archipelia/lobby-protocol';
-import { rateLimitedFailure } from '@archipelia/lobby-protocol';
+import type { Hello, LobbyInfoRequest } from '@drizztdourden08/archipelia-lobby-protocol';
+import { rateLimitedFailure } from '@drizztdourden08/archipelia-lobby-protocol';
 import type { Conversation } from './link.type';
 
 const answerInfo = async ({ options, wire }: Conversation, request: LobbyInfoRequest) => {

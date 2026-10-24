@@ -1,5 +1,5 @@
 /* @layer core @kind logic */
-import { BEACON_EXPIRY_MS, BEACON_PORT, parseBeacon } from '@archipelia/lobby-protocol';
+import { BEACON_EXPIRY_MS, BEACON_PORT, parseBeacon } from '@drizztdourden08/archipelia-lobby-protocol';
 import type { BrowseHandle, BrowseOptions } from './browse.type';
 import { BROWSE_QUERY_MS, MS, SERVICE_DOMAIN, SWEEP_MS } from './network-discovery.constants';
 import { createMdnsCollector } from './create-mdns-collector';

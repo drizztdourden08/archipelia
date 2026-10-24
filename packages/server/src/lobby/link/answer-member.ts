@@ -1,5 +1,5 @@
 /* @layer core @kind logic */
-import type { ClientMessage, ServerMessage } from '@archipelia/lobby-protocol';
+import type { ClientMessage, ServerMessage } from '@drizztdourden08/archipelia-lobby-protocol';
 import type { MemberRef } from '../lobby-service.type';
 import { GONE, JOINED, OTHER_UPLOAD } from './link.constants';
 import type { Conversation, MemberHandler } from './link.type';

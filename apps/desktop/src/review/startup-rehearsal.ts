@@ -32,6 +32,7 @@ const withoutEngine = (real: EngineOverview): EngineOverview => ({
 const rehearse = (decision: StartupDecision, status: 'missing' | 'ready', real: EngineOverview): Rehearsal => {
   const installs: string[] = [];
   const offered: string[] = [];
+  const opened: string[] = [];
   const deps: EngineStartupDeps = {
     status: () => Promise.resolve({ state: status, dir: real.status.dir }),
     startup: () => Promise.resolve(decision),
@@ -47,8 +48,11 @@ const rehearse = (decision: StartupDecision, status: 'missing' | 'ready', real: 
     switchTo: () => Promise.resolve(),
     finish: () => Promise.resolve(),
     tell: () => undefined,
+    openNotes: (url) => {
+      opened.push(url);
+    },
   };
-  return { ran: runEngineStartup(ctx, deps), installs, offered };
+  return { ran: runEngineStartup(ctx, deps), installs, offered, opened };
 };
 
 export { rehearse };

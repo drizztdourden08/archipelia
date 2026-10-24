@@ -1,6 +1,6 @@
 /* @layer core @kind logic */
-import type { Hello } from '@archipelia/lobby-protocol';
-import { checkHello, lobbyNotFoundFailure, negotiateProtocol, normalizeLobbyCode } from '@archipelia/lobby-protocol';
+import type { Hello } from '@drizztdourden08/archipelia-lobby-protocol';
+import { checkHello, lobbyNotFoundFailure, negotiateProtocol, normalizeLobbyCode } from '@drizztdourden08/archipelia-lobby-protocol';
 import { settleLobby } from '../checks/settle-lobby';
 import type { LobbyContext } from '../lobby-context.type';
 import type { LobbyLink, MemberRef, Outcome } from '../lobby-service.type';

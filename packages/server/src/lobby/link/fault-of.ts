@@ -1,5 +1,5 @@
 /* @layer core @kind logic */
-import type { Failure } from '@archipelia/lobby-protocol';
+import type { Failure } from '@drizztdourden08/archipelia-lobby-protocol';
 import { STORE_FAULT } from '../state/state.constants';
 import { GENERIC_FAULT } from './link.constants';
 

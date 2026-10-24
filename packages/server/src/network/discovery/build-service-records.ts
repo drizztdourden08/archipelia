@@ -1,6 +1,6 @@
 /* @layer core @kind logic */
-import type { DiscoveryRecord } from '@archipelia/lobby-protocol';
-import { buildDiscoveryTxt } from '@archipelia/lobby-protocol';
+import type { DiscoveryRecord } from '@drizztdourden08/archipelia-lobby-protocol';
+import { buildDiscoveryTxt } from '@drizztdourden08/archipelia-lobby-protocol';
 import type { MdnsRecord } from '../ports/network-ports.type';
 import { hostFqdn } from './host-fqdn';
 import { instanceFqdn } from './instance-fqdn';

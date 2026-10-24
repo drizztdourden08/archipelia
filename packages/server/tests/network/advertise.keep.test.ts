@@ -1,7 +1,7 @@
 /* @layer tests @kind test */
 import { afterEach, describe, expect, test, vi } from 'vitest';
-import type { DiscoveryRecord } from '@archipelia/lobby-protocol';
-import { BEACON_INTERVAL_MS, BEACON_PORT, parseBeacon, parseDiscoveryTxt } from '@archipelia/lobby-protocol';
+import type { DiscoveryRecord } from '@drizztdourden08/archipelia-lobby-protocol';
+import { BEACON_INTERVAL_MS, BEACON_PORT, parseBeacon, parseDiscoveryTxt } from '@drizztdourden08/archipelia-lobby-protocol';
 import type { MdnsRecord } from '../../src/network';
 import { startAdvertiser } from '../../src/network';
 import { createFakeNetwork } from './fake-network';

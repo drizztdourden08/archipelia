@@ -1,6 +1,6 @@
 /* @layer core @kind logic */
-import type { DiscoveryRecord } from '@archipelia/lobby-protocol';
-import { PROTOCOL_VERSION } from '@archipelia/lobby-protocol';
+import type { DiscoveryRecord } from '@drizztdourden08/archipelia-lobby-protocol';
+import { PROTOCOL_VERSION } from '@drizztdourden08/archipelia-lobby-protocol';
 import type { ReachInput } from './reach.type';
 import { UNKNOWN_AP } from './reach.constants';
 

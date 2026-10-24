@@ -1,5 +1,5 @@
 /* @layer core @kind logic */
-import type { LobbyState, StateMember } from '@archipelia/lobby-protocol';
+import type { LobbyState, StateMember } from '@drizztdourden08/archipelia-lobby-protocol';
 import type { Lobby, LobbyMember } from '@archipelia/model';
 import { SERVER_NAME } from '../lobby.constants';
 import { liveMembers } from './live-members';

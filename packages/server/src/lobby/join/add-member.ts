@@ -1,7 +1,7 @@
 /* @layer core @kind logic */
-import { checkClientVersion } from '@archipelia/lobby-protocol';
-import { hashToken, newToken } from '@archipelia/lobby-protocol/node';
-import type { Hello } from '@archipelia/lobby-protocol';
+import { checkClientVersion } from '@drizztdourden08/archipelia-lobby-protocol';
+import { hashToken, newToken } from '@drizztdourden08/archipelia-lobby-protocol/node';
+import type { Hello } from '@drizztdourden08/archipelia-lobby-protocol';
 import type { Lobby, LobbyMember, UploadTrust } from '@archipelia/model';
 import type { LobbyContext } from '../lobby-context.type';
 import type { MemberRef, Outcome } from '../lobby-service.type';

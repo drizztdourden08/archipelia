@@ -1,5 +1,5 @@
 /* @layer core @kind types */
-import type { DiscoveryRecord } from '@archipelia/lobby-protocol';
+import type { DiscoveryRecord } from '@drizztdourden08/archipelia-lobby-protocol';
 import type { NetworkPorts } from '../ports/network-ports.type';
 
 type DiscoverySource = 'mdns' | 'beacon';

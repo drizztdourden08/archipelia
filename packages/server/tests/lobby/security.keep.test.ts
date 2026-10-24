@@ -4,7 +4,7 @@ import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, test } from 'vitest';
-import type { TransportEvent } from '@archipelia/lobby-protocol/node';
+import type { TransportEvent } from '@drizztdourden08/archipelia-lobby-protocol/node';
 import type { Lobby } from '@archipelia/model';
 import { createLobbyService } from '../../src/lobby/create-lobby-service';
 import { createLobbyConnection } from '../../src/lobby/link/create-lobby-connection';

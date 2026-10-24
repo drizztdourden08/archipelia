@@ -52,6 +52,9 @@ const depsOf = (patch: Partial<EngineStartupDeps> = {}) => {
     switchTo: vi.fn(() => Promise.resolve()),
     finish: vi.fn(() => Promise.resolve()),
     tell: vi.fn(),
+    openNotes: vi.fn((url: string) => {
+      calls.push(`openNotes ${url}`);
+    }),
     ...patch,
   };
   return { deps, calls };

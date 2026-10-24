@@ -1,5 +1,5 @@
 /* @layer core @kind logic */
-import type { Failure } from '@archipelia/lobby-protocol';
+import type { Failure } from '@drizztdourden08/archipelia-lobby-protocol';
 import { isRecord } from '@archipelia/model';
 import type { SlotUpload } from '@archipelia/model';
 import { parseAllDocuments } from 'yaml';

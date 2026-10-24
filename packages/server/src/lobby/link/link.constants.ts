@@ -1,5 +1,5 @@
 /* @layer core @kind config */
-import type { Failure } from '@archipelia/lobby-protocol';
+import type { Failure } from '@drizztdourden08/archipelia-lobby-protocol';
 
 const MS_PER_SECOND = 1000;
 

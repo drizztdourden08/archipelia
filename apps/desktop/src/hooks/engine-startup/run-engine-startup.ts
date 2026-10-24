@@ -30,7 +30,7 @@ const runFirstRun = async (ctx: StartupCtx, deps: EngineStartupDeps, choice: Eng
 
 const runOffer = async (ctx: StartupCtx, deps: EngineStartupDeps, offer: OfferDecision): Promise<void> => {
   await deps.offerShown(offer.to);
-  if (await ctx.confirmAction(offerDialog(offer))) await installAndFinish(deps, offer.choice);
+  if (await ctx.confirmAction(offerDialog(offer, deps.openNotes))) await installAndFinish(deps, offer.choice);
 };
 
 const runEngineStartup = async (ctx: StartupCtx, deps: EngineStartupDeps): Promise<void> => {

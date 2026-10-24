@@ -1,6 +1,6 @@
 /* @layer core @kind logic */
 import { hostBinding } from '@archipelia/hosts';
-import { DEFAULT_PORT } from '@archipelia/lobby-protocol';
+import { DEFAULT_PORT } from '@drizztdourden08/archipelia-lobby-protocol';
 import { DOMAIN } from '@archipelia/model';
 import { SERVER_VERSION } from '../core/core-lobbies.constants';
 import { startListener } from '../listener/start-listener';

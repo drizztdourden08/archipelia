@@ -7,8 +7,8 @@ import type { ServerHost } from '@drizztdourden08/brock-electron/server';
 import type { CoreDomains, CoreEvent } from '../src';
 import { startCore } from '../src';
 import { createNodeDomains, createNodeRest, nodeLanHost } from '../src/node';
-import type { Transport } from '@archipelia/lobby-protocol/testing';
-import { connectWebSocket } from '@archipelia/lobby-protocol/testing';
+import type { Transport } from '@drizztdourden08/archipelia-lobby-protocol/testing';
+import { connectWebSocket } from '@drizztdourden08/archipelia-lobby-protocol/testing';
 
 let dataDir = '';
 

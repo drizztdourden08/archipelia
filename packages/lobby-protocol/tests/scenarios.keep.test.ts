@@ -3,7 +3,7 @@ import { readdirSync } from 'node:fs';
 import { describe, expect, test } from 'vitest';
 import { PROTOCOL_VERSION } from '../src';
 import { SCENARIO_CATALOG, checkFixtureSchemas, loadScenario, runScenario } from '../src/testing';
-import { FIXTURES_DIR } from '../src/testing/scenario/fixtures-dir.constants';
+import { findFixturesDir } from '../src/testing/scenario/find-fixtures-dir';
 
 const NAMES = SCENARIO_CATALOG.map((entry) => entry.name);
 
@@ -27,7 +27,7 @@ describe('conformance scenarios, fake client against fake server', () => {
 
 describe('fixtures', () => {
   test('the catalog and the fixture files name the same scenarios', () => {
-    const files = readdirSync(FIXTURES_DIR)
+    const files = readdirSync(findFixturesDir())
       .filter((file) => file.endsWith('.jsonl'))
       .map((file) => file.slice(0, -'.jsonl'.length))
       .sort();

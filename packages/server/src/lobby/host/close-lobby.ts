@@ -1,5 +1,5 @@
 /* @layer core @kind logic */
-import { CLOSE_CODES, createError } from '@archipelia/lobby-protocol';
+import { CLOSE_CODES, createError } from '@drizztdourden08/archipelia-lobby-protocol';
 import type { LobbyContext } from '../lobby-context.type';
 import { LOBBY_CLOSED } from '../join/join.constants';
 import { OVERLAY_DIR } from '../lobby.constants';

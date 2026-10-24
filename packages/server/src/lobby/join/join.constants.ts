@@ -1,5 +1,5 @@
 /* @layer core @kind config */
-import type { Failure } from '@archipelia/lobby-protocol';
+import type { Failure } from '@drizztdourden08/archipelia-lobby-protocol';
 
 const LOBBY_CLOSED: Failure = { code: 'lobby-closed', message: 'This lobby has ended.' };
 const LOBBY_LOCKED: Failure = { code: 'lobby-locked', message: 'This lobby no longer takes new players.' };

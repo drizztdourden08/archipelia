@@ -1,6 +1,6 @@
 /* @layer core @kind types */
 import type { SecretStore } from '@archipelia/hosts';
-import type { Failure, ServerMessage } from '@archipelia/lobby-protocol';
+import type { Failure, ServerMessage } from '@drizztdourden08/archipelia-lobby-protocol';
 import type { DataFiles, EngineRuntime, Lobby, LobbyOptions, Session, SessionEngine, SessionTemplate } from '@archipelia/model';
 import type { LobbyRun } from '@archipelia/sessions';
 import type { ProofVerdict, Registry, RegistryClient, WorldVerdict } from '@archipelia/trust';
