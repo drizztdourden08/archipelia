@@ -1,5 +1,4 @@
 /* @layer server @kind entry */
-import './shims/node-globals';
 import { resolveDataDir, runServer } from '@drizztdourden08/brock-electron/server';
 import { createNodeDomains } from '@archipelia/server/node';
 import { SERVE_COMMANDS } from './cli/cli.constants';
