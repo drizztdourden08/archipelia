@@ -110,7 +110,7 @@ type Lobby = {
 
 type AdminLobbyMember = Omit<LobbyMember, 'tokenHash'>;
 
-type AdminWorld = Omit<WorldUpload, 'proof'> & { proofSent: boolean };
+type AdminWorld = Omit<WorldUpload, 'proof'> & { proofSent: boolean; runsUnconfined?: boolean; consentNote?: string };
 
 type AdminLobby = Omit<Lobby, 'members' | 'worlds'> & { members: AdminLobbyMember[]; worlds: AdminWorld[] };
 

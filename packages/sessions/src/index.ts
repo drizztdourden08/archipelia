@@ -1,5 +1,8 @@
 /* @layer core @kind barrel */
 export { readOutput } from './output/read-output';
+export { zipEntries } from './output/zip-entries';
+export { zipEntryBytes } from './output/zip-entry-bytes';
+export type { ZipEntry, ZipLimits } from './output/zip.type';
 export { gameOfYaml } from './players/game-of-yaml';
 export { renderImportedYaml } from './players/render-imported-yaml';
 export { renderPresetYaml } from './players/render-preset-yaml';

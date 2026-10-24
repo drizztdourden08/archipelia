@@ -1,7 +1,8 @@
 /* @layer core @kind logic */
-import { unzipSync } from 'fflate';
 import type { DataFiles, SessionOutput } from '@archipelia/model';
 import { SEED, SPOILER } from './read-output.constants';
+import { zipEntries } from './zip-entries';
+import { zipEntryBytes } from './zip-entry-bytes';
 
 const baseName = (path: string) => path.split(/[\\/]/).pop() ?? path;
 
@@ -9,11 +10,11 @@ const readOutput = async (files: DataFiles, outputDir: string, zipPath: string, 
   const zipName = baseName(zipPath);
   const bytes = await files.readBytes(`${outputDir}/${zipName}`);
   if (!bytes) throw new Error(`generator output ${zipName} is missing`);
-  const entries = unzipSync(bytes);
-  const names = Object.keys(entries);
-  const spoilerName = names.find((name) => SPOILER.test(name));
-  if (spoilerName) await files.writeText(`${outputDir}/${baseName(spoilerName)}`, new TextDecoder().decode(entries[spoilerName]));
-  const output: SessionOutput = { zip: zipName, files: names, spoiler: spoilerName && baseName(spoilerName), generateLog };
+  const entries = zipEntries(bytes);
+  const names = entries.map((entry) => entry.name);
+  const spoiler = entries.find((entry) => SPOILER.test(entry.name));
+  if (spoiler) await files.writeText(`${outputDir}/${baseName(spoiler.name)}`, new TextDecoder().decode(zipEntryBytes(bytes, spoiler)));
+  const output: SessionOutput = { zip: zipName, files: names, spoiler: spoiler && baseName(spoiler.name), generateLog };
   return { output, seed: zipName.match(SEED)?.[1] };
 };
 

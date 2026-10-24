@@ -11,7 +11,7 @@ import { adminToken } from '../listener/admin/admin-token';
 import type { CoreLobbyDeps } from './core-lobbies.type';
 import { SERVER_VERSION } from './core-lobbies.constants';
 
-const createCoreLobbies = ({ ports, sessions, runtime, runtimeFor, sessionFiles }: CoreLobbyDeps) => {
+const createCoreLobbies = ({ ports, sessions, runtime, runtimeFor, sessionFiles, sandbox }: CoreLobbyDeps) => {
   const watchers = new Set<(lobby: Lobby) => void>();
   const runOf = (template: SessionTemplate, lobby: LobbyRun) =>
     ports.lobbyRun
@@ -22,6 +22,7 @@ const createCoreLobbies = ({ ports, sessions, runtime, runtimeFor, sessionFiles 
     trust: createLobbyTrust(ports.domain(DOMAIN.cache)),
     runner: { run: runOf, stop: (id) => sessions().stop(id), running: (id) => sessions().running(id), runtimeFor, output: sessionFiles },
     overlay: buildOverlay,
+    sandbox,
     secrets: ports.secrets,
     activeEngine: () => runtime().then(sessionEngineOf, () => undefined),
     serverVersion: ports.environment?.version ?? SERVER_VERSION,
