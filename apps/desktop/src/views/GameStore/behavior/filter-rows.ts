@@ -5,7 +5,7 @@ const inTab = (row: GameRow, tab: GameTab) => {
   if (tab === 'installed') return row.state !== 'available';
   if (tab === 'updates') return row.state === 'update';
   if (tab === 'official') return row.entry.source === 'official';
-  return row.entry.source === 'index';
+  return row.entry.source === 'index' || row.entry.source === 'first-party';
 };
 
 const filterRows = (rows: GameRow[], tab: GameTab, query: string) => {

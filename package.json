@@ -9,6 +9,11 @@
     "email": "drizztdourden08@users.noreply.github.com"
   },
   "type": "module",
+  "exports": {
+    "./registry/registry.json": "./registry/registry.json",
+    "./registry/registry.schema.json": "./registry/registry.schema.json",
+    "./package.json": "./package.json"
+  },
   "engines": {
     "node": ">=24"
   },

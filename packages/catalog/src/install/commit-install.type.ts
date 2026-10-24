@@ -1,5 +1,5 @@
 /* @layer core @kind types */
-import type { DataFiles, EngineRuntime, GameSource, WorldLayout } from '@archipelia/model';
+import type { DataFiles, EngineRuntime, GameSource, WorldLayout, WorldTrust } from '@archipelia/model';
 import type { ApworldInfo } from './read-apworld.type';
 import type { HashDecision } from './hash-decision.type';
 
@@ -15,6 +15,7 @@ type InstallJob = {
   layout: WorldLayout;
   hash: HashDecision;
   requires: string[];
+  trust?: WorldTrust;
 };
 
 export type { InstallJob };

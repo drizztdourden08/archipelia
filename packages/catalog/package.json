@@ -28,6 +28,7 @@
   "dependencies": {
     "@archipelia/engine": "workspace:*",
     "@archipelia/model": "workspace:*",
+    "@archipelia/trust": "workspace:*",
     "smol-toml": "catalog:",
     "@drizztdourden08/brock-core": "^0.81.0",
     "fflate": "catalog:"

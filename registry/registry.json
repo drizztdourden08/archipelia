@@ -1,0 +1,36 @@
+{
+  "format": 1,
+  "clients": [
+    {
+      "id": "relic-of-the-past",
+      "name": "Relic of the Past",
+      "homepage": "https://github.com/drizztdourden08/relic-of-the-past",
+      "games": ["Relic of the Past"],
+      "status": "active",
+      "trust": {
+        "method": "github-attestation",
+        "repo": "drizztdourden08/relic-of-the-past",
+        "workflow": ".github/workflows/release.yml",
+        "refs": ["refs/heads/master", "refs/heads/main"],
+        "issuer": "https://token.actions.githubusercontent.com"
+      }
+    }
+  ],
+  "games": [
+    {
+      "game": "Relic of the Past",
+      "module": "relic_of_the_past",
+      "displayName": "Relic of the Past",
+      "home": "https://github.com/drizztdourden08/relic-of-the-past",
+      "tags": ["action", "adventure"],
+      "client": "relic-of-the-past",
+      "release": {
+        "repo": "drizztdourden08/relic-of-the-past",
+        "world": "relic_of_the_past.apworld",
+        "manifest": "relic_of_the_past.apworld.json",
+        "kind": "builds",
+        "bundle": "relic_of_the_past.apworld.sigstore.json"
+      }
+    }
+  ]
+}

@@ -5,11 +5,18 @@ packages:
 
 catalog:
   '@electron-toolkit/utils': ^4.0.0
+  '@sigstore/bundle': ^5.0.0
+  '@sigstore/mock': ^0.13.0
+  '@sigstore/protobuf-specs': ^0.5.2
+  '@sigstore/sign': ^5.0.0
+  '@sigstore/tuf': ^5.0.0
+  '@sigstore/verify': ^4.1.2
   '@types/node': ^24.19.0
   '@types/react': ^19.2.15
   '@types/react-dom': ^19.2.3
   '@types/ssh2': ^1.15.5
   '@vitejs/plugin-react': ^5.2.0
+  ajv: ^8.17.1
   archipelago.js: ^2.1.0
   electron: ^42.2.0
   electron-builder: ^26.8.1
@@ -19,6 +26,7 @@ catalog:
   jscpd: ^4.0.5
   knip: ^5.65.0
   markdownlint-cli2: ^0.22.1
+  nock: ^13.5.5
   playwright-core: ^1.63.0
   react: ^19.2.6
   react-dom: ^19.2.6

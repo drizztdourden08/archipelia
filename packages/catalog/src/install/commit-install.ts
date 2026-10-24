@@ -33,6 +33,7 @@ const commitInstall = async (job: InstallJob): Promise<InstalledGame> => {
     const record: InstalledGame = {
       apworld, game, version: job.version ?? info.manifest.world_version ?? 'unknown', source: job.source,
       installedAt: Date.now(), schema, ...job.hash, layout, path: placement.path, requires: job.requires,
+      ...(job.trust ? { trust: job.trust } : {}),
     };
     await saveInstalled(files, record);
     await placement.commit();

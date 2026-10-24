@@ -1,0 +1,17 @@
+{"dir":"c2s","msg":{"type":"hello","seq":1,"protocol":{"name":"archipelia-lobby","versions":[1]},"lobby":{"code":"K7QM-4XT2"},"resume":null,"client":{"id":"relic-of-the-past","name":"Relic of the Past","version":"0.22.0","build":"c44b2c1","platform":{"os":"windows","arch":"x64"},"homepage":"https://github.com/drizztdourden08/relic-of-the-past","sdk":{"name":"@archipelia/lobby-protocol","version":"1.0.0"}},"player":{"displayName":"Link"},"archipelago":{"version":"0.6.8"},"capabilities":["slots.yaml","worlds.upload"],"worlds":[{"game":"Relic of the Past","module":"relic_of_the_past","worldVersion":"0.1.0","sha256":"$W","size":"$W_size","proof":"$proof"}],"slots":[{"name":"Link","game":"Relic of the Past","yaml":{"sha256":"$Y","size":"$Y_size"}}]}}
+{"dir":"s2c","msg":{"type":"welcome","re":1,"protocol":{"name":"archipelia-lobby","version":1},"server":{"name":"Archipelia","version":"$any_str"},"lobby":{"id":"$any_str","name":"Friday seed","engine":{"ap":"0.6.8"},"admission":"host-approval","allowUnlisted":false,"phase":"open"},"member":{"id":"$member","token":"$token","admission":"pending","trust":"verified"},"need":["$W","$Y"],"limits":{"maxMessageBytes":1048576,"chunkBytes":262144,"maxWorldBytes":67108864,"maxYamlBytes":262144,"maxMemberBytes":134217728}}}
+{"dir":"s2c","msg":{"type":"lobby.state","rev":"$any_int","phase":"open","engine":{"ap":"0.6.8"},"members":[{"id":"$member","displayName":"Link","client":{"name":"Relic of the Past","version":"0.22.0"},"trust":"verified","admission":"pending","ready":false,"slots":[{"name":"Link","game":"Relic of the Past","state":"uploading"}]}],"others":{"approved":"$any_int","pending":"$any_int"}}}
+{"dir":"c2s","msg":{"type":"upload.begin","seq":2,"sha256":"$W","kind":"world","size":"$W_size"}}
+{"dir":"s2c","msg":{"type":"upload.ready","re":2,"sha256":"$W","offset":0}}
+{"dir":"c2s","msg":{"type":"upload.chunk","sha256":"$W","offset":0,"data":"$bad_data"}}
+{"dir":"c2s","msg":{"type":"upload.chunk","sha256":"$W","offset":262144,"data":"$bad_data"}}
+{"dir":"c2s","msg":{"type":"upload.chunk","sha256":"$W","offset":524288,"data":"$bad_data"}}
+{"dir":"c2s","msg":{"type":"upload.chunk","sha256":"$W","offset":786432,"data":"$bad_data"}}
+{"dir":"s2c","msg":{"type":"error","code":"upload-hash-mismatch","message":"The bytes of the file do not match its hash. Send the file again.","fatal":false}}
+{"dir":"c2s","msg":{"type":"upload.begin","seq":3,"sha256":"$W","kind":"world","size":"$W_size"}}
+{"dir":"s2c","msg":{"type":"upload.ready","re":3,"sha256":"$W","offset":0}}
+{"dir":"c2s","msg":{"type":"upload.chunk","sha256":"$W","offset":0,"data":"$data"}}
+{"dir":"c2s","msg":{"type":"upload.chunk","sha256":"$W","offset":262144,"data":"$data"}}
+{"dir":"c2s","msg":{"type":"upload.chunk","sha256":"$W","offset":524288,"data":"$data"}}
+{"dir":"c2s","msg":{"type":"upload.chunk","sha256":"$W","offset":786432,"data":"$data"}}
+{"dir":"s2c","msg":{"type":"upload.done","sha256":"$W","ok":true}}
