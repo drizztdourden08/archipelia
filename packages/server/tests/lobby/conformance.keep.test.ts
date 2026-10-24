@@ -44,7 +44,7 @@ const seedFiles = async (server: ConformanceServer, lobby: Lobby, kit: ScenarioK
   for (const file of kit.files.filter((entry) => entry.name === 'W' || entry.name === 'Y')) await server.store.writeFile(lobby.id, file.sha256, file.bytes);
 };
 
-const hostHook = (server: ConformanceServer, lobby: Lobby, name: string, kit: ScenarioKit) => async (line: HostLine, bindings: Bindings) => {
+const hostHook = (server: ConformanceServer, lobby: Lobby, name: string) => async (line: HostLine, bindings: Bindings) => {
   const member = String(bindings.member);
   const { service } = server;
   if (line.action === 'approve') await service.approve(lobby.id, member);
@@ -68,7 +68,7 @@ describe('the real lobby server against the fake client', () => {
     if (entry.setup.heldFiles) await seedFiles(server, lobby, kit);
     const client = createFakeClient({
       scenario: loadScenario(name), kit, ignore: ['lobby.state'], timeoutMs: 8000,
-      connect: () => connectDrained(server.url), host: hostHook(server, lobby, name, kit),
+      connect: () => connectDrained(server.url), host: hostHook(server, lobby, name),
     });
     const result = await client.play();
     expect(result.failure).toBeUndefined();

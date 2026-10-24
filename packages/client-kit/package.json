@@ -44,11 +44,11 @@
     "fflate": "^0.8.3"
   },
   "devDependencies": {
+    "@archipelia/package-build": "workspace:*",
     "@drizztdourden08/brock-lint-config": "^0.85.0",
     "@types/node": "catalog:",
     "eslint": "catalog:",
     "typescript": "catalog:",
-    "yaml": "catalog:",
-    "esbuild": "^0.25.12"
+    "yaml": "catalog:"
   }
 }
