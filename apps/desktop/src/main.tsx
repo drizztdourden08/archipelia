@@ -13,6 +13,7 @@ import { appTitleBar } from '../.brock/title-bar';
 import { appTours } from '../.brock/tours';
 import { appWidgetKits } from '../.brock/widget-kits';
 import { appStartupPrompts } from '../.brock/startup';
+import { appToolbars } from '../.brock/toolbars';
 import { SETTINGS } from './main.constants';
 import { product } from './product';
 import { quitWhileHosting } from './rooms/quit-while-hosting';
@@ -37,6 +38,7 @@ createRoot(root).render(
       tours={appTours}
       widgetKits={appWidgetKits}
       startupPrompts={appStartupPrompts}
+      toolbars={appToolbars}
     />
   </StrictMode>,
 );
