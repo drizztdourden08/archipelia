@@ -1,7 +1,10 @@
 /* @layer renderer-app @kind config */
 import { defineChannels, event, invoke } from '@drizztdourden08/brock-core';
 import type { CatalogView, InstallRequest } from '@archipelia/catalog';
-import type { CatalogEntry, EngineStatus, GamePreset, InstalledGame, ServerEntry, Session, SessionTemplate } from '@archipelia/model';
+import type {
+  CatalogEntry, EngineChoice, EngineEvent, EngineInstallResult, EngineOverview, EngineStatus, GamePreset,
+  InstalledGame, ServerEntry, Session, SessionTemplate, StartupDecision,
+} from '@archipelia/model';
 import type { HostLogLine, ServerTestResult } from '@archipelia/hosts';
 import type { PresetInput } from '@archipelia/presets';
 import type { SessionEvent } from '@archipelia/sessions';
@@ -9,6 +12,12 @@ import type { SessionEvent } from '@archipelia/sessions';
 const APP_CHANNELS = defineChannels({
   engineStatus: invoke<() => Promise<EngineStatus>>()('ap:engine:status'),
   engineSetup: invoke<() => Promise<EngineStatus>>()('ap:engine:setup'),
+  engineOverview: invoke<(force?: boolean) => Promise<EngineOverview>>()('ap:engine:overview'),
+  engineInstall: invoke<(choice: EngineChoice) => Promise<EngineInstallResult>>()('ap:engine:install'),
+  engineSwitch: invoke<(id: string) => Promise<EngineOverview>>()('ap:engine:switch'),
+  engineRemove: invoke<(id: string) => Promise<EngineOverview>>()('ap:engine:remove'),
+  engineStartup: invoke<() => Promise<StartupDecision>>()('ap:engine:startup'),
+  engineOfferShown: invoke<(version: string) => Promise<void>>()('ap:engine:offerShown'),
   catalogRead: invoke<(refresh: boolean) => Promise<CatalogView>>()('ap:catalog:read'),
   catalogOfficial: invoke<() => Promise<CatalogEntry[]>>()('ap:catalog:official'),
   gamesList: invoke<() => Promise<InstalledGame[]>>()('ap:games:list'),
@@ -36,6 +45,7 @@ const APP_CHANNELS = defineChannels({
   serversTest: invoke<(id: string) => Promise<ServerTestResult>>()('ap:servers:test'),
   serversTrustKey: invoke<(id: string, sha256: string) => Promise<ServerEntry>>()('ap:servers:trustKey'),
   ggOpenRooms: invoke<(baseUrl: string) => Promise<void>>()('ap:gg:openRooms'),
+  onEngineEvent: event<(event: EngineEvent) => void>()('ap:engine:event'),
   onSessionEvent: event<(event: SessionEvent) => void>()('ap:sessions:event'),
 });
 
