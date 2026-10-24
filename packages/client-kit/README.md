@@ -274,7 +274,7 @@ Every failure the kit raises is a `KitError`: an `Error` with `name` `KitError`,
 
 The kit replaces three pieces that RotP removed or has not yet moved.
 
-- `shared/randomizer/archipelago/player-yaml.ts` (`renderPlayerYaml`) and `yaml-emit.ts` become `buildPlayerYaml`. RotP keeps what is its own and passes the result in:
+- `renderPlayerYaml` and its YAML emitter under `packages/randomizer/src/archipelago/` become `buildPlayerYaml`. RotP keeps what is its own and passes the result in:
   - Its option snapshot values go in `options`, and `export-options` rows (the `options.json` the exporter writes) go in `schema` through `parseOptionSchema`.
   - `death_link` is just one more option. RotP sets it in `options` before the call.
   - `seed_text` is a text option row, and the app's rolled values go in `preRolled`.
@@ -282,7 +282,7 @@ The kit replaces three pieces that RotP removed or has not yet moved.
   - `progression_balancing` 50 is no longer added by the kit. RotP sets it in `options`, or passes `withDefaults`.
   - `plando_connections` and `start_inventory_from_pool` are no longer dropped by the kit. RotP leaves them out of `options`.
   - The description line is the `description` input.
-- `scripts/build/build-apworld.mjs` becomes a short script. It runs the TS exporter, then calls `buildApworldSet` (or `archipelia-kit build-set` after writing the exporter's files into a folder and pointing `dataFolder` at it). It no longer needs `jszip`, and the exporter no longer has to write into the package folder.
+- The apworld build in `tooling/apworld/` becomes a short script. It runs the TS exporter, then calls `buildApworldSet` (or `archipelia-kit build-set` after writing the exporter's files into a folder and pointing `dataFolder` at it). It no longer needs `jszip`, and the exporter no longer has to write into the package folder.
   - `game` and `worldVersion` come from `AP_GAME` and `AP_WORLD_VERSION`, and `minimumAp` from RotP's own constant.
   - `appVersion` is the app's version.
   - `builds` lists the Archipelago versions RotP supports, one entry each.
