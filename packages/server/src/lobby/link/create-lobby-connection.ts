@@ -15,12 +15,17 @@ import { seqOf } from './seq-of';
 const createLobbyConnection = (options: ConnectionOptions) => {
   const { transport, protocol } = options;
   const state: ConnectionState = { welcomed: false, closed: false };
+  let tail: Promise<unknown> = Promise.resolve();
   const link: LobbyLink = {
-    send: (message) => transport.send(encodeMessage(message)),
+    send: (message) => {
+      if (message.type === 'welcome') options.limit.bytes = DEFAULT_LIMITS.maxMessageBytes;
+      transport.send(encodeMessage(message));
+    },
     close: (code) => {
       state.closed = true;
       transport.close(code);
     },
+    drain: () => tail,
   };
   const fail = (failure: Failure, re?: number, welcomed = state.welcomed) => {
     const error = createError(failure, { welcomed, ...(re === undefined ? {} : { re }) });
@@ -29,11 +34,7 @@ const createLobbyConnection = (options: ConnectionOptions) => {
     if (code !== null) link.close(code);
   };
   const clock = helloClock(() => fail(NO_HELLO));
-  const helloArrived = () => {
-    clock.stop();
-    options.limit.bytes = DEFAULT_LIMITS.maxMessageBytes;
-  };
-  const wire: Wire = { link, send: link.send, fail, helloArrived, infoAnswered: clock.again, drained: options.drained ?? (() => Promise.resolve()) };
+  const wire: Wire = { link, send: link.send, fail, helloArrived: clock.stop, infoAnswered: clock.again, drained: options.drained ?? (() => Promise.resolve()) };
   const conversation: Conversation = { options, state, wire };
   const stopPings = keepAlive(options.keepAlive, link);
 
@@ -57,7 +58,6 @@ const createLobbyConnection = (options: ConnectionOptions) => {
     return undefined;
   };
 
-  let tail: Promise<unknown> = Promise.resolve();
   transport.listen((event) => {
     tail = tail.then(() => onEvent(event)).catch((error: unknown) => fail(faultOf(error, options.log), event.kind === 'text' ? seqOf(event.text) : undefined));
   });

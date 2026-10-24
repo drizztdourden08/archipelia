@@ -19,7 +19,9 @@ const participantWorlds = async (ctx: LobbyContext, lobby: Lobby, players: Parti
     if (!world) throw new Error(`the world of ${slot.name} was not sent by its player`);
     const problem = await cleared(ctx, lobby, world);
     if (problem) throw new Error(problem);
-    if (!worlds.has(world.module)) worlds.set(world.module, world);
+    const same = worlds.get(world.module);
+    if (same && same.sha256 !== world.sha256) throw new Error(`Two different worlds use the package ${world.module}. Keep one of them.`);
+    worlds.set(world.module, world);
   }
   return [...worlds.values()];
 };

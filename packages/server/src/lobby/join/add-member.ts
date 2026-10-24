@@ -24,7 +24,7 @@ const enter = (ctx: LobbyContext, draft: Lobby, hello: Hello, joined: { tokenHas
   };
   draft.nextMember += 1;
   draft.members.push(member);
-  return admitInDraft(draft, member.id, { slots: hello.slots, worlds: hello.worlds, trust: joined.trust });
+  return admitInDraft(draft, member.id, { slots: hello.slots, worlds: hello.worlds, trust: joined.trust }, true);
 };
 
 const addMember = async (ctx: LobbyContext, { lobby, hello, link }: JoinRequest): Promise<Outcome<MemberRef>> => {

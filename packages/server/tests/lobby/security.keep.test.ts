@@ -11,12 +11,8 @@ import { createLobbyConnection } from '../../src/lobby/link/create-lobby-connect
 import { createRateLimiter } from '../../src/lobby/link/create-rate-limiter';
 import { buildOverlay } from '../../src/lobby/overlay/build-overlay';
 import { startListener } from '../../src/listener/start-listener';
-import { engine, fileOf, helloOf, holdFiles, linkOf, startService } from './security-kit';
+import { admin, engine, fileOf, helloOf, holdFiles, linkOf, startService, tick } from './security-kit';
 import { fakeTrust, testDeps } from './test-deps';
-
-const tick = (ms = 30) => new Promise((resolve) => setTimeout(resolve, ms));
-
-const admin = { token: () => Promise.resolve('t'), watch: () => () => undefined, engines: () => Promise.resolve([]) };
 
 const joined = async (service: Awaited<ReturnType<typeof startService>>['service'], hello = helloOf()) => {
   const result = await service.protocol.join(hello, linkOf().link);
@@ -37,9 +33,10 @@ describe('lobby security: checks', () => {
     await kit.service.protocol.settle(lobby.id);
     const approving = kit.service.approve(lobby.id, ref.memberId);
     await tick();
-    await kit.service.refuse(lobby.id, ref.memberId, 'gone');
+    const refusing = kit.service.refuse(lobby.id, ref.memberId, 'gone');
+    await tick();
     release();
-    await approving;
+    await Promise.all([approving, refusing]);
     const after = await kit.service.get(lobby.id);
     expect(after?.members[0]?.admission).toBe('refused');
     expect(slotOf(after, ref.memberId)?.state).toBe('checking');
@@ -53,6 +50,7 @@ describe('lobby security: connections', () => {
     const kit = await startService();
     const listener = await startListener({ service: kit.service, host: '127.0.0.1', port: 0, serverVersion: 't', admin });
     const socket = connect(listener.port, '127.0.0.1');
+    socket.on('error', () => undefined);
     const received: Buffer[] = [];
     socket.on('data', (chunk: Buffer) => received.push(chunk));
     const closed = new Promise((resolve) => socket.on('close', resolve));
@@ -115,6 +113,7 @@ describe('lobby security: timeouts and starts', () => {
     const kit = await startService();
     const listener = await startListener({ service: kit.service, host: '127.0.0.1', port: 0, serverVersion: 't', admin, upgradeTimeoutMs: 200 });
     const socket = connect(listener.port, '127.0.0.1');
+    socket.on('error', () => undefined);
     const started = Date.now();
     await new Promise((resolve) => socket.on('close', resolve));
     expect(Date.now() - started).toBeLessThan(3000);

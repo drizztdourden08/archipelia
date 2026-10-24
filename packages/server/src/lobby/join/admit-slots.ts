@@ -7,17 +7,20 @@ import { fixedWorlds } from '../state/fixed-worlds';
 import { liveMembers } from '../state/live-members';
 import type { Admitted, SlotRequest } from './admit-slots.type';
 
-const otherBuild = (lobby: Lobby, memberId: string, world: WorldEntry, trust: UploadTrust): Failure | null => {
+const otherBuild = (lobby: Lobby, memberId: string, world: WorldEntry): Failure | null => {
   const live = new Set(liveMembers(lobby).map((member) => member.id));
-  const other = lobby.worlds.find((known) => known.game === world.game && known.sha256 !== world.sha256 && known.memberId !== memberId && live.has(known.memberId));
-  if (!other || (other.trust.level === 'verified' && trust.level === 'verified')) return null;
-  return { code: 'world-version-conflict', message: `This lobby already uses another build of ${world.game} ${world.worldVersion}. Use that build and join again.`, field: 'worlds' };
+  const other = lobby.worlds.find((known) => (known.game === world.game || known.module === world.module) && known.sha256 !== world.sha256 && known.memberId !== memberId && live.has(known.memberId));
+  if (!other) return null;
+  const message = other.game === world.game
+    ? `This lobby already uses another build of ${world.game} ${world.worldVersion}. Use that build and join again.`
+    : `Another world of this lobby already uses the package ${world.module}.`;
+  return { code: 'world-version-conflict', message, field: 'worlds' };
 };
 
 const worldFailure = (lobby: Lobby, memberId: string, request: SlotRequest): Failure | null => {
   const fixed = fixedWorlds(lobby, memberId);
   for (const world of request.worlds) {
-    const failure = checkWorldVersion(fixed.get(world.game), world.game, world.worldVersion) ?? otherBuild(lobby, memberId, world, request.trust);
+    const failure = checkWorldVersion(fixed.get(world.game), world.game, world.worldVersion) ?? otherBuild(lobby, memberId, world);
     if (failure) return failure;
   }
   return null;

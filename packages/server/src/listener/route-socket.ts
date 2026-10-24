@@ -8,8 +8,9 @@ import { TLS_HANDSHAKE, UPGRADE_TIMEOUT_MS } from './listener.constants';
 import type { AcceptDeps } from './listener.type';
 
 const routeSocket = (socket: Socket, deps: Omit<AcceptDeps, 'upgraded'> & { upgradeTimeoutMs?: number }, secure: SecureContext | undefined) => {
-  socket.setTimeout(deps.upgradeTimeoutMs ?? UPGRADE_TIMEOUT_MS, () => socket.destroy());
-  const accept = { ...deps, upgraded: () => socket.setTimeout(0) };
+  const deadline = setTimeout(() => socket.destroy(), deps.upgradeTimeoutMs ?? UPGRADE_TIMEOUT_MS).unref();
+  socket.once('close', () => clearTimeout(deadline));
+  const accept = { ...deps, upgraded: () => clearTimeout(deadline) };
   socket.once('data', (first: Buffer) => {
     socket.pause();
     socket.unshift(first);

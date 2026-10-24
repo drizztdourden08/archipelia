@@ -49,7 +49,7 @@ type LobbyServiceDeps = {
   newCode?: () => string;
 };
 
-type LobbyLink = { send: (message: ServerMessage) => void; close: (code: number) => void };
+type LobbyLink = { send: (message: ServerMessage) => void; close: (code: number) => void; drain?: () => Promise<unknown> };
 
 type MemberRef = { lobbyId: string; memberId: string };
 

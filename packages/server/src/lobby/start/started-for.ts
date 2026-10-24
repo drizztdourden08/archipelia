@@ -12,7 +12,7 @@ const slotResult = (room: LobbyRoom, slot: SlotUpload) => ({
 
 const playingSlots = (lobby: Lobby, memberId: string): SlotUpload[] => {
   const member = lobby.members.find((candidate) => candidate.id === memberId);
-  if (lobby.phase !== 'hosting' || member?.admission !== 'approved') return [];
+  if (lobby.phase !== 'hosting' || lobby.room?.state !== 'hosting' || member?.admission !== 'approved') return [];
   return member.slots.filter((slot) => slot.state === 'ok');
 };
 

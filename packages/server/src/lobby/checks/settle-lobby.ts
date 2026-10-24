@@ -17,7 +17,7 @@ const report = async (ctx: LobbyContext, lobbyId: string, verdicts: SlotVerdict[
     if (!failure) continue;
     const ref = { lobbyId, memberId };
     const message = createError(failure, { welcomed: true });
-    if (fatal) await dismissMember(ctx, ref, { admission: 'refused', reason: failure.message, message: { ...message, fatal: true } });
+    if (fatal) await dismissMember(ctx, ref, { admission: 'refused', reason: failure.message, message: { ...message, fatal: true }, queued: true });
     else ctx.hub.send(ref, message);
   }
 };

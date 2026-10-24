@@ -10,6 +10,7 @@ import { prepareLobby, startConformanceServer } from './conformance-server';
 const DRAIN_MS = 150;
 
 const connectDrained = async (url: string): Promise<Transport> => {
+  await new Promise((resolve) => setTimeout(resolve, DRAIN_MS));
   const transport = await connectWebSocket(url);
   return { ...transport, close: (code) => void setTimeout(() => transport.close(code), DRAIN_MS) };
 };

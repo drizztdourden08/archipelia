@@ -11,7 +11,7 @@ const leaveLobby = async (ctx: LobbyContext, ref: MemberRef) => {
   });
   ctx.hub.close(ref, NORMAL_CLOSE);
   ctx.uploads.forgetMember(ref);
-  await pruneFiles(ctx.deps.store, lobby);
+  await ctx.queue(`settle:${ref.lobbyId}`, async () => pruneFiles(ctx.deps.store, (await ctx.book.get(ref.lobbyId)) ?? lobby));
   ctx.publish(lobby);
 };
 

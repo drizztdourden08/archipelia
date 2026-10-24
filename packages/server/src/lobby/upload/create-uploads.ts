@@ -5,7 +5,7 @@ import { sha256Hex } from '@archipelia/lobby-protocol/node';
 import type { LobbyContext } from '../lobby-context.type';
 import type { MemberRef } from '../lobby-service.type';
 import { activeMember } from '../state/active-member';
-import { memberFiles } from '../state/member-files';
+import { usedFiles } from '../state/used-files';
 import { HASH_MISMATCH, MAX_PENDING_BYTES, NOT_BEGUN, NOT_MEMBER, PART_TTL_MS, PAST_SIZE, SERVER_BUSY, UNEXPECTED } from './upload.constants';
 import type { UploadPart } from './upload.type';
 import { uploadLimit } from './upload-limit';
@@ -28,7 +28,7 @@ const createUploads = (context: () => LobbyContext) => {
     const lobby = await ctx.book.get(ref.lobbyId);
     const member = activeMember(lobby, ref.memberId);
     if (!lobby || !member) return errorOf(NOT_MEMBER, message.seq);
-    const files = memberFiles(lobby, member);
+    const files = usedFiles(lobby, member);
     const declared = files.some((file) => file.sha256 === message.sha256 && file.kind === message.kind && file.size === message.size);
     const failure = uploadLimit(lobby, message, files) ?? (declared ? null : UNEXPECTED);
     if (failure) return errorOf(failure, message.seq);
