@@ -49,12 +49,15 @@ type SessionOutput = { zip: string; files: string[]; spoiler?: string; generateL
 
 type Endpoint = { host: string; port: number; roomUrl?: string };
 
+type SessionEngine = { id: string; ap: string; python: string };
+
 type Session = {
   id: string;
   templateId?: string;
   snapshot: SessionTemplate;
   status: SessionStatus;
   createdAt: number;
+  engine?: SessionEngine;
   seed?: string;
   output?: SessionOutput;
   endpoint?: Endpoint;
@@ -64,5 +67,5 @@ type Session = {
 
 export type {
   Endpoint, GeneratorSettings, HostTarget, PlayerSource, ReleaseMode, RemainingMode, ServerSettings, Session,
-  SessionOutput, SessionPlayer, SessionStatus, SessionTemplate, SpoilerLevel,
+  SessionEngine, SessionOutput, SessionPlayer, SessionStatus, SessionTemplate, SpoilerLevel,
 };

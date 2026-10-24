@@ -1,6 +1,7 @@
 /* @layer core @kind barrel */
 export type * from './data-files.type';
 export type * from './engine.type';
+export type * from './engine-versions.type';
 export type * from './game.type';
 export { hostLabel } from './host-label';
 export { isRecord } from './is-record';
