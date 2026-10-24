@@ -22,6 +22,7 @@ const startLobbyListener = async ({ core, network, log, domain }: ListenPorts, o
     host: hostBinding(network.automation, network.lanHost).bindHost,
     port: options.port ?? DEFAULT_PORT,
     serverVersion: options.serverVersion ?? SERVER_VERSION,
+    sandbox: (await core.sandbox()).mode,
     ...(options.tls ? { tls: options.tls } : {}),
     log,
   });

@@ -12,7 +12,7 @@ import { routeSocket } from './route-socket';
 const startListener = (options: ListenerOptions): Promise<RunningListener> =>
   new Promise((resolve, reject) => {
     let bound = options.port;
-    const info = () => ({ name: SERVER_NAME, version: options.serverVersion, port: bound, sandbox: 'none', tls: options.tls !== undefined });
+    const info = () => ({ name: SERVER_NAME, version: options.serverVersion, port: bound, sandbox: options.sandbox ?? 'none', tls: options.tls !== undefined });
     const admin: AdminDeps = { ...options.admin, service: options.service, info };
     const limiter = createRateLimiter();
     const deps = { admin, limiter, log: options.log ?? (() => undefined), ...(options.upgradeTimeoutMs ? { upgradeTimeoutMs: options.upgradeTimeoutMs } : {}) };

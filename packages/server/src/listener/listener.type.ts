@@ -2,6 +2,7 @@
 import type { Lobby } from '@archipelia/model';
 import type { RateLimiter } from '../lobby/link/link.type';
 import type { LobbyService } from '../lobby/lobby-service-api.type';
+import type { SandboxMode } from '../sandbox/sandbox.type';
 
 type RequestHead = { method: string; path: string; headers: Record<string, string> };
 
@@ -27,6 +28,7 @@ type ListenerOptions = {
   host: string;
   port: number;
   serverVersion: string;
+  sandbox?: SandboxMode;
   tls?: ListenerTls;
   log?: (message: string) => void;
   upgradeTimeoutMs?: number;
