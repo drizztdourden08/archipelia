@@ -3,6 +3,7 @@ import { hostBinding } from '@archipelia/hosts';
 import { DEFAULT_PORT } from '@drizztdourden08/archipelia-lobby-protocol';
 import { DOMAIN } from '@archipelia/model';
 import { SERVER_VERSION } from '../core/core-lobbies.constants';
+import { LOOPBACK_HOST } from '../listener/listener.constants';
 import { startListener } from '../listener/start-listener';
 import { createNodeMappingPorts, createNodeNetworkPorts, createPublicLookup, DEFAULT_NETWORK_MODE } from '../network';
 import type { ReachPorts } from './reach/reach.type';
@@ -19,7 +20,7 @@ const startLobbyListener = async ({ core, network, log, domain }: ListenPorts, o
   const listener = await startListener({
     service: core.lobbies,
     admin: { token: core.adminToken, watch: core.watchLobbies, engines: () => core.engine.overview() },
-    host: hostBinding(network.automation, network.lanHost).bindHost,
+    host: options.mode === 'off' ? LOOPBACK_HOST : hostBinding(network.automation, network.lanHost).bindHost,
     port: options.port ?? DEFAULT_PORT,
     serverVersion: options.serverVersion ?? SERVER_VERSION,
     sandbox: (await core.sandbox()).mode,

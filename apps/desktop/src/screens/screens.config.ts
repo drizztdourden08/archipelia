@@ -10,6 +10,7 @@ export default defineScreens({
       menu: 'entry',
       groups: [
         { id: 'library', label: 'Library' },
+        { id: 'lobbies', label: 'Lobbies' },
         { id: 'hosting', label: 'Hosting' },
         { id: 'app', label: 'App' },
       ],

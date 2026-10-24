@@ -7,6 +7,8 @@ const ROUTE = {
   officialGames: 'multiworld/games/official',
   installedGames: 'multiworld/games/installed',
   engine: 'multiworld/engine',
+  lobbies: 'multiworld/lobbies',
+  newLobby: 'multiworld/lobbies/new',
 } as const;
 
 const EDIT_SUB = 'edit';

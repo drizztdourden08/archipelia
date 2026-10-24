@@ -16,7 +16,7 @@ type Transport = {
 
 type SocketTransport = Transport & { ping: () => void; heardAt: () => number; drained: () => Promise<void> };
 
-type SocketOptions = { maxMessageBytes?: () => number; closeGraceMs?: number };
+type SocketOptions = { maxMessageBytes?: () => number; closeGraceMs?: number; client?: boolean };
 
 type Channel = {
   emit: TransportHandler;

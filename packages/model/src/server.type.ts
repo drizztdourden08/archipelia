@@ -21,4 +21,13 @@ type ServerEntry = {
   lastTest?: ServerTest;
 };
 
-export type { ServerAuth, ServerCheck, ServerCheckName, ServerEntry, ServerTest };
+type LobbyServerEntry = {
+  id: string;
+  label: string;
+  url: string;
+  tokenRef: string;
+  certSha256?: string;
+  lastTest?: ServerTest;
+};
+
+export type { LobbyServerEntry, ServerAuth, ServerCheck, ServerCheckName, ServerEntry, ServerTest };

@@ -7,8 +7,8 @@ import type { ServerHost } from '@drizztdourden08/brock-electron/server';
 import type { CoreDomains, CoreEvent } from '../src';
 import { startCore } from '../src';
 import { createNodeDomains, createNodeRest, nodeLanHost } from '../src/node';
-import type { Transport } from '@drizztdourden08/archipelia-lobby-protocol/testing';
 import { connectWebSocket } from '@drizztdourden08/archipelia-lobby-protocol/testing';
+import { replies } from './replies';
 
 let dataDir = '';
 
@@ -63,28 +63,6 @@ describe('the core under plain Node', () => {
     expect(nodeLanHost()).toMatch(/^\d+\.\d+\.\d+\.\d+$/);
   });
 });
-
-const replies = (transport: Transport) => {
-  const queue: Record<string, unknown>[] = [];
-  const waiting: ((value: Record<string, unknown>) => void)[] = [];
-  transport.listen((event) => {
-    if (event.kind !== 'text') return;
-    const message = JSON.parse(event.text) as Record<string, unknown>;
-    const next = waiting.shift();
-    if (next) next(message);
-    else queue.push(message);
-  });
-  const take = () => new Promise<Record<string, unknown>>((resolve) => {
-    const first = queue.shift();
-    if (first) resolve(first);
-    else waiting.push(resolve);
-  });
-  return async (type?: string): Promise<Record<string, unknown>> => {
-    let message = await take();
-    while (type !== undefined && message.type !== type) message = await take();
-    return message;
-  };
-};
 
 const started = () => {
   const host = hostOf([]);

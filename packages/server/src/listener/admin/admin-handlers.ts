@@ -1,24 +1,30 @@
 /* @layer core @kind logic */
-import type { LobbyOptions, SessionEngine } from '@archipelia/model';
+import { lobbyOptions } from '../../lobby/state/lobby-options';
 import type { AdminHandler } from './admin.type';
 import { adminParams } from './admin-params';
 import { adminView } from './admin-view';
 import { hostSlotsOf } from './host-slots-of';
+import { readEngine } from './options/read-engine';
+import { readLobbyOptions } from './options/read-lobby-options';
+import { readText } from './options/read-text';
 
 const lobbyCalls: Record<string, AdminHandler> = {
   'lobby.list': async ({ service, sandbox }) => (await service.list()).map((lobby) => adminView(sandbox, lobby)),
   'lobby.get': async ({ service, sandbox }, request) => adminView(sandbox, await service.get(adminParams(request).text('lobbyId'))),
   'lobby.create': async ({ service, sandbox }, request) => {
     const params = adminParams(request);
-    const engine = params.record('engine') as SessionEngine | undefined;
-    const options = params.record('options') as Partial<LobbyOptions> | undefined;
-    return adminView(sandbox, await service.create({ name: params.text('name'), ...(engine ? { engine } : {}), ...(options ? { options } : {}) }));
+    const engine = readEngine(params.record('engine'));
+    const options = readLobbyOptions(params.record('options'), lobbyOptions());
+    return adminView(sandbox, await service.create({ name: readText('name', params.text('name')), ...(engine ? { engine } : {}), ...(options ? { options } : {}) }));
   },
   'lobby.update': async ({ service, sandbox }, request) => {
     const params = adminParams(request);
     const name = params.maybeText('name');
-    const options = params.record('options') as Partial<LobbyOptions> | undefined;
-    return adminView(sandbox, await service.update(params.text('lobbyId'), { ...(name ? { name } : {}), ...(options ? { options } : {}) }));
+    const lobbyId = params.text('lobbyId');
+    const current = await service.get(lobbyId);
+    if (!current) throw new Error(`no lobby has the id ${lobbyId}`);
+    const options = readLobbyOptions(params.record('options'), current.options);
+    return adminView(sandbox, await service.update(lobbyId, { ...(name ? { name: readText('name', name) } : {}), ...(options ? { options } : {}) }));
   },
   'lobby.lock': async ({ service, sandbox }, request) => adminView(sandbox, await service.lock(adminParams(request).text('lobbyId'))),
   'lobby.close': async ({ service, sandbox }, request) => adminView(sandbox, await service.close(adminParams(request).text('lobbyId'))),

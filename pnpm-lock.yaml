@@ -164,6 +164,9 @@ importers:
       '@archipelia/sessions':
         specifier: workspace:*
         version: link:../../packages/sessions
+      '@drizztdourden08/archipelia-lobby-protocol':
+        specifier: workspace:*
+        version: link:../../packages/lobby-protocol
       '@drizztdourden08/brock-core':
         specifier: ^0.87.2
         version: 0.87.2
@@ -240,9 +243,6 @@ importers:
       '@archipelia/trust':
         specifier: workspace:*
         version: link:../../packages/trust
-      '@drizztdourden08/archipelia-lobby-protocol':
-        specifier: workspace:*
-        version: link:../../packages/lobby-protocol
       '@drizztdourden08/brock-build':
         specifier: ^0.87.2
         version: 0.87.2(@types/node@24.19.0)(@vitejs/plugin-react@5.2.0(vite@7.3.6(@types/node@24.19.0)(jiti@2.7.0)(yaml@2.9.1)))(electron-builder@26.15.3(electron-builder-squirrel-windows@26.15.3(dmg-builder@26.15.3)))(electron-vite@5.0.0(vite@7.3.6(@types/node@24.19.0)(jiti@2.7.0)(yaml@2.9.1)))(electron@42.11.8)(eslint@10.11.0(jiti@2.7.0))(markdownlint-cli2@0.22.1)(playwright-core@1.63.0)(stylelint@17.15.0(typescript@6.0.3))(typescript@6.0.3)
@@ -824,6 +824,11 @@ packages:
       electron-builder: '>=26'
       electron-vite: '>=5'
       playwright-core: '>=1.40'
+    peerDependenciesMeta:
+      electron-builder:
+        optional: true
+      playwright-core:
+        optional: true
 
   '@drizztdourden08/brock-core@0.87.2':
     resolution: {integrity: sha512-q98VJqjjavfqN/EUj7MGEuUmNa34QvKCURCqKEEl+wU+RggotDTJdoIbvOIqV4NiOk9Mvg+q8t1FZN5kbYJ2rw==, tarball: https://npm.pkg.github.com/download/@drizztdourden08/brock-core/0.87.2/e0f96acc553a500c8f7be33f4d7094d5d008bb66}
@@ -842,6 +847,11 @@ packages:
       eslint: ^10.0.0
       markdownlint-cli2: ^0.22.0
       stylelint: ^17.0.0
+    peerDependenciesMeta:
+      markdownlint-cli2:
+        optional: true
+      stylelint:
+        optional: true
 
   '@drizztdourden08/brock-react@0.87.2':
     resolution: {integrity: sha512-d5UtRrLYuUfNV2XabxAYQUE+bO/5F6xWTAdldLKNM16roQVW9IL9aZTsrCMHaalUhVF5tyCEz/mOOA5K8Ss+wg==, tarball: https://npm.pkg.github.com/download/@drizztdourden08/brock-react/0.87.2/9bb26a311b90e3aea00c1b190c8cb59cdfa5a59e}
@@ -882,6 +892,11 @@ packages:
       eslint: ^10.0.0
       stylelint: ^17.0.0
       typescript: ^6.0.0
+    peerDependenciesMeta:
+      stylelint:
+        optional: true
+      typescript:
+        optional: true
 
   '@drizztdourden08/tessera@0.56.2':
     resolution: {integrity: sha512-azJvKG8U5fiHuDy/w4wg1LBTT+2E3F9aL2mOWTgZcvj99ATvr4jCNkXJsuO86nlAeS1A3kVB0wePlKDr0V4iUA==, tarball: https://npm.pkg.github.com/download/@drizztdourden08/tessera/0.56.2/50e316b28e845952dcdd9d757873484995a53043}
@@ -4714,11 +4729,12 @@ snapshots:
       '@resvg/resvg-js': 2.6.2
       '@vitejs/plugin-react': 5.2.0(vite@7.3.6(@types/node@24.19.0)(jiti@2.7.0)(yaml@2.9.1))
       electron: 42.11.8
-      electron-builder: 26.15.3(electron-builder-squirrel-windows@26.15.3(dmg-builder@26.15.3))
       electron-vite: 5.0.0(vite@7.3.6(@types/node@24.19.0)(jiti@2.7.0)(yaml@2.9.1))
-      playwright-core: 1.63.0
       pngjs: 7.0.0
       rcedit: 5.0.2
+    optionalDependencies:
+      electron-builder: 26.15.3(electron-builder-squirrel-windows@26.15.3(dmg-builder@26.15.3))
+      playwright-core: 1.63.0
     transitivePeerDependencies:
       - '@types/node'
       - eslint
@@ -4739,6 +4755,7 @@ snapshots:
     dependencies:
       '@drizztdourden08/standards': 0.11.0(@types/node@24.19.0)(eslint@10.11.0(jiti@2.7.0))(stylelint@17.15.0(typescript@6.0.3))(typescript@6.0.3)
       eslint: 10.11.0(jiti@2.7.0)
+    optionalDependencies:
       markdownlint-cli2: 0.22.1
       stylelint: 17.15.0(typescript@6.0.3)
     transitivePeerDependencies:
@@ -4797,10 +4814,11 @@ snapshots:
       jscpd: 4.3.0
       knip: 5.88.1(@types/node@24.19.0)(typescript@6.0.3)
       markdownlint-cli2: 0.22.1
-      stylelint: 17.15.0(typescript@6.0.3)
       stylelint-config-standard: 40.0.0(stylelint@17.15.0(typescript@6.0.3))
-      typescript: 6.0.3
       typescript-eslint: 8.70.1(eslint@10.11.0(jiti@2.7.0))(typescript@6.0.3)
+    optionalDependencies:
+      stylelint: 17.15.0(typescript@6.0.3)
+      typescript: 6.0.3
     transitivePeerDependencies:
       - '@types/node'
       - supports-color

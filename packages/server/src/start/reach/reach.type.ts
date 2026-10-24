@@ -17,7 +17,14 @@ type ReachInput = {
   log: (message: string) => void;
 };
 
-type ReachStatus = { mode: NetworkMode; advertising: boolean; lobbyPort: string | null; publicAddress: string | null; rooms: Record<string, string> };
+type ReachStatus = {
+  mode: NetworkMode;
+  advertising: boolean;
+  lobbyPort: string | null;
+  publicAddress: string | null;
+  rooms: Record<string, string>;
+  cgnat: string | null;
+};
 
 type RoomMapping = { port: number; result: Promise<PortMapResult> };
 
