@@ -20,7 +20,7 @@ Commands: `start` (the default), `token` (prints the admin token file path), `st
 
 A TOML file and the environment. The environment wins. The file is `--config=<file>`, else
 `ARCHIPELIA_CONFIG`, else `<data folder>/server.toml`, else `/etc/archipelia/server.toml`.
-The data folder is Brock's: `--user-data=`, else `BROCK_DATA_DIR`, else `STATE_DIRECTORY`,
+The data folder is Brock's `resolveDataDir`: `--user-data=`, else `BROCK_DATA_DIR`, else `STATE_DIRECTORY`,
 else `./.user-data`.
 
 | Key | Environment | Default |
@@ -56,11 +56,20 @@ false` leaves it to `archipelia-server engine install`.
 discovery and port mapping do not reach the host network, so the example sets the network to
 `off` and publishes the ports itself.
 
-## Waiting on Brock 0.87
+## Sandbox (bubblewrap)
 
-- `server.optionalAddons: ['ssh2', 'cpu-features']` in `brock.config.ts`. Until it exists
-  `brock server build` (and so `brock build` of this app, the CI `server` job and the release
-  `build-server` job) fails on the optional native addon of `ssh2`.
-- `resolveDataDir` exported from `@drizztdourden08/brock-electron/server`. Until then
-  `server/data/data-folder.ts` follows the documented order for the CLI commands. Replace it
-  with the Brock export and delete the file.
+Unlisted worlds run in bubblewrap. `server.osPackages` puts it in the .deb `Depends` and in the
+Docker image. It needs unprivileged user namespaces:
+
+- On the host, `user.max_user_namespaces` above 0. On Ubuntu 24.04 and later also
+  `kernel.apparmor_restrict_unprivileged_userns=0`, or an AppArmor profile for `/usr/bin/bwrap`
+  with the `userns` permission.
+- In a container, Docker's default seccomp and AppArmor profiles refuse the calls bubblewrap
+  makes. The compose example sets `seccomp=unconfined`, `apparmor=unconfined` and
+  `systempaths=unconfined` (Docker masks parts of `/proc` otherwise), and keeps `cap_drop: ALL`,
+  a read-only root and the image user (uid 10001). Swap `seccomp=unconfined` for Docker's
+  default profile with `unshare`, `setns`, `clone`, `clone3`, `mount`, `umount2` and `pivot_root`
+  allowed. Never use `--privileged` or `--cap-add SYS_ADMIN`: they hand the container what the
+  sandbox exists to withhold. The compose example has not been run on a Docker host yet.
+- Without a working bubblewrap an unlisted world still waits for the host to allow it, and runs
+  with no sandbox.

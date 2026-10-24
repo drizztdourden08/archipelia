@@ -43,6 +43,12 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.PACKAGES_TOKEN || secrets.GITHUB_TOKEN }}
 
+      - name: Install Linux packages
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends bubblewrap
+
+      - name: Let the tests create user namespaces
+        run: sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+
       - name: Build
         run: pnpm --dir "$APP_DIR" exec brock build
 

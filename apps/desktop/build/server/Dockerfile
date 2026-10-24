@@ -3,7 +3,7 @@
 FROM debian:trixie-slim
 ARG TARGETARCH
 RUN apt-get update \
- && apt-get install -y --no-install-recommends ca-certificates tini \
+ && apt-get install -y --no-install-recommends ca-certificates tini bubblewrap \
  && rm -rf /var/lib/apt/lists/* \
  && useradd --system --uid 10001 --user-group --home-dir /data --no-create-home --shell /usr/sbin/nologin archipelia \
  && mkdir /data \

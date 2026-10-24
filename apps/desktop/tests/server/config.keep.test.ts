@@ -1,11 +1,10 @@
 /* @layer tests @kind test */
 import { mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
-import { join, resolve } from 'node:path';
+import { join } from 'node:path';
 import { afterEach, beforeEach, describe, expect, test } from 'vitest';
 import { loadConfig } from '../../server/config/load-config';
 import { pickConfig } from '../../server/config/pick-config';
-import { dataFolder } from '../../server/data/data-folder';
 
 let dir = '';
 
@@ -57,15 +56,5 @@ describe('the server settings', () => {
   test('stop with the file name when the file is not valid TOML', async () => {
     await writeFile(join(dir, 'server.toml'), 'port = = 1');
     expect(() => loadConfig(dir, [], {})).toThrow(join(dir, 'server.toml'));
-  });
-});
-
-describe('the data folder', () => {
-  test('is the flag, then BROCK_DATA_DIR, then STATE_DIRECTORY, then .user-data', () => {
-    const cwd = join(dir, 'work');
-    expect(dataFolder([`--user-data=${join(dir, 'flag')}`], { BROCK_DATA_DIR: join(dir, 'env') }, cwd)).toBe(join(dir, 'flag'));
-    expect(dataFolder([], { BROCK_DATA_DIR: join(dir, 'env') }, cwd)).toBe(join(dir, 'env'));
-    expect(dataFolder([], { STATE_DIRECTORY: join(dir, 'state') }, cwd)).toBe(join(dir, 'state'));
-    expect(dataFolder([], {}, cwd)).toBe(resolve(cwd, '.user-data'));
   });
 });

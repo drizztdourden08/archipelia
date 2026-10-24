@@ -1,10 +1,9 @@
 /* @layer server @kind entry */
-import { runServer } from '@drizztdourden08/brock-electron/server';
+import { resolveDataDir, runServer } from '@drizztdourden08/brock-electron/server';
 import { createNodeDomains } from '@archipelia/server/node';
 import { SERVE_COMMANDS } from './cli/cli.constants';
 import { parseCommand } from './cli/parse-command';
 import { runCli } from './cli/run-cli';
-import { dataFolder } from './data/data-folder';
 import { startServer } from './start/start-server';
 
 const argv = process.argv.slice(2);
@@ -15,7 +14,7 @@ if (SERVE_COMMANDS.includes(command.name)) {
 } else {
   const write = (stream: NodeJS.WriteStream) => (line: string) => void stream.write(`${line}\n`);
   void runCli(command, {
-    dataDir: dataFolder(argv, process.env, process.cwd()), args: argv, env: process.env, out: write(process.stdout), err: write(process.stderr),
+    dataDir: resolveDataDir(argv, process.env, process.cwd()), args: argv, env: process.env, out: write(process.stdout), err: write(process.stderr),
   }).then(
     (code) => { process.exitCode = code; },
     (error: unknown) => {

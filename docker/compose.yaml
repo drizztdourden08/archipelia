@@ -10,6 +10,19 @@ services:
     environment:
       ARCHIPELIA_NETWORK: "off"
       ARCHIPELIA_PUBLIC_LOOKUP: "false"
+    # bubblewrap runs unlisted worlds in a sandbox. It needs unprivileged user namespaces,
+    # so the three options below open only what it needs. Replace seccomp=unconfined with
+    # Docker's default profile plus unshare, setns, clone, clone3, mount, umount2 and
+    # pivot_root. Do not use privileged or SYS_ADMIN.
+    security_opt:
+      - seccomp=unconfined
+      - apparmor=unconfined
+      - systempaths=unconfined
+    cap_drop:
+      - ALL
+    read_only: true
+    tmpfs:
+      - /tmp
 
 volumes:
   archipelia-data:
