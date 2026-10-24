@@ -5,8 +5,10 @@ import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { afterEach, beforeEach, describe, expect, test } from 'vitest';
 import { zipSync } from 'fflate';
+import type { DiskLimit } from '../src/service/disk-limit/disk-limit.type';
 import type { SpawnWrap } from '@archipelia/engine';
 import type { DataFiles, Session } from '@archipelia/model';
+import { diskMessage } from '../src/service/disk-limit/disk-message';
 import { produceSession } from '../src/service/produce-session';
 import { runtimeOf } from './runtime-of';
 
@@ -17,6 +19,10 @@ const FAKE_GENERATE = [
   "const out = rest[rest.indexOf('--outputpath') + 1];",
   "if (mode === 'sleep') await new Promise((resolve) => setTimeout(resolve, 20000));",
   'mkdirSync(out, { recursive: true });',
+  "const junk = Buffer.alloc(3 * 1024 * 1024, 1);",
+  "if (mode === 'fill' || mode === 'fillquick') writeFileSync(join(out, 'junk.bin'), junk);",
+  "if (mode === 'fillextra') writeFileSync(join(outside, 'junk.bin'), junk);",
+  "if (mode === 'fill' || mode === 'fillextra') await new Promise((resolve) => setTimeout(resolve, 20000));",
   "cpSync(zip, join(out, 'AP_1.zip'));",
   "if (mode === 'plant') symlinkSync(outside, join(out, 'AP_1.apsave'), 'junction');",
   "if (mode === 'swap') { cpSync(zip, join(outside, 'AP_1.zip')); rmSync(out, { recursive: true }); symlinkSync(outside, out, 'junction'); }",
@@ -59,7 +65,7 @@ const session: Session = {
   },
 };
 
-const produce = async (mode: string, timeoutMs?: number) => {
+const produce = async (mode: string, timeoutMs?: number, disk?: DiskLimit) => {
   const script = join(work, 'fake-generate.mjs');
   const zip = join(work, 'seed.zip');
   const outside = join(work, 'outside');
@@ -68,7 +74,7 @@ const produce = async (mode: string, timeoutMs?: number) => {
   await writeFile(zip, zipSync({ 'AP_1/AP_1.archipelago': new TextEncoder().encode('multidata') }));
   const wrap: SpawnWrap = (command) => ({ file: process.execPath, args: [script, mode, zip, outside, ...command.args], cwd: work, env: process.env });
   const deps = { files: filesAt(join(work, 'sessions')), emit: () => undefined } as never;
-  return produceSession(deps, session, { runtime: runtimeOf('e', '0.6.8'), confine: () => wrap, timeoutMs });
+  return produceSession(deps, session, { runtime: runtimeOf('e', '0.6.8'), confine: () => wrap, timeoutMs, disk });
 };
 
 const canLinkFiles = await (async () => {
@@ -101,4 +107,32 @@ describe('A3: a Generate run has a time limit', () => {
   test('a run past its limit is stopped and fails with a plain reason', async () => {
     await expect(produce('sleep', 300)).rejects.toThrow(/^Generate ran past/);
   }, 15000);
+});
+
+describe('I-81: the disk a confined Generate may fill is capped', () => {
+  const cap = (extraDirs: string[] = []): DiskLimit => ({ bytes: 1024 * 1024, extraDirs, intervalMs: 50 });
+
+  test('a run that fills the run folder is stopped while it runs, not after', async () => {
+    const started = Date.now();
+    await expect(produce('fill', undefined, cap())).rejects.toThrow(/^Generate filled more than/);
+    expect(Date.now() - started).toBeLessThan(15000);
+    expect(existsSync(join(work, 'sessions', 's1', 'confined'))).toBe(false);
+  }, 20000);
+
+  test('the overlay counts too, so a run that fills it is stopped', async () => {
+    await expect(produce('fillextra', undefined, cap([join(work, 'outside')]))).rejects.toThrow(/^Generate filled more than/);
+  }, 20000);
+
+  test('a run that fills the disk and ends before the next check is still refused', async () => {
+    await expect(produce('fillquick', undefined, { ...cap(), intervalMs: 60000 })).rejects.toThrow(/^Generate filled more than/);
+  });
+
+  test('a run under the cap passes', async () => {
+    const { output } = await produce('plant', undefined, { bytes: 64 * 1024 * 1024, extraDirs: [], intervalMs: 50 });
+    expect(output.zip).toBe('AP_1.zip');
+  });
+
+  test('a message names the cap in gibibytes', () => {
+    expect(diskMessage(2 * 1024 * 1024 * 1024)).toBe('Generate filled more than 2 GiB of disk and was stopped.');
+  });
 });

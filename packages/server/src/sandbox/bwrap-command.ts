@@ -1,16 +1,19 @@
 /* @layer core @kind logic */
 import type { SpawnCommand } from '@archipelia/engine';
-import { ISOLATION_FLAGS, NO_USERNS_FLAGS, RUN_LIMITS, SANDBOX_TMP, SYSTEM_PATHS, TMP_BYTES } from './sandbox.constants';
+import { ISOLATION_FLAGS, NO_USERNS_FLAGS, NPROC_MARGIN, RUN_LIMITS, SANDBOX_TMP, SYSTEM_PATHS, TMP_BYTES } from './sandbox.constants';
 import { sandboxEnv } from './sandbox-env';
-import type { BwrapFeatures, SandboxScope } from './sandbox.type';
+import type { BwrapFeatures, BwrapSetup, SandboxScope } from './sandbox.type';
 
 const binds = (flag: string, paths: string[]) => paths.flatMap((path) => [flag, path, path]);
 
-const launcher = (bwrap: string, features: BwrapFeatures) => (features.prlimit ? [features.prlimit, ...RUN_LIMITS, '--', bwrap] : [bwrap]);
+const processLimit = (tasks: number | undefined) => (tasks === undefined ? [] : [`--nproc=${tasks + NPROC_MARGIN}`]);
 
-const bwrapCommand = (bwrap: string, features: BwrapFeatures, scope: SandboxScope, command: SpawnCommand): SpawnCommand => {
+const launcher = (bwrap: string, features: BwrapFeatures, tasks: number | undefined) =>
+  (features.prlimit ? [features.prlimit, ...RUN_LIMITS, ...processLimit(tasks), '--', bwrap] : [bwrap]);
+
+const bwrapCommand = ({ bwrap, features, tasks }: BwrapSetup, scope: SandboxScope, command: SpawnCommand): SpawnCommand => {
   const [file = bwrap, ...args] = [
-    ...launcher(bwrap, features),
+    ...launcher(bwrap, features, tasks),
     ...ISOLATION_FLAGS,
     ...(features.disableUserns ? NO_USERNS_FLAGS : []),
     ...binds('--ro-bind-try', SYSTEM_PATHS),

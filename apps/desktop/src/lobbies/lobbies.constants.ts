@@ -16,6 +16,8 @@ const SERVER_OPTIONS_FILE = 'listener.json';
 
 const LOOPBACK_HOST = /^(localhost|127(\.\d{1,3}){3}|::1)$/i;
 
+const ROOM_PASSWORDS_IN_MEMORY = 'This computer has no keyring, so room passwords live in memory only. They are gone when Archipelia closes, and so are the rooms.';
+
 const PLAIN_REMOTE = 'ws:// is only for this computer. Use wss:// to reach another computer, so the admin token is never sent in clear.';
 
 const NOT_AN_ADDRESS = 'Enter the address as ws://host:port, or wss://host:port for a server with TLS.';
@@ -30,4 +32,4 @@ const MAX_PORT = 65535;
 
 export {
   AUTHORITY, BRACKETS, LOOPBACK_HOST, MAX_PORT, PLAIN_REMOTE, PIN_DIGEST, PIN_PAIR, PIN_SEPARATORS, WRITTEN_PORT,
-  DEFAULT_SERVER_OPTIONS, INITIAL_NETWORK_MODE, LOBBY_REQUESTS, LOCAL_SERVER, NOT_AN_ADDRESS, SERVER_OPTIONS_FILE };
+  ROOM_PASSWORDS_IN_MEMORY, DEFAULT_SERVER_OPTIONS, INITIAL_NETWORK_MODE, LOBBY_REQUESTS, LOCAL_SERVER, NOT_AN_ADDRESS, SERVER_OPTIONS_FILE };

@@ -92,10 +92,11 @@ describe('the lobby list', () => {
   });
 
   test('warns only for the server on this computer, and only when it does not listen', () => {
-    const status = { state: 'failed', options: { mode: 'lan', publicLookup: true }, automation: false, lanAddress: '1.2.3.4' } as const;
+    const status = { state: 'failed', options: { mode: 'lan', publicLookup: true }, automation: false, roomPasswords: 'vault', lanAddress: '1.2.3.4' } as const;
     expect(serverNotice(true, status)).toContain('not running');
     expect(serverNotice(true, { ...status, state: 'starting' })).toContain('starting');
     expect(serverNotice(true, { ...status, state: 'listening' })).toBeNull();
+    expect(serverNotice(true, { ...status, state: 'listening', roomPasswords: 'memory' })).toContain('memory only');
     expect(serverNotice(false, status)).toBeNull();
   });
 

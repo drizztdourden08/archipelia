@@ -9,6 +9,7 @@ import { bakesPassword } from './bakes-password';
 import { failureOf } from './failure-of';
 import { CONFINED_DIR, MINUTE_MS } from './produce-session.constants';
 import type { GenerateRun, ProduceRun } from './produce-session.type';
+import { watchDisk } from './disk-limit/watch-disk';
 import { releaseZip } from './release-zip';
 import { roomPasswordOf } from './room-password';
 import type { ServiceDeps } from './service-deps.type';
@@ -31,11 +32,20 @@ const generateIn = async (deps: ServiceDeps, session: Session, run: ProduceRun, 
   const baked = bakesPassword(session.snapshot.host) ? await roomPasswordOf(deps, session) : undefined;
   if (baked) await writeSessionSettings(workDir, baked);
   const limit = timeLimit(run.signal, run.timeoutMs);
-  const generating = runGenerator(deps, session, { runtime: run.runtime, signal: limit.signal, wrap: run.confine?.(workDir), settingsDir: baked ? workDir : undefined, base });
-  return generating.catch((error: unknown) => {
+  const disk = watchDisk(run.disk, [workDir], limit.signal);
+  const generating = runGenerator(deps, session, { runtime: run.runtime, signal: disk.signal, wrap: run.confine?.(workDir), settingsDir: baked ? workDir : undefined, base });
+  return generating.then(async (result) => {
+    await disk.check();
+    return result;
+  }).catch((error: unknown) => {
+    const full = disk.failure();
+    if (full) throw full;
     if (limit.expired()) throw new Error(`Generate ran past ${Math.round((run.timeoutMs ?? 0) / MINUTE_MS)} minutes and was stopped.`);
     throw error;
-  }).finally(() => removeSessionSettings(workDir));
+  }).finally(() => {
+    disk.stop();
+    return removeSessionSettings(workDir);
+  });
 };
 
 const produceSession = async (deps: ServiceDeps, session: Session, run: ProduceRun) => {

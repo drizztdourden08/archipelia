@@ -19,7 +19,7 @@ import { inputOf } from './row-parts';
 const PIN = 'ab'.repeat(32);
 
 const status = (patch: Partial<LobbyServerStatus> = {}): LobbyServerStatus => ({
-  state: 'listening', options: { mode: 'lan', publicLookup: true }, automation: false, lanAddress: '192.168.1.5', port: 38290, secure: false, ...patch,
+  state: 'listening', options: { mode: 'lan', publicLookup: true }, automation: false, roomPasswords: 'vault', lanAddress: '192.168.1.5', port: 38290, secure: false, ...patch,
 });
 
 const lan = (patch: Partial<LanEntry> = {}): LanEntry => ({

@@ -8,11 +8,14 @@ type LobbyServerOptions = { mode: NetworkMode; publicLookup: boolean };
 
 type LobbyServerState = 'starting' | 'listening' | 'failed';
 
+type RoomPasswordKeeping = 'vault' | 'memory';
+
 type LobbyServerStatus = {
   state: LobbyServerState;
   error?: string;
   options: LobbyServerOptions;
   automation: boolean;
+  roomPasswords: RoomPasswordKeeping;
   lanAddress: string;
   port?: number;
   secure?: boolean;

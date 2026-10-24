@@ -5,7 +5,7 @@ import { pythonHome } from '../../sandbox/python-home';
 import type { LobbyContext } from '../lobby-context.type';
 import type { OverlayWorld } from '../lobby-service.type';
 import { OVERLAY_DIR } from '../lobby.constants';
-import { GENERATE_TIMEOUT_MS } from './start.constants';
+import { GENERATE_DISK_BYTES, GENERATE_TIMEOUT_MS } from './start.constants';
 import { failLobby } from './fail-lobby';
 import { hostLobby } from './host-lobby';
 import { lobbyTemplate } from './lobby-template';
@@ -26,7 +26,10 @@ const lobbyRun = async (ctx: LobbyContext, lobby: Lobby, engine: EngineRuntime, 
   if (!owned.some((world) => world.trust.level === 'unlisted')) return run;
   const readOnly = [pythonHome(engine)];
   const sandbox = await ctx.deps.sandbox();
-  return { ...run, hostRuntime: engine, confine: (runDir) => sandbox.confine({ readOnly, readWrite: [overlay.root, runDir] }) };
+  return {
+    ...run, hostRuntime: engine, disk: { bytes: GENERATE_DISK_BYTES, extraDirs: [overlay.root] },
+    confine: (runDir) => sandbox.confine({ readOnly, readWrite: [overlay.root, runDir] }),
+  };
 };
 
 const generateAndHost = async (ctx: LobbyContext, lobby: Lobby) => {
@@ -38,6 +41,7 @@ const generateAndHost = async (ctx: LobbyContext, lobby: Lobby) => {
   const template = await lobbyTemplate(ctx, lobby, players);
   const session = await ctx.deps.runner.run(template, run);
   if (session.status === 'hosting') return hostLobby(ctx, lobby.id, session, players);
+  if (run.confine) await ctx.deps.store.removeDir(lobby.id, OVERLAY_DIR).catch(() => undefined);
   return failLobby(ctx, lobby.id, { stage: session.output ? 'host' : 'generate', message: session.error ?? 'The run stopped.' });
 };
 

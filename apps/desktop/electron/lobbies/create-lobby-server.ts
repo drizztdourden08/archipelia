@@ -10,7 +10,7 @@ import type { LobbyServerDeps } from './lobbies.type';
 import { readServerOptions } from './read-server-options';
 
 const createLobbyServer = (deps: LobbyServerDeps) => {
-  const { files, automation, lanHost, version } = deps;
+  const { files, automation, canStoreSecrets, lanHost, version } = deps;
   const cell = createListenerCell(deps);
   const enqueue = createSerialQueue();
   let options: LobbyServerOptions = DEFAULT_SERVER_OPTIONS;
@@ -24,6 +24,7 @@ const createLobbyServer = (deps: LobbyServerDeps) => {
       ...(error ? { error } : {}),
       options,
       automation,
+      roomPasswords: canStoreSecrets() ? 'vault' : 'memory',
       lanAddress: lanHost(),
       ...(endpoint ? { port: endpoint.port, secure: endpoint.secure, reach: endpoint.reach() } : {}),
       ...(serverId ? { serverId } : {}),

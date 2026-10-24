@@ -1,8 +1,5 @@
 /* @layer core @kind barrel */
 export { readOutput } from './output/read-output';
-export { zipEntries } from './output/zip-entries';
-export { zipEntryBytes } from './output/zip-entry-bytes';
-export type { ZipEntry, ZipLimits } from './output/zip.type';
 export { gameOfYaml } from './players/game-of-yaml';
 export { renderImportedYaml } from './players/render-imported-yaml';
 export { renderPresetYaml } from './players/render-preset-yaml';
@@ -11,6 +8,7 @@ export { writePlayers } from './players/write-players';
 export type { PlayerDeps } from './players/write-players.type';
 export { createSessionService } from './service/session-service';
 export type { ServiceDeps } from './service/service-deps.type';
+export type { DiskLimit } from './service/disk-limit/disk-limit.type';
 export type { LobbyRun } from './service/lobby-run.type';
 export type { SessionService } from './service/session-service.type';
 export type { SessionEvent } from './service/session-event.type';

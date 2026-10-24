@@ -43,6 +43,7 @@ type LobbyServerDeps = {
   listen: (options: LobbyListen) => Promise<LobbyEndpoint>;
   files: DataFiles;
   automation: boolean;
+  canStoreSecrets: () => boolean;
   lanHost: () => string;
   version: string;
   log: (message: string) => void;

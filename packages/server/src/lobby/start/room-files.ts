@@ -1,7 +1,7 @@
 /* @layer core @kind logic */
 import { sha256Hex } from '@drizztdourden08/archipelia-lobby-protocol/node';
 import type { LobbyRoomFile } from '@archipelia/model';
-import { zipEntries, zipEntryBytes } from '@archipelia/sessions';
+import { zipEntries, zipEntryBytes } from '@archipelia/model/zip';
 import { FILE_ID_PREFIX } from '../lobby.constants';
 import { OUTPUT_SLOT, SKIPPED_OUTPUT } from './start.constants';
 import type { Participant } from './start.type';

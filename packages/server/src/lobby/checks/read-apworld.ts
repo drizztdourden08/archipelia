@@ -1,6 +1,7 @@
 /* @layer core @kind logic */
-import { strFromU8, unzipSync } from 'fflate';
+import { strFromU8 } from 'fflate';
 import { isRecord } from '@archipelia/model';
+import { APWORLD_LIMITS, unzipCapped } from '@archipelia/model/zip';
 import type { ApworldRead, ApworldManifest } from './read-apworld.type';
 import { MANIFEST_NAME, MAX_MANIFEST_BYTES } from './read-apworld.constants';
 
@@ -20,15 +21,10 @@ const parseManifest = (bytes: Uint8Array | undefined): unknown => {
 };
 
 const unzipManifest = (bytes: Uint8Array) => {
-  const names: string[] = [];
   try {
-    const found = unzipSync(bytes, {
-      filter: (file) => {
-        names.push(file.name);
-        return file.name.split('/').length === 2 && file.name.endsWith(`/${MANIFEST_NAME}`) && file.originalSize <= MAX_MANIFEST_BYTES;
-      },
-    });
-    return { names, found };
+    const { names, files } = unzipCapped(bytes, APWORLD_LIMITS, (entry) =>
+      entry.name.split('/').length === 2 && entry.name.endsWith(`/${MANIFEST_NAME}`) && entry.size <= MAX_MANIFEST_BYTES);
+    return { names, found: files };
   } catch {
     return null;
   }

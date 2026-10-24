@@ -6,6 +6,7 @@ import { afterEach, beforeEach, describe, expect, test } from 'vitest';
 import type { ServerHost } from '@drizztdourden08/brock-electron/server';
 import type { CoreDomains, CoreEvent } from '../src';
 import { startCore } from '../src';
+import { createRoomSecrets } from '../src/core/room-secrets/create-room-secrets';
 import { createNodeDomains, createNodeRest, nodeLanHost } from '../src/node';
 import { connectWebSocket } from '@drizztdourden08/archipelia-lobby-protocol/testing';
 import { replies } from './replies';
@@ -45,6 +46,15 @@ describe('the core under plain Node', () => {
     await rest.secrets.set('room-owner', 'abc');
     expect(await rest.secrets.get('room-owner')).toBe('abc');
     expect(await readFile(join(dataDir, 'secrets', 'secrets.json'), 'utf8')).toContain('room-owner');
+  });
+
+  test('keeps a room password in that same file, since the file store can always store', async () => {
+    const host = hostOf([]);
+    const rest = createNodeRest(host);
+    const secrets = createRoomSecrets({ vault: rest.secrets, canStore: () => true, log: () => undefined });
+    await secrets.set('lobby-room-lb_1', 'room-pw');
+    expect(await secrets.get('lobby-room-lb_1')).toBe('room-pw');
+    expect(await readFile(join(dataDir, 'secrets', 'secrets.json'), 'utf8')).toContain('lobby-room-lb_1');
   });
 
   test('an environment variable overrides a stored secret', async () => {

@@ -4,14 +4,14 @@ import { noSandbox } from './no-sandbox';
 import { BASIC_FEATURES } from './sandbox.constants';
 import type { SandboxProbe, SandboxRunner } from './sandbox.type';
 
-const detectSandbox = async ({ platform, find, features, problem }: SandboxProbe): Promise<SandboxRunner> => {
+const detectSandbox = async ({ platform, find, features, problem, tasks }: SandboxProbe): Promise<SandboxRunner> => {
   if (platform !== 'linux') return noSandbox(`${platform} has no sandbox for worlds`);
   const bwrap = await find();
   if (!bwrap) return noSandbox('bubblewrap is not installed');
   let refused = '';
   for (const option of [await features(bwrap), BASIC_FEATURES]) {
     const found = await problem(bwrap, option);
-    if (found === null) return createBwrapRunner(bwrap, option);
+    if (found === null) return createBwrapRunner(bwrap, option, tasks);
     refused = found;
   }
   return noSandbox(`bubblewrap cannot start here: ${refused}`);
