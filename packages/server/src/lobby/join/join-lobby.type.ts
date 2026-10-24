@@ -1,14 +1,16 @@
 /* @layer core @kind types */
 import type { Failure, Hello, WorldEntry } from '@drizztdourden08/archipelia-lobby-protocol';
-import type { Lobby, LobbyMember } from '@archipelia/model';
-import type { LobbyLink } from '../lobby-service.type';
-
-type JoinRequest = { lobby: Lobby; hello: Hello; link: LobbyLink };
-
-type ResumeRequest = JoinRequest & { token: string };
+import type { Lobby, LobbyMember, UploadTrust } from '@archipelia/model';
+import type { LobbyLink, Outcome } from '../lobby-service.type';
 
 type TrustRequest = { client: { id: string; name: string }; worlds: WorldEntry[] };
 
-type Welcoming = JoinRequest & { member: LobbyMember; token: string; resumed: boolean; notices: Failure[] };
+type Assessed = { clientId: string; clientName: string; trust: Outcome<UploadTrust> };
 
-export type { JoinRequest, ResumeRequest, TrustRequest, Welcoming };
+type JoinRequest = { lobby: Lobby; hello: Hello; link: LobbyLink; assessed: Assessed };
+
+type ResumeRequest = JoinRequest & { token: string };
+
+type Welcoming = Omit<JoinRequest, 'assessed'> & { member: LobbyMember; token: string; resumed: boolean; notices: Failure[] };
+
+export type { Assessed, JoinRequest, ResumeRequest, TrustRequest, Welcoming };

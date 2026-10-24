@@ -27,10 +27,10 @@ const enter = (ctx: LobbyContext, draft: Lobby, hello: Hello, joined: { tokenHas
   return admitInDraft(draft, member.id, { slots: hello.slots, worlds: hello.worlds, trust: joined.trust }, true);
 };
 
-const addMember = async (ctx: LobbyContext, { lobby, hello, link }: JoinRequest): Promise<Outcome<MemberRef>> => {
+const addMember = async (ctx: LobbyContext, { lobby, hello, link, assessed }: JoinRequest): Promise<Outcome<MemberRef>> => {
   const failure = checkClientVersion(lobby.engine.ap, hello);
   if (failure) return { ok: false, failure };
-  const trust = await checkTrust(hello, lobby, ctx.deps.trust, ctx.now());
+  const trust = checkTrust(lobby, assessed);
   if (!trust.ok) return trust;
   const token = newToken();
   const tokenHash = hashToken(token);
