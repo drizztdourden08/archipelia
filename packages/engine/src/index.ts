@@ -8,6 +8,7 @@ export { runPython } from './process/run-python';
 export type { PythonResult, PythonRun } from './process/run-python.type';
 export { spawnPython } from './process/spawn-python';
 export type { PythonSpawn } from './process/spawn-python.type';
+export type { SpawnCommand, SpawnWrap } from './process/spawn-command.type';
 export type { DumpedSchema, SchemaDump, SchemaRead } from './options/read-options-schema.type';
 export type { Guard } from './runtime/parse-json.type';
 export { apRoot } from './runtime/ap-root';

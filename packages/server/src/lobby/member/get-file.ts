@@ -1,8 +1,8 @@
 /* @layer core @kind logic */
-import { unzipSync } from 'fflate';
 import type { FileGet, ServerMessage } from '@drizztdourden08/archipelia-lobby-protocol';
 import { createError, DEFAULT_LIMITS } from '@drizztdourden08/archipelia-lobby-protocol';
 import type { Lobby, LobbyRoomFile } from '@archipelia/model';
+import { zipEntries, zipEntryBytes } from '@archipelia/sessions';
 import type { LobbyContext } from '../lobby-context.type';
 import type { MemberRef } from '../lobby-service.type';
 import { NO_FILE } from './member.constants';
@@ -26,7 +26,8 @@ const fileOf = (lobby: Lobby | undefined, ref: MemberRef, fileId: string): Lobby
 
 const readEntry = async (ctx: LobbyContext, lobby: Lobby, file: LobbyRoomFile) => {
   const zip = lobby.room ? await ctx.deps.runner.output.readBytes(`${lobby.sessionId}/output/${lobby.room.zip}`) : null;
-  return zip ? unzipSync(zip, { filter: (entry) => entry.name === file.entry })[file.entry] : undefined;
+  const entry = zip ? zipEntries(zip).find((candidate) => candidate.name === file.entry) : undefined;
+  return zip && entry ? zipEntryBytes(zip, entry) : undefined;
 };
 
 const getFile = async (ctx: LobbyContext, ref: MemberRef, message: FileGet): Promise<Iterable<ServerMessage>> => {

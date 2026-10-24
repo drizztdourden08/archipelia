@@ -4,6 +4,7 @@ import type { Failure, ServerMessage } from '@drizztdourden08/archipelia-lobby-p
 import type { DataFiles, EngineRuntime, Lobby, LobbyOptions, Session, SessionEngine, SessionTemplate } from '@archipelia/model';
 import type { LobbyRun } from '@archipelia/sessions';
 import type { ProofVerdict, Registry, RegistryClient, WorldVerdict } from '@archipelia/trust';
+import type { SandboxRunner } from '../sandbox/sandbox.type';
 
 type LobbyStore = {
   load: () => Promise<Lobby[]>;
@@ -40,6 +41,7 @@ type LobbyServiceDeps = {
   trust: LobbyTrust;
   runner: LobbyRunner;
   overlay: (input: OverlayInput) => Promise<EngineRuntime>;
+  sandbox: () => Promise<SandboxRunner>;
   secrets: SecretStore;
   activeEngine: () => Promise<SessionEngine | undefined>;
   serverVersion: string;

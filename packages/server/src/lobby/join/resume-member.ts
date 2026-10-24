@@ -19,20 +19,20 @@ const changed = (lobby: Lobby, member: LobbyMember, { hello }: ResumeRequest) =>
   return stored !== slotsKey(hello.slots.map((slot) => ({ ...slot, yaml: slot.yaml.sha256 })), hello.worlds.map((world) => world.sha256));
 };
 
-const resumeChecks = async (ctx: LobbyContext, request: ResumeRequest): Promise<Outcome<{ member: LobbyMember; trust: UploadTrust }>> => {
-  const { lobby, hello, token } = request;
+const resumeChecks = (request: ResumeRequest): Outcome<{ member: LobbyMember; trust: UploadTrust }> => {
+  const { lobby, hello, token, assessed } = request;
   const member = lobby.members.find((candidate) => candidate.tokenHash === hashToken(token)) ?? null;
   const outcome = resumeOutcome(member);
   if (outcome.kind === 'error' || !member) return { ok: false, failure: outcome.kind === 'error' ? outcome.failure : { code: 'resume-invalid', message: 'This lobby does not know this player.' } };
   const failure = checkClientVersion(lobby.engine.ap, hello);
   if (failure) return { ok: false, failure };
-  const trust = await checkTrust(hello, lobby, ctx.deps.trust, ctx.now());
+  const trust = checkTrust(lobby, assessed);
   return trust.ok ? { ok: true, value: { member, trust: trust.value } } : trust;
 };
 
 const resumeMember = async (ctx: LobbyContext, request: ResumeRequest): Promise<Outcome<MemberRef>> => {
   const { lobby, hello, link, token } = request;
-  const checked = await resumeChecks(ctx, request);
+  const checked = resumeChecks(request);
   if (!checked.ok) return checked;
   const found = checked.value.member;
   const replace = changed(lobby, found, request);

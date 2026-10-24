@@ -6,6 +6,7 @@ import type { LobbyContext } from '../lobby-context.type';
 import type { LobbyLink, MemberRef, Outcome } from '../lobby-service.type';
 import { rejectionOf } from '../state/rejection-of';
 import { addMember } from './add-member';
+import { assessClient } from './assess-client';
 import { checkAccess } from './check-access';
 import { resumeMember } from './resume-member';
 
@@ -27,9 +28,10 @@ const joinLobby = async (ctx: LobbyContext, hello: Hello, link: LobbyLink): Prom
   if (!lobby) return { ok: false, failure: lobbyNotFoundFailure() };
   const failure = checkAccess(lobby, hello) ?? checkHello(hello);
   if (failure) return { ok: false, failure };
+  const assessed = await assessClient(hello, ctx.deps.trust, ctx.now());
   const join = async () => {
     const current = (await ctx.book.get(lobby.id)) ?? lobby;
-    return hello.resume ? resumeMember(ctx, { lobby: current, hello, link, token: hello.resume }) : addMember(ctx, { lobby: current, hello, link });
+    return hello.resume ? resumeMember(ctx, { lobby: current, hello, link, assessed, token: hello.resume }) : addMember(ctx, { lobby: current, hello, link, assessed });
   };
   const result = await ctx.queue(`settle:${lobby.id}`, () => enter(ctx, join));
   if (result.ok) await settleLobby(ctx, lobby.id);

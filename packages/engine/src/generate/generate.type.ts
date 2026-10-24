@@ -1,5 +1,6 @@
 /* @layer core @kind types */
 import type { EngineProgress, EngineRuntime, SpoilerLevel } from '@archipelia/model';
+import type { SpawnWrap } from '../process/spawn-command.type';
 
 type GenerateParams = {
   runtime: EngineRuntime;
@@ -13,6 +14,7 @@ type GenerateParams = {
   onProgress?: (progress: EngineProgress) => void;
   onLine?: (line: string) => void;
   signal?: AbortSignal;
+  wrap?: SpawnWrap;
 };
 
 type GenerateResult = { ok: boolean; zip?: string; lines: string[] };
