@@ -1,0 +1,15 @@
+services:
+  archipelia-server:
+    image: ghcr.io/drizztdourden08/archipelia-server:latest
+    restart: unless-stopped
+    ports:
+      - "38290:38290"
+      - "38281:38281"
+    volumes:
+      - archipelia-data:/data
+    environment:
+      ARCHIPELIA_NETWORK: "off"
+      ARCHIPELIA_PUBLIC_LOOKUP: "false"
+
+volumes:
+  archipelia-data:

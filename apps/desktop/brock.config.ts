@@ -11,7 +11,8 @@ export default defineBrockConfig({
     repo: { owner: 'drizztdourden08', name: 'archipelia' },
     icons: { brand: 'archipelia', rim: 'light' },
   },
-  targets: ['desktop'],
+  targets: ['desktop', 'server'],
+  server: { ports: [38290, 38281] },
   modules: ['secrets', 'updater'],
   workflows: { publish: { packages: ['packages/lobby-protocol', 'packages/client-kit'], registry: 'github' } },
 });

@@ -1,0 +1,60 @@
+#!/bin/sh
+# @layer tooling-scripts @kind build
+# Managed by brock sync: the .deb post-install script, run as root by dpkg.
+# It makes the system user, or stops when the name belongs to another account,
+# runs build/server/after-install.sh if the app has one, then handles the service:
+# a first install enables and starts it, an upgrade only restarts a running one.
+set -e
+if [ "$1" = "configure" ]; then
+  if entry=$(getent passwd archipelia); then
+    uid=$(echo "$entry" | cut -d: -f3)
+    comment=$(echo "$entry" | cut -d: -f5)
+    shell=$(echo "$entry" | cut -d: -f7)
+    if [ "$uid" -lt 100 ] || [ "$uid" -gt 999 ] || [ "$shell" != "/usr/sbin/nologin" ] || [ "$comment" != "archipelia server (brock)" ]; then
+      echo "archipelia: the account archipelia exists and was not made by this package; refusing to run the server as it." >&2
+      exit 1
+    fi
+  else
+    group_option="--user-group"
+    if group_entry=$(getent group archipelia); then
+      gid=$(echo "$group_entry" | cut -d: -f3)
+      members=$(echo "$group_entry" | cut -d: -f4)
+      if [ "$gid" -lt 100 ] || [ "$gid" -gt 999 ] || [ -n "$members" ]; then
+        echo "archipelia: the group archipelia exists and is not a plain system group (gid 100 to 999, no members); refusing to run the server in it." >&2
+        exit 1
+      fi
+      group_option="-g archipelia"
+    fi
+    useradd --system $group_option --comment "archipelia server (brock)" --home-dir /var/lib/archipelia --no-create-home --shell /usr/sbin/nologin archipelia
+  fi
+
+# @layer tooling-scripts @kind build
+set -e
+mkdir -p /etc/archipelia
+if [ ! -f /etc/archipelia/server.toml ]; then
+  cat > /etc/archipelia/server.toml <<'TOML'
+port = 38290
+network = "lan"
+publicLookup = true
+
+[engine]
+auto = true
+
+[tls]
+selfSigned = true
+TOML
+  chmod 0644 /etc/archipelia/server.toml
+fi
+ln -sf /opt/archipelia/bin/archipelia-server /usr/local/bin/archipelia-server
+
+  if [ -d /run/systemd/system ]; then
+    systemctl daemon-reload
+    if [ -z "$2" ]; then
+      systemctl enable archipelia.service
+      systemctl start archipelia.service
+    else
+      systemctl try-restart archipelia.service
+    fi
+  fi
+fi
+exit 0
