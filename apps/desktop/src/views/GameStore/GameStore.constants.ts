@@ -1,7 +1,11 @@
 /* @layer renderer-app @kind config */
 import type { EmptyKind } from './GameStore.type';
 
-const SOURCE_LABEL = { official: 'Official', index: 'Community', file: 'From file' } as const;
+const SOURCE_LABEL = { official: 'Official', index: 'Community', file: 'From file', 'first-party': 'Community' } as const;
+
+const FIRST_PARTY_TAG = 'First-party';
+
+const NOT_AVAILABLE = 'Not available';
 
 const MAX_CARDS = 120;
 
@@ -22,4 +26,4 @@ const FAILURE = {
   file: 'Could not add the game from that file.',
 } as const;
 
-export { APWORLD, EMPTY_TEXT, FAILURE, MAX_CARDS, SOURCE_LABEL };
+export { APWORLD, EMPTY_TEXT, FAILURE, FIRST_PARTY_TAG, MAX_CARDS, NOT_AVAILABLE, SOURCE_LABEL };

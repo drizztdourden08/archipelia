@@ -267,6 +267,9 @@ importers:
       '@archipelia/model':
         specifier: workspace:*
         version: link:../model
+      '@archipelia/trust':
+        specifier: workspace:*
+        version: link:../trust
       '@drizztdourden08/brock-core':
         specifier: ^0.79.0
         version: 0.79.0
