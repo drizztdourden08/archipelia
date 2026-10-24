@@ -8,7 +8,7 @@ import { apRoot, generate, readRuntime, spawnPython } from '@archipelia/engine';
 import { createLocalHost, removeSessionSettings, writeSessionSettings } from '@archipelia/hosts';
 import type { EngineRuntime } from '@archipelia/model';
 import { waitFor } from './support/ap-player';
-import { ENGINE_DIR } from './support/e2e-inputs';
+import { e2eEngineDir } from './support/e2e-inputs';
 import { required } from './support/required';
 import { dataFilesAt } from './support/temp-file-store';
 
@@ -32,19 +32,20 @@ const roomInfo = async (port: number) => {
 const hostingSeen = (lines: string[]) => lines.some((line) => line.includes('Hosting game at'));
 
 describe('room passwords never travel on a command line', () => {
-  const state: { dir: string; runtime?: EngineRuntime } = { dir: '' };
+  const state: { dir: string; engineDir: string; runtime?: EngineRuntime } = { dir: '', engineDir: '' };
 
   beforeAll(async () => {
     state.dir = await mkdtemp(join(tmpdir(), 'archipelia-pw-'));
-    state.runtime = await readRuntime(ENGINE_DIR);
-    await installOfficial({ engineDir: ENGINE_DIR, files: dataFilesAt(join(state.dir, 'games')), apworld: 'timespinner' });
+    state.engineDir = await e2eEngineDir();
+    state.runtime = await readRuntime(state.engineDir);
+    await installOfficial({ engineDir: state.engineDir, files: dataFilesAt(join(state.dir, 'games')), apworld: 'timespinner' });
     await mkdir(join(state.dir, 'players'));
     await writeFile(join(state.dir, 'players', 'p1.yaml'), 'name: Lunais\ngame: Timespinner\nTimespinner: {}\n');
   });
 
   afterAll(async () => {
     const files = dataFilesAt(join(state.dir, 'games'));
-    for (const game of await listInstalled(files)) await removeWorld({ engineDir: ENGINE_DIR, files, apworld: game.apworld });
+    for (const game of await listInstalled(files)) await removeWorld({ engineDir: state.engineDir, files, apworld: game.apworld });
   });
 
   test('a local host reads the password from a session file it then deletes', async () => {

@@ -1,7 +1,7 @@
 /* @layer renderer-app @kind hook */
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { confirmDelete, useJob, useKeyedGuard } from '@drizztdourden08/brock-react';
-import type { InstalledEngine } from '@archipelia/model';
+import type { EngineEntry } from '@archipelia/model';
 import { failWith } from '../../../hooks/fail-with';
 import { useLoggedFailure } from '../../../hooks/useLoggedFailure';
 import { ENGINE_JOB } from '../../../jobs/jobs.constants';
@@ -45,13 +45,13 @@ const useEngineSettings = () => {
     if (plan.kind === 'none') return;
     void guard('apply', failWith(FAILURE.apply, async () => {
       if (plan.kind === 'switch') await switchTo(plan.id);
-      else await finishInstall(await install(plan.choice), { ap: plan.choice.ap, switchTo });
+      else await finishInstall(await install(plan.choice), { ap: plan.choice.ap, switchTo, install });
     }));
   }, [guard, plan, switchTo, install]);
 
   const switchEngine = useCallback((id: string) => { void guard('apply', failWith(FAILURE.apply, () => switchTo(id))); }, [guard, switchTo]);
 
-  const removeEngine = useCallback((engine: InstalledEngine) => {
+  const removeEngine = useCallback((engine: EngineEntry) => {
     void confirmDelete(removeEngineConfirm(engine)).then((confirmed) => (
       confirmed ? guard('remove', failWith(FAILURE.remove, () => remove(engine.id))) : undefined
     ));

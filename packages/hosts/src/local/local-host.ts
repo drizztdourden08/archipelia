@@ -48,7 +48,10 @@ const createLocalHost = ({ runtime, port, bindHost = '0.0.0.0', advertiseHost, s
 
   const stop = async () => {
     const running = child;
-    if (running?.exitCode !== null) return;
+    if (running?.exitCode !== null || running.signalCode !== null) {
+      child = undefined;
+      return;
+    }
     const exited = once(running, 'exit');
     running.stdin?.write('/exit\n');
     const timer = setTimeout(() => running.kill(), stopTimeoutMs);

@@ -3,7 +3,7 @@ import { describe, expect, test } from 'vitest';
 import { chosenVersions } from '../../src/views/EngineSettings/behavior/chosen-versions';
 import { pythonOptions } from '../../src/views/EngineSettings/behavior/python-options';
 import { releaseOptions } from '../../src/views/EngineSettings/behavior/release-options';
-import { engine, feedOf, overviewOf, release } from './engine-fixture';
+import { engine, feedOf, overviewOf, range, release } from './engine-fixture';
 
 describe('Archipelago picker options', () => {
   test('lists every release newest first and marks the latest and the one in use', () => {
@@ -70,5 +70,21 @@ describe('the versions the pickers show', () => {
   test('a release added to the feed later is a valid pick', () => {
     const next = overviewOf({ feed: feedOf({ releases: [release('0.6.9'), release('0.6.8')] }) });
     expect(chosenVersions(next, { ap: '0.6.9' }).ap).toBe('0.6.9');
+  });
+});
+
+describe('the Python range of the picked Archipelago', () => {
+  const narrow = () => overviewOf({ ranges: { '0.6.8': range('3.11.9', '3.13.0') } });
+
+  test('turns off the builds it does not fit, with the reason', () => {
+    const options = pythonOptions(narrow(), '0.6.8');
+    expect(options.find((option) => option.value === '3.13.17')?.disabled).toBe('Archipelago 0.6.8 needs 3.11.9 to 3.12.x');
+    expect(options.find((option) => option.value === '3.12.15')?.disabled).toBeUndefined();
+  });
+
+  test('moves a pick that no longer fits to the newest fitting build and says so', () => {
+    const chosen = chosenVersions(narrow(), { ap: '0.6.8', python: '3.13.17' });
+    expect(chosen.python).toBe('3.12.15');
+    expect(chosen.note).toContain('does not fit Archipelago 0.6.8');
   });
 });

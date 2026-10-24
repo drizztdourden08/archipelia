@@ -1,5 +1,5 @@
 /* @layer tests @kind test */
-import type { ApRelease, EngineOverview, InstalledEngine, PythonBuild, VersionFeed } from '@archipelia/model';
+import type { ApRelease, EngineEntry, EngineOverview, PythonBuild, PythonRange, VersionFeed } from '@archipelia/model';
 
 const release = (version: string): ApRelease => ({ version, tag: version, publishedAt: '2026-10-04T00:00:00Z', notesUrl: `https://example.test/${version}` });
 
@@ -7,9 +7,12 @@ const build = (version: string, extra: Partial<PythonBuild> = {}): PythonBuild =
   version, release: '20261021', target: 'win32-x64', file: `cpython-${version}.tar.gz`, sha256: 'abc', ...extra,
 });
 
-const engine = (ap: string, python: string, extra: Partial<InstalledEngine> = {}): InstalledEngine => ({
-  id: `ap-${ap}_py-${python}_win32-x64`, ap, apCommit: 'deadbeef', python, pythonRelease: '20260924', target: 'win32-x64', builtAt: 1_760_000_000_000, state: 'ready', ...extra,
+const engine = (ap: string, python: string, extra: Partial<EngineEntry> = {}): EngineEntry => ({
+  id: `ap-${ap}_py-${python}_win32-x64`, ap, apCommit: 'deadbeef', python, pythonRelease: '20260924', target: 'win32-x64', builtAt: 1_760_000_000_000, state: 'ready',
+  lastGood: false, packages: [], rules: [], sessions: 0, ...extra,
 });
+
+const range = (min: string, maxExclusive?: string): PythonRange => ({ min, ...(maxExclusive ? { maxExclusive } : {}), source: 'declared' });
 
 const feedOf = (patch: Partial<VersionFeed> = {}): VersionFeed => ({
   state: 'fresh',
@@ -28,10 +31,11 @@ const overviewOf = (patch: Partial<EngineOverview> = {}): EngineOverview => {
     feed: feedOf(),
     tag: 'new-version',
     latestAp: '0.6.8',
+    ranges: { '0.6.8': range('3.11.9', '3.14.0'), '0.6.7': range('3.11.9', '3.14.0'), '0.6.2': range('3.10.11', '3.13.0') },
     ...patch,
   };
 };
 
 const when = (at: number, form: string): string => `${form}:${at}`;
 
-export { engine, feedOf, overviewOf, release, when };
+export { engine, feedOf, overviewOf, range, release, when };

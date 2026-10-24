@@ -11,13 +11,13 @@ import { createRunStore, createSessionService } from '@archipelia/sessions';
 import type { SessionService } from '@archipelia/sessions';
 import type { Client } from 'archipelago.js';
 import { checkAll, checkSome, joinAs, reachGoal, waitFor, waitForItems } from './ap-player';
-import { ENGINE_DIR } from './e2e-inputs';
+import { e2eEngineDir } from './e2e-inputs';
 import { required } from './required';
 import { dataFilesAt, tempDataRoot } from './temp-file-store';
 
-type RigContext = { games: DataFiles; cache: DataFiles; presets: PresetStore };
+type RigContext = { engineDir: string; games: DataFiles; cache: DataFiles; presets: PresetStore };
 type Multiworld = { title: string; port: number; setup: (ctx: RigContext) => Promise<SessionPlayer[]> };
-type RigState = { root: string; session?: Session; service?: SessionService; players: SessionPlayer[]; clients: Client[]; log: string[] };
+type RigState = { root: string; engineDir: string; session?: Session; service?: SessionService; players: SessionPlayer[]; clients: Client[]; log: string[] };
 
 const serverOptions = { hintCost: 10, releaseMode: 'auto', collectMode: 'auto', remainingMode: 'goal', autoShutdownMinutes: 0 } as const;
 
@@ -25,9 +25,10 @@ const startRig = async (state: RigState, { title, port, setup }: Multiworld) => 
   state.root = await tempDataRoot();
   const files = dataFilesAt(join(state.root, 'sessions'));
   const games = dataFilesAt(join(state.root, 'games'));
-  const runtime = await readRuntime(ENGINE_DIR);
+  state.engineDir = await e2eEngineDir();
+  const runtime = await readRuntime(state.engineDir);
   const presets = createPresetStore(dataFilesAt(join(state.root, 'presets')));
-  state.players = await setup({ games, cache: dataFilesAt(join(state.root, 'cache')), presets });
+  state.players = await setup({ engineDir: state.engineDir, games, cache: dataFilesAt(join(state.root, 'cache')), presets });
   const installed = await listInstalled(games);
   state.service = createSessionService({
     files, presets, runs: createRunStore(files), runtime: () => Promise.resolve(runtime),
@@ -46,7 +47,7 @@ const stopRig = async (state: RigState) => {
   state.clients.forEach((client) => client.socket.disconnect());
   if (state.service && state.session?.status === 'hosting') await state.service.stop(state.session.id);
   const files = dataFilesAt(join(state.root, 'games'));
-  for (const game of await listInstalled(files)) await removeWorld({ engineDir: ENGINE_DIR, files, apworld: game.apworld });
+  for (const game of await listInstalled(files)) await removeWorld({ engineDir: state.engineDir, files, apworld: game.apworld });
 };
 
 const joinEveryone = async (state: RigState, port: number) => {
@@ -76,7 +77,7 @@ const reachEveryGoal = async (state: RigState) => {
 };
 
 const defineMultiworld = (multiworld: Multiworld) => describe(multiworld.title, () => {
-  const state: RigState = { root: '', players: [], clients: [], log: [] };
+  const state: RigState = { root: '', engineDir: '', players: [], clients: [], log: [] };
 
   beforeAll(() => startRig(state, multiworld));
   afterAll(() => stopRig(state));

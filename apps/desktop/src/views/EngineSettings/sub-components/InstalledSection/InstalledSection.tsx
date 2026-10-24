@@ -3,13 +3,14 @@ import { ListItemList, ListItemRow, SettingsSection } from '@drizztdourden08/tes
 import { Button, EmptyState, Flex, Icon, IconButton, Tag } from '@drizztdourden08/tessera/primitives';
 import { engineTags } from '../../behavior/engine-tags';
 import { installedMeta } from '../../behavior/installed-meta';
+import { installedSummary } from '../../behavior/installed-summary';
 import { whenText } from '../../behavior/when-text';
 import { LIST_TEXT, SECTION_TEXT } from '../../EngineSettings.constants';
 import { LIST_SHAPE } from './InstalledSection.constants';
 import type { InstalledSectionProps } from './InstalledSection.type';
 
 const InstalledSection = ({ engines, activeId, busy, onSwitch, onRemove }: InstalledSectionProps) => (
-  <SettingsSection id="installed" title={SECTION_TEXT.installed.title} description={SECTION_TEXT.installed.description}>
+  <SettingsSection id="installed" title={SECTION_TEXT.installed.title} description={installedSummary(engines)}>
     {engines.length === 0 ? <EmptyState size="sm" message={LIST_TEXT.empty} /> : (
       <ListItemList label={LIST_TEXT.label} count={engines.length} shape={LIST_SHAPE}>
         {engines.map((engine) => {
@@ -26,7 +27,7 @@ const InstalledSection = ({ engines, activeId, busy, onSwitch, onRemove }: Insta
                   {!active && engine.state === 'ready' && (
                     <Button size="sm" variant="secondary" disabled={busy} onClick={() => onSwitch(engine.id)}>{LIST_TEXT.switchLabel}</Button>
                   )}
-                  <IconButton size="sm" variant="ghost" tone="danger" label={`${LIST_TEXT.removeLabel} Archipelago ${engine.ap}`} disabled={busy || active} onClick={() => onRemove(engine)}>
+                  <IconButton size="sm" variant="ghost" tone="danger" label={engine.inUse ?? `${LIST_TEXT.removeLabel} Archipelago ${engine.ap}`} disabled={busy || active || engine.inUse !== undefined} onClick={() => onRemove(engine)}>
                     <Icon name="trash-2" />
                   </IconButton>
                 </Flex>

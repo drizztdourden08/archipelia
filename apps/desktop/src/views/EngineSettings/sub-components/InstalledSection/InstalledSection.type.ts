@@ -1,12 +1,12 @@
 /* @layer renderer-app @kind types */
-import type { InstalledEngine } from '@archipelia/model';
+import type { EngineEntry } from '@archipelia/model';
 
 type InstalledSectionProps = {
-  engines: readonly InstalledEngine[];
+  engines: readonly EngineEntry[];
   activeId: string | undefined;
   busy: boolean;
   onSwitch: (id: string) => void;
-  onRemove: (engine: InstalledEngine) => void;
+  onRemove: (engine: EngineEntry) => void;
 };
 
 export type { InstalledSectionProps };

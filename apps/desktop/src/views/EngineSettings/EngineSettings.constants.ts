@@ -55,6 +55,12 @@ const ROW_TEXT = {
     hint: 'Check now asks GitHub again.',
     keywords: 'check update refresh feed github',
   },
+  dependencies: {
+    label: 'Dependencies',
+    description: 'The Python packages of the engine in use, and the rules the app applied when it installed them.',
+    hint: 'The list is what pip reports inside the engine.',
+    keywords: 'pip packages requirements freeze',
+  },
   change: {
     label: 'Change the engine',
     description: 'The chosen versions install beside the engine in use and are tested before they take over. A failed install never touches the engine in use.',
@@ -88,6 +94,10 @@ const ACTIVE_LOOK: TagLook = { variant: 'urgency', color: 'success' };
 
 const FAILED_LOOK: TagLook = { variant: 'urgency', color: 'danger' };
 
+const LAST_GOOD_LOOK: TagLook = { variant: 'normal', color: 'neutral' };
+
+const MANY_ENGINES = 2;
+
 const FAILED_CHECK: Record<NonNullable<SmokeResult['failed']>, string> = {
   schema: 'The options check failed.',
   generate: 'Making a test seed failed.',
@@ -108,6 +118,6 @@ const WHEN_FORMAT: Record<WhenForm, DatePreset> = { ago: 'relative', day: 'date'
 const KEPT_AFTER_REMOVE = 'Sessions made with it are hosted with the engine in use.';
 
 export {
-  ACTIVE_LOOK, CHANGE_ACTION, CHANGE_HINT, CHECK_ACTION, FAILED_CHECK, FAILED_LOOK, FAILED_UNKNOWN, FAILURE, KEPT_AFTER_REMOVE, LIST_TEXT,
-  NO_PLAN, REBUILD_CONFIRM, ROW_TEXT, SECTION_TEXT, STARTING_STEP, STATE_VIEW, TAG_VIEW, WHEN_FORMAT,
+  ACTIVE_LOOK, CHANGE_ACTION, CHANGE_HINT, CHECK_ACTION, FAILED_CHECK, FAILED_LOOK, FAILED_UNKNOWN, FAILURE, KEPT_AFTER_REMOVE, LAST_GOOD_LOOK,
+  LIST_TEXT, MANY_ENGINES, NO_PLAN, REBUILD_CONFIRM, ROW_TEXT, SECTION_TEXT, STARTING_STEP, STATE_VIEW, TAG_VIEW, WHEN_FORMAT,
 };
