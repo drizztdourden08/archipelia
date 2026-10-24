@@ -32,7 +32,7 @@ const createSessionService = (deps: ServiceDeps) => {
       const engines = lobbyEngines(lobby);
       const runtime = engines.runtime ?? await deps.runtime();
       session = await update(session, { engine: sessionEngineOf(runtime) });
-      const { output, seed } = await produceSession(deps, session, { runtime, signal, confine: engines.confine, timeoutMs: engines.timeoutMs });
+      const { output, seed } = await produceSession(deps, session, { runtime, signal, confine: engines.confine, timeoutMs: engines.timeoutMs, disk: engines.disk });
       session = await update(session, { status: 'starting', output, seed });
       return await update(session, { status: 'hosting', endpoint: await hostSession({ deps, live, signal, runtime: engines.host }, session) });
     } catch (err) {

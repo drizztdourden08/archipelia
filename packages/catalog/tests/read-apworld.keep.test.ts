@@ -4,6 +4,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { strToU8, zipSync } from 'fflate';
 import { afterAll, beforeAll, describe, expect, test } from 'vitest';
+import { lieAboutSize } from '@archipelia/model/testing';
 import { readApworld } from '../src/install/read-apworld';
 
 let dir = '';
@@ -38,5 +39,19 @@ describe('readApworld', () => {
   test('an archive with two packages is refused', async () => {
     const file = await write('two.apworld', { 'a/__init__.py': '', 'b/__init__.py': '' });
     await expect(readApworld(file)).rejects.toThrow(/found 2/);
+  });
+
+  test('I-81: an archive that declares more than an apworld may hold is refused', async () => {
+    const zip = zipSync({ 'demo/__init__.py': strToU8(''), 'demo/data.bin': new Uint8Array(1000) });
+    const file = join(dir, 'bomb.apworld');
+    await writeFile(file, lieAboutSize(zip, 512 * 1024 * 1024));
+    await expect(readApworld(file)).rejects.toThrow('larger than this server takes');
+  });
+
+  test('I-81: a manifest that lies about its size is stopped', async () => {
+    const zip = zipSync({ 'demo/__init__.py': strToU8(''), 'demo/archipelago.json': new Uint8Array(1024 * 1024) });
+    const file = join(dir, 'liar.apworld');
+    await writeFile(file, lieAboutSize(zip, 2048, 1));
+    await expect(readApworld(file)).rejects.toThrow('inflates past its declared size');
   });
 });

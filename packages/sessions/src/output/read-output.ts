@@ -1,8 +1,7 @@
 /* @layer core @kind logic */
 import type { DataFiles, SessionOutput } from '@archipelia/model';
+import { zipEntries, zipEntryBytes } from '@archipelia/model/zip';
 import { SEED, SPOILER } from './read-output.constants';
-import { zipEntries } from './zip-entries';
-import { zipEntryBytes } from './zip-entry-bytes';
 
 const baseName = (path: string) => path.split(/[\\/]/).pop() ?? path;
 

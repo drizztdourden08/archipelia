@@ -1,7 +1,7 @@
 /* @layer core @kind logic */
 import { lstat, mkdir, open, writeFile } from 'node:fs/promises';
 import { basename, join } from 'node:path';
-import { ZIP_LIMITS } from '../output/zip.constants';
+import { ZIP_LIMITS } from '@archipelia/model/zip';
 import { ARCHIVE_NAME, READ_NO_FOLLOW } from './produce-session.constants';
 
 const plainFolder = async (path: string) => {

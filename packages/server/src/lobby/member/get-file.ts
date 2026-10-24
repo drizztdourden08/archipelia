@@ -2,7 +2,7 @@
 import type { FileGet, ServerMessage } from '@drizztdourden08/archipelia-lobby-protocol';
 import { createError, DEFAULT_LIMITS } from '@drizztdourden08/archipelia-lobby-protocol';
 import type { Lobby, LobbyRoomFile } from '@archipelia/model';
-import { zipEntries, zipEntryBytes } from '@archipelia/sessions';
+import { zipEntries, zipEntryBytes } from '@archipelia/model/zip';
 import type { LobbyContext } from '../lobby-context.type';
 import type { MemberRef } from '../lobby-service.type';
 import { NO_FILE } from './member.constants';

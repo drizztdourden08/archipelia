@@ -1,8 +1,8 @@
 /* @layer tests @kind test */
 import { describe, expect, test } from 'vitest';
 import { zipSync } from 'fflate';
-import { zipEntries } from '../src/output/zip-entries';
-import { zipEntryBytes } from '../src/output/zip-entry-bytes';
+import { zipEntries } from '../src/zip/zip-entries';
+import { zipEntryBytes } from '../src/zip/zip-entry-bytes';
 
 const text = (value: string) => new TextEncoder().encode(value);
 

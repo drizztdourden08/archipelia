@@ -73,3 +73,10 @@ Docker image. It needs unprivileged user namespaces:
   sandbox exists to withhold. The compose example has not been run on a Docker host yet.
 - Without a working bubblewrap an unlisted world still waits for the host to allow it, and runs
   with no sandbox.
+- A confined Generate may fill 2 GiB of disk, counting its run folder and its overlay. The server
+  measures both every 2 seconds and stops the run, and again when it ends. The lobby then fails
+  with a plain message and the overlay is removed.
+- A confined run may start as many tasks as the server user holds when it starts, plus 2048
+  (the kernel's `RLIMIT_NPROC` counts every process and thread of that user). The limit follows
+  the load, so it never starves the server. Without `/proc/loadavg` it is left out and the pid
+  namespace is the only bound.

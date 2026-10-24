@@ -1,6 +1,6 @@
 /* @layer core @kind logic */
 import { copyFile, mkdir, rename, rm, stat, writeFile } from 'node:fs/promises';
-import { unzipSync } from 'fflate';
+import { APWORLD_LIMITS, unzipCapped } from '@archipelia/model/zip';
 import { basename, dirname, join, resolve, sep } from 'node:path';
 import { apRoot } from '@archipelia/engine';
 import type { ApworldInfo } from './read-apworld.type';
@@ -11,8 +11,8 @@ import { BACKUP_DIR } from './place-world.constants';
 const exists = (path: string) => stat(path).then(() => true, () => false);
 
 const extractFolder = async ({ bytes, module }: ApworldInfo, target: string) => {
-  const entries = unzipSync(bytes, { filter: ({ name }) => name.startsWith(`${module}/`) && !name.endsWith('/') });
-  for (const [name, data] of Object.entries(entries)) {
+  const { files } = unzipCapped(bytes, APWORLD_LIMITS, ({ name }) => name.startsWith(`${module}/`) && !name.endsWith('/'));
+  for (const [name, data] of Object.entries(files)) {
     const out = resolve(target, name.slice(module.length + 1));
     if (!out.startsWith(`${target}${sep}`)) throw new Error(`${name}: path leaves the world folder`);
     await mkdir(dirname(out), { recursive: true });
