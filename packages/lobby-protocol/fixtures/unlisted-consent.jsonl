@@ -1,0 +1,16 @@
+{"dir":"c2s","msg":{"type":"hello","seq":1,"protocol":{"name":"archipelia-lobby","versions":[1]},"lobby":{"code":"K7QM-4XT2"},"resume":null,"client":{"id":"quest-client","name":"Quest Client","version":"1.4.2","platform":{"os":"linux","arch":"x64"}},"player":{"displayName":"Zelda"},"archipelago":{"version":"0.6.8"},"capabilities":["slots.yaml","worlds.upload"],"worlds":[{"game":"Unlisted Quest","module":"unlisted_quest","worldVersion":"1.0.0","sha256":"$U","size":"$U_size"}],"slots":[{"name":"Zelda","game":"Unlisted Quest","yaml":{"sha256":"$UY","size":"$UY_size"}}]}}
+{"dir":"s2c","msg":{"type":"welcome","re":1,"protocol":{"name":"archipelia-lobby","version":1},"server":{"name":"Archipelia","version":"$any_str"},"lobby":{"id":"$any_str","name":"Friday seed","engine":{"ap":"0.6.8"},"admission":"host-approval","allowUnlisted":true,"phase":"open"},"member":{"id":"$member","token":"$token","admission":"pending","trust":"unlisted"},"need":["$U","$UY"],"limits":{"maxMessageBytes":1048576,"chunkBytes":262144,"maxWorldBytes":67108864,"maxYamlBytes":262144,"maxMemberBytes":134217728}}}
+{"dir":"s2c","msg":{"type":"lobby.state","rev":"$any_int","phase":"open","engine":{"ap":"0.6.8"},"members":[{"id":"$member","displayName":"Zelda","client":{"name":"Quest Client","version":"1.4.2"},"trust":"unlisted","admission":"pending","ready":false,"slots":[{"name":"Zelda","game":"Unlisted Quest","state":"uploading"}]}],"others":{"approved":"$any_int","pending":"$any_int"}}}
+{"dir":"c2s","msg":{"type":"upload.begin","seq":2,"sha256":"$U","kind":"world","size":"$U_size"}}
+{"dir":"s2c","msg":{"type":"upload.ready","re":2,"sha256":"$U","offset":0}}
+{"dir":"c2s","msg":{"type":"upload.chunk","sha256":"$U","offset":0,"data":"$data"}}
+{"dir":"s2c","msg":{"type":"upload.done","sha256":"$U","ok":true}}
+{"dir":"c2s","msg":{"type":"upload.begin","seq":3,"sha256":"$UY","kind":"yaml","size":"$UY_size"}}
+{"dir":"s2c","msg":{"type":"upload.ready","re":3,"sha256":"$UY","offset":0}}
+{"dir":"c2s","msg":{"type":"upload.chunk","sha256":"$UY","offset":0,"data":"$data"}}
+{"dir":"s2c","msg":{"type":"upload.done","sha256":"$UY","ok":true}}
+{"dir":"host","action":"approve"}
+{"dir":"s2c","msg":{"type":"admission","state":"approved"}}
+{"dir":"s2c","msg":{"type":"lobby.state","rev":"$any_int","phase":"open","engine":{"ap":"0.6.8"},"members":[{"$has":{"id":"$member","displayName":"Zelda","client":{"name":"Quest Client","version":"1.4.2"},"trust":"unlisted","admission":"approved","ready":false,"slots":[{"$has":{"name":"Zelda","game":"Unlisted Quest","state":"waiting-consent"}}]}}]}}
+{"dir":"host","action":"consent","world":"$U","allowed":true}
+{"dir":"s2c","msg":{"type":"lobby.state","rev":"$any_int","phase":"open","engine":{"ap":"0.6.8"},"members":[{"$has":{"id":"$member","displayName":"Zelda","client":{"name":"Quest Client","version":"1.4.2"},"trust":"unlisted","admission":"approved","ready":false,"slots":[{"$has":{"name":"Zelda","game":"Unlisted Quest","state":"ok"}}]}}]}}

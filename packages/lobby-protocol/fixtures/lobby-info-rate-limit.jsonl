@@ -1,0 +1,4 @@
+{"dir":"repeat","times":30,"lines":[{"dir":"c2s","msg":{"type":"lobby.info","protocol":{"name":"archipelia-lobby","versions":[1]},"lobby":{"code":"K7QM-4XT2"}}},{"dir":"s2c","msg":{"type":"lobby.info.reply","protocol":{"name":"archipelia-lobby","version":1},"server":{"name":"Archipelia","version":"$any_str"},"lobby":{"name":"Friday seed","engine":{"ap":"0.6.8"},"phase":"open","joinable":true,"admission":"host-approval","allowUnlisted":false,"worlds":[],"requires":{"capabilities":["slots.yaml"]}},"limits":{"maxMessageBytes":1048576,"chunkBytes":262144,"maxWorldBytes":67108864,"maxYamlBytes":262144,"maxMemberBytes":134217728}}}]}
+{"dir":"c2s","msg":{"type":"lobby.info","protocol":{"name":"archipelia-lobby","versions":[1]},"lobby":{"code":"K7QM-4XT2"}}}
+{"dir":"s2c","msg":{"type":"error","code":"rate-limited","message":"$any_str","fatal":true,"retryAfter":"$any_int"}}
+{"dir":"close","code":4429}
