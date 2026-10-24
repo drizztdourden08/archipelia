@@ -1,4 +1,4 @@
-/* @layer tests @kind helper */
+/* @layer testing @kind logic */
 import { createHash } from 'node:crypto';
 
 const statementOf = (bytes: Uint8Array, predicateType = 'https://slsa.dev/provenance/v1') => ({

@@ -61,7 +61,7 @@ afterEach(async () => {
   await rm(work, { recursive: true, force: true });
 });
 
-describe.runIf(runner.mode === 'bwrap' && existsSync(PYTHON))('a real bubblewrap sandbox on Linux (skipped without bwrap; CI runs it once Brock 0.87 workflows: { testEnv: { linuxPackages: ["bubblewrap"], userNamespaces: true } } is on)', () => {
+describe.runIf(process.platform === 'linux' && existsSync(PYTHON) && (runner.mode === 'bwrap' || process.env.CI !== undefined))('a real bubblewrap sandbox on Linux (needs bubblewrap, which CI installs)', () => {
   test('a world cannot read or write outside its overlay and run folder, nor open a socket', async () => {
     const overlay = join(work, 'overlay');
     const run = join(work, 'run');

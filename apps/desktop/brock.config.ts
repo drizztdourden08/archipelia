@@ -11,7 +11,11 @@ export default defineBrockConfig({
     repo: { owner: 'drizztdourden08', name: 'archipelia' },
     icons: { brand: 'archipelia', rim: 'light' },
   },
-  targets: ['desktop'],
+  targets: ['desktop', 'server'],
+  server: { ports: [38290, 38281], osPackages: ['bubblewrap'], optionalAddons: ['ssh2', 'cpu-features'] },
   modules: ['secrets', 'updater'],
-  workflows: { publish: { packages: ['packages/lobby-protocol', 'packages/client-kit'], registry: 'github' } },
+  workflows: {
+    testEnv: { linuxPackages: ['bubblewrap'], userNamespaces: true },
+    publish: { packages: ['packages/lobby-protocol', 'packages/client-kit'], registry: 'github' },
+  },
 });

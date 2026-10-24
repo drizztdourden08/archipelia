@@ -1,4 +1,4 @@
-/* @layer tests @kind helper */
+/* @layer testing @kind logic */
 import { createHash } from 'node:crypto';
 import type { KeyPairKeyObjectResult } from 'node:crypto';
 import { TrustedRoot } from '@sigstore/protobuf-specs';

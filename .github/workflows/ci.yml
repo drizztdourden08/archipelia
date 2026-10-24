@@ -43,6 +43,12 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.PACKAGES_TOKEN || secrets.GITHUB_TOKEN }}
 
+      - name: Install Linux packages
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends bubblewrap
+
+      - name: Let the tests create user namespaces
+        run: sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+
       - name: Build
         run: pnpm --dir "$APP_DIR" exec brock build
 
@@ -107,3 +113,43 @@ jobs:
           name: review
           path: .user-data/Data/review/
           if-no-files-found: ignore
+
+  server:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+
+      # pnpm/action-setup takes the version from packageManager in the root package.json.
+      # Naming a version here as well fails the step.
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+          registry-url: https://npm.pkg.github.com
+          scope: '@drizztdourden08'
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.PACKAGES_TOKEN || secrets.GITHUB_TOKEN }}
+
+      - name: Build the server
+        run: pnpm --dir "$APP_DIR" exec brock server build
+
+      - name: Start the server and wait for its health check
+        shell: bash
+        run: |
+          BUNDLE="$GITHUB_WORKSPACE/$APP_DIR/dist/server/main.mjs"
+          DATA="$(mktemp -d)"
+          node "$BUNDLE" --user-data="$DATA" &
+          PID=$!
+          HEALTHY=""
+          for _ in $(seq 1 30); do
+            if node "$BUNDLE" health --user-data="$DATA"; then HEALTHY=1; break; fi
+            kill -0 "$PID" 2>/dev/null || break
+            sleep 1
+          done
+          kill "$PID" 2>/dev/null || true
+          wait "$PID" 2>/dev/null || true
+          test -n "$HEALTHY" || { echo "::error::The server never reported healthy."; exit 1; }

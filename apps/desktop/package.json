@@ -33,19 +33,25 @@
     "@archipelia/server": "workspace:*",
     "@archipelia/sessions": "workspace:*",
     "@drizztdourden08/archipelia-lobby-protocol": "workspace:*",
-    "@drizztdourden08/brock-core": "^0.85.0",
-    "@drizztdourden08/brock-electron": "^0.85.0",
-    "@drizztdourden08/brock-react": "^0.85.0",
-    "@drizztdourden08/brock-secrets": "^0.85.0",
-    "@drizztdourden08/brock-updater": "^0.85.0",
-    "@drizztdourden08/tessera": "^0.55.0",
+    "@drizztdourden08/brock-core": "^0.87.2",
+    "@drizztdourden08/brock-electron": "^0.87.2",
+    "@drizztdourden08/brock-react": "^0.87.2",
+    "@drizztdourden08/brock-secrets": "^0.87.2",
+    "@drizztdourden08/brock-updater": "^0.87.2",
+    "@drizztdourden08/tessera": "^0.56.0",
     "@electron-toolkit/utils": "catalog:",
+    "@peculiar/x509": "^2.1.0",
     "@runonflux/nat-upnp": "^2.0.5",
+    "@sigstore/bundle": "catalog:",
+    "@sigstore/protobuf-specs": "catalog:",
+    "@sigstore/tuf": "catalog:",
+    "@sigstore/verify": "catalog:",
     "archipelago.js": "catalog:",
     "fflate": "catalog:",
     "multicast-dns": "^7.2.5",
     "react": "catalog:",
     "react-dom": "catalog:",
+    "reflect-metadata": "^0.2.2",
     "smol-toml": "catalog:",
     "ssh2": "catalog:",
     "velopack": "catalog:",
@@ -53,8 +59,9 @@
     "zustand": "catalog:"
   },
   "devDependencies": {
-    "@drizztdourden08/brock-build": "^0.85.0",
-    "@drizztdourden08/brock-lint-config": "^0.85.0",
+    "@archipelia/trust": "workspace:*",
+    "@drizztdourden08/brock-build": "^0.87.2",
+    "@drizztdourden08/brock-lint-config": "^0.87.2",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
@@ -70,7 +77,7 @@
     "vite": "catalog:"
   },
   "brock": {
-    "tessera": "0.55.0",
-    "version": "0.85.0"
+    "tessera": "0.56.2",
+    "version": "0.87.2"
   }
 }
