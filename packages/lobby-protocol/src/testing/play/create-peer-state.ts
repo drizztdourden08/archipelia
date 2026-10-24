@@ -1,5 +1,5 @@
 /* @layer testing @kind logic */
-import type { Transport, TransportEvent } from '../transport/transport.type';
+import type { Transport, TransportEvent } from '../../node/transport/transport.type';
 import type { PeerState } from './play.type';
 import { DEFAULT_LIMITS } from '../../protocol/protocol.constants';
 import { createQueue } from './create-queue';

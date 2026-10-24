@@ -2,7 +2,7 @@
 import type { StartJob } from '@drizztdourden08/brock-core/jobs';
 import type { FetchLike } from '@archipelia/engine';
 import type { SecretStore } from '@archipelia/hosts';
-import type { DataFiles, EngineEvent } from '@archipelia/model';
+import type { DataFiles, EngineEvent, Lobby } from '@archipelia/model';
 import type { SessionEvent } from '@archipelia/sessions';
 
 type CoreDomain = DataFiles & {
@@ -14,7 +14,8 @@ type CoreDomains = { domain: (id: string) => CoreDomain };
 
 type CoreEvent =
   | { kind: 'engine'; event: EngineEvent }
-  | { kind: 'session'; event: SessionEvent };
+  | { kind: 'session'; event: SessionEvent }
+  | { kind: 'lobby'; lobby: Lobby };
 
 type CoreLogLevel = 'info' | 'warn' | 'error';
 
@@ -27,6 +28,7 @@ type CoreEnvironment = {
   fetch?: FetchLike;
   platform?: string;
   target?: string;
+  version?: string;
 };
 
 type CorePorts = {

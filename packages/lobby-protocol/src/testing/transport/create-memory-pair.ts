@@ -1,6 +1,6 @@
 /* @layer testing @kind logic */
-import type { Channel, Transport } from './transport.type';
-import { createChannel } from './create-channel';
+import type { Channel, Transport } from '../../node/transport/transport.type';
+import { createChannel } from '../../node/transport/create-channel';
 
 const createMemoryPair = (): [Transport, Transport] => {
   let open = true;

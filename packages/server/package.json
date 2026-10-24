@@ -37,10 +37,13 @@
     "@archipelia/model": "workspace:*",
     "@archipelia/presets": "workspace:*",
     "@archipelia/sessions": "workspace:*",
+    "@archipelia/trust": "workspace:*",
     "@drizztdourden08/brock-core": "^0.82.0",
     "@drizztdourden08/brock-electron": "^0.82.0",
     "@drizztdourden08/brock-secrets": "^0.82.0",
     "@runonflux/nat-upnp": "^2.0.5",
-    "multicast-dns": "^7.2.5"
+    "fflate": "catalog:",
+    "multicast-dns": "^7.2.5",
+    "yaml": "catalog:"
   }
 }

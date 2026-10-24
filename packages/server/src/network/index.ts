@@ -5,6 +5,8 @@ export type { AdvertiseHandle, AdvertiseOptions } from './discovery/advertise.ty
 export type { BrowseHandle, BrowseOptions, DiscoverySource, LanServer } from './discovery/browse.type';
 export { mapPort } from './mapping/map-port';
 export { createNodeMappingPorts } from './mapping/create-node-mapping-ports';
+export { createPublicLookup } from './mapping/create-public-lookup';
+export type { LookupOutcome, PublicLookup, PublicLookupFetch, PublicLookupOptions } from './mapping/public-lookup.type';
 export type {
   CgnatKind,
   CgnatReport,

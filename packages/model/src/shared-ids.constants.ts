@@ -6,6 +6,8 @@ const DOMAIN = {
   games: 'games',
   engine: 'engine',
   cache: 'cache',
+  lobbies: 'lobbies',
+  server: 'server',
 } as const;
 
 const ENGINE_JOB = 'archipelia-engine-setup';

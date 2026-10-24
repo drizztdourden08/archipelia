@@ -7,6 +7,8 @@ import type { ServerHost } from '@drizztdourden08/brock-electron/server';
 import type { CoreDomains, CoreEvent } from '../src';
 import { startCore } from '../src';
 import { createNodeDomains, createNodeRest, nodeLanHost } from '../src/node';
+import type { Transport } from '@archipelia/lobby-protocol/testing';
+import { connectWebSocket } from '@archipelia/lobby-protocol/testing';
 
 let dataDir = '';
 
@@ -59,5 +61,68 @@ describe('the core under plain Node', () => {
 
   test('picks an address for the lobby', () => {
     expect(nodeLanHost()).toMatch(/^\d+\.\d+\.\d+\.\d+$/);
+  });
+});
+
+const replies = (transport: Transport) => {
+  const queue: Record<string, unknown>[] = [];
+  const waiting: ((value: Record<string, unknown>) => void)[] = [];
+  transport.listen((event) => {
+    if (event.kind !== 'text') return;
+    const message = JSON.parse(event.text) as Record<string, unknown>;
+    const next = waiting.shift();
+    if (next) next(message);
+    else queue.push(message);
+  });
+  const take = () => new Promise<Record<string, unknown>>((resolve) => {
+    const first = queue.shift();
+    if (first) resolve(first);
+    else waiting.push(resolve);
+  });
+  return async (type?: string): Promise<Record<string, unknown>> => {
+    let message = await take();
+    while (type !== undefined && message.type !== type) message = await take();
+    return message;
+  };
+};
+
+const started = () => {
+  const host = hostOf([]);
+  return startCore(host, createNodeRest(host, { automation: true }));
+};
+
+describe('the lobby listener of the core', () => {
+  test('binds loopback under automation, answers the admin API with its token and lobby.info for the lobby it made', async () => {
+    const server = started();
+    const endpoint = await server.listen({ port: 0, mode: 'lan-and-internet' });
+    expect(endpoint.host).toBe('127.0.0.1');
+    expect(endpoint.reach()).toMatchObject({ mode: 'lan-and-internet', advertising: false });
+    const token = await server.core.adminToken();
+    expect(await readFile(join(dataDir, 'Data', 'server', 'admin-token'), 'utf8')).toBe(token);
+    const admin = await connectWebSocket(`ws://127.0.0.1:${endpoint.port}/archipelia/admin`);
+    const next = replies(admin);
+    admin.send(JSON.stringify({ type: 'admin.hello', seq: 1, token }));
+    expect(await next()).toMatchObject({ type: 'admin.welcome', re: 1 });
+    admin.send(JSON.stringify({ type: 'lobby.create', seq: 2, name: 'Night run', engine: { id: 'e', ap: '0.6.8', python: '3.12.0' } }));
+    const created = await next('admin.reply');
+    const lobby = (created.result ?? {}) as { code: string };
+    expect(created).toMatchObject({ type: 'admin.reply', re: 2, ok: true });
+    const client = await connectWebSocket(`ws://127.0.0.1:${endpoint.port}/archipelia/lobby`);
+    const answer = replies(client);
+    client.send(JSON.stringify({ type: 'lobby.info', seq: 1, protocol: { name: 'archipelia-lobby', versions: [1] }, lobby: { code: lobby.code } }));
+    expect(await answer()).toMatchObject({ type: 'lobby.info.reply', re: 1, lobby: { name: 'Night run', engine: { ap: '0.6.8' }, admission: 'host-approval', joinable: true } });
+    client.close();
+    admin.close();
+    await server.stop();
+  });
+
+  test('refuses an admin hello with a wrong token', async () => {
+    const server = started();
+    const endpoint = await server.listen({ port: 0, mode: 'off' });
+    const admin = await connectWebSocket(`ws://127.0.0.1:${endpoint.port}/archipelia/admin`);
+    const next = replies(admin);
+    admin.send(JSON.stringify({ type: 'admin.hello', token: 'wrong' }));
+    expect(await next()).toMatchObject({ type: 'error', code: 'admin-refused', fatal: true });
+    await server.stop();
   });
 });

@@ -1,5 +1,5 @@
 /* @layer testing @kind logic */
-import type { TransportEvent } from '../transport/transport.type';
+import type { TransportEvent } from '../../node/transport/transport.type';
 import type { PeerContext } from './play.type';
 
 const typeOf = (text: string): string | null => {

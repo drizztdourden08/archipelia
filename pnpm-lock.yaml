@@ -185,12 +185,18 @@ importers:
       '@electron-toolkit/utils':
         specifier: 'catalog:'
         version: 4.0.0(electron@42.11.8)
+      '@runonflux/nat-upnp':
+        specifier: ^2.0.5
+        version: 2.0.5
       archipelago.js:
         specifier: 'catalog:'
         version: 2.1.0
       fflate:
         specifier: 'catalog:'
         version: 0.8.3
+      multicast-dns:
+        specifier: ^7.2.5
+        version: 7.2.5
       react:
         specifier: 'catalog:'
         version: 19.3.0
@@ -458,6 +464,9 @@ importers:
       '@archipelia/sessions':
         specifier: workspace:*
         version: link:../sessions
+      '@archipelia/trust':
+        specifier: workspace:*
+        version: link:../trust
       '@drizztdourden08/brock-core':
         specifier: ^0.82.0
         version: 0.82.0
@@ -470,9 +479,15 @@ importers:
       '@runonflux/nat-upnp':
         specifier: ^2.0.5
         version: 2.0.5
+      fflate:
+        specifier: 'catalog:'
+        version: 0.8.3
       multicast-dns:
         specifier: ^7.2.5
         version: 7.2.5
+      yaml:
+        specifier: 'catalog:'
+        version: 2.9.1
     devDependencies:
       '@drizztdourden08/brock-lint-config':
         specifier: ^0.82.0

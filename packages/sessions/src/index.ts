@@ -8,6 +8,7 @@ export { writePlayers } from './players/write-players';
 export type { PlayerDeps } from './players/write-players.type';
 export { createSessionService } from './service/session-service';
 export type { ServiceDeps } from './service/service-deps.type';
+export type { LobbyRun } from './service/lobby-run.type';
 export type { SessionService } from './service/session-service.type';
 export type { SessionEvent } from './service/session-event.type';
 export { createRunStore } from './store/create-run-store';

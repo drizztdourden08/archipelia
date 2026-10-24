@@ -7,12 +7,17 @@ import { MAX_LOG_LINES } from './host-session.constants';
 import { bakesPassword } from './bakes-password';
 import { roomPasswordOf } from './room-password';
 import { pickHostEngine } from '../engine/pick-host-engine';
+import type { HostEngine } from '../engine/pick-host-engine.type';
 import { hostWarning } from './host-warning';
 import { warnSession } from './warn-session';
 
-const hostSession = async ({ deps, live, signal }: HostRun, session: Session) => {
+const localEngine = ({ deps, runtime }: HostRun, session: Session): Promise<HostEngine> =>
+  runtime ? Promise.resolve({ runtime }) : pickHostEngine({ source: deps, session });
+
+const hostSession = async (run: HostRun, session: Session) => {
+  const { deps, live, signal } = run;
   const { server, host: hostTarget } = session.snapshot;
-  const picked = hostTarget.kind === 'local' ? await pickHostEngine({ source: deps, session }) : undefined;
+  const picked = hostTarget.kind === 'local' ? await localEngine(run, session) : undefined;
   const target = await deps.hostFor(hostTarget, picked?.runtime);
   const entry: LiveSession = { host: target, log: [] };
   live.set(session.id, entry);

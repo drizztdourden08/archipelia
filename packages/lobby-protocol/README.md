@@ -31,7 +31,7 @@ The package has three entry points.
 | Import | Holds | Needs Node |
 | --- | --- | --- |
 | `@archipelia/lobby-protocol` | constants, message types, schemas, the validator, the codec, error rules, version rules, lobby code helpers, the resume outcome, the discovery record and beacon | no |
-| `@archipelia/lobby-protocol/node` | `newToken`, `hashToken`, `sha256Hex` | yes (`node:crypto`) |
+| `@archipelia/lobby-protocol/node` | `newToken`, `hashToken`, `sha256Hex`, and the WebSocket transport over a socket (`createSocketTransport`, `upgradeResponse`) that servers and the fake server share | yes (`node:crypto`, `node:stream`) |
 | `@archipelia/lobby-protocol/testing` | the fixtures loader, the scenario kit, `createFakeServer`, `createFakeClient`, `runScenario`, the WebSocket transport and an in-memory transport | yes |
 
 The fixtures are plain files under `fixtures/`, also reachable as `@archipelia/lobby-protocol/fixtures/<scenario>.jsonl`.
