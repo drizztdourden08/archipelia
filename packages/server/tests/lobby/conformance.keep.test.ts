@@ -1,7 +1,7 @@
 /* @layer tests @kind test */
 import { afterEach, describe, expect, test } from 'vitest';
-import type { Bindings, HostLine, JsonValue, ScenarioKit, Transport } from '@archipelia/lobby-protocol/testing';
-import { connectWebSocket, createFakeClient, loadScenario, SCENARIO_CATALOG } from '@archipelia/lobby-protocol/testing';
+import type { Bindings, HostLine, JsonValue, ScenarioKit, Transport } from '@drizztdourden08/archipelia-lobby-protocol/testing';
+import { connectWebSocket, createFakeClient, loadScenario, SCENARIO_CATALOG } from '@drizztdourden08/archipelia-lobby-protocol/testing';
 import type { Lobby } from '@archipelia/model';
 import { kitFor } from './conformance-kit';
 import type { ConformanceServer } from './conformance-server';
@@ -14,8 +14,6 @@ const connectDrained = async (url: string): Promise<Transport> => {
   const transport = await connectWebSocket(url);
   return { ...transport, close: (code) => void setTimeout(() => transport.close(code), DRAIN_MS) };
 };
-
-const SEEDED_BEFORE_START = ['file-download', 'start-failure'];
 
 let running: ConformanceServer | undefined;
 
@@ -55,7 +53,6 @@ const hostHook = (server: ConformanceServer, lobby: Lobby, name: string, kit: Sc
   else if (line.action === 'consent') await service.consent(lobby.id, String(line.world), line.allowed === true);
   else if (line.action === 'takeover') await takeOver(server, name, bindings);
   else if (line.action === 'start') {
-    if (SEEDED_BEFORE_START.includes(name)) await seedFiles(server, lobby, kit);
     await (await service.start(lobby.id)).finished;
   }
 };
@@ -68,6 +65,7 @@ describe('the real lobby server against the fake client', () => {
     const lobby = await prepareLobby(running, entry.setup);
     const kit = kitFor(name);
     const server = running;
+    if (entry.setup.heldFiles) await seedFiles(server, lobby, kit);
     const client = createFakeClient({
       scenario: loadScenario(name), kit, ignore: ['lobby.state'], timeoutMs: 8000,
       connect: () => connectDrained(server.url), host: hostHook(server, lobby, name, kit),

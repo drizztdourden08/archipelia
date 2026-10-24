@@ -1,5 +1,5 @@
 /* @layer core @kind logic */
-import { createError } from '@archipelia/lobby-protocol';
+import { createError } from '@drizztdourden08/archipelia-lobby-protocol';
 import type { LobbyContext } from '../lobby-context.type';
 import type { MemberRef, Outcome } from '../lobby-service.type';
 import { needOf } from '../state/need-of';

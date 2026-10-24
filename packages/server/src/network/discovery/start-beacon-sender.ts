@@ -1,5 +1,5 @@
 /* @layer core @kind logic */
-import { BEACON_INTERVAL_MS, BEACON_PORT, buildBeacon } from '@archipelia/lobby-protocol';
+import { BEACON_INTERVAL_MS, BEACON_PORT, buildBeacon } from '@drizztdourden08/archipelia-lobby-protocol';
 import type { BeaconSenderOptions } from './advertise.type';
 import { broadcastTargets } from './broadcast-targets';
 

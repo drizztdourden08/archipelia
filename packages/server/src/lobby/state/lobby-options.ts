@@ -1,5 +1,5 @@
 /* @layer core @kind logic */
-import { DEFAULT_LIMITS } from '@archipelia/lobby-protocol';
+import { DEFAULT_LIMITS } from '@drizztdourden08/archipelia-lobby-protocol';
 import type { LobbyOptions } from '@archipelia/model';
 import { DEFAULT_MAX_SLOTS, DEFAULT_ROOM_PORT, LOBBY_GENERATOR, LOBBY_SERVER } from '../lobby.constants';
 

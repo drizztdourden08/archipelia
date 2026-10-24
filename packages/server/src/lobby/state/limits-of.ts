@@ -1,6 +1,6 @@
 /* @layer core @kind logic */
-import type { Limits } from '@archipelia/lobby-protocol';
-import { DEFAULT_LIMITS } from '@archipelia/lobby-protocol';
+import type { Limits } from '@drizztdourden08/archipelia-lobby-protocol';
+import { DEFAULT_LIMITS } from '@drizztdourden08/archipelia-lobby-protocol';
 import type { Lobby } from '@archipelia/model';
 
 const limitsOf = ({ options }: Lobby): Limits => ({

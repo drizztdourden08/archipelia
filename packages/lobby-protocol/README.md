@@ -18,23 +18,37 @@ The text below is meant to be enough for a third party to write a client. The wo
 
 ## Using the package
 
-The package name is `@archipelia/lobby-protocol`. It has no runtime dependency and imports nothing from Electron or from the Archipelia app. It ships TypeScript source, so the consumer's bundler or test runner transpiles it. It needs Node 24 or newer for the parts that touch the network or the file system.
+The package name is `@drizztdourden08/archipelia-lobby-protocol`. It has no runtime dependency and imports nothing from Electron or from the Archipelia app. It needs Node 24 or newer for the parts that touch the network or the file system.
 
-A client in another repository takes it as a pinned git dependency, with no registry:
+The package is published to GitHub Packages, like the Brock and Tessera packages, by the release workflow of the Archipelia repository. The scope must match the GitHub owner.
 
-```json
-"@archipelia/lobby-protocol": "github:drizztdourden08/archipelia#lobby-protocol-v1.0.0&path:/packages/lobby-protocol"
-```
+1. In the client's `.npmrc`, map the scope to the registry and give it a token:
+
+   ```ini
+   @drizztdourden08:registry=https://npm.pkg.github.com
+   //npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}
+   ```
+
+2. Set `NODE_AUTH_TOKEN` to a GitHub personal access token (classic) with the `read:packages` scope. In a GitHub Actions job, use the job's `GITHUB_TOKEN` and grant the job `packages: read`. Never commit the token.
+3. Install it:
+
+   ```sh
+   pnpm add @drizztdourden08/archipelia-lobby-protocol
+   ```
+
+The published package ships built JavaScript (ES modules) with `.d.ts` files in `dist`, and the fixtures in `fixtures`. A consumer runs it with plain Node and needs no transpile step. The declarations use relative imports without extensions, so a TypeScript consumer should use `moduleResolution: "bundler"` (or `skipLibCheck`). The `/testing` entry compiles with the DOM lib on. In the Archipelia repository the package points at its TypeScript source, and `node scripts/build.mjs` makes `dist`.
+
+A client never has to build a message with a helper. Messages are plain objects. The package exports a type for each one (`Hello`, `UploadBegin`, `Ready` and the rest) and `validateMessage` and `encodeMessage` check and write them. It builds only the things that need a rule: `createError` (an `error` message), `buildDiscoveryTxt` and `buildBeacon` (the discovery record), `formatLobbyCode` and the version sentences (`checkClientVersion`, `checkWorldRange`, `checkWorldVersion`).
 
 The package has three entry points.
 
 | Import | Holds | Needs Node |
 | --- | --- | --- |
-| `@archipelia/lobby-protocol` | constants, message types, schemas, the validator, the codec, error rules, version rules, lobby code helpers, the resume outcome, the discovery record and beacon | no |
-| `@archipelia/lobby-protocol/node` | `newToken`, `hashToken`, `sha256Hex`, and the WebSocket transport over a socket (`createSocketTransport`, `upgradeResponse`) that servers and the fake server share | yes (`node:crypto`, `node:stream`) |
-| `@archipelia/lobby-protocol/testing` | the fixtures loader, the scenario kit, `createFakeServer`, `createFakeClient`, `runScenario`, the WebSocket transport and an in-memory transport | yes |
+| `@drizztdourden08/archipelia-lobby-protocol` | constants, message types, schemas, the validator, the codec, error rules, version rules, lobby code helpers, the resume outcome, the discovery record and beacon | no |
+| `@drizztdourden08/archipelia-lobby-protocol/node` | `newToken`, `hashToken`, `sha256Hex`, and the WebSocket transport over a socket (`createSocketTransport`, `upgradeResponse`) that servers and the fake server share | yes (`node:crypto`, `node:stream`) |
+| `@drizztdourden08/archipelia-lobby-protocol/testing` | the fixtures loader, the scenario kit, `createFakeServer`, `createFakeClient`, `runScenario`, the WebSocket transport and an in-memory transport | yes |
 
-The fixtures are plain files under `fixtures/`, also reachable as `@archipelia/lobby-protocol/fixtures/<scenario>.jsonl`.
+The fixtures are plain files under `fixtures/`, also reachable as `@drizztdourden08/archipelia-lobby-protocol/fixtures/<scenario>.jsonl`.
 
 The pure entry point is safe for a renderer. The other two use `node:` modules and belong to a main process, a server or a test.
 
@@ -98,7 +112,7 @@ The server answers with `lobby.info.reply`:
 - `requires.capabilities` lists what a client must declare. `limits` are the upload limits, so a client can check its files first.
 - The reply holds no member list, no member count, no token, no password and no room address.
 - A wrong code gets `lobby-not-found` and a close with `4404`. A closed lobby gets `lobby-closed` and `4410`. No common protocol major gets `protocol-unsupported` and `4401`.
-- Because the exchange needs no proof, it is limited. A `lobby.info` request MUST be at most 1 024 bytes, else the server answers `bad-message` and closes with `4400`. A server answers at most 30 `lobby.info` requests per minute per source address (`LOBBY_INFO_LIMIT`). The 31st gets `rate-limited` with `retryAfter` and a close with `4429`. A wrong code in a `lobby.info` request counts as a failed attempt in the same counter as a wrong code in `hello` (see the checks below).
+- Because the exchange needs no proof, it is limited. A `lobby.info` request MUST be at most 1 024 bytes, else the server answers `bad-message` and closes with `4400`. A server answers at most 30 `lobby.info` requests per minute per source address (`LOBBY_INFO_LIMIT`). The 31st gets `rate-limited` with `retryAfter` and a close with `4429` (see the back-off below). A wrong code in a `lobby.info` request counts as a failed attempt in the same counter as a wrong code in `hello` (see the checks below).
 - After the reply the connection stays open. The 15 s timer for `hello` starts again at the reply. A client that wants no more can close.
 
 ## Handshake
@@ -118,7 +132,7 @@ The client speaks first, with `lobby.info` or `hello`, within 15 s of the connec
     "build": "c44b2c1",
     "platform": { "os": "windows", "arch": "x64" },
     "homepage": "https://github.com/drizztdourden08/relic-of-the-past",
-    "sdk": { "name": "@archipelia/lobby-protocol", "version": "1.0.0" }
+    "sdk": { "name": "@drizztdourden08/archipelia-lobby-protocol", "version": "1.0.1" }
   },
   "player": { "displayName": "Link" },
   "archipelago": { "version": "0.6.8" },
@@ -271,6 +285,7 @@ S: { "type": "upload.done", "sha256": "<h>", "ok": true }
 - When the size is reached, the server checks the hash. A mismatch drops the partial file and sends `upload-hash-mismatch`. The client MAY retry once.
 - Limits: `maxWorldBytes` (64 MiB), `maxYamlBytes` (256 KiB), `maxMemberBytes` (128 MiB) for all the files of a member. A declared size above a limit is refused at `upload.begin` with `upload-too-large`. A stream past the declared size gets `bad-message`.
 - One upload at a time per connection.
+- Order: the client uploads the world first, then the YAML. A world that the lobby refuses (version, trust, range) then ends the join before a YAML is sent. A file the server already holds is not asked for again, so `need` can be empty. A client uploads exactly the hashes in the last `need` it received (`welcome` or `slots.ok`), in the order of that list.
 
 ### What the server does with a file
 
@@ -344,6 +359,7 @@ The server sends the whole public view on join and on any change. `rev` grows by
 - Slot `state`: `uploading`, `checking`, `waiting-consent`, `ok`, `refused` (with `reason`).
 - A pending member sees only its own entry, and an `others` object with the counts `approved` and `pending` of the other members.
 - The client marks itself ready when its uploads are done: `{ "type": "ready", "seq": 9, "ready": true }`. Ready is advisory. The host decides when to start.
+- A resumed member does not send `ready` again when its own entry in the first `lobby.state` after the `welcome` already has `ready: true`. It sends `ready` only when that entry says `ready: false` and its uploads are done.
 - `{ "type": "leave" }` ends the membership and deletes its files.
 
 ## Start and results
@@ -418,6 +434,8 @@ On success each approved member gets its own results:
 | `internal` | no | none | server fault, the message says what to tell the host |
 
 `resume-invalid` and `resume-replaced` are additive codes of this version. A refused member that is connected sees `admission` with the state `refused` and then the close. The error `refused` is what a refused member gets when it resumes.
+
+A close with `4429` is always preceded by the `rate-limited` error, and that error always carries `retryAfter`, the whole seconds to wait before the next `lobby.info` or `hello` from the same address. The close frame itself carries no reason text. A client that sees `4429` without having read the error (the error was lost, or the client only watches close codes) MUST wait 60 seconds, the length of both counting windows (`LOBBY_INFO_WINDOW_MS` and `WRONG_CODE_WINDOW_MS`), and SHOULD double the wait after each further `4429`, up to 15 minutes.
 
 `ERROR_RULES` holds this table in code, `createError` builds the message with the right `fatal` flag, and `closeCodeOf` gives the close code.
 
@@ -576,6 +594,8 @@ A string value of the form `$name` is a placeholder.
 | uploads and files | `upload-unexpected`, `upload-too-large`, `upload-hash-mismatch`, `yaml-invalid`, `world-invalid`, `consent-refused` |
 | protocol | `protocol-unsupported`, `wrong-code-rate-limit`, `bad-message-prewelcome`, `bad-message-binary`, `bad-message-after-welcome`, `metadata-missing`, `internal-error` |
 
+A catalog entry may carry two more facts. `setup.heldFiles` is true when the server already holds the apworld and the YAML before the client joins, as when another member sent the same files, so the `welcome` says `need: []` and the script uploads nothing. `serverSideOnly` marks a scenario that a conforming client cannot play, because the client would have to send a frame that the protocol forbids. `bad-message-binary` and `bad-message-after-welcome` are such scenarios. A client test skips them, and a server test plays them.
+
 The scenario `approval-join` is the RotP example exchange above. Every error code has at least one scenario.
 
 ### The fake server and the fake client
@@ -583,7 +603,7 @@ The scenario `approval-join` is the RotP example exchange above. Every error cod
 Both play a scenario from opposite ends and fail on the first line that breaks the schema, the order or the values.
 
 ```ts
-import { createFakeServer, loadScenario } from '@archipelia/lobby-protocol/testing';
+import { createFakeServer, loadScenario } from '@drizztdourden08/archipelia-lobby-protocol/testing';
 
 const server = createFakeServer({ scenario: loadScenario('approval-join') });
 const listener = await server.listen();

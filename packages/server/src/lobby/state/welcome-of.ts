@@ -1,6 +1,6 @@
 /* @layer core @kind logic */
-import type { Welcome } from '@archipelia/lobby-protocol';
-import { PROTOCOL_NAME, PROTOCOL_VERSION } from '@archipelia/lobby-protocol';
+import type { Welcome } from '@drizztdourden08/archipelia-lobby-protocol';
+import { PROTOCOL_NAME, PROTOCOL_VERSION } from '@drizztdourden08/archipelia-lobby-protocol';
 import { SERVER_NAME } from '../lobby.constants';
 import { limitsOf } from './limits-of';
 import type { WelcomeInput } from './welcome-of.type';

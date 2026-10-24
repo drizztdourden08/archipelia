@@ -1,5 +1,5 @@
 /* @layer core @kind logic */
-import type { Failure, UploadBegin } from '@archipelia/lobby-protocol';
+import type { Failure, UploadBegin } from '@drizztdourden08/archipelia-lobby-protocol';
 import type { Lobby } from '@archipelia/model';
 import { formatSize } from '../state/format-size';
 import type { MemberFile } from '../state/member-files.type';

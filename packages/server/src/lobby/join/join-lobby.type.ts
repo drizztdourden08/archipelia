@@ -1,5 +1,5 @@
 /* @layer core @kind types */
-import type { Failure, Hello, WorldEntry } from '@archipelia/lobby-protocol';
+import type { Failure, Hello, WorldEntry } from '@drizztdourden08/archipelia-lobby-protocol';
 import type { Lobby, LobbyMember } from '@archipelia/model';
 import type { LobbyLink } from '../lobby-service.type';
 

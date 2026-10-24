@@ -1,5 +1,5 @@
 /* @layer core @kind logic */
-import type { LobbyStarted } from '@archipelia/lobby-protocol';
+import type { LobbyStarted } from '@drizztdourden08/archipelia-lobby-protocol';
 import type { Lobby, LobbyRoom, SlotUpload } from '@archipelia/model';
 import type { LobbyContext } from '../lobby-context.type';
 

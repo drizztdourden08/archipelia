@@ -1,7 +1,7 @@
 /* @layer tests @kind test */
 import { zipSync } from 'fflate';
-import type { ScenarioKit } from '@archipelia/lobby-protocol/testing';
-import { createScenarioKit, makeApworld } from '@archipelia/lobby-protocol/testing';
+import type { ScenarioKit } from '@drizztdourden08/archipelia-lobby-protocol/testing';
+import { createScenarioKit, makeApworld } from '@drizztdourden08/archipelia-lobby-protocol/testing';
 
 const WORLD_SIZE = 812345;
 

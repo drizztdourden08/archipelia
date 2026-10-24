@@ -1,6 +1,6 @@
 /* @layer core @kind logic */
-import type { Failure } from '@archipelia/lobby-protocol';
-import { checkWorldRange } from '@archipelia/lobby-protocol';
+import type { Failure } from '@drizztdourden08/archipelia-lobby-protocol';
+import { checkWorldRange } from '@drizztdourden08/archipelia-lobby-protocol';
 import type { Lobby, WorldUpload } from '@archipelia/model';
 import { readApworld } from './read-apworld';
 

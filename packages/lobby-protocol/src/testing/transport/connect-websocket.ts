@@ -19,7 +19,7 @@ const connectWebSocket = (url: string): Promise<Transport> =>
     socket.addEventListener('open', () =>
       resolve({
         send: (text) => socket.send(text),
-        sendBinary: (bytes) => socket.send(bytes),
+        sendBinary: (bytes) => socket.send(bytes.slice()),
         close: (code = 1000) => socket.close(usableCode(code)),
         listen: channel.listen,
       }),

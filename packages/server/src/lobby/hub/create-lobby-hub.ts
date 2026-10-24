@@ -1,5 +1,5 @@
 /* @layer core @kind logic */
-import type { ServerMessage } from '@archipelia/lobby-protocol';
+import type { ServerMessage } from '@drizztdourden08/archipelia-lobby-protocol';
 import type { Lobby } from '@archipelia/model';
 import type { LobbyLink, MemberRef } from '../lobby-service.type';
 import { lobbyView } from '../state/lobby-view';

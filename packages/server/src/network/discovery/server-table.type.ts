@@ -1,5 +1,5 @@
 /* @layer core @kind types */
-import type { DiscoveryRecord } from '@archipelia/lobby-protocol';
+import type { DiscoveryRecord } from '@drizztdourden08/archipelia-lobby-protocol';
 import type { DiscoverySource, LanServer } from './browse.type';
 
 type Sighting = { record: DiscoveryRecord; host: string; port: number; compatible: boolean };

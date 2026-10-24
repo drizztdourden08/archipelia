@@ -34,6 +34,7 @@ type ScenarioSetup = {
   maxSlots: number;
   existingSlots: ScenarioSlot[];
   registry: 'active' | 'revoked';
+  heldFiles?: boolean;
   outputFile?: ScenarioOutputFile;
 };
 
@@ -42,6 +43,7 @@ type ScenarioEntry = {
   title: string;
   requires: Capability[];
   setup: ScenarioSetup;
+  serverSideOnly?: boolean;
 };
 
 type Scenario = ScenarioEntry & { lines: FixtureLine[] };

@@ -1,7 +1,7 @@
 /* @layer core @kind logic */
 import type { Duplex } from 'node:stream';
-import { LOBBY_PATH, PRE_WELCOME_MAX_MESSAGE_BYTES } from '@archipelia/lobby-protocol';
-import { createSocketTransport, upgradeResponse } from '@archipelia/lobby-protocol/node';
+import { LOBBY_PATH, PRE_WELCOME_MAX_MESSAGE_BYTES } from '@drizztdourden08/archipelia-lobby-protocol';
+import { createSocketTransport, upgradeResponse } from '@drizztdourden08/archipelia-lobby-protocol/node';
 import { createLobbyConnection } from '../lobby/link/create-lobby-connection';
 import { ADMIN_MAX_BYTES } from './admin/admin.constants';
 import { createAdminConnection } from './admin/create-admin-connection';

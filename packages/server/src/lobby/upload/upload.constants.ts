@@ -1,5 +1,5 @@
 /* @layer core @kind config */
-import type { Failure } from '@archipelia/lobby-protocol';
+import type { Failure } from '@drizztdourden08/archipelia-lobby-protocol';
 
 const UNEXPECTED: Failure = { code: 'upload-unexpected', message: 'This lobby did not ask for that file.' };
 const HASH_MISMATCH: Failure = { code: 'upload-hash-mismatch', message: 'The bytes of the file do not match its hash. Send the file again.' };

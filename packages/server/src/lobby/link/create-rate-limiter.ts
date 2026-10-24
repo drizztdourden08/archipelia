@@ -1,5 +1,5 @@
 /* @layer core @kind logic */
-import { LOBBY_INFO_LIMIT, LOBBY_INFO_WINDOW_MS, WRONG_CODE_LIMIT, WRONG_CODE_WINDOW_MS } from '@archipelia/lobby-protocol';
+import { LOBBY_INFO_LIMIT, LOBBY_INFO_WINDOW_MS, WRONG_CODE_LIMIT, WRONG_CODE_WINDOW_MS } from '@drizztdourden08/archipelia-lobby-protocol';
 import { ADMIN_HELLO_LIMIT, ADMIN_HELLO_WINDOW_MS, MS_PER_SECOND } from './link.constants';
 
 const createRateLimiter = (now: () => number = Date.now) => {

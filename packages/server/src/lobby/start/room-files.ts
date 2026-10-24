@@ -1,6 +1,6 @@
 /* @layer core @kind logic */
 import { unzipSync } from 'fflate';
-import { sha256Hex } from '@archipelia/lobby-protocol/node';
+import { sha256Hex } from '@drizztdourden08/archipelia-lobby-protocol/node';
 import type { LobbyRoomFile } from '@archipelia/model';
 import { FILE_ID_PREFIX } from '../lobby.constants';
 import { OUTPUT_SLOT, SKIPPED_OUTPUT } from './start.constants';

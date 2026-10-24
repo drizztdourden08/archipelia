@@ -1,6 +1,6 @@
 /* @layer tests @kind test */
-import type { DiscoveryRecord } from '@archipelia/lobby-protocol';
-import { buildBeacon } from '@archipelia/lobby-protocol';
+import type { DiscoveryRecord } from '@drizztdourden08/archipelia-lobby-protocol';
+import { buildBeacon } from '@drizztdourden08/archipelia-lobby-protocol';
 import type { MdnsRecord } from '../../src/network';
 
 const RECORD: DiscoveryRecord = { name: 'Friday seed server', id: 'srv_4f2a9c', protocol: 1, ap: '0.6.8', open: true };

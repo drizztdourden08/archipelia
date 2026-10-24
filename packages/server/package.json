@@ -33,7 +33,7 @@
     "@archipelia/engine": "workspace:*",
     "@archipelia/engine-bundle": "workspace:*",
     "@archipelia/hosts": "workspace:*",
-    "@archipelia/lobby-protocol": "workspace:*",
+    "@drizztdourden08/archipelia-lobby-protocol": "workspace:*",
     "@archipelia/model": "workspace:*",
     "@archipelia/presets": "workspace:*",
     "@archipelia/sessions": "workspace:*",

@@ -1,5 +1,5 @@
 /* @layer core @kind logic */
-import type { Failure } from '@archipelia/lobby-protocol';
+import type { Failure } from '@drizztdourden08/archipelia-lobby-protocol';
 import type { Lobby, UploadTrust } from '@archipelia/model';
 import type { RegistryClient } from '@archipelia/trust';
 import { findClient } from '@archipelia/trust';

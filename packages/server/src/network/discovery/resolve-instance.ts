@@ -1,5 +1,5 @@
 /* @layer core @kind logic */
-import { parseDiscoveryTxt } from '@archipelia/lobby-protocol';
+import { parseDiscoveryTxt } from '@drizztdourden08/archipelia-lobby-protocol';
 import type { MdnsFound, PendingInstance } from './mdns-collector.type';
 import { MAX_PORT } from './network-discovery.constants';
 import { parseTxtEntries } from './parse-txt-entries';

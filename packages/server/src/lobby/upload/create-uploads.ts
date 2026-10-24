@@ -1,7 +1,7 @@
 /* @layer core @kind logic */
-import type { Failure, ServerMessage, UploadBegin, UploadChunk } from '@archipelia/lobby-protocol';
-import { createError } from '@archipelia/lobby-protocol';
-import { sha256Hex } from '@archipelia/lobby-protocol/node';
+import type { Failure, ServerMessage, UploadBegin, UploadChunk } from '@drizztdourden08/archipelia-lobby-protocol';
+import { createError } from '@drizztdourden08/archipelia-lobby-protocol';
+import { sha256Hex } from '@drizztdourden08/archipelia-lobby-protocol/node';
 import type { LobbyContext } from '../lobby-context.type';
 import type { MemberRef } from '../lobby-service.type';
 import { activeMember } from '../state/active-member';

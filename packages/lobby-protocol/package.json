@@ -1,10 +1,33 @@
 {
-  "name": "@archipelia/lobby-protocol",
-  "version": "1.0.0",
+  "name": "@drizztdourden08/archipelia-lobby-protocol",
+  "version": "1.0.1",
   "description": "The Archipelia lobby protocol: message types, JSON Schemas, codec, version rules, fixtures, a fake client and a fake server.",
   "type": "module",
-  "private": true,
   "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/drizztdourden08/archipelia.git",
+    "directory": "packages/lobby-protocol"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com",
+    "exports": {
+      ".": {
+        "types": "./dist/types/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "./node": {
+        "types": "./dist/types/node/index.d.ts",
+        "default": "./dist/node.js"
+      },
+      "./testing": {
+        "types": "./dist/types/testing/index.d.ts",
+        "default": "./dist/testing.js"
+      },
+      "./fixtures/*": "./fixtures/*",
+      "./package.json": "./package.json"
+    }
+  },
   "engines": {
     "node": ">=24"
   },
@@ -16,18 +39,21 @@
     "./package.json": "./package.json"
   },
   "files": [
-    "src",
+    "dist",
     "fixtures",
     "README.md"
   ],
   "sideEffects": false,
   "scripts": {
-    "lint": "tsc --noEmit && eslint ."
+    "build": "node scripts/build.mjs",
+    "prepack": "node scripts/build.mjs",
+    "lint": "tsc --noEmit && tsc --noEmit -p tsconfig.dom.json && eslint ."
   },
   "devDependencies": {
     "@drizztdourden08/brock-lint-config": "^0.85.0",
     "@types/node": "catalog:",
     "eslint": "catalog:",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "esbuild": "^0.25.12"
   }
 }

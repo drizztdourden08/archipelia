@@ -1,5 +1,5 @@
 /* @layer core @kind logic */
-import type { DiscoveryRecord } from '@archipelia/lobby-protocol';
+import type { DiscoveryRecord } from '@drizztdourden08/archipelia-lobby-protocol';
 import type { AdvertiseHandle, AdvertiseOptions } from './advertise.type';
 import { buildServiceRecords } from './build-service-records';
 import { noOpAdvertiser } from './no-op-advertiser';

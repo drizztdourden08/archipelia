@@ -1,5 +1,5 @@
 /* @layer core @kind logic */
-import type { FileGet, Hello, LobbyInfoRequest, SlotsSet, UploadBegin, UploadChunk } from '@archipelia/lobby-protocol';
+import type { FileGet, Hello, LobbyInfoRequest, SlotsSet, UploadBegin, UploadChunk } from '@drizztdourden08/archipelia-lobby-protocol';
 import { markArrived } from '../checks/mark-arrived';
 import { settleLobby } from '../checks/settle-lobby';
 import { joinLobby } from '../join/join-lobby';

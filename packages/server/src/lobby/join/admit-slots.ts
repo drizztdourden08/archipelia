@@ -1,6 +1,6 @@
 /* @layer core @kind logic */
-import type { Failure, SlotEntry, WorldEntry } from '@archipelia/lobby-protocol';
-import { checkWorldVersion } from '@archipelia/lobby-protocol';
+import type { Failure, SlotEntry, WorldEntry } from '@drizztdourden08/archipelia-lobby-protocol';
+import { checkWorldVersion } from '@drizztdourden08/archipelia-lobby-protocol';
 import type { Lobby, SlotUpload, UploadTrust, WorldUpload } from '@archipelia/model';
 import type { Outcome } from '../lobby-service.type';
 import { fixedWorlds } from '../state/fixed-worlds';

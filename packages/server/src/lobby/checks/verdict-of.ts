@@ -1,5 +1,5 @@
 /* @layer core @kind logic */
-import type { Failure } from '@archipelia/lobby-protocol';
+import type { Failure } from '@drizztdourden08/archipelia-lobby-protocol';
 import type { LobbyMember, SlotState, SlotUpload } from '@archipelia/model';
 import type { SlotVerdict } from './check-slot.type';
 

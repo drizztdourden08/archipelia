@@ -1,6 +1,6 @@
 /* @layer core @kind logic */
-import type { Failure, Hello, SlotsSet } from '@archipelia/lobby-protocol';
-import { checkHello } from '@archipelia/lobby-protocol';
+import type { Failure, Hello, SlotsSet } from '@drizztdourden08/archipelia-lobby-protocol';
+import { checkHello } from '@drizztdourden08/archipelia-lobby-protocol';
 import { SLOT_RULES_HELLO } from './member.constants';
 
 const slotRules = (capabilities: string[], message: SlotsSet): Failure | null => {

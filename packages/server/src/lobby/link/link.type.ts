@@ -1,6 +1,6 @@
 /* @layer core @kind types */
-import type { ClientMessage, Failure, ServerMessage } from '@archipelia/lobby-protocol';
-import type { Transport } from '@archipelia/lobby-protocol/node';
+import type { ClientMessage, Failure, ServerMessage } from '@drizztdourden08/archipelia-lobby-protocol';
+import type { Transport } from '@drizztdourden08/archipelia-lobby-protocol/node';
 import type { LobbyProtocol } from '../lobby-service-api.type';
 import type { LobbyLink, MemberRef } from '../lobby-service.type';
 import type { createRateLimiter } from './create-rate-limiter';

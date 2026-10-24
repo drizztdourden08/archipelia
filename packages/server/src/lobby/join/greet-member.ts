@@ -1,6 +1,6 @@
 /* @layer core @kind logic */
-import type { ServerMessage } from '@archipelia/lobby-protocol';
-import { CLOSE_CODES, createError } from '@archipelia/lobby-protocol';
+import type { ServerMessage } from '@drizztdourden08/archipelia-lobby-protocol';
+import { CLOSE_CODES, createError } from '@drizztdourden08/archipelia-lobby-protocol';
 import type { LobbyContext } from '../lobby-context.type';
 import type { LobbyLink, MemberRef } from '../lobby-service.type';
 import { startedFor } from '../start/started-for';

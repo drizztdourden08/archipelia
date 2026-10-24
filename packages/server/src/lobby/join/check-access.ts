@@ -1,5 +1,5 @@
 /* @layer core @kind logic */
-import type { Failure, Hello } from '@archipelia/lobby-protocol';
+import type { Failure, Hello } from '@drizztdourden08/archipelia-lobby-protocol';
 import type { Lobby } from '@archipelia/model';
 import { usedSlots } from '../state/used-slots';
 import { LOBBY_CLOSED, LOBBY_FULL, LOBBY_LOCKED } from './join.constants';

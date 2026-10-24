@@ -1,5 +1,5 @@
 /* @layer core @kind logic */
-import { CLOSE_CODES } from '@archipelia/lobby-protocol';
+import { CLOSE_CODES } from '@drizztdourden08/archipelia-lobby-protocol';
 import type { LobbyContext } from '../lobby-context.type';
 import type { MemberRef } from '../lobby-service.type';
 import type { Dismissal } from './dismiss-member.type';

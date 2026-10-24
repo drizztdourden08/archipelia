@@ -71,7 +71,7 @@ const SCENARIO_CATALOG: ScenarioEntry[] = [
     name: 'refused',
     title: 'The host refuses a pending member',
     requires: ['slots.yaml', 'worlds.upload'],
-    setup: BASE_SETUP,
+    setup: { ...BASE_SETUP, heldFiles: true },
   },
   {
     name: 'version-mismatch',
@@ -125,7 +125,7 @@ const SCENARIO_CATALOG: ScenarioEntry[] = [
     name: 'resume-pending',
     title: 'A member resumes with its token and gets its pending state back',
     requires: ['slots.yaml', 'worlds.upload'],
-    setup: BASE_SETUP,
+    setup: { ...BASE_SETUP, heldFiles: true },
   },
   {
     name: 'resume-invalid',
@@ -137,13 +137,13 @@ const SCENARIO_CATALOG: ScenarioEntry[] = [
     name: 'resume-refused',
     title: 'A refused member that resumes is refused again',
     requires: ['slots.yaml', 'worlds.upload'],
-    setup: BASE_SETUP,
+    setup: { ...BASE_SETUP, heldFiles: true },
   },
   {
     name: 'resume-replaced',
     title: 'A second connection takes over a member and the first is closed',
     requires: ['slots.yaml', 'worlds.upload'],
-    setup: BASE_SETUP,
+    setup: { ...BASE_SETUP, heldFiles: true },
   },
   {
     name: 'bad-message-prewelcome',
@@ -156,12 +156,14 @@ const SCENARIO_CATALOG: ScenarioEntry[] = [
     title: 'A binary frame closes the connection',
     requires: ['slots.yaml'],
     setup: BASE_SETUP,
+    serverSideOnly: true,
   },
   {
     name: 'bad-message-after-welcome',
     title: 'An unknown type after the welcome gets a non-fatal error',
     requires: ['slots.yaml', 'worlds.upload'],
-    setup: { ...BASE_SETUP, admission: 'open' },
+    setup: { ...BASE_SETUP, admission: 'open', heldFiles: true },
+    serverSideOnly: true,
   },
   {
     name: 'metadata-missing',
@@ -185,7 +187,7 @@ const SCENARIO_CATALOG: ScenarioEntry[] = [
     name: 'slots-set-locked',
     title: 'slots.set after the lobby locks is refused without closing',
     requires: ['slots.yaml', 'worlds.upload'],
-    setup: { ...BASE_SETUP, admission: 'open' },
+    setup: { ...BASE_SETUP, admission: 'open', heldFiles: true },
   },
   {
     name: 'lobby-full',
@@ -257,13 +259,13 @@ const SCENARIO_CATALOG: ScenarioEntry[] = [
     name: 'internal-error',
     title: 'A server fault is reported without closing the connection',
     requires: ['slots.yaml'],
-    setup: { ...BASE_SETUP, admission: 'open' },
+    setup: { ...BASE_SETUP, admission: 'open', heldFiles: true },
   },
   {
     name: 'slots-set',
     title: 'A member replaces its slot list before the lobby locks',
     requires: ['slots.yaml', 'worlds.upload'],
-    setup: { ...BASE_SETUP, admission: 'open' },
+    setup: { ...BASE_SETUP, admission: 'open', heldFiles: true },
   },
   {
     name: 'file-download',
@@ -272,6 +274,7 @@ const SCENARIO_CATALOG: ScenarioEntry[] = [
     setup: {
       ...BASE_SETUP,
       admission: 'open',
+      heldFiles: true,
       outputFile: { slot: 'Link', fileId: 'f_1', name: 'Link.aprotp', text: 'patch' },
     },
   },
@@ -279,7 +282,7 @@ const SCENARIO_CATALOG: ScenarioEntry[] = [
     name: 'start-failure',
     title: 'Generation fails, the host starts again and the room opens',
     requires: ['slots.yaml', 'worlds.upload'],
-    setup: { ...BASE_SETUP, admission: 'open' },
+    setup: { ...BASE_SETUP, admission: 'open', heldFiles: true },
   },
 ];
 

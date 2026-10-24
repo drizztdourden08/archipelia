@@ -1,5 +1,5 @@
 /* @layer core @kind logic */
-import { IDLE_TIMEOUT_MS, PING_INTERVAL_MS } from '@archipelia/lobby-protocol';
+import { IDLE_TIMEOUT_MS, PING_INTERVAL_MS } from '@drizztdourden08/archipelia-lobby-protocol';
 import type { LobbyLink } from '../lobby-service.type';
 import { GOING_AWAY } from './link.constants';
 import type { KeepAlive } from './link.type';

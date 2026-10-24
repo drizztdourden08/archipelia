@@ -1,5 +1,5 @@
 /* @layer core @kind logic */
-import { sha256Hex } from '@archipelia/lobby-protocol/node';
+import { sha256Hex } from '@drizztdourden08/archipelia-lobby-protocol/node';
 import type { SlotUpload } from '@archipelia/model';
 import { settleLobby } from '../checks/settle-lobby';
 import type { LobbyContext } from '../lobby-context.type';

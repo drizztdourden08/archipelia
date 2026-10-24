@@ -1,6 +1,6 @@
 /* @layer core @kind logic */
-import type { LobbyInfoReply } from '@archipelia/lobby-protocol';
-import { PROTOCOL_NAME, PROTOCOL_VERSION, REQUIRED_CAPABILITY, lobbyJoinable } from '@archipelia/lobby-protocol';
+import type { LobbyInfoReply } from '@drizztdourden08/archipelia-lobby-protocol';
+import { PROTOCOL_NAME, PROTOCOL_VERSION, REQUIRED_CAPABILITY, lobbyJoinable } from '@drizztdourden08/archipelia-lobby-protocol';
 import type { Lobby } from '@archipelia/model';
 import { SERVER_NAME } from '../lobby.constants';
 import { fixedWorlds } from './fixed-worlds';

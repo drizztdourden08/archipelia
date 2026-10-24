@@ -3,7 +3,7 @@ import { mkdtemp, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { zipSync } from 'fflate';
-import type { ScenarioSetup } from '@archipelia/lobby-protocol/testing';
+import type { ScenarioSetup } from '@drizztdourden08/archipelia-lobby-protocol/testing';
 import type { Lobby, Session, SessionTemplate } from '@archipelia/model';
 import type { LobbyRun } from '@archipelia/sessions';
 import { createLobbyService } from '../../src/lobby/create-lobby-service';

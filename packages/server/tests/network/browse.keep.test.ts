@@ -1,6 +1,6 @@
 /* @layer tests @kind test */
 import { afterEach, describe, expect, test, vi } from 'vitest';
-import { BEACON_EXPIRY_MS, buildBeacon } from '@archipelia/lobby-protocol';
+import { BEACON_EXPIRY_MS, buildBeacon } from '@drizztdourden08/archipelia-lobby-protocol';
 import type { LanServer } from '../../src/network';
 import { startAdvertiser, startBrowser } from '../../src/network';
 import { announcement, beaconBytes, RECORD } from './discovery-samples';

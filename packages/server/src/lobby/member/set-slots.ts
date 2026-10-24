@@ -1,6 +1,6 @@
 /* @layer core @kind logic */
-import type { Failure, ServerMessage, SlotsSet } from '@archipelia/lobby-protocol';
-import { createError } from '@archipelia/lobby-protocol';
+import type { Failure, ServerMessage, SlotsSet } from '@drizztdourden08/archipelia-lobby-protocol';
+import { createError } from '@drizztdourden08/archipelia-lobby-protocol';
 import { admitInDraft } from '../join/admit-in-draft';
 import type { Admitted } from '../join/admit-slots.type';
 import { checkTrust } from '../join/check-trust';
