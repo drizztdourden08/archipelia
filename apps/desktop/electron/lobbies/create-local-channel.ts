@@ -11,7 +11,7 @@ const createLocalChannel = (deps: AdminDeps): AdminChannel => ({
   },
   watch: (listener) =>
     deps.watch((lobby) => {
-      const view = adminView(lobby);
+      const view = adminView(deps.sandbox, lobby);
       if (view) listener(view);
     }),
   close: () => undefined,

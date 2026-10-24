@@ -6,7 +6,7 @@ import { memberLine } from './member-line';
 
 const consentOptions = ({ member, world }: ConsentRequest, where: string): ConfirmActionOptions => ({
   title: 'Allow this world?',
-  message: `This world was not published by a listed client. Archipelia will run its Python code on ${where} with your user rights. Allow it only if you trust ${member.displayName}.`,
+  message: `This world was not published by a listed client. ${world.consentNote ?? `Archipelia will run its Python code on ${where} with your user rights.`} Allow it only if you trust ${member.displayName}.`,
   confirmLabel: 'Allow this world',
   cancelLabel: 'Refuse',
   variant: 'danger',

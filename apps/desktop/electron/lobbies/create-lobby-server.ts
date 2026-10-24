@@ -4,7 +4,8 @@ import { DEFAULT_SERVER_OPTIONS, SERVER_OPTIONS_FILE } from '../../src/lobbies/l
 import type { LobbyServerOptions, LobbyServerStatus, ServerInfo } from '../../src/lobbies/lobbies.type';
 import { createListenerCell } from './create-listener-cell';
 import { createSerialQueue } from './create-serial-queue';
-import { PRODUCT_NAME } from './lobbies.constants';
+import { BAD_OPTIONS, PRODUCT_NAME } from './lobbies.constants';
+import { parseServerOptions } from './parse-server-options';
 import type { LobbyServerDeps } from './lobbies.type';
 import { readServerOptions } from './read-server-options';
 
@@ -40,7 +41,9 @@ const createLobbyServer = (deps: LobbyServerDeps) => {
     await cell.open(options);
   });
 
-  const apply = (next: LobbyServerOptions) => enqueue(async () => {
+  const apply = (given: unknown) => enqueue(async () => {
+    const next = parseServerOptions(given);
+    if (!next) throw new Error(BAD_OPTIONS);
     await cell.close();
     options = next;
     await files.writeJson(SERVER_OPTIONS_FILE, next);

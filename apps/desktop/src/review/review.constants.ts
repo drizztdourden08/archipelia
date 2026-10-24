@@ -34,7 +34,7 @@ const REVIEW_LOBBY = 'Review lobby';
 
 const REVIEW_PLAYER = 'Zelda';
 
-const LOBBY_UI = { create: 'New lobby', submit: 'Create lobby', unlisted: 'Allow unlisted clients', start: 'Start', close: 'Close lobby' } as const;
+const LOBBY_UI = { create: 'New lobby', submit: 'Create lobby', unlisted: 'Allow unlisted clients', start: 'Start', close: 'Close lobby', openTitle: 'Open this server to your network?', open: 'Open to my network' } as const;
 
 const STORAGE_FOLDERS = ['Sessions', 'Presets', 'Installed games'];
 

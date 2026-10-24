@@ -5,7 +5,7 @@ import { createSocketTransport, upgradeResponse } from '@drizztdourden08/archipe
 import { createLobbyConnection } from '../lobby/link/create-lobby-connection';
 import { ADMIN_MAX_BYTES } from './admin/admin.constants';
 import { createAdminConnection } from './admin/create-admin-connection';
-import { ADMIN_PATH, NOT_FOUND, UPGRADE_REQUIRED } from './listener.constants';
+import { ADMIN_PATH, FORBIDDEN, NOT_FOUND, UPGRADE_REQUIRED } from './listener.constants';
 import type { AcceptDeps, Peer } from './listener.type';
 import { readHead } from './read-head';
 
@@ -14,6 +14,10 @@ const acceptSocket = async (socket: Duplex, peer: Peer, deps: AcceptDeps) => {
   const key = head.headers['sec-websocket-key'];
   if (head.headers.upgrade?.toLowerCase() !== 'websocket' || !key) {
     socket.end(UPGRADE_REQUIRED);
+    return;
+  }
+  if (head.headers.origin !== undefined) {
+    socket.end(FORBIDDEN);
     return;
   }
   if (head.path !== LOBBY_PATH && head.path !== ADMIN_PATH) {

@@ -31,7 +31,7 @@ describe('the embedded lobby server', () => {
     const fixture = await serve();
     const server = serverOf(fixture);
     await server.start();
-    expect(server.status()).toMatchObject({ state: 'listening', options: { mode: 'lan', publicLookup: true }, lanAddress: '192.168.1.5', automation: true });
+    expect(server.status()).toMatchObject({ state: 'listening', options: { mode: 'off', publicLookup: true }, lanAddress: '192.168.1.5', automation: true });
     expect(server.status().serverId).toMatch(/^srv_/);
     const applied = await server.apply({ mode: 'lan-and-internet', publicLookup: false });
     expect(applied).toMatchObject({ state: 'listening', options: { mode: 'lan-and-internet', publicLookup: false }, reach: { mode: 'lan-and-internet', cgnat: null } });
@@ -41,6 +41,16 @@ describe('the embedded lobby server', () => {
     expect(next.status().options).toEqual({ mode: 'lan-and-internet', publicLookup: false });
     expect(server.info()).toMatchObject({ name: 'Archipelia', version: '1.2.3', sandbox: 'none' });
     await next.stop();
+  });
+
+  test('refuses options it does not know and keeps the ones it has', async () => {
+    const fixture = await serve();
+    const server = serverOf(fixture);
+    await server.start();
+    await expect(server.apply({ mode: 'everywhere', publicLookup: true })).rejects.toThrow('not valid');
+    await expect(server.apply('lan')).rejects.toThrow('not valid');
+    expect(server.status()).toMatchObject({ state: 'listening', options: { mode: 'off' } });
+    await server.stop();
   });
 
   test('says why it is not running when the port is taken', async () => {
@@ -58,7 +68,7 @@ describe('the embedded lobby server', () => {
   test('drives the lobbies of this computer in process', async () => {
     const fixture = await serve();
     const { core } = fixture.started;
-    const channel = createLocalChannel({ service: core.lobbies, token: core.adminToken, watch: core.watchLobbies, info: () => ({}), engines: () => core.engine.overview() });
+    const channel = createLocalChannel({ service: core.lobbies, token: core.adminToken, watch: core.watchLobbies, sandbox: 'none', info: () => ({}), engines: () => core.engine.overview() });
     const ops = createLobbyOps(channel);
     const seen: string[] = [];
     channel.watch((lobby) => seen.push(lobby.phase));

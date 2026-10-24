@@ -14,7 +14,7 @@ import { usedSlotCount } from '../../src/views/LobbyDetail/behavior/used-slot-co
 import { serverNotice } from '../../src/views/LobbyList/behavior/server-notice';
 import { serverOptions } from '../../src/views/LobbyList/behavior/server-options';
 import { waitingCount } from '../../src/views/LobbyList/behavior/waiting-count';
-import { lobby, member, slot } from './lobby-fixtures';
+import { lobby, member, slot, world } from './lobby-fixtures';
 
 describe('what a lobby lets the host do', () => {
   test('offers lock, start and close while the lobby is open, and blocks start until a slot is ready', () => {
@@ -62,6 +62,13 @@ describe('the members and the consent dialog', () => {
     expect(options?.message).toContain('trust Zelda');
     expect(options?.facts?.map((fact) => fact.label)).toEqual(['Game', 'World version', 'Size', 'Hash', 'Sent by', 'Client', 'Check']);
     expect(pendingWorlds(lobby(), member())).toEqual([]);
+  });
+
+  test('shows the note of the server about its sandbox in place of the default sentence', () => {
+    const request = { lobby: lobby(), member: member(), slot: slot(), world: world({ consentNote: 'It runs in a sandbox on this server.' }) };
+    const { message } = consentOptions(request, 'this computer');
+    expect(message).toContain('It runs in a sandbox on this server. Allow it only');
+    expect(message).not.toContain('user rights');
   });
 
   test('describes where the room runs', () => {

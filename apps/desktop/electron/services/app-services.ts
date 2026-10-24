@@ -35,7 +35,7 @@ const createAppServices = async (ctx: MainContext) => {
   }, ctx, { domains: () => ctx.storage });
   if (!started) throw new Error('the embedded core did not start');
   const { core, listen } = started;
-  const lobbies = createLobbyServices({
+  const lobbies = await createLobbyServices({
     core, listen, domain: ctx.storage.domain, secrets, automation, lanHost, version, log: ctx.log,
     onLobby: (event) => ctx.emit(APP_CHANNELS.onLobbyEvent, event),
     onLan: (servers) => ctx.emit(APP_CHANNELS.onLanServers, servers),

@@ -32,11 +32,21 @@ const createInScreen = async (tour: AppReviewTour) => {
   const toggle = await waitNamed(tour, SELECTOR.toggle, new RegExp(LOBBY_UI.unlisted), layer(tour));
   if (toggle) tour.click(toggle);
   await tour.capture('lobby-form');
+  const priv = (await appApi().lobbyServerStatus()).options.mode === 'off';
   await clickNamed(tour, SELECTOR.button, LOBBY_UI.submit, layer(tour));
+  if (priv) await openToNetwork(tour);
   const made = await tour.waitFor(() => lobbyNow(before), 15000);
   if (!made) await tour.capture('lobby-create-failed');
   tour.check('lobby-created', made !== null, 'Create lobby opens the lobby on the embedded server', 'the lobby was not created');
   return made;
+};
+
+const openToNetwork = async (tour: AppReviewTour) => {
+  const ask = await waitNamed(tour, SELECTOR.dialog, LOBBY_UI.openTitle);
+  tour.check('lobby-private-asks', ask !== null, 'a private server asks before the first lobby opens it to the network', 'the private server did not ask');
+  if (ask) await clickNamed(tour, SELECTOR.button, LOBBY_UI.open, ask);
+  const mode = (await appApi().lobbyServerStatus()).options.mode;
+  tour.check('lobby-opens-lan', mode === 'lan', 'the answer switches the network mode to LAN only', `the network mode is ${mode}`);
 };
 
 const allowWorld = async (tour: AppReviewTour) => {

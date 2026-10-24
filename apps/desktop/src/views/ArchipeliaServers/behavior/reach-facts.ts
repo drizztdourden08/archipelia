@@ -1,5 +1,6 @@
 /* @layer renderer-app @kind logic */
 import type { FactsPanelFact } from '@drizztdourden08/tessera/composites';
+import { lobbyAddress } from '../../../lobbies/lobby-address';
 import type { LobbyServerStatus } from '../../../lobbies/lobbies.type';
 import { MODE_OPTIONS, REACH_TEXT } from '../ArchipeliaServers.constants';
 
@@ -19,7 +20,7 @@ const roomFacts = (status: LobbyServerStatus, names: Record<string, string>): Fa
 
 const reachFacts = (status: LobbyServerStatus, names: Record<string, string>): FactsPanelFact[] => {
   if (status.state !== 'listening' || status.port === undefined) return [];
-  const address = `${status.automation ? '127.0.0.1' : status.lanAddress}:${status.port}`;
+  const address = lobbyAddress(status) ?? '';
   const mode = MODE_OPTIONS.find((option) => option.value === status.options.mode)?.label ?? status.options.mode;
   return [
     { label: 'Lobby address', value: address, mono: true, copyable: 'lobby address' },

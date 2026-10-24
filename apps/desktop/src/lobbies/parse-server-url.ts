@@ -1,6 +1,6 @@
 /* @layer renderer-app @kind logic */
 import { DEFAULT_PORT } from '@drizztdourden08/archipelia-lobby-protocol';
-import { AUTHORITY, BRACKETS, MAX_PORT, WRITTEN_PORT } from './lobbies.constants';
+import { AUTHORITY, BRACKETS, LOOPBACK_HOST, MAX_PORT, WRITTEN_PORT } from './lobbies.constants';
 import type { ServerTarget } from './lobbies.type';
 
 const portOf = (text: string): number => {
@@ -15,7 +15,9 @@ const parseServerUrl = (value: string): ServerTarget | null => {
     const url = new URL(text);
     const port = portOf(text);
     if ((url.protocol !== 'ws:' && url.protocol !== 'wss:') || url.hostname === '' || port < 1 || port > MAX_PORT) return null;
-    return { secure: url.protocol === 'wss:', host: url.hostname.replace(BRACKETS, ''), port };
+    const secure = url.protocol === 'wss:';
+    const host = url.hostname.replace(BRACKETS, '');
+    return secure || LOOPBACK_HOST.test(host) ? { secure, host, port } : null;
   } catch {
     return null;
   }

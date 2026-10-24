@@ -30,9 +30,8 @@ const useRemoteServers = () => {
 
   const add = useCallback(async (draft: ServerDraft): Promise<boolean> => {
     const done = await guard('save', failWith(FAILURE.save, async () => {
-      const first = await appApi().lobbyServersSave(newEntry(draft));
-      await vaultOf().set(tokenSecret(first.id), draft.token, `Admin token for ${first.label}`);
-      const stored = await appApi().lobbyServersSave({ ...first, tokenRef: tokenSecret(first.id) });
+      const stored = await appApi().lobbyServersSave(newEntry(draft));
+      await vaultOf().set(tokenSecret(stored.id), draft.token, `Admin token for ${stored.label}`);
       setSelected(stored.id);
       await test(stored.id);
       return true;
@@ -65,7 +64,7 @@ const useRemoteServers = () => {
 
   const replaceToken = useCallback((entry: LobbyServerEntry, token: string) => guard(`token:${entry.id}`, failWith(FAILURE.token, async () => {
     await vaultOf().set(tokenSecret(entry.id), token, `Admin token for ${entry.label}`);
-    await save({ ...entry, tokenRef: tokenSecret(entry.id) });
+    await save(entry);
     await test(entry.id);
   })), [guard, save, test]);
 

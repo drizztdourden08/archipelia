@@ -23,4 +23,4 @@ const lobby = (patch: Partial<AdminLobby> = {}): AdminLobby => ({
   members: [member()], worlds: [world()], nextMember: 2, createdAt: 10, closesAt: 20, ...patch,
 });
 
-export { lobby, member, slot };
+export { lobby, member, slot, world };

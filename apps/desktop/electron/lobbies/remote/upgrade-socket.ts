@@ -2,7 +2,7 @@
 import { createHash, randomBytes } from 'node:crypto';
 import type { Socket } from 'node:net';
 import type { ServerTarget } from '../../../src/lobbies/lobbies.type';
-import { ADMIN_PATH, HEAD_END, KEY_BYTES, MAX_HEAD_BYTES, WEBSOCKET_GUID } from './remote.constants';
+import { ADMIN_PATH, CONNECT_TIMEOUT_MS, HEAD_END, KEY_BYTES, MAX_HEAD_BYTES, TIMEOUT_TEXT, WEBSOCKET_GUID } from './remote.constants';
 
 const requestFor = (target: ServerTarget, key: string): string =>
   [
@@ -18,7 +18,9 @@ const upgradeSocket = (socket: Socket, target: ServerTarget): Promise<void> =>
   new Promise((resolve, reject) => {
     const key = randomBytes(KEY_BYTES).toString('base64');
     let buffered = Buffer.alloc(0);
+    const timer = setTimeout(() => fail(new Error(TIMEOUT_TEXT)), CONNECT_TIMEOUT_MS);
     const fail = (error: Error) => {
+      clearTimeout(timer);
       socket.off('data', onData);
       socket.destroy();
       reject(error);
@@ -37,6 +39,7 @@ const upgradeSocket = (socket: Socket, target: ServerTarget): Promise<void> =>
         return;
       }
       socket.off('error', fail);
+      clearTimeout(timer);
       const rest = buffered.subarray(end + HEAD_END.length);
       if (rest.length > 0) socket.unshift(rest);
       resolve();

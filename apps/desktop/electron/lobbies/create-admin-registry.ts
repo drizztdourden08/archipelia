@@ -3,6 +3,7 @@ import { LOCAL_SERVER } from '../../src/lobbies/lobbies.constants';
 import { createLobbyOps } from './create-lobby-ops';
 import type { AdminChannel, RegistryDeps } from './lobbies.type';
 import { MISSING_TOKEN } from './lobbies.constants';
+import { tokenSecret } from '../../src/lobbies/token-secret';
 import { openRemoteChannel } from './remote/open-remote-channel';
 
 const createAdminRegistry = ({ local, store, secrets, onLobby }: RegistryDeps) => {
@@ -14,7 +15,7 @@ const createAdminRegistry = ({ local, store, secrets, onLobby }: RegistryDeps) =
     const known = remote.get(serverId);
     if (known?.alive()) return known;
     const entry = await store.require(serverId);
-    const token = await secrets.get(entry.tokenRef);
+    const token = await secrets.get(tokenSecret(entry.id));
     if (!token) throw new Error(MISSING_TOKEN);
     const { channel } = await openRemoteChannel({ url: entry.url, token, ...(entry.certSha256 ? { certSha256: entry.certSha256 } : {}) });
     channel.watch((lobby) => onLobby({ serverId, lobby }));

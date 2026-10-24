@@ -6,7 +6,7 @@ import type { LanMatch, ServerDraft } from './ArchipeliaServers.type';
 const MODE_OPTIONS: SettingsOption[] = [
   { value: 'lan', label: 'LAN only', hint: 'Computers on your network find this server by themselves. Nothing is opened on the router.' },
   { value: 'lan-and-internet', label: 'LAN and internet', hint: 'Also asks the router to open the ports. It needs a router that allows it.' },
-  { value: 'off', label: 'Off', hint: 'Not announced and no router port. Players can still type the address.' },
+  { value: 'off', label: 'Off', hint: 'Private: only this computer can reach the lobby server. Nothing is announced and no router port is opened.' },
 ];
 
 const EMPTY_DRAFT: ServerDraft = { label: '', url: '', token: '', pin: '' };
@@ -17,7 +17,7 @@ const NO_PIN = 'None. The connection is plain, or the certificate is one your co
 
 const FORM_TEXT = {
   label: { title: 'Label', description: 'How the server is named in lists.', hint: 'Any name you like.' },
-  url: { title: 'Address', description: 'Where the server listens, such as wss://play.example.net:38290.', hint: 'Use ws:// only for a server on your own network.' },
+  url: { title: 'Address', description: 'Where the server listens, such as wss://play.example.net:38290.', hint: 'Use wss:// for another computer. ws:// works for this computer only, so the token never travels in clear.' },
   token: { title: 'Admin token', description: 'The secret the server made at its first start.', hint: 'Stored in the vault, never in the settings.' },
   pin: { title: 'Certificate pin', description: 'The SHA-256 fingerprint of the server certificate.', hint: 'Leave it empty and test the server: the fingerprint is shown for you to trust.' },
 } as const;
@@ -71,7 +71,6 @@ const REMOTE_EMPTY = 'No remote server yet. Add one to manage its lobbies from h
 
 const PROBLEM = {
   label: 'Give the server a label.',
-  url: 'Enter the address as ws://host:port, or wss://host:port for a server with TLS.',
   token: 'Enter the admin token of the server.',
   pin: 'The pin is 64 hexadecimal digits, with or without colons.',
 } as const;

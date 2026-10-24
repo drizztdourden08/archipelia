@@ -30,7 +30,7 @@ const labels = (facts: { label: string }[]) => facts.map((fact) => fact.label);
 
 describe('the server addresses and pins', () => {
   test('reads ws and wss addresses with the default port of the lobby', () => {
-    expect(parseServerUrl('ws://192.168.1.5')).toEqual({ secure: false, host: '192.168.1.5', port: 38290 });
+    expect(parseServerUrl('ws://127.0.0.1')).toEqual({ secure: false, host: '127.0.0.1', port: 38290 });
     expect(parseServerUrl(' wss://play.example.net:443 ')).toEqual({ secure: true, host: 'play.example.net', port: 443 });
     expect(parseServerUrl('wss://[::1]:4000')).toEqual({ secure: true, host: '::1', port: 4000 });
     expect(parseServerUrl('https://play.example.net')).toBeNull();
@@ -50,6 +50,7 @@ describe('the server addresses and pins', () => {
     const entry: LobbyServerEntry = { id: 'r1', label: 'VPS', url: 'wss://vps.test:5000', tokenRef: 't' };
     expect(serverPlace('local', [], status())).toMatchObject({ local: true, address: '192.168.1.5:38290', where: 'this computer' });
     expect(serverPlace('local', [], status({ automation: true })).address).toBe('127.0.0.1:38290');
+    expect(serverPlace('local', [], status({ options: { mode: 'off', publicLookup: true } })).address).toBe('127.0.0.1:38290');
     expect(serverPlace('local', [], null).address).toBeNull();
     expect(serverPlace('r1', [entry], null)).toMatchObject({ local: false, label: 'VPS', address: 'vps.test:5000' });
   });

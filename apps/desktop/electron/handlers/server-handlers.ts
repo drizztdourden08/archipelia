@@ -2,13 +2,14 @@
 import type { HandlerGroup } from '@drizztdourden08/brock-electron/main';
 import { APP_CHANNELS } from '../../src/ipc/contract.constants';
 import { testSavedServer } from '@archipelia/hosts';
+import { canonicalServerRefs } from '../lobbies/canonical-server-refs';
 
 const serverHandlers: HandlerGroup = {
   id: 'archipelia-servers',
   register: (ctx) => {
     const { runtime, secrets, servers } = ctx.services;
     ctx.handle(APP_CHANNELS.serversList, () => servers.list());
-    ctx.handle(APP_CHANNELS.serversSave, (_event, entry) => servers.save(entry));
+    ctx.handle(APP_CHANNELS.serversSave, (_event, entry) => servers.save(canonicalServerRefs(entry)));
     ctx.handle(APP_CHANNELS.serversRemove, (_event, id) => servers.remove(id));
     ctx.handle(APP_CHANNELS.serversTest, async (_event, id) => {
       const active = await runtime().then((engine) => engine.apVersion, () => undefined);

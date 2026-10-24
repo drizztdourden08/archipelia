@@ -1,6 +1,6 @@
 /* @layer renderer-app @kind component */
 import { SettingsSection } from '@drizztdourden08/tessera/composites';
-import { Button, ButtonRow, Stack, Text } from '@drizztdourden08/tessera/primitives';
+import { Button, ButtonRow, Callout, Stack, Text } from '@drizztdourden08/tessera/primitives';
 import { ErrorCallout } from '@archipelia/design';
 import { useLobbyCreate } from './behavior/useLobbyCreate';
 
@@ -9,6 +9,7 @@ const LobbyCreate = () => {
   return (
     <Stack>
       <Text variant="caption">{`The lobby opens on ${model.label}. Players join with its code.`}</Text>
+      {model.note && <Callout tone="info">{model.note}</Callout>}
       {model.error && <ErrorCallout message={model.error} />}
       <SettingsSection id="new-lobby" title="New lobby" rows={model.rows} />
       <ButtonRow>
