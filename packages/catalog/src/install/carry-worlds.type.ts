@@ -10,8 +10,4 @@ type CarryWorldsParams = {
   since?: number;
 };
 
-type CarryProblem = { apworld: string; game: string; reason: string };
-
-type CarryResult = { copied: string[]; reinstalled: string[]; problems: CarryProblem[]; at: number };
-
-export type { CarryProblem, CarryResult, CarryWorldsParams };
+export type { CarryWorldsParams };

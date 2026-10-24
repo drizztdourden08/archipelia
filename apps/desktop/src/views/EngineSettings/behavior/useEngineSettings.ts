@@ -1,10 +1,10 @@
 /* @layer renderer-app @kind hook */
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { confirmDelete, useJob, useKeyedGuard, useSettings } from '@drizztdourden08/brock-react';
+import { ENGINE_JOB } from '@archipelia/model';
 import type { EngineEntry } from '@archipelia/model';
 import { failWith } from '../../../hooks/fail-with';
 import { useLoggedFailure } from '../../../hooks/useLoggedFailure';
-import { ENGINE_JOB } from '../../../jobs/jobs.constants';
 import type { AppSettings } from '../../../settings.type';
 import { useEngineStore } from '../../../stores/useEngineStore';
 import { FAILURE } from '../EngineSettings.constants';

@@ -1,0 +1,41 @@
+{
+  "name": "@archipelia/server",
+  "version": "0.1.0",
+  "description": "Archipelia server: the core (engine, catalog, sessions, hosts and runs) built from ports, with no Electron in it. The lobby service and listener grow here.",
+  "type": "module",
+  "private": true,
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=24"
+  },
+  "exports": {
+    ".": "./src/index.ts",
+    "./node": "./src/node/index.ts",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "src"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "lint": "tsc --noEmit && eslint ."
+  },
+  "devDependencies": {
+    "@drizztdourden08/brock-lint-config": "^0.82.0",
+    "@types/node": "catalog:",
+    "eslint": "catalog:",
+    "typescript": "catalog:"
+  },
+  "dependencies": {
+    "@archipelia/catalog": "workspace:*",
+    "@archipelia/engine": "workspace:*",
+    "@archipelia/engine-bundle": "workspace:*",
+    "@archipelia/hosts": "workspace:*",
+    "@archipelia/model": "workspace:*",
+    "@archipelia/presets": "workspace:*",
+    "@archipelia/sessions": "workspace:*",
+    "@drizztdourden08/brock-core": "^0.82.0",
+    "@drizztdourden08/brock-electron": "^0.82.0",
+    "@drizztdourden08/brock-secrets": "^0.82.0"
+  }
+}

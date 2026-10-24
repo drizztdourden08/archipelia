@@ -2,7 +2,7 @@
 import type { HandlerGroup } from '@drizztdourden08/brock-electron/main';
 import { assertSafeName } from '@drizztdourden08/brock-core/storage';
 import { APP_CHANNELS } from '../../src/ipc/contract.constants';
-import { runJobId } from '../../src/jobs/run-job-id';
+import { runJobId } from '@archipelia/model';
 
 const sessionHandlers: HandlerGroup = {
   id: 'archipelia-sessions',

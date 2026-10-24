@@ -1,0 +1,24 @@
+/* @layer core @kind barrel */
+export { createEngineLock } from './engine-lock';
+export { createEngineRuntimes } from './engine-runtimes';
+export type { EngineEnv, VersionSource } from './engine-service.type';
+export { ENGINE_JOB_TITLE, ENGINE_STEPS, SWITCH_JOB_TITLE, SWITCH_STEPS } from './engine-steps.constants';
+export { CHECK_NAME, ENGINE_TEXT } from './engine-text.constants';
+export { createFeedStore } from './feed-store';
+export { fallbackChoice } from './fallback-choice';
+export { installEngine } from './install-engine';
+export type { EngineJob, InstallDeps } from './install-engine.type';
+export { isEngineChoice } from './is-engine-choice';
+export { OUTCOME_EVENT } from './outcome-event.constants';
+export { createRemoveDeps } from './create-remove-deps';
+export { removeEngine } from './remove-engine';
+export type { RemoveDeps } from './remove-engine.type';
+export { resolveChoice } from './resolve-choice';
+export { runSwitchJob } from './run-switch-job';
+export { setupEngine } from './setup-engine';
+export { startupDecision } from './startup-decision';
+export { createVersionSource } from './version-source';
+export { generateSmokeSeed } from './smoke/generate-smoke-seed';
+export { readSmokeSchemas } from './smoke/read-smoke-schemas';
+export { runSmoke } from './smoke/run-smoke';
+export type { HostRequest, SchemaCheck, SeedRequest, SeedResult, SmokeDeps, SmokeInput, SmokeOutcome, SmokeWorld } from './smoke/smoke.type';

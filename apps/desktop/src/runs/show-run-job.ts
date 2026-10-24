@@ -1,8 +1,8 @@
 /* @layer renderer-app @kind logic */
 import { jobs, toast } from '@drizztdourden08/brock-react';
+import { runJobId } from '@archipelia/model';
 import type { Session } from '@archipelia/model';
 import { appApi } from '../ipc/app-api';
-import { runJobId } from '../jobs/run-job-id';
 
 const showRunJob = async (run: Session): Promise<void> => {
   try {
