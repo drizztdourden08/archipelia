@@ -6,11 +6,14 @@ import { testSavedServer } from '@archipelia/hosts';
 const serverHandlers: HandlerGroup = {
   id: 'archipelia-servers',
   register: (ctx) => {
-    const { secrets, servers } = ctx.services;
+    const { runtime, secrets, servers } = ctx.services;
     ctx.handle(APP_CHANNELS.serversList, () => servers.list());
     ctx.handle(APP_CHANNELS.serversSave, (_event, entry) => servers.save(entry));
     ctx.handle(APP_CHANNELS.serversRemove, (_event, id) => servers.remove(id));
-    ctx.handle(APP_CHANNELS.serversTest, async (_event, id) => testSavedServer(await servers.require(id), secrets, servers));
+    ctx.handle(APP_CHANNELS.serversTest, async (_event, id) => {
+      const active = await runtime().then((engine) => engine.apVersion, () => undefined);
+      return testSavedServer(await servers.require(id), secrets, servers, active);
+    });
     ctx.handle(APP_CHANNELS.serversTrustKey, async (_event, id, sha256) => servers.save({ ...(await servers.require(id)), hostKeySha256: sha256 }));
   },
 };

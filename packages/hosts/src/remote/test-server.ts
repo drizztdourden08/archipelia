@@ -2,7 +2,6 @@
 import type { ServerEntry, ServerTest } from '@archipelia/model';
 import type { RemoteCredentials, ServerTestOptions } from './remote.type';
 import { connectSsh } from './connect-ssh';
-import { ENGINE_AP_VERSION } from './test-server.constants';
 import { summarize } from './summarize';
 import { parseProbe } from './parse-probe';
 import { probeScript } from './probe-script';
@@ -10,8 +9,10 @@ import { probeChecks } from './probe-checks';
 
 const refuseUnknownKey = () => false;
 
-const testServer = async (entry: ServerEntry, credentials: RemoteCredentials, options: ServerTestOptions = {}): Promise<ServerTest> => {
-  const { onHostKey = refuseUnknownKey, connect = connectSsh, apVersion = ENGINE_AP_VERSION } = options;
+const testServer = async (
+  entry: ServerEntry, credentials: RemoteCredentials, apVersion: string | undefined, options: ServerTestOptions = {},
+): Promise<ServerTest> => {
+  const { onHostKey = refuseUnknownKey, connect = connectSsh } = options;
   const session = await connect({ entry, credentials, onHostKey }).catch((error: unknown) => (error instanceof Error ? error : new Error(String(error))));
   if (session instanceof Error) return summarize([{ name: 'connect', ok: false, detail: session.message }]);
   try {

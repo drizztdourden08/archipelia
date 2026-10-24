@@ -1,6 +1,6 @@
 /* @layer core @kind logic */
 import { randomUUID } from 'node:crypto';
-import type { HostTarget } from '@archipelia/model';
+import type { EngineRuntime, HostTarget } from '@archipelia/model';
 import { createGgHost } from '../gg-host/gg-host';
 import { createLocalHost } from '../local/local-host';
 import { createRemoteHost } from '../remote/remote-host';
@@ -17,9 +17,9 @@ const ggOwnerId = async (secrets: SecretStore, name: string) => {
 };
 
 const createHostFactory = ({ runtime, secrets, servers, advertiseHost, ggOwnerSecret }: HostFactoryDeps) =>
-  async (target: HostTarget): Promise<SessionHost> => {
+  async (target: HostTarget, own?: EngineRuntime): Promise<SessionHost> => {
     if (target.kind === 'local') {
-      return createLocalHost({ runtime: await runtime(), port: target.port, advertiseHost: advertiseHost() });
+      return createLocalHost({ runtime: own ?? await runtime(), port: target.port, advertiseHost: advertiseHost() });
     }
     if (target.kind === 'archipelago-gg') {
       return createGgHost({ ownerId: await ggOwnerId(secrets, ggOwnerSecret), baseUrl: target.baseUrl });

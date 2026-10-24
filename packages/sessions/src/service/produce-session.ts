@@ -1,34 +1,35 @@
 /* @layer core @kind logic */
 import { generate } from '@archipelia/engine';
-import type { Session } from '@archipelia/model';
+import type { EngineRuntime, Session } from '@archipelia/model';
 import { removeSessionSettings, writeSessionSettings } from '@archipelia/hosts';
 import { readOutput } from '../output/read-output';
 import { writePlayers } from '../players/write-players';
 import { bakesPassword } from './bakes-password';
 import { failureOf } from './failure-of';
 import { roomPasswordOf } from './room-password';
+import type { GenerateRun } from './produce-session.type';
 import type { ServiceDeps } from './service-deps.type';
 
-const runGenerator = async (deps: ServiceDeps, session: Session, settingsDir: string | undefined, signal?: AbortSignal) => {
+const runGenerator = (deps: ServiceDeps, session: Session, { runtime, settingsDir, signal }: GenerateRun) => {
   const { files, emit } = deps;
   const dir = session.id;
   const { generator } = session.snapshot;
   return generate({
-    runtime: await deps.runtime(), playersDir: files.path(`${dir}/players`), outDir: files.path(`${dir}/output`), settingsDir,
+    runtime, playersDir: files.path(`${dir}/players`), outDir: files.path(`${dir}/output`), settingsDir,
     spoiler: generator.spoiler, race: generator.race, skipBalancing: !generator.progressionBalancing, signal,
     onProgress: (progress) => emit({ type: 'progress', sessionId: session.id, progress }),
     onLine: (line) => emit({ type: 'generate', sessionId: session.id, line }),
   });
 };
 
-const produceSession = async (deps: ServiceDeps, session: Session, signal?: AbortSignal) => {
+const produceSession = async (deps: ServiceDeps, session: Session, runtime: EngineRuntime, signal?: AbortSignal) => {
   const { files } = deps;
   const dir = session.id;
   const sessionDir = files.path(dir);
   await writePlayers(session.snapshot.players, `${dir}/players`, deps);
   const baked = bakesPassword(session.snapshot.host) ? await roomPasswordOf(deps, session) : undefined;
   if (baked) await writeSessionSettings(sessionDir, baked);
-  const result = await runGenerator(deps, session, baked ? sessionDir : undefined, signal).finally(() => removeSessionSettings(sessionDir));
+  const result = await runGenerator(deps, session, { runtime, settingsDir: baked ? sessionDir : undefined, signal }).finally(() => removeSessionSettings(sessionDir));
   await files.writeText(`${dir}/generate.log`, result.lines.join('\n'));
   if (!result.ok || !result.zip) throw new Error(failureOf(result.lines));
   return readOutput(files, `${dir}/output`, result.zip, 'generate.log');

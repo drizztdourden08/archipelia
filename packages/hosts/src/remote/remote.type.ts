@@ -24,7 +24,7 @@ type SshConnect = (target: SshTarget) => Promise<SshSession>;
 
 type RemoteHostOptions = SshTarget & { connect?: SshConnect; hostingTimeoutMs?: number; stopWaitSeconds?: number };
 
-type ServerTestOptions = { onHostKey?: HostKeyPrompt; connect?: SshConnect; apVersion?: string };
+type ServerTestOptions = { onHostKey?: HostKeyPrompt; connect?: SshConnect };
 
 export type {
   ExecResult, HostKeyPrompt, RemoteCredentials, RemoteHostOptions, ServerTestOptions, SshConnect, SshSession, SshTarget, StreamHandle,
