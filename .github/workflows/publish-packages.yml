@@ -1,0 +1,107 @@
+name: Publish packages
+
+# Managed by brock sync from workflows.publish in brock.config.ts. Change it there, then run brock sync.
+# Publishes the workspace packages to GitHub Packages without a release of the app. The same steps
+# run in the publish-packages job of the release workflow. A version npm view already finds is skipped.
+on:
+  workflow_dispatch:
+    inputs:
+      packages:
+        description: 'Package folders to publish, separated by commas. Empty publishes all of them: packages/lobby-protocol, packages/client-kit.'
+        required: false
+        default: ''
+        type: string
+
+concurrency:
+  group: publish-packages
+  cancel-in-progress: false
+
+jobs:
+  publish-packages:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+          registry-url: https://npm.pkg.github.com
+          scope: '@drizztdourden08'
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.PACKAGES_TOKEN || secrets.GITHUB_TOKEN }}
+
+      - name: Select packages
+        id: select
+        shell: bash
+        env:
+          REQUESTED: ${{ inputs.packages }}
+          ALLOWED: ',packages/lobby-protocol,packages/client-kit,'
+          LISTED: 'packages/lobby-protocol, packages/client-kit'
+        run: |
+          REQUESTED="${REQUESTED//[[:space:]]/}"
+          if [ -z "$REQUESTED" ]; then
+            SELECTED="$ALLOWED"
+          else
+            SELECTED=","
+            IFS=',' read -ra ITEMS <<< "$REQUESTED"
+            for ITEM in "${ITEMS[@]}"; do
+              ITEM="${ITEM%/}"
+              [ -z "$ITEM" ] && continue
+              case "$ALLOWED" in
+                *",$ITEM,"*) SELECTED="$SELECTED$ITEM," ;;
+                *)
+                  echo "::error title=Unknown package::$ITEM is not in workflows.publish of brock.config.ts. Use one or more of: $LISTED."
+                  exit 1
+                  ;;
+              esac
+            done
+          fi
+          echo "folders=$SELECTED" >> "$GITHUB_OUTPUT"
+
+      - name: Build @drizztdourden08/archipelia-lobby-protocol
+        if: contains(steps.select.outputs.folders, ',packages/lobby-protocol,')
+        working-directory: 'packages/lobby-protocol'
+        run: pnpm run build
+
+      - name: Build @drizztdourden08/archipelia-client-kit
+        if: contains(steps.select.outputs.folders, ',packages/client-kit,')
+        working-directory: 'packages/client-kit'
+        run: pnpm run build
+
+      - name: Publish @drizztdourden08/archipelia-lobby-protocol
+        if: contains(steps.select.outputs.folders, ',packages/lobby-protocol,')
+        working-directory: 'packages/lobby-protocol'
+        shell: bash
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PACKAGE_NAME: '@drizztdourden08/archipelia-lobby-protocol'
+        run: |
+          VERSION="$(node -p "require('./package.json').version")"
+          if npm view "$PACKAGE_NAME@$VERSION" version >/dev/null 2>&1; then
+            echo "::notice::$PACKAGE_NAME@$VERSION is already published, so it is skipped."
+          else
+            pnpm publish --no-git-checks --registry https://npm.pkg.github.com
+          fi
+
+      - name: Publish @drizztdourden08/archipelia-client-kit
+        if: contains(steps.select.outputs.folders, ',packages/client-kit,')
+        working-directory: 'packages/client-kit'
+        shell: bash
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PACKAGE_NAME: '@drizztdourden08/archipelia-client-kit'
+        run: |
+          VERSION="$(node -p "require('./package.json').version")"
+          if npm view "$PACKAGE_NAME@$VERSION" version >/dev/null 2>&1; then
+            echo "::notice::$PACKAGE_NAME@$VERSION is already published, so it is skipped."
+          else
+            pnpm publish --no-git-checks --registry https://npm.pkg.github.com
+          fi

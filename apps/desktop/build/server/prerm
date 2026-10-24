@@ -1,0 +1,16 @@
+#!/bin/sh
+# @layer tooling-scripts @kind build
+# Managed by brock sync: the .deb pre-removal script, run as root by dpkg.
+# Data in /var/lib/archipelia stays on remove.
+set -e
+if [ -d /run/systemd/system ]; then
+  case "$1" in
+    remove|deconfigure)
+      systemctl disable --now archipelia.service || true
+      ;;
+    upgrade)
+      systemctl stop archipelia.service || true
+      ;;
+  esac
+fi
+exit 0

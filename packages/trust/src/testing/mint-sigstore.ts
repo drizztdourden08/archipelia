@@ -1,4 +1,4 @@
-/* @layer tests @kind helper */
+/* @layer testing @kind logic */
 import { generateKeyPairSync } from 'node:crypto';
 import { bundleToJSON } from '@sigstore/bundle';
 import { fulcioHandler, initializeCA, initializeCTLog, initializeTLog, rekorHandler } from '@sigstore/mock';
@@ -6,10 +6,9 @@ import { DSSEBundleBuilder, FulcioSigner, RekorWitness } from '@sigstore/sign';
 import nock from 'nock';
 import { adaptHandler } from './adapt-handler';
 import { identityToken } from './identity-token';
+import { HOUR } from './mint-sigstore.constants';
 import type { Identity, MintedSigstore } from './mint.type';
 import { trustedRootOf } from './trusted-root-of';
-
-const HOUR = 3_600_000;
 
 const keyPair = () => generateKeyPairSync('ec', { namedCurve: 'prime256v1' });
 

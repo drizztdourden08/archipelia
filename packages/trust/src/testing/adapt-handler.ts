@@ -1,8 +1,5 @@
-/* @layer tests @kind helper */
-
-type MockHandler = {
-  fn: (body: string) => Promise<{ statusCode: number; response: string | ArrayBufferView; contentType?: string }>;
-};
+/* @layer testing @kind logic */
+import type { MockHandler } from './adapt-handler.type';
 
 const adaptHandler = (handler: MockHandler) => async (_uri: string, body: unknown): Promise<[number, string, Record<string, string>]> => {
   const result = await handler.fn(typeof body === 'string' ? body : JSON.stringify(body));

@@ -10,6 +10,7 @@
   },
   "exports": {
     ".": "./src/index.ts",
+    "./testing": "./src/testing/index.ts",
     "./package.json": "./package.json"
   },
   "files": [
@@ -20,7 +21,7 @@
     "lint": "tsc --noEmit && eslint ."
   },
   "devDependencies": {
-    "@drizztdourden08/brock-lint-config": "^0.85.0",
+    "@drizztdourden08/brock-lint-config": "^0.87.2",
     "@sigstore/mock": "catalog:",
     "ajv": "catalog:",
     "nock": "catalog:",

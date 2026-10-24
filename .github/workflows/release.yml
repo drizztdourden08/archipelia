@@ -291,8 +291,56 @@ jobs:
           name: release-linux
           path: upload/*
 
+  build-server:
+    needs: prepare
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ needs.prepare.outputs.sha }}
+
+      # The tag and the version commit wait for every build: the release job makes them.
+      - name: Set the release version
+        shell: bash
+        run: node -e "const f=process.argv[1];const p=JSON.parse(require('fs').readFileSync(f,'utf8'));p.version=process.argv[2];require('fs').writeFileSync(f,JSON.stringify(p,null,2)+'\n')" "$APP_DIR/package.json" "${{ needs.prepare.outputs.version }}"
+
+      # pnpm/action-setup takes the version from packageManager in the root package.json.
+      # Naming a version here as well fails the step.
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+          registry-url: https://npm.pkg.github.com
+          scope: '@drizztdourden08'
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.PACKAGES_TOKEN || secrets.GITHUB_TOKEN }}
+
+      - name: Package the server
+        run: pnpm --dir "$APP_DIR" exec brock server package --arch x64 --deb
+
+      - name: Collect the release files
+        shell: bash
+        run: |
+          mkdir -p upload
+          cp "$APP_DIR"/release/server/*.tar.gz "$APP_DIR"/release/server/*.deb upload/
+          ls -l upload
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: release-server
+          path: upload/*
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: server-docker
+          path: ${{ env.APP_DIR }}/release/server/docker
+
   publish-packages:
-    needs: [prepare, build-windows, build-macos, build-linux]
+    needs: [prepare, build-windows, build-macos, build-linux, build-server]
     runs-on: ubuntu-24.04
     permissions:
       contents: read
@@ -352,7 +400,7 @@ jobs:
           fi
 
   release:
-    needs: [prepare, build-windows, build-macos, build-linux]
+    needs: [prepare, build-windows, build-macos, build-linux, build-server]
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v7
@@ -393,6 +441,8 @@ jobs:
             link "artifacts/release-macos/*.dmg" "macOS disk image (.dmg)"
             link "artifacts/release-linux/*.AppImage" "Linux AppImage, updates itself"
             link "artifacts/release-linux/*.deb" "Debian package (.deb)"
+            link "artifacts/release-server/archipelia-server-linux-x64.tar.gz" "Server for Linux x64 (.tar.gz), with its own Node"
+            link "artifacts/release-server/archipelia-server_*_amd64.deb" "Server for Debian and Ubuntu x64 (.deb), runs as a systemd service"
           } > release-body.md
           echo "title=$(grep -m 1 '^# ' "$NOTES" | sed 's/^# //')" >> "$GITHUB_OUTPUT"
           cat release-body.md
@@ -430,3 +480,42 @@ jobs:
           files: artifacts/release-*/*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  publish-server-image:
+    needs: [prepare, release]
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: server-docker
+          path: docker
+
+      - uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
+
+      - uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Name the image tags
+        id: tags
+        shell: bash
+        env:
+          VERSION: ${{ needs.prepare.outputs.version }}
+          SET_LATEST: ${{ inputs.set_latest }}
+        run: |
+          IMAGE="ghcr.io/drizztdourden08/archipelia-server"
+          TAGS="$IMAGE:$VERSION"
+          if [ "$SET_LATEST" = "true" ]; then TAGS="$TAGS,$IMAGE:latest"; fi
+          echo "tags=$TAGS" >> "$GITHUB_OUTPUT"
+
+      - uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
+        with:
+          context: docker
+          platforms: linux/amd64
+          push: true
+          tags: ${{ steps.tags.outputs.tags }}

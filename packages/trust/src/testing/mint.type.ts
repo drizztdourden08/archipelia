@@ -1,4 +1,4 @@
-/* @layer tests @kind types */
+/* @layer testing @kind types */
 import type { KeyPairKeyObjectResult } from 'node:crypto';
 import type { TrustedRoot } from '@sigstore/protobuf-specs';
 

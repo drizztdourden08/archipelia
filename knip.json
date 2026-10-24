@@ -15,6 +15,7 @@
     "apps/desktop": {
       "entry": [
         "electron/main.ts",
+        "server/main.ts",
         "electron/preload.ts",
         "electron/services/app-services.type.ts",
         "src/ipc/contract.type.ts",
@@ -31,6 +32,7 @@
       "project": [
         "src/**/*.{ts,tsx}",
         "electron/**/*.ts",
+        "server/**/*.ts",
         ".brock/*.ts",
         "tests/**/*.ts"
       ]
