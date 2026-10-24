@@ -2,6 +2,7 @@
 import { describe, expect, test, vi } from 'vitest';
 import type { EngineRuntime, HostTarget, Session, SessionEngine, SessionTemplate } from '@archipelia/model';
 import type { HostLogLine, SessionHost } from '@archipelia/hosts';
+import { runtimeOf } from './runtime-of';
 
 const generate = vi.hoisted(() => vi.fn());
 vi.mock('@archipelia/engine', async (original) => ({ ...(await original<object>()), generate }));
@@ -11,9 +12,6 @@ vi.mock('../src/players/write-players', () => ({ writePlayers: () => Promise.res
 const { createSessionService } = await import('../src/service/session-service');
 const { hostSession } = await import('../src/service/host-session');
 
-const runtimeOf = (id: string, apVersion: string): EngineRuntime => ({
-  id, apVersion, apCommit: 'c', pythonVersion: '3.12.15', root: `/e/${id}`, python: '', generate: '', multiServer: '', schemaScript: '',
-});
 
 const templateOf = (host: HostTarget): SessionTemplate => ({
   id: 't', name: 'T', players: [], host, updatedAt: 0,

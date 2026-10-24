@@ -1,11 +1,9 @@
 /* @layer tests @kind test */
 import { describe, expect, test } from 'vitest';
-import type { EngineRuntime, Session, SessionEngine } from '@archipelia/model';
+import type { Session, SessionEngine } from '@archipelia/model';
 import { engineOfSession, LEGACY_ENGINE, pickHostEngine, remoteVersionWarning, sessionEngineOf } from '../src/engine';
+import { runtimeOf } from './runtime-of';
 
-const runtimeOf = (id: string, apVersion: string): EngineRuntime => ({
-  id, apVersion, apCommit: 'c', pythonVersion: '3.12.15', root: `/e/${id}`, python: '', generate: '', multiServer: '', schemaScript: '',
-});
 
 const engine: SessionEngine = { id: 'ap-0.6.6', ap: '0.6.6', python: '3.12.14' };
 
