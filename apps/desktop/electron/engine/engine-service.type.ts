@@ -6,6 +6,7 @@ import type { DataFiles, EngineEvent, EngineStateFile, PythonRange, Session, Ver
 type EngineEnv = {
   root: string;
   games: DataFiles;
+  cache: DataFiles;
   size: (id: string) => Promise<number>;
   feedStore: FeedStore;
   fetch: FetchLike;

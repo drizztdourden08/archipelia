@@ -1,6 +1,6 @@
 /* @layer electron-main @kind logic */
 import { rm } from 'node:fs/promises';
-import { carryWorlds, guardRecords, installOfficial } from '@archipelia/catalog';
+import { carryWorlds, guardRecords, installOfficial, reinstallFirstParty } from '@archipelia/catalog';
 import {
   activateEngine, activeEngineDir, engineFolder, engineInstalled, findActiveEngine, loadEngineRuntime, loadRuntime, readEngineState,
   readInstalledEngine, registerEngine, stampEngineSmoke, verifyEngineSource,
@@ -17,7 +17,7 @@ import { runSmoke } from './smoke/run-smoke';
 
 const createInstallDeps = (env: EngineEnv, source: VersionSource): InstallDeps => {
   const smoke = createSmokeDeps();
-  const { root, games } = env;
+  const { root, games, cache } = env;
   return {
     job: () => env.startJob(ENGINE_JOB, ENGINE_STEPS, { title: ENGINE_JOB_TITLE, cancellable: true }),
     resolve: async (choice) => resolveChoice(source, choice, await readEngineState(root)),
@@ -32,7 +32,9 @@ const createInstallDeps = (env: EngineEnv, source: VersionSource): InstallDeps =
     },
     guardRecords: () => guardRecords(games),
     carry: ({ from, to, since }) => carryWorlds({
-      from, to, since, files: games, reinstall: (apworld) => installOfficial({ engineDir: to.root, files: games, apworld }),
+      from, to, since, files: games,
+      reinstall: (apworld) => installOfficial({ engineDir: to.root, files: games, apworld }),
+      reinstallFirstParty: (apworld) => reinstallFirstParty({ engineDir: to.root, files: games, cache, apworld }),
     }),
     smoke: (input) => runSmoke(smoke, input),
     stamp: (id, result) => stampEngineSmoke(engineFolder(root, id), result),

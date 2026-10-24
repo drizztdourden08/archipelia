@@ -9,9 +9,18 @@ type Stability = 'stable' | 'unstable' | 'alpha' | 'beta' | 'untested' | 'unknow
 
 type FuzzVerdict = { verdict: 'clean' | 'flaky' | 'broken'; fuzzedAt: string; seeds: number; failRate: number };
 
-type CatalogVersion = { version: string; url: string; sha256?: string; fuzz?: FuzzVerdict };
+type CatalogVersion = { version: string; url: string; sha256?: string; size?: number; fuzz?: FuzzVerdict };
 
-type FirstPartyRelease = { client: string; bundleUrl: string; minimumAp?: string; maximumAp?: string };
+type FirstPartyBuild = { archipelagoVersion: string; url: string; bundleUrl: string; sha256: string; size: number };
+
+type FirstPartyRelease = {
+  client: string;
+  bundleUrl: string;
+  minimumAp?: string;
+  maximumAp?: string;
+  worldVersion?: string;
+  builds?: FirstPartyBuild[];
+};
 
 type WorldTrust = { state: 'verified' | 'unverified'; detail: string };
 
@@ -46,4 +55,4 @@ type InstalledGame = {
   trust?: WorldTrust;
 };
 
-export type { CatalogEntry, CatalogVersion, FirstPartyRelease, FuzzVerdict, GameSource, InstalledGame, Stability, WorldLayout, WorldTrust };
+export type { CatalogEntry, CatalogVersion, FirstPartyBuild, FirstPartyRelease, FuzzVerdict, GameSource, InstalledGame, Stability, WorldLayout, WorldTrust };

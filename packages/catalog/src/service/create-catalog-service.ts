@@ -4,9 +4,9 @@ import { mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { readRuntime } from '@archipelia/engine';
-import { loadTrustedRoot } from '@archipelia/trust';
 import { assertSafeName } from '@drizztdourden08/brock-core/storage';
 import { readCatalog } from '../read-catalog';
+import { trustRoot as trustRootOf } from '../first-party/trust-root';
 import { fitEntries } from '../first-party/fit-entries';
 import { mergeCatalog } from '../first-party/merge-catalog';
 import { readFirstParty } from '../first-party/read-first-party';
@@ -65,7 +65,7 @@ const createCatalogService = ({ games: files, cache, engineDir, fetch: fetchFn, 
     }
   };
 
-  const root = trustRoot ?? (async () => (await loadTrustedRoot({ files: cache })).root);
+  const root = trustRoot ?? (() => trustRootOf(cache));
 
   const install = async (request: InstallRequest): Promise<InstalledGame> => {
     const base = { engineDir: await engineDir(), files };

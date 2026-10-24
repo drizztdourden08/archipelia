@@ -6,6 +6,7 @@ type CarryWorldsParams = {
   to: EngineRuntime;
   files: DataFiles;
   reinstall: (apworld: string) => Promise<unknown>;
+  reinstallFirstParty: (apworld: string) => Promise<unknown>;
   since?: number;
 };
 

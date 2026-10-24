@@ -28,6 +28,7 @@
         "repo": "drizztdourden08/relic-of-the-past",
         "world": "relic_of_the_past.apworld",
         "manifest": "relic_of_the_past.apworld.json",
+        "kind": "builds",
         "bundle": "relic_of_the_past.apworld.sigstore.json"
       }
     }

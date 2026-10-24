@@ -59,7 +59,8 @@
             "repo": { "$ref": "#/$defs/repo" },
             "world": { "$ref": "#/$defs/text" },
             "manifest": { "$ref": "#/$defs/text" },
-            "bundle": { "$ref": "#/$defs/text" }
+            "bundle": { "$ref": "#/$defs/text" },
+            "kind": { "const": "builds" }
           }
         }
       }

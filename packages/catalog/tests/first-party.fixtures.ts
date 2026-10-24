@@ -15,7 +15,11 @@ const BUNDLE_URL = `${BASE}/relic_of_the_past.apworld.sigstore.json`;
 
 const REGISTRY_URL = 'https://raw.githubusercontent.com/drizztdourden08/archipelia/main/registry/registry.json';
 
-const registryOf = (status: 'active' | 'revoked' = 'active') => ({
+const buildUrl = (ap: string) => `${BASE}/relic_of_the_past-ap${ap}.apworld`;
+
+const buildBundleUrl = (ap: string) => `${buildUrl(ap)}.sigstore.json`;
+
+const registryOf = (status: 'active' | 'revoked' = 'active', kind?: 'builds') => ({
   format: 1,
   clients: [
     {
@@ -46,13 +50,14 @@ const registryOf = (status: 'active' | 'revoked' = 'active') => ({
         world: 'relic_of_the_past.apworld',
         manifest: 'relic_of_the_past.apworld.json',
         bundle: 'relic_of_the_past.apworld.sigstore.json',
+        ...(kind ? { kind } : {}),
       },
     },
   ],
 });
 
-const worldBytes = () => zipSync({
-  'relic_of_the_past/__init__.py': strToU8('# world'),
+const worldBytes = (tag = 'world') => zipSync({
+  'relic_of_the_past/__init__.py': strToU8(`# ${tag}`),
   'relic_of_the_past/archipelago.json': strToU8(JSON.stringify({ game: 'Relic of the Past', world_version: '0.1.0' })),
 });
 
@@ -60,6 +65,23 @@ const sha256Of = (bytes: Uint8Array) => createHash('sha256').update(bytes).diges
 
 const manifestOf = (bytes: Uint8Array, patch: Record<string, unknown> = {}) => ({
   game: 'Relic of the Past', worldVersion: '0.1.0', minimumAp: '0.6.4', sha256: sha256Of(bytes), appVersion: '0.1.0', ...patch,
+});
+
+const buildsManifestOf = (builds: { ap: string; bytes: Uint8Array }[], patch: Record<string, unknown> = {}) => ({
+  game: 'Relic of the Past',
+  module: 'relic_of_the_past',
+  worldVersion: '0.1.0',
+  appVersion: '0.1.0',
+  minimumAp: builds[0]?.ap,
+  maximumAp: builds[builds.length - 1]?.ap,
+  builds: builds.map(({ ap, bytes }) => ({
+    archipelagoVersion: ap,
+    file: `relic_of_the_past-ap${ap}.apworld`,
+    sha256: sha256Of(bytes),
+    size: bytes.length,
+    bundle: `relic_of_the_past-ap${ap}.apworld.sigstore.json`,
+  })),
+  ...patch,
 });
 
 const json = (body: unknown) => new Response(JSON.stringify(body), { status: 200 });
@@ -79,5 +101,5 @@ const communityEntry = (apworld: string, patch: Partial<CatalogEntry> = {}): Cat
 });
 
 export {
-  BUNDLE_URL, MANIFEST_URL, REGISTRY_URL, WORLD_URL, bytesResponse, communityEntry, json, manifestOf, missing, registryOf, routed, sha256Of, worldBytes,
+  BUNDLE_URL, MANIFEST_URL, REGISTRY_URL, WORLD_URL, buildBundleUrl, buildUrl, buildsManifestOf, bytesResponse, communityEntry, json, manifestOf, missing, registryOf, routed, sha256Of, worldBytes,
 };

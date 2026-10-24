@@ -30,11 +30,17 @@ const versionLine = ({ installed, latest, entry }: GameRow) => {
 const checksumWarning = ({ entry, latest }: GameRow) =>
   (latest && !latest.sha256 && entry.source === 'index' ? ['No published checksum'] : []);
 
+const rangeLine = ({ entry }: GameRow) => {
+  const { minimumAp, maximumAp } = entry.firstParty ?? {};
+  if (minimumAp && maximumAp) return [`Archipelago ${minimumAp} to ${maximumAp}`];
+  return minimumAp ? [`Archipelago ${minimumAp} or newer`] : [];
+};
+
 const reasonLine = ({ entry }: GameRow) => (entry.unavailable ? [entry.unavailable] : []);
 
 const trustLine = ({ installed }: GameRow) => (installed?.trust ? [installed.trust.detail] : []);
 
-const detailsOf = (row: GameRow) => [...versionLine(row), ...reasonLine(row), ...trustLine(row), ...checksumWarning(row)];
+const detailsOf = (row: GameRow) => [...versionLine(row), ...rangeLine(row), ...reasonLine(row), ...trustLine(row), ...checksumWarning(row)];
 
 const installLabel = ({ state }: GameRow, installing: boolean) => {
   if (state === 'update') return installing ? 'Updating...' : 'Update';

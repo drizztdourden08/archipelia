@@ -47,6 +47,12 @@ describe('first-party games in the store', () => {
     expect(card.actions[0]).toMatchObject({ disabled: true });
   });
 
+  test('shows the declared Archipelago range as information only', () => {
+    const both = cardOf(firstParty({ firstParty: { client: 'c', bundleUrl: 'b', minimumAp: '0.6.5', maximumAp: '0.6.9' } }));
+    expect(both.details).toContain('Archipelago 0.6.5 to 0.6.9');
+    expect(both.actions[0]).toMatchObject({ disabled: false });
+  });
+
   test('an installed game shows its verification line, verified or not yet', () => {
     const unverified = cardOf(firstParty(), [record({ trust: { state: 'unverified', detail: 'Not verified yet: this release has no attestation bundle.' } })]);
     expect(unverified.details).toEqual(['Installed 0.1.0', 'Not verified yet: this release has no attestation bundle.']);

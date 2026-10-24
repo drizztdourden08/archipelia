@@ -1,7 +1,7 @@
 /* @layer tests @kind test */
 import { describe, expect, test } from 'vitest';
 import { readFirstParty } from '../src/first-party/read-first-party';
-import { BUNDLE_URL, MANIFEST_URL, REGISTRY_URL, WORLD_URL, json, manifestOf, missing, registryOf, routed, worldBytes } from './first-party.fixtures';
+import { BUNDLE_URL, MANIFEST_URL, REGISTRY_URL, WORLD_URL, buildBundleUrl, buildUrl, buildsManifestOf, json, manifestOf, missing, registryOf, routed, worldBytes } from './first-party.fixtures';
 import { memoryFiles } from './memory-files.fixtures';
 
 const HOUR = 3_600_000;
@@ -22,6 +22,34 @@ describe('readFirstParty', () => {
     });
     expect(read.entries[0]?.unavailable).toBeUndefined();
     expect(read.clients.map((client) => client.id)).toEqual(['relic-of-the-past']);
+  });
+
+});
+
+describe('readFirstParty manifests and fallbacks', () => {
+  test('lists every build and leaves the version to the engine', async () => {
+    const [a, b] = [worldBytes('ap665'), worldBytes('ap667')];
+    const manifest = buildsManifestOf([{ ap: '0.6.5', bytes: a }, { ap: '0.6.7', bytes: b }]);
+    const fetchFn = routed({ [REGISTRY_URL]: () => json(registryOf('active', 'builds')), [MANIFEST_URL]: () => json(manifest) });
+    const read = await readFirstParty({ files: memoryFiles([]), fetch: fetchFn });
+    expect(read.problems).toEqual([]);
+    expect(read.entries[0]).toMatchObject({ source: 'first-party', versions: [] });
+    expect(read.entries[0]?.unavailable).toBeUndefined();
+    expect(read.entries[0]?.firstParty).toMatchObject({
+      worldVersion: '0.1.0',
+      minimumAp: '0.6.5',
+      maximumAp: '0.6.7',
+      builds: [
+        { archipelagoVersion: '0.6.5', url: buildUrl('0.6.5'), bundleUrl: buildBundleUrl('0.6.5'), sha256: manifest.builds[0]?.sha256, size: a.length },
+        { archipelagoVersion: '0.6.7', url: buildUrl('0.6.7'), bundleUrl: buildBundleUrl('0.6.7'), size: b.length },
+      ],
+    });
+  });
+
+  test('a single manifest in a builds index is reported', async () => {
+    const fetchFn = routed({ [REGISTRY_URL]: () => json(registryOf('active', 'builds')), [MANIFEST_URL]: () => json(manifestOf(worldBytes())) });
+    const read = await readFirstParty({ files: memoryFiles([]), fetch: fetchFn });
+    expect(read.entries[0]?.unavailable).toContain('could not be read');
   });
 
   test('a release with no manifest yet is listed as No release yet, not as a problem', async () => {

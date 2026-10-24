@@ -6,6 +6,14 @@ import { engineFit } from '../src/first-party/engine-fit';
 import { fitEntries } from '../src/first-party/fit-entries';
 import { communityEntry } from './first-party.fixtures';
 
+const build = (ap: string) => ({ archipelagoVersion: ap, url: `https://x/${ap}.apworld`, bundleUrl: `https://x/${ap}.sigstore.json`, sha256: ap.padEnd(64, '0'), size: 10 });
+
+const buildsEntry = (aps: string[], patch: Partial<CatalogEntry> = {}): CatalogEntry => entryOf({ minimumAp: aps[0], maximumAp: aps[aps.length - 1] }, {
+  versions: [],
+  firstParty: { client: 'c', bundleUrl: 'u', minimumAp: aps[0], maximumAp: aps[aps.length - 1], worldVersion: '0.1.0', builds: aps.map(build) },
+  ...patch,
+});
+
 const release = (range: { minimumAp?: string; maximumAp?: string }) => ({ client: 'c', bundleUrl: 'u', ...range });
 
 const entryOf = (range: { minimumAp?: string; maximumAp?: string }, patch: Partial<CatalogEntry> = {}): CatalogEntry =>
@@ -54,6 +62,29 @@ describe('fitEntries', () => {
     const entry = entryOf({ minimumAp: '0.6.4' });
     fitEntries([entry], '0.6.2');
     expect(entry.unavailable).toBeUndefined();
+  });
+});
+
+describe('fitEntries with per-version builds', () => {
+  test('picks the build whose Archipelago version equals the engine and makes it the version to install', () => {
+    const [fitted] = fitEntries([buildsEntry(['0.6.5', '0.6.7', '0.6.9'])], '0.6.7');
+    expect(fitted?.unavailable).toBeUndefined();
+    expect(fitted?.versions).toEqual([{ version: '0.1.0', url: 'https://x/0.6.7.apworld', sha256: '0.6.7'.padEnd(64, '0'), size: 10 }]);
+  });
+
+  test('with no build for the engine it is not available, and the range does not matter', () => {
+    const [fitted] = fitEntries([buildsEntry(['0.6.5', '0.6.9'])], '0.6.7');
+    expect(fitted?.versions).toEqual([]);
+    expect(fitted?.unavailable).toBe('No Relic of the Past build for Archipelago 0.6.7; builds exist for 0.6.5, 0.6.9');
+  });
+
+  test('an engine newer than the last build is not available either', () => {
+    expect(fitEntries([buildsEntry(['0.6.5', '0.6.7'])], '0.7.0')[0]?.unavailable).toContain('No Relic of the Past build for Archipelago 0.7.0');
+  });
+
+  test('a build index is untouched when the engine is unknown', () => {
+    const entry = buildsEntry(['0.6.7']);
+    expect(fitEntries([entry], undefined)[0]).toBe(entry);
   });
 });
 

@@ -1,6 +1,6 @@
 /* @layer tests @kind test */
 import { beforeEach, describe, expect, test, vi } from 'vitest';
-import { BUNDLE_URL, MANIFEST_URL, REGISTRY_URL, WORLD_URL, communityEntry, json, manifestOf, missing, registryOf, routed, worldBytes } from './first-party.fixtures';
+import { BUNDLE_URL, MANIFEST_URL, REGISTRY_URL, WORLD_URL, buildUrl, buildsManifestOf, communityEntry, json, manifestOf, missing, registryOf, routed, worldBytes } from './first-party.fixtures';
 import { memoryFiles } from './memory-files.fixtures';
 
 const readCatalog = vi.hoisted(() => vi.fn());
@@ -37,6 +37,20 @@ describe('catalog service with the first-party source', () => {
     expect(rows[0]).toMatchObject({ source: 'first-party', displayName: 'Relic of the Past' });
     expect(view.entries.map((entry) => entry.apworld)).toContain('alpha');
     expect(rows[0]?.versions[0]?.url).toBe(WORLD_URL);
+  });
+
+  test('resolves a builds index to the build of the active engine, and says which builds exist when none fits', async () => {
+    const routes = {
+      [REGISTRY_URL]: () => json(registryOf('active', 'builds')),
+      [MANIFEST_URL]: () => json(buildsManifestOf([{ ap: '0.6.5', bytes: worldBytes('a') }, { ap: '0.6.7', bytes: worldBytes('b') }])),
+    };
+    const fits = await serviceWith(routes).read(false);
+    expect(fits.entries.find((entry) => entry.apworld === 'relic_of_the_past')?.versions[0]?.url).toBe(buildUrl('0.6.7'));
+    apVersion.value = '0.6.6';
+    const none = await serviceWith(routes).read(false);
+    expect(none.entries.find((entry) => entry.apworld === 'relic_of_the_past')?.unavailable).toBe(
+      'No Relic of the Past build for Archipelago 0.6.6; builds exist for 0.6.5, 0.6.7',
+    );
   });
 
   test('shows No release yet when the release has no manifest', async () => {

@@ -40,6 +40,12 @@ describe('registry/registry.json', () => {
     expect(parsed.registry.games[0]).toMatchObject({ game: 'Relic of the Past', module: 'relic_of_the_past', client: 'relic-of-the-past' });
   });
 
+  test('says Relic of the Past is a builds index', () => {
+    const parsed = parseRegistry(registryFile);
+    if (!parsed.ok) throw new Error('the registry does not parse');
+    expect(parsed.registry.games[0]?.release).toMatchObject({ manifest: 'relic_of_the_past.apworld.json', kind: 'builds' });
+  });
+
   test('is the floor the app ships', () => {
     expect(findClient(floorRegistry(), 'relic-of-the-past')?.trust.repo).toBe('drizztdourden08/relic-of-the-past');
   });
@@ -53,6 +59,7 @@ describe('registry/registry.json', () => {
     ['a client with an unknown status', edited((draft) => { Object.assign(draft.clients[0] ?? {}, { status: 'pending' }); })],
     ['a field the schema does not name', edited((draft) => { Object.assign(draft.clients[0] ?? {}, { secret: 1 }); })],
     ['a game with a bad module name', edited((draft) => { Object.assign(draft.games[0] ?? {}, { module: 'Bad-Name' }); })],
+    ['a release kind the schema does not name', edited((draft) => { Object.assign(draft.games[0]?.release as Record<string, unknown>, { kind: 'other' }); })],
     ['another format number', { ...registryFile, format: 2 }],
   ])('the schema rejects %s', (_name, value) => {
     expect(validate(value)).toBe(false);

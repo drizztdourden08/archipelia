@@ -21,7 +21,9 @@ type RegistryClient = {
   trust: ClientTrust;
 };
 
-type RegistryRelease = { repo: string; world: string; manifest: string; bundle: string };
+type ReleaseKind = 'builds';
+
+type RegistryRelease = { repo: string; world: string; manifest: string; bundle: string; kind?: ReleaseKind };
 
 type RegistryGame = {
   game: string;
@@ -35,4 +37,4 @@ type RegistryGame = {
 
 type Registry = { format: 1; clients: RegistryClient[]; games: RegistryGame[] };
 
-export type { ClientStatus, ClientTrust, GithubAttestationTrust, Registry, RegistryClient, RegistryGame, RegistryRelease };
+export type { ClientStatus, ClientTrust, GithubAttestationTrust, Registry, RegistryClient, RegistryGame, RegistryRelease, ReleaseKind };

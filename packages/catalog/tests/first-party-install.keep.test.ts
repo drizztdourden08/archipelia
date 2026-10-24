@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, test, vi } from 'vitest';
 import type { CatalogEntry, DataFiles } from '@archipelia/model';
 import { parseRegistry } from '@archipelia/trust';
 import { createWorldFetch } from './first-party-world.fixtures';
-import { BUNDLE_URL, WORLD_URL, communityEntry, json, missing, registryOf, sha256Of, worldBytes } from './first-party.fixtures';
+import { BUNDLE_URL, WORLD_URL, buildBundleUrl, buildUrl, bytesResponse, communityEntry, json, missing, registryOf, sha256Of, worldBytes } from './first-party.fixtures';
 
 const apVersion = vi.hoisted(() => ({ value: '0.6.7' }));
 const verify = vi.hoisted(() => vi.fn());
@@ -104,5 +104,69 @@ describe('installing a first-party release', () => {
     await installWorld({ engineDir: '', files, entry: community, version: '1.0.0', fetch: createWorldFetch(bytes, {}) });
     expect(committed()).toMatchObject({ source: 'index' });
     expect(committed().trust).toBeUndefined();
+  });
+});
+
+const at665 = worldBytes('ap 0.6.5');
+const at667 = worldBytes('ap 0.6.7');
+
+const buildOf = (ap: string, bytes: Uint8Array, patch: Record<string, unknown> = {}) => ({
+  archipelagoVersion: ap, url: buildUrl(ap), bundleUrl: buildBundleUrl(ap), sha256: sha256Of(bytes), size: bytes.length, ...patch,
+});
+
+const buildsEntry = (builds = [buildOf('0.6.5', at665), buildOf('0.6.7', at667)]): CatalogEntry => entryOf({
+  versions: [],
+  firstParty: { client: 'relic-of-the-past', bundleUrl: BUNDLE_URL, minimumAp: '0.6.5', maximumAp: '0.6.7', worldVersion: '0.1.0', builds },
+});
+
+const installBuild = (entry: CatalogEntry, routes: Record<string, () => Response>) =>
+  installWorld({
+    engineDir: '', files, entry, version: '0.1.0', trust: trustWith(),
+    fetch: createWorldFetch(bytes, { [buildUrl('0.6.5')]: () => bytesResponse(at665), [buildUrl('0.6.7')]: () => bytesResponse(at667), ...routes }),
+  });
+
+describe('installing a per-version build', () => {
+  test('installs the build for the engine version and verifies that build own bundle', async () => {
+    apVersion.value = '0.6.5';
+    verify.mockReturnValue({ ok: true, sha256: sha256Of(at665), game: 'Relic of the Past', signer: { identity: 'i', repo: 'drizztdourden08/relic-of-the-past', workflow: 'w', ref: 'r' } });
+    await installBuild(buildsEntry(), { [buildBundleUrl('0.6.5')]: () => json({ mediaType: 'bundle' }) });
+    expect(verify).toHaveBeenCalledOnce();
+    expect(verify.mock.calls[0]?.[0]).toEqual(at665);
+    expect(committed()).toMatchObject({ source: 'first-party', hash: { verified: true }, trust: { state: 'verified' } });
+  });
+
+  test('a build with no bundle of its own installs as not verified yet, even if another build has one', async () => {
+    apVersion.value = '0.6.7';
+    await installBuild(buildsEntry(), { [buildBundleUrl('0.6.5')]: () => json({ mediaType: 'bundle' }), [buildBundleUrl('0.6.7')]: missing });
+    expect(verify).not.toHaveBeenCalled();
+    expect(committed()).toMatchObject({ trust: { state: 'unverified' } });
+    expect(committed().trust?.detail).toContain('Not verified yet');
+  });
+
+  test('no build for the engine version is refused with the list of builds', async () => {
+    apVersion.value = '0.6.6';
+    await expect(installBuild(buildsEntry(), {})).rejects.toThrow('No Relic of the Past build for Archipelago 0.6.6; builds exist for 0.6.5, 0.6.7');
+    expect(commit).not.toHaveBeenCalled();
+  });
+
+  test('a build whose size differs from the index is refused before anything is installed', async () => {
+    apVersion.value = '0.6.7';
+    const entry = buildsEntry([buildOf('0.6.7', at667, { size: at667.length + 1 })]);
+    await expect(installBuild(entry, { [buildBundleUrl('0.6.7')]: missing })).rejects.toThrow(/size is \d+ bytes, the release says/);
+    expect(commit).not.toHaveBeenCalled();
+  });
+
+  test('a build whose checksum differs from the index is refused', async () => {
+    apVersion.value = '0.6.7';
+    const entry = buildsEntry([buildOf('0.6.7', at667, { sha256: 'e'.repeat(64) })]);
+    await expect(installBuild(entry, { [buildBundleUrl('0.6.7')]: missing })).rejects.toThrow(/sha256/);
+    expect(commit).not.toHaveBeenCalled();
+  });
+
+  test('a tampered build is refused with the reason', async () => {
+    apVersion.value = '0.6.7';
+    verify.mockReturnValue({ ok: false, code: 'trust-failed', reason: 'digest-mismatch', detail: 'the bundle attests a different file' });
+    await expect(installBuild(buildsEntry(), { [buildBundleUrl('0.6.7')]: () => json({ mediaType: 'bundle' }) })).rejects.toThrow(/is refused: the bundle attests a different file/);
+    expect(commit).not.toHaveBeenCalled();
   });
 });
