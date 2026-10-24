@@ -44,6 +44,7 @@ type CorePorts = {
   network: CoreNetwork;
   environment?: CoreEnvironment;
   lobbyRun?: CoreLobbyRun;
+  lobbySecrets?: SecretStore;
 };
 
 export type { CoreDomain, CoreDomains, CoreEnvironment, CoreEvent, CoreLobbyRun, CoreLobbyRunContext, CoreLogLevel, CoreNetwork, CorePorts };
