@@ -1,0 +1,7 @@
+/* @layer core @kind config */
+const MDNS_MAX_RECORDS = 64;
+const MDNS_MAX_NAME = 255;
+const MDNS_MAX_TXT_ENTRIES = 16;
+const MDNS_MAX_TXT_BYTES = 255;
+
+export { MDNS_MAX_NAME, MDNS_MAX_RECORDS, MDNS_MAX_TXT_BYTES, MDNS_MAX_TXT_ENTRIES };

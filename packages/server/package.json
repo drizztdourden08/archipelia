@@ -11,6 +11,7 @@
   "exports": {
     ".": "./src/index.ts",
     "./node": "./src/node/index.ts",
+    "./network": "./src/network/index.ts",
     "./package.json": "./package.json"
   },
   "files": [
@@ -22,6 +23,7 @@
   },
   "devDependencies": {
     "@drizztdourden08/brock-lint-config": "^0.82.0",
+    "@types/multicast-dns": "^7.2.4",
     "@types/node": "catalog:",
     "eslint": "catalog:",
     "typescript": "catalog:"
@@ -31,11 +33,14 @@
     "@archipelia/engine": "workspace:*",
     "@archipelia/engine-bundle": "workspace:*",
     "@archipelia/hosts": "workspace:*",
+    "@archipelia/lobby-protocol": "workspace:*",
     "@archipelia/model": "workspace:*",
     "@archipelia/presets": "workspace:*",
     "@archipelia/sessions": "workspace:*",
     "@drizztdourden08/brock-core": "^0.82.0",
     "@drizztdourden08/brock-electron": "^0.82.0",
-    "@drizztdourden08/brock-secrets": "^0.82.0"
+    "@drizztdourden08/brock-secrets": "^0.82.0",
+    "@runonflux/nat-upnp": "^2.0.5",
+    "multicast-dns": "^7.2.5"
   }
 }
