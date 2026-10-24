@@ -24,8 +24,10 @@ const EngineSettings = () => {
           checking={engine.checking}
           onAp={engine.pickAp}
           onPython={engine.pickPython}
+          checkAtStart={engine.checkAtStart}
           onApply={engine.apply}
           onCheck={engine.check}
+          onCheckAtStart={engine.setCheckAtStart}
         />
       )}
       {overview && (

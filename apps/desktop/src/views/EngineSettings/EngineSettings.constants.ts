@@ -14,7 +14,7 @@ const STATE_VIEW: Record<EngineState | 'unknown', { label: string; tone: StatusT
 
 const REBUILD_CONFIRM: ConfirmActionOptions = {
   title: 'Rebuild the engine',
-  message: 'The engine is removed and downloaded again, about 90 MB.',
+  message: 'The engine in use is set up again. The downloads already on this computer are reused, so little or nothing is fetched.',
   confirmLabel: 'Rebuild',
   variant: 'danger',
 };
@@ -60,6 +60,12 @@ const ROW_TEXT = {
     description: 'The Python packages of the engine in use, and the rules the app applied when it installed them.',
     hint: 'The list is what pip reports inside the engine.',
     keywords: 'pip packages requirements freeze',
+  },
+  startCheck: {
+    label: 'Look for a new version at start',
+    description: 'When Archipelia starts it asks once about each new Archipelago release.',
+    hint: 'Off means no check at start. Check now still works here.',
+    keywords: 'startup offer prompt update notify automatic',
   },
   change: {
     label: 'Change the engine',

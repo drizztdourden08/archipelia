@@ -1,10 +1,11 @@
 /* @layer renderer-app @kind hook */
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { confirmDelete, useJob, useKeyedGuard } from '@drizztdourden08/brock-react';
+import { confirmDelete, useJob, useKeyedGuard, useSettings } from '@drizztdourden08/brock-react';
 import type { EngineEntry } from '@archipelia/model';
 import { failWith } from '../../../hooks/fail-with';
 import { useLoggedFailure } from '../../../hooks/useLoggedFailure';
 import { ENGINE_JOB } from '../../../jobs/jobs.constants';
+import type { AppSettings } from '../../../settings.type';
 import { useEngineStore } from '../../../stores/useEngineStore';
 import { FAILURE } from '../EngineSettings.constants';
 import type { Picked } from '../EngineSettings.type';
@@ -20,6 +21,7 @@ const useEngineSettings = () => {
   const { status, overview, refresh, setup, load, install, switchTo, remove } = useEngineStore();
   const { job, open } = useJob(ENGINE_JOB);
   const { guard, isBusy, lastError } = useKeyedGuard();
+  const { settings, patch } = useSettings<AppSettings>();
   const [picked, setPicked] = useState<Picked>({});
 
   useEffect(() => {
@@ -49,6 +51,8 @@ const useEngineSettings = () => {
     }));
   }, [guard, plan, switchTo, install]);
 
+  const setCheckAtStart = useCallback((on: boolean) => patch({ engineCheckAtStart: on }), [patch]);
+
   const switchEngine = useCallback((id: string) => { void guard('apply', failWith(FAILURE.apply, () => switchTo(id))); }, [guard, switchTo]);
 
   const removeEngine = useCallback((engine: EngineEntry) => {
@@ -60,6 +64,8 @@ const useEngineSettings = () => {
   return {
     overview, chosen, plan, busy, lastError, view, failure, actions, progress: setupProgress(job),
     checking: isBusy('check'),
+    checkAtStart: settings.engineCheckAtStart,
+    setCheckAtStart,
     pickAp, pickPython, check, apply, switchEngine, removeEngine,
   };
 };

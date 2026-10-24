@@ -2,7 +2,7 @@
 import type { ScreenMeta } from '@drizztdourden08/brock-react';
 import { OldRuns } from '../../views/OldRuns';
 
-const meta: ScreenMeta = { title: 'Old runs', icon: 'history', order: 2, keywords: ['session runs', 'clean', 'old runs'] };
+const meta: ScreenMeta = { title: 'Old runs', icon: 'history', order: 2, keywords: ['session runs', 'clean', 'old runs'], showHeader: true };
 
 const OldRunsPage = () => <OldRuns />;
 

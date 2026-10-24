@@ -30,6 +30,8 @@ export default defineReviewStep({
     const tagLabel = TAG_VIEW[overview.tag].label;
     const tag = await waitText(tour, tagLabel, layer);
     tour.check('engine-version-tag', tag, `the version tag reads ${tagLabel}`, `the version tag does not read ${tagLabel}`);
+    const startCheck = await waitText(tour, anyCase(ROW_TEXT.startCheck.label), layer);
+    tour.check('engine-check-at-start', startCheck, 'the Engine page has the check at start setting', 'the Engine page has no check at start setting');
     const checkNow = await waitNamed(tour, SELECTOR.button, 'Check now', layer() ?? undefined);
     tour.check('engine-check-now', checkNow !== null, 'Check now is offered next to the version list', 'no Check now button on the Engine page');
     const installed = await waitText(tour, anyCase(SECTION_TEXT.installed.title), layer);

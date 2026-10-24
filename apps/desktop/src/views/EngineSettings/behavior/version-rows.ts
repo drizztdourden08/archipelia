@@ -27,6 +27,10 @@ const versionRows = (input: VersionRowsInput): SettingsSectionRow[] => {
       ...rowOf('list', ROW_TEXT.list), hint: feedLine(overview.feed, when), problem: feedNotice(overview.feed, when),
       actions: [{ ...CHECK_ACTION, loading: checking, disabled: busy || checking, onSelect: input.onCheck }],
     },
+    {
+      ...rowOf('start-check', ROW_TEXT.startCheck),
+      input: { kind: 'toggle', value: input.checkAtStart, onChange: input.onCheckAtStart },
+    },
     { ...change, hint: CHANGE_HINT[plan.kind], actions: changeActions(plan, busy, input.onApply) },
   ];
 };

@@ -44,8 +44,10 @@ type VersionRowsInput = {
   when: WhenText;
   onAp: (version: string) => void;
   onPython: (version: string) => void;
+  checkAtStart: boolean;
   onApply: () => void;
   onCheck: () => void;
+  onCheckAtStart: (on: boolean) => void;
 };
 
 export type { ChoicePlan, EngineActionsInput, EngineTag, FinishInstall, FinishInstallInput, Picked, RowText, TagView, VersionRowsInput, WhenForm, WhenText };
