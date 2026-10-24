@@ -2,8 +2,8 @@
 import { CLOSE_CODES } from '@archipelia/lobby-protocol';
 import type { LobbyContext } from '../lobby-context.type';
 import type { MemberRef } from '../lobby-service.type';
-import { dropFiles } from './drop-files';
 import type { Dismissal } from './dismiss-member.type';
+import { pruneFiles } from './prune-files';
 
 const dismissMember = async (ctx: LobbyContext, ref: MemberRef, { admission, reason, message }: Dismissal) => {
   const lobby = await ctx.book.commit(ref.lobbyId, (draft) => {
@@ -15,7 +15,8 @@ const dismissMember = async (ctx: LobbyContext, ref: MemberRef, { admission, rea
   });
   ctx.hub.send(ref, message);
   ctx.hub.close(ref, CLOSE_CODES.forbidden);
-  await dropFiles(ctx.deps.store, lobby, ref.memberId);
+  ctx.uploads.forgetMember(ref);
+  await pruneFiles(ctx.deps.store, lobby);
   ctx.publish(lobby);
   return lobby;
 };

@@ -15,7 +15,7 @@ const createCoreLobbies = ({ ports, sessions, runtime, runtimeFor, sessionFiles 
   const lobbies = createLobbyService({
     store: createLobbyStore(ports.domain(DOMAIN.lobbies)),
     trust: createLobbyTrust(ports.domain(DOMAIN.cache)),
-    runner: { run: (template, lobby) => sessions().run(template, undefined, lobby), stop: (id) => sessions().stop(id), runtimeFor, output: sessionFiles },
+    runner: { run: (template, lobby) => sessions().run(template, undefined, lobby), stop: (id) => sessions().stop(id), running: (id) => sessions().running(id), runtimeFor, output: sessionFiles },
     overlay: buildOverlay,
     secrets: ports.secrets,
     activeEngine: () => runtime().then(sessionEngineOf, () => undefined),

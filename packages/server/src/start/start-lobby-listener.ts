@@ -4,10 +4,16 @@ import { DEFAULT_PORT } from '@archipelia/lobby-protocol';
 import { DOMAIN } from '@archipelia/model';
 import { SERVER_VERSION } from '../core/core-lobbies.constants';
 import { startListener } from '../listener/start-listener';
-import { createNodeMappingPorts, createNodeNetworkPorts, DEFAULT_NETWORK_MODE } from '../network';
+import { createNodeMappingPorts, createNodeNetworkPorts, createPublicLookup, DEFAULT_NETWORK_MODE } from '../network';
+import type { ReachPorts } from './reach/reach.type';
 import { serverIdentity } from './reach/server-identity';
 import { startReach } from './reach/start-reach';
 import type { LobbyEndpoint, LobbyListen, ListenPorts } from './start-core.type';
+
+const nodeReachPorts = (lookupOn: boolean): ReachPorts => {
+  const lookup = lookupOn ? createPublicLookup() : null;
+  return { network: createNodeNetworkPorts(), mapping: createNodeMappingPorts(lookup), lookup };
+};
 
 const startLobbyListener = async ({ core, network, log, domain }: ListenPorts, options: LobbyListen = {}): Promise<LobbyEndpoint> => {
   const listener = await startListener({
@@ -17,10 +23,11 @@ const startLobbyListener = async ({ core, network, log, domain }: ListenPorts, o
     port: options.port ?? DEFAULT_PORT,
     serverVersion: options.serverVersion ?? SERVER_VERSION,
     ...(options.tls ? { tls: options.tls } : {}),
+    log,
   });
   const reach = await startReach({
-    port: listener.port, mode: options.mode ?? DEFAULT_NETWORK_MODE, automation: network.automation, log,
-    ports: options.reachPorts ?? { network: createNodeNetworkPorts(), mapping: createNodeMappingPorts() },
+    port: listener.port, secure: listener.secure, mode: options.mode ?? DEFAULT_NETWORK_MODE, automation: network.automation, log,
+    ports: options.reachPorts ?? nodeReachPorts(options.publicAddressLookup !== false),
     server: await serverIdentity(domain(DOMAIN.server)),
     lobbies: () => core.lobbies.list(),
     fallbackAp: () => core.runtime().then((runtime) => runtime.apVersion, () => undefined),
@@ -30,7 +37,7 @@ const startLobbyListener = async ({ core, network, log, domain }: ListenPorts, o
     await reach.stop();
     await listener.stop();
   };
-  return { host: listener.host, port: listener.port, reach: reach.status, stop };
+  return { host: listener.host, port: listener.port, secure: listener.secure, reach: reach.status, stop };
 };
 
 export { startLobbyListener };

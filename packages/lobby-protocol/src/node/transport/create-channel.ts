@@ -1,5 +1,6 @@
 /* @layer protocol @kind logic */
 import type { Channel, TransportEvent, TransportHandler } from './transport.type';
+import { MAX_BUFFERED_EVENTS } from './websocket.constants';
 
 const createChannel = (): Channel => {
   let handler: TransportHandler | null = null;
@@ -7,7 +8,7 @@ const createChannel = (): Channel => {
 
   const emit: TransportHandler = (event) => {
     if (handler) handler(event);
-    else buffered.push(event);
+    else if (buffered.length < MAX_BUFFERED_EVENTS) buffered.push(event);
   };
 
   const listen = (next: TransportHandler) => {

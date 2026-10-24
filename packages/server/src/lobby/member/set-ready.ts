@@ -5,7 +5,7 @@ import type { MemberRef } from '../lobby-service.type';
 const setReady = async (ctx: LobbyContext, ref: MemberRef, ready: boolean) => {
   const lobby = await ctx.book.commit(ref.lobbyId, (draft) => {
     const member = draft.members.find((candidate) => candidate.id === ref.memberId);
-    if (member) member.ready = ready;
+    if (member?.admission === 'pending' || member?.admission === 'approved') member.ready = ready;
   });
   ctx.publish(lobby);
 };

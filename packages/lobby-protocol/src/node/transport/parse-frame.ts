@@ -1,14 +1,8 @@
 /* @layer protocol @kind logic */
 import type { ParsedFrame } from './transport.type';
-import { LENGTH_MASK, MASK_BIT, MASK_BYTES } from './parse-frame.constants';
+import { MASK_BIT, MASK_BYTES } from './parse-frame.constants';
 import { MAX_FRAME_BYTES } from './websocket.constants';
-
-const readLength = (buffer: Buffer): { length: number; offset: number } | null => {
-  const marker = (buffer[1] ?? 0) & LENGTH_MASK;
-  if (marker < 126) return { length: marker, offset: 2 };
-  if (marker === 126) return buffer.length < 4 ? null : { length: buffer.readUInt16BE(2), offset: 4 };
-  return buffer.length < 10 ? null : { length: Number(buffer.readBigUInt64BE(2)), offset: 10 };
-};
+import { readLength } from './read-length';
 
 const unmask = (payload: Buffer, mask: Buffer): Buffer => {
   const out = Buffer.from(payload);

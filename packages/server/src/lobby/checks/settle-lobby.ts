@@ -29,9 +29,13 @@ const settleOnce = async (ctx: LobbyContext, lobbyId: string) => {
   if (jobs.length === 0) return;
   const worlds = new Map<string, Promise<WorldVerdict>>();
   const verdicts = await Promise.all(jobs.map((job) => checkSlot(ctx, job, worlds)));
-  await report(ctx, lobbyId, verdicts.filter((verdict) => !verdict.fatal));
-  ctx.publish(await ctx.book.commit(lobbyId, (draft) => setStates(draft, verdicts)));
-  await report(ctx, lobbyId, verdicts.filter((verdict) => verdict.fatal));
+  let applied: SlotVerdict[] = [];
+  const settled = await ctx.book.commit(lobbyId, (draft) => {
+    applied = setStates(draft, verdicts);
+  });
+  await report(ctx, lobbyId, applied.filter((verdict) => !verdict.fatal));
+  ctx.publish(settled);
+  await report(ctx, lobbyId, applied.filter((verdict) => verdict.fatal));
 };
 
 const settleLobby = (ctx: LobbyContext, lobbyId: string) => ctx.queue(`settle:${lobbyId}`, () => settleOnce(ctx, lobbyId));

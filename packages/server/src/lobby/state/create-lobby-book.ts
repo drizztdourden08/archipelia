@@ -2,15 +2,27 @@
 import type { Lobby } from '@archipelia/model';
 import type { LobbyStore } from '../lobby-service.type';
 import { createQueue } from './create-queue';
+import { recoverLobby } from './recover-lobby';
+import { storeFault } from './store-fault';
 
-const createLobbyBook = (store: LobbyStore) => {
+const createLobbyBook = (store: LobbyStore, now: () => number) => {
   const lobbies = new Map<string, Lobby>();
   let loaded: Promise<void> | undefined;
 
+  const save = (lobby: Lobby) => store.save(lobby).catch((error: unknown) => {
+    throw storeFault(error);
+  });
+
+  const load = async () => {
+    for (const stored of await store.load()) {
+      const recovered = recoverLobby(stored, now());
+      if (recovered) await save(recovered);
+      lobbies.set(stored.id, recovered ?? stored);
+    }
+  };
+
   const ready = () => {
-    loaded ??= store.load().then((all) => {
-      for (const lobby of all) lobbies.set(lobby.id, lobby);
-    });
+    loaded ??= load();
     return loaded;
   };
 
@@ -24,11 +36,14 @@ const createLobbyBook = (store: LobbyStore) => {
     return [...lobbies.values()];
   };
 
-  const byCode = async (code: string) => (await list()).find((lobby) => lobby.code === code);
+  const byCode = async (code: string) => {
+    const all = (await list()).filter((lobby) => lobby.code === code);
+    return all.find((lobby) => lobby.phase !== 'closed') ?? all[0];
+  };
 
   const add = async (lobby: Lobby) => {
     await ready();
-    await store.save(lobby);
+    await save(lobby);
     lobbies.set(lobby.id, lobby);
     return lobby;
   };
@@ -39,7 +54,7 @@ const createLobbyBook = (store: LobbyStore) => {
     const draft = structuredClone(current);
     await change(draft);
     draft.rev = current.rev + 1;
-    await store.save(draft);
+    await save(draft);
     lobbies.set(id, draft);
     return draft;
   };

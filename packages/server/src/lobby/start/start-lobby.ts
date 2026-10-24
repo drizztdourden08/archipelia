@@ -12,9 +12,9 @@ const startLobby = async (ctx: LobbyContext, lobbyId: string): Promise<StartedRu
   if (!before) throw new Error(`no lobby has the id ${lobbyId}`);
   if (!STARTABLE_PHASES.includes(before.phase)) throw new Error(`the lobby is ${before.phase} and cannot start`);
   await settleLobby(ctx, lobbyId);
-  const checked = await ctx.book.get(lobbyId);
-  if (!checked || participants(checked).length === 0) throw new Error('no slot is ready to play');
   const lobby = await ctx.book.commit(lobbyId, (draft) => {
+    if (!STARTABLE_PHASES.includes(draft.phase)) throw new Error(`the lobby is ${draft.phase} and cannot start`);
+    if (participants(draft).length === 0) throw new Error('no slot is ready to play');
     draft.phase = 'generating';
     delete draft.failure;
   });

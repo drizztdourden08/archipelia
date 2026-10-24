@@ -74,7 +74,9 @@ const createSessionService = (deps: ServiceDeps) => {
     await Promise.all([...live].filter(([, entry]) => entry.host.kind === 'local').map(([id]) => stop(id)));
   };
 
-  return { cancel, command, logOf, run, stop, stopLocal };
+  const running = (id: string) => live.has(id);
+
+  return { cancel, command, logOf, run, running, stop, stopLocal };
 };
 
 export { createSessionService };

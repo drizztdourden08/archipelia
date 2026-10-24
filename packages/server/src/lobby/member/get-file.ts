@@ -7,12 +7,15 @@ import type { LobbyContext } from '../lobby-context.type';
 import type { MemberRef } from '../lobby-service.type';
 import { NO_FILE } from './member.constants';
 
-const chunksOf = (bytes: Uint8Array, base: { re?: number; fileId: string }): ServerMessage[] => {
-  const chunks: ServerMessage[] = [];
+const chunksOf = function* (bytes: Uint8Array, base: { re?: number; fileId: string }): Generator<ServerMessage> {
   for (let offset = 0; offset < bytes.length; offset += DEFAULT_LIMITS.chunkBytes) {
-    chunks.push({ type: 'file.chunk', ...base, offset, data: Buffer.from(bytes.subarray(offset, offset + DEFAULT_LIMITS.chunkBytes)).toString('base64') });
+    yield { type: 'file.chunk', ...base, offset, data: Buffer.from(bytes.subarray(offset, offset + DEFAULT_LIMITS.chunkBytes)).toString('base64') };
   }
-  return chunks;
+};
+
+const fileMessages = function* (bytes: Uint8Array, base: { re?: number; fileId: string }, sha256: string): Generator<ServerMessage> {
+  yield* chunksOf(bytes, base);
+  yield { type: 'file.done', ...base, sha256 };
 };
 
 const fileOf = (lobby: Lobby | undefined, ref: MemberRef, fileId: string): LobbyRoomFile | undefined => {
@@ -26,14 +29,14 @@ const readEntry = async (ctx: LobbyContext, lobby: Lobby, file: LobbyRoomFile) =
   return zip ? unzipSync(zip, { filter: (entry) => entry.name === file.entry })[file.entry] : undefined;
 };
 
-const getFile = async (ctx: LobbyContext, ref: MemberRef, message: FileGet): Promise<ServerMessage[]> => {
+const getFile = async (ctx: LobbyContext, ref: MemberRef, message: FileGet): Promise<Iterable<ServerMessage>> => {
   const re = message.seq === undefined ? {} : { re: message.seq };
   const lobby = await ctx.book.get(ref.lobbyId);
   const file = fileOf(lobby, ref, message.fileId);
   const bytes = lobby && file ? await readEntry(ctx, lobby, file) : undefined;
   if (!file || !bytes) return [createError(NO_FILE, { welcomed: true, ...re })];
   const base = { fileId: file.fileId, ...re };
-  return [...chunksOf(bytes, base), { type: 'file.done', ...base, sha256: file.sha256 }];
+  return fileMessages(bytes, base, file.sha256);
 };
 
 export { getFile };

@@ -4,27 +4,14 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { zipSync } from 'fflate';
 import type { ScenarioSetup } from '@archipelia/lobby-protocol/testing';
-import type { EngineRuntime, Lobby, Session, SessionTemplate } from '@archipelia/model';
+import type { Lobby, Session, SessionTemplate } from '@archipelia/model';
 import type { LobbyRun } from '@archipelia/sessions';
-import type { Registry } from '@archipelia/trust';
 import { createLobbyService } from '../../src/lobby/create-lobby-service';
 import type { LobbyStore } from '../../src/lobby/lobby-service.type';
 import { createLobbyStore } from '../../src/lobby/store/create-lobby-store';
 import { startListener } from '../../src/listener/start-listener';
 import { createNodeDomains } from '../../src/node';
-
-const registryOf = (status: 'active' | 'revoked'): Registry => ({
-  format: 1,
-  games: [],
-  clients: [{
-    id: 'relic-of-the-past', name: 'Relic of the Past', homepage: 'https://github.com/drizztdourden08/relic-of-the-past', games: ['Relic of the Past'], status,
-    trust: { method: 'github-attestation', repo: 'drizztdourden08/relic-of-the-past', workflow: '.github/workflows/release.yml', refs: ['refs/heads/main'], issuer: 'https://token.actions.githubusercontent.com' },
-  }],
-});
-
-const runtimeOf = (root: string): EngineRuntime => ({
-  id: 'test', apVersion: '0.6.8', apCommit: 'test', pythonVersion: '3.12.0', root, python: 'python', generate: 'Generate.py', multiServer: 'MultiServer.py', schemaScript: 'schema.py',
-});
+import { fakeTrust, testDeps } from './test-deps';
 
 const faultyStore = (store: LobbyStore, armed: boolean): LobbyStore => {
   let fired = !armed;
@@ -51,7 +38,6 @@ const startConformanceServer = async (name: string, setup: ScenarioSetup) => {
   const domains = createNodeDomains(dataDir);
   const store = faultyStore(createLobbyStore(domains.domain('lobbies')), name === 'internal-error');
   const output = domains.domain('sessions');
-  const secrets = new Map<string, string>();
   let runs = 0;
   const run = async (template: SessionTemplate, lobby: LobbyRun): Promise<Session> => {
     runs += 1;
@@ -61,22 +47,8 @@ const startConformanceServer = async (name: string, setup: ScenarioSetup) => {
     service.onSessionEvent({ type: 'session', session: { ...base, status: 'starting' } });
     return { ...base, status: 'hosting', seed: '1234', output: { zip: 'AP_1234.zip', files: [], generateLog: '' }, endpoint: { host: 'archipelago.gg', port: 38281, roomUrl: 'https://archipelago.gg/room/test' } };
   };
-  const service = createLobbyService({
-    store,
-    trust: {
-      registry: () => Promise.resolve(registryOf(setup.registry)),
-      verifyProof: () => Promise.resolve(name === 'trust-failed' ? { ok: false, code: 'trust-failed', reason: 'chain-invalid', detail: 'test' } : { ok: true, signer: { identity: 'test', repo: 'r', workflow: 'w', ref: 'main' } }),
-      verifyWorld: (bytes) => Promise.resolve({ ok: true, sha256: '', game: 'Relic of the Past', signer: { identity: 'test', repo: 'r', workflow: 'w', ref: String(bytes.length) } }),
-    },
-    runner: { run, stop: () => Promise.resolve(), runtimeFor: () => Promise.resolve(runtimeOf(dataDir)), output },
-    overlay: ({ runtime }) => Promise.resolve(runtime),
-    secrets: { get: (key) => Promise.resolve(secrets.get(key) ?? null), set: (key, value) => Promise.resolve(void secrets.set(key, value)) },
-    activeEngine: () => Promise.resolve(undefined),
-    serverVersion: '0.9.0',
-    log: () => undefined,
-    emit: () => undefined,
-    newCode: () => 'K7QM4XT2',
-  });
+  const trust = fakeTrust(setup.registry, name === 'trust-failed');
+  const service = createLobbyService(testDeps({ store, output, root: dataDir, trust, run }));
   const listener = await startListener({
     service, host: '127.0.0.1', port: 0, serverVersion: '0.9.0',
     admin: { token: () => Promise.resolve('admin-test-token'), watch: () => () => undefined, engines: () => Promise.resolve([]) },

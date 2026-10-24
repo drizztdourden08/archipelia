@@ -10,7 +10,9 @@ const markArrived = async (ctx: LobbyContext, lobbyId: string): Promise<Lobby | 
   if (!lobby || !SETTLING_PHASES.includes(lobby.phase)) return undefined;
   const arrived = await arrivedSlots(ctx.deps.store, lobby);
   if (arrived.length === 0) return lobby;
-  const marked = await ctx.book.commit(lobbyId, (draft) => setStates(draft, arrived));
+  const marked = await ctx.book.commit(lobbyId, (draft) => {
+    setStates(draft, arrived);
+  });
   ctx.publish(marked);
   return marked;
 };

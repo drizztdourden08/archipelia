@@ -12,7 +12,7 @@ const adminToken = (files: DataFiles, log: (message: string) => void) => {
     const created = newToken();
     await files.writeText(ADMIN_TOKEN_FILE, created);
     await chmod(files.path(ADMIN_TOKEN_FILE), OWNER_ONLY).catch(() => undefined);
-    log(`The admin token of this server is ${created}. It is kept in ${files.path(ADMIN_TOKEN_FILE)}.`);
+    log(`A new admin token for this server is in ${files.path(ADMIN_TOKEN_FILE)}.`);
     return created;
   };
   return () => {

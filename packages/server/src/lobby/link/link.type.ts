@@ -15,9 +15,12 @@ type ConnectionOptions = {
   transport: Transport;
   address: string;
   keepAlive?: KeepAlive;
+  limit: { bytes: number };
+  drained?: () => Promise<void>;
+  log: (message: string) => void;
 };
 
-type ConnectionState = { welcomed: boolean; ref?: MemberRef; upload?: string };
+type ConnectionState = { welcomed: boolean; closed: boolean; ref?: MemberRef; upload?: string };
 
 type Wire = {
   link: LobbyLink;
@@ -25,10 +28,11 @@ type Wire = {
   fail: (failure: Failure, re?: number) => void;
   helloArrived: () => void;
   infoAnswered: () => void;
+  drained: () => Promise<void>;
 };
 
 type Conversation = { options: ConnectionOptions; state: ConnectionState; wire: Wire };
 
-type MemberHandler = (conversation: Conversation, ref: MemberRef, message: ClientMessage) => Promise<ServerMessage[]>;
+type MemberHandler = (conversation: Conversation, ref: MemberRef, message: ClientMessage) => Promise<Iterable<ServerMessage>>;
 
 export type { ConnectionOptions, ConnectionState, Conversation, KeepAlive, MemberHandler, RateLimiter, Wire };

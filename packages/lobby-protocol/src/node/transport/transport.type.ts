@@ -14,7 +14,9 @@ type Transport = {
   listen: (handler: TransportHandler) => void;
 };
 
-type SocketTransport = Transport & { ping: () => void; heardAt: () => number };
+type SocketTransport = Transport & { ping: () => void; heardAt: () => number; drained: () => Promise<void> };
+
+type SocketOptions = { maxMessageBytes?: () => number; closeGraceMs?: number };
 
 type Channel = {
   emit: TransportHandler;
@@ -25,4 +27,4 @@ type WebSocketFrame = { fin: boolean; opcode: number; payload: Buffer };
 
 type ParsedFrame = { frame: WebSocketFrame; consumed: number };
 
-export type { Channel, ParsedFrame, SocketTransport, Transport, TransportEvent, TransportHandler, WebSocketFrame };
+export type { Channel, ParsedFrame, SocketOptions, SocketTransport, Transport, TransportEvent, TransportHandler, WebSocketFrame };

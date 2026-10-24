@@ -8,7 +8,14 @@ import type { ReachPorts, ReachStatus } from './reach/reach.type';
 
 type CoreRest = Omit<CorePorts, 'domain' | 'log'>;
 
-type LobbyListen = { port?: number; tls?: ListenerTls; serverVersion?: string; mode?: NetworkMode; reachPorts?: ReachPorts };
+type LobbyListen = {
+  port?: number;
+  tls?: ListenerTls;
+  serverVersion?: string;
+  mode?: NetworkMode;
+  publicAddressLookup?: boolean;
+  reachPorts?: ReachPorts;
+};
 
 type LobbyEndpoint = RunningListener & { reach: () => ReachStatus };
 

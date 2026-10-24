@@ -1,4 +1,6 @@
 /* @layer core @kind logic */
+import { rm } from 'node:fs/promises';
+import { join } from 'node:path';
 import type { DataFiles, Lobby } from '@archipelia/model';
 import { isRecord } from '@archipelia/model';
 import type { LobbyStore } from '../lobby-service.type';
@@ -21,6 +23,8 @@ const createLobbyStore = (files: DataFiles): LobbyStore => {
     readFile: (lobbyId, sha256) => files.readBytes(fileOf(lobbyId, sha256)),
     writeFile: (lobbyId, sha256, bytes) => files.writeBytes(fileOf(lobbyId, sha256), bytes),
     removeFile: (lobbyId, sha256) => files.remove(fileOf(lobbyId, sha256)),
+    listFiles: async (lobbyId) => (await files.list(`${lobbyId}/${FILES_DIR}`).catch(() => [])).filter((entry) => !entry.isDirectory).map((entry) => entry.name),
+    removeDir: (lobbyId, name) => rm(join(files.path(lobbyId), name), { recursive: true, force: true }),
     dir: (lobbyId) => files.path(lobbyId),
   };
 };

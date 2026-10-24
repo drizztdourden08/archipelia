@@ -1,11 +1,12 @@
 /* @layer core @kind types */
 import type { Lobby } from '@archipelia/model';
-import type { MappingPorts, NetworkMode, NetworkPorts, PortMapResult } from '../../network';
+import type { MappingPorts, NetworkMode, NetworkPorts, PortMapResult, PublicLookup } from '../../network';
 
-type ReachPorts = { network: NetworkPorts; mapping: MappingPorts };
+type ReachPorts = { network: NetworkPorts; mapping: MappingPorts; lookup?: PublicLookup | null };
 
 type ReachInput = {
   port: number;
+  secure: boolean;
   mode: NetworkMode;
   automation: boolean;
   ports: ReachPorts;
@@ -16,7 +17,7 @@ type ReachInput = {
   log: (message: string) => void;
 };
 
-type ReachStatus = { mode: NetworkMode; advertising: boolean; lobbyPort: string | null; rooms: Record<string, string> };
+type ReachStatus = { mode: NetworkMode; advertising: boolean; lobbyPort: string | null; publicAddress: string | null; rooms: Record<string, string> };
 
 type RoomMapping = { port: number; result: Promise<PortMapResult> };
 

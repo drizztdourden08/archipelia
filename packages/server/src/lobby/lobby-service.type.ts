@@ -12,6 +12,8 @@ type LobbyStore = {
   readFile: (lobbyId: string, sha256: string) => Promise<Uint8Array | null>;
   writeFile: (lobbyId: string, sha256: string, bytes: Uint8Array) => Promise<void>;
   removeFile: (lobbyId: string, sha256: string) => Promise<void>;
+  listFiles: (lobbyId: string) => Promise<string[]>;
+  removeDir: (lobbyId: string, name: string) => Promise<void>;
   dir: (lobbyId: string) => string;
 };
 
@@ -24,6 +26,7 @@ type LobbyTrust = {
 type LobbyRunner = {
   run: (template: SessionTemplate, lobby: LobbyRun) => Promise<Session>;
   stop: (sessionId: string) => Promise<unknown>;
+  running: (sessionId: string) => boolean;
   runtimeFor: (engine: SessionEngine) => Promise<EngineRuntime | undefined>;
   output: DataFiles;
 };

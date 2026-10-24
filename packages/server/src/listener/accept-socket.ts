@@ -1,15 +1,15 @@
 /* @layer core @kind logic */
 import type { Duplex } from 'node:stream';
-import { LOBBY_PATH } from '@archipelia/lobby-protocol';
+import { LOBBY_PATH, PRE_WELCOME_MAX_MESSAGE_BYTES } from '@archipelia/lobby-protocol';
 import { createSocketTransport, upgradeResponse } from '@archipelia/lobby-protocol/node';
 import { createLobbyConnection } from '../lobby/link/create-lobby-connection';
-import type { RateLimiter } from '../lobby/link/link.type';
+import { ADMIN_MAX_BYTES } from './admin/admin.constants';
 import { createAdminConnection } from './admin/create-admin-connection';
 import { ADMIN_PATH, NOT_FOUND, UPGRADE_REQUIRED } from './listener.constants';
-import type { AdminDeps, Peer } from './listener.type';
+import type { AcceptDeps, Peer } from './listener.type';
 import { readHead } from './read-head';
 
-const acceptSocket = async (socket: Duplex, peer: Peer, deps: { admin: AdminDeps; limiter: RateLimiter }) => {
+const acceptSocket = async (socket: Duplex, peer: Peer, deps: AcceptDeps) => {
   const head = await readHead(socket);
   const key = head.headers['sec-websocket-key'];
   if (head.headers.upgrade?.toLowerCase() !== 'websocket' || !key) {
@@ -21,10 +21,12 @@ const acceptSocket = async (socket: Duplex, peer: Peer, deps: { admin: AdminDeps
     return;
   }
   socket.write(upgradeResponse(key));
-  const transport = createSocketTransport(socket);
+  deps.upgraded();
+  const limit = { bytes: head.path === ADMIN_PATH ? ADMIN_MAX_BYTES : PRE_WELCOME_MAX_MESSAGE_BYTES };
+  const transport = createSocketTransport(socket, { maxMessageBytes: () => limit.bytes });
+  if (head.path === ADMIN_PATH) createAdminConnection({ ...deps.admin, limiter: deps.limiter }, transport, peer);
+  else createLobbyConnection({ protocol: deps.admin.service.protocol, limiter: deps.limiter, transport, address: peer.address, keepAlive: transport, limit, drained: transport.drained, log: deps.log });
   socket.resume();
-  if (head.path === ADMIN_PATH) createAdminConnection(deps.admin, transport, peer);
-  else createLobbyConnection({ protocol: deps.admin.service.protocol, limiter: deps.limiter, transport, address: peer.address, keepAlive: transport });
 };
 
 export { acceptSocket };

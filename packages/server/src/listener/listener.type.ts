@@ -1,5 +1,6 @@
 /* @layer core @kind types */
 import type { Lobby } from '@archipelia/model';
+import type { RateLimiter } from '../lobby/link/link.type';
 import type { LobbyService } from '../lobby/lobby-service-api.type';
 
 type RequestHead = { method: string; path: string; headers: Record<string, string> };
@@ -16,6 +17,10 @@ type AdminDeps = {
   engines: () => Promise<unknown>;
 };
 
+type AcceptDeps = { admin: AdminDeps; limiter: RateLimiter; log: (message: string) => void; upgraded: () => void };
+
+type AdminConnectionDeps = AdminDeps & { limiter: RateLimiter };
+
 type ListenerOptions = {
   service: LobbyService;
   admin: Omit<AdminDeps, 'service' | 'info'>;
@@ -23,8 +28,10 @@ type ListenerOptions = {
   port: number;
   serverVersion: string;
   tls?: ListenerTls;
+  log?: (message: string) => void;
+  upgradeTimeoutMs?: number;
 };
 
-type RunningListener = { host: string; port: number; stop: () => Promise<void> };
+type RunningListener = { host: string; port: number; secure: boolean; stop: () => Promise<void> };
 
-export type { AdminDeps, ListenerOptions, ListenerTls, Peer, RequestHead, RunningListener };
+export type { AcceptDeps, AdminConnectionDeps, AdminDeps, ListenerOptions, ListenerTls, Peer, RequestHead, RunningListener };

@@ -2,7 +2,7 @@
 import { CLOSE_CODES, createError } from '@archipelia/lobby-protocol';
 import type { LobbyContext } from '../lobby-context.type';
 import { LOBBY_CLOSED } from '../join/join.constants';
-import { memberFiles } from '../state/member-files';
+import { OVERLAY_DIR } from '../lobby.constants';
 
 const closeLobby = async (ctx: LobbyContext, lobbyId: string) => {
   const before = await ctx.book.get(lobbyId);
@@ -12,8 +12,9 @@ const closeLobby = async (ctx: LobbyContext, lobbyId: string) => {
     draft.closesAt = ctx.now();
     if (draft.room) draft.room.state = 'stopped';
   });
-  const files = new Set(lobby.members.flatMap((member) => memberFiles(lobby, member).map((file) => file.sha256)));
-  await Promise.all([...files].map((sha256) => ctx.deps.store.removeFile(lobbyId, sha256)));
+  ctx.uploads.forgetLobby(lobbyId);
+  await Promise.all((await ctx.deps.store.listFiles(lobbyId)).map((sha256) => ctx.deps.store.removeFile(lobbyId, sha256)));
+  await ctx.deps.store.removeDir(lobbyId, OVERLAY_DIR);
   ctx.publish(lobby);
   for (const memberId of ctx.hub.connected(lobbyId)) {
     ctx.hub.send({ lobbyId, memberId }, createError(LOBBY_CLOSED, { welcomed: true }));

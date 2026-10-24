@@ -1,7 +1,7 @@
 /* @layer core @kind logic */
 import type { ClientMessage, ServerMessage } from '@archipelia/lobby-protocol';
 import type { MemberRef } from '../lobby-service.type';
-import { JOINED, OTHER_UPLOAD } from './link.constants';
+import { GONE, JOINED, OTHER_UPLOAD } from './link.constants';
 import type { Conversation, MemberHandler } from './link.type';
 
 const none: ServerMessage[] = [];
@@ -32,15 +32,22 @@ const handlers: Partial<Record<ClientMessage['type'], MemberHandler>> = {
   'file.get': ({ options }, ref, message) => (message.type === 'file.get' ? options.protocol.file(ref, message) : Promise.resolve(none)),
 };
 
+const deliver = async ({ options, wire }: Conversation, ref: MemberRef, listed: ServerMessage[] | null, replies: Iterable<ServerMessage>) => {
+  if (listed?.some((reply) => reply.type === 'upload.done')) await options.protocol.arrive(ref.lobbyId);
+  for (const reply of listed ?? replies) {
+    wire.send(reply);
+    await wire.drained();
+  }
+  if (listed?.some((reply) => reply.type === 'upload.done')) await options.protocol.settle(ref.lobbyId);
+};
+
 const answerMember = async (conversation: Conversation, ref: MemberRef, message: ClientMessage) => {
   const handler = handlers[message.type];
-  if (!handler) return conversation.wire.fail(JOINED, 'seq' in message ? message.seq : undefined);
+  const seq = 'seq' in message ? message.seq : undefined;
+  if (!handler) return conversation.wire.fail(JOINED, seq);
+  if (!(await conversation.options.protocol.active(ref))) return conversation.wire.fail(GONE, seq);
   const replies = await handler(conversation, ref, message);
-  const done = replies.some((reply) => reply.type === 'upload.done');
-  if (done) await conversation.options.protocol.arrive(ref.lobbyId);
-  for (const reply of replies) conversation.wire.send(reply);
-  if (done) await conversation.options.protocol.settle(ref.lobbyId);
-  return undefined;
+  return deliver(conversation, ref, message.type === 'file.get' ? null : [...replies], replies);
 };
 
 export { answerMember };

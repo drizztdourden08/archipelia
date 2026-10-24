@@ -1,11 +1,11 @@
 /* @layer protocol @kind logic */
 import type { Duplex } from 'node:stream';
-import type { SocketTransport, WebSocketFrame } from './transport.type';
+import type { SocketOptions, SocketTransport, WebSocketFrame } from './transport.type';
 import { createChannel } from './create-channel';
 import { createFrameReader } from './create-frame-reader';
 import { createMessageAssembler } from './create-message-assembler';
 import { encodeFrame } from './encode-frame';
-import { ABNORMAL_CODE, NO_STATUS_CODE, OPCODES, TOO_BIG_CODE } from './websocket.constants';
+import { ABNORMAL_CODE, CLOSE_GRACE_MS, MAX_FRAME_BYTES, NO_STATUS_CODE, OPCODES, TOO_BIG_CODE } from './websocket.constants';
 
 const closePayload = (code: number): Buffer => {
   const payload = Buffer.alloc(2);
@@ -13,9 +13,10 @@ const closePayload = (code: number): Buffer => {
   return payload;
 };
 
-const createSocketTransport = (socket: Duplex): SocketTransport => {
+const createSocketTransport = (socket: Duplex, options: SocketOptions = {}): SocketTransport => {
+  const maxMessage = options.maxMessageBytes ?? (() => MAX_FRAME_BYTES);
   const channel = createChannel();
-  const assemble = createMessageAssembler();
+  const assemble = createMessageAssembler(maxMessage);
   let finished = false;
   let heard = Date.now();
 
@@ -29,10 +30,12 @@ const createSocketTransport = (socket: Duplex): SocketTransport => {
     if (finished) return;
     socket.write(encodeFrame(OPCODES.close, closePayload(code)));
     socket.end();
+    setTimeout(() => socket.destroy(), options.closeGraceMs ?? CLOSE_GRACE_MS).unref();
     finish(code);
   };
 
   const onFrame = (frame: WebSocketFrame) => {
+    if (finished) return;
     heard = Date.now();
     if (frame.opcode === OPCODES.ping) socket.write(encodeFrame(OPCODES.pong, frame.payload));
     else if (frame.opcode === OPCODES.close) {
@@ -44,8 +47,9 @@ const createSocketTransport = (socket: Duplex): SocketTransport => {
     }
   };
 
-  const read = createFrameReader(onFrame);
+  const read = createFrameReader(onFrame, maxMessage);
   socket.on('data', (chunk: Buffer) => {
+    if (finished) return;
     try {
       read(chunk);
     } catch {
@@ -68,6 +72,10 @@ const createSocketTransport = (socket: Duplex): SocketTransport => {
       if (!finished) socket.write(encodeFrame(OPCODES.ping, Buffer.alloc(0)));
     },
     heardAt: () => heard,
+    drained: () => (socket.writableNeedDrain && !finished ? new Promise<void>((resolve) => {
+      socket.once('drain', resolve);
+      socket.once('close', resolve);
+    }) : Promise.resolve()),
   };
 };
 
