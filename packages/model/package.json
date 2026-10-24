@@ -10,6 +10,8 @@
   },
   "exports": {
     ".": "./src/index.ts",
+    "./testing": "./src/testing/index.ts",
+    "./zip": "./src/zip/index.ts",
     "./package.json": "./package.json"
   },
   "files": [
@@ -19,8 +21,11 @@
   "scripts": {
     "lint": "tsc --noEmit && eslint ."
   },
+  "dependencies": {
+    "fflate": "catalog:"
+  },
   "devDependencies": {
-    "@drizztdourden08/brock-lint-config": "^0.87.2",
+    "@drizztdourden08/brock-lint-config": "^0.88.0",
     "@types/node": "catalog:",
     "eslint": "catalog:",
     "typescript": "catalog:"
