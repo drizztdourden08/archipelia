@@ -8,6 +8,6 @@ type InstallRequest =
   | { kind: 'official'; apworld: string }
   | { kind: 'file'; fileName: string; bytes: Uint8Array };
 
-type CatalogServiceDeps = { games: DataFiles; cache: DataFiles; engineDir: () => string };
+type CatalogServiceDeps = { games: DataFiles; cache: DataFiles; engineDir: () => Promise<string> };
 
 export type { CatalogServiceDeps, CatalogView, InstallRequest };

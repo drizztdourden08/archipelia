@@ -25,6 +25,15 @@ type InstalledEngine = {
   smoke?: SmokeResult;
 };
 
+type EngineEntry = InstalledEngine & {
+  lastGood: boolean;
+  bytes?: number;
+  packages: string[];
+  rules: RequirementRule[];
+  sessions: number;
+  inUse?: string;
+};
+
 type EngineStateFile = { version: 1; active?: string; lastGood?: string; installed: InstalledEngine[]; offeredAp?: string };
 
 type FeedState = 'fresh' | 'cached' | 'offline' | 'rate-limited' | 'never';
@@ -42,16 +51,17 @@ type VersionFeed = {
 
 type EngineOverview = {
   status: EngineStatus;
-  active?: InstalledEngine;
-  installed: InstalledEngine[];
+  active?: EngineEntry;
+  installed: EngineEntry[];
   feed: VersionFeed;
   tag: VersionTag;
   latestAp?: string;
+  ranges: Record<string, PythonRange>;
 };
 
 type StartupDecision =
   | { kind: 'first-run'; choice: EngineChoice }
-  | { kind: 'offer'; from: string; to: string; notesUrl: string }
+  | { kind: 'offer'; from: string; to: string; notesUrl: string; choice: EngineChoice }
   | { kind: 'none' };
 
 type EngineInstallResult = {
@@ -60,6 +70,7 @@ type EngineInstallResult = {
   failed?: SmokeResult['failed'];
   brokenWorlds?: string[];
   error?: string;
+  fallback?: EngineChoice;
 };
 
 type EngineEvent = {
@@ -69,6 +80,6 @@ type EngineEvent = {
 };
 
 export type {
-  ApRelease, EngineChoice, EngineEvent, EngineInstallResult, EngineOverview, EngineStateFile, FeedState, InstalledEngine,
+  ApRelease, EngineChoice, EngineEntry, EngineEvent, EngineInstallResult, EngineOverview, EngineStateFile, FeedState, InstalledEngine,
   PythonBuild, PythonRange, RequirementRule, SmokeResult, StartupDecision, VersionFeed, VersionTag,
 };

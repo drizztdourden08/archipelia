@@ -10,10 +10,13 @@
   },
   "exports": {
     ".": "./src/index.ts",
+    "./versions": "./src/versions/index.ts",
+    "./engine-defaults.json": "./engine-defaults.json",
     "./package.json": "./package.json"
   },
   "files": [
-    "src"
+    "src",
+    "engine-defaults.json"
   ],
   "sideEffects": false,
   "scripts": {

@@ -11,10 +11,10 @@ const lineSink = (onLine) => {
   };
 };
 
-const run = (cmd, args, { cwd, env, onLine } = {}) =>
+const run = (cmd, args, { cwd, env, onLine, signal } = {}) =>
   new Promise((resolve, reject) => {
     const output = onLine ? 'pipe' : 'inherit';
-    const child = spawn(cmd, args, { cwd, env: env ?? process.env, stdio: ['ignore', output, output], windowsHide: true });
+    const child = spawn(cmd, args, { cwd, env: env ?? process.env, stdio: ['ignore', output, output], windowsHide: true, signal });
     if (onLine) {
       child.stdout.on('data', lineSink(onLine));
       child.stderr.on('data', lineSink(onLine));
@@ -26,7 +26,7 @@ const run = (cmd, args, { cwd, env, onLine } = {}) =>
 const tarBinary = () =>
   (process.platform === 'win32' ? win32.join(process.env.SystemRoot ?? 'C:/Windows', 'System32', 'tar.exe') : 'tar');
 
-const extractTarGz = (archive, into, { strip = 0, onLine } = {}) =>
-  run(tarBinary(), ['-xzf', archive, '-C', into, ...(strip ? [`--strip-components=${strip}`] : [])], { onLine });
+const extractTarGz = (archive, into, { strip = 0, onLine, signal } = {}) =>
+  run(tarBinary(), ['-xzf', archive, '-C', into, ...(strip ? [`--strip-components=${strip}`] : [])], { onLine, signal });
 
 export { extractTarGz, run };

@@ -2,7 +2,7 @@
 import type { ScreenMeta } from '@drizztdourden08/brock-react';
 import { EngineSettings } from '../../../views/EngineSettings';
 
-const meta: ScreenMeta = { title: 'Engine', icon: 'cpu', order: 2, keywords: ['archipelago', 'python', 'generator', 'setup', 'rebuild'] };
+const meta: ScreenMeta = { title: 'Engine', icon: 'cpu', order: 2, keywords: ['archipelago', 'python', 'generator', 'setup', 'rebuild', 'version', 'upgrade', 'downgrade', 'install'] };
 
 const EnginePage = () => <EngineSettings />;
 
