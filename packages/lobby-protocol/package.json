@@ -1,0 +1,33 @@
+{
+  "name": "@archipelia/lobby-protocol",
+  "version": "1.0.0",
+  "description": "The Archipelia lobby protocol: message types, JSON Schemas, codec, version rules, fixtures, a fake client and a fake server.",
+  "type": "module",
+  "private": true,
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=24"
+  },
+  "exports": {
+    ".": "./src/index.ts",
+    "./node": "./src/node/index.ts",
+    "./testing": "./src/testing/index.ts",
+    "./fixtures/*": "./fixtures/*",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "src",
+    "fixtures",
+    "README.md"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "lint": "tsc --noEmit && eslint ."
+  },
+  "devDependencies": {
+    "@drizztdourden08/brock-lint-config": "^0.79.0",
+    "@types/node": "catalog:",
+    "eslint": "catalog:",
+    "typescript": "catalog:"
+  }
+}
