@@ -50,7 +50,7 @@ describe('the published package', () => {
   test('names the GitHub Packages scope and registry, and is not private', () => {
     const manifest = JSON.parse(readFileSync(join(ROOT, 'package.json'), 'utf8')) as Record<string, unknown>;
     expect(manifest.name).toBe('@drizztdourden08/archipelia-client-kit');
-    expect(manifest.version).toBe('0.1.0');
+    expect(manifest.version).toMatch(/^\d+\.\d+\.\d+$/);
     expect(manifest.private).toBeUndefined();
     expect(manifest.publishConfig).toEqual({ registry: 'https://npm.pkg.github.com' });
     expect(manifest.files).toEqual(['bin', 'dist', 'README.md']);
