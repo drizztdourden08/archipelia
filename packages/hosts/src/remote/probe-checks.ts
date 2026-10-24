@@ -1,6 +1,7 @@
 /* @layer core @kind logic */
 import type { ServerCheck } from '@archipelia/model';
 import type { HostProbe } from './host-probe.type';
+import { apVersionDetail } from './ap-version-detail';
 import { PYTHON_MAX, PYTHON_MIN } from './probe-checks.constants';
 
 const pythonCheck = ({ python, pythonVersion }: HostProbe): ServerCheck => {
@@ -11,14 +12,10 @@ const pythonCheck = ({ python, pythonVersion }: HostProbe): ServerCheck => {
   return { name: 'python', ok, detail: ok ? detail : `${detail}, Archipelago needs 3.${PYTHON_MIN} to 3.${PYTHON_MAX}` };
 };
 
-const probeChecks = (probe: HostProbe, apVersion: string, gamePort: number): ServerCheck[] => [
+const probeChecks = (probe: HostProbe, apVersion: string | undefined, gamePort: number): ServerCheck[] => [
   pythonCheck(probe),
   { name: 'multiserver', ok: probe.multiServer, detail: probe.multiServer ? `${probe.apPath}/MultiServer.py found` : `no MultiServer.py in ${probe.apPath}` },
-  {
-    name: 'ap-version',
-    ok: probe.apVersion === apVersion,
-    detail: probe.apVersion ? `Archipelago ${probe.apVersion}, this app runs ${apVersion}` : `no version found in ${probe.apPath}/Utils.py`,
-  },
+  { name: 'ap-version', advisory: true, ...apVersionDetail(probe.apVersion, apVersion) },
   {
     name: 'game-port',
     ok: probe.portFree === true,

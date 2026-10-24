@@ -5,6 +5,7 @@ import { newId } from '@drizztdourden08/brock-core/storage';
 import type { LiveSession, ServiceDeps } from './service-deps.type';
 import { produceSession } from './produce-session';
 import { hostSession } from './host-session';
+import { sessionEngineOf } from '../engine/session-engine-of';
 import { CANCELLED, SERVER_LINES, SERVER_LOG } from './session-service.constants';
 
 const createSessionService = (deps: ServiceDeps) => {
@@ -25,7 +26,9 @@ const createSessionService = (deps: ServiceDeps) => {
     pending.set(session.id, controller);
     const signal = outer ? AbortSignal.any([outer, controller.signal]) : controller.signal;
     try {
-      const { output, seed } = await produceSession(deps, session, signal);
+      const runtime = await deps.runtime();
+      session = await update(session, { engine: sessionEngineOf(runtime) });
+      const { output, seed } = await produceSession(deps, session, runtime, signal);
       session = await update(session, { status: 'starting', output, seed });
       return await update(session, { status: 'hosting', endpoint: await hostSession({ deps, live, signal }, session) });
     } catch (err) {

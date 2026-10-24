@@ -4,10 +4,10 @@ import { testServer } from '../remote/test-server';
 import { credentialsOf } from './credentials-of';
 import type { SecretReader, ServerSaver, ServerTestResult } from './servers.type';
 
-const testSavedServer = async (entry: ServerEntry, secrets: SecretReader, servers: ServerSaver): Promise<ServerTestResult> => {
+const testSavedServer = async (entry: ServerEntry, secrets: SecretReader, servers: ServerSaver, apVersion?: string): Promise<ServerTestResult> => {
   let offered: string | undefined;
   const onHostKey = (sha: string) => { offered = sha; return false; };
-  const result = await testServer(entry, await credentialsOf(entry, secrets), { onHostKey });
+  const result = await testServer(entry, await credentialsOf(entry, secrets), apVersion, { onHostKey });
   await servers.save({ ...entry, lastTest: result });
   return offered && !entry.hostKeySha256 ? { ...result, hostKey: offered } : result;
 };

@@ -5,6 +5,8 @@ export { readCatalog } from './read-catalog';
 export type { Catalog, CatalogOptions, CatalogProblem } from './read-catalog.type';
 export { listInstalled } from './install/list-installed';
 export { readInstalled } from './install/read-installed';
+export { carryWorlds } from './install/carry-worlds';
+export type { CarryProblem, CarryResult, CarryWorldsParams } from './install/carry-worlds.type';
 export { installFromFile } from './install/install-from-file';
 export type { InstallFromFileParams } from './install/install-from-file.type';
 export { installOfficial } from './install/install-official';
