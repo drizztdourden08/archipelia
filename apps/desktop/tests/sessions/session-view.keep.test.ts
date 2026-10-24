@@ -21,7 +21,7 @@ import { templateOf } from './session-fixtures';
 
 const JOB: JobSnapshot = {
   id: 'run', title: 'Running', state: 'running', steps: [], currentStep: null, progress: 0, stepProgress: 0,
-  line: null, error: null, log: [], startedAt: 0, endedAt: null, cancellable: true,
+  line: null, error: null, log: [], startedAt: 0, endedAt: null, cancellable: true, visible: true,
 };
 
 const run = (id: string, createdAt: number, patch: Partial<Session> = {}): Session => ({

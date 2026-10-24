@@ -3,7 +3,7 @@ import { NEW_PRESET_TOUR } from '../hooks/tour-targets.constants';
 
 const SELECTOR = {
   layer: '.screen-layer:not(.screen-layer--hidden)',
-  layerClose: '.screen-layer:not(.screen-layer--hidden) .screen-window__header .window-header__close',
+  layerClose: '.screen-layer:not(.screen-layer--hidden) .screen-window__corner-close',
   button: 'button, [role="button"]',
   dialog: '[role="dialog"], [role="alertdialog"], dialog',
   field: 'input, textarea',
