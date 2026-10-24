@@ -1,0 +1,42 @@
+/* @layer core @kind config */
+import { DISCOVERY_SERVICE } from '@archipelia/lobby-protocol';
+
+const SERVICE_DOMAIN = `${DISCOVERY_SERVICE}.local`;
+const SERVICE_ENUMERATION = '_services._dns-sd._udp.local';
+const HOST_PREFIX = 'archipelia-';
+const HOST_SUFFIX = '.local';
+const MAX_LABEL = 63;
+const PTR_TTL_SECONDS = 4500;
+const RECORD_TTL_SECONDS = 120;
+const LIMITED_BROADCAST = '255.255.255.255';
+const MAX_LAN_SERVERS = 256;
+const MAX_PENDING_INSTANCES = 64;
+const BROWSE_QUERY_MS = 30000;
+const SWEEP_MS = 5000;
+const MS = 1000;
+const REPEAT_MS = 1000;
+const MAX_PORT = 65535;
+const MAX_HOSTS = 128;
+const MAX_ADDRESSES = 8;
+const INSTANCE_SUFFIX = `.${SERVICE_DOMAIN}`;
+
+export {
+  BROWSE_QUERY_MS,
+  HOST_PREFIX,
+  HOST_SUFFIX,
+  INSTANCE_SUFFIX,
+  LIMITED_BROADCAST,
+  MAX_ADDRESSES,
+  MAX_HOSTS,
+  MAX_LABEL,
+  MAX_LAN_SERVERS,
+  MAX_PENDING_INSTANCES,
+  MAX_PORT,
+  MS,
+  PTR_TTL_SECONDS,
+  REPEAT_MS,
+  RECORD_TTL_SECONDS,
+  SERVICE_DOMAIN,
+  SERVICE_ENUMERATION,
+  SWEEP_MS,
+};
