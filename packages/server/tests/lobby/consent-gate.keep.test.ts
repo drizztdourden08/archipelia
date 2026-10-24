@@ -11,6 +11,7 @@ import type { LobbyTrust, OverlayInput } from '../../src/lobby/lobby-service.typ
 import { createLobbyStore } from '../../src/lobby/store/create-lobby-store';
 import { createNodeDomains } from '../../src/node';
 import { createBwrapRunner } from '../../src/sandbox/create-bwrap-runner';
+import { BASIC_FEATURES } from '../../src/sandbox/sandbox.constants';
 import type { SandboxRunner } from '../../src/sandbox/sandbox.type';
 import { engine, fileOf, helloOf, holdFiles, linkOf, tick } from './security-kit';
 import { fakeTrust, testDeps } from './test-deps';
@@ -166,7 +167,7 @@ describe('consent survives no bypass', () => {
 
 describe('sandboxed lobby runs', () => {
   test('Generate of an unlisted world runs in bubblewrap with only the overlay and run folder writable, and the room runs from the plain engine', async () => {
-    const gate = await setup({ sandbox: createBwrapRunner('/usr/bin/bwrap') });
+    const gate = await setup({ sandbox: createBwrapRunner('/usr/bin/bwrap', BASIC_FEATURES) });
     const { lobby } = await joinUnlisted(gate);
     await gate.service.consent(lobby.id, fileOf('W').sha256, true);
     await (await gate.service.start(lobby.id)).finished;
@@ -180,7 +181,7 @@ describe('sandboxed lobby runs', () => {
   });
 
   test('a lobby of verified worlds keeps its overlay for the room and needs no sandbox', async () => {
-    const gate = await setup({ sandbox: createBwrapRunner('/usr/bin/bwrap') });
+    const gate = await setup({ sandbox: createBwrapRunner('/usr/bin/bwrap', BASIC_FEATURES) });
     const lobby = await gate.service.create({ name: 'Listed', engine, options: { admission: 'open' } });
     await gate.service.protocol.join(helloOf(), linkOf().link);
     await holdFiles(gate.store, lobby.id, ['W', 'Y']);

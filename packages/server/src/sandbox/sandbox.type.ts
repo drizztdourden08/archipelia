@@ -7,10 +7,13 @@ type SandboxScope = { readOnly: string[]; readWrite: string[] };
 
 type SandboxRunner = { mode: SandboxMode; reason?: string; confine: (scope: SandboxScope) => SpawnWrap | undefined };
 
+type BwrapFeatures = { tmpfsSize: boolean; disableUserns: boolean; prlimit?: string | undefined };
+
 type SandboxProbe = {
   platform: string;
   find: () => Promise<string | undefined>;
-  problem: (bwrap: string) => Promise<string | null>;
+  features: (bwrap: string) => Promise<BwrapFeatures>;
+  problem: (bwrap: string, features: BwrapFeatures) => Promise<string | null>;
 };
 
-export type { SandboxMode, SandboxProbe, SandboxRunner, SandboxScope };
+export type { BwrapFeatures, SandboxMode, SandboxProbe, SandboxRunner, SandboxScope };

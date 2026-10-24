@@ -9,10 +9,10 @@ import { afterEach, beforeEach, describe, expect, test } from 'vitest';
 import { runPython } from '@archipelia/engine';
 import type { EngineRuntime } from '@archipelia/model';
 import { detectSandbox } from '../../src/sandbox/detect-sandbox';
-import { findBwrap } from '../../src/sandbox/find-bwrap';
+import { bwrapFeatures } from '../../src/sandbox/bwrap-features';
+import { findTool } from '../../src/sandbox/find-tool';
 import { noSandbox } from '../../src/sandbox/no-sandbox';
 import { probeBwrap } from '../../src/sandbox/probe-bwrap';
-import { pythonHome } from '../../src/sandbox/python-home';
 
 const PYTHON = '/usr/bin/python3';
 
@@ -44,7 +44,7 @@ const WORLD = [
 ].join('\n');
 
 const runner = process.platform === 'linux'
-  ? await detectSandbox({ platform: 'linux', find: () => findBwrap(), problem: probeBwrap })
+  ? await detectSandbox({ platform: 'linux', find: () => findTool('bwrap'), features: bwrapFeatures, problem: probeBwrap })
   : noSandbox('not Linux');
 
 const runtimeOf = (root: string): EngineRuntime => ({
@@ -72,7 +72,7 @@ describe.runIf(runner.mode === 'bwrap' && existsSync(PYTHON))('a real bubblewrap
     const server = createServer((socket) => socket.end());
     await new Promise<void>((resolve) => server.listen(0, '127.0.0.1', resolve));
     const { port } = server.address() as AddressInfo;
-    const wrap = runner.confine({ readOnly: [pythonHome(PYTHON)], readWrite: [overlay, run] });
+    const wrap = runner.confine({ readOnly: [], readWrite: [overlay, run] });
     const args = [join(overlay, 'world.py'), join(work, 'secret.txt'), join(work, 'escape.txt'), String(port), join(run, 'ok.txt')];
     const result = await runPython(runtimeOf(work), { args, cwd: overlay, wrap }).finally(() => server.close());
     expect(result.code).toBe(0);

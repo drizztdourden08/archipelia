@@ -15,6 +15,7 @@ type AdminDeps = {
   token: () => Promise<string>;
   watch: (listener: (lobby: Lobby) => void) => () => void;
   info: () => Record<string, unknown>;
+  sandbox: SandboxMode;
   engines: () => Promise<unknown>;
 };
 
@@ -24,7 +25,7 @@ type AdminConnectionDeps = AdminDeps & { limiter: RateLimiter };
 
 type ListenerOptions = {
   service: LobbyService;
-  admin: Omit<AdminDeps, 'service' | 'info'>;
+  admin: Omit<AdminDeps, 'service' | 'info' | 'sandbox'>;
   host: string;
   port: number;
   serverVersion: string;

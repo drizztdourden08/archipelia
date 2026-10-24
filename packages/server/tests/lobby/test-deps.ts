@@ -27,7 +27,7 @@ const fakeTrust = (status: 'active' | 'revoked', proofFails = false, world?: () 
 });
 
 const runtimeOf = (root: string): EngineRuntime => ({
-  id: 'test', apVersion: '0.6.8', apCommit: 'test', pythonVersion: '3.12.0', root, python: 'python', generate: 'Generate.py', multiServer: 'MultiServer.py', schemaScript: 'schema.py',
+  id: 'test', apVersion: '0.6.8', apCommit: 'test', pythonVersion: '3.12.0', root, python: `${root}/python/bin/python3`, generate: 'Generate.py', multiServer: 'MultiServer.py', schemaScript: 'schema.py',
 });
 
 type TestDepsInput = {

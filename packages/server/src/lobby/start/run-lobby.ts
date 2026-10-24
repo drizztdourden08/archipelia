@@ -5,6 +5,7 @@ import { pythonHome } from '../../sandbox/python-home';
 import type { LobbyContext } from '../lobby-context.type';
 import type { OverlayWorld } from '../lobby-service.type';
 import { OVERLAY_DIR } from '../lobby.constants';
+import { GENERATE_TIMEOUT_MS } from './start.constants';
 import { failLobby } from './fail-lobby';
 import { hostLobby } from './host-lobby';
 import { lobbyTemplate } from './lobby-template';
@@ -21,10 +22,10 @@ const overlayWorlds = (ctx: LobbyContext, lobby: Lobby, owned: WorldUpload[]): P
 const lobbyRun = async (ctx: LobbyContext, lobby: Lobby, engine: EngineRuntime, owned: WorldUpload[]): Promise<LobbyRun> => {
   const worlds = await overlayWorlds(ctx, lobby, owned);
   const overlay = await ctx.deps.overlay({ lobbyId: lobby.id, dir: `${ctx.deps.store.dir(lobby.id)}/${OVERLAY_DIR}`, runtime: engine, worlds });
-  const run = { lobbyId: lobby.id, worlds: owned.map(({ game, sha256 }) => ({ game, sha256 })), runtime: overlay };
+  const run = { lobbyId: lobby.id, worlds: owned.map(({ game, sha256 }) => ({ game, sha256 })), runtime: overlay, timeoutMs: GENERATE_TIMEOUT_MS };
   if (!owned.some((world) => world.trust.level === 'unlisted')) return run;
+  const readOnly = [pythonHome(engine)];
   const sandbox = await ctx.deps.sandbox();
-  const readOnly = [pythonHome(engine.python)];
   return { ...run, hostRuntime: engine, confine: (runDir) => sandbox.confine({ readOnly, readWrite: [overlay.root, runDir] }) };
 };
 
