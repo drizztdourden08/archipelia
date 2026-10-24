@@ -1,7 +1,7 @@
 /* @layer tests @kind test */
 import { describe, expect, test } from 'vitest';
 import type { ServerEntry, ServerSettings } from '@archipelia/model';
-import { createRemoteHost, testServer } from '../src';
+import { apVersionOfTest, createRemoteHost, testServer } from '../src';
 import type { SessionHost } from '../src';
 import { createFakeSsh, PROBE } from './fake-ssh-session';
 
@@ -91,7 +91,7 @@ describe('remote host', () => {
 describe('testServer', () => {
   test('reports every check and ignores the advisory linger check for the verdict', async () => {
     const fake = createFakeSsh({ probe: PROBE.replace('linger=yes', 'linger=no') });
-    const result = await testServer(entry, {}, { connect: fake.connect });
+    const result = await testServer(entry, {}, '0.6.7', { connect: fake.connect });
     expect(result.ok).toBe(true);
     expect(result.checks?.map((check) => [check.name, check.ok])).toEqual([
       ['connect', true], ['python', true], ['multiserver', true], ['ap-version', true], ['game-port', true], ['linger', false],
@@ -99,17 +99,40 @@ describe('testServer', () => {
     expect(fake.calls.ended).toBe(1);
   });
 
-  test('an old python, another AP version and a busy port fail the test', async () => {
-    const probe = PROBE.replace('pyver=3.12.3', 'pyver=3.10.4').replace('apver=0.6.7', 'apver=0.6.1').replace('port=free', 'port=busy');
-    const result = await testServer(entry, {}, { connect: createFakeSsh({ probe }).connect });
+  test('an old python and a busy port fail the test', async () => {
+    const probe = PROBE.replace('pyver=3.12.3', 'pyver=3.10.4').replace('port=free', 'port=busy');
+    const result = await testServer(entry, {}, '0.6.7', { connect: createFakeSsh({ probe }).connect });
     expect(result.ok).toBe(false);
-    expect(result.checks?.filter((check) => !check.ok).map((check) => check.name)).toEqual(['python', 'ap-version', 'game-port']);
+    expect(result.checks?.filter((check) => !check.ok).map((check) => check.name)).toEqual(['python', 'game-port']);
     expect(result.message).toMatch(/needs 3.11 to 3.13/);
+  });
+
+  test('an older server version is advisory and never fails the test', async () => {
+    const probe = PROBE.replace('apver=0.6.7', 'apver=0.6.1');
+    const result = await testServer(entry, {}, '0.6.8', { connect: createFakeSsh({ probe }).connect });
+    const check = result.checks?.find((candidate) => candidate.name === 'ap-version');
+    expect(result.ok).toBe(true);
+    expect(check).toMatchObject({ ok: false, advisory: true });
+    expect(check?.detail).toBe('Archipelago 0.6.1 on the server, this app runs 0.6.8. Seeds generated with a newer version may be refused.');
+    expect(apVersionOfTest(result)).toBe('0.6.1');
+  });
+
+  test('a newer server, or an app without an engine, passes the version check', async () => {
+    const newer = await testServer(entry, {}, '0.6.5', { connect: createFakeSsh().connect });
+    expect(newer.checks?.find((check) => check.name === 'ap-version')).toMatchObject({ ok: true, advisory: true });
+    const none = await testServer(entry, {}, undefined, { connect: createFakeSsh().connect });
+    expect(none.checks?.find((check) => check.name === 'ap-version')?.detail).toBe('Archipelago 0.6.7 on the server');
+  });
+
+  test('a server without a version reports none', async () => {
+    const result = await testServer(entry, {}, '0.6.7', { connect: createFakeSsh({ probe: PROBE.replace('apver=0.6.7', 'apver=') }).connect });
+    expect(result.checks?.find((check) => check.name === 'ap-version')).toMatchObject({ ok: false, advisory: true });
+    expect(apVersionOfTest(result)).toBeUndefined();
   });
 
   test('a failed connection is one failed check', async () => {
     const connect = () => Promise.reject(new Error("the server's host key changed"));
-    const result = await testServer(entry, {}, { connect });
+    const result = await testServer(entry, {}, '0.6.7', { connect });
     expect(result).toMatchObject({ ok: false, message: "the server's host key changed", checks: [{ name: 'connect', ok: false }] });
   });
 });

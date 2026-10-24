@@ -15,3 +15,5 @@ export { createTemplateStore } from './store/create-template-store';
 export type { RunStore, TemplateStore } from './store/session-stores.type';
 export { createServerStore } from './servers/create-server-store';
 export type { ServerStore } from './servers/server-store.type';
+export { engineOfSession, LEGACY_ENGINE, pickHostEngine, remoteVersionWarning, sessionEngineOf } from './engine';
+export type { HostEngine, HostEngineRequest, HostEngineSource } from './engine';
