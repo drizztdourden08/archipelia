@@ -20,7 +20,9 @@ const startLobby = async (ctx: LobbyContext, lobbyId: string): Promise<StartedRu
   });
   ctx.publish(lobby);
   sendApproved(ctx.hub, lobby, { type: 'lobby.progress', phase: 'generating', step: 'generate', fraction: 0 });
-  return { lobby, finished: runLobby(ctx, lobby) };
+  const finished = runLobby(ctx, lobby);
+  finished.catch((error: unknown) => ctx.deps.log(`lobby ${lobby.name}: the run did not finish: ${String(error)}`));
+  return { lobby, finished };
 };
 
 export { startLobby };

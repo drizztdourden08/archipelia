@@ -12,9 +12,9 @@ const fileOf = (name: string, kind: ScenarioFile['kind'], bytes: Uint8Array): Sc
   sha256: sha256Hex(bytes),
 });
 
-const createScenarioKit = (): ScenarioKit => {
-  const worlds = Object.entries(KIT_WORLDS).map(([name, spec]) => fileOf(name, 'world', makeApworld(spec)));
-  const yamls = Object.entries(KIT_YAMLS).map(([name, spec]) => fileOf(name, 'yaml', makeYaml(spec)));
+const createScenarioKit = (replaced: Partial<Record<string, Uint8Array>> = {}): ScenarioKit => {
+  const worlds = Object.entries(KIT_WORLDS).map(([name, spec]) => fileOf(name, 'world', replaced[name] ?? makeApworld(spec)));
+  const yamls = Object.entries(KIT_YAMLS).map(([name, spec]) => fileOf(name, 'yaml', replaced[name] ?? makeYaml(spec)));
   const files = [...worlds, ...yamls];
   const values: Bindings = {
     BIG: sha256Hex('a world that is far too large'),

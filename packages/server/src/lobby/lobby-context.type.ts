@@ -16,4 +16,4 @@ type LobbyContext = {
   publish: (lobby: Lobby) => void;
 };
 
-export type { LobbyBook, LobbyContext };
+export type { LobbyContext };

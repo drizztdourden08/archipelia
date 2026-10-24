@@ -29,7 +29,6 @@ const createUploads = (ctx: LobbyContext) => {
     if (await ctx.deps.store.hasFile(lobby.id, message.sha256)) {
       return [{ ...ready, offset: message.size }, { type: 'upload.done', sha256: message.sha256, ok: true }];
     }
-`);
     const part = parts.get(keyOf(ref, message.sha256)) ?? { size: message.size, chunks: [], received: 0 };
     parts.set(keyOf(ref, message.sha256), part);
     return [{ ...ready, offset: part.received }];
@@ -45,7 +44,6 @@ const createUploads = (ctx: LobbyContext) => {
   const chunk = (ref: MemberRef, message: UploadChunk): Promise<ServerMessage[]> => {
     const key = keyOf(ref, message.sha256);
     const part = parts.get(key);
-`);
     if (!part) return Promise.resolve(badMessage(NOT_BEGUN));
     if (message.offset !== part.received) return Promise.resolve(badMessage(`The chunk starts at ${message.offset}. The upload is at ${part.received}.`));
     const bytes = Buffer.from(message.data, 'base64');

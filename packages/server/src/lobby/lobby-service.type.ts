@@ -2,7 +2,7 @@
 import type { SecretStore } from '@archipelia/hosts';
 import type { Failure, ServerMessage } from '@archipelia/lobby-protocol';
 import type { DataFiles, EngineRuntime, Lobby, LobbyOptions, Session, SessionEngine, SessionTemplate } from '@archipelia/model';
-import type { LobbyRun, SessionEvent } from '@archipelia/sessions';
+import type { LobbyRun } from '@archipelia/sessions';
 import type { ProofVerdict, Registry, RegistryClient, WorldVerdict } from '@archipelia/trust';
 
 type LobbyStore = {
@@ -60,9 +60,7 @@ type CreateLobbyInput = { name: string; engine?: SessionEngine; options?: Partia
 
 type LobbyPatch = { name?: string; options?: Partial<LobbyOptions> };
 
-type LobbyEventSink = (event: SessionEvent) => void;
-
 export type {
-  CreateLobbyInput, HostMemberInput, HostSlotInput, LobbyEventSink, LobbyLink, LobbyPatch, LobbyRunner, LobbyServiceDeps, LobbyStore, LobbyTrust,
+  CreateLobbyInput, HostMemberInput, HostSlotInput, LobbyLink, LobbyPatch, LobbyServiceDeps, LobbyStore, LobbyTrust,
   MemberRef, Outcome, OverlayInput, OverlayWorld,
 };

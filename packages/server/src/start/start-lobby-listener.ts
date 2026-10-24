@@ -1,15 +1,16 @@
 /* @layer core @kind logic */
 import { hostBinding } from '@archipelia/hosts';
 import { DEFAULT_PORT } from '@archipelia/lobby-protocol';
-import type { Core } from '../core/core.type';
+import { DOMAIN } from '@archipelia/model';
 import { SERVER_VERSION } from '../core/core-lobbies.constants';
-import type { CoreNetwork } from '../core/core-ports.type';
 import { startListener } from '../listener/start-listener';
-import type { RunningListener } from '../listener/listener.type';
-import type { LobbyListen } from './start-core.type';
+import { createNodeMappingPorts, createNodeNetworkPorts, DEFAULT_NETWORK_MODE } from '../network';
+import { serverIdentity } from './reach/server-identity';
+import { startReach } from './reach/start-reach';
+import type { LobbyEndpoint, LobbyListen, ListenPorts } from './start-core.type';
 
-const startLobbyListener = (core: Core, network: CoreNetwork, options: LobbyListen = {}): Promise<RunningListener> =>
-  startListener({
+const startLobbyListener = async ({ core, network, log, domain }: ListenPorts, options: LobbyListen = {}): Promise<LobbyEndpoint> => {
+  const listener = await startListener({
     service: core.lobbies,
     admin: { token: core.adminToken, watch: core.watchLobbies, engines: () => core.engine.overview() },
     host: hostBinding(network.automation, network.lanHost).bindHost,
@@ -17,5 +18,19 @@ const startLobbyListener = (core: Core, network: CoreNetwork, options: LobbyList
     serverVersion: options.serverVersion ?? SERVER_VERSION,
     ...(options.tls ? { tls: options.tls } : {}),
   });
+  const reach = await startReach({
+    port: listener.port, mode: options.mode ?? DEFAULT_NETWORK_MODE, automation: network.automation, log,
+    ports: options.reachPorts ?? { network: createNodeNetworkPorts(), mapping: createNodeMappingPorts() },
+    server: await serverIdentity(domain(DOMAIN.server)),
+    lobbies: () => core.lobbies.list(),
+    fallbackAp: () => core.runtime().then((runtime) => runtime.apVersion, () => undefined),
+    watch: core.watchLobbies,
+  });
+  const stop = async () => {
+    await reach.stop();
+    await listener.stop();
+  };
+  return { host: listener.host, port: listener.port, reach: reach.status, stop };
+};
 
 export { startLobbyListener };
