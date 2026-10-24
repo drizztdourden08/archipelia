@@ -1,14 +1,8 @@
+import type { EngineSpec } from '@archipelia/engine';
+
 type EngineStep = 'python' | 'archipelago' | 'requirements' | 'official';
 
-type RequirementRule = { ap?: string; python?: string; skip: string[]; extra: string[] };
-
-type EngineSpec = {
-  id: string;
-  target: string;
-  ap: { version: string; commit: string };
-  python: { version: string; release: string; file: string; sha256: string };
-  requirements: { skip: string[]; extra: string[]; rules: RequirementRule[] };
-};
+type RequirementRule = EngineSpec['requirements']['rules'][number];
 
 type BuildEngineOptions = {
   buildDir?: string;

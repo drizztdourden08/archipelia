@@ -1,10 +1,11 @@
 /* @layer core @kind logic */
-import { isRecord, isStringList } from '@archipelia/model';
+import { isStringList } from '@archipelia/model';
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { META_STRING_KEYS } from './engine-meta.constants';
 import type { EngineMeta } from './engine-meta.type';
 import { hasStrings } from './has-strings';
+import { isSmokeResult } from './is-smoke-result';
 import { parseJson } from './parse-json';
 import { RUNTIME_FILE } from './read-runtime.constants';
 
@@ -19,7 +20,7 @@ const readEngineMeta = async (engineDir: string): Promise<EngineMeta> => {
     builtAt: Number(stored.builtAt),
     rules: Array.isArray(stored.rules) ? (stored.rules as EngineMeta['rules']) : [],
     packages: isStringList(stored.packages) ? stored.packages : [],
-    ...(isRecord(stored.smoke) ? { smoke: stored.smoke as unknown as NonNullable<EngineMeta['smoke']> } : {}),
+    ...(isSmokeResult(stored.smoke) ? { smoke: stored.smoke } : {}),
   };
 };
 

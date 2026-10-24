@@ -2,4 +2,6 @@
 
 const META_STRING_KEYS = ['pythonRelease', 'target'];
 
-export { META_STRING_KEYS };
+const SMOKE_FAILURES: readonly unknown[] = ['schema', 'generate', 'host'];
+
+export { META_STRING_KEYS, SMOKE_FAILURES };

@@ -56,6 +56,14 @@ const spec = (ap, python) => ({
   },
 });
 
+const cancelSignal = () => {
+  let cancelled = false;
+  return {
+    signal: { throwIfAborted: () => { if (cancelled) throw new Error('cancelled'); } },
+    cancel: () => { cancelled = true; },
+  };
+};
+
 let buildDir;
 
 beforeEach(async () => {
@@ -68,7 +76,7 @@ beforeEach(async () => {
 
 afterEach(() => rm(buildDir, { recursive: true, force: true }));
 
-describe('buildEngine', () => {
+describe('buildEngine output', () => {
   test('builds into a folder named by the spec id and writes the extended manifest', async () => {
     const steps = [];
     const stamp = await buildEngine({ buildDir, spec: spec('0.6.8', '3.12.15'), onStep: (step) => steps.push(step) });
@@ -110,6 +118,17 @@ describe('buildEngine', () => {
     expect(text.split('\n')).toEqual(['websockets>=13', 'requests==2.32.5']);
   });
 
+  test('a built engine skips the base steps when it is built again', async () => {
+    const skipped = [];
+    await buildEngine({ buildDir, spec: spec('0.6.8', '3.12.15') });
+    fakes.downloads.length = 0;
+    await buildEngine({ buildDir, spec: spec('0.6.8', '3.12.15'), onSkip: (step) => skipped.push(step) });
+    expect(skipped).toEqual(['python', 'archipelago', 'requirements']);
+    expect(fakes.downloads).toEqual([]);
+  });
+});
+
+describe('buildEngine reuse and failure', () => {
   test('a second spec builds beside the first and leaves it untouched', async () => {
     const first = await buildEngine({ buildDir, spec: spec('0.6.7', '3.12.14') });
     await writeFile(join(buildDir, 'ap-0.6.7_py-3.12.14_win32-x64', 'user-world.apworld'), 'x', 'utf8');
@@ -118,15 +137,6 @@ describe('buildEngine', () => {
     expect((await readdir(buildDir)).sort()).toEqual(['ap-0.6.7_py-3.12.14_win32-x64', 'ap-0.6.8_py-3.13.17_win32-x64']);
     expect(await readFile(first, 'utf8')).toBe(before);
     expect(await readdir(join(buildDir, 'ap-0.6.7_py-3.12.14_win32-x64'))).toContain('user-world.apworld');
-  });
-
-  test('a built engine skips the base steps when it is built again', async () => {
-    const skipped = [];
-    await buildEngine({ buildDir, spec: spec('0.6.8', '3.12.15') });
-    fakes.downloads.length = 0;
-    await buildEngine({ buildDir, spec: spec('0.6.8', '3.12.15'), onSkip: (step) => skipped.push(step) });
-    expect(skipped).toEqual(['python', 'archipelago', 'requirements']);
-    expect(fakes.downloads).toEqual([]);
   });
 
   test('a failure removes the half-built folder and keeps the other engines', async () => {
@@ -143,19 +153,21 @@ describe('buildEngine', () => {
     await expect(buildEngine({ buildDir, spec: spec('0.6.8', '3.12.15') })).rejects.toThrow('freeze failed');
     expect(await readdir(buildDir)).toContain('ap-0.6.8_py-3.12.15_win32-x64');
   });
+});
 
+describe('buildEngine cancel and source check', () => {
   test('a cancel before the build leaves no folder and starts no download', async () => {
-    const controller = new AbortController();
-    controller.abort();
-    await expect(buildEngine({ buildDir, spec: spec('0.6.8', '3.12.15'), signal: controller.signal })).rejects.toThrow();
+    const { signal, cancel } = cancelSignal();
+    cancel();
+    await expect(buildEngine({ buildDir, spec: spec('0.6.8', '3.12.15'), signal })).rejects.toThrow();
     expect(await readdir(buildDir)).toEqual([]);
     expect(fakes.downloads).toEqual([]);
   });
 
   test('a cancel during the requirements removes the folder', async () => {
-    const controller = new AbortController();
-    const verifySource = async () => controller.abort();
-    await expect(buildEngine({ buildDir, spec: spec('0.6.8', '3.12.15'), signal: controller.signal, verifySource })).rejects.toThrow();
+    const { signal, cancel } = cancelSignal();
+    const verifySource = async () => cancel();
+    await expect(buildEngine({ buildDir, spec: spec('0.6.8', '3.12.15'), signal, verifySource })).rejects.toThrow();
     expect(await readdir(buildDir)).toEqual([]);
     expect(fakes.runs.some((line) => line.includes('pip install'))).toBe(false);
   });
