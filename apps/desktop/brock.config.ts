@@ -13,4 +13,5 @@ export default defineBrockConfig({
   },
   targets: ['desktop'],
   modules: ['secrets', 'updater'],
+  workflows: { publish: { packages: ['packages/lobby-protocol', 'packages/client-kit'], registry: 'github' } },
 });

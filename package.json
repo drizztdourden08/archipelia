@@ -4,6 +4,10 @@
   "private": true,
   "description": "Archipelia: the Archipelago multiworld workflow in one app. Games store, presets, sessions, an invisible generator and embedded servers.",
   "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/drizztdourden08/archipelia.git"
+  },
   "author": {
     "name": "drizztdourden_",
     "email": "drizztdourden08@users.noreply.github.com"

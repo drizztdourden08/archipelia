@@ -291,6 +291,66 @@ jobs:
           name: release-linux
           path: upload/*
 
+  publish-packages:
+    needs: [prepare, build-windows, build-macos, build-linux]
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ needs.prepare.outputs.sha }}
+
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+          registry-url: https://npm.pkg.github.com
+          scope: '@drizztdourden08'
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.PACKAGES_TOKEN || secrets.GITHUB_TOKEN }}
+
+      - name: Build @drizztdourden08/archipelia-lobby-protocol
+        working-directory: 'packages/lobby-protocol'
+        run: pnpm run build
+
+      - name: Build @drizztdourden08/archipelia-client-kit
+        working-directory: 'packages/client-kit'
+        run: pnpm run build
+
+      - name: Publish @drizztdourden08/archipelia-lobby-protocol
+        working-directory: 'packages/lobby-protocol'
+        shell: bash
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PACKAGE_NAME: '@drizztdourden08/archipelia-lobby-protocol'
+        run: |
+          VERSION="$(node -p "require('./package.json').version")"
+          if npm view "$PACKAGE_NAME@$VERSION" version >/dev/null 2>&1; then
+            echo "::notice::$PACKAGE_NAME@$VERSION is already published, so it is skipped."
+          else
+            pnpm publish --no-git-checks --registry https://npm.pkg.github.com
+          fi
+
+      - name: Publish @drizztdourden08/archipelia-client-kit
+        working-directory: 'packages/client-kit'
+        shell: bash
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PACKAGE_NAME: '@drizztdourden08/archipelia-client-kit'
+        run: |
+          VERSION="$(node -p "require('./package.json').version")"
+          if npm view "$PACKAGE_NAME@$VERSION" version >/dev/null 2>&1; then
+            echo "::notice::$PACKAGE_NAME@$VERSION is already published, so it is skipped."
+          else
+            pnpm publish --no-git-checks --registry https://npm.pkg.github.com
+          fi
+
   release:
     needs: [prepare, build-windows, build-macos, build-linux]
     runs-on: ubuntu-24.04
