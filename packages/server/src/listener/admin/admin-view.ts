@@ -1,7 +1,7 @@
 /* @layer core @kind logic */
-import type { Lobby } from '@archipelia/model';
+import type { AdminLobby, Lobby } from '@archipelia/model';
 
-const adminView = (lobby: Lobby | undefined) => {
+const adminView = (lobby: Lobby | undefined): AdminLobby | null => {
   if (!lobby) return null;
   return {
     ...lobby,

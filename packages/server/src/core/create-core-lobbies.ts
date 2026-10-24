@@ -1,6 +1,7 @@
 /* @layer core @kind logic */
-import type { Lobby } from '@archipelia/model';
+import type { Lobby, SessionTemplate } from '@archipelia/model';
 import { DOMAIN } from '@archipelia/model';
+import type { LobbyRun } from '@archipelia/sessions';
 import { sessionEngineOf } from '@archipelia/sessions';
 import { createLobbyService } from '../lobby/create-lobby-service';
 import { buildOverlay } from '../lobby/overlay/build-overlay';
@@ -12,10 +13,14 @@ import { SERVER_VERSION } from './core-lobbies.constants';
 
 const createCoreLobbies = ({ ports, sessions, runtime, runtimeFor, sessionFiles }: CoreLobbyDeps) => {
   const watchers = new Set<(lobby: Lobby) => void>();
+  const runOf = (template: SessionTemplate, lobby: LobbyRun) =>
+    ports.lobbyRun
+      ? ports.lobbyRun(template, lobby, { output: sessionFiles, report: (event) => lobbies.onSessionEvent(event) })
+      : sessions().run(template, undefined, lobby);
   const lobbies = createLobbyService({
     store: createLobbyStore(ports.domain(DOMAIN.lobbies)),
     trust: createLobbyTrust(ports.domain(DOMAIN.cache)),
-    runner: { run: (template, lobby) => sessions().run(template, undefined, lobby), stop: (id) => sessions().stop(id), running: (id) => sessions().running(id), runtimeFor, output: sessionFiles },
+    runner: { run: runOf, stop: (id) => sessions().stop(id), running: (id) => sessions().running(id), runtimeFor, output: sessionFiles },
     overlay: buildOverlay,
     secrets: ports.secrets,
     activeEngine: () => runtime().then(sessionEngineOf, () => undefined),

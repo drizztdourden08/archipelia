@@ -2,8 +2,8 @@
 import type { StartJob } from '@drizztdourden08/brock-core/jobs';
 import type { FetchLike } from '@archipelia/engine';
 import type { SecretStore } from '@archipelia/hosts';
-import type { DataFiles, EngineEvent, Lobby } from '@archipelia/model';
-import type { SessionEvent } from '@archipelia/sessions';
+import type { DataFiles, EngineEvent, Lobby, Session, SessionTemplate } from '@archipelia/model';
+import type { LobbyRun, SessionEvent } from '@archipelia/sessions';
 
 type CoreDomain = DataFiles & {
   dir: () => string;
@@ -31,6 +31,10 @@ type CoreEnvironment = {
   version?: string;
 };
 
+type CoreLobbyRunContext = { output: DataFiles; report: (event: SessionEvent) => void };
+
+type CoreLobbyRun = (template: SessionTemplate, lobby: LobbyRun, context: CoreLobbyRunContext) => Promise<Session>;
+
 type CorePorts = {
   domain: CoreDomains['domain'];
   job: StartJob;
@@ -39,6 +43,7 @@ type CorePorts = {
   log: (message: string, level?: CoreLogLevel) => void;
   network: CoreNetwork;
   environment?: CoreEnvironment;
+  lobbyRun?: CoreLobbyRun;
 };
 
-export type { CoreDomain, CoreDomains, CoreEnvironment, CoreEvent, CoreLogLevel, CoreNetwork, CorePorts };
+export type { CoreDomain, CoreDomains, CoreEnvironment, CoreEvent, CoreLobbyRun, CoreLobbyRunContext, CoreLogLevel, CoreNetwork, CorePorts };

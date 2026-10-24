@@ -108,7 +108,13 @@ type Lobby = {
   closesAt: number;
 };
 
+type AdminLobbyMember = Omit<LobbyMember, 'tokenHash'>;
+
+type AdminWorld = Omit<WorldUpload, 'proof'> & { proofSent: boolean };
+
+type AdminLobby = Omit<Lobby, 'members' | 'worlds'> & { members: AdminLobbyMember[]; worlds: AdminWorld[] };
+
 export type {
-  ClientMeta, Lobby, LobbyAdmission, LobbyFailure, LobbyLimits, LobbyMember, LobbyOptions, LobbyPhase, LobbyRoom, LobbyRoomFile,
+  AdminLobby, AdminLobbyMember, AdminWorld, ClientMeta, Lobby, LobbyAdmission, LobbyFailure, LobbyLimits, LobbyMember, LobbyOptions, LobbyPhase, LobbyRoom, LobbyRoomFile,
   MemberAdmission, SlotState, SlotUpload, TrustLevel, UploadTrust, WorldUpload,
 };
