@@ -1,8 +1,8 @@
 /* @layer renderer-app @kind hook */
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { jobs, toast } from '@drizztdourden08/brock-react';
+import { runJobId } from '@archipelia/model';
 import type { SessionTemplate } from '@archipelia/model';
-import { runJobId } from '../jobs/run-job-id';
 import { findLaunchedRun } from '../runs/find-launched-run';
 import type { RunLaunch } from '../runs/run-launch.type';
 import { useRunsStore } from '../stores/useRunsStore';

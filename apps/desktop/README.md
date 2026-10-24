@@ -35,8 +35,9 @@ packages/sessions              templates, run history, player files, the session
                                and the live room parsing (sessions/live-room)
 packages/design                the shared Tessera compounds and the app tree of the guide
 tooling/engine-bundle          builds the engine: a standalone Python with the pinned Archipelago
-electron/services/             the composition: stores and services built from packages/*
-electron/engine/, electron/gg/ main-side engine setup and archipelago.gg rooms
+packages/server                the core: engine, catalog, sessions, hosts and runs built from ports
+electron/services/             the desktop ports (storage, jobs, events, secrets) handed to the core
+electron/gg/                   main-side archipelago.gg rooms
 src/widgets/                   the session widgets: players, hints, room, log, console, spoiler
 src/session-widgets/           the session widget layout and the widget window check
 src/search-actions/            the actions the search palette offers

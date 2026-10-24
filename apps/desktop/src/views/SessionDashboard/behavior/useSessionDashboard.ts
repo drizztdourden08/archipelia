@@ -4,7 +4,7 @@ import { confirmAction, useCopyText, useJob, useNow } from '@drizztdourden08/bro
 import { useRunsStore } from '../../../stores/useRunsStore';
 import { useSessionViewStore } from '../../../stores/useSessionViewStore';
 import { pickSession } from './pick-session';
-import { runJobId } from '../../../jobs/run-job-id';
+import { runJobId } from '@archipelia/model';
 import { FAILURE, NO_LINES, TICK_MS } from '../SessionDashboard.constants';
 import { failWith } from '../../../hooks/fail-with';
 import { useLoggedFailure } from '../../../hooks/useLoggedFailure';
