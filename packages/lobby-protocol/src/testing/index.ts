@@ -30,4 +30,5 @@ export type {
 export { connectWebSocket } from './transport/connect-websocket';
 export { createMemoryPair } from './transport/create-memory-pair';
 export { listenWebSocket } from './transport/listen-websocket';
-export type { Transport, TransportEvent, WebSocketListener } from './transport/transport.type';
+export type { Transport, TransportEvent } from '../node/transport/transport.type';
+export type { WebSocketListener } from './transport/transport.type';

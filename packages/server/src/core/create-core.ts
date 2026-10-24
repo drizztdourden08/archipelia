@@ -11,6 +11,7 @@ import { createEngineService } from './engine/create-engine-service';
 import { createEngineUsage } from './engine/engine-usage';
 import { createFeedStore } from '@archipelia/engine/install';
 import { createRunJobs } from './runs/create-run-jobs';
+import { createCoreLobbies } from './create-core-lobbies';
 
 const createCore = (ports: CorePorts) => {
   const { domain, job, emit, secrets, log, network, environment = {} } = ports;
@@ -44,11 +45,13 @@ const createCore = (ports: CorePorts) => {
     emit: (event) => {
       usage.track(event);
       runJobs.onEvent(event);
+      lobbies.onSessionEvent(event);
       emit({ kind: 'session', event });
     },
   });
+  const { lobbies, watchLobbies, adminToken } = createCoreLobbies({ ports, sessions: () => sessions, runtime, runtimeFor, sessionFiles });
   const dispose = () => sessions.stopLocal().catch((err: unknown) => log(`the core did not stop its local servers: ${String(err)}`, 'error'));
-  return { catalog, dispose, engine, installed, presets, runJobs, runs, runtime, servers, sessionFiles, sessions, templates };
+  return { adminToken, catalog, dispose, engine, installed, lobbies, presets, runJobs, runs, runtime, servers, sessionFiles, sessions, templates, watchLobbies };
 };
 
 export { createCore };

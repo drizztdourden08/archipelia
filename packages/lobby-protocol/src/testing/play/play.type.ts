@@ -1,5 +1,5 @@
 /* @layer testing @kind types */
-import type { Transport, TransportEvent } from '../transport/transport.type';
+import type { Transport, TransportEvent } from '../../node/transport/transport.type';
 import type { Bindings, FixtureLine, HostHook, ScenarioFile } from '../scenario/scenario.type';
 
 type PeerRole = 'client' | 'server';

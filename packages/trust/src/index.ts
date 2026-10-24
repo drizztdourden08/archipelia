@@ -8,5 +8,6 @@ export { REGISTRY_URL } from './registry/registry.constants';
 export type { ClientStatus, ClientTrust, GithubAttestationTrust, Registry, RegistryClient, RegistryGame, RegistryRelease, ReleaseKind } from './registry/registry.type';
 export { loadTrustedRoot } from './verify/load-trusted-root';
 export type { FetchTrustedRoot, LoadTrustedRootDeps, LoadTrustedRootOptions, TrustedRootLoad, TrustedRootSource } from './verify/trusted-root.type';
+export { verifyProof } from './verify/verify-proof';
 export { verifyWorld } from './verify/verify-world';
-export type { TrustFailureReason, WorldSigner, WorldVerdict } from './verify/verify-world.type';
+export type { ProofVerdict, TrustFailureReason, WorldSigner, WorldVerdict } from './verify/verify-world.type';

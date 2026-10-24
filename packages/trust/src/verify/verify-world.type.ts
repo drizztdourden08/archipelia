@@ -19,4 +19,6 @@ type WorldVerdict =
 
 type VerifyFailure = Extract<WorldVerdict, { ok: false }>;
 
-export type { TrustFailureReason, VerifyFailure, WorldSigner, WorldVerdict };
+type ProofVerdict = { ok: true; signer: WorldSigner } | VerifyFailure;
+
+export type { ProofVerdict, TrustFailureReason, VerifyFailure, WorldSigner, WorldVerdict };

@@ -2,13 +2,27 @@
 import type { ServerHost } from '@drizztdourden08/brock-electron/server';
 import { createCore } from '../core/create-core';
 import type { CoreDomains } from '../core/core-ports.type';
-import type { CoreRest, StartedCore } from './start-core.type';
+import type { RunningListener } from '../listener/listener.type';
+import type { CoreRest, LobbyListen, StartedCore } from './start-core.type';
+import { startLobbyListener } from './start-lobby-listener';
 
 const startCore = (host: ServerHost<CoreDomains>, rest: CoreRest): StartedCore => {
   const { domains } = host;
   if (!domains) throw new Error('the core needs the data domains of its host');
   const core = createCore({ ...rest, domain: domains.domain, log: host.log });
-  return { core, stop: core.dispose };
+  let listener: Promise<RunningListener> | undefined;
+  const listen = (options: LobbyListen = {}) => {
+    const version = rest.environment?.version;
+    listener ??= startLobbyListener(core, rest.network, { ...(version ? { serverVersion: version } : {}), ...options });
+    return listener;
+  };
+  const stop = async () => {
+    const running = listener;
+    listener = undefined;
+    if (running) await (await running).stop();
+    await core.dispose();
+  };
+  return { core, listen, stop };
 };
 
 export { startCore };

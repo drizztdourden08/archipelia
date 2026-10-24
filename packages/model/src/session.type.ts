@@ -51,6 +51,8 @@ type Endpoint = { host: string; port: number; roomUrl?: string };
 
 type SessionEngine = { id: string; ap: string; python: string };
 
+type SessionWorld = { game: string; sha256: string };
+
 type Session = {
   id: string;
   templateId?: string;
@@ -58,6 +60,8 @@ type Session = {
   status: SessionStatus;
   createdAt: number;
   engine?: SessionEngine;
+  lobbyId?: string;
+  worlds?: SessionWorld[];
   seed?: string;
   output?: SessionOutput;
   endpoint?: Endpoint;
@@ -67,5 +71,5 @@ type Session = {
 
 export type {
   Endpoint, GeneratorSettings, HostTarget, PlayerSource, ReleaseMode, RemainingMode, ServerSettings, Session,
-  SessionEngine, SessionOutput, SessionPlayer, SessionStatus, SessionTemplate, SpoilerLevel,
+  SessionEngine, SessionOutput, SessionPlayer, SessionStatus, SessionTemplate, SessionWorld, SpoilerLevel,
 };

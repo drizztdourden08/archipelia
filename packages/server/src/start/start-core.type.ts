@@ -2,9 +2,12 @@
 import type { RunningServer } from '@drizztdourden08/brock-electron/server';
 import type { Core } from '../core/core.type';
 import type { CorePorts } from '../core/core-ports.type';
+import type { ListenerTls, RunningListener } from '../listener/listener.type';
 
 type CoreRest = Omit<CorePorts, 'domain' | 'log'>;
 
-type StartedCore = RunningServer & { core: Core };
+type LobbyListen = { port?: number; tls?: ListenerTls; serverVersion?: string };
 
-export type { CoreRest, StartedCore };
+type StartedCore = RunningServer & { core: Core; listen: (options?: LobbyListen) => Promise<RunningListener> };
+
+export type { CoreRest, LobbyListen, StartedCore };

@@ -1,5 +1,5 @@
 /* @layer testing @kind types */
-import type { Transport } from '../transport/transport.type';
+import type { Transport } from '../../node/transport/transport.type';
 import type { Bindings, HostHook, Scenario, ScenarioKit, ScenarioResult } from '../scenario/scenario.type';
 import type { WebSocketListener } from '../transport/transport.type';
 

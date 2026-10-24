@@ -1,5 +1,5 @@
 /* @layer testing @kind logic */
-import type { Transport } from '../transport/transport.type';
+import type { Transport } from '../../node/transport/transport.type';
 import type { FakeServer, FakeServerOptions } from './fake.type';
 import { createQueue } from '../play/create-queue';
 import { playScript } from '../play/play-script';

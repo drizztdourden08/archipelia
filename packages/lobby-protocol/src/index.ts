@@ -26,6 +26,7 @@ export type {
 } from './discovery/discovery.type';
 export { checkHello } from './hello/check-hello';
 export { formatLobbyCode } from './lobby/format-lobby-code';
+export { CODE_ALPHABET, CODE_LENGTH } from './lobby/lobby-code.constants';
 export { lobbyJoinable } from './lobby/lobby-joinable';
 export { lobbyNotFoundFailure } from './lobby/lobby-not-found-failure';
 export { negotiateProtocol } from './lobby/negotiate-protocol';

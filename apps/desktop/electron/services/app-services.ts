@@ -8,9 +8,9 @@ import { APP_CHANNELS } from '../../src/ipc/contract.constants';
 
 const lanHost = () => lanAddresses().find((lan) => lan.family === 'IPv4')?.address ?? '127.0.0.1';
 
-const forward = (ctx: MainContext, { kind, event }: CoreEvent) => {
-  if (kind === 'engine') ctx.emit(APP_CHANNELS.onEngineEvent, event);
-  else if (event.type === 'session' || event.type === 'log') ctx.emit(APP_CHANNELS.onSessionEvent, event);
+const forward = (ctx: MainContext, coreEvent: CoreEvent) => {
+  if (coreEvent.kind === 'engine') ctx.emit(APP_CHANNELS.onEngineEvent, coreEvent.event);
+  else if (coreEvent.kind === 'session' && (coreEvent.event.type === 'session' || coreEvent.event.type === 'log')) ctx.emit(APP_CHANNELS.onSessionEvent, coreEvent.event);
 };
 
 const createAppServices = async (ctx: MainContext) => {

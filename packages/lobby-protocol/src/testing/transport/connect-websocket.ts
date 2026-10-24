@@ -1,6 +1,6 @@
 /* @layer testing @kind logic */
-import type { Transport } from './transport.type';
-import { createChannel } from './create-channel';
+import type { Transport } from '../../node/transport/transport.type';
+import { createChannel } from '../../node/transport/create-channel';
 
 const usableCode = (code: number): number => (code === 1000 || (code >= 3000 && code <= 4999) ? code : 1000);
 

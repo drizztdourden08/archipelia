@@ -3,8 +3,8 @@ import { describe, expect, test } from 'vitest';
 import { LOBBY_PATH } from '../src';
 import { connectWebSocket, createFakeClient, createFakeServer, createMemoryPair, loadScenario } from '../src/testing';
 import type { TransportEvent } from '../src/testing';
-import { encodeFrame } from '../src/testing/transport/encode-frame';
-import { parseFrame } from '../src/testing/transport/parse-frame';
+import { encodeFrame } from '../src/node/transport/encode-frame';
+import { parseFrame } from '../src/node/transport/parse-frame';
 
 const playOverSocket = async (name: string) => {
   const scenario = loadScenario(name);

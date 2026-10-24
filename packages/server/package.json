@@ -31,11 +31,15 @@
     "@archipelia/engine": "workspace:*",
     "@archipelia/engine-bundle": "workspace:*",
     "@archipelia/hosts": "workspace:*",
+    "@archipelia/lobby-protocol": "workspace:*",
     "@archipelia/model": "workspace:*",
     "@archipelia/presets": "workspace:*",
     "@archipelia/sessions": "workspace:*",
+    "@archipelia/trust": "workspace:*",
     "@drizztdourden08/brock-core": "^0.82.0",
     "@drizztdourden08/brock-electron": "^0.82.0",
-    "@drizztdourden08/brock-secrets": "^0.82.0"
+    "@drizztdourden08/brock-secrets": "^0.82.0",
+    "fflate": "catalog:",
+    "yaml": "catalog:"
   }
 }

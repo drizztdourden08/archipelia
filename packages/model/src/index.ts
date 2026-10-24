@@ -3,6 +3,7 @@ export type * from './data-files.type';
 export type * from './engine.type';
 export type * from './engine-versions.type';
 export type * from './game.type';
+export type * from './lobby.type';
 export { hostLabel } from './host-label';
 export { isRecord } from './is-record';
 export { isStringList } from './is-string-list';

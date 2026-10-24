@@ -3,6 +3,7 @@ import type { Session, SessionTemplate } from '@archipelia/model';
 import type { HostLogLine } from '@archipelia/hosts';
 import { newId } from '@drizztdourden08/brock-core/storage';
 import type { LiveSession, ServiceDeps } from './service-deps.type';
+import type { LobbyRun } from './lobby-run.type';
 import { produceSession } from './produce-session';
 import { hostSession } from './host-session';
 import { sessionEngineOf } from '../engine/session-engine-of';
@@ -20,17 +21,18 @@ const createSessionService = (deps: ServiceDeps) => {
     return next;
   };
 
-  const run = async (template: SessionTemplate, outer?: AbortSignal) => {
-    let session = await update({ id: newId(), templateId: template.id, snapshot: template, status: 'generating', createdAt: Date.now() }, {});
+  const run = async (template: SessionTemplate, outer?: AbortSignal, lobby?: LobbyRun) => {
+    const origin = lobby ? { lobbyId: lobby.lobbyId, worlds: lobby.worlds } : {};
+    let session = await update({ id: newId(), templateId: template.id, snapshot: template, status: 'generating', createdAt: Date.now(), ...origin }, {});
     const controller = new AbortController();
     pending.set(session.id, controller);
     const signal = outer ? AbortSignal.any([outer, controller.signal]) : controller.signal;
     try {
-      const runtime = await deps.runtime();
+      const runtime = lobby?.runtime ?? await deps.runtime();
       session = await update(session, { engine: sessionEngineOf(runtime) });
       const { output, seed } = await produceSession(deps, session, runtime, signal);
       session = await update(session, { status: 'starting', output, seed });
-      return await update(session, { status: 'hosting', endpoint: await hostSession({ deps, live, signal }, session) });
+      return await update(session, { status: 'hosting', endpoint: await hostSession({ deps, live, signal, runtime: lobby?.runtime }, session) });
     } catch (err) {
       await live.get(session.id)?.host.stop().catch(() => undefined);
       live.delete(session.id);
