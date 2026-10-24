@@ -1,67 +1,73 @@
 /* @layer tooling-scripts @kind logic */
 import { mkdir, rm, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { downloadTo, exists } from './download.mjs';
+import { BUNDLE_DIR } from './bundle-dir.mjs';
+import { exists } from './download.mjs';
+import { freezePackages } from './freeze-packages.mjs';
+import { installRequirements } from './install-requirements.mjs';
 import { OFFICIAL_DIR, packOfficial } from './official/pack-official.mjs';
-import { BUNDLE_DIR, currentTarget, pythonUrl, readPins } from './pins.mjs';
-import { engineRequirements } from './requirements.mjs';
-import { extractTarGz, run } from './run.mjs';
 import { installSchemaScript } from './schema-script.mjs';
+import { unpackEngine } from './unpack-engine.mjs';
+import { writeManifest } from './write-manifest.mjs';
 
-const PIP_INSTALL = ['-m', 'pip', 'install', '--disable-pip-version-check', '--no-warn-script-location', '-r'];
 const BASE_STAMP = 'base.done';
 const BASE_STEPS = ['python', 'archipelago', 'requirements'];
+const REMOVE_OPTIONS = { recursive: true, force: true, maxRetries: 5, retryDelay: 200 };
 
-const unpack = async ({ pins, py, out, downloads, onLine, onStep }) => {
-  onStep?.('python', `Downloading Python ${pins.python.version}`);
-  onLine?.(`Downloading Python ${pins.python.version}`);
-  await extractTarGz(await downloadTo(pythonUrl(pins, py), join(downloads, py.file), py.sha256), out, { onLine });
-  onStep?.('archipelago', `Downloading Archipelago ${pins.ap.version}`);
-  onLine?.(`Downloading Archipelago ${pins.ap.version}`);
-  await extractTarGz(await downloadTo(pins.ap.url, join(downloads, `ap-${pins.ap.commit}.tar.gz`)), join(out, 'ap'), { strip: 1, onLine });
-};
-
-const installRequirements = async ({ pins, out, python, onLine, onStep }) => {
-  onStep?.('requirements', 'Installing the Python requirements');
-  const pinned = { skip: pins.skipRequirements, extra: pins.extraRequirements };
-  const files = await engineRequirements(join(out, 'ap'), pinned, join(out, 'requirements.engine.txt'));
-  for (const file of files) await run(python, [...PIP_INSTALL, file], { onLine });
-};
-
-const buildBase = async ({ pins, py, out, downloads, python, onLine, onStep }) => {
-  await rm(out, { recursive: true, force: true });
+const buildBase = async ({ spec, out, downloads, python, verifySource, onLine, onStep, signal }) => {
+  await rm(out, REMOVE_OPTIONS);
   await mkdir(join(out, 'ap'), { recursive: true });
-  await unpack({ pins, py, out, downloads, onLine, onStep });
-  await installRequirements({ pins, out, python: join(out, python), onLine, onStep });
+  await unpackEngine({ spec, out, downloads, onLine, onStep, signal });
+  const warning = await verifySource?.(join(out, 'ap'));
+  if (warning) onLine?.(warning);
+  signal?.throwIfAborted();
+  await installRequirements({ spec, out, python: join(out, python), onLine, onStep, signal });
   await writeFile(join(out, BASE_STAMP), '', 'utf8');
 };
 
-const buildEngine = async ({ buildDir = join(BUNDLE_DIR, 'dist'), onLine, onStep, onSkip } = {}) => {
-  const pins = await readPins();
-  const target = currentTarget();
-  const py = pins.python.targets[target];
-  if (!py) throw new Error(`no Python pin for ${target}`);
-  const out = join(buildDir, `${pins.ap.version}-${target}`);
-  const stamp = join(out, 'engine.json');
-  const python = process.platform === 'win32' ? 'python/python.exe' : 'python/bin/python3';
-  const built = (await exists(join(out, BASE_STAMP))) || (await exists(stamp));
-  if (built) BASE_STEPS.forEach((step) => onSkip?.(step));
-  else await buildBase({ pins, py, out, downloads: join(buildDir, 'downloads'), python, onLine, onStep });
+const assembleEngine = async ({ spec, out, python, stamp, onLine, onStep, signal }) => {
   const schemaScript = await installSchemaScript(out);
+  signal?.throwIfAborted();
   onStep?.('official', 'Packing the official worlds');
   onLine?.('Packing the official worlds');
   await packOfficial({ out, python, onLine });
-  const runtime = {
-    apVersion: pins.ap.version,
+  signal?.throwIfAborted();
+  const packages = await freezePackages(join(out, python), signal);
+  return writeManifest(stamp, {
+    id: spec.id,
+    apVersion: spec.ap.version,
+    apCommit: spec.ap.commit,
+    pythonVersion: spec.python.version,
+    pythonRelease: spec.python.release,
+    target: spec.target,
+    builtAt: Date.now(),
     root: '.',
     python,
     generate: 'ap/Generate.py',
     multiServer: 'ap/MultiServer.py',
     schemaScript,
     official: OFFICIAL_DIR,
-  };
-  await writeFile(stamp, JSON.stringify(runtime, null, 2), 'utf8');
-  return stamp;
+    rules: spec.requirements.rules,
+    packages,
+  });
+};
+
+const buildEngine = async ({ buildDir = join(BUNDLE_DIR, 'dist'), spec, verifySource, onLine, onStep, onSkip, signal } = {}) => {
+  if (!spec) throw new Error('buildEngine needs a spec');
+  const out = join(buildDir, spec.id);
+  const stamp = join(out, 'engine.json');
+  const python = process.platform === 'win32' ? 'python/python.exe' : 'python/bin/python3';
+  const hadEngine = await exists(stamp);
+  const built = hadEngine || (await exists(join(out, BASE_STAMP)));
+  try {
+    signal?.throwIfAborted();
+    if (built) BASE_STEPS.forEach((step) => onSkip?.(step));
+    else await buildBase({ spec, out, downloads: join(buildDir, 'downloads'), python, verifySource, onLine, onStep, signal });
+    return await assembleEngine({ spec, out, python, stamp, onLine, onStep, signal });
+  } catch (err) {
+    if (!hadEngine) await rm(out, REMOVE_OPTIONS);
+    throw err;
+  }
 };
 
 export { buildEngine };

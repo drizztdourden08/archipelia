@@ -30,6 +30,7 @@
     "eslint": "catalog:"
   },
   "dependencies": {
+    "@archipelia/engine": "workspace:*",
     "fflate": "catalog:"
   }
 }
