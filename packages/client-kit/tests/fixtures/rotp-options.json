@@ -1,0 +1,10 @@
+[
+  { "key": "progression_balancing", "type": "range", "displayName": "Progression balancing", "description": "How much the generator balances progression.", "default": 50, "range": { "min": 0, "max": 99 }, "locked": false },
+  { "key": "accessibility", "type": "choice", "displayName": "Accessibility", "description": "What the generator guarantees.", "default": "full", "choices": [{ "value": "full", "id": 0 }, { "value": "minimal", "id": 2 }], "numeric": false, "locked": false },
+  { "key": "death_link", "type": "toggle", "displayName": "DeathLink", "description": "Share deaths.", "default": false, "locked": false },
+  { "key": "shop_shuffle", "type": "choice", "displayName": "Shop shuffle", "description": "How shops are shuffled.", "default": "off", "choices": [{ "value": "off", "id": 0 }, { "value": "on", "id": 1 }, { "value": "random", "id": 2 }], "numeric": false, "locked": false },
+  { "key": "capacity_mode", "type": "choice", "displayName": "Capacity mode", "description": "Numbered modes.", "default": 0, "choices": [{ "value": "0", "id": 0 }, { "value": "1", "id": 1 }, { "value": "2", "id": 2 }], "numeric": true, "locked": false },
+  { "key": "dungeon_count", "type": "range", "displayName": "Dungeons", "description": "How many dungeons.", "default": 8, "range": { "min": 1, "max": 8 }, "locked": false },
+  { "key": "seed_text", "type": "text", "displayName": "Seed", "description": "The profile seed.", "default": "", "locked": false },
+  { "key": "pre_rolled", "type": "dict", "displayName": "Pre-rolled values", "description": "Written by the app.", "default": {}, "locked": false }
+]

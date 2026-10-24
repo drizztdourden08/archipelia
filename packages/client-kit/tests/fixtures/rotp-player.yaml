@@ -1,0 +1,20 @@
+name: Link
+description: Relic of the Past 0.22.0
+game: Relic of the Past
+Relic of the Past:
+  progression_balancing: 50
+  accessibility: full
+  death_link: false
+  shop_shuffle: 2
+  capacity_mode: 2
+  dungeon_count: 5
+  seed_text: "seed: 1234"
+  pre_rolled:
+    pond:
+      demands:
+        - 1
+        - 2
+        - 3
+    shop:
+      prices: []
+      tag: "random"
