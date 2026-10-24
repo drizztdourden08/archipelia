@@ -42,7 +42,7 @@ const createAdminConnection = (deps: AdminConnectionDeps, transport: Transport, 
       return refuse('The admin token is wrong.', CLOSE_REFUSED);
     }
     clearTimeout(timer);
-    unwatch = deps.watch((lobby) => send({ type: 'lobby.detail', lobby: adminView(lobby) }));
+    unwatch = deps.watch((lobby) => send({ type: 'lobby.detail', lobby: adminView(deps.sandbox, lobby) }));
     return send({ type: 'admin.welcome', ...(typeof request.seq === 'number' ? { re: request.seq } : {}), protocol: { name: ADMIN_PROTOCOL, version: ADMIN_VERSION }, server: deps.info() });
   };
 

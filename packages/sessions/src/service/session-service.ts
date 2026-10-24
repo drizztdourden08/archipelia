@@ -4,6 +4,7 @@ import type { HostLogLine } from '@archipelia/hosts';
 import { newId } from '@drizztdourden08/brock-core/storage';
 import type { LiveSession, ServiceDeps } from './service-deps.type';
 import type { LobbyRun } from './lobby-run.type';
+import { lobbyEngines } from './lobby-engines';
 import { produceSession } from './produce-session';
 import { hostSession } from './host-session';
 import { sessionEngineOf } from '../engine/session-engine-of';
@@ -28,11 +29,12 @@ const createSessionService = (deps: ServiceDeps) => {
     pending.set(session.id, controller);
     const signal = outer ? AbortSignal.any([outer, controller.signal]) : controller.signal;
     try {
-      const runtime = lobby?.runtime ?? await deps.runtime();
+      const engines = lobbyEngines(lobby);
+      const runtime = engines.runtime ?? await deps.runtime();
       session = await update(session, { engine: sessionEngineOf(runtime) });
-      const { output, seed } = await produceSession(deps, session, runtime, signal);
+      const { output, seed } = await produceSession(deps, session, { runtime, signal, confine: engines.confine, timeoutMs: engines.timeoutMs });
       session = await update(session, { status: 'starting', output, seed });
-      return await update(session, { status: 'hosting', endpoint: await hostSession({ deps, live, signal, runtime: lobby?.runtime }, session) });
+      return await update(session, { status: 'hosting', endpoint: await hostSession({ deps, live, signal, runtime: engines.host }, session) });
     } catch (err) {
       await live.get(session.id)?.host.stop().catch(() => undefined);
       live.delete(session.id);

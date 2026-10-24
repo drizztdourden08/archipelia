@@ -2,6 +2,7 @@
 import type { Lobby } from '@archipelia/model';
 import type { RateLimiter } from '../lobby/link/link.type';
 import type { LobbyService } from '../lobby/lobby-service-api.type';
+import type { SandboxMode } from '../sandbox/sandbox.type';
 
 type RequestHead = { method: string; path: string; headers: Record<string, string> };
 
@@ -14,6 +15,7 @@ type AdminDeps = {
   token: () => Promise<string>;
   watch: (listener: (lobby: Lobby) => void) => () => void;
   info: () => Record<string, unknown>;
+  sandbox: SandboxMode;
   engines: () => Promise<unknown>;
 };
 
@@ -23,10 +25,11 @@ type AdminConnectionDeps = AdminDeps & { limiter: RateLimiter };
 
 type ListenerOptions = {
   service: LobbyService;
-  admin: Omit<AdminDeps, 'service' | 'info'>;
+  admin: Omit<AdminDeps, 'service' | 'info' | 'sandbox'>;
   host: string;
   port: number;
   serverVersion: string;
+  sandbox?: SandboxMode;
   tls?: ListenerTls;
   log?: (message: string) => void;
   upgradeTimeoutMs?: number;
