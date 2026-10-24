@@ -1,0 +1,54 @@
+{
+  "name": "@drizztdourden08/archipelia-client-kit",
+  "version": "0.1.0",
+  "description": "The Archipelia client kit: the standard tooling a client uses to build its Archipelago player YAML and its .apworld, with reproducible zips, per-version builds and the release index.",
+  "type": "module",
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/drizztdourden08/archipelia.git",
+    "directory": "packages/client-kit"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./node": {
+      "types": "./dist/types/node/index.d.ts",
+      "default": "./dist/node.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "archipelia-kit": "./bin/archipelia-kit.mjs"
+  },
+  "files": [
+    "bin",
+    "dist",
+    "README.md"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "prepack": "node scripts/build.mjs",
+    "lint": "tsc --noEmit && eslint ."
+  },
+  "dependencies": {
+    "fflate": "^0.8.3"
+  },
+  "devDependencies": {
+    "@drizztdourden08/brock-lint-config": "^0.79.0",
+    "@types/node": "catalog:",
+    "eslint": "catalog:",
+    "typescript": "catalog:",
+    "yaml": "catalog:",
+    "esbuild": "^0.25.12"
+  }
+}
