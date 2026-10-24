@@ -1,0 +1,22 @@
+/* @layer renderer-app @kind component */
+import { useMemo } from 'react';
+import { SettingsSection } from '@drizztdourden08/tessera/composites';
+import { versionRows } from '../../behavior/version-rows';
+import { whenText } from '../../behavior/when-text';
+import { SECTION_TEXT } from '../../EngineSettings.constants';
+import { VersionTag } from '../VersionTag';
+import type { VersionsSectionProps } from './VersionsSection.type';
+
+const VersionsSection = ({ overview, chosen, plan, busy, checking, onAp, onPython, onApply, onCheck }: VersionsSectionProps) => {
+  const rows = useMemo(
+    () => versionRows({
+      overview, chosen, plan, busy, checking, onAp, onPython, onApply, onCheck,
+      tag: <VersionTag tag={overview.tag} feed={overview.feed} />,
+      when: whenText,
+    }),
+    [overview, chosen, plan, busy, checking, onAp, onPython, onApply, onCheck],
+  );
+  return <SettingsSection id="versions" title={SECTION_TEXT.versions.title} description={SECTION_TEXT.versions.description} rows={rows} />;
+};
+
+export { VersionsSection };

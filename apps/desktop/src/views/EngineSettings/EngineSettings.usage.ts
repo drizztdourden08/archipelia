@@ -2,7 +2,7 @@
 import type { ComponentUsage } from '@drizztdourden08/tessera';
 
 const usage = {
-  job: 'The engine page: its state, the Archipelago version, its folder and the set up, check and show progress buttons.',
+  job: 'The engine page: the Archipelago and Python pickers with the version tag, the version list and Check now, the installed engines, and the status of the engine in use.',
   useWhen: [
     'The Engine page of the Multiworld settings group.',
   ],
@@ -11,7 +11,12 @@ const usage = {
     { case: 'A short message that the engine is missing.', use: 'Callout' },
   ],
   rules: [
-    'Read the engine state from useEngineStore and check it again when the page opens.',
+    'Read the engine state and the versions from useEngineStore and load them again when the page opens.',
+    'Draw three SettingsSections: Versions, Installed engines and Status.',
+    'Both pickers are searchable selects that list any version, newer or older; the version tag from the overview sits on both rows and reads New version, Up to date or Not checked.',
+    'Install and switch appears only when the picked pair is not installed, and Switch when it is installed but not in use.',
+    'Check now asks GitHub again; an offline or rate limited feed is a problem line on the version list row.',
+    'Remove asks with confirmDelete and is off for the engine in use.',
     'Draw the buttons as SettingActions row actions and turn them off while the engine builds.',
     'Once ready, Check again is the primary action and Rebuild is a danger action whose confirm focuses Cancel.',
     'Set up and Rebuild open the job dialog with the steps and the log; Show progress, or Show the last set up once it ended, opens that dialog again.',

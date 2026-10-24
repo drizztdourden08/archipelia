@@ -1,47 +1,51 @@
 /* @layer renderer-app @kind component */
-import { useEffect, useMemo } from 'react';
-import { SettingActions, useJob } from '@drizztdourden08/brock-react';
-import { Button, Flex, Icon, ProgressBar, Stack, StatRow, Status, Text } from '@drizztdourden08/tessera/primitives';
+import { Stack, Text } from '@drizztdourden08/tessera/primitives';
 import { ErrorCallout } from '@archipelia/design';
-import { ENGINE_JOB } from '../../jobs/jobs.constants';
-import { useEngineStore } from '../../stores/useEngineStore';
-import { useLoggedFailure } from '../../hooks/useLoggedFailure';
-import { engineActions } from './behavior/engine-actions';
-import { engineView } from './behavior/engine-view';
-import { openEngineFolder } from './behavior/open-engine-folder';
-import { setupProgress } from './behavior/setup-progress';
-import { FAILURE } from './EngineSettings.constants';
+import { useEngineSettings } from './behavior/useEngineSettings';
+import { SECTION_TEXT } from './EngineSettings.constants';
+import { InstalledSection } from './sub-components/InstalledSection';
+import { StatusSection } from './sub-components/StatusSection';
+import { VersionsSection } from './sub-components/VersionsSection';
 
 const EngineSettings = () => {
-  const { status, refresh, setup } = useEngineStore();
-  const { job, open } = useJob(ENGINE_JOB);
-  useEffect(() => { void refresh(); }, [refresh]);
-  const { state, building, ready, apVersion, dir, openable, error } = engineView(status);
-  const failure = useLoggedFailure(error, FAILURE.setup);
-  const progress = setupProgress(job);
-  const actions = useMemo(
-    () => engineActions({ ready, building, setup, refresh, showProgress: job ? open : undefined }),
-    [ready, building, setup, refresh, job, open],
-  );
+  const engine = useEngineSettings();
+  const { overview, view } = engine;
 
   return (
     <Stack>
-      <Text variant="body">
-        The engine is a private Python with the pinned Archipelago source. It generates seeds and runs the servers,
-        out of sight. Setting it up downloads about 90 MB once.
-      </Text>
-      <Stack gap="xs" data-tour="engine-status">
-        <Status tone={state.tone}>{state.label}</Status>
-        {progress && <ProgressBar value={progress.percent} label="Engine setup" showValue live />}
-        {progress && <Text variant="caption">{progress.step}</Text>}
-      </Stack>
-      <StatRow label="Archipelago" value={apVersion} />
-      <Flex gap="sm" align="center" wrap>
-        <StatRow label="Folder" value={dir} />
-        <Button size="sm" variant="secondary" icon={<Icon name="folder-open" />} disabled={!openable} onClick={() => { void openEngineFolder(dir); }}>Open folder</Button>
-      </Flex>
-      {failure && <ErrorCallout message={failure} />}
-      <SettingActions actions={actions} align="start" />
+      <Text variant="body">{SECTION_TEXT.intro}</Text>
+      {engine.lastError && <ErrorCallout message={engine.lastError} />}
+      {overview && (
+        <VersionsSection
+          overview={overview}
+          chosen={engine.chosen}
+          plan={engine.plan}
+          busy={engine.busy}
+          checking={engine.checking}
+          onAp={engine.pickAp}
+          onPython={engine.pickPython}
+          onApply={engine.apply}
+          onCheck={engine.check}
+        />
+      )}
+      {overview && (
+        <InstalledSection
+          engines={overview.installed}
+          activeId={overview.active?.id}
+          busy={engine.busy}
+          onSwitch={engine.switchEngine}
+          onRemove={engine.removeEngine}
+        />
+      )}
+      <StatusSection
+        state={view.state}
+        progress={engine.progress}
+        apVersion={view.apVersion}
+        dir={view.dir}
+        openable={view.openable}
+        failure={engine.failure}
+        actions={engine.actions}
+      />
     </Stack>
   );
 };
