@@ -35,6 +35,15 @@ const game = (patch: Record<string, unknown> = {}) => ({
 const file = (clients: unknown[], games: unknown[] = []) => ({ format: 1, clients, games });
 
 describe('parseRegistry', () => {
+  test('reads a release that says it is a builds index, and refuses any other kind', () => {
+    const release = { repo: 'owner/repo', world: 'a.apworld', manifest: 'a.apworld.json', bundle: 'a.apworld.sigstore.json' };
+    const parsed = parseRegistry(file([client()], [game({ release: { ...release, kind: 'builds' } }), game({ game: 'Odd', module: 'odd', release: { ...release, kind: 'other' } })]));
+    expect(parsed.ok).toBe(true);
+    if (!parsed.ok) return;
+    expect(parsed.registry.games.map((entry) => entry.release.kind)).toEqual(['builds']);
+    expect(parsed.problems).toHaveLength(1);
+  });
+
   test('reads clients and games', () => {
     const parsed = parseRegistry(file([client()], [game()]));
     expect(parsed).toMatchObject({ ok: true, problems: [] });

@@ -7,7 +7,7 @@ const latestOf = (entry: CatalogEntry) => [...entry.versions].sort((a, b) => com
 
 const stateOf = (entry: CatalogEntry, installed: InstalledGame | undefined, latest: CatalogVersion | undefined): GameRowState => {
   if (!installed) return 'available';
-  if (entry.source === 'index' && latest && compareVersions(latest.version, installed.version) > 0) return 'update';
+  if (entry.source !== 'official' && latest && compareVersions(latest.version, installed.version) > 0) return 'update';
   return 'installed';
 };
 
@@ -16,7 +16,7 @@ const buildRows = (entries: CatalogEntry[], installed: InstalledGame[]): GameRow
   const seen = new Set<string>();
   return entries
     .filter((entry) => entry.source !== 'official' || !seen.has(entry.apworld))
-    .filter((entry) => entry.source === 'official' || entry.versions.length > 0)
+    .filter((entry) => entry.source !== 'index' || entry.versions.length > 0)
     .map((entry) => {
       seen.add(entry.apworld);
       const latest = latestOf(entry);

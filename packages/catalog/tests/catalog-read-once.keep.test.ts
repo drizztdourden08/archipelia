@@ -4,6 +4,9 @@ import type { DataFiles } from '@archipelia/model';
 
 const readCatalog = vi.hoisted(() => vi.fn());
 vi.mock('../src/read-catalog', () => ({ readCatalog }));
+vi.mock('../src/first-party/read-first-party', () => ({
+  readFirstParty: () => Promise.resolve({ entries: [], clients: [], problems: [], source: 'floor' }),
+}));
 
 const { createCatalogService } = await import('../src/service/create-catalog-service');
 

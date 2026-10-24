@@ -30,7 +30,7 @@ const createAppServices = (ctx: MainContext) => {
   const servers = createServerStore(ctx.storage.domain(DOMAIN.servers));
   const usage = createEngineUsage();
   const engine = createEngineService({
-    root: engineRoot(ctx), games, size: (id) => engineFiles.size(id), feedStore: createFeedStore(cache),
+    root: engineRoot(ctx), games, cache, size: (id) => engineFiles.size(id), feedStore: createFeedStore(cache),
     fetch: (url, init) => fetch(url, init), target: currentTarget(), platform: process.platform, startJob: ctx.job,
     emit: (event) => ctx.emit(APP_CHANNELS.onEngineEvent, event), sessions: () => runs.list(), inUse: usage.inUse,
   });

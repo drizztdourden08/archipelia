@@ -40,7 +40,7 @@ describe('carryWorlds', () => {
     ]);
     const reinstalled: string[] = [];
     const result = await carryWorlds({
-      from: runtimeAt('old'), to: runtimeAt('new'), files, reinstall: (apworld) => { reinstalled.push(apworld); return Promise.resolve(); },
+      from: runtimeAt('old'), to: runtimeAt('new'), files, reinstall: (apworld) => { reinstalled.push(apworld); return Promise.resolve(); }, reinstallFirstParty: () => Promise.resolve(),
     });
     expect(result.copied.sort()).toEqual(['alpha', 'folderworld']);
     expect(result.reinstalled).toEqual(['checksfinder']);
@@ -58,7 +58,7 @@ describe('carryWorlds', () => {
       recordOf('broken', { source: 'official', path: 'custom_worlds/broken.apworld' }),
     ]);
     const result = await carryWorlds({
-      from: runtimeAt('old'), to: runtimeAt('new'), files, reinstall: () => Promise.reject(new Error('pack is missing')),
+      from: runtimeAt('old'), to: runtimeAt('new'), files, reinstall: () => Promise.reject(new Error('pack is missing')), reinstallFirstParty: () => Promise.resolve(),
     });
     expect(result.copied).toEqual([]);
     expect(Object.fromEntries(result.problems.map((problem) => [problem.apworld, problem.reason]))).toEqual({
@@ -71,7 +71,7 @@ describe('carryWorlds', () => {
   test('since skips records the first pass already carried', async () => {
     const files = memoryFiles([recordOf('alpha', { installedAt: 100 }), recordOf('late', { installedAt: 300 })]);
     await writeFile(join(base, 'old/ap/custom_worlds/late.apworld'), 'late');
-    const result = await carryWorlds({ from: runtimeAt('old'), to: runtimeAt('new'), files, reinstall: () => Promise.resolve(), since: 200 });
+    const result = await carryWorlds({ from: runtimeAt('old'), to: runtimeAt('new'), files, reinstall: () => Promise.resolve(), reinstallFirstParty: () => Promise.resolve(), since: 200 });
     expect(result.copied).toEqual(['late']);
   });
 });
