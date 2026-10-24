@@ -22,7 +22,7 @@
     "lint": "tsc --noEmit && eslint . && stylelint \"src/**/*.css\" --allow-empty-input"
   },
   "devDependencies": {
-    "@drizztdourden08/brock-lint-config": "^0.87.0",
+    "@drizztdourden08/brock-lint-config": "^0.87.1",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "eslint": "catalog:",

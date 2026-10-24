@@ -76,8 +76,6 @@ Docker image. It needs unprivileged user namespaces:
 
 ## Waiting on Brock
 
-- Brock 0.87.1 types `server.optionalAddons`. Until then `pnpm typecheck` of the desktop app
-  fails on `optionalAddons` in `apps/desktop/brock.config.ts` (the key works at run time).
 - Brock 0.87.2 defines `__dirname`, `__filename` and `require` in the server bundle. Until then
   `server/shims/node-globals.ts` does it for the inlined CommonJS of `ssh2`. When 0.87.2 is in,
   delete the file `apps/desktop/server/shims/node-globals.ts` and the line
