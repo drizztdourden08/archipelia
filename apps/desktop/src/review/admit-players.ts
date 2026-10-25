@@ -9,13 +9,20 @@ import { SELECTOR } from './review-dom.constants';
 import { clickNamed } from './click-named';
 import { directLobby } from './direct-lobby';
 import { nameOf } from './name-of';
+import { named } from './named';
 import { waitNamed } from './wait-named';
 import { withHeartbeat } from './with-heartbeat';
 
 const layer = (tour: AppReviewTour) => tour.find(SELECTOR.layer) ?? undefined;
 
+const enabled = (tour: AppReviewTour, name: string) => {
+  const found = named(tour, SELECTOR.button, name, layer(tour));
+  return found instanceof HTMLButtonElement && !found.disabled ? found : null;
+};
+
 const allowWorld = async (tour: AppReviewTour, player: string) => {
-  await clickNamed(tour, SELECTOR.button, `Review the world of ${player}`, layer(tour));
+  const review = await tour.waitFor(() => enabled(tour, `Review the world of ${player}`), 15000);
+  if (review) tour.click(review);
   const dialog = await waitNamed(tour, SELECTOR.dialog, /^Allow this world\?/);
   const focused = document.activeElement instanceof HTMLElement ? nameOf(document.activeElement) : '';
   tour.check(`consent-focus-${player}`, dialog !== null && focused === 'Refuse', 'the consent dialog focuses Refuse', `the consent dialog focused "${focused}"`);
@@ -37,7 +44,8 @@ const slotReady = (lobbyId: string, name: string) =>
 const worldAsked = (tour: AppReviewTour) => tour.findAll(SELECTOR.button, layer(tour)).some((el) => nameOf(el) === `Review the world of ${REVIEW_JOINER}`);
 
 const admitJoiner = async (tour: AppReviewTour, lobbyId: string) => {
-  await clickNamed(tour, SELECTOR.button, `Approve ${REVIEW_JOINER}`, layer(tour));
+  const approve = await tour.waitFor(() => enabled(tour, `Approve ${REVIEW_JOINER}`), 15000);
+  if (approve) tour.click(approve);
   const consent = await tour.waitFor(() => slotReady(lobbyId, REVIEW_JOINER) ?? (worldAsked(tour) ? true : null), 15000);
   if (consent && !slotReady(lobbyId, REVIEW_JOINER)) await allowWorld(tour, REVIEW_JOINER);
   const ready = await tour.waitFor(() => slotReady(lobbyId, REVIEW_JOINER), 20000);
