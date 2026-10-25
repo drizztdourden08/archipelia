@@ -39,6 +39,8 @@ const PLAYERS_TEXT = {
   none: 'No player yet.',
   noneDirect: 'No player of your own. Players who connect still play.',
   noGame: 'No game installed yet. Add games in Games first.',
+  added: 'Added here',
+  addedTitle: 'You added this player to the session.',
 } as const;
 
 const UNSAVED_SESSION = 'A session has changes that are not saved.';

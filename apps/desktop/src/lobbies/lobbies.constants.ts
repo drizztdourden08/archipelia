@@ -1,8 +1,11 @@
 /* @layer renderer-app @kind config */
+import type { MemberAdmission } from '@archipelia/model';
 import type { NetworkMode } from '@archipelia/server/network';
 import type { LobbyServerOptions } from './lobbies.type';
 
 const LOCAL_SERVER = 'local';
+
+const CONNECTED_ADMISSIONS: readonly MemberAdmission[] = ['pending', 'approved'];
 
 const LOBBY_REQUESTS = [
   'lobby.create', 'lobby.update', 'lobby.lock', 'lobby.close', 'lobby.start', 'member.approve', 'member.refuse', 'member.remove', 'member.host', 'world.consent', 'room.stop',
@@ -42,4 +45,4 @@ const MAX_PORT = 65535;
 
 export {
   AUTHORITY, BRACKETS, LOOPBACK, LOOPBACK_HOST, MAX_PORT, NEEDS_WSS, NOT_A_JOIN_ADDRESS, PLAIN_REMOTE, PRIVATE_HOST, SCHEME, PIN_DIGEST, PIN_PAIR, PIN_SEPARATORS, WRITTEN_PORT,
-  ROOM_PASSWORDS_IN_MEMORY, DEFAULT_SERVER_OPTIONS, INITIAL_NETWORK_MODE, LOBBY_REQUESTS, LOCAL_SERVER, NOT_AN_ADDRESS, SERVER_OPTIONS_FILE };
+  CONNECTED_ADMISSIONS, ROOM_PASSWORDS_IN_MEMORY, DEFAULT_SERVER_OPTIONS, INITIAL_NETWORK_MODE, LOBBY_REQUESTS, LOCAL_SERVER, NOT_AN_ADDRESS, SERVER_OPTIONS_FILE };

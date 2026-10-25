@@ -7,6 +7,7 @@ import { Card, SectionHeader, Select, Stack, TextInput } from '@drizztdourden08/
 import type { PlayersCardProps } from './PlayersCard.type';
 import { PlayerOverridesCell } from '../PlayerOverridesCell';
 import { PlayerSourceCell } from '../PlayerSourceCell';
+import { JoinedTag } from '../JoinedTag';
 import { gameOptionsOf } from '../../behavior/game-options-of';
 import { playerLabel } from '../../behavior/player-label';
 import { emptyPlayers } from '../../behavior/empty-players';
@@ -14,7 +15,7 @@ import { NAME_LIMIT, PLAYER_GRID_CLASS, PLAYERS_TEXT } from '../../SessionBuilde
 
 const slotKey = (player: SessionPlayer) => String(player.slot);
 
-const PlayersCard = ({ players, installed, presets, selectedSlot, busy, direct, actions, onEdit }: PlayersCardProps) => {
+const PlayersCard = ({ players, installed, presets, selectedSlot, busy, direct, connected, connectedCount, actions, onEdit }: PlayersCardProps) => {
   const columns = useMemo((): RowGridColumn<SessionPlayer>[] => [
     {
       id: 'name', label: 'Name', min: 120, max: 220,
@@ -34,7 +35,8 @@ const PlayersCard = ({ players, installed, presets, selectedSlot, busy, direct, 
       id: 'overrides', label: 'Overrides', min: 160, max: 220, fold: true,
       cell: (player) => <PlayerOverridesCell player={player} selected={player.slot === selectedSlot} onEdit={onEdit} />,
     },
-  ], [actions, busy, installed, onEdit, presets, selectedSlot]);
+    ...(direct ? [{ id: 'joined', label: 'Joined', min: 120, max: 160, fold: true, cell: () => <JoinedTag /> }] : []),
+  ], [actions, busy, direct, installed, onEdit, presets, selectedSlot]);
   const remove = useCallback((key: string) => actions.remove(Number(key)), [actions]);
   const rowMenu = useCallback((player: SessionPlayer): MenuItem[] => [
     { id: 'duplicate', label: 'Duplicate', icon: 'copy', onSelect: () => actions.duplicate(player.slot) },
@@ -43,7 +45,7 @@ const PlayersCard = ({ players, installed, presets, selectedSlot, busy, direct, 
   return (
     <Card>
       <Stack gap="sm">
-        <SectionHeader title={`Players · ${players.length}`} subtitle={direct ? PLAYERS_TEXT.direct : PLAYERS_TEXT.manual} />
+        <SectionHeader title={`Players · ${players.length + connectedCount}`} subtitle={direct ? PLAYERS_TEXT.direct : PLAYERS_TEXT.manual} />
         <RowGrid
           label="Players"
           className={PLAYER_GRID_CLASS}
@@ -58,6 +60,7 @@ const PlayersCard = ({ players, installed, presets, selectedSlot, busy, direct, 
           rowMenu={rowMenu}
           empty={emptyPlayers(installed.length > 0, direct)}
         />
+        {connected}
       </Stack>
     </Card>
   );

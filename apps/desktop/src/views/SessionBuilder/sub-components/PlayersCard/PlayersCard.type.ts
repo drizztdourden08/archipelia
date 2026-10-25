@@ -1,4 +1,5 @@
 /* @layer renderer-app @kind types */
+import type { ReactNode } from 'react';
 import type { GamePreset, InstalledGame, SessionPlayer } from '@archipelia/model';
 
 type PlayerActions = {
@@ -18,6 +19,8 @@ type PlayersCardProps = {
   selectedSlot?: number;
   busy: boolean;
   direct: boolean;
+  connected?: ReactNode;
+  connectedCount: number;
   actions: PlayerActions;
   onEdit: (slot: number) => void;
 };

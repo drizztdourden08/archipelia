@@ -18,7 +18,7 @@ const usage = {
     'Choosing This computer only stops all networking at once; no confirmation is needed.',
     'Keep the internet mode out of this choice; it stays an advanced setting of the server.',
     'The choice decides the server where a session opens its lobby.',
-    'Pass lockedServer once a session has its lobby: the other kind of place is then off, with the reason.',
+    'A session passes its server and onServer, so the choice moves the lobby of the session; pass locked while players are connected, and the other kind of place is then off, with the reason.',
   ],
   a11y: [
     'The three options are one radio group named Where to host.',

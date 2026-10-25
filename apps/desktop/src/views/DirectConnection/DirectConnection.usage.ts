@@ -15,7 +15,7 @@ const usage = {
     'Turning it off asks first, then closes the lobby.',
     'Host approval is on by default; turning it off accepts every player at once.',
     'Allow unlisted clients is off by default.',
-    'Once the lobby is open, Where to host keeps its server; only the network of this computer can change.',
+    'Where to host shows only once direct connection is on, so nothing listens on the network before. Picking another server moves the lobby there; while players are connected the server stays.',
     'Show the session code with a copy button, the server address and the Archipelago version players must run.',
     'Show the room address, seed, files and any failure once the session ran.',
   ],

@@ -28,6 +28,7 @@ const BuilderSettings = ({ builder }: BuilderSettingsProps) => {
         onEnable={builder.direct.enable}
         onDisable={builder.direct.disable}
         onOptions={builder.direct.setOptions}
+        onServer={builder.direct.moveTo}
       />
     </>
   );

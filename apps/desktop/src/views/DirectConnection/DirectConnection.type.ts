@@ -8,6 +8,7 @@ type DirectConnectionProps = {
   onEnable: () => void;
   onDisable: () => void;
   onOptions: (patch: Partial<DirectOptions>) => void;
+  onServer: (serverId: string) => void;
 };
 
 export type { DirectConnectionProps };

@@ -4,7 +4,7 @@ import type { LobbyServerStatus, ServerPlace } from '../../lobbies/lobbies.type'
 
 type HostWhere = 'private' | 'lan' | 'remote';
 
-type HostChoiceProps = { lockedServer?: string };
+type HostChoiceProps = { serverId?: string; locked?: boolean; onServer?: (serverId: string) => void };
 
 type NetworkStateProps = {
   open: boolean;

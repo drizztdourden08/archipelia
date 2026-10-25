@@ -1,5 +1,5 @@
 /* @layer renderer-app @kind hook */
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { confirmAction, nav, useKeyedGuard } from '@drizztdourden08/brock-react';
 import type { NetworkMode } from '@archipelia/server/network';
 import { failWith } from '../../../hooks/fail-with';
@@ -10,13 +10,15 @@ import { appApi } from '../../../ipc/app-api';
 import { LOCAL_SERVER } from '../../../lobbies/lobbies.constants';
 import { serverPlace } from '../../../lobbies/server-place';
 import { FAILURE, OPEN_LAN } from '../HostChoice.constants';
-import type { HostWhere } from '../HostChoice.type';
+import type { HostChoiceProps, HostWhere } from '../HostChoice.type';
 import { chooseWhere } from './choose-where';
 import { whereOptions } from './where-options';
 
-const useHostChoice = (lockedServer?: string) => {
-  const { serverId, entries, select } = useActiveServer();
-  useEffect(() => { if (lockedServer !== undefined && lockedServer !== serverId) select(lockedServer); }, [lockedServer, select, serverId]);
+const useHostChoice = ({ serverId: chosen, locked = false, onServer }: HostChoiceProps) => {
+  const active = useActiveServer();
+  const { entries } = active;
+  const serverId = chosen ?? active.serverId;
+  const select = onServer ?? active.select;
   const { status, setStatus } = useLocalServerStatus();
   const { guard, isBusy, errorOf } = useKeyedGuard();
   const [wantsRemote, setWantsRemote] = useState(false);
@@ -60,8 +62,8 @@ const useHostChoice = (lockedServer?: string) => {
 
   return {
     where, serverId, entries, place, status,
-    options: whereOptions(lockedServer),
-    locked: lockedServer !== undefined,
+    options: whereOptions(locked ? serverId : undefined),
+    locked,
     ready: status !== null,
     busy: isBusy('mode'),
     error: errorOf('mode'),

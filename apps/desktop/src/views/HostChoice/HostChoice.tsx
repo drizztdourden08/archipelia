@@ -7,8 +7,8 @@ import { useHostChoice } from './behavior/useHostChoice';
 import { NetworkState } from './sub-components/NetworkState';
 import { RemoteChoice } from './sub-components/RemoteChoice';
 
-const HostChoice = ({ lockedServer }: HostChoiceProps) => {
-  const model = useHostChoice(lockedServer);
+const HostChoice = (props: HostChoiceProps) => {
+  const model = useHostChoice(props);
   const { status, where } = model;
   return (
     <PanelContainer title="Where to host">

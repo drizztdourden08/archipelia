@@ -10,7 +10,7 @@ import type { DirectDeps } from '../SessionBuilder.type';
 import { withoutDirect } from './without-direct';
 
 const useDirectSession = ({ draft, persist, guard }: DirectDeps) => {
-  const { serverId } = useActiveServer();
+  const { serverId, select } = useActiveServer();
   const act = useLobbyStore((state) => state.act);
 
   const enable = useCallback(() => guard('direct', async () => {
@@ -32,7 +32,16 @@ const useDirectSession = ({ draft, persist, guard }: DirectDeps) => {
     await persist({ ...draft, direct });
   }), [act, draft, guard, persist]);
 
-  return { enable, disable, setOptions };
+  const moveTo = useCallback((next: string) => guard('direct', async () => {
+    const { direct } = draft;
+    select(next);
+    if (!direct || direct.serverId === next) return;
+    const lobby = await act(next, lobbyRequest.open(draft, direct));
+    await act(direct.serverId, lobbyRequest.close(direct.lobbyId)).catch(() => undefined);
+    await persist({ ...draft, direct: { ...direct, serverId: next, lobbyId: lobby.id } });
+  }), [act, draft, guard, persist, select]);
+
+  return { enable, disable, setOptions, moveTo };
 };
 
 export { useDirectSession };

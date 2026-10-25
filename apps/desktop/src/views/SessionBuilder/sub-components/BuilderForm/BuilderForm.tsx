@@ -2,6 +2,7 @@
 import { Box, Stack } from '@drizztdourden08/tessera/primitives';
 import type { BuilderFormProps } from './BuilderForm.type';
 import { useSessionBuilder } from '../../behavior/useSessionBuilder';
+import { useConnectedCount } from '../../../../hooks/useConnectedCount';
 import { sourcesOf } from '../../behavior/player-sources';
 import { BuilderHeader } from '../BuilderHeader';
 import { ProblemList } from '../ProblemList';
@@ -16,6 +17,7 @@ const BuilderForm = ({ initial, onRun }: BuilderFormProps) => {
   const builder = useSessionBuilder({ initial, onRun });
   const { draft, selected, players, toggleSelected } = builder;
   const { game, preset } = sourcesOf(selected, builder.installed, builder.presets);
+  const connected = useConnectedCount(draft.direct);
 
   return (
     <Box ref={builder.rootRef}>
@@ -38,10 +40,11 @@ const BuilderForm = ({ initial, onRun }: BuilderFormProps) => {
           selectedSlot={selected?.slot}
           busy={builder.busy}
           direct={draft.direct !== undefined}
+          connected={draft.direct && <LobbyMembers serverId={draft.direct.serverId} lobbyId={draft.direct.lobbyId} />}
+          connectedCount={connected}
           actions={players}
           onEdit={toggleSelected}
         />
-        {draft.direct && <LobbyMembers serverId={draft.direct.serverId} lobbyId={draft.direct.lobbyId} />}
         {selected && (
           <OverridesPanel
             player={selected}

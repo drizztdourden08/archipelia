@@ -21,7 +21,7 @@ describe('what the session lets the host do with a connected player', () => {
 });
 
 describe('the direct connection section', () => {
-  const handlers = { busy: false, onEnable: () => undefined, onDisable: () => undefined, onOptions: () => undefined };
+  const handlers = { busy: false, onEnable: () => undefined, onDisable: () => undefined, onOptions: () => undefined, onServer: () => undefined };
 
   test('offers only the switch while the session takes no direct connection', () => {
     expect(directRows(handlers).map((row) => row.id)).toEqual(['allow']);
