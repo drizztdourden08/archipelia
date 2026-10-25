@@ -27,7 +27,7 @@ export default defineTour({
     {
       id: 'games',
       title: '2. Games',
-      body: 'Every game a player brings needs its world installed. Search the Official and Community lists, then press Add on a card.',
+      body: 'Every game a player brings needs its world installed. Search the Official and Community lists, then press Add on a card. Games sit in the menu under Library.',
       target: { tour: 'game-store-tools' },
       mascot: 'curious',
       open: ROUTE.officialGames,
@@ -35,7 +35,7 @@ export default defineTour({
     {
       id: 'preset',
       title: '3. A preset',
-      body: 'A preset holds one game\'s options, ready to reuse. Press New preset to make your first one.',
+      body: 'A preset holds one game\'s options, ready to reuse. Presets sit under Library too. Press New preset to make your first one.',
       target: NEW_PRESET,
       advanceOn: { click: NEW_PRESET },
       mascot: 'point',
@@ -44,7 +44,7 @@ export default defineTour({
     {
       id: 'session',
       title: '4. A session',
-      body: 'A session is a saved setup: the players, their presets and the server options. Press New session here, then Run to make a seed and host the room.',
+      body: 'A session is a saved setup: the players, their presets and the server options. Sessions has its own entry in the menu, right after Home. Press New session here, then Run to make a seed and host the room.',
       mascot: 'jump',
       open: ROUTE.sessions,
     },

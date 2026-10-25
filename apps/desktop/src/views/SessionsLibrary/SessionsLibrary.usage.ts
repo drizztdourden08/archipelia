@@ -4,7 +4,7 @@ import type { ComponentUsage } from '@drizztdourden08/tessera';
 const usage = {
   job: 'The Sessions page: the saved sessions and their runs side by side.',
   useWhen: [
-    'The Sessions page of the Library group.',
+    'The Sessions page, the top level entry after Home.',
   ],
   avoidWhen: [
     { case: 'One session being edited.', use: 'SessionBuilder' },
