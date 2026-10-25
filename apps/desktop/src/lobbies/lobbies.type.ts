@@ -1,5 +1,5 @@
 /* @layer renderer-app @kind types */
-import type { AdminLobby, HostTarget, LobbyAdmission, SessionEngine } from '@archipelia/model';
+import type { AdminLobby, DirectConnection, SessionEngine } from '@archipelia/model';
 import type { ReachStatus } from '@archipelia/server';
 import type { LanServer, NetworkMode } from '@archipelia/server/network';
 import type { LOBBY_REQUESTS } from './lobbies.constants';
@@ -27,7 +27,7 @@ type ServerInfo = { name: string; version: string; port: number; sandbox: string
 
 type LobbyServerView = { info: ServerInfo; engine?: SessionEngine };
 
-type LobbyDraft = { name: string; admission: LobbyAdmission; allowUnlisted: boolean; maxSlots: number; room: HostTarget };
+type DirectOptions = Pick<DirectConnection, 'admission' | 'allowUnlisted'>;
 
 type LobbyRequestType = (typeof LOBBY_REQUESTS)[number];
 
@@ -49,11 +49,21 @@ type ServerTarget = { secure: boolean; host: string; port: number };
 
 type JoinAddress = { target: ServerTarget } | { problem: string };
 
-type LobbyProbe = { ok: boolean; message: string; name?: string; ap?: string; phase?: string; joinable?: boolean; admission?: string; games?: string[] };
+type LobbyProbe = {
+  ok: boolean;
+  message: string;
+  name?: string;
+  ap?: string;
+  phase?: string;
+  joinable?: boolean;
+  admission?: string;
+  allowUnlisted?: boolean;
+  games?: string[];
+};
 
 type HostPlayerSlot = { name: string; game: string; yaml: string; worldVersion: string };
 
 export type {
-  HostPlayerSlot, JoinAddress, LanEntry, LobbyDraft, LobbyEvent, LobbyProbe, LobbyRequest, LobbyReviewHost, LobbyReviewPlay, LobbyServerOptions, LobbyServerState,
+  DirectOptions, HostPlayerSlot, JoinAddress, LanEntry, LobbyEvent, LobbyProbe, LobbyRequest, LobbyReviewHost, LobbyReviewPlay, LobbyServerOptions, LobbyServerState,
   LobbyServerStatus, LobbyServerTest, LobbyServerView, ServerInfo, ServerPlace, ServerTarget,
 };

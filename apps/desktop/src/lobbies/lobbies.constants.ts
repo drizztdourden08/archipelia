@@ -5,7 +5,7 @@ import type { LobbyServerOptions } from './lobbies.type';
 const LOCAL_SERVER = 'local';
 
 const LOBBY_REQUESTS = [
-  'lobby.create', 'lobby.lock', 'lobby.close', 'lobby.start', 'member.approve', 'member.refuse', 'member.remove', 'member.host', 'world.consent', 'room.stop',
+  'lobby.create', 'lobby.update', 'lobby.lock', 'lobby.close', 'lobby.start', 'member.approve', 'member.refuse', 'member.remove', 'member.host', 'world.consent', 'room.stop',
 ] as const;
 
 const INITIAL_NETWORK_MODE: NetworkMode = 'off';

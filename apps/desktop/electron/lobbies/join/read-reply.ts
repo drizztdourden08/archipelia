@@ -22,7 +22,7 @@ const probeOf = (lobby: Record<string, unknown>): LobbyProbe => {
   const phase = textOf(lobby.phase);
   const admission = textOf(lobby.admission);
   return {
-    ok: true, message: '', joinable: lobby.joinable === true, games: gamesOf(lobby.worlds),
+    ok: true, message: '', joinable: lobby.joinable === true, allowUnlisted: lobby.allowUnlisted === true, games: gamesOf(lobby.worlds),
     ...(name ? { name } : {}), ...(ap ? { ap } : {}), ...(phase ? { phase } : {}), ...(admission ? { admission } : {}),
   };
 };
