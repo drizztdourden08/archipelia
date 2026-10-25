@@ -19,7 +19,7 @@ const usage = {
     'Mark at most one action primary: the next step for that world.',
     'Disable an action while that world is busy; never hide it.',
     'Mark the action that is running as loading, so only that card shows the work.',
-    'Mark an action that deletes something as danger.',
+    'Never mark a removal as danger: Tessera asks inline for a danger action, and the app asks with its own dialog.',
     'Pass summary as one plain text description, shown on the one detail line after the version, the notes and the tags; pass summaryHint with the longer text for the hint. Never pass markup.',
     'Pass art as a small picture of the world, a data address, and it fills the media tile with the kind icon as a badge; leave it out and the tile shows the kind icon alone.',
   ],
