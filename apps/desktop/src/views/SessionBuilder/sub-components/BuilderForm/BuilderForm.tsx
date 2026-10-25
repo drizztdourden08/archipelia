@@ -1,5 +1,5 @@
 /* @layer renderer-app @kind component */
-import { Box, Grid, Stack } from '@drizztdourden08/tessera/primitives';
+import { Box, Stack } from '@drizztdourden08/tessera/primitives';
 import type { BuilderFormProps } from './BuilderForm.type';
 import { useSessionBuilder } from '../../behavior/useSessionBuilder';
 import { sourcesOf } from '../../behavior/player-sources';
@@ -38,34 +38,32 @@ const BuilderForm = ({ initial, onRun }: BuilderFormProps) => {
           actions={players}
           onEdit={toggleSelected}
         />
-        <Grid minColWidth={384} gap="md">
-          {selected && (
-            <OverridesPanel
-              player={selected}
-              game={game}
-              preset={preset}
-              onValue={players.setOverride}
-              onReset={players.resetOverride}
-              onResetAll={players.resetAll}
-              onClose={toggleSelected}
-            />
-          )}
-          <ServerOptionsForm
-            generator={draft.generator}
-            server={draft.server}
-            host={draft.host}
-            serverOptions={builder.serverOptions}
-            password={builder.password}
-            hasPassword={Boolean(draft.server.passwordRef)}
-            onGenerator={builder.setGenerator}
-            onServer={builder.setServer}
-            onHostKind={builder.setHostKind}
-            onPort={builder.setPort}
-            onRemoteServer={builder.setRemoteServer}
-            onPassword={builder.setPassword}
-            onClearPassword={builder.clearPassword}
+        {selected && (
+          <OverridesPanel
+            player={selected}
+            game={game}
+            preset={preset}
+            onValue={players.setOverride}
+            onReset={players.resetOverride}
+            onResetAll={players.resetAll}
+            onClose={toggleSelected}
           />
-        </Grid>
+        )}
+        <ServerOptionsForm
+          generator={draft.generator}
+          server={draft.server}
+          host={draft.host}
+          serverOptions={builder.serverOptions}
+          password={builder.password}
+          hasPassword={Boolean(draft.server.passwordRef)}
+          onGenerator={builder.setGenerator}
+          onServer={builder.setServer}
+          onHostKind={builder.setHostKind}
+          onPort={builder.setPort}
+          onRemoteServer={builder.setRemoteServer}
+          onPassword={builder.setPassword}
+          onClearPassword={builder.clearPassword}
+        />
       </Stack>
     </Box>
   );

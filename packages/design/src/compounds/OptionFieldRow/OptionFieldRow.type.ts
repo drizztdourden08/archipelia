@@ -2,6 +2,7 @@
 import type { OptionDef, OptionValue } from '@archipelia/model';
 
 type OptionFieldRowProps = {
+  id?: string;
   def: OptionDef;
   value: OptionValue;
   hint?: string;

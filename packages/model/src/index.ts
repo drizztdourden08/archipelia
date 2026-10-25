@@ -6,6 +6,8 @@ export type * from './game.type';
 export type * from './lobby.type';
 export { hostLabel } from './host-label';
 export { isRecord } from './is-record';
+export { choicesOf } from './choices-of';
+export { RANDOM_CHOICE } from './choices-of.constants';
 export { isStringList } from './is-string-list';
 export { optionDef } from './option-def';
 export type * from './options.type';

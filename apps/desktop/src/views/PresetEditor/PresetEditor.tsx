@@ -1,8 +1,9 @@
 /* @layer renderer-app @kind component */
 import { useCallback } from 'react';
 import { Box, Callout, EmptyState, Stack, Text } from '@drizztdourden08/tessera/primitives';
-import { FormGroupTabs, SaveBar } from '@drizztdourden08/tessera/composites';
+import { FormGroupTabs, SaveBar, ValidationSummary } from '@drizztdourden08/tessera/composites';
 import { valueOf } from '@archipelia/presets';
+import { optionDomId } from './behavior/option-dom-id';
 import { usePresetEditor } from './behavior/usePresetEditor';
 import type { PresetEditorProps } from './PresetEditor.type';
 import { EditorHeader } from './sub-components/EditorHeader';
@@ -11,7 +12,7 @@ import './PresetEditor.css';
 
 const PresetEditor = (props: PresetEditorProps) => {
   const { preset, schema, onDuplicate, onDelete } = props;
-  const { bar, busy, draft, filter, problems, resetAll, revert, save, status, transfer } = usePresetEditor(props);
+  const { bar, busy, draft, filter, items, jump, problems, resetAll, revert, save, status, transfer } = usePresetEditor(props);
   const handleDuplicate = useCallback(() => onDuplicate(preset), [onDuplicate, preset]);
   const handleDelete = useCallback(() => onDelete(preset), [onDelete, preset]);
   const handleSave = useCallback(() => { void save(); }, [save]);
@@ -32,6 +33,7 @@ const PresetEditor = (props: PresetEditorProps) => {
       />
       {status?.tone === 'error' && <Box role="alert"><Callout tone="danger">{status.text}</Callout></Box>}
       {status?.tone === 'info' && <Text variant="caption" role="status" className="preset-editor__status">{status.text}</Text>}
+      <ValidationSummary problems={items} onFocusField={jump} />
       <FormGroupTabs
         tabs={filter.tabs}
         activeTab={filter.tab}
@@ -47,6 +49,7 @@ const PresetEditor = (props: PresetEditorProps) => {
         {filter.visible.map((def) => (
           <OptionRow
             key={def.key}
+            id={optionDomId(def.key)}
             def={def}
             value={valueOf(draft.values, def)}
             problem={problems.get(def.key)}

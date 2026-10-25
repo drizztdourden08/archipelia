@@ -9,6 +9,8 @@ import { useYamlTransfer } from './useYamlTransfer';
 import { problemMap } from './problem-map';
 import { saveBlock } from './save-block';
 import { saveState } from './save-state';
+import { problemItems } from './problem-items';
+import { useJumpToOption } from './useJumpToOption';
 import { UNSAVED_PRESET } from '../PresetEditor.constants';
 
 const usePresetEditor = ({ preset, schema, onDirtyChange, onSaveChange }: EditorParams) => {
@@ -23,6 +25,15 @@ const usePresetEditor = ({ preset, schema, onDirtyChange, onSaveChange }: Editor
 
   const problems = useMemo(() => problemMap(draft.problems), [draft.problems]);
   const block = useMemo(() => saveBlock(schema, draft.name, draft.problems, draft.unparsed), [schema, draft.name, draft.problems, draft.unparsed]);
+  const items = useMemo(() => problemItems(schema, draft.problems, draft.values, draft.unparsed), [schema, draft.problems, draft.values, draft.unparsed]);
+  const jump = useJumpToOption({
+    schema,
+    filter: { tab: filter.tab, query: filter.query, showAdvanced: filter.showAdvanced },
+    visible: filter.visible,
+    setTab: filter.setTab,
+    setQuery: filter.setQuery,
+    setShowAdvanced: filter.setShowAdvanced,
+  });
   const name = draft.name.trim();
 
   const save = useCallback(async () => {
@@ -66,7 +77,7 @@ const usePresetEditor = ({ preset, schema, onDirtyChange, onSaveChange }: Editor
 
   const bar = { state: saveState({ busy, dirty: draft.dirty, block, failure, saved }), error: block ?? failure ?? undefined };
 
-  return { bar, busy, draft, filter, problems, resetAll, revert, save, status, transfer };
+  return { bar, busy, draft, filter, items, jump, problems, resetAll, revert, save, status, transfer };
 };
 
 export { usePresetEditor };
