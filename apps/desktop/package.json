@@ -33,12 +33,12 @@
     "@archipelia/server": "workspace:*",
     "@archipelia/sessions": "workspace:*",
     "@drizztdourden08/archipelia-lobby-protocol": "workspace:*",
-    "@drizztdourden08/brock-core": "^0.96.1",
-    "@drizztdourden08/brock-electron": "^0.96.1",
-    "@drizztdourden08/brock-react": "^0.96.1",
-    "@drizztdourden08/brock-secrets": "^0.96.1",
-    "@drizztdourden08/brock-updater": "^0.96.1",
-    "@drizztdourden08/tessera": "^0.64.0",
+    "@drizztdourden08/brock-core": "^0.97.1",
+    "@drizztdourden08/brock-electron": "^0.97.1",
+    "@drizztdourden08/brock-react": "^0.97.1",
+    "@drizztdourden08/brock-secrets": "^0.97.1",
+    "@drizztdourden08/brock-updater": "^0.97.1",
+    "@drizztdourden08/tessera": ">=0.64.0 <1",
     "@electron-toolkit/utils": "catalog:",
     "@peculiar/x509": "^2.1.0",
     "@runonflux/nat-upnp": "^2.0.5",
@@ -60,8 +60,8 @@
   },
   "devDependencies": {
     "@archipelia/trust": "workspace:*",
-    "@drizztdourden08/brock-build": "^0.96.1",
-    "@drizztdourden08/brock-lint-config": "^0.96.1",
+    "@drizztdourden08/brock-build": "^0.97.1",
+    "@drizztdourden08/brock-lint-config": "^0.97.1",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
@@ -78,6 +78,6 @@
   },
   "brock": {
     "tessera": "0.64.0",
-    "version": "0.96.1"
+    "version": "0.97.1"
   }
 }

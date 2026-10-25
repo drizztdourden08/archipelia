@@ -14,3 +14,17 @@ coverage/
 *.tsbuildinfo
 .brock-port-slot
 /guide/
+# brock sync: generated icon files, start. Brock rewrites the lines up to the end marker.
+apps/desktop/build/icons/
+apps/desktop/build/filetypes/
+apps/desktop/build/splash/
+apps/desktop/public/logos/icon.svg
+apps/desktop/public/logos/icon.ico
+apps/desktop/public/logos/icon-256.png
+apps/desktop/public/logos/icon-32.png
+apps/desktop/public/logos/icon-24.png
+apps/desktop/public/logos/icon-bot.svg
+apps/desktop/public/logos/icon-bot.ico
+apps/desktop/public/logos/icon-bot-256.png
+apps/desktop/public/logos/mark.svg
+# brock sync: generated icon files, end.
