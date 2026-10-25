@@ -9,7 +9,7 @@ import { listFiles } from './world-folders.mjs';
 const MANIFEST = 'archipelago.json';
 const CONTAINER_VERSION = 7;
 const GLOBAL_IGNORE_FILE = 'GLOBAL.apignore';
-const DEFAULT_GLOBAL_IGNORE =['__MACOSX', '.DS_Store', '.DS_STORE', '__pycache__'];
+const DEFAULT_GLOBAL_IGNORE = ['__MACOSX', '.DS_Store', '.DS_STORE', '__pycache__'];
 
 const readLines = async (file) => {
   try {
@@ -50,4 +50,4 @@ const packWorld = async (world, game, into) => {
   return { file, sha256: createHash('sha256').update(bytes).digest('hex'), worldVersion: manifest.world_version };
 };
 
-export { DEFAULT_GLOBAL_IGNORE, packWorld, pythonSources, readGlobalIgnore, readWorld };
+export { packWorld, pythonSources, readGlobalIgnore, readWorld };
