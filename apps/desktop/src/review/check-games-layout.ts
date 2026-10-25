@@ -31,7 +31,7 @@ const checkGamesLayout = async (tour: AppReviewTour): Promise<void> => {
   const bar = layer ? tour.find(SELECTOR.statusBar, layer) : null;
   const add = bar ? await waitNamed(tour, SELECTOR.button, 'Add from file', bar) : null;
   tour.check('games-status-bar', bar !== null && add !== null, 'the status bar at the foot has the totals and Add from file in its own actions', 'the Games status bar or its Add from file action is missing');
-  if (layer) await checkGameCards(tour, layer);
+  await checkGameCards(tour);
   await checkOfficialVersions(tour, layer);
   await tour.capture('games');
 };

@@ -20,7 +20,7 @@ const search = (games: Locator, text: string) => games.getByRole('searchbox', { 
 
 const addWorld = async (games: Locator, title: string) => {
   const card = cardOf(games, title);
-  await card.getByRole('button', { name: 'Add', exact: true }).click();
+  await card.getByRole('button', { name: `Add ${title}`, exact: true }).click();
   await card.getByText('Installed', { exact: true }).waitFor({ timeout: INSTALL_TIMEOUT });
   return card;
 };
@@ -61,7 +61,7 @@ const removeBothWorlds = async (launched: LaunchedApp) => {
   const games = await openGames(launched);
   await openTab(games, 'Installed');
   for (const title of [TIMESPINNER.card, SOH.card]) {
-    await cardOf(games, title).getByRole('button', { name: 'Remove', exact: true }).click();
+    await cardOf(games, title).getByRole('button', { name: `Remove ${title}`, exact: true }).click();
     await dialogOf(launched.page, `Delete ${title}?`).getByRole('button', { name: 'Delete', exact: true }).click();
     await cardOf(games, title).waitFor({ state: 'detached' });
   }
