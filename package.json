@@ -34,19 +34,19 @@
     "postinstall": "node bin/archipelia.mjs --link"
   },
   "devDependencies": {
-    "@drizztdourden08/brock-lint-config": "^0.95.0",
+    "@drizztdourden08/brock-lint-config": "^0.97.1",
     "vitest": "catalog:",
-    "@drizztdourden08/brock-build": "^0.95.0",
+    "@drizztdourden08/brock-build": "^0.97.1",
     "jscpd": "catalog:",
     "knip": "catalog:",
     "markdownlint-cli2": "catalog:",
-    "@drizztdourden08/brock-thread": "^0.95.0"
+    "@drizztdourden08/brock-thread": "^0.97.1"
   },
   "bin": {
     "archipelia": "./bin/archipelia.mjs"
   },
   "brock": {
-    "version": "0.95.0"
+    "version": "0.97.1"
   },
   "packageManager": "pnpm@10.17.0"
 }
