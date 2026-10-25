@@ -1,5 +1,5 @@
 /* @layer renderer-app @kind hook */
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { confirmAction, nav, useKeyedGuard } from '@drizztdourden08/brock-react';
 import type { NetworkMode } from '@archipelia/server/network';
 import { failWith } from '../../../hooks/fail-with';
@@ -12,9 +12,11 @@ import { serverPlace } from '../../../lobbies/server-place';
 import { FAILURE, OPEN_LAN } from '../HostChoice.constants';
 import type { HostWhere } from '../HostChoice.type';
 import { chooseWhere } from './choose-where';
+import { whereOptions } from './where-options';
 
-const useHostChoice = () => {
+const useHostChoice = (lockedServer?: string) => {
   const { serverId, entries, select } = useActiveServer();
+  useEffect(() => { if (lockedServer !== undefined && lockedServer !== serverId) select(lockedServer); }, [lockedServer, select, serverId]);
   const { status, setStatus } = useLocalServerStatus();
   const { guard, isBusy, errorOf } = useKeyedGuard();
   const [wantsRemote, setWantsRemote] = useState(false);
@@ -58,6 +60,8 @@ const useHostChoice = () => {
 
   return {
     where, serverId, entries, place, status,
+    options: whereOptions(lockedServer),
+    locked: lockedServer !== undefined,
     ready: status !== null,
     busy: isBusy('mode'),
     error: errorOf('mode'),

@@ -4,6 +4,7 @@ import { afterEach, describe, expect, test } from 'vitest';
 import { createLobbyOps } from '../../electron/lobbies/create-lobby-ops';
 import { openRemoteChannel } from '../../electron/lobbies/remote/open-remote-channel';
 import { testRemoteServer } from '../../electron/lobbies/remote/test-remote-server';
+import type { LobbyRequest } from '../../src/lobbies/lobbies.type';
 import { lobbyRequest } from '../../src/lobbies/lobby-request';
 import { ENGINE, startFixture } from './admin-fixture';
 import { TEST_CERT, TEST_KEY } from './test-certificate';
@@ -24,7 +25,7 @@ afterEach(async () => {
 
 const certificateSha256 = createHash('sha256').update(new X509Certificate(TEST_CERT).raw).digest('hex');
 
-const draft = { name: 'Friday seed', admission: 'host-approval', allowUnlisted: false, maxSlots: 4, room: { kind: 'archipelago-gg' } } as const;
+const createRequest: LobbyRequest = { type: 'lobby.create', params: { name: 'Friday seed', options: { admission: 'host-approval', allowUnlisted: false, maxSlots: 4, room: { kind: 'archipelago-gg' } } } };
 
 describe('the remote admin client against the real listener', () => {
   test('lists, creates and locks a lobby over ws', async () => {
@@ -32,7 +33,7 @@ describe('the remote admin client against the real listener', () => {
     const { channel, info } = await openRemoteChannel({ url: `ws://127.0.0.1:${endpoint.port}`, token });
     expect(info).toMatchObject({ name: 'Archipelia', tls: false });
     const ops = createLobbyOps(channel);
-    const request = lobbyRequest.create(draft);
+    const request = createRequest;
     const created = await ops.act({ ...request, params: { ...request.params, engine: ENGINE } });
     expect(created).toMatchObject({ name: 'Friday seed', phase: 'open', options: { maxSlots: 4 } });
     expect(JSON.stringify(created)).not.toContain('tokenHash');

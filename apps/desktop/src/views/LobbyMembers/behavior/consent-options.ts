@@ -1,7 +1,7 @@
 /* @layer renderer-app @kind logic */
 import type { ConfirmActionOptions } from '@drizztdourden08/brock-react';
 import { formatBytes } from '@drizztdourden08/brock-core/format';
-import type { ConsentRequest } from '../LobbyDetail.type';
+import type { ConsentRequest } from '../LobbyMembers.type';
 import { memberLine } from './member-line';
 
 const consentOptions = ({ member, world }: ConsentRequest, where: string): ConfirmActionOptions => ({

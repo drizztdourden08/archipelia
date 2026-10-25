@@ -1,8 +1,8 @@
 /* @layer renderer-app @kind component */
 import { ListItemList, ListItemRow } from '@drizztdourden08/tessera/composites';
 import { Icon, Text } from '@drizztdourden08/tessera/primitives';
-import { TEXT } from '../../JoinLobby.constants';
-import type { FoundServersProps } from '../../JoinLobby.type';
+import { TEXT } from '../../JoinSession.constants';
+import type { FoundServersProps } from '../../JoinSession.type';
 
 const FoundServers = ({ servers, looking, selected, onPick }: FoundServersProps) => {
   if (!looking) return <Text variant="caption" tone="dim">{TEXT.notLooking}</Text>;

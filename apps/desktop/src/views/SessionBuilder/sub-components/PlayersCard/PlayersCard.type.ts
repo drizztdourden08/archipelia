@@ -17,6 +17,7 @@ type PlayersCardProps = {
   presets: GamePreset[];
   selectedSlot?: number;
   busy: boolean;
+  direct: boolean;
   actions: PlayerActions;
   onEdit: (slot: number) => void;
 };

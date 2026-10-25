@@ -4,13 +4,13 @@ import { Button, ButtonRow, Callout, Field, Flex, Icon, Select, Text } from '@dr
 import { TEXT } from '../../HostChoice.constants';
 import type { RemoteChoiceProps } from '../../HostChoice.type';
 
-const RemoteChoice = ({ serverId, entries, place, stillOpen, busy, onSelect, onStop, onManage }: RemoteChoiceProps) => (
+const RemoteChoice = ({ serverId, entries, place, stillOpen, busy, locked, onSelect, onStop, onManage }: RemoteChoiceProps) => (
   <Flex direction="column" gap="sm">
     {entries.length === 0 && <Text variant="caption">{TEXT.noRemote}</Text>}
     {entries.length > 0 && (
       <Flex align="end" gap="md" wrap>
         <Field label="Server" width="md">
-          <Select value={serverId} options={entries.map((entry) => ({ value: entry.id, label: entry.label }))} onChange={onSelect} />
+          <Select value={serverId} options={entries.map((entry) => ({ value: entry.id, label: entry.label }))} onChange={onSelect} disabled={locked} />
         </Field>
         {place.address && <Field label="Players join at"><CopyValue value={place.address} label="server address" mono /></Field>}
       </Flex>

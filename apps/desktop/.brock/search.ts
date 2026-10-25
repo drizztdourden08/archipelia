@@ -13,19 +13,13 @@ const searchIndex = buildSearchIndex(config, [
   {"kind":"tab","id":"archipelia","bucket":"multiworld","group":"hosting","page":"servers","title":"Archipelia servers","icon":"network","keywords":["lobby","lan","network","admin","token","certificate","reach","router"]},
   {"kind":"tab","id":"machines","bucket":"multiworld","group":"hosting","page":"servers","title":"Machines","icon":"hard-drive","keywords":["ssh","remote","host","machine"]},
   {"kind":"page-meta","id":"servers","bucket":"multiworld","group":"hosting","title":"Servers","icon":"server","keywords":["ssh","remote","host","machine","archipelia","lobby","network","lan"]},
-  {"kind":"tab","id":"community","bucket":"multiworld","group":"library","page":"games","title":"Community","icon":"gamepad-2","keywords":["games","apworld","catalog"]},
-  {"kind":"tab","id":"installed","bucket":"multiworld","group":"library","page":"games","title":"Installed","icon":"gamepad-2","keywords":["games","apworld","installed","worlds"]},
-  {"kind":"tab","id":"official","bucket":"multiworld","group":"library","page":"games","title":"Official","icon":"gamepad-2","keywords":["games","apworld","catalog"]},
-  {"kind":"tab","id":"updates","bucket":"multiworld","group":"library","page":"games","title":"Updates","icon":"gamepad-2","keywords":["games","apworld","new","versions"]},
-  {"kind":"page-meta","id":"games","bucket":"multiworld","group":"library","title":"Games","icon":"gamepad-2","keywords":["apworld","install","catalog","worlds","library"]},
+  {"kind":"page","id":"games","bucket":"multiworld","group":"library","title":"Games","icon":"gamepad-2","keywords":["apworld","install","catalog","worlds","library"]},
   {"kind":"page","id":"presets","bucket":"multiworld","group":"library","title":"Presets","icon":"sliders-horizontal","keywords":["options","yaml","player","settings","library"]},
-  {"kind":"sub","id":"detail","bucket":"multiworld","group":"lobbies","page":"lobbies","title":"Lobby","icon":"users","path":":serverId/:id"},
-  {"kind":"sub","id":"new","bucket":"multiworld","group":"lobbies","page":"lobbies","title":"New lobby","icon":"plus","path":"new","keywords":["create","lobby","open"]},
-  {"kind":"page","id":"lobbies","bucket":"multiworld","group":"lobbies","title":"Lobbies","icon":"users","keywords":["lobby","players","join","code","approve","host","approval"]},
   {"kind":"base","id":"session","title":"Session","icon":"radio"},
   {"kind":"sub","id":"edit","bucket":"sessions","page":"sessions","title":"Edit session","icon":"pencil","path":":id/edit"},
+  {"kind":"sub","id":"join","bucket":"sessions","page":"sessions","title":"Join a session","icon":"log-in","path":"join","keywords":["join","lobby","session","code","play","servers","on","your","network","a"]},
   {"kind":"sub","id":"new","bucket":"sessions","page":"sessions","title":"New session","icon":"plus","path":"new","keywords":["builder","players","create","session"]},
-  {"kind":"page","id":"sessions","bucket":"sessions","title":"Sessions","icon":"layers","keywords":["saved","sessions","runs","new","session","builder"]},
+  {"kind":"page","id":"sessions","bucket":"sessions","title":"Sessions","icon":"layers","keywords":["saved","sessions","runs","new","session","builder","direct","connection","lobby","host","approval","join","a"]},
 ]);
 
 export { searchIndex };

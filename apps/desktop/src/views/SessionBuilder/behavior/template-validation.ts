@@ -52,7 +52,7 @@ const sessionProblem = (field: ProblemField) => (message: string): TemplateProbl
 
 const validateTemplate = (template: SessionTemplate, library: LibraryView): TemplateProblem[] => [
   ...(template.name.trim() ? [] : [sessionProblem('session-name')('The session needs a name')]),
-  ...(template.players.length ? [] : [sessionProblem('players')('Add at least one player')]),
+  ...(template.players.length || template.direct ? [] : [sessionProblem('players')('Add at least one player')]),
   ...nameProblems(template.players),
   ...template.players.flatMap((player) => [...presetProblems(player, library), ...yamlProblems(player, library)]),
   ...hostProblems(template.host).map(sessionProblem('host')),

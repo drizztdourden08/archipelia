@@ -4,12 +4,12 @@ import type { ComponentUsage } from '@drizztdourden08/tessera';
 const usage = {
   job: 'The Where to host choice: this computer only, my local network (LAN), or a saved remote Archipelia server, with the state and the addresses of the network.',
   useWhen: [
-    'The Lobbies page, above the lobbies.',
+    'The Direct connection section of the session editor.',
     'Any screen that lets the host decide where players reach the lobby server.',
   ],
   avoidWhen: [
     { case: 'The advanced network settings such as the internet mode.', use: 'ArchipeliaServers' },
-    { case: 'The lobbies of a server.', use: 'LobbyList' },
+    { case: 'The players who connected to a session.', use: 'LobbyMembers' },
   ],
   rules: [
     'Offer three options, each with one plain sentence: This computer only, My local network (LAN), A remote Archipelia server.',
@@ -17,7 +17,8 @@ const usage = {
     'While the network is on, show On your network at the LAN address and port, both addresses with a copy button, whether it is announced, and a Stop action.',
     'Choosing This computer only stops all networking at once; no confirmation is needed.',
     'Keep the internet mode out of this choice; it stays an advanced setting of the server.',
-    'The choice decides the server the Lobbies page works on.',
+    'The choice decides the server where a session opens its lobby.',
+    'Pass lockedServer once a session has its lobby: the other kind of place is then off, with the reason.',
   ],
   a11y: [
     'The three options are one radio group named Where to host.',
@@ -32,7 +33,7 @@ const usage = {
 
 const HostChoiceSample = () => <HostChoice />;
 `,
-  propsHash: '69a6789bb8733db8',
+  propsHash: 'aa942c85fbcd5fd6',
 } satisfies ComponentUsage;
 
 export { usage };

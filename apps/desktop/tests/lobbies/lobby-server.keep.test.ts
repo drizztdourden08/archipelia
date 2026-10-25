@@ -5,6 +5,7 @@ import { DOMAIN } from '@archipelia/model';
 import { createLobbyOps } from '../../electron/lobbies/create-lobby-ops';
 import { createLobbyServer } from '../../electron/lobbies/create-lobby-server';
 import { createLocalChannel } from '../../electron/lobbies/create-local-channel';
+import type { LobbyRequest } from '../../src/lobbies/lobbies.type';
 import { lobbyRequest } from '../../src/lobbies/lobby-request';
 import { ENGINE, startFixture } from './admin-fixture';
 
@@ -73,7 +74,7 @@ describe('the embedded lobby server', () => {
     const ops = createLobbyOps(channel);
     const seen: string[] = [];
     channel.watch((lobby) => seen.push(lobby.phase));
-    const request = lobbyRequest.create({ name: 'Local', admission: 'open', allowUnlisted: true, maxSlots: 2, room: { kind: 'local', port: 38281 } });
+    const request: LobbyRequest = { type: 'lobby.create', params: { name: 'Local', options: { admission: 'open', allowUnlisted: true, maxSlots: 2, room: { kind: 'local', port: 38281 } } } };
     const lobby = await ops.act({ ...request, params: { ...request.params, engine: ENGINE } });
     expect(lobby).toMatchObject({ name: 'Local', options: { admission: 'open', allowUnlisted: true, maxSlots: 2, room: { kind: 'local', port: 38281 } } });
     expect(JSON.stringify(lobby)).not.toContain('tokenHash');

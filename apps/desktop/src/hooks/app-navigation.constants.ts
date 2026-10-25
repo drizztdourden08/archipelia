@@ -2,11 +2,10 @@
 const ROUTE = {
   sessions: 'sessions/sessions',
   newSession: 'sessions/sessions/new',
+  joinSession: 'sessions/sessions/join',
   games: 'multiworld/games',
   presets: 'multiworld/presets',
   engine: 'multiworld/engine',
-  lobbies: 'multiworld/lobbies',
-  newLobby: 'multiworld/lobbies/new',
   archipeliaServers: 'multiworld/servers/archipelia',
 } as const;
 

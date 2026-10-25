@@ -30,24 +30,28 @@ const SERVER_FIELDS: [string, string][] = [
   ['Key file', REVIEW_SERVER.keyPath], ['Archipelago path on the host', REVIEW_SERVER.apPath],
 ];
 
-const REVIEW_LOBBY = 'Review lobby';
+const REVIEW_DIRECT = 'Review direct session';
 
 const REVIEW_PLAYER = 'Zelda';
 
-const LOBBY_UI = { create: 'New lobby', submit: 'Create lobby', unlisted: 'Allow unlisted clients', start: 'Start', close: 'Close lobby' } as const;
+const DIRECT_UI = {
+  allow: /^Allow direct connection/, unlisted: /^Allow unlisted clients/, run: 'Run', offTitle: 'Turn off direct connection?', off: 'Turn it off', section: 'Direct connection',
+} as const;
+
+const JOIN_UI = { player: /^Player name/, display: /^Your name/, join: 'Join as a player', address: /^Server address/, code: /^Session code/, look: 'Look at the session' } as const;
 
 const HOST_UI = {
   private: /^This computer only/, lan: /^My local network/, remote: /^A remote Archipelia server/, askTitle: 'Open this computer to your network?', open: 'Open to my network',
-  stop: 'Stop', addPlayer: 'Add my player', find: 'Find servers on my network', stopFind: 'Stop looking', look: 'Look at the lobby',
+  stop: 'Stop', find: 'Find servers on my network', stopFind: 'Stop looking',
 } as const;
 
-const REVIEW_HOST_PLAYER = 'Host';
+const REVIEW_JOINER = 'Cy';
 
 const STORAGE_FOLDERS = ['Sessions', 'Presets', 'Installed games'];
 
 const GUARD_DIALOG = 'Unsaved changes';
 
 export {
-  GUARD_DIALOG, HEARTBEAT_MS, HOST_UI, LOBBY_UI, REVIEW_HOST_PLAYER, REVIEW_CHECKS, REVIEW_GAME, REVIEW_LOBBY, REVIEW_PLAYER, REVIEW_PLAYERS, REVIEW_PORT, REVIEW_PRESET, REVIEW_SERVER, REVIEW_SESSION, RUN_TIMEOUT_MS, SAVE_STATE, SERVER_FIELDS, SERVER_PROBLEMS,
+  DIRECT_UI, GUARD_DIALOG, HEARTBEAT_MS, HOST_UI, JOIN_UI, REVIEW_CHECKS, REVIEW_DIRECT, REVIEW_GAME, REVIEW_JOINER, REVIEW_PLAYER, REVIEW_PLAYERS, REVIEW_PORT, REVIEW_PRESET, REVIEW_SERVER, REVIEW_SESSION, RUN_TIMEOUT_MS, SAVE_STATE, SERVER_FIELDS, SERVER_PROBLEMS,
   SERVER_UI, SERVER_UNTOUCHED, STORAGE_FOLDERS,
 };

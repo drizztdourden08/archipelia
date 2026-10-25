@@ -5,10 +5,10 @@ const appReview: AppReview = {
   seed: () => import('../src/review/seed'),
   steps: [
     { id: 'dashboard', load: () => import('../src/review/dashboard.step') },
+    { id: 'direct-session', load: () => import('../src/review/direct-session.step') },
     { id: 'engine', load: () => import('../src/review/engine.step') },
     { id: 'engine-startup', load: () => import('../src/review/engine-startup.step') },
     { id: 'live-room', load: () => import('../src/review/live-room.step') },
-    { id: 'lobby', load: () => import('../src/review/lobby.step') },
     { id: 'lobby-server', load: () => import('../src/review/lobby-server.step') },
     { id: 'presets', load: () => import('../src/review/presets.step') },
     { id: 'servers', load: () => import('../src/review/servers.step') },

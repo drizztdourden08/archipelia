@@ -1,0 +1,35 @@
+/* @layer renderer-app @kind component */
+import { PanelContainer } from '@drizztdourden08/tessera/composites';
+import { Button, ButtonRow, Field, Flex, Icon, Stack, Text, TextInput } from '@drizztdourden08/tessera/primitives';
+import { ErrorCallout } from '@archipelia/design';
+import { TEXT } from '../../JoinSession.constants';
+import type { FindPanelProps } from '../../JoinSession.type';
+import { FoundServers } from '../FoundServers';
+import { ProbeResult } from '../ProbeResult';
+
+const FindPanel = ({ model, localAp }: FindPanelProps) => (
+  <PanelContainer title="Find the session">
+    <Stack gap="sm">
+      <Text variant="caption">{TEXT.intro}</Text>
+      <ButtonRow>
+        <Button size="sm" variant="secondary" icon={<Icon name="search" />} onClick={model.toggleLooking}>
+          {model.looking ? 'Stop looking' : 'Find servers on my network'}
+        </Button>
+      </ButtonRow>
+      <FoundServers servers={model.servers} looking={model.looking} selected={model.address} onPick={model.pick} />
+      <Flex align="end" gap="md" wrap>
+        <Field label="Server address" hint="host:port, such as 192.168.1.20:38290" error={model.addressProblem ?? undefined} width="md">
+          <TextInput value={model.address} onChange={(event) => model.setAddress(event.target.value)} />
+        </Field>
+        <Field label="Session code" hint="Such as K7QM-4XT2" width="sm">
+          <TextInput value={model.code} onChange={(event) => model.setCode(event.target.value)} />
+        </Field>
+        <Button variant="secondary" loading={model.checking} disabled={!model.canCheck} onClick={() => void model.check()}>Look at the session</Button>
+      </Flex>
+      {model.error && <ErrorCallout message={model.error} />}
+      {model.probe && <ProbeResult probe={model.probe} localAp={localAp} />}
+    </Stack>
+  </PanelContainer>
+);
+
+export { FindPanel };

@@ -6,9 +6,9 @@ import { useLanServers } from '../../../hooks/useLanServers';
 import { appApi } from '../../../ipc/app-api';
 import { joinAddress } from '../../../lobbies/join-address';
 import type { LanEntry, LobbyProbe } from '../../../lobbies/lobbies.type';
-import { FAILURE } from '../JoinLobby.constants';
+import { FAILURE } from '../JoinSession.constants';
 
-const useJoinLobby = () => {
+const useFindSession = () => {
   const [looking, setLooking] = useState(false);
   const [address, setAddress] = useState('');
   const [code, setCode] = useState('');
@@ -41,4 +41,4 @@ const useJoinLobby = () => {
   };
 };
 
-export { useJoinLobby };
+export { useFindSession };

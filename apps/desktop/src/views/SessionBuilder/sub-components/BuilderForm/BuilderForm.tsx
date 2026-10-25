@@ -8,6 +8,8 @@ import { ProblemList } from '../ProblemList';
 import { PlayersCard } from '../PlayersCard';
 import { OverridesPanel } from '../OverridesPanel';
 import { ErrorCallout, ServerOptionsForm } from '@archipelia/design';
+import { DirectConnection } from '../../../DirectConnection';
+import { LobbyMembers } from '../../../LobbyMembers';
 import { FAILURE } from '../../SessionBuilder.constants';
 
 const BuilderForm = ({ initial, onRun }: BuilderFormProps) => {
@@ -35,9 +37,11 @@ const BuilderForm = ({ initial, onRun }: BuilderFormProps) => {
           presets={builder.presets}
           selectedSlot={selected?.slot}
           busy={builder.busy}
+          direct={draft.direct !== undefined}
           actions={players}
           onEdit={toggleSelected}
         />
+        {draft.direct && <LobbyMembers serverId={draft.direct.serverId} lobbyId={draft.direct.lobbyId} />}
         {selected && (
           <OverridesPanel
             player={selected}
@@ -63,6 +67,13 @@ const BuilderForm = ({ initial, onRun }: BuilderFormProps) => {
           onRemoteServer={builder.setRemoteServer}
           onPassword={builder.setPassword}
           onClearPassword={builder.clearPassword}
+        />
+        <DirectConnection
+          direct={draft.direct}
+          busy={builder.busy}
+          onEnable={builder.direct.enable}
+          onDisable={builder.direct.disable}
+          onOptions={builder.direct.setOptions}
         />
       </Stack>
     </Box>

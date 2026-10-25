@@ -3,7 +3,9 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { jobs, toast } from '@drizztdourden08/brock-react';
 import { runJobId } from '@archipelia/model';
 import type { SessionTemplate } from '@archipelia/model';
+import { appApi } from '../ipc/app-api';
 import { findLaunchedRun } from '../runs/find-launched-run';
+import { launchOf } from '../runs/launch-of';
 import type { RunLaunch } from '../runs/run-launch.type';
 import { useRunsStore } from '../stores/useRunsStore';
 import { useAppNavigation } from './useAppNavigation';
@@ -28,9 +30,9 @@ const useRunLauncher = () => {
   }, [launchedId, openSession, status]);
 
   const start = useCallback(async (template: SessionTemplate) => {
-    setLaunch({ templateId: template.id, startedAt: Date.now() });
+    setLaunch(launchOf(template, Date.now()));
     try {
-      await run(template);
+      await (template.direct ? appApi().sessionsRunDirect(template) : run(template));
     } catch (err) {
       setLaunch(null);
       toast(`${template.name} did not run: ${(err as Error).message}`, { variant: 'danger' });

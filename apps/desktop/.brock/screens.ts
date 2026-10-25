@@ -12,17 +12,11 @@ import MultiworldHostingHostingSettings, { meta as multiworldHostingHostingSetti
 import { meta as multiworldHostingServersArchipeliaTabMeta } from '../src/screens/multiworld/hosting/servers/archipelia.tab';
 import { meta as multiworldHostingServersMachinesTabMeta } from '../src/screens/multiworld/hosting/servers/machines.tab';
 import { meta as multiworldHostingServersPageMetaMeta } from '../src/screens/multiworld/hosting/servers.page';
-import { meta as multiworldLibraryGamesCommunityTabMeta } from '../src/screens/multiworld/library/games/community.tab';
-import { meta as multiworldLibraryGamesInstalledTabMeta } from '../src/screens/multiworld/library/games/installed.tab';
-import { meta as multiworldLibraryGamesOfficialTabMeta } from '../src/screens/multiworld/library/games/official.tab';
-import { meta as multiworldLibraryGamesUpdatesTabMeta } from '../src/screens/multiworld/library/games/updates.tab';
-import { meta as multiworldLibraryGamesPageMetaMeta } from '../src/screens/multiworld/library/games.page';
+import { meta as multiworldLibraryGamesPageMeta } from '../src/screens/multiworld/library/games.page';
 import { meta as multiworldLibraryPresetsPageMeta } from '../src/screens/multiworld/library/presets.page';
-import { meta as multiworldLobbiesLobbiesDetailSubMeta } from '../src/screens/multiworld/lobbies/lobbies/detail.sub';
-import { meta as multiworldLobbiesLobbiesNewSubMeta } from '../src/screens/multiworld/lobbies/lobbies/new.sub';
-import { meta as multiworldLobbiesLobbiesPageMeta } from '../src/screens/multiworld/lobbies/lobbies.page';
 import { meta as sessionBaseMeta } from '../src/screens/session.base';
 import { meta as sessionsSessionsEditSubMeta } from '../src/screens/sessions/sessions/edit.sub';
+import { meta as sessionsSessionsJoinSubMeta } from '../src/screens/sessions/sessions/join.sub';
 import { meta as sessionsSessionsNewSubMeta } from '../src/screens/sessions/sessions/new.sub';
 import { meta as sessionsSessionsPageMeta } from '../src/screens/sessions/sessions.page';
 
@@ -37,17 +31,11 @@ const screenTree = buildScreenTree(config, [
   { kind: 'tab', bucket: 'multiworld', group: 'hosting', page: 'servers', id: 'archipelia', component: lazyComponent(() => import('../src/screens/multiworld/hosting/servers/archipelia.tab')), meta: multiworldHostingServersArchipeliaTabMeta },
   { kind: 'tab', bucket: 'multiworld', group: 'hosting', page: 'servers', id: 'machines', component: lazyComponent(() => import('../src/screens/multiworld/hosting/servers/machines.tab')), meta: multiworldHostingServersMachinesTabMeta },
   { kind: 'page-meta', bucket: 'multiworld', group: 'hosting', id: 'servers', meta: multiworldHostingServersPageMetaMeta },
-  { kind: 'tab', bucket: 'multiworld', group: 'library', page: 'games', id: 'community', component: lazyComponent(() => import('../src/screens/multiworld/library/games/community.tab')), meta: multiworldLibraryGamesCommunityTabMeta },
-  { kind: 'tab', bucket: 'multiworld', group: 'library', page: 'games', id: 'installed', component: lazyComponent(() => import('../src/screens/multiworld/library/games/installed.tab')), meta: multiworldLibraryGamesInstalledTabMeta },
-  { kind: 'tab', bucket: 'multiworld', group: 'library', page: 'games', id: 'official', component: lazyComponent(() => import('../src/screens/multiworld/library/games/official.tab')), meta: multiworldLibraryGamesOfficialTabMeta },
-  { kind: 'tab', bucket: 'multiworld', group: 'library', page: 'games', id: 'updates', component: lazyComponent(() => import('../src/screens/multiworld/library/games/updates.tab')), meta: multiworldLibraryGamesUpdatesTabMeta },
-  { kind: 'page-meta', bucket: 'multiworld', group: 'library', id: 'games', meta: multiworldLibraryGamesPageMetaMeta },
+  { kind: 'page', bucket: 'multiworld', group: 'library', id: 'games', component: lazyComponent(() => import('../src/screens/multiworld/library/games.page')), meta: multiworldLibraryGamesPageMeta },
   { kind: 'page', bucket: 'multiworld', group: 'library', id: 'presets', component: lazyComponent(() => import('../src/screens/multiworld/library/presets.page')), meta: multiworldLibraryPresetsPageMeta },
-  { kind: 'sub', bucket: 'multiworld', group: 'lobbies', page: 'lobbies', id: 'detail', component: lazyComponent(() => import('../src/screens/multiworld/lobbies/lobbies/detail.sub')), meta: multiworldLobbiesLobbiesDetailSubMeta },
-  { kind: 'sub', bucket: 'multiworld', group: 'lobbies', page: 'lobbies', id: 'new', component: lazyComponent(() => import('../src/screens/multiworld/lobbies/lobbies/new.sub')), meta: multiworldLobbiesLobbiesNewSubMeta },
-  { kind: 'page', bucket: 'multiworld', group: 'lobbies', id: 'lobbies', component: lazyComponent(() => import('../src/screens/multiworld/lobbies/lobbies.page')), meta: multiworldLobbiesLobbiesPageMeta },
   { kind: 'base', id: 'session', component: lazyComponent(() => import('../src/screens/session.base')), meta: sessionBaseMeta },
   { kind: 'sub', bucket: 'sessions', page: 'sessions', id: 'edit', component: lazyComponent(() => import('../src/screens/sessions/sessions/edit.sub')), meta: sessionsSessionsEditSubMeta },
+  { kind: 'sub', bucket: 'sessions', page: 'sessions', id: 'join', component: lazyComponent(() => import('../src/screens/sessions/sessions/join.sub')), meta: sessionsSessionsJoinSubMeta },
   { kind: 'sub', bucket: 'sessions', page: 'sessions', id: 'new', component: lazyComponent(() => import('../src/screens/sessions/sessions/new.sub')), meta: sessionsSessionsNewSubMeta },
   { kind: 'page', bucket: 'sessions', id: 'sessions', component: lazyComponent(() => import('../src/screens/sessions/sessions.page')), meta: sessionsSessionsPageMeta },
 ], searchIndex);

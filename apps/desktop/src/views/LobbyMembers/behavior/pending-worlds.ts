@@ -1,6 +1,6 @@
 /* @layer renderer-app @kind logic */
 import type { AdminLobby, AdminLobbyMember } from '@archipelia/model';
-import type { ConsentRequest } from '../LobbyDetail.type';
+import type { ConsentRequest } from '../LobbyMembers.type';
 
 const pendingWorlds = (lobby: AdminLobby, member: AdminLobbyMember): ConsentRequest[] =>
   member.slots.flatMap((slot) => {

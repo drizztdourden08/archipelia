@@ -2,7 +2,7 @@
 import type { FactsPanelFact } from '@drizztdourden08/tessera/composites';
 import type { AdminLobby } from '@archipelia/model';
 import { LOOPBACK } from '../../../lobbies/lobbies.constants';
-import { TLS_TEXT } from '../LobbyDetail.constants';
+import { TLS_TEXT } from '../DirectConnection.constants';
 
 const resultsFacts = (lobby: AdminLobby, onThisComputer: boolean): FactsPanelFact[] => {
   const { room } = lobby;

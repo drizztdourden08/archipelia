@@ -28,6 +28,12 @@ type EditorDeps = {
   guard: (key: string, work: () => Promise<unknown>) => Promise<unknown>;
 };
 
+type DirectDeps = {
+  draft: SessionTemplate;
+  persist: (template: SessionTemplate) => Promise<SessionTemplate>;
+  guard: (key: string, work: () => Promise<unknown>) => Promise<unknown>;
+};
+
 type ImportedYaml = { fileName: string; yaml: string; game: string };
 
 type ProblemField = 'session-name' | 'players' | 'name' | 'game' | 'source' | 'option' | 'host';
@@ -35,5 +41,5 @@ type ProblemField = 'session-name' | 'players' | 'name' | 'game' | 'source' | 'o
 type TemplateProblem = { message: string; field: ProblemField; slot?: number; optionKey?: string; optionLabel?: string };
 
 export type {
-  BuilderParams, EditorDeps, HostingDefaults, ImportedYaml, LibraryView, OverrideRow, Overrides, ProblemField, RowFilter, SessionBuilderProps, SourceChoice, TemplateProblem,
+  BuilderParams, DirectDeps, EditorDeps, HostingDefaults, ImportedYaml, LibraryView, OverrideRow, Overrides, ProblemField, RowFilter, SessionBuilderProps, SourceChoice, TemplateProblem,
 };
