@@ -11,6 +11,7 @@ type GameCardAction = {
   label: string;
   icon: IconName;
   onClick: () => void;
+  tone?: 'danger';
   primary?: boolean;
   disabled?: boolean;
   loading?: boolean;

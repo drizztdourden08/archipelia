@@ -7,7 +7,7 @@ const actionOf = (action: GameCardAction): ActionItem => ({
   label: action.label,
   icon: action.icon,
   iconOnly: true,
-  kind: action.primary ? 'primary' : 'default',
+  kind: action.primary ? 'primary' : action.tone ?? 'default',
   disabled: action.disabled === true || action.loading === true,
   onSelect: action.onClick,
 });

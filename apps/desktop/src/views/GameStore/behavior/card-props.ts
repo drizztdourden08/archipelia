@@ -54,7 +54,7 @@ const actionsOf = (row: GameRow, { isBusy, installWorld, remove, openHome }: Car
   const install: GameCardAction[] = request && row.state !== 'installed'
     ? [{ id: 'install', label: installLabel(row, installing), icon: 'download', primary: true, disabled: working || Boolean(row.entry.unavailable), loading: installing, onClick: () => installWorld(request, row.entry.apworld) }]
     : [];
-  const removal: GameCardAction[] = row.installed ? [{ id: 'remove', label: 'Remove', icon: 'trash-2', disabled: working, onClick: () => remove(row) }] : [];
+  const removal: GameCardAction[] = row.installed ? [{ id: 'remove', label: 'Remove', icon: 'trash-2', tone: 'danger', disabled: working, onClick: () => remove(row) }] : [];
   const home: GameCardAction[] = row.entry.home ? [{ id: 'home', label: 'Home page', icon: 'external-link', onClick: () => openHome(row.entry.home ?? '') }] : [];
   return [...install, ...home, ...removal];
 };

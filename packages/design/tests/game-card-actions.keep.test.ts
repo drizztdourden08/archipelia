@@ -11,9 +11,9 @@ describe('GameCard actions', () => {
     expect(actionOf(base)).toMatchObject({ id: 'install', label: 'Add', icon: 'download', iconOnly: true, kind: 'default', disabled: false });
   });
 
-  test('the primary action is primary and the rest are default, so only the app dialog asks before a removal', () => {
+  test('the primary action is primary and a removal is danger', () => {
     expect(actionOf({ ...base, primary: true }).kind).toBe('primary');
-    expect(actionOf({ ...base, id: 'remove', label: 'Remove' }).kind).toBe('default');
+    expect(actionOf({ ...base, tone: 'danger' }).kind).toBe('danger');
   });
 
   test('a loading action is turned off, so only its card shows the work', () => {
