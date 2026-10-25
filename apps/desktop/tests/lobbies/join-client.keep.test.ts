@@ -58,6 +58,17 @@ describe('Archipelia joins a session as a player', () => {
     expect((await joins.until((view) => view.state === 'failed')).message).toContain('Allow unlisted clients');
   });
 
+  test('says the connection was lost and that it retries when the server goes away', async () => {
+    const { rig, files, record } = await setUp('0.6.8', { admission: 'host-approval', allowUnlisted: true });
+    const joins = startJoins(files, '0.6.8');
+    cleanups.push(() => Promise.resolve(joins.service.closeAll()));
+    await joins.service.start(record);
+    await joins.until((view) => view.state === 'pending');
+    await rig.stop();
+    const lost = await joins.until((view) => view.state === 'offline');
+    expect(lost.message).toMatch(/lost\. Archipelia tries again in \d+ s\./);
+  }, 30000);
+
   test('keeps its token in its own storage and resumes its place after a restart', async () => {
     const { rig, lobby, files, record } = await setUp('0.6.8', { admission: 'host-approval', allowUnlisted: true });
     const first = startJoins(files, '0.6.8');

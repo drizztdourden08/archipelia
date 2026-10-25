@@ -1,10 +1,13 @@
 /* @layer tests @kind test */
-import { afterEach, describe, expect, test } from 'vitest';
+import { afterEach, describe, expect, test, vi } from 'vitest';
 import type { AdminLobby, SessionTemplate } from '@archipelia/model';
 import type { Bindings, HostLine } from '@drizztdourden08/archipelia-lobby-protocol/testing';
 import { connectWebSocket, createFakeClient, createScenarioKit, loadScenario } from '@drizztdourden08/archipelia-lobby-protocol/testing';
 import { startLobbyRig } from '@archipelia/server/testing';
 import { runDirect } from '../../electron/sessions/run-direct';
+import { syncDirect } from '../../electron/sessions/sync-direct';
+import { joinRecord, startJoins } from '../lobbies/join-kit';
+import { tempFiles } from '../lobbies/temp-files';
 import type { LobbyRequest } from '../../src/lobbies/lobbies.type';
 import { lobbyRequest } from '../../src/lobbies/lobby-request';
 import { launchOf } from '../../src/runs/launch-of';
@@ -16,6 +19,8 @@ type Rig = Awaited<ReturnType<typeof startLobbyRig>>;
 const ENGINE = { id: 'ap-0.6.8', ap: '0.6.8', python: '3.12.0' };
 
 const DIRECT = { admission: 'host-approval', allowUnlisted: false } as const;
+
+const CY_YAML = ['name: Cy', 'game: Quest', ''].join('\n');
 
 let rig: Rig | undefined;
 
@@ -78,6 +83,28 @@ describe('a session that takes direct connections', () => {
     await runDirect(template, directDeps(rig));
     await expect(runDirect(template, directDeps(rig))).rejects.toThrow('Turn Allow direct connection off and on again');
   });
+});
+
+describe('the slots of the host in a session that takes direct connections', () => {
+  test('are reserved, so a client with a host slot name is refused at join, and the run still works', async () => {
+    rig = await startLobbyRig();
+    const on = rig;
+    const options = { admission: 'open', allowUnlisted: true } as const;
+    const draft = { ...sessionOf(), players: [{ slot: 1, name: 'Cy', game: 'Quest', source: { kind: 'yaml', fileName: 'cy.yaml', yaml: CY_YAML } } as const] };
+    const request = lobbyRequest.open(draft, options);
+    const lobby = await actOn(on)({ ...request, params: { ...request.params, engine: ENGINE } });
+    const template = { ...draft, direct: { serverId: 'local', lobbyId: lobby.id, ...options } };
+    await syncDirect(template, directDeps(on));
+    const store = await tempFiles('joins');
+    const joins = startJoins(store.files, '0.6.8');
+    await joins.service.start(await joinRecord(on.address, lobby.code));
+    const failed = await joins.until((view) => view.state === 'failed');
+    expect(failed.message).toContain('slot name Cy');
+    joins.service.closeAll();
+    await store.remove();
+    await runDirect(template, directDeps(on));
+    await vi.waitFor(() => expect(on.templates[0]?.players.map((player) => player.name)).toEqual(['Cy']));
+  }, 30000);
 });
 
 describe('a session without direct connection', () => {
