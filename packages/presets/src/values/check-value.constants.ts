@@ -1,5 +1,5 @@
 /* @layer core @kind config */
-import { isStringList } from '@archipelia/model';
+import { choicesOf, isStringList } from '@archipelia/model';
 import type { OptionKind } from '@archipelia/model';
 import type { Check } from './check-value.type';
 import { checkRange } from './check-range';
@@ -9,7 +9,7 @@ import { isMap } from './is-map';
 
 const CHECKS: Record<OptionKind, Check> = {
   toggle: (_def, value) => (typeof value === 'boolean' ? undefined : 'on or off'),
-  choice: (def, value) => (def.choices?.some((c) => c.value === value) ? undefined : 'one of the listed choices'),
+  choice: (def, value) => (choicesOf(def).some((c) => c.value === value) ? undefined : 'one of the listed choices'),
   range: checkRange,
   'named-range': checkRange,
   text: (_def, value) => (typeof value === 'string' ? undefined : 'text'),

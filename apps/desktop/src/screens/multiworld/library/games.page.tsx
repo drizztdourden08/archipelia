@@ -2,7 +2,7 @@
 import type { ScreenMeta } from '@drizztdourden08/brock-react';
 import { GameStore } from '../../../views/GameStore';
 
-const meta: ScreenMeta = { title: 'Games', icon: 'gamepad-2', order: 2, keywords: ['apworld', 'install', 'catalog', 'worlds'], menu: 'entry', showHeader: true, fill: true };
+const meta: ScreenMeta = { title: 'Games', icon: 'gamepad-2', order: 2, keywords: ['apworld', 'install', 'catalog', 'worlds', 'library'], menu: 'Library', showHeader: true, fill: true };
 
 const GamesPage = () => <GameStore />;
 

@@ -4,4 +4,6 @@ const INDEX_FILE = /^index\/[^/]+\.toml$/;
 
 const ROOT_FILES = new Set(['index.toml', 'index.lock']);
 
-export { INDEX_FILE, ROOT_FILES };
+const INDEX_DIR = 'index';
+
+export { INDEX_DIR, INDEX_FILE, ROOT_FILES };

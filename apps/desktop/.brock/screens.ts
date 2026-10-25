@@ -18,13 +18,13 @@ import { meta as multiworldLibraryGamesOfficialTabMeta } from '../src/screens/mu
 import { meta as multiworldLibraryGamesUpdatesTabMeta } from '../src/screens/multiworld/library/games/updates.tab';
 import { meta as multiworldLibraryGamesPageMetaMeta } from '../src/screens/multiworld/library/games.page';
 import { meta as multiworldLibraryPresetsPageMeta } from '../src/screens/multiworld/library/presets.page';
-import { meta as multiworldLibrarySessionsEditSubMeta } from '../src/screens/multiworld/library/sessions/edit.sub';
-import { meta as multiworldLibrarySessionsNewSubMeta } from '../src/screens/multiworld/library/sessions/new.sub';
-import { meta as multiworldLibrarySessionsPageMeta } from '../src/screens/multiworld/library/sessions.page';
 import { meta as multiworldLobbiesLobbiesDetailSubMeta } from '../src/screens/multiworld/lobbies/lobbies/detail.sub';
 import { meta as multiworldLobbiesLobbiesNewSubMeta } from '../src/screens/multiworld/lobbies/lobbies/new.sub';
 import { meta as multiworldLobbiesLobbiesPageMeta } from '../src/screens/multiworld/lobbies/lobbies.page';
 import { meta as sessionBaseMeta } from '../src/screens/session.base';
+import { meta as sessionsSessionsEditSubMeta } from '../src/screens/sessions/sessions/edit.sub';
+import { meta as sessionsSessionsNewSubMeta } from '../src/screens/sessions/sessions/new.sub';
+import { meta as sessionsSessionsPageMeta } from '../src/screens/sessions/sessions.page';
 
 const screenTree = buildScreenTree(config, [
   { kind: 'page', bucket: 'data', id: 'old-runs', component: lazyComponent(() => import('../src/screens/data/old-runs.page')), meta: dataOldRunsPageMeta },
@@ -43,13 +43,13 @@ const screenTree = buildScreenTree(config, [
   { kind: 'tab', bucket: 'multiworld', group: 'library', page: 'games', id: 'updates', component: lazyComponent(() => import('../src/screens/multiworld/library/games/updates.tab')), meta: multiworldLibraryGamesUpdatesTabMeta },
   { kind: 'page-meta', bucket: 'multiworld', group: 'library', id: 'games', meta: multiworldLibraryGamesPageMetaMeta },
   { kind: 'page', bucket: 'multiworld', group: 'library', id: 'presets', component: lazyComponent(() => import('../src/screens/multiworld/library/presets.page')), meta: multiworldLibraryPresetsPageMeta },
-  { kind: 'sub', bucket: 'multiworld', group: 'library', page: 'sessions', id: 'edit', component: lazyComponent(() => import('../src/screens/multiworld/library/sessions/edit.sub')), meta: multiworldLibrarySessionsEditSubMeta },
-  { kind: 'sub', bucket: 'multiworld', group: 'library', page: 'sessions', id: 'new', component: lazyComponent(() => import('../src/screens/multiworld/library/sessions/new.sub')), meta: multiworldLibrarySessionsNewSubMeta },
-  { kind: 'page', bucket: 'multiworld', group: 'library', id: 'sessions', component: lazyComponent(() => import('../src/screens/multiworld/library/sessions.page')), meta: multiworldLibrarySessionsPageMeta },
   { kind: 'sub', bucket: 'multiworld', group: 'lobbies', page: 'lobbies', id: 'detail', component: lazyComponent(() => import('../src/screens/multiworld/lobbies/lobbies/detail.sub')), meta: multiworldLobbiesLobbiesDetailSubMeta },
   { kind: 'sub', bucket: 'multiworld', group: 'lobbies', page: 'lobbies', id: 'new', component: lazyComponent(() => import('../src/screens/multiworld/lobbies/lobbies/new.sub')), meta: multiworldLobbiesLobbiesNewSubMeta },
   { kind: 'page', bucket: 'multiworld', group: 'lobbies', id: 'lobbies', component: lazyComponent(() => import('../src/screens/multiworld/lobbies/lobbies.page')), meta: multiworldLobbiesLobbiesPageMeta },
   { kind: 'base', id: 'session', component: lazyComponent(() => import('../src/screens/session.base')), meta: sessionBaseMeta },
+  { kind: 'sub', bucket: 'sessions', page: 'sessions', id: 'edit', component: lazyComponent(() => import('../src/screens/sessions/sessions/edit.sub')), meta: sessionsSessionsEditSubMeta },
+  { kind: 'sub', bucket: 'sessions', page: 'sessions', id: 'new', component: lazyComponent(() => import('../src/screens/sessions/sessions/new.sub')), meta: sessionsSessionsNewSubMeta },
+  { kind: 'page', bucket: 'sessions', id: 'sessions', component: lazyComponent(() => import('../src/screens/sessions/sessions.page')), meta: sessionsSessionsPageMeta },
 ], searchIndex);
 
 export { screenTree };

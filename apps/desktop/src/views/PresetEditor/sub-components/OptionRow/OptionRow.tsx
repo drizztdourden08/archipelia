@@ -4,13 +4,14 @@ import type { OptionValue } from '@archipelia/model';
 import type { OptionRowProps } from './OptionRow.type';
 import { OptionFieldRow, hintOf, isChangedValue } from '@archipelia/design';
 
-const OptionRowView = ({ def, value, problem, onValue, onReset, onProblem }: OptionRowProps) => {
+const OptionRowView = ({ id, def, value, problem, onValue, onReset, onProblem }: OptionRowProps) => {
   const handleChange = useCallback((next: OptionValue) => onValue(def.key, next), [def.key, onValue]);
   const handleReset = useCallback(() => onReset(def.key), [def.key, onReset]);
   const handleProblem = useCallback((next: string | null) => onProblem(def.key, next), [def.key, onProblem]);
   const hint = useMemo(() => hintOf(def), [def]);
   return (
     <OptionFieldRow
+      id={id}
       def={def}
       value={value}
       hint={hint}

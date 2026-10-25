@@ -1,0 +1,29 @@
+/* @layer renderer-app @kind style */
+.option-control {
+  min-inline-size: 0;
+  max-inline-size: 100%;
+}
+
+.option-control--auto {
+  inline-size: fit-content;
+}
+
+.option-control--xs {
+  inline-size: min(100%, var(--size-128));
+}
+
+.option-control--sm {
+  inline-size: min(100%, var(--size-192));
+}
+
+.option-control--md {
+  inline-size: min(100%, var(--size-256));
+}
+
+.option-control--lg {
+  inline-size: min(100%, var(--size-384));
+}
+
+.option-control--full {
+  inline-size: 100%;
+}

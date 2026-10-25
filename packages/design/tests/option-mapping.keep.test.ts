@@ -57,7 +57,7 @@ describe('labels and hints', () => {
 
   test('choice labels are title cased, values kept', () => {
     expect(choiceOptions(defOf('goal'))).toEqual([
-      { value: 'ganon', label: 'Ganon' }, { value: 'crystals_only', label: 'Crystals Only' },
+      { value: 'ganon', label: 'Ganon' }, { value: 'crystals_only', label: 'Crystals Only' }, { value: 'random', label: 'Random' },
     ]);
   });
 
