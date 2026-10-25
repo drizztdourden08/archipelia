@@ -52,6 +52,7 @@ type InstalledGame = {
   layout: WorldLayout;
   path: string;
   requires: string[];
+  packages?: string[];
   trust?: WorldTrust;
 };
 

@@ -2,6 +2,7 @@
 import type { DataFiles, EngineRuntime, GameSource, WorldLayout, WorldTrust } from '@archipelia/model';
 import type { ApworldInfo } from './read-apworld.type';
 import type { HashDecision } from './hash-decision.type';
+import type { PackageConsent } from './package-consent.type';
 
 type InstallJob = {
   runtime: EngineRuntime;
@@ -16,6 +17,7 @@ type InstallJob = {
   hash: HashDecision;
   requires: string[];
   trust?: WorldTrust;
+  packages?: PackageConsent;
 };
 
 export type { InstallJob };

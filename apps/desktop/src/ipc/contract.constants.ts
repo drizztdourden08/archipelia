@@ -27,6 +27,7 @@ const APP_CHANNELS = defineChannels({
   catalogEnrich: invoke<(request: EnrichRequest) => Promise<GameEnrichment | undefined>>()('ap:catalog:enrich'),
   gamesList: invoke<() => Promise<InstalledGame[]>>()('ap:games:list'),
   gamesInstall: invoke<(request: InstallRequest) => Promise<InstalledGame>>()('ap:games:install'),
+  gamesPackages: invoke<(request: InstallRequest) => Promise<string[]>>()('ap:games:packages'),
   gamesRemove: invoke<(apworld: string) => Promise<void>>()('ap:games:remove'),
   presetsList: invoke<() => Promise<GamePreset[]>>()('ap:presets:list'),
   presetsCreate: invoke<(preset: PresetInput) => Promise<GamePreset>>()('ap:presets:create'),

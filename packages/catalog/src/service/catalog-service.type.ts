@@ -7,9 +7,9 @@ import type { Catalog } from '../read-catalog.type';
 type CatalogView = { apVersion: string; entries: CatalogEntry[]; problems: number; fetchedAt: number };
 
 type InstallRequest =
-  | { kind: 'index'; apworld: string; version: string }
+  | { kind: 'index'; apworld: string; version: string; acceptPackages?: boolean }
   | { kind: 'official'; apworld: string }
-  | { kind: 'file'; fileName: string; bytes: Uint8Array };
+  | { kind: 'file'; fileName: string; bytes: Uint8Array; acceptPackages?: boolean };
 
 type CatalogServiceDeps = {
   games: DataFiles;

@@ -1,10 +1,6 @@
 /* @layer core @kind logic */
 import type { CatalogEntry, InstalledGame } from '@archipelia/model';
-import { mkdtemp, rm, writeFile } from 'node:fs/promises';
-import { join } from 'node:path';
-import { tmpdir } from 'node:os';
 import { readRuntime } from '@archipelia/engine';
-import { assertSafeName } from '@drizztdourden08/brock-core/storage';
 import { readCatalog } from '../read-catalog';
 import { trustRoot as trustRootOf } from '../first-party/trust-root';
 import { fitEntries } from '../first-party/fit-entries';
@@ -12,11 +8,15 @@ import { mergeCatalog } from '../first-party/merge-catalog';
 import { readFirstParty } from '../first-party/read-first-party';
 import { installFromFile } from '../install/install-from-file';
 import { installOfficial } from '../install/install-official';
+import { previewFilePackages } from '../install/preview-file-packages';
+import { previewWorldPackages } from '../install/preview-world-packages';
 import { installWorld } from '../install/install-world';
+import { withTempFile } from '../install/with-temp-file';
 import { removeWorld } from '../install/remove-world';
 import { createEnricher } from '../enrich/create-enricher';
 import { createEnrichEntry } from '../enrich/create-enrich-entry';
 import { officialEntries } from '../official/official-entries';
+import { withListedGuides } from '../official/with-listed-guides';
 import type { CatalogServiceDeps, CatalogView, InstallRequest, Latest } from './catalog-service.type';
 import { CACHE_DIR } from './catalog-service.constants';
 
@@ -48,38 +48,36 @@ const createCatalogService = ({ games: files, cache, engineDir, fetch: fetchFn, 
     return { apVersion: latest.apVersion, entries, problems: latest.problems.length, fetchedAt: latest.fetchedAt };
   };
 
-  const official = async (): Promise<CatalogEntry[]> => {
-    const named = new Map((latest?.entries ?? []).filter((e) => e.source === 'official').map((e) => [e.apworld, e]));
-    return (await officialEntries(await engineDir())).map((entry) => {
-      const listed = named.get(entry.apworld);
-      return listed ? { ...entry, displayName: listed.displayName, home: listed.home, setupGuide: listed.setupGuide, tags: listed.tags } : entry;
-    });
-  };
-
-  const installBytes = async (fileName: string, bytes: Uint8Array) => {
-    const dir = await mkdtemp(join(tmpdir(), 'archipelia-apworld-'));
-    try {
-      const path = join(dir, assertSafeName(fileName, 'file name'));
-      await writeFile(path, bytes);
-      return await installFromFile({ engineDir: await engineDir(), files, path });
-    } finally {
-      await rm(dir, { recursive: true, force: true });
-    }
-  };
+  const official = async (): Promise<CatalogEntry[]> => withListedGuides(await officialEntries(await engineDir()), latest?.entries ?? []);
 
   const root = trustRoot ?? (() => trustRootOf(cache));
+
+  const indexEntry = async (apworld: string) => {
+    await read(false);
+    const entry = latest?.entries.find((e) => e.apworld === apworld && e.source !== 'official');
+    if (!entry || !latest) throw new Error(`${apworld} is not in the index`);
+    return { entry, latest };
+  };
 
   const install = async (request: InstallRequest): Promise<InstalledGame> => {
     const base = { engineDir: await engineDir(), files };
     if (request.kind === 'official') return installOfficial({ ...base, apworld: request.apworld });
-    if (request.kind === 'file') return installBytes(request.fileName, request.bytes);
-    await read(false);
-    const entry = latest?.entries.find((e) => e.apworld === request.apworld && e.source !== 'official');
-    if (!entry || !latest) throw new Error(`${request.apworld} is not in the index`);
+    const consent = request.acceptPackages ? { packages: 'any' as const } : {};
+    if (request.kind === 'file') {
+      return withTempFile(request.fileName, request.bytes, (path) => installFromFile({ ...base, path, ...consent }));
+    }
+    const { entry, latest: current } = await indexEntry(request.apworld);
     return installWorld({
-      ...base, entry, version: request.version, trust: { clients: latest.firstParty.clients, root },
-      ...(fetchFn ? { fetch: fetchFn } : {}),
+      ...base, entry, version: request.version, trust: { clients: current.firstParty.clients, root },
+      ...consent, ...(fetchFn ? { fetch: fetchFn } : {}),
     });
+  };
+
+  const packages = async (request: InstallRequest): Promise<string[]> => {
+    if (request.kind === 'official') return [];
+    if (request.kind === 'file') return withTempFile(request.fileName, request.bytes, previewFilePackages);
+    const { entry } = await indexEntry(request.apworld);
+    return previewWorldPackages({ engineDir: await engineDir(), entry, version: request.version, ...(fetchFn ? { fetch: fetchFn } : {}) });
   };
 
   const remove = async (apworld: string) => removeWorld({ engineDir: await engineDir(), files, apworld });
@@ -88,7 +86,7 @@ const createCatalogService = ({ games: files, cache, engineDir, fetch: fetchFn, 
     cache, engineDir, entryOf: createEnrichEntry(engineDir, () => latest?.entries ?? []), ...(fetchFn ? { fetch: fetchFn } : {}),
   });
 
-  return { enrich, install, official, read, remove };
+  return { enrich, install, official, packages, read, remove };
 };
 
 export { createCatalogService };

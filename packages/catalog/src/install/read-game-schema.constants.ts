@@ -2,4 +2,6 @@
 
 const ERROR_LINE = /^\s*\w*(Error|Exception)\b.*:/;
 
-export { ERROR_LINE };
+const MISSING_MODULE = /No module named '([^']+)'/;
+
+export { ERROR_LINE, MISSING_MODULE };
