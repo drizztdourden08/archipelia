@@ -44,4 +44,4 @@ const startJoins = (files: DataFiles, ap: string) => {
   return { service, views, until };
 };
 
-export { joinRecord, questWorld, startJoins };
+export { joinRecord, startJoins };

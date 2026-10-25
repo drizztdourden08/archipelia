@@ -7,8 +7,8 @@ import { BuilderHeader } from '../BuilderHeader';
 import { ProblemList } from '../ProblemList';
 import { PlayersCard } from '../PlayersCard';
 import { OverridesPanel } from '../OverridesPanel';
-import { ErrorCallout, ServerOptionsForm } from '@archipelia/design';
-import { DirectConnection } from '../../../DirectConnection';
+import { ErrorCallout } from '@archipelia/design';
+import { BuilderSettings } from '../BuilderSettings';
 import { LobbyMembers } from '../../../LobbyMembers';
 import { FAILURE } from '../../SessionBuilder.constants';
 
@@ -53,28 +53,7 @@ const BuilderForm = ({ initial, onRun }: BuilderFormProps) => {
             onClose={toggleSelected}
           />
         )}
-        <ServerOptionsForm
-          generator={draft.generator}
-          server={draft.server}
-          host={draft.host}
-          serverOptions={builder.serverOptions}
-          password={builder.password}
-          hasPassword={Boolean(draft.server.passwordRef)}
-          onGenerator={builder.setGenerator}
-          onServer={builder.setServer}
-          onHostKind={builder.setHostKind}
-          onPort={builder.setPort}
-          onRemoteServer={builder.setRemoteServer}
-          onPassword={builder.setPassword}
-          onClearPassword={builder.clearPassword}
-        />
-        <DirectConnection
-          direct={draft.direct}
-          busy={builder.busy}
-          onEnable={builder.direct.enable}
-          onDisable={builder.direct.disable}
-          onOptions={builder.direct.setOptions}
-        />
+        <BuilderSettings builder={builder} />
       </Stack>
     </Box>
   );

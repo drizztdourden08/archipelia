@@ -1,4 +1,6 @@
 /* @layer electron-main @kind config */
+import type { ClientInfo } from '@drizztdourden08/archipelia-lobby-protocol';
+
 const JOINS_FILE = 'joins.json';
 
 const FILES_DIR = 'files';
@@ -20,6 +22,10 @@ const APWORLD_EXTENSION = '.apworld';
 const MANIFEST_NAME = 'archipelago.json';
 
 const CLIENT_ID = 'archipelia';
+
+const CLIENT_OS: Record<string, ClientInfo['platform']['os']> = { win32: 'windows', darwin: 'macos', linux: 'linux', android: 'android' };
+
+const CLIENT_ARCH: Record<string, ClientInfo['platform']['arch']> = { x64: 'x64', arm64: 'arm64' };
 
 const CLIENT_HOMEPAGE = 'https://github.com/drizztdourden08/archipelia';
 
@@ -47,6 +53,6 @@ const RESUMABLE = ['connecting', 'pending', 'approved', 'started', 'offline', 'f
 const ENDING_CODES = ['refused', 'resume-invalid', 'lobby-closed'] as const;
 
 export {
-  APWORLD_EXTENSION, CLIENT_HOMEPAGE, MANIFEST_NAME, CLIENT_ID, DISPLAY_NAME_LIMIT, ENDING_CODES, FALLBACK_WORLD_VERSION, FILES_DIR, JOINS_FILE, REPLY_TIMEOUT_MS, RESUMABLE, SEMVER, SLOT_NAME_LIMIT,
+  APWORLD_EXTENSION, CLIENT_ARCH, CLIENT_HOMEPAGE, CLIENT_OS, MANIFEST_NAME, CLIENT_ID, DISPLAY_NAME_LIMIT, ENDING_CODES, FALLBACK_WORLD_VERSION, FILES_DIR, JOINS_FILE, REPLY_TIMEOUT_MS, RESUMABLE, SEMVER, SLOT_NAME_LIMIT,
   TEXT, UPLOAD_TIMEOUT_MS,
 };

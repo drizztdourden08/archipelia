@@ -1,7 +1,7 @@
 /* @layer electron-main @kind logic */
 import type { AdmissionMessage, ErrorMessage, LobbyFailed, LobbyProgress, LobbyStarted, LobbyState, RoomStatus, Welcome } from '@drizztdourden08/archipelia-lobby-protocol';
 import { ENDING_CODES, TEXT } from './joins.constants';
-import type { JoinRun, LinkMessage } from './joins.type';
+import type { JoinHandlers, JoinRun, LinkMessage } from './joins.type';
 import { fetchFiles } from './fetch-files';
 import { resultsOf } from './results-of';
 import { sendReady } from './send-ready';
@@ -50,18 +50,20 @@ const onWelcome = (run: JoinRun, { member, lobby }: Welcome) =>
 const onLobby = (run: JoinRun, message: LobbyProgress | LobbyFailed) =>
   run.save({ message: message.type === 'lobby.failed' ? `${TEXT.failed}${message.message}` : TEXT.making });
 
+const handlers: JoinHandlers = {
+  welcome: onWelcome,
+  admission: onAdmission,
+  'lobby.state': onState,
+  'lobby.progress': onLobby,
+  'lobby.failed': onLobby,
+  'lobby.started': onStarted,
+  'room.status': onRoom,
+  error: onError,
+};
+
 const handle = (run: JoinRun, message: LinkMessage): Promise<unknown> => {
-  switch (message.type) {
-    case 'welcome': return onWelcome(run, message);
-    case 'admission': return onAdmission(run, message);
-    case 'lobby.state': return onState(run, message);
-    case 'lobby.progress':
-    case 'lobby.failed': return onLobby(run, message);
-    case 'lobby.started': return onStarted(run, message);
-    case 'room.status': return onRoom(run, message);
-    case 'error': return onError(run, message);
-    default: return Promise.resolve();
-  }
+  const handler = handlers[message.type] as ((run: JoinRun, message: LinkMessage) => Promise<unknown>) | undefined;
+  return handler ? handler(run, message) : Promise.resolve();
 };
 
 const followJoin = (run: JoinRun) => (message: LinkMessage) => {

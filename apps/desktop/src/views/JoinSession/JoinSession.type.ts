@@ -19,8 +19,10 @@ type JoinPlayerProps = { target: JoinTarget; installed: readonly InstalledGame[]
 
 type JoinCardProps = { join: JoinView; busy: boolean; onLeave: (id: string) => void; onResume: (id: string) => void; onDismiss: (id: string) => void };
 
+type JoinStatusProps = { join: JoinView };
+
 type FindPanelProps = { model: ReturnType<typeof useFindSession>; localAp?: string };
 
 type JoinedListProps = { joined: ReturnType<typeof useJoins> };
 
-export type { FindPanelProps, FoundServersProps, JoinCardProps, JoinedListProps, JoinPlayerProps, JoinTarget, PlayerDraft, PlayerFile, ProbeResultProps };
+export type { FindPanelProps, FoundServersProps, JoinCardProps, JoinedListProps, JoinPlayerProps, JoinStatusProps, JoinTarget, PlayerDraft, ProbeResultProps };

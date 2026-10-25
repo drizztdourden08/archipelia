@@ -3,7 +3,7 @@ import { nav } from '@drizztdourden08/brock-react';
 import type { AppReviewTour } from '@drizztdourden08/brock-react';
 import { ROUTE } from '../hooks/app-navigation.constants';
 import { openSessionEditor } from '../hooks/open-session-editor';
-import { DIRECT_UI, REVIEW_JOINER, REVIEW_PLAYER, REVIEW_PLAYERS } from './review.constants';
+import { DIRECT_UI, DIRECT_RUN_MS, REVIEW_JOINER, REVIEW_PLAYER, REVIEW_PLAYERS } from './review.constants';
 import { SELECTOR } from './review-dom.constants';
 import { clickNamed } from './click-named';
 import { directLobby } from './direct-lobby';
@@ -11,11 +11,9 @@ import { waitText } from './wait-text';
 
 const layer = () => document.querySelector<HTMLElement>(SELECTOR.layer);
 
-const RUN_WAIT_MS = 30000;
-
 const runDirect = async (tour: AppReviewTour, templateId: string, lobbyId: string) => {
   await clickNamed(tour, SELECTOR.button, DIRECT_UI.run, tour.find(SELECTOR.layer) ?? undefined);
-  const hosting = await tour.waitFor(() => (directLobby(lobbyId)?.phase === 'hosting' ? true : null), RUN_WAIT_MS);
+  const hosting = await tour.waitFor(() => (directLobby(lobbyId)?.phase === 'hosting' ? true : null), DIRECT_RUN_MS);
   tour.check('direct-run', hosting === true, 'Run starts the lobby of the session and the room is hosting', 'the session with direct connection did not reach hosting');
   if (!hosting) return;
   openSessionEditor(templateId);

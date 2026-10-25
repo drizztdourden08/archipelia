@@ -65,6 +65,8 @@ type RecordDeps = {
 
 type JoinServicesDeps = { core: Core; files: DataFiles; name: string; version: string; emit: (view: JoinView) => void; log: (message: string) => void };
 
+type JoinHandlers = { [Type in LinkMessage['type']]?: (run: JoinRun, message: Extract<LinkMessage, { type: Type }>) => Promise<unknown> };
+
 type UploadFile = { sha256: string; kind: 'world' | 'yaml'; bytes: () => Promise<Uint8Array> };
 
-export type { JoinBook, JoinContext, JoinDeps, JoinRecord, JoinRun, JoinServicesDeps, JoinStop, RecordDeps, JoinWorld, JoinYaml, LinkMessage, LobbyLink, UploadFile, Waiter };
+export type { JoinContext, JoinDeps, JoinHandlers, JoinRecord, JoinRun, JoinServicesDeps, JoinStop, RecordDeps, JoinWorld, LinkMessage, LobbyLink, UploadFile, Waiter };

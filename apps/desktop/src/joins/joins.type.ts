@@ -38,4 +38,4 @@ type JoinView = {
   updatedAt: number;
 };
 
-export type { JoinFile, JoinRequest, JoinResults, JoinSource, JoinState, JoinView };
+export type { JoinFile, JoinRequest, JoinResults, JoinState, JoinView };
