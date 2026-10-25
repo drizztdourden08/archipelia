@@ -2,7 +2,7 @@
 import type { ComponentUsage } from '@drizztdourden08/tessera';
 
 const usage = {
-  job: 'One Archipelago world in the games store as a compact card: its kind as an icon, its name, its world version, its state and icon actions.',
+  job: 'One Archipelago world in the games store as a compact Tessera ItemCard: its kind as an icon, its name, its world version, its state and icon actions.',
   useWhen: [
     'A world in the grid of the games store, installed or not.',
     'Any card that offers to install, update or remove one world.',
@@ -20,13 +20,15 @@ const usage = {
     'Disable an action while that world is busy; never hide it.',
     'Mark the action that is running as loading, so only that card shows the work.',
     'Mark an action that deletes something as danger.',
-    'Pass summary as one plain text description, shown in two lines at most; pass summaryHint with the longer text for the hint. Never pass markup.',
+    'Pass summary as one plain text description, shown on the one detail line after the version and the notes and cut with an ellipsis; pass summaryHint with the longer text for the hint. Never pass markup.',
     'Pass art as a small picture of the world, a data address, and it fills the media tile with the kind icon as a badge; leave it out and the tile shows the kind icon alone.',
+    'Pass at most two tags; they show on a line of their own under the detail line.',
   ],
   a11y: [
-    'The card is a group named after the world title.',
-    'Each icon button is named with the action and the world, such as Add Timespinner, and shows its action as a hint.',
-    'The kind icon and each note are named images with a hint that opens on focus.',
+    'The title of the card is a level 3 heading.',
+    'The media tile is a named image, named by kindLabel, and its hint opens on hover.',
+    'Each icon button is named with the action and the world, such as Add Timespinner, and shows that name as a hint.',
+    'Each note is a named image with a hint that opens on focus.',
     'A loading action is busy and turned off until its work ends.',
   ],
   tree: {

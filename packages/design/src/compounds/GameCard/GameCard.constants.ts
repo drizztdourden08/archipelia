@@ -1,5 +1,6 @@
 /* @layer renderer-app @kind config */
 import { defineStatuses } from '@drizztdourden08/tessera/primitives';
+import type { ItemCardMediaTone } from '@drizztdourden08/tessera/composites';
 import type { IconName } from '@drizztdourden08/tessera/primitives';
 import type { GameCardKind } from './GameCard.type';
 
@@ -17,8 +18,15 @@ const KIND_ICON: Record<GameCardKind, IconName> = {
   file: 'file',
 };
 
+const KIND_TONE: Record<GameCardKind, ItemCardMediaTone> = {
+  official: 'primary',
+  community: 'info',
+  'first-party': 'tertiary',
+  file: 'neutral',
+};
+
 const MAX_TAGS = 2;
 
-const MEDIA_SIZE = 40;
+const MEDIA_SIZE = 32;
 
-export { GAME_STATUS, KIND_ICON, MAX_TAGS, MEDIA_SIZE };
+export { GAME_STATUS, KIND_ICON, KIND_TONE, MAX_TAGS, MEDIA_SIZE };

@@ -1,25 +1,15 @@
 /* @layer renderer-app @kind style */
-.game-card {
-  padding: var(--space-xs) var(--space-sm);
-}
-
-.game-card__kind {
-  display: flex;
-  flex: none;
-  inline-size: var(--size-40);
-  block-size: var(--size-40);
+.game-card.game-card--first-party {
+  border-color: var(--c-tertiary);
 }
 
 .game-card__media {
   position: relative;
   display: flex;
-  flex: 1;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
-  border-radius: var(--radius-md);
-  background: var(--c-primary-dim);
-  color: var(--c-text);
+  inline-size: var(--size-32);
+  block-size: var(--size-32);
 }
 
 .game-card__badge {
@@ -35,38 +25,9 @@
   color: var(--c-text);
 }
 
-.game-card[data-kind='community'] .game-card__media {
-  background: var(--c-info-dim);
-}
-
-.game-card[data-kind='first-party'] .game-card__media {
-  background: var(--c-tertiary-dim);
-}
-
-.game-card[data-kind='file'] .game-card__media {
-  background: var(--c-secondary-dim);
-}
-
-.game-card[data-kind='first-party'] {
-  border-color: var(--c-tertiary);
-}
-
-.game-card__main {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
+.game-card__notes {
+  display: inline-flex;
   gap: var(--space-2xs);
-  min-inline-size: 0;
-}
-
-.game-card__title {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.game-card__actions {
-  flex: none;
 }
 
 .game-card__note {
@@ -76,18 +37,6 @@
 
 .game-card__note[data-warning] {
   color: var(--c-warning);
-}
-
-.game-card__summary-anchor {
-  display: flex;
-  min-inline-size: 0;
-}
-
-.game-card__summary {
-  display: -webkit-box;
-  overflow: hidden;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
 }
 
 .game-card__hint {
