@@ -14,11 +14,14 @@ import { createRunJobs } from './runs/create-run-jobs';
 import { createCoreLobbies } from './create-core-lobbies';
 import { coreSandbox } from './core-sandbox';
 import { createRoomSecrets } from './room-secrets/create-room-secrets';
+import { roomBinding } from './room-binding';
+import type { NetworkMode } from '../network';
 
 const createCore = (ports: CorePorts) => {
   const { domain, job, emit, log, network, environment = {} } = ports;
   const secrets = createRoomSecrets({ vault: ports.secrets, canStore: ports.canStoreSecrets ?? (() => true), log });
   const binding = hostBinding(network.automation, network.lanHost);
+  let lobbyMode: NetworkMode = 'off';
   const sessionFiles = domain(DOMAIN.sessions);
   const games = domain(DOMAIN.games);
   const cache = domain(DOMAIN.cache);
@@ -44,6 +47,7 @@ const createCore = (ports: CorePorts) => {
   const sessions = createSessionService({
     files: sessionFiles, presets, runs, runtime, runtimeFor, remoteApVersion, schemaOf,
     hostFor: usage.watch(createHostFactory({ runtime, secrets, servers, ...binding, ggOwnerSecret: GG_OWNER_SECRET })),
+    lobbyBinding: () => roomBinding(lobbyMode, network),
     resolveSecret: (ref) => secrets.get(ref),
     emit: (event) => {
       usage.track(event);
@@ -55,7 +59,10 @@ const createCore = (ports: CorePorts) => {
   const sandbox = coreSandbox(environment.platform ?? process.platform, log);
   const { lobbies, watchLobbies, adminToken } = createCoreLobbies({ ports: { ...ports, secrets }, sessions: () => sessions, runtime, runtimeFor, sessionFiles, sandbox });
   const dispose = () => sessions.stopLocal().catch((err: unknown) => log(`the core did not stop its local servers: ${String(err)}`, 'error'));
-  return { adminToken, catalog, dispose, engine, installed, lobbies, presets, runJobs, runs, runtime, sandbox, servers, sessionFiles, sessions, templates, watchLobbies };
+  const setLobbyNetworkMode = (mode: NetworkMode) => {
+    lobbyMode = mode;
+  };
+  return { adminToken, catalog, dispose, engine, installed, lobbies, presets, runJobs, runs, runtime, sandbox, servers, sessionFiles, sessions, setLobbyNetworkMode, templates, watchLobbies };
 };
 
 export { createCore };

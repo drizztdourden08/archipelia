@@ -17,6 +17,7 @@ const nodeReachPorts = (lookupOn: boolean): ReachPorts => {
 };
 
 const startLobbyListener = async ({ core, network, log, domain }: ListenPorts, options: LobbyListen = {}): Promise<LobbyEndpoint> => {
+  core.setLobbyNetworkMode(options.mode ?? DEFAULT_NETWORK_MODE);
   const listener = await startListener({
     service: core.lobbies,
     admin: { token: core.adminToken, watch: core.watchLobbies, engines: () => core.engine.overview() },

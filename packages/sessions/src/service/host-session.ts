@@ -18,7 +18,9 @@ const hostSession = async (run: HostRun, session: Session) => {
   const { deps, live, signal } = run;
   const { server, host: hostTarget } = session.snapshot;
   const picked = hostTarget.kind === 'local' ? await localEngine(run, session) : undefined;
-  const target = await deps.hostFor(hostTarget, picked?.runtime);
+  const target = session.lobbyId && deps.lobbyBinding
+    ? await deps.hostFor(hostTarget, picked?.runtime, deps.lobbyBinding())
+    : await deps.hostFor(hostTarget, picked?.runtime);
   const entry: LiveSession = { host: target, log: [] };
   live.set(session.id, entry);
   target.onLog((line) => {

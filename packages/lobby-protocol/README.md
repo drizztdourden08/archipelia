@@ -629,3 +629,8 @@ A scenario fails with a text such as `line 12 (s2c): members[0].id: expected "m_
 - Every error code has a row in the table above, the right fatal flag and the right close code.
 - The `lobby.info` reply holds no member data, the request has its size limit, and the 31st request in a minute is rate limited.
 - The discovery record and the beacon parse, reject an unknown protocol version as incompatible, and reject an oversize datagram.
+
+## Changes
+
+- 1.2.0: `lobby.started` carries an optional `room.localAddress`, the loopback address of a room that runs on the computer of the server. A client that joined through a loopback address SHOULD use it. The change is additive, so protocol major 1 is unchanged.
+- 1.1.0: the socket transport has a client-side masking option.

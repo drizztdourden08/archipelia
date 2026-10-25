@@ -1,7 +1,7 @@
 /* @layer tests @kind test */
 import { describe, expect, test, vi } from 'vitest';
 import type { EngineRuntime, HostTarget, Session, SessionEngine, SessionTemplate } from '@archipelia/model';
-import type { HostLogLine, SessionHost } from '@archipelia/hosts';
+import type { HostBinding, HostLogLine, SessionHost } from '@archipelia/hosts';
 import { runtimeOf } from './runtime-of';
 
 const generate = vi.hoisted(() => vi.fn());
@@ -33,7 +33,7 @@ const fakeHost = (kind: HostTarget['kind']): SessionHost => ({
 
 const depsWith = (extra: Record<string, unknown>) => {
   const events: { type: string; line?: HostLogLine; session?: Session }[] = [];
-  const hostFor = vi.fn((target: HostTarget, _runtime?: EngineRuntime) => Promise.resolve(fakeHost(target.kind)));
+  const hostFor = vi.fn((target: HostTarget, _runtime?: EngineRuntime, _binding?: HostBinding) => Promise.resolve(fakeHost(target.kind)));
   const stored = new Map<string, Session>();
   const deps = {
     files: { path: (rel = '') => `/data/${rel}`, writeText: () => Promise.resolve(), writeJson: () => Promise.resolve() },
@@ -61,6 +61,15 @@ describe('hostSession engine choice', () => {
     expect(hostFor.mock.calls[0]?.[1]?.id).toBe('ap-0.6.5');
     expect(events).toHaveLength(1);
     expect(events[0]?.line?.text).toMatch(/^Warning: .*Archipelago 0\.6\.7.*older Archipelago 0\.6\.5/);
+  });
+
+  test('a lobby room is hosted with the binding of the lobby, and a plain session is not', async () => {
+    const binding = { bindHost: '127.0.0.1', advertiseHost: () => '127.0.0.1' };
+    const { deps, hostFor } = depsWith({ lobbyBinding: () => binding });
+    await hostSession({ deps, live: new Map() }, { ...sessionOf({ kind: 'local', port: 38281 }), lobbyId: 'lb_1' });
+    expect(hostFor.mock.calls[0]?.[2]).toBe(binding);
+    await hostSession({ deps, live: new Map() }, sessionOf({ kind: 'local', port: 38281 }));
+    expect(hostFor.mock.calls[1]).toHaveLength(2);
   });
 
   test('a remote session warns when the last test showed an older server', async () => {
