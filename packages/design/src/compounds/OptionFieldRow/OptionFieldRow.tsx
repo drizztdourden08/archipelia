@@ -1,10 +1,9 @@
 /* @layer renderer-app @kind component */
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { FormRow } from '@drizztdourden08/tessera/composites';
 import { Text } from '@drizztdourden08/tessera/primitives';
 import type { OptionFieldRowProps } from './OptionFieldRow.type';
 import { OptionControl } from '../OptionControl';
-import { helpOf } from './behavior/help-of';
 import './OptionFieldRow.css';
 
 const OptionFieldRow = ({ id, def, value, hint, changed, problem, onChange, onReset, onProblem }: OptionFieldRowProps) => {
@@ -14,7 +13,6 @@ const OptionFieldRow = ({ id, def, value, hint, changed, problem, onChange, onRe
     onProblem?.(next);
   }, [onProblem]);
   const about = def.description.trim();
-  const full = useMemo(() => helpOf(about), [about]);
   return (
     <FormRow
       id={id}
@@ -25,8 +23,8 @@ const OptionFieldRow = ({ id, def, value, hint, changed, problem, onChange, onRe
           {about && <Text variant="caption" tone="dim" className="option-field-row__description">{about}</Text>}
         </>
       ) : undefined}
-      descriptionLines={0}
-      help={full && <Text variant="caption" className="option-field-row__help">{full}</Text>}
+      descriptionLines={2}
+      descriptionOverflow="hint"
       changed={changed}
       advanced={def.visibility.length === 0}
       problem={problem ?? jsonProblem ?? undefined}

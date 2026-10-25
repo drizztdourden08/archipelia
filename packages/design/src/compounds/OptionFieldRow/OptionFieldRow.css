@@ -1,17 +1,8 @@
 /* @layer renderer-app @kind style */
-.option-field-row__hint,
-.option-field-row__description {
+.option-field-row__hint {
   display: block;
 }
 
 .option-field-row__description {
-  display: -webkit-box;
-  overflow: hidden;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-}
-
-.option-field-row__help {
-  display: block;
   white-space: pre-line;
 }
