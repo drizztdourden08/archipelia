@@ -20,8 +20,8 @@ const probeLobby = async (address: string, code: string): Promise<LobbyProbe> =>
     return await new Promise<LobbyProbe>((resolve) => {
       const done = (probe: LobbyProbe) => {
         clearTimeout(timer);
-        transport.close();
         resolve(probe);
+        transport.close();
       };
       const timer = setTimeout(() => done({ ok: false, message: NO_ANSWER }), PROBE_TIMEOUT_MS);
       transport.listen((event) => {

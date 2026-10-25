@@ -22,7 +22,7 @@ const openLan = async (tour: AppReviewTour) => {
   tour.check('hosting-lan-running', running, 'the page shows On your network at the LAN address and port', 'the page does not show the LAN address');
   const mode = await modeNow();
   tour.check('hosting-lan-mode', mode === 'lan', 'the answer switches the network mode to LAN', `the network mode is ${mode}`);
-  const both = await waitText(tour, /This computer\s*127\.0\.0\.1:\d+/, () => layer(tour));
+  const both = await waitText(tour, /this computer\s*127\.0\.0\.1:\d+/i, () => layer(tour));
   tour.check('hosting-both-addresses', both, 'the state shows the address on this computer and the address on the network', 'the same-computer address is not shown');
   await tour.capture('lobby-hosting-lan');
 };
