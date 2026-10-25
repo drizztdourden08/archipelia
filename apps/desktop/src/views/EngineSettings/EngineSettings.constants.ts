@@ -123,7 +123,9 @@ const WHEN_FORMAT: Record<WhenForm, DatePreset> = { ago: 'relative', day: 'date'
 
 const KEPT_AFTER_REMOVE = 'Sessions made with it are hosted with the engine in use.';
 
+const ACTIVE_REMOVE_NOTE = 'It is the engine in use. Until you install one again, no session can be made or hosted. The install window opens right after, so you can pick a release.';
+
 export {
-  ACTIVE_LOOK, CHANGE_ACTION, CHANGE_HINT, CHECK_ACTION, FAILED_CHECK, FAILED_LOOK, FAILED_UNKNOWN, FAILURE, KEPT_AFTER_REMOVE, LAST_GOOD_LOOK,
+  ACTIVE_LOOK, ACTIVE_REMOVE_NOTE, CHANGE_ACTION, CHANGE_HINT, CHECK_ACTION, FAILED_CHECK, FAILED_LOOK, FAILED_UNKNOWN, FAILURE, KEPT_AFTER_REMOVE, LAST_GOOD_LOOK,
   LIST_TEXT, MANY_ENGINES, NO_PLAN, REBUILD_CONFIRM, ROW_TEXT, SECTION_TEXT, STARTING_STEP, STATE_VIEW, TAG_VIEW, WHEN_FORMAT,
 };
