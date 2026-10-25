@@ -1,8 +1,8 @@
 /* @layer core @kind logic */
 import type { LobbyStarted } from '@drizztdourden08/archipelia-lobby-protocol';
 import type { Lobby, LobbyRoom, SlotUpload } from '@archipelia/model';
-import { LOOPBACK_HOST } from '../../listener/listener.constants';
 import type { LobbyContext } from '../lobby-context.type';
+import { localAddress } from './local-address';
 
 const slotResult = (room: LobbyRoom, slot: SlotUpload) => ({
   name: slot.name,
@@ -19,10 +19,11 @@ const playingSlots = (lobby: Lobby, memberId: string): SlotUpload[] => {
 
 const roomInfo = async (ctx: LobbyContext, lobby: Lobby, room: LobbyRoom): Promise<LobbyStarted['room']> => {
   const password = room.passwordRef ? await ctx.deps.secrets.get(room.passwordRef) : null;
+  const local = localAddress(lobby.options.room, room);
   return {
     address: `${room.host}:${room.port}`, host: room.host, port: room.port, tls: room.tls,
     ...(password ? { password } : {}), ...(room.roomUrl ? { roomUrl: room.roomUrl } : {}),
-    ...(lobby.options.room.kind === 'local' ? { localAddress: `${LOOPBACK_HOST}:${room.port}` } : {}),
+    ...(local ? { localAddress: local } : {}),
   };
 };
 
