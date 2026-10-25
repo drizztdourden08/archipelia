@@ -31,10 +31,10 @@ const usage = {
   example: `import { DirectConnection } from '../DirectConnection';
 
 const DirectConnectionSample = () => (
-  <DirectConnection busy={false} onEnable={() => undefined} onDisable={() => undefined} onOptions={() => undefined} />
+  <DirectConnection busy={false} onEnable={() => undefined} onDisable={() => undefined} onOptions={() => undefined} onServer={() => undefined} />
 );
 `,
-  propsHash: '30fe0d74afce83ae',
+  propsHash: '51c7a775bf9ac6c0',
 } satisfies ComponentUsage;
 
 export { usage };

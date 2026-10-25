@@ -33,7 +33,7 @@ const usage = {
 
 const HostChoiceSample = () => <HostChoice />;
 `,
-  propsHash: 'aa942c85fbcd5fd6',
+  propsHash: 'd824746e29aae235',
 } satisfies ComponentUsage;
 
 export { usage };
