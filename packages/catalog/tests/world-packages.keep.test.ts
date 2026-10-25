@@ -2,10 +2,10 @@
 import { mkdir, mkdtemp, readFile, rm, stat, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { strToU8, zipSync } from 'fflate';
 import { afterAll, beforeAll, beforeEach, describe, expect, test, vi } from 'vitest';
 import type { EngineRuntime } from '@archipelia/model';
 import { memoryFiles, recordOf } from './memory-files.fixtures';
+import { writeZip } from './zip-file.fixtures';
 
 const engine = vi.hoisted(() => ({ installPackages: vi.fn(), readOptionsSchema: vi.fn() }));
 
@@ -20,11 +20,7 @@ const GAME = 'Chrono Trigger Rando-Dalton Imperial';
 let base = '';
 let runtime: EngineRuntime;
 
-const write = async (name: string, entries: Record<string, string>) => {
-  const file = join(base, name);
-  await writeFile(file, zipSync(Object.fromEntries(Object.entries(entries).map(([k, v]) => [k, strToU8(v)]))));
-  return file;
-};
+const write = (name: string, entries: Record<string, string>) => writeZip(base, name, entries);
 
 const worldFile = (requirements?: string) => write('ctrdi.apworld', {
   'ctrdi/__init__.py': '', 'ctrdi/archipelago.json': `{"game":"${GAME}"}`, ...(requirements === undefined ? {} : { 'ctrdi/requirements.txt': requirements }),

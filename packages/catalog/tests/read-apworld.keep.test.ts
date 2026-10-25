@@ -6,14 +6,11 @@ import { strToU8, zipSync } from 'fflate';
 import { afterAll, beforeAll, describe, expect, test } from 'vitest';
 import { lieAboutSize } from '@archipelia/model/testing';
 import { readApworld } from '../src/install/read-apworld';
+import { writeZip } from './zip-file.fixtures';
 
 let dir = '';
 
-const write = async (name: string, entries: Record<string, string>) => {
-  const file = join(dir, name);
-  await writeFile(file, zipSync(Object.fromEntries(Object.entries(entries).map(([k, v]) => [k, strToU8(v)]))));
-  return file;
-};
+const write = (name: string, entries: Record<string, string>) => writeZip(dir, name, entries);
 
 beforeAll(async () => {
   dir = await mkdtemp(join(tmpdir(), 'archipelia-apworld-test-'));
