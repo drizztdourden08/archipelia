@@ -6,24 +6,44 @@
 .game-card__kind {
   display: flex;
   flex: none;
+  inline-size: var(--size-40);
+  block-size: var(--size-40);
+}
+
+.game-card__media {
+  position: relative;
+  display: flex;
+  flex: 1;
   align-items: center;
   justify-content: center;
-  inline-size: var(--size-32);
-  block-size: var(--size-32);
+  overflow: hidden;
   border-radius: var(--radius-md);
   background: var(--c-primary-dim);
   color: var(--c-text);
 }
 
-.game-card[data-kind='community'] .game-card__kind {
+.game-card__badge {
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline-end: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--size-2);
+  border-start-start-radius: var(--radius-sm);
+  background: var(--c-surface);
+  color: var(--c-text);
+}
+
+.game-card[data-kind='community'] .game-card__media {
   background: var(--c-info-dim);
 }
 
-.game-card[data-kind='first-party'] .game-card__kind {
+.game-card[data-kind='first-party'] .game-card__media {
   background: var(--c-tertiary-dim);
 }
 
-.game-card[data-kind='file'] .game-card__kind {
+.game-card[data-kind='file'] .game-card__media {
   background: var(--c-secondary-dim);
 }
 
@@ -56,4 +76,24 @@
 
 .game-card__note[data-warning] {
   color: var(--c-warning);
+}
+
+.game-card__summary-anchor {
+  display: flex;
+  min-inline-size: 0;
+}
+
+.game-card__summary {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.game-card__hint {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 12;
+  white-space: pre-line;
 }

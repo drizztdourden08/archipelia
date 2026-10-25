@@ -14,6 +14,8 @@ import { installFromFile } from '../install/install-from-file';
 import { installOfficial } from '../install/install-official';
 import { installWorld } from '../install/install-world';
 import { removeWorld } from '../install/remove-world';
+import { createEnricher } from '../enrich/create-enricher';
+import { createEnrichEntry } from '../enrich/create-enrich-entry';
 import { officialEntries } from '../official/official-entries';
 import type { CatalogServiceDeps, CatalogView, InstallRequest, Latest } from './catalog-service.type';
 import { CACHE_DIR } from './catalog-service.constants';
@@ -82,7 +84,11 @@ const createCatalogService = ({ games: files, cache, engineDir, fetch: fetchFn, 
 
   const remove = async (apworld: string) => removeWorld({ engineDir: await engineDir(), files, apworld });
 
-  return { install, official, read, remove };
+  const { enrich } = createEnricher({
+    cache, engineDir, entryOf: createEnrichEntry(engineDir, () => latest?.entries ?? []), ...(fetchFn ? { fetch: fetchFn } : {}),
+  });
+
+  return { enrich, install, official, read, remove };
 };
 
 export { createCatalogService };

@@ -19,4 +19,6 @@ const KIND_ICON: Record<GameCardKind, IconName> = {
 
 const MAX_TAGS = 2;
 
-export { GAME_STATUS, KIND_ICON, MAX_TAGS };
+const MEDIA_SIZE = 40;
+
+export { GAME_STATUS, KIND_ICON, MAX_TAGS, MEDIA_SIZE };

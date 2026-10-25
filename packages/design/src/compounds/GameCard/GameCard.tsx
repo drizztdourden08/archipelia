@@ -1,14 +1,15 @@
 /* @layer renderer-app @kind component */
 import { Box, Card, Flex, Icon, IconButton, Status, Tag, Text, Tooltip } from '@drizztdourden08/tessera/primitives';
-import { GAME_STATUS, KIND_ICON, MAX_TAGS } from './GameCard.constants';
+import { GAME_STATUS, MAX_TAGS } from './GameCard.constants';
 import type { GameCardProps } from './GameCard.type';
+import { GameCardMedia } from './sub-components/GameCardMedia';
 import './GameCard.css';
 
-const GameCard = ({ title, kind, kindLabel, version, status, notes, tags, actions }: GameCardProps) => (
+const GameCard = ({ title, kind, kindLabel, version, status, notes, tags, actions, summary, summaryHint, art }: GameCardProps) => (
   <Card role="group" aria-label={title} className="game-card" data-kind={kind}>
     <Flex align="center" gap="sm">
       <Tooltip content={kindLabel} focusable>
-        <Box className="game-card__kind" role="img" aria-label={kindLabel}><Icon name={KIND_ICON[kind]} size={18} /></Box>
+        <Box className="game-card__kind" role="img" aria-label={kindLabel}><GameCardMedia kind={kind} art={art} /></Box>
       </Tooltip>
       <Box className="game-card__main">
         <Text variant="subtitle" className="game-card__title" title={title}>{title}</Text>
@@ -22,6 +23,11 @@ const GameCard = ({ title, kind, kindLabel, version, status, notes, tags, action
           ))}
           {tags.slice(0, MAX_TAGS).map((tag) => <Tag key={tag}>{tag}</Tag>)}
         </Flex>
+        {summary && (
+          <Tooltip content={summaryHint ? <Text className="game-card__hint">{summaryHint}</Text> : summary} placement="bottom" className="game-card__summary-anchor">
+            <Text variant="caption" tone="dim" className="game-card__summary">{summary}</Text>
+          </Tooltip>
+        )}
       </Box>
       <Flex gap="2xs" className="game-card__actions">
         {actions.map((action) => (
