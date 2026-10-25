@@ -5,6 +5,7 @@ import { appApi } from '../ipc/app-api';
 import { REVIEW_GAME } from './review.constants';
 import { SELECTOR } from './review-dom.constants';
 import { checkGamesLayout } from './check-games-layout';
+import { cardNamed } from './card-named';
 import { clickNamed } from './click-named';
 import { waitNamed } from './wait-named';
 
@@ -22,7 +23,8 @@ export default defineReviewStep({
   run: async (tour) => {
     nav.open(ROUTE.games);
     await checkGamesLayout(tour);
-    await clickNamed(tour, SELECTOR.button, `Remove ${REVIEW_GAME.card}`, tour.find(SELECTOR.layer) ?? undefined);
+    const card = await tour.waitFor(() => cardNamed(tour, REVIEW_GAME.card));
+    if (card) await clickNamed(tour, SELECTOR.button, 'Remove', card);
     const confirm = await waitNamed(tour, SELECTOR.dialog, `Delete ${REVIEW_GAME.card}?`);
     tour.check('game-delete-asks', confirm !== null, `removing asks Delete ${REVIEW_GAME.card}?`, 'removing the game did not ask first');
     if (confirm) await clickNamed(tour, SELECTOR.button, 'Delete', confirm);
