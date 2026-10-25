@@ -15,20 +15,3 @@
 .game-store__anchor {
   display: grid;
 }
-
-.game-store__foot {
-  display: flex;
-  align-items: stretch;
-}
-
-.game-store__foot-bar {
-  flex: 1;
-}
-
-.game-store__foot-action {
-  display: flex;
-  align-items: center;
-  padding-inline: var(--space-sm);
-  border-block-start: var(--border-width-thin) solid var(--c-border);
-  background-color: var(--c-surface);
-}
