@@ -1,56 +1,52 @@
 /* @layer renderer-app @kind component */
-import { openExternal, SearchAnchor } from '@drizztdourden08/brock-react';
-import { Box, Button, ButtonRow, EmptyState, Flex, Grid, Icon, SearchInput, Spinner, Stack, Text } from '@drizztdourden08/tessera/primitives';
+import { openExternal } from '@drizztdourden08/brock-react';
+import { Box, EmptyState, Icon, IconButton, ScrollArea, Spinner, Stack, Tooltip } from '@drizztdourden08/tessera/primitives';
+import { FilterBar } from '@drizztdourden08/tessera/composites';
+import { ErrorCallout } from '@archipelia/design';
 import { useGameStore } from './behavior/useGameStore';
-import type { GameStoreProps } from './GameStore.type';
-import { ErrorCallout, GameCard } from '@archipelia/design';
-import { cardPropsOf } from './behavior/card-props';
+import { GAME_FIELDS } from './behavior/game-schema.constants';
 import { EMPTY_TEXT } from './GameStore.constants';
-import { gameAnchor } from './behavior/game-anchor';
+import { GameSection } from './sub-components/GameSection';
+import { GameStatusBar } from './sub-components/GameStatusBar';
 import './GameStore.css';
 
-const GameStore = ({ tab }: GameStoreProps) => {
-  const store = useGameStore(tab);
+const GameStore = () => {
+  const store = useGameStore();
   const handlers = { isBusy: store.isBusy, installWorld: store.installWorld, remove: store.remove, openHome: openExternal };
+  const resetKey = `${store.query}:${store.filters.length}`;
 
   return (
-    <Stack>
-      <Flex justify="between" align="center" wrap>
-        {!(store.loading && store.rows.length === 0) && (
-          <Text variant="caption">
-            {store.rows.length} worlds · {store.installed.length} installed{store.catalog ? ` · index for AP ${store.catalog.apVersion}` : ''}
-          </Text>
-        )}
-        <Box data-tour="game-store-tools">
-          <ButtonRow>
-            <SearchInput placeholder="Search worlds" aria-label="Search worlds" value={store.query} onChange={store.setQuery} />
-            <Button variant="secondary" loading={store.isBusy('load')} onClick={store.refresh} icon={<Icon name="refresh-cw" />}>Refresh index</Button>
-            <Button variant="secondary" loading={store.isBusy('file')} onClick={store.addFromFile} icon={<Icon name="plus" />}>Add from file</Button>
-          </ButtonRow>
-        </Box>
-      </Flex>
+    <Box className="game-store">
+      <Box data-tour="game-store-tools">
+        <FilterBar
+          search={store.query}
+          onSearchChange={store.setQuery}
+          searchPlaceholder="Search worlds"
+          searchLabel="Search worlds"
+          schema={GAME_FIELDS}
+          clauses={store.filters}
+          onChange={store.setFilters}
+          extra={(
+            <Tooltip content="Refresh the index" placement="bottom">
+              <IconButton size="sm" variant="ghost" label="Refresh index" loading={store.isBusy('load')} onClick={store.refresh}><Icon name="refresh-cw" /></IconButton>
+            </Tooltip>
+          )}
+        />
+      </Box>
       {store.error && <ErrorCallout message={store.error} onRetry={store.loadFailed ? store.retry : undefined} />}
-      {store.visible.length === 0
-        ? (
-          <EmptyState icon={store.loading ? <Spinner /> : undefined} message={EMPTY_TEXT[store.empty]}
-            action={store.empty === 'installed' ? <Button variant="primary" onClick={store.openOfficial}>Open Official</Button> : undefined} />
-        )
-        : (
-          <Grid minColWidth={260} gap="md">
-            {store.visible.slice(0, store.cards.shown).map((row) => (
-              <SearchAnchor key={`${row.entry.source}:${row.entry.apworld}`} anchor={gameAnchor(row.entry.apworld)} className="game-store__anchor">
-                <GameCard {...cardPropsOf(row, handlers)} />
-              </SearchAnchor>
-            ))}
-          </Grid>
-        )}
-      {store.cards.hidden && (
-        <Flex justify="center" align="center" gap="sm" wrap>
-          <Text variant="caption">{`Showing ${store.cards.shown} of ${store.cards.total}: refine the search or show more.`}</Text>
-          <Button variant="secondary" onClick={store.cards.showMore}>Show more</Button>
-        </Flex>
-      )}
-    </Stack>
+      <ScrollArea scrollbar="slim" className="game-store__body">
+        {store.visible.length === 0
+          ? <EmptyState icon={store.loading ? <Spinner /> : undefined} message={EMPTY_TEXT[store.empty]} />
+          : (
+            <Stack gap="lg">
+              {store.sections.map((section) => (
+                <GameSection key={section.id} section={section} resetKey={resetKey} filtered={store.filtered} handlers={handlers} />
+              ))}
+            </Stack>
+          )}
+      </ScrollArea>
+      <GameStatusBar summary={store.summary} loading={store.loading} filtered={store.filtered} adding={store.isBusy('file')} onAddFromFile={store.addFromFile} />
+    </Box>
   );
 };
 

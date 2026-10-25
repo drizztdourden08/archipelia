@@ -2,7 +2,7 @@
 import type { ComponentUsage } from '@drizztdourden08/tessera';
 
 const usage = {
-  job: 'One Archipelago world in the games store: its source, its install state, a few detail lines and the actions on it.',
+  job: 'One Archipelago world in the games store as a compact card: its kind as an icon, its name, its world version, its state and icon actions.',
   useWhen: [
     'A world in the grid of the games store, installed or not.',
     'Any card that offers to install, update or remove one world.',
@@ -12,16 +12,19 @@ const usage = {
     { case: 'A headline number with its trend.', use: 'StatTile' },
   ],
   rules: [
-    'Keep details to short lines, such as the world version and the Archipelago version it needs.',
+    'Say what kind of world it is with the kind icon and its tint, never with a word on the card; kindLabel names the icon for the hint and for a screen reader.',
+    'Show the world version once, such as 1.2.0 or 1.0.0 to 1.2.1 for an update.',
+    'Pass one status only: installed, update, no release yet or not available. Leave it out for a world that is only there to add.',
+    'Put detail that is rare or long in a note, shown as an icon with a hint, and leave out what every card would repeat.',
     'Mark at most one action primary: the next step for that world.',
-    'Pass status only when the world is installed or has an update; leave it out for a world not installed.',
     'Disable an action while that world is busy; never hide it.',
-    'Mark the action that is running as loading, with a label that says what runs, so only that card shows the work.',
+    'Mark the action that is running as loading, so only that card shows the work.',
     'Mark an action that deletes something as danger.',
   ],
   a11y: [
     'The card is a group named after the world title.',
-    'Each action button is named with the action and the world, such as Add Timespinner.',
+    'Each icon button is named with the action and the world, such as Add Timespinner, and shows its action as a hint.',
+    'The kind icon and each note are named images with a hint that opens on focus.',
     'A loading action is busy and turned off until its work ends.',
   ],
   tree: {
@@ -33,14 +36,17 @@ const usage = {
 const GameCardSample = ({ onInstall }: { onInstall: () => void }) => (
   <GameCard
     title="Timespinner"
-    source="Official"
-    status={{ label: 'update', tone: 'warning' }}
-    details={['World 1.2.0', 'For AP 0.6.7']}
-    actions={[{ label: 'Update', onClick: onInstall, variant: 'primary' }]}
+    kind="community"
+    kindLabel="Community world"
+    version="1.0.0 to 1.2.0"
+    status="update"
+    notes={[]}
+    tags={[]}
+    actions={[{ id: 'update', label: 'Update', icon: 'download', primary: true, onClick: onInstall }]}
   />
 );
 `,
-  propsHash: '973f866b6b077843',
+  propsHash: '8bf524fde41d817c',
 } satisfies ComponentUsage;
 
 export { usage };

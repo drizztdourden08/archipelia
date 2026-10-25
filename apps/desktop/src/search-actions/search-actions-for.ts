@@ -20,9 +20,9 @@ const searchActionsFor = (room: Session | undefined, filePicker: FilePickerPort)
     id: 'archipelia:install-game',
     label: 'Install a game',
     group: ACTION_GROUP,
-    description: 'Open the official games to install a world.',
+    description: 'Open the games to install a world.',
     keywords: ['apworld', 'world', 'add', 'store'],
-    run: () => nav.open(ROUTE.officialGames),
+    run: () => nav.open(ROUTE.games),
   },
   {
     id: 'archipelia:add-game-file',
