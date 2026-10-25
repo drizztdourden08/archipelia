@@ -4,7 +4,7 @@ import { NEW_SERVER } from '../ServerManager.constants';
 
 const serverMeta = (entry: ServerEntry): string => {
   if (!entry.id) return NEW_SERVER.meta;
-  return `${entry.host} · ${entry.auth.kind === 'ssh-key' ? 'SSH key' : 'password'}`;
+  return entry.host;
 };
 
 export { serverMeta };

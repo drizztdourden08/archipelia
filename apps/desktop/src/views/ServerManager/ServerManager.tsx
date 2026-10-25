@@ -50,6 +50,9 @@ const ServerManager = () => {
       onSave={manager.save}
       onDiscard={manager.discard}
       storageKey={LIST.width}
+      listWidth={LIST.listWidth}
+      minListWidth={LIST.minListWidth}
+      maxListWidth={LIST.maxListWidth}
       detail={draft && <ServerEditor draft={draft} manager={manager} />}
       emptyDetail={(
         <Stack>
