@@ -53,13 +53,18 @@ describe('engine state', () => {
 
 });
 
+const twoEnginesNewestActive = async (): Promise<string> => {
+  const root = await tempRoot();
+  await registerEngine(root, engine('0.6.7', '3.12.14'));
+  await registerEngine(root, engine('0.6.8', '3.12.15'));
+  await activateEngine(root, 'ap-0.6.7_py-3.12.14_win32-x64');
+  await activateEngine(root, 'ap-0.6.8_py-3.12.15_win32-x64');
+  return root;
+};
+
 describe('engine state, forgetting and offers', () => {
   test('a forgotten last good engine is cleared and the active one stays', async () => {
-    const root = await tempRoot();
-    await registerEngine(root, engine('0.6.7', '3.12.14'));
-    await registerEngine(root, engine('0.6.8', '3.12.15'));
-    await activateEngine(root, 'ap-0.6.7_py-3.12.14_win32-x64');
-    await activateEngine(root, 'ap-0.6.8_py-3.12.15_win32-x64');
+    const root = await twoEnginesNewestActive();
     const state = await forgetEngine(root, 'ap-0.6.7_py-3.12.14_win32-x64');
     expect(state.lastGood).toBeUndefined();
     expect(state.active).toBe('ap-0.6.8_py-3.12.15_win32-x64');
@@ -67,11 +72,7 @@ describe('engine state, forgetting and offers', () => {
   });
 
   test('forgetting the active engine clears the active pointer and keeps the others', async () => {
-    const root = await tempRoot();
-    await registerEngine(root, engine('0.6.7', '3.12.14'));
-    await registerEngine(root, engine('0.6.8', '3.12.15'));
-    await activateEngine(root, 'ap-0.6.7_py-3.12.14_win32-x64');
-    await activateEngine(root, 'ap-0.6.8_py-3.12.15_win32-x64');
+    const root = await twoEnginesNewestActive();
     const state = await forgetEngine(root, 'ap-0.6.8_py-3.12.15_win32-x64');
     expect(state.active).toBeUndefined();
     expect(findActiveEngine(state)).toBeUndefined();
