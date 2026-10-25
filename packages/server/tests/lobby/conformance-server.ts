@@ -11,7 +11,7 @@ import type { LobbyStore } from '../../src/lobby/lobby-service.type';
 import { createLobbyStore } from '../../src/lobby/store/create-lobby-store';
 import { startListener } from '../../src/listener/start-listener';
 import { createNodeDomains } from '../../src/node';
-import { fakeTrust, testDeps } from './test-deps';
+import { fakeTrust, testDeps } from '../../src/testing';
 
 const faultyStore = (store: LobbyStore, armed: boolean): LobbyStore => {
   let fired = !armed;

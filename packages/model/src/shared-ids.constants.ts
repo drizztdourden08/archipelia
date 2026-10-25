@@ -9,10 +9,13 @@ const DOMAIN = {
   lobbies: 'lobbies',
   server: 'server',
   lobbyServers: 'lobbyServers',
+  joins: 'joins',
 } as const;
 
 const ENGINE_JOB = 'archipelia-engine-setup';
 
 const RUN_JOB_PREFIX = 'archipelia-run-';
 
-export { DOMAIN, ENGINE_JOB, RUN_JOB_PREFIX };
+const LOBBY_TEMPLATE_PREFIX = 'lobby-';
+
+export { DOMAIN, ENGINE_JOB, LOBBY_TEMPLATE_PREFIX, RUN_JOB_PREFIX };

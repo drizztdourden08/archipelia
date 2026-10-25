@@ -1,5 +1,6 @@
 /* @layer core @kind logic */
 import type { Lobby, SessionPlayer, SessionTemplate } from '@archipelia/model';
+import { lobbyTemplateId } from '@archipelia/model';
 import type { LobbyContext } from '../lobby-context.type';
 import { roomPassword } from './room-password';
 import type { Participant } from './start.type';
@@ -11,7 +12,7 @@ const playerOf = async (ctx: LobbyContext, lobby: Lobby, { slot }: Participant, 
 };
 
 const lobbyTemplate = async (ctx: LobbyContext, lobby: Lobby, players: Participant[]): Promise<SessionTemplate> => ({
-  id: `lobby-${lobby.id}`,
+  id: lobbyTemplateId(lobby.id),
   name: lobby.name,
   players: await Promise.all(players.map((player, index) => playerOf(ctx, lobby, player, index))),
   generator: lobby.options.generator,

@@ -12,7 +12,7 @@ import { createLobbyService } from '../../src/lobby/create-lobby-service';
 import { createLobbyStore } from '../../src/lobby/store/create-lobby-store';
 import { createNodeDomains } from '../../src/node';
 import { engine, helloOf, holdFiles, linkOf } from './security-kit';
-import { fakeTrust, testDeps } from './test-deps';
+import { fakeTrust, testDeps } from '../../src/testing';
 
 const NO_KEYRING = 'This system cannot keep a secret encrypted, so it was not stored.';
 

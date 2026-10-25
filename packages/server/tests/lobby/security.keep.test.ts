@@ -12,7 +12,7 @@ import { createRateLimiter } from '../../src/lobby/link/create-rate-limiter';
 import { buildOverlay } from '../../src/lobby/overlay/build-overlay';
 import { startListener } from '../../src/listener/start-listener';
 import { admin, engine, fileOf, helloOf, holdFiles, linkOf, startService, tick } from './security-kit';
-import { fakeTrust, testDeps } from './test-deps';
+import { fakeTrust, testDeps } from '../../src/testing';
 
 const joined = async (service: Awaited<ReturnType<typeof startService>>['service'], hello = helloOf()) => {
   const result = await service.protocol.join(hello, linkOf().link);
