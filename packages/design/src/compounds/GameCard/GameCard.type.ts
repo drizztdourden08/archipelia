@@ -28,6 +28,9 @@ type GameCardProps = {
   notes: GameCardNote[];
   tags: string[];
   actions: GameCardAction[];
+  summary?: string;
+  summaryHint?: string;
+  art?: string;
 };
 
 export type { GameCardAction, GameCardKind, GameCardNote, GameCardProps, GameCardStatus };

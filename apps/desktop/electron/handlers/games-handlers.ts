@@ -8,6 +8,7 @@ const gamesHandlers: HandlerGroup = {
     const { catalog, installed } = ctx.services;
     ctx.handle(APP_CHANNELS.catalogRead, (_event, refresh) => catalog.read(refresh));
     ctx.handle(APP_CHANNELS.catalogOfficial, () => catalog.official());
+    ctx.handle(APP_CHANNELS.catalogEnrich, (_event, request) => catalog.enrich(request));
     ctx.handle(APP_CHANNELS.gamesList, () => installed());
     ctx.handle(APP_CHANNELS.gamesInstall, (_event, request) => catalog.install(request));
     ctx.handle(APP_CHANNELS.gamesRemove, (_event, apworld) => catalog.remove(apworld));

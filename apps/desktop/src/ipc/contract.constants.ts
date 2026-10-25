@@ -1,6 +1,6 @@
 /* @layer renderer-app @kind config */
 import { defineChannels, event, invoke } from '@drizztdourden08/brock-core';
-import type { CatalogView, InstallRequest } from '@archipelia/catalog';
+import type { CatalogView, EnrichRequest, GameEnrichment, InstallRequest } from '@archipelia/catalog';
 import type {
   AdminLobby, CatalogEntry, EngineChoice, EngineEvent, EngineInstallResult, EngineOverview, EngineStatus, GamePreset,
   InstalledGame, LobbyServerEntry, ServerEntry, Session, SessionTemplate, StartupDecision,
@@ -24,6 +24,7 @@ const APP_CHANNELS = defineChannels({
   engineOfferShown: invoke<(version: string) => Promise<void>>()('ap:engine:offerShown'),
   catalogRead: invoke<(refresh: boolean) => Promise<CatalogView>>()('ap:catalog:read'),
   catalogOfficial: invoke<() => Promise<CatalogEntry[]>>()('ap:catalog:official'),
+  catalogEnrich: invoke<(request: EnrichRequest) => Promise<GameEnrichment | undefined>>()('ap:catalog:enrich'),
   gamesList: invoke<() => Promise<InstalledGame[]>>()('ap:games:list'),
   gamesInstall: invoke<(request: InstallRequest) => Promise<InstalledGame>>()('ap:games:install'),
   gamesRemove: invoke<(apworld: string) => Promise<void>>()('ap:games:remove'),

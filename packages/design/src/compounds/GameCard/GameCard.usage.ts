@@ -20,6 +20,8 @@ const usage = {
     'Disable an action while that world is busy; never hide it.',
     'Mark the action that is running as loading, so only that card shows the work.',
     'Mark an action that deletes something as danger.',
+    'Pass summary as one plain text description, shown in two lines at most; pass summaryHint with the longer text for the hint. Never pass markup.',
+    'Pass art as a small picture of the world, a data address, and it fills the media tile with the kind icon as a badge; leave it out and the tile shows the kind icon alone.',
   ],
   a11y: [
     'The card is a group named after the world title.',
@@ -46,7 +48,7 @@ const GameCardSample = ({ onInstall }: { onInstall: () => void }) => (
   />
 );
 `,
-  propsHash: '8bf524fde41d817c',
+  propsHash: '1997f4629b33569c',
 } satisfies ComponentUsage;
 
 export { usage };
