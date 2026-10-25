@@ -29,6 +29,8 @@ const SECTIONS: readonly { id: GameSectionId; title: string; icon: IconName }[] 
 
 const MAX_CARDS = 120;
 
+const SEEN_DWELL_MS = 250;
+
 const EMPTY_TEXT: Record<EmptyKind, string> = {
   loading: 'Loading the catalog',
   search: 'No world matches',
@@ -46,4 +48,4 @@ const FAILURE = {
   file: 'Could not add the game from that file.',
 } as const;
 
-export { APWORLD, EMPTY_TEXT, FAILURE, FIT_LABEL, KIND_LABEL, KIND_OF, MAX_CARDS, NONE_INSTALLED, NO_RELEASE, SECTIONS, SOURCE_LABEL, STATE_LABEL };
+export { APWORLD, EMPTY_TEXT, FAILURE, FIT_LABEL, KIND_LABEL, KIND_OF, MAX_CARDS, NONE_INSTALLED, NO_RELEASE, SECTIONS, SEEN_DWELL_MS, SOURCE_LABEL, STATE_LABEL };

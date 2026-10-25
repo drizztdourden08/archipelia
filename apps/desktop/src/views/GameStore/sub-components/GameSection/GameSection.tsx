@@ -1,11 +1,10 @@
 /* @layer renderer-app @kind component */
 import { SearchAnchor } from '@drizztdourden08/brock-react';
 import { Button, Flex, Grid, Icon, SectionHeader, Stack, Text } from '@drizztdourden08/tessera/primitives';
-import { GameCard } from '@archipelia/design';
-import { cardPropsOf } from '../../behavior/card-props';
 import { gameAnchor } from '../../behavior/game-anchor';
 import { useCardLimit } from '../../behavior/useCardLimit';
 import { NONE_INSTALLED, SECTIONS } from '../../GameStore.constants';
+import { GameRowCard } from '../GameRowCard';
 import type { GameSectionProps } from './GameSection.type';
 
 const GameSection = ({ section, resetKey, filtered, handlers }: GameSectionProps) => {
@@ -21,7 +20,7 @@ const GameSection = ({ section, resetKey, filtered, handlers }: GameSectionProps
       <Grid minColWidth={280} gap="sm">
         {rows.slice(0, cards.shown).map((row) => (
           <SearchAnchor key={`${row.entry.source}:${row.entry.apworld}`} anchor={gameAnchor(row.entry.apworld)} className="game-store__anchor">
-            <GameCard {...cardPropsOf(row, handlers)} />
+            <GameRowCard row={row} handlers={handlers} />
           </SearchAnchor>
         ))}
       </Grid>
