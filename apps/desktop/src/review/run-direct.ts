@@ -8,12 +8,13 @@ import { SELECTOR } from './review-dom.constants';
 import { clickNamed } from './click-named';
 import { directLobby } from './direct-lobby';
 import { waitText } from './wait-text';
+import { withHeartbeat } from './with-heartbeat';
 
 const layer = () => document.querySelector<HTMLElement>(SELECTOR.layer);
 
 const runDirect = async (tour: AppReviewTour, templateId: string, lobbyId: string) => {
   await clickNamed(tour, SELECTOR.button, DIRECT_UI.run, tour.find(SELECTOR.layer) ?? undefined);
-  const hosting = await tour.waitFor(() => (directLobby(lobbyId)?.phase === 'hosting' ? true : null), DIRECT_RUN_MS);
+  const hosting = await withHeartbeat(tour, tour.waitFor(() => (directLobby(lobbyId)?.phase === 'hosting' ? true : null), DIRECT_RUN_MS), () => 'the session is still making its seed');
   tour.check('direct-run', hosting === true, 'Run starts the lobby of the session and the room is hosting', 'the session with direct connection did not reach hosting');
   if (!hosting) return;
   openSessionEditor(templateId);

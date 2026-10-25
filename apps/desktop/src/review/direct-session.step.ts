@@ -41,9 +41,9 @@ export default defineReviewStep({
     if (!template) return;
     const section = await openEditor(tour, template.id);
     tour.check('direct-section', section, 'the session editor has a Direct connection section', 'the session editor has no Direct connection section');
-    await chooseHosting(tour);
     const lobby = await enableDirect(tour);
     if (!lobby) return;
+    await chooseHosting(tour);
     await joinAsPlayer(tour, lobby.code);
     await openEditor(tour, template.id);
     await admitPlayers(tour, lobby);
