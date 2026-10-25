@@ -1,46 +1,43 @@
 /* @layer tests @kind test */
 import { describe, expect, test } from 'vitest';
 import { mergeLobby } from '../../src/stores/merge-lobby';
-import { consentOptions } from '../../src/views/LobbyDetail/behavior/consent-options';
-import { lobbyActions } from '../../src/views/LobbyDetail/behavior/lobby-actions';
-import { memberActions } from '../../src/views/LobbyDetail/behavior/member-actions';
-import { pendingWorlds } from '../../src/views/LobbyDetail/behavior/pending-worlds';
-import { readySlotCount } from '../../src/views/LobbyDetail/behavior/ready-slot-count';
-import { resultsFacts } from '../../src/views/LobbyDetail/behavior/results-facts';
-import { roomText } from '../../src/views/LobbyDetail/behavior/room-text';
-import { trustTag } from '../../src/views/LobbyDetail/behavior/trust-tag';
-import { usedSlotCount } from '../../src/views/LobbyDetail/behavior/used-slot-count';
-import { serverNotice } from '../../src/views/LobbyList/behavior/server-notice';
-import { waitingCount } from '../../src/views/LobbyList/behavior/waiting-count';
+import { directRows } from '../../src/views/DirectConnection/behavior/direct-rows';
+import { joinFacts } from '../../src/views/DirectConnection/behavior/join-facts';
+import { resultsFacts } from '../../src/views/DirectConnection/behavior/results-facts';
+import { serverNotice } from '../../src/views/DirectConnection/behavior/server-notice';
+import { consentOptions } from '../../src/views/LobbyMembers/behavior/consent-options';
+import { memberActions } from '../../src/views/LobbyMembers/behavior/member-actions';
+import { pendingWorlds } from '../../src/views/LobbyMembers/behavior/pending-worlds';
+import { trustTag } from '../../src/views/LobbyMembers/behavior/trust-tag';
 import { lobby, member, slot, world } from './lobby-fixtures';
 
-describe('what a lobby lets the host do', () => {
-  test('offers lock, start and close while the lobby is open, and blocks start until a slot is ready', () => {
-    expect(lobbyActions(lobby())).toMatchObject({ lock: true, start: true, close: true, stopRoom: false });
-    expect(lobbyActions(lobby()).startBlock).toContain('No slot is ready');
-    const ready = lobby({ members: [member({ admission: 'approved' })] });
-    expect(readySlotCount(ready)).toBe(1);
-    expect(lobbyActions(ready).startBlock).toBeNull();
-  });
-
-  test('stops offering lock and start once the room hosts, and offers to stop the room', () => {
-    const hosting = lobby({ phase: 'hosting', room: { seed: 's', zip: 'z', host: 'h', port: 1, tls: 'no', files: [], state: 'hosting' } });
-    expect(lobbyActions(hosting)).toMatchObject({ lock: false, start: false, stopRoom: true });
-    expect(lobbyActions(lobby({ phase: 'closed' })).close).toBe(false);
-    expect(lobbyActions(lobby({ phase: 'failed' })).start).toBe(true);
-  });
-
+describe('what the session lets the host do with a connected player', () => {
   test('lets the host approve or refuse a waiting player and remove an approved one', () => {
     expect(memberActions(lobby(), member())).toEqual({ approve: true, refuse: true, remove: false });
     expect(memberActions(lobby(), member({ admission: 'approved' }))).toEqual({ approve: false, refuse: false, remove: true });
     expect(memberActions(lobby(), member({ admission: 'approved', kind: 'host' })).remove).toBe(false);
     expect(memberActions(lobby({ phase: 'hosting' }), member())).toEqual({ approve: false, refuse: false, remove: false });
   });
+});
 
-  test('counts used slots like the server: a client holds at least one', () => {
-    const many = lobby({ members: [member({ slots: [] }), member({ id: 'm_2', slots: [slot(), slot({ name: 'B' })] }), member({ id: 'm_3', admission: 'refused' })] });
-    expect(usedSlotCount(many)).toBe(3);
-    expect(waitingCount(many)).toBe(2);
+describe('the direct connection section', () => {
+  const handlers = { templateId: 't1', busy: false, onEnable: () => undefined, onDisable: () => undefined, onOptions: () => undefined, onServer: () => undefined };
+
+  test('offers only the switch while the session takes no direct connection', () => {
+    expect(directRows(handlers).map((row) => row.id)).toEqual(['allow']);
+  });
+
+  test('offers Host approval on and unlisted clients off for a session with a lobby', () => {
+    const rows = directRows({ ...handlers, direct: { serverId: 'local', lobbyId: 'lb_1', admission: 'host-approval', allowUnlisted: false } });
+    expect(rows.map((row) => row.id)).toEqual(['allow', 'approval', 'unlisted']);
+    expect(rows.map((row) => ('input' in row && row.input?.kind === 'toggle' ? row.input.value : null))).toEqual([true, true, false]);
+  });
+
+  test('shows the session code with a copy button, the server address and the Archipelago version', () => {
+    const facts = joinFacts(lobby(), '127.0.0.1:38290');
+    expect(facts.map((fact) => fact.label)).toEqual(['Session code', 'Server address', 'Archipelago version']);
+    expect(facts[0]).toMatchObject({ value: 'K7QM-4XT2', copyable: 'session code' });
+    expect(joinFacts(lobby(), null).map((fact) => fact.label)).toEqual(['Session code', 'Archipelago version']);
   });
 });
 
@@ -69,12 +66,6 @@ describe('the members and the consent dialog', () => {
     expect(message).not.toContain('user rights');
   });
 
-  test('describes where the room runs', () => {
-    expect(roomText({ kind: 'local', port: 38281 })).toContain('38281');
-    expect(roomText({ kind: 'archipelago-gg' })).toBe('archipelago.gg');
-    expect(roomText({ kind: 'remote', serverId: 's1' }, 'Home box')).toBe('Remote server Home box');
-  });
-
   test('lists the room and its files once the lobby has started', () => {
     const hosting = lobby({ room: { seed: 'S1', zip: 'z', host: '10.0.0.5', port: 38281, tls: 'no', files: [], state: 'hosting', roomUrl: 'https://x.test/room' } });
     expect(resultsFacts(hosting, false).map((fact) => fact.label)).toEqual(['Room address', 'Room state', 'Seed', 'Connection', 'Room page']);
@@ -84,7 +75,7 @@ describe('the members and the consent dialog', () => {
   });
 });
 
-describe('the lobby list', () => {
+describe('the lobby of a session', () => {
   test('warns only for the server on this computer, and only when it does not listen', () => {
     const status = { state: 'failed', options: { mode: 'lan', publicLookup: true }, automation: false, roomPasswords: 'vault', lanAddress: '1.2.3.4' } as const;
     expect(serverNotice(true, status)).toContain('not running');

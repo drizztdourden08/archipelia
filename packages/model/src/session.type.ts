@@ -1,4 +1,5 @@
 /* @layer core @kind types */
+import type { LobbyAdmission } from './lobby.type';
 import type { OptionValue } from './options.type';
 
 type ReleaseMode = 'disabled' | 'enabled' | 'auto' | 'auto-enabled' | 'goal';
@@ -33,6 +34,13 @@ type ServerSettings = {
   autoShutdownMinutes: number;
 };
 
+type DirectConnection = {
+  serverId: string;
+  lobbyId: string;
+  admission: LobbyAdmission;
+  allowUnlisted: boolean;
+};
+
 type SessionTemplate = {
   id: string;
   name: string;
@@ -40,6 +48,7 @@ type SessionTemplate = {
   generator: GeneratorSettings;
   server: ServerSettings;
   host: HostTarget;
+  direct?: DirectConnection;
   updatedAt: number;
 };
 
@@ -70,6 +79,6 @@ type Session = {
 };
 
 export type {
-  Endpoint, GeneratorSettings, HostTarget, PlayerSource, ReleaseMode, RemainingMode, ServerSettings, Session,
+  DirectConnection, Endpoint, GeneratorSettings, HostTarget, PlayerSource, ReleaseMode, RemainingMode, ServerSettings, Session,
   SessionEngine, SessionOutput, SessionPlayer, SessionStatus, SessionTemplate, SessionWorld, SpoilerLevel,
 };

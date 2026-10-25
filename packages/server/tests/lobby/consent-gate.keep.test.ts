@@ -14,7 +14,7 @@ import { createBwrapRunner } from '../../src/sandbox/create-bwrap-runner';
 import { BASIC_FEATURES } from '../../src/sandbox/sandbox.constants';
 import type { SandboxRunner } from '../../src/sandbox/sandbox.type';
 import { engine, fileOf, helloOf, holdFiles, linkOf, tick } from './security-kit';
-import { fakeTrust, testDeps } from './test-deps';
+import { fakeTrust, testDeps } from '../../src/testing';
 
 type GateOptions = { sandbox?: SandboxRunner; trust?: LobbyTrust };
 

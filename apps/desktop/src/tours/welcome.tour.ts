@@ -44,7 +44,7 @@ export default defineTour({
     {
       id: 'session',
       title: '4. A session',
-      body: 'A session is a saved setup: the players, their presets and the server options. Sessions has its own entry in the menu, right after Home. Press New session here, then Run to make a seed and host the room.',
+      body: 'A session is a saved setup: the players, their presets and the server options. Turn on Allow direct connection in a session to let friends connect as players with their own Archipelia. Sessions has its own entry in the menu, right after Home. Press New session here, then Run to make a seed and host the room. Join a session, on the same page, joins the session of another host.',
       mascot: 'jump',
       open: ROUTE.sessions,
     },

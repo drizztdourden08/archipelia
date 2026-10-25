@@ -10,7 +10,7 @@ import { createLobbyService } from '../../src/lobby/create-lobby-service';
 import type { LobbyLink, LobbyTrust } from '../../src/lobby/lobby-service.type';
 import { createLobbyStore } from '../../src/lobby/store/create-lobby-store';
 import { createNodeDomains } from '../../src/node';
-import { fakeTrust, testDeps } from './test-deps';
+import { fakeTrust, testDeps } from '../../src/testing';
 
 type KitOptions = { trust?: LobbyTrust; run?: (template: SessionTemplate, lobby: LobbyRun) => Promise<Session> };
 

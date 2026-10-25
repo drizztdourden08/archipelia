@@ -1,7 +1,5 @@
 /* @layer renderer-app @kind logic */
-import { nav } from '@drizztdourden08/brock-react';
 import type { AppReviewTour } from '@drizztdourden08/brock-react';
-import { ROUTE } from '../hooks/app-navigation.constants';
 import { appApi } from '../ipc/app-api';
 import { HOST_UI } from './review.constants';
 import { SELECTOR } from './review-dom.constants';
@@ -35,15 +33,12 @@ const stopLan = async (tour: AppReviewTour) => {
 };
 
 const chooseHosting = async (tour: AppReviewTour) => {
-  nav.open(ROUTE.lobbies);
   const asked = await waitText(tour, /where to host/i, () => layer(tour));
   const options = await waitText(tour, /This computer only[\s\S]*My local network \(LAN\)[\s\S]*A remote Archipelia server/, () => layer(tour));
-  tour.check('hosting-choice', asked && options, 'the Lobbies page asks where to host with three options', 'the Where to host choice is missing or incomplete');
+  tour.check('hosting-choice', asked && options, 'the Direct connection section asks where to host with three options', 'the Where to host choice is missing or incomplete');
   await tour.capture('lobby-hosting-private');
   await openLan(tour);
   await stopLan(tour);
-  const joinPath = await waitText(tour, /join a lobby/i, () => layer(tour));
-  tour.check('join-path', joinPath, 'the page has a Join a lobby path', 'the Join a lobby path is missing');
 };
 
 export { chooseHosting };

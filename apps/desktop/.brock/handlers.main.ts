@@ -3,12 +3,13 @@ import type { HandlerGroup } from '@drizztdourden08/brock-electron/main';
 import { engineHandlers } from '../electron/handlers/engine-handlers';
 import { gamesHandlers } from '../electron/handlers/games-handlers';
 import { ggHandlers } from '../electron/handlers/gg-handlers';
+import { joinHandlers } from '../electron/handlers/join-handlers';
 import { libraryHandlers } from '../electron/handlers/library-handlers';
 import { lobbyHandlers } from '../electron/handlers/lobby-handlers';
 import { lobbyReviewHandlers } from '../electron/handlers/lobby-review-handlers';
 import { serverHandlers } from '../electron/handlers/server-handlers';
 import { sessionHandlers } from '../electron/handlers/session-handlers';
 
-const mainHandlers: HandlerGroup[] = [engineHandlers, gamesHandlers, ggHandlers, libraryHandlers, lobbyHandlers, lobbyReviewHandlers, serverHandlers, sessionHandlers];
+const mainHandlers: HandlerGroup[] = [engineHandlers, gamesHandlers, ggHandlers, joinHandlers, libraryHandlers, lobbyHandlers, lobbyReviewHandlers, serverHandlers, sessionHandlers];
 
 export { mainHandlers };

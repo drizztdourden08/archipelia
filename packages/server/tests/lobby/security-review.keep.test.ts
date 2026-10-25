@@ -7,7 +7,7 @@ import { lobbyOptions } from '../../src/lobby/state/lobby-options';
 import { createLobbyService } from '../../src/lobby/create-lobby-service';
 import { startListener } from '../../src/listener/start-listener';
 import { admin, engine, fileOf, helloOf, holdFiles, linkOf, startService, tick } from './security-kit';
-import { fakeTrust, testDeps } from './test-deps';
+import { fakeTrust, testDeps } from '../../src/testing';
 
 const unlistedHello = () => {
   const world = helloOf().worlds[0];

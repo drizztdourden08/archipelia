@@ -8,7 +8,7 @@ const usage = {
   ],
   avoidWhen: [
     { case: 'The machines you reach over SSH.', use: 'ServerManager' },
-    { case: 'The lobbies of a server.', use: 'LobbyList' },
+    { case: 'The direct connection of a session.', use: 'DirectConnection' },
   ],
   rules: [
     'Show This computer first, then the saved remote servers, then the servers found on the network, in the list pane.',

@@ -1,7 +1,9 @@
 /* @layer renderer-app @kind component */
 import { useCallback } from 'react';
-import { Grid, Stack, Text } from '@drizztdourden08/tessera/primitives';
+import { nav } from '@drizztdourden08/brock-react';
+import { Button, Flex, Grid, Icon, Stack, Text } from '@drizztdourden08/tessera/primitives';
 import { ErrorCallout } from '@archipelia/design';
+import { ROUTE } from '../../hooks/app-navigation.constants';
 import { useRunLauncher } from '../../hooks/useRunLauncher';
 import { isWorking } from '../../runs/is-working';
 import { showRunJob } from '../../runs/show-run-job';
@@ -33,7 +35,10 @@ const SessionsLibrary = () => {
 
   return (
     <Stack>
-      <Text variant="caption">A session is a saved setup you can run again. Each run makes a seed and a room, kept in Runs with its files.</Text>
+      <Flex justify="between" align="center" gap="sm" wrap>
+        <Text variant="caption">A session is a saved setup you can run again. Each run makes a seed and a room, kept in Runs with its files.</Text>
+        <Button size="sm" variant="secondary" icon={<Icon name="log-in" />} onClick={() => nav.open(ROUTE.joinSession)}>Join a session</Button>
+      </Flex>
       {hub.loadError && <ErrorCallout message={hub.loadError} onRetry={hub.reload} />}
       {hub.actionError && <ErrorCallout message={hub.actionError} />}
       {hub.templates.map((template) => <TemplateSearchEntry key={template.id} template={template} servers={hub.servers} />)}

@@ -3,10 +3,14 @@ import type { MainContext } from '@drizztdourden08/brock-electron/main';
 import { app } from 'electron';
 import { embedServer, lanAddresses } from '@drizztdourden08/brock-electron/main';
 import { getSecrets } from '@drizztdourden08/brock-secrets/main';
+import { DOMAIN } from '@archipelia/model';
 import { startCore } from '@archipelia/server';
 import type { CoreDomains, CoreEvent, StartedCore } from '@archipelia/server';
 import { APP_CHANNELS } from '../../src/ipc/contract.constants';
+import { product } from '../../src/product';
+import { createJoinServices } from '../joins/create-join-services';
 import { createLobbyServices } from '../lobbies/create-lobby-services';
+import { createLobbyCloser } from '../sessions/create-lobby-closer';
 import { fakeLobbyRun } from '../lobbies/review/fake-lobby-run';
 import { REVIEW_FLAG } from '../lobbies/review/review.constants';
 
@@ -43,7 +47,18 @@ const createAppServices = async (ctx: MainContext) => {
     onLobby: (event) => ctx.emit(APP_CHANNELS.onLobbyEvent, event),
     onLan: (servers) => ctx.emit(APP_CHANNELS.onLanServers, servers),
   });
-  return { ...core, secrets, ...lobbies };
+  const joins = createJoinServices({
+    core, files: ctx.storage.domain(DOMAIN.joins), name: product.name, version, log: ctx.log,
+    emit: (view) => ctx.emit(APP_CHANNELS.onJoinEvent, view),
+  });
+  const { lobbyServer } = lobbies;
+  const closer = createLobbyCloser({
+    files: ctx.storage.domain(DOMAIN.server), opsFor: (serverId) => lobbies.admins.opsFor(serverId), templates: () => core.templates.list(),
+    quiet: () => (lobbyServer.status().options.mode === 'off' ? Promise.resolve() : lobbyServer.apply({ ...lobbyServer.status().options, mode: 'off' })),
+    emit: (pending) => ctx.emit(APP_CHANNELS.onPendingCloses, pending),
+  });
+  void closer.retryAll().catch((error: unknown) => ctx.log(`the pending lobby closes did not run: ${String(error)}`));
+  return { ...core, secrets, ...lobbies, joins, closer };
 };
 
 export { createAppServices };

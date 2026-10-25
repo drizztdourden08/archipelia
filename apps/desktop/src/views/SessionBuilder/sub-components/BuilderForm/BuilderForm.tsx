@@ -2,18 +2,22 @@
 import { Box, Stack } from '@drizztdourden08/tessera/primitives';
 import type { BuilderFormProps } from './BuilderForm.type';
 import { useSessionBuilder } from '../../behavior/useSessionBuilder';
+import { useConnectedCount } from '../../../../hooks/useConnectedCount';
 import { sourcesOf } from '../../behavior/player-sources';
 import { BuilderHeader } from '../BuilderHeader';
 import { ProblemList } from '../ProblemList';
 import { PlayersCard } from '../PlayersCard';
 import { OverridesPanel } from '../OverridesPanel';
-import { ErrorCallout, ServerOptionsForm } from '@archipelia/design';
+import { ErrorCallout } from '@archipelia/design';
+import { BuilderSettings } from '../BuilderSettings';
+import { LobbyMembers } from '../../../LobbyMembers';
 import { FAILURE } from '../../SessionBuilder.constants';
 
 const BuilderForm = ({ initial, onRun }: BuilderFormProps) => {
   const builder = useSessionBuilder({ initial, onRun });
   const { draft, selected, players, toggleSelected } = builder;
   const { game, preset } = sourcesOf(selected, builder.installed, builder.presets);
+  const connected = useConnectedCount(draft.direct);
 
   return (
     <Box ref={builder.rootRef}>
@@ -35,6 +39,9 @@ const BuilderForm = ({ initial, onRun }: BuilderFormProps) => {
           presets={builder.presets}
           selectedSlot={selected?.slot}
           busy={builder.busy}
+          direct={draft.direct !== undefined}
+          connected={draft.direct && <LobbyMembers serverId={draft.direct.serverId} lobbyId={draft.direct.lobbyId} />}
+          connectedCount={connected}
           actions={players}
           onEdit={toggleSelected}
         />
@@ -49,21 +56,7 @@ const BuilderForm = ({ initial, onRun }: BuilderFormProps) => {
             onClose={toggleSelected}
           />
         )}
-        <ServerOptionsForm
-          generator={draft.generator}
-          server={draft.server}
-          host={draft.host}
-          serverOptions={builder.serverOptions}
-          password={builder.password}
-          hasPassword={Boolean(draft.server.passwordRef)}
-          onGenerator={builder.setGenerator}
-          onServer={builder.setServer}
-          onHostKind={builder.setHostKind}
-          onPort={builder.setPort}
-          onRemoteServer={builder.setRemoteServer}
-          onPassword={builder.setPassword}
-          onClearPassword={builder.clearPassword}
-        />
+        <BuilderSettings builder={builder} />
       </Stack>
     </Box>
   );

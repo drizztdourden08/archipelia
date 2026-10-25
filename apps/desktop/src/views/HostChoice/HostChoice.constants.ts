@@ -26,6 +26,8 @@ const TEXT = {
   notAnnounced: 'Not yet.',
   stillOpen: 'This computer is still open to your network. Choose This computer only to stop it.',
   noRemote: 'No remote server is saved yet. Add one on the Servers page, then pick it here.',
+  lockedHere: 'Players are connected to this session on this computer. Remove them first to move the session to another server.',
+  lockedRemote: 'Players are connected to this session on a remote server. Remove them first to move the session back here.',
 } as const;
 
 export { FAILURE, OPEN_LAN, TEXT, WHERE_OPTIONS };

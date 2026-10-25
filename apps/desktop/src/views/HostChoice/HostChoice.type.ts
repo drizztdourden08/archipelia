@@ -4,6 +4,8 @@ import type { LobbyServerStatus, ServerPlace } from '../../lobbies/lobbies.type'
 
 type HostWhere = 'private' | 'lan' | 'remote';
 
+type HostChoiceProps = { serverId?: string; locked?: boolean; onServer?: (serverId: string) => void };
+
 type NetworkStateProps = {
   open: boolean;
   status: LobbyServerStatus;
@@ -19,9 +21,10 @@ type RemoteChoiceProps = {
   place: ServerPlace;
   stillOpen: boolean;
   busy: boolean;
+  locked: boolean;
   onSelect: (serverId: string) => void;
   onStop: () => void;
   onManage: () => void;
 };
 
-export type { HostWhere, NetworkNoticesProps, NetworkStateProps, RemoteChoiceProps };
+export type { HostChoiceProps, HostWhere, NetworkNoticesProps, NetworkStateProps, RemoteChoiceProps };

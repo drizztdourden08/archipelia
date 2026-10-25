@@ -10,11 +10,15 @@ import { appApi } from '../../../ipc/app-api';
 import { LOCAL_SERVER } from '../../../lobbies/lobbies.constants';
 import { serverPlace } from '../../../lobbies/server-place';
 import { FAILURE, OPEN_LAN } from '../HostChoice.constants';
-import type { HostWhere } from '../HostChoice.type';
+import type { HostChoiceProps, HostWhere } from '../HostChoice.type';
 import { chooseWhere } from './choose-where';
+import { whereOptions } from './where-options';
 
-const useHostChoice = () => {
-  const { serverId, entries, select } = useActiveServer();
+const useHostChoice = ({ serverId: chosen, locked = false, onServer }: HostChoiceProps) => {
+  const active = useActiveServer();
+  const { entries } = active;
+  const serverId = chosen ?? active.serverId;
+  const select = onServer ?? active.select;
   const { status, setStatus } = useLocalServerStatus();
   const { guard, isBusy, errorOf } = useKeyedGuard();
   const [wantsRemote, setWantsRemote] = useState(false);
@@ -58,6 +62,8 @@ const useHostChoice = () => {
 
   return {
     where, serverId, entries, place, status,
+    options: whereOptions(locked ? serverId : undefined),
+    locked,
     ready: status !== null,
     busy: isBusy('mode'),
     error: errorOf('mode'),

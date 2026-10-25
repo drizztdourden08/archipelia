@@ -8,6 +8,7 @@ import { useHostingDefaults } from './useHostingDefaults';
 import { useRoomPassword } from './useRoomPassword';
 import { usePlayersEditor } from './usePlayersEditor';
 import { useProblems } from './useProblems';
+import { useDirectSession } from './useDirectSession';
 import { hostOfKind } from './host-of-kind';
 import { withPort } from './with-port';
 import { withServer } from './with-server';
@@ -15,6 +16,7 @@ import { withoutPassword } from './without-password';
 import { UNSAVED_SESSION } from '../SessionBuilder.constants';
 import { failWith } from '../../../hooks/fail-with';
 import { failureOf } from './failure-of';
+import { appApi } from '../../../ipc/app-api';
 
 const useSessionBuilder = ({ initial, onRun }: BuilderParams) => {
   const [draft, setDraft] = useState<SessionTemplate>(initial);
@@ -47,12 +49,15 @@ const useSessionBuilder = ({ initial, onRun }: BuilderParams) => {
   const setPort = useCallback((port: number) => setHost((host) => withPort(host, port)), [setHost]);
   const setRemoteServer = useCallback((serverId: string) => setHost((host) => withServer(host, serverId)), [setHost]);
 
-  const persist = useCallback(async () => {
-    const saved = await saveTemplate(await commit(draft));
+  const persistTemplate = useCallback(async (template: SessionTemplate) => {
+    const saved = await saveTemplate(await commit(template));
+    if (saved.direct) await appApi().sessionsSyncDirect(saved);
     setDraft(saved);
     setSavedJson(JSON.stringify(saved));
     return saved;
-  }, [commit, draft, saveTemplate]);
+  }, [commit, saveTemplate]);
+  const persist = useCallback(() => persistTemplate(draft), [draft, persistTemplate]);
+  const direct = useDirectSession({ draft, persist: persistTemplate, guard });
 
   const save = useCallback(() => guard('save', persist), [guard, persist]);
   const run = useCallback(() => (attemptRun() ? guard('run', async () => onRun(await persist())) : undefined), [attemptRun, guard, onRun, persist]);
@@ -71,7 +76,7 @@ const useSessionBuilder = ({ initial, onRun }: BuilderParams) => {
   useUnsavedChanges(dirty, UNSAVED_SESSION);
 
   return {
-    ...data, ...check, busy: isBusy(), clearPassword, draft, error: lastError, password: room.password, players, run, save, saved, selected,
+    ...data, ...check, busy: isBusy(), clearPassword, direct, draft, error: lastError, password: room.password, players, run, save, saved, selected,
     setGenerator, setHostKind, setName, setPassword: room.setPassword, setPort, setRemoteServer, setServer, toggleSelected,
   };
 };

@@ -8,7 +8,8 @@ import { chooseWhere } from '../../src/views/HostChoice/behavior/choose-where';
 import { yourNetwork } from '../../src/views/HostChoice/behavior/your-network';
 import { networkFacts } from '../../src/views/HostChoice/behavior/network-facts';
 import { privateFacts } from '../../src/views/HostChoice/behavior/private-facts';
-import { hostSlot } from '../../src/views/HostPlayer/behavior/host-slot';
+import { whereOptions } from '../../src/views/HostChoice/behavior/where-options';
+import { hostSlotOf } from '../../electron/sessions/host-slot-of';
 
 const LISTENING: LobbyServerStatus = {
   state: 'listening', options: { mode: 'lan', publicLookup: true }, automation: false, roomPasswords: 'vault', lanAddress: '192.168.1.5', port: 38290, secure: false,
@@ -66,23 +67,31 @@ describe('the address of a lobby to join', () => {
   });
 });
 
-describe('the host player', () => {
+describe('the players and the place of a session with direct connection', () => {
   const game = {
     apworld: 'zelda', game: 'A Link to the Past', version: '1', source: 'official', installedAt: 0, sha256: 'x', verified: true, layout: 'folder', path: 'p', requires: [],
     schema: { game: 'A Link to the Past', worldVersion: '1.0.0', groups: [], presets: {}, options: [{ key: 'death_link', displayName: 'Death link', group: 'g', kind: 'toggle', description: '', default: false, visibility: ['simple'], weightable: false }] },
   } as InstalledGame;
   const preset = { id: 'p1', game: 'A Link to the Past', name: 'Hard', values: { death_link: true }, updatedAt: 0 } as GamePreset;
 
-  test('builds the slot of the host from a preset, or from the defaults of the game', () => {
-    const slot = hostSlot('Host', game, preset);
-    expect(slot).toMatchObject({ name: 'Host', game: 'A Link to the Past', worldVersion: '1.0.0' });
-    expect(slot.yaml).toContain('name: Host');
+  const slotOf = hostSlotOf(() => Promise.resolve([game]), { get: (id) => Promise.resolve(id === preset.id ? preset : null) });
+
+  test('builds the slot of a player of the session from its preset', async () => {
+    const slot = await slotOf({ slot: 1, name: 'Ana', game: 'A Link to the Past', source: { kind: 'preset', presetId: 'p1', overrides: {} } });
+    expect(slot).toMatchObject({ name: 'Ana', game: 'A Link to the Past', worldVersion: '1.0.0' });
+    expect(slot.yaml).toContain('name: Ana');
     expect(slot.yaml).toContain('death_link: true');
-    expect(hostSlot('Host', game, undefined).yaml).toContain('death_link: false');
+    await expect(slotOf({ slot: 2, name: 'Bo', game: 'Other', source: { kind: 'preset', presetId: 'p1', overrides: {} } })).rejects.toThrow('Other is not installed');
   });
 
-  test('sends the host player through the admin request member.host', () => {
-    const slots = [hostSlot('Host', game, preset)];
+  test('sends the players of the session through the admin request member.host', async () => {
+    const slots = [await slotOf({ slot: 1, name: 'Ana', game: 'A Link to the Past', source: { kind: 'preset', presetId: 'p1', overrides: {} } })];
     expect(lobbyRequest.host('lb1', 'Host', slots)).toEqual({ type: 'member.host', params: { lobbyId: 'lb1', displayName: 'Host', slots } });
+  });
+
+  test('keeps the server of a session with a lobby: the other kind of place is off, with the reason', () => {
+    expect(whereOptions(undefined).every((option) => !option.disabled)).toBe(true);
+    expect(whereOptions('local').map((option) => Boolean(option.disabled))).toEqual([false, false, true]);
+    expect(whereOptions('srv_1').map((option) => Boolean(option.disabled))).toEqual([true, true, false]);
   });
 });
