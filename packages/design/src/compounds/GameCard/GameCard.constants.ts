@@ -1,0 +1,22 @@
+/* @layer renderer-app @kind config */
+import { defineStatuses } from '@drizztdourden08/tessera/primitives';
+import type { IconName } from '@drizztdourden08/tessera/primitives';
+import type { GameCardKind } from './GameCard.type';
+
+const GAME_STATUS = defineStatuses({
+  installed: { label: 'Installed', tone: 'success', icon: 'circle-check' },
+  update: { label: 'Update', tone: 'warning', icon: 'arrow-big-up-dash' },
+  'no-release': { label: 'No release yet', tone: 'neutral', icon: 'clock' },
+  unavailable: { label: 'Not available', tone: 'warning', icon: 'circle-alert' },
+});
+
+const KIND_ICON: Record<GameCardKind, IconName> = {
+  official: 'package',
+  community: 'users',
+  'first-party': 'sparkles',
+  file: 'file',
+};
+
+const MAX_TAGS = 2;
+
+export { GAME_STATUS, KIND_ICON, MAX_TAGS };

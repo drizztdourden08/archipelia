@@ -1,8 +1,8 @@
 /* @layer renderer-app @kind logic */
 import type { CardHandlers, GameRow } from '../GameStore.type';
 import type { InstallRequest } from '@archipelia/catalog';
-import type { GameCardProps } from '@archipelia/design';
-import { FIRST_PARTY_TAG, NOT_AVAILABLE, SOURCE_LABEL } from '../GameStore.constants';
+import type { GameCardAction, GameCardNote, GameCardProps, GameCardStatus } from '@archipelia/design';
+import { KIND_LABEL, KIND_OF, NO_RELEASE } from '../GameStore.constants';
 import { removeKey } from './remove-key';
 
 const requestOf = ({ entry, latest }: GameRow): InstallRequest | undefined => {
@@ -10,60 +10,63 @@ const requestOf = ({ entry, latest }: GameRow): InstallRequest | undefined => {
   return latest ? { kind: 'index', apworld: entry.apworld, version: latest.version } : undefined;
 };
 
-const statusOf = ({ state, latest, entry }: GameRow): GameCardProps['status'] => {
-  if (state === 'installed') return { label: 'Installed', tone: 'success' };
-  if (state === 'update') return { label: `Update ${latest?.version}`, tone: 'warning' };
-  return entry.unavailable ? { label: NOT_AVAILABLE, tone: 'neutral' } : undefined;
+const statusOf = ({ state, entry }: GameRow): GameCardStatus | undefined => {
+  if (entry.unavailable) return entry.unavailable === NO_RELEASE ? 'no-release' : 'unavailable';
+  return state === 'update' ? 'update' : undefined;
 };
 
-const tagOf = (row: GameRow): string | undefined => {
-  if (row.entry.source === 'first-party') return FIRST_PARTY_TAG;
-  return statusOf(row) || row.entry.stability === 'unknown' ? undefined : row.entry.stability;
+const versionOf = ({ installed, latest, entry, state }: GameRow) => {
+  if (installed && state === 'update' && latest) return `${installed.version} to ${latest.version}`;
+  if (installed) return installed.version;
+  return latest?.version ?? entry.firstParty?.worldVersion;
 };
 
-const versionLine = ({ installed, latest, entry }: GameRow) => {
-  if (installed) return [`Installed ${installed.version}`];
-  if (latest) return [`Latest ${latest.version}`];
-  return entry.source === 'official' ? ['Ships with the engine'] : [];
-};
-
-const checksumWarning = ({ entry, latest }: GameRow) =>
-  (latest && !latest.sha256 && entry.source === 'index' ? ['No published checksum'] : []);
-
-const rangeLine = ({ entry }: GameRow) => {
+const rangeNote = ({ entry }: GameRow): GameCardNote[] => {
   const { minimumAp, maximumAp } = entry.firstParty ?? {};
-  if (minimumAp && maximumAp) return [`Archipelago ${minimumAp} to ${maximumAp}`];
-  return minimumAp ? [`Archipelago ${minimumAp} or newer`] : [];
+  if (minimumAp && maximumAp) return [{ icon: 'info', text: `Archipelago ${minimumAp} to ${maximumAp}` }];
+  return minimumAp ? [{ icon: 'info', text: `Archipelago ${minimumAp} or newer` }] : [];
 };
 
-const reasonLine = ({ entry }: GameRow) => (entry.unavailable ? [entry.unavailable] : []);
+const reasonNote = ({ entry }: GameRow): GameCardNote[] =>
+  (entry.unavailable && entry.unavailable !== NO_RELEASE ? [{ icon: 'circle-alert', text: entry.unavailable, warning: true }] : []);
 
-const trustLine = ({ installed }: GameRow) => (installed?.trust ? [installed.trust.detail] : []);
+const trustNote = ({ installed }: GameRow): GameCardNote[] => {
+  if (!installed?.trust) return [];
+  const verified = installed.trust.state === 'verified';
+  return [{ icon: verified ? 'lock' : 'triangle-alert', text: installed.trust.detail, warning: !verified }];
+};
 
-const detailsOf = (row: GameRow) => [...versionLine(row), ...rangeLine(row), ...reasonLine(row), ...trustLine(row), ...checksumWarning(row)];
+const checksumNote = ({ entry, latest }: GameRow): GameCardNote[] =>
+  (latest && !latest.sha256 && entry.source === 'index' ? [{ icon: 'triangle-alert', text: 'No published checksum', warning: true }] : []);
+
+const notesOf = (row: GameRow) => [...reasonNote(row), ...trustNote(row), ...checksumNote(row), ...rangeNote(row)];
 
 const installLabel = ({ state }: GameRow, installing: boolean) => {
   if (state === 'update') return installing ? 'Updating...' : 'Update';
   return installing ? 'Adding...' : 'Add';
 };
 
-const cardPropsOf = (row: GameRow, { isBusy, installWorld, remove, openHome }: CardHandlers): GameCardProps => {
+const actionsOf = (row: GameRow, { isBusy, installWorld, remove, openHome }: CardHandlers): GameCardAction[] => {
   const request = requestOf(row);
   const installing = isBusy(row.entry.apworld);
   const working = installing || isBusy(removeKey(row.entry.apworld));
-  const install = request && row.state !== 'installed'
-    ? [{ label: installLabel(row, installing), variant: 'primary', disabled: working || Boolean(row.entry.unavailable), loading: installing, onClick: () => installWorld(request, row.entry.apworld) }]
+  const install: GameCardAction[] = request && row.state !== 'installed'
+    ? [{ id: 'install', label: installLabel(row, installing), icon: 'download', primary: true, disabled: working || Boolean(row.entry.unavailable), loading: installing, onClick: () => installWorld(request, row.entry.apworld) }]
     : [];
-  const removal = row.installed ? [{ label: 'Remove', variant: 'danger', disabled: working, onClick: () => remove(row) }] : [];
-  const home = row.entry.home ? [{ label: 'Home page', onClick: () => openHome(row.entry.home ?? '') }] : [];
-  return {
-    title: row.entry.displayName,
-    source: SOURCE_LABEL[row.entry.source],
-    status: statusOf(row),
-    tag: tagOf(row),
-    details: detailsOf(row),
-    actions: [...install, ...removal, ...home],
-  };
+  const removal: GameCardAction[] = row.installed ? [{ id: 'remove', label: 'Remove', icon: 'trash-2', tone: 'danger', disabled: working, onClick: () => remove(row) }] : [];
+  const home: GameCardAction[] = row.entry.home ? [{ id: 'home', label: 'Home page', icon: 'external-link', onClick: () => openHome(row.entry.home ?? '') }] : [];
+  return [...install, ...home, ...removal];
 };
+
+const cardPropsOf = (row: GameRow, handlers: CardHandlers): GameCardProps => ({
+  title: row.entry.displayName,
+  kind: KIND_OF[row.entry.source],
+  kindLabel: KIND_LABEL[row.entry.source],
+  version: versionOf(row),
+  status: statusOf(row),
+  notes: notesOf(row),
+  tags: row.entry.tags,
+  actions: actionsOf(row, handlers),
+});
 
 export { cardPropsOf };

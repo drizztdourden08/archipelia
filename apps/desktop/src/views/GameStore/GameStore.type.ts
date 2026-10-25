@@ -11,12 +11,16 @@ type CardHandlers = {
 
 type GameRowState = 'installed' | 'update' | 'available';
 
-type GameTab = 'installed' | 'official' | 'community' | 'updates';
+type GameSectionId = 'installed' | 'official' | 'community';
 
 type GameRow = { entry: CatalogEntry; installed?: InstalledGame; latest?: CatalogVersion; state: GameRowState };
 
-type GameStoreProps = { tab: GameTab };
+type GameSectionRows = { id: GameSectionId; rows: GameRow[] };
 
-type EmptyKind = 'loading' | 'search' | 'updates' | 'installed' | 'catalog';
+type EmptyKind = 'loading' | 'search' | 'none';
 
-export type { CardHandlers, EmptyKind, GameRow, GameRowState, GameStoreProps, GameTab };
+type GameRecord = { name: string; source: string; state: string; fit: string; stability: string; tags: string[] };
+
+type GameSummary = { worlds: number; installed: number; updates: number; shown: number; apVersion?: string };
+
+export type { CardHandlers, EmptyKind, GameRecord, GameRow, GameRowState, GameSectionId, GameSectionRows, GameSummary };

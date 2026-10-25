@@ -1,13 +1,15 @@
 /* @layer renderer-app @kind hook */
-import { confirmDelete, toast, useKeyedGuard, useNavigation, usePlatform, useScreenState } from '@drizztdourden08/brock-react';
+import { confirmDelete, toast, useKeyedGuard, usePlatform, useScreenState } from '@drizztdourden08/brock-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useLibraryStore } from '../../../stores/useLibraryStore';
-import type { GameRow, GameTab } from '../GameStore.type';
+import type { FilterClause } from '@drizztdourden08/tessera/data';
+import type { GameRow } from '../GameStore.type';
 import { appApi } from '../../../ipc/app-api';
 import { buildRows } from './build-rows';
 import { filterRows } from './filter-rows';
 import { removeGameConfirm } from './remove-game-confirm';
-import { useCardLimit } from './useCardLimit';
+import { groupSections } from './group-sections';
+import { summaryOf } from './summary-of';
 import type { InstallRequest } from '@archipelia/catalog';
 import { APWORLD, FAILURE } from '../GameStore.constants';
 import { failWith } from '../../../hooks/fail-with';
@@ -15,13 +17,13 @@ import { toastInstalled } from './toast-installed';
 import { useInstalledEntries } from './useInstalledEntries';
 import { emptyKind } from './empty-kind';
 import { removeKey } from './remove-key';
-import { ROUTE } from '../../../hooks/app-navigation.constants';
+import { NO_FILTERS } from './useGameStore.constants';
 
-const useGameStore = (tab: GameTab) => {
+const useGameStore = () => {
   const { catalog, official, installed, loadGames, install, removeGame } = useLibraryStore();
   const { filePicker } = usePlatform();
-  const { open } = useNavigation();
   const [query, setQuery] = useScreenState('query', '');
+  const [filters, setFilters] = useScreenState<readonly FilterClause[]>('filters', NO_FILTERS);
   const [opened, setOpened] = useState(false);
   const { guard, isBusy, errorOf, lastError: error } = useKeyedGuard();
 
@@ -32,9 +34,11 @@ const useGameStore = (tab: GameTab) => {
   useInstalledEntries(installed);
 
   const rows = useMemo(() => buildRows([...official, ...(catalog?.entries ?? [])], installed), [catalog, official, installed]);
-  const visible = useMemo(() => filterRows(rows, tab, query), [rows, tab, query]);
-  const cards = useCardLimit(visible.length, `${tab}:${query}`);
-  const empty = emptyKind(tab, query, loading);
+  const visible = useMemo(() => filterRows(rows, query, filters), [rows, query, filters]);
+  const sections = useMemo(() => groupSections(visible), [visible]);
+  const filtered = query.trim() !== '' || filters.length > 0;
+  const summary = useMemo(() => summaryOf(rows, visible.length, catalog?.apVersion), [rows, visible, catalog]);
+  const empty = emptyKind(filtered, loading);
 
   const installWorld = useCallback((request: InstallRequest, key: string) => guard(key, failWith(FAILURE.install, async () => toastInstalled(await install(request)))), [guard, install]);
   const remove = useCallback(({ entry, installed: game }: GameRow) => guard(removeKey(entry.apworld), failWith(FAILURE.remove, async () => {
@@ -50,12 +54,11 @@ const useGameStore = (tab: GameTab) => {
     const picked = await filePicker.pickFile({ extensions: APWORLD });
     if (picked) toastInstalled(await install({ kind: 'file', fileName: picked.name, bytes: picked.bytes }));
   })), [guard, filePicker, install]);
-  const openOfficial = useCallback(() => open(ROUTE.officialGames), [open]);
 
   const loadFailed = errorOf('load') !== null;
 
   return {
-    addFromFile, cards, catalog, empty, error, installWorld, installed, isBusy, loadFailed, loading, openOfficial, query, refresh, remove, retry, rows, setQuery, visible,
+    addFromFile, empty, error, filtered, filters, installWorld, isBusy, loadFailed, loading, query, refresh, remove, retry, sections, setFilters, setQuery, summary, visible,
   };
 };
 

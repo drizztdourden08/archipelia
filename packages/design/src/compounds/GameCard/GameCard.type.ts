@@ -1,15 +1,33 @@
 /* @layer renderer-app @kind types */
-import type { StatusTone } from '@drizztdourden08/tessera/primitives';
+import type { IconName } from '@drizztdourden08/tessera/primitives';
+import type { GAME_STATUS } from './GameCard.constants';
 
-type GameCardAction = { label: string; onClick: () => void; variant?: 'primary' | 'secondary' | 'danger'; disabled?: boolean; loading?: boolean };
+type GameCardKind = 'official' | 'community' | 'first-party' | 'file';
+
+type GameCardStatus = keyof typeof GAME_STATUS;
+
+type GameCardAction = {
+  id: string;
+  label: string;
+  icon: IconName;
+  onClick: () => void;
+  tone?: 'danger';
+  primary?: boolean;
+  disabled?: boolean;
+  loading?: boolean;
+};
+
+type GameCardNote = { icon: IconName; text: string; warning?: boolean };
 
 type GameCardProps = {
   title: string;
-  source: string;
-  status?: { label: string; tone: StatusTone };
-  tag?: string;
-  details: string[];
+  kind: GameCardKind;
+  kindLabel: string;
+  version?: string;
+  status?: GameCardStatus;
+  notes: GameCardNote[];
+  tags: string[];
   actions: GameCardAction[];
 };
 
-export type { GameCardProps };
+export type { GameCardAction, GameCardKind, GameCardNote, GameCardProps, GameCardStatus };

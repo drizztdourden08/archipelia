@@ -27,10 +27,10 @@ export default defineTour({
     {
       id: 'games',
       title: '2. Games',
-      body: 'Every game a player brings needs its world installed. Search the Official and Community lists, then press Add on a card.',
+      body: 'Every game a player brings needs its world installed. Search and filter the worlds, then press the Add button on a card.',
       target: { tour: 'game-store-tools' },
       mascot: 'curious',
-      open: ROUTE.officialGames,
+      open: ROUTE.games,
     },
     {
       id: 'preset',

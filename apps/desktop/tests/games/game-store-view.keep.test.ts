@@ -13,15 +13,13 @@ const handlers = (busy: string[]) => ({ isBusy: (key: string) => busy.includes(k
 
 describe('games store view', () => {
   test('the empty text says why the list is empty', () => {
-    expect(emptyKind('updates', '', true)).toBe('loading');
-    expect(emptyKind('updates', 'zz', false)).toBe('search');
-    expect(emptyKind('updates', ' ', false)).toBe('updates');
-    expect(emptyKind('installed', '', false)).toBe('installed');
-    expect(emptyKind('official', '', false)).toBe('catalog');
+    expect(emptyKind(true, true)).toBe('loading');
+    expect(emptyKind(true, false)).toBe('search');
+    expect(emptyKind(false, false)).toBe('none');
   });
 
   test('the card being installed loads its Add button and reads Adding...', () => {
-    expect(cardPropsOf(row, handlers([])).actions[0]).toMatchObject({ label: 'Add', loading: false, disabled: false });
+    expect(cardPropsOf(row, handlers([])).actions[0]).toMatchObject({ label: 'Add', icon: 'download', loading: false, disabled: false });
     expect(cardPropsOf(row, handlers(['hk'])).actions[0]).toMatchObject({ label: 'Adding...', loading: true, disabled: true });
     expect(cardPropsOf(row, handlers(['load', 'file'])).actions[0]).toMatchObject({ label: 'Add', loading: false, disabled: false });
   });
@@ -31,5 +29,11 @@ describe('games store view', () => {
     expect(cardPropsOf(update, handlers([removeKey('hk')])).actions.map((action) => [action.label, action.disabled, action.loading])).toEqual([
       ['Update', true, false], ['Remove', true, undefined],
     ]);
+  });
+
+  test('the kind is an icon kind, never a word, and the version is the world version', () => {
+    const community: GameRow = { entry: { ...entry, source: 'index', versions: [{ version: '1.2.0', url: 'u' }] }, latest: { version: '1.2.0', url: 'u' }, state: 'available' };
+    expect(cardPropsOf(community, handlers([]))).toMatchObject({ kind: 'community', version: '1.2.0', status: undefined });
+    expect(cardPropsOf(row, handlers([]))).toMatchObject({ kind: 'official', version: undefined });
   });
 });

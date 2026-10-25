@@ -12,7 +12,7 @@ const useInstalledEntries = (installed: readonly InstalledGame[]): void => {
     keywords: ['game', 'installed', 'apworld', game.apworld],
     anchor: gameAnchor(game.apworld),
   })), [installed]);
-  useSearchEntries(entries, ROUTE.installedGames);
+  useSearchEntries(entries, ROUTE.games);
 };
 
 export { useInstalledEntries };

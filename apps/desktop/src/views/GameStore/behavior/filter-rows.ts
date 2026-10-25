@@ -1,18 +1,16 @@
 /* @layer renderer-app @kind logic */
-import type { GameRow, GameTab } from '../GameStore.type';
+import { compile, matchesText } from '@drizztdourden08/tessera/data';
+import type { FilterClause } from '@drizztdourden08/tessera/data';
+import { GAME_FIELDS } from './game-schema.constants';
+import { recordOf } from './record-of';
+import type { GameRow } from '../GameStore.type';
 
-const inTab = (row: GameRow, tab: GameTab) => {
-  if (tab === 'installed') return row.state !== 'available';
-  if (tab === 'updates') return row.state === 'update';
-  if (tab === 'official') return row.entry.source === 'official';
-  return row.entry.source === 'index' || row.entry.source === 'first-party';
-};
+const textOf = ({ entry }: GameRow) => `${entry.displayName} ${entry.game} ${entry.apworld} ${entry.tags.join(' ')}`;
 
-const filterRows = (rows: GameRow[], tab: GameTab, query: string) => {
-  const needle = query.trim().toLowerCase();
+const filterRows = (rows: GameRow[], query: string, clauses: readonly FilterClause[]) => {
+  const test = compile(clauses, GAME_FIELDS);
   return rows
-    .filter((row) => inTab(row, tab))
-    .filter((row) => !needle || `${row.entry.displayName} ${row.entry.game} ${row.entry.apworld}`.toLowerCase().includes(needle))
+    .filter((row) => matchesText(textOf(row), query) && test(recordOf(row)))
     .sort((a, b) => a.entry.displayName.localeCompare(b.entry.displayName));
 };
 
