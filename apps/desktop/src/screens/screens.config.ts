@@ -16,6 +16,12 @@ export default defineScreens({
       ],
     },
     {
+      id: 'sessions',
+      title: 'Sessions',
+      icon: 'layers',
+      menu: 'entry',
+    },
+    {
       id: 'data',
       title: 'Data',
       icon: 'hard-drive',
