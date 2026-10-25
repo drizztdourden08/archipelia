@@ -1,5 +1,5 @@
 /* @layer renderer-app @kind logic */
-import type { LobbyDraft, LobbyRequest } from './lobbies.type';
+import type { HostPlayerSlot, LobbyDraft, LobbyRequest } from './lobbies.type';
 
 const lobbyRequest = {
   create: ({ name, admission, allowUnlisted, maxSlots, room }: LobbyDraft): LobbyRequest => ({
@@ -13,6 +13,7 @@ const lobbyRequest = {
   approve: (lobbyId: string, memberId: string): LobbyRequest => ({ type: 'member.approve', params: { lobbyId, memberId } }),
   refuse: (lobbyId: string, memberId: string): LobbyRequest => ({ type: 'member.refuse', params: { lobbyId, memberId } }),
   remove: (lobbyId: string, memberId: string): LobbyRequest => ({ type: 'member.remove', params: { lobbyId, memberId } }),
+  host: (lobbyId: string, displayName: string, slots: readonly HostPlayerSlot[]): LobbyRequest => ({ type: 'member.host', params: { lobbyId, displayName, slots } }),
   consent: (lobbyId: string, sha256: string, allowed: boolean): LobbyRequest => ({ type: 'world.consent', params: { lobbyId, sha256, allowed } }),
 };
 

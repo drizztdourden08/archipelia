@@ -5,7 +5,7 @@ import type { LobbyServerOptions } from './lobbies.type';
 const LOCAL_SERVER = 'local';
 
 const LOBBY_REQUESTS = [
-  'lobby.create', 'lobby.lock', 'lobby.close', 'lobby.start', 'member.approve', 'member.refuse', 'member.remove', 'world.consent', 'room.stop',
+  'lobby.create', 'lobby.lock', 'lobby.close', 'lobby.start', 'member.approve', 'member.refuse', 'member.remove', 'member.host', 'world.consent', 'room.stop',
 ] as const;
 
 const INITIAL_NETWORK_MODE: NetworkMode = 'off';
@@ -16,11 +16,21 @@ const SERVER_OPTIONS_FILE = 'listener.json';
 
 const LOOPBACK_HOST = /^(localhost|127(\.\d{1,3}){3}|::1)$/i;
 
+const LOOPBACK = '127.0.0.1';
+
 const ROOM_PASSWORDS_IN_MEMORY = 'This computer has no keyring, so room passwords live in memory only. They are gone when Archipelia closes, and so are the rooms.';
 
 const PLAIN_REMOTE = 'ws:// is only for this computer. Use wss:// to reach another computer, so the admin token is never sent in clear.';
 
 const NOT_AN_ADDRESS = 'Enter the address as ws://host:port, or wss://host:port for a server with TLS.';
+
+const NOT_A_JOIN_ADDRESS = 'Enter the address as host:port, such as 192.168.1.20:38290.';
+
+const NEEDS_WSS = 'Use wss:// to reach a computer outside your network, so nothing travels in clear.';
+
+const PRIVATE_HOST = /^(10(\.\d{1,3}){3}|192\.168(\.\d{1,3}){2}|172\.(1[6-9]|2\d|3[01])(\.\d{1,3}){2}|169\.254(\.\d{1,3}){2}|[^.]+\.local|f[cd][0-9a-f]{2}:.*|fe80:.*)$/i;
+
+const SCHEME = /^[a-z]+:\/\//i;
 
 const PIN_SEPARATORS = /[\s:]/g;
 const PIN_DIGEST = /^[0-9a-f]{64}$/;
@@ -31,5 +41,5 @@ const WRITTEN_PORT = /:(\d+)$/;
 const MAX_PORT = 65535;
 
 export {
-  AUTHORITY, BRACKETS, LOOPBACK_HOST, MAX_PORT, PLAIN_REMOTE, PIN_DIGEST, PIN_PAIR, PIN_SEPARATORS, WRITTEN_PORT,
+  AUTHORITY, BRACKETS, LOOPBACK, LOOPBACK_HOST, MAX_PORT, NEEDS_WSS, NOT_A_JOIN_ADDRESS, PLAIN_REMOTE, PRIVATE_HOST, SCHEME, PIN_DIGEST, PIN_PAIR, PIN_SEPARATORS, WRITTEN_PORT,
   ROOM_PASSWORDS_IN_MEMORY, DEFAULT_SERVER_OPTIONS, INITIAL_NETWORK_MODE, LOBBY_REQUESTS, LOCAL_SERVER, NOT_AN_ADDRESS, SERVER_OPTIONS_FILE };

@@ -1,6 +1,5 @@
 /* @layer tests @kind test */
 import { describe, expect, test } from 'vitest';
-import type { LobbyServerEntry } from '@archipelia/model';
 import { mergeLobby } from '../../src/stores/merge-lobby';
 import { consentOptions } from '../../src/views/LobbyDetail/behavior/consent-options';
 import { lobbyActions } from '../../src/views/LobbyDetail/behavior/lobby-actions';
@@ -12,7 +11,6 @@ import { roomText } from '../../src/views/LobbyDetail/behavior/room-text';
 import { trustTag } from '../../src/views/LobbyDetail/behavior/trust-tag';
 import { usedSlotCount } from '../../src/views/LobbyDetail/behavior/used-slot-count';
 import { serverNotice } from '../../src/views/LobbyList/behavior/server-notice';
-import { serverOptions } from '../../src/views/LobbyList/behavior/server-options';
 import { waitingCount } from '../../src/views/LobbyList/behavior/waiting-count';
 import { lobby, member, slot, world } from './lobby-fixtures';
 
@@ -79,18 +77,14 @@ describe('the members and the consent dialog', () => {
 
   test('lists the room and its files once the lobby has started', () => {
     const hosting = lobby({ room: { seed: 'S1', zip: 'z', host: '10.0.0.5', port: 38281, tls: 'no', files: [], state: 'hosting', roomUrl: 'https://x.test/room' } });
-    expect(resultsFacts(hosting).map((fact) => fact.label)).toEqual(['Room address', 'Room state', 'Seed', 'Connection', 'Room page']);
-    expect(resultsFacts(lobby())).toEqual([]);
+    expect(resultsFacts(hosting, false).map((fact) => fact.label)).toEqual(['Room address', 'Room state', 'Seed', 'Connection', 'Room page']);
+    expect(resultsFacts(lobby(), false)).toEqual([]);
+    expect(resultsFacts(hosting, true).map((fact) => fact.label)).toEqual(['Room address', 'On this computer', 'Room state', 'Seed', 'Connection', 'Room page']);
+    expect(resultsFacts(hosting, true)[1]).toMatchObject({ value: '127.0.0.1:38281' });
   });
 });
 
 describe('the lobby list', () => {
-  const entries: LobbyServerEntry[] = [{ id: 'r1', label: 'VPS', url: 'wss://vps.test', tokenRef: 't' }];
-
-  test('offers this computer first, then each saved server', () => {
-    expect(serverOptions(entries)).toEqual([{ value: 'local', label: 'This computer' }, { value: 'r1', label: 'VPS' }]);
-  });
-
   test('warns only for the server on this computer, and only when it does not listen', () => {
     const status = { state: 'failed', options: { mode: 'lan', publicLookup: true }, automation: false, roomPasswords: 'vault', lanAddress: '1.2.3.4' } as const;
     expect(serverNotice(true, status)).toContain('not running');

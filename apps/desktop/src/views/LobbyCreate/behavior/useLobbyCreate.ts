@@ -1,6 +1,6 @@
 /* @layer renderer-app @kind hook */
 import { useEffect, useMemo, useState } from 'react';
-import { confirmAction, nav, useKeyedGuard, useSettings } from '@drizztdourden08/brock-react';
+import { nav, useKeyedGuard, useSettings } from '@drizztdourden08/brock-react';
 import type { ServerEntry } from '@archipelia/model';
 import { failWith } from '../../../hooks/fail-with';
 import { openLobby } from '../../../hooks/open-lobby';
@@ -13,7 +13,7 @@ import { lobbyRequest } from '../../../lobbies/lobby-request';
 import { LOCAL_SERVER } from '../../../lobbies/lobbies.constants';
 import type { AppSettings } from '../../../settings.type';
 import { useLobbyStore } from '../../../stores/useLobbyStore';
-import { FAILURE, OPEN_MESSAGE, OPEN_TITLE, PRIVATE_NOTE } from '../LobbyCreate.constants';
+import { FAILURE, PRIVATE_NOTE } from '../LobbyCreate.constants';
 import { createRows } from './create-rows';
 import { draftProblems } from './draft-problems';
 import { newDraft } from './new-draft';
@@ -28,7 +28,7 @@ const useLobbyCreate = () => {
   const [view, setView] = useState<LobbyServerView | null>(null);
   const [machines, setMachines] = useState<ServerEntry[]>([]);
   const { guard, isBusy, errorOf } = useKeyedGuard();
-  const { status, setStatus } = useLocalServerStatus();
+  const { status } = useLocalServerStatus();
 
   useEffect(() => {
     setView(null);
@@ -43,17 +43,10 @@ const useLobbyCreate = () => {
 
   const isPrivate = serverId === LOCAL_SERVER && status?.options.mode === 'off';
 
-  const openToNetwork = async () => {
-    if (!status) return;
-    const open = await confirmAction({ title: OPEN_TITLE, message: OPEN_MESSAGE, confirmLabel: 'Open to my network', cancelLabel: 'Keep it private' });
-    if (open) setStatus(await appApi().lobbyServerApply({ ...status.options, mode: 'lan' }));
-  };
-
   const create = () => {
     setAttempted(true);
     if (problems.length > 0 || (view && !view.engine)) return;
     void guard('create', failWith(FAILURE.create, async () => {
-      if (isPrivate) await openToNetwork();
       const lobby = await act(serverId, lobbyRequest.create(draft));
       openLobby(serverId, lobby.id);
     }));

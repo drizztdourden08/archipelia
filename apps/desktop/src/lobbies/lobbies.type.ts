@@ -47,7 +47,13 @@ type ServerPlace = { local: boolean; label: string; address: string | null; wher
 
 type ServerTarget = { secure: boolean; host: string; port: number };
 
+type JoinAddress = { target: ServerTarget } | { problem: string };
+
+type LobbyProbe = { ok: boolean; message: string; name?: string; ap?: string; phase?: string; joinable?: boolean; admission?: string; games?: string[] };
+
+type HostPlayerSlot = { name: string; game: string; yaml: string; worldVersion: string };
+
 export type {
-  LanEntry, LobbyDraft, LobbyEvent, LobbyRequest, LobbyReviewHost, LobbyReviewPlay, LobbyServerOptions, LobbyServerState,
+  HostPlayerSlot, JoinAddress, LanEntry, LobbyDraft, LobbyEvent, LobbyProbe, LobbyRequest, LobbyReviewHost, LobbyReviewPlay, LobbyServerOptions, LobbyServerState,
   LobbyServerStatus, LobbyServerTest, LobbyServerView, ServerInfo, ServerPlace, ServerTarget,
 };

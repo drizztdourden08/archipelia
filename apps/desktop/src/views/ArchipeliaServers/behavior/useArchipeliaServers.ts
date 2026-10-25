@@ -9,7 +9,7 @@ import type { LobbyServerOptions } from '../../../lobbies/lobbies.type';
 import { useEngineStore } from '../../../stores/useEngineStore';
 import { useLobbyStore } from '../../../stores/useLobbyStore';
 import { FAILURE } from '../ArchipeliaServers.constants';
-import { useLanServers } from './useLanServers';
+import { useLanServers } from '../../../hooks/useLanServers';
 import { useRemoteServers } from './useRemoteServers';
 
 const useArchipeliaServers = () => {

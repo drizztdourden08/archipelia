@@ -100,6 +100,7 @@ type LobbyStarted = {
     tls: RoomTls;
     password?: string;
     roomUrl?: string;
+    localAddress?: string;
   };
   slots: { name: string; game: string; team: number; files: StartedFile[] }[];
 };

@@ -90,6 +90,7 @@ const LOBBY_STARTED_SCHEMA = {
         tls: { $ref: '#/$defs/roomTls' },
         password: { $ref: '#/$defs/text256' },
         roomUrl: { $ref: '#/$defs/text256' },
+        localAddress: { $ref: '#/$defs/text256' },
       },
     },
     slots: {

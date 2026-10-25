@@ -1,6 +1,7 @@
 /* @layer core @kind logic */
 import type { LobbyStarted } from '@drizztdourden08/archipelia-lobby-protocol';
 import type { Lobby, LobbyRoom, SlotUpload } from '@archipelia/model';
+import { LOOPBACK_HOST } from '../../listener/listener.constants';
 import type { LobbyContext } from '../lobby-context.type';
 
 const slotResult = (room: LobbyRoom, slot: SlotUpload) => ({
@@ -16,11 +17,12 @@ const playingSlots = (lobby: Lobby, memberId: string): SlotUpload[] => {
   return member.slots.filter((slot) => slot.state === 'ok');
 };
 
-const roomInfo = async (ctx: LobbyContext, room: LobbyRoom): Promise<LobbyStarted['room']> => {
+const roomInfo = async (ctx: LobbyContext, lobby: Lobby, room: LobbyRoom): Promise<LobbyStarted['room']> => {
   const password = room.passwordRef ? await ctx.deps.secrets.get(room.passwordRef) : null;
   return {
     address: `${room.host}:${room.port}`, host: room.host, port: room.port, tls: room.tls,
     ...(password ? { password } : {}), ...(room.roomUrl ? { roomUrl: room.roomUrl } : {}),
+    ...(lobby.options.room.kind === 'local' ? { localAddress: `${LOOPBACK_HOST}:${room.port}` } : {}),
   };
 };
 
@@ -32,7 +34,7 @@ const startedFor = async (ctx: LobbyContext, lobby: Lobby, memberId: string): Pr
     type: 'lobby.started',
     seed: room.seed,
     engine: { ap: lobby.engine.ap },
-    room: await roomInfo(ctx, room),
+    room: await roomInfo(ctx, lobby, room),
     slots: slots.map((slot) => slotResult(room, slot)),
   };
 };
