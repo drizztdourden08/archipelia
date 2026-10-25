@@ -1,6 +1,7 @@
 /* @layer renderer-app @kind style */
 .idle-base {
   position: absolute;
+  isolation: isolate;
   inset: 0;
   box-sizing: border-box;
   padding: calc(var(--control-h-md) + var(--space-2xl)) var(--space-lg);

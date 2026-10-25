@@ -1,6 +1,5 @@
 /* @layer renderer-app @kind component */
 import { useCallback } from 'react';
-import { AnimatedMascot } from '@drizztdourden08/tessera/brand';
 import { Button, ButtonRow, EmptyState, Flex, Icon, Shortcut, Spinner, Stack, Text } from '@drizztdourden08/tessera/primitives';
 import { ErrorCallout } from '@archipelia/design';
 import { ROUTE } from '../../../../hooks/app-navigation.constants';
@@ -8,6 +7,7 @@ import { openNewSession } from '../../../../hooks/open-new-session';
 import { useAppNavigation } from '../../../../hooks/useAppNavigation';
 import { reloadRuns } from '../../../../runs/reload-runs';
 import { RUNS_FAILED } from '../../../../runs/runs.constants';
+import { IdleArt } from '../IdleArt';
 import type { IdleBaseProps } from './IdleBase.type';
 import './IdleBase.css';
 
@@ -24,11 +24,12 @@ const IdleBase = ({ loaded, failed }: IdleBaseProps) => {
   );
   return (
     <Stack gap="lg" align="center" justify="center" className="idle-base">
+      <IdleArt />
       {failed && !loaded
         ? <Stack gap="md" align="center"><ErrorCallout message={RUNS_FAILED} onRetry={reloadRuns} />{actions}</Stack>
         : (
           <EmptyState
-            icon={loaded ? <AnimatedMascot brand="auto" animation="idle" loop size="xl" /> : <Spinner />}
+            icon={loaded ? undefined : <Spinner />}
             message={loaded ? 'No room is hosting right now.' : 'Loading runs'}
             action={actions}
           />
