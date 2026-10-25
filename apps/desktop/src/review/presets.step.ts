@@ -8,6 +8,7 @@ import { SELECTOR } from './review-dom.constants';
 import { named } from './named';
 import { nameOf } from './name-of';
 import { pickInPalette } from './pick-in-palette';
+import { rowsFit } from './rows-fit';
 import { waitNamed } from './wait-named';
 
 const nameField = (tour: AppReviewTour) => tour.waitFor(() => {
@@ -52,6 +53,7 @@ export default defineReviewStep({
     if (!field) return tour.check('preset-editor', false, '', 'the preset editor has no name field');
     tour.typeText(field, `${REVIEW_PRESET} edited`);
     tour.check('preset-save-bar', await showsUnsaved(tour), 'the save bar says Unsaved changes and offers Save', 'the save bar did not show the unsaved edit');
+    tour.check('option-rows-fit', rowsFit(tour), 'every option input sits left of its reset button', 'an option input runs under or past its reset button');
     await tour.capture('edited');
     await guardOnClose(tour);
     const again = await nameField(tour);
