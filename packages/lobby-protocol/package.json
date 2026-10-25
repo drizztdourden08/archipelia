@@ -51,7 +51,7 @@
   },
   "devDependencies": {
     "@archipelia/package-build": "workspace:*",
-    "@drizztdourden08/brock-lint-config": "^0.95.0",
+    "@drizztdourden08/brock-lint-config": "^0.97.1",
     "@types/node": "catalog:",
     "eslint": "catalog:",
     "typescript": "catalog:"
