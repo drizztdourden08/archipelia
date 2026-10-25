@@ -7,7 +7,7 @@ type JoinRequest = { address: string; code: string; displayName: string; slotNam
 
 type JoinState = 'connecting' | 'pending' | 'approved' | 'started' | 'refused' | 'failed' | 'offline' | 'ended';
 
-type JoinFile = { name: string; size: number; saved?: string };
+type JoinFile = { name: string; size: number; saved?: string; refused?: string };
 
 type JoinResults = {
   seed: string;

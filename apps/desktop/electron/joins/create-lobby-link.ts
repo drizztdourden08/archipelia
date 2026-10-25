@@ -1,7 +1,7 @@
 /* @layer electron-main @kind logic */
 import { decodeMessage, DEFAULT_LIMITS } from '@drizztdourden08/archipelia-lobby-protocol';
 import type { Transport } from '@drizztdourden08/archipelia-lobby-protocol/node';
-import { REPLY_TIMEOUT_MS, UPLOAD_TIMEOUT_MS } from './joins.constants';
+import { REPLY_TIMEOUT_MS, TEXT, UPLOAD_TIMEOUT_MS } from './joins.constants';
 import type { LinkMessage, LobbyLink } from './joins.type';
 import { createWaiterBook } from './create-waiter-book';
 import { replyTo } from './reply-to';
@@ -48,15 +48,22 @@ const createLobbyLink = (transport: Transport): LobbyLink => {
     return reply;
   };
 
-  const stream = async (message: Record<string, unknown>, isEnd: (message: LinkMessage) => boolean) => {
+  const stream = async (message: Record<string, unknown>, isEnd: (message: LinkMessage) => boolean, accept: (part: LinkMessage) => boolean) => {
     seq += 1;
     const id = seq;
     const parts: LinkMessage[] = [];
-    const stop = onMessage((part) => { if (replyTo(part) === id) parts.push(part); });
+    let refuse: (error: Error) => void = () => undefined;
+    const refused = new Promise<never>((_resolve, reject) => { refuse = reject; });
+    const stop = onMessage((part) => {
+      if (replyTo(part) !== id || isEnd(part)) return;
+      if (accept(part)) parts.push(part);
+      else refuse(new Error(TEXT.badFile));
+    });
     const end = book.waitFor((answer) => (replyTo(answer) === id && isEnd(answer)) || isFatal(answer), UPLOAD_TIMEOUT_MS);
+    end.catch(() => undefined);
     send({ ...message, seq: id });
     try {
-      const last = await end;
+      const last = await Promise.race([end, refused]);
       return [...parts, last];
     } finally {
       stop();

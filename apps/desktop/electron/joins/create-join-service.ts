@@ -1,15 +1,22 @@
 /* @layer electron-main @kind logic */
 import type { JoinView } from '../../src/joins/joins.type';
-import { RESUMABLE, TEXT } from './joins.constants';
+import { JOIN_TIMING, NOT_RESUMED, TEXT } from './joins.constants';
 import type { JoinContext, JoinDeps, JoinRecord, LobbyLink } from './joins.type';
 import { createJoinBook } from './create-join-book';
+import { createRetries } from './create-retries';
 import { joinView } from './join-view';
 import { runJoin } from './run-join';
 
 const newest = (left: JoinView, right: JoinView) => right.createdAt - left.createdAt;
 
+const resumable = (record: JoinRecord) => Boolean(record.token && record.admission) && !NOT_RESUMED.includes(record.state);
+
 const createJoinService = (deps: JoinDeps) => {
-  const ctx: JoinContext = { deps, book: createJoinBook(deps.files), live: new Map<string, LobbyLink>(), now: deps.now ?? Date.now };
+  const timing = { ...JOIN_TIMING, ...deps.timing };
+  const retries = createRetries(timing, (id) => void resume(id).catch(() => undefined));
+  const ctx: JoinContext = {
+    deps, book: createJoinBook(deps.files), live: new Map<string, LobbyLink>(), now: deps.now ?? Date.now, timing, retry: retries.schedule, settled: retries.reset,
+  };
 
   const require = async (id: string): Promise<JoinRecord> => {
     const record = await ctx.book.get(id);
@@ -18,6 +25,7 @@ const createJoinService = (deps: JoinDeps) => {
   };
 
   const drop = (id: string) => {
+    retries.cancel(id);
     const link = ctx.live.get(id);
     ctx.live.delete(id);
     link?.close();
@@ -30,29 +38,22 @@ const createJoinService = (deps: JoinDeps) => {
     return joinView(record);
   };
 
-  const leave = async (id: string) => {
-    const link = ctx.live.get(id);
-    link?.send({ type: 'leave' });
+  const resume = async (id: string) => begin(await require(id));
+
+  const forget = async (id: string, leave: boolean) => {
+    if (leave) ctx.live.get(id)?.send({ type: 'leave' });
     drop(id);
     await ctx.book.remove(id);
-  };
-
-  const resumeAll = async () => {
-    const records = await ctx.book.list();
-    await Promise.all(records.filter((record) => record.token && RESUMABLE.some((state) => state === record.state)).map(begin));
   };
 
   return {
     list: async () => (await ctx.book.list()).map(joinView).sort(newest),
     start: begin,
-    resume: async (id: string) => begin(await require(id)),
-    leave,
-    dismiss: async (id: string) => {
-      drop(id);
-      await ctx.book.remove(id);
-    },
-    resumeAll,
-    closeAll: () => [...ctx.live.keys()].forEach(drop),
+    resume,
+    leave: (id: string) => forget(id, true),
+    dismiss: (id: string) => forget(id, false),
+    resumeAll: async () => { await Promise.all((await ctx.book.list()).filter(resumable).map(begin)); },
+    closeAll: () => [...ctx.live.keys(), ...retries.ids()].forEach(drop),
   };
 };
 

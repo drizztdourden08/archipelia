@@ -9,7 +9,7 @@ import { sendReady } from './send-ready';
 const onAdmission = async (run: JoinRun, message: AdmissionMessage) => {
   if (message.state === 'pending') return;
   if (message.state === 'approved') {
-    await run.save({ state: 'approved', message: undefined });
+    await run.save({ state: 'approved', admission: 'approved', message: undefined });
     sendReady(run);
     return;
   }
@@ -26,9 +26,14 @@ const onState = async (run: JoinRun, message: LobbyState) => {
 };
 
 const onStarted = async (run: JoinRun, message: LobbyStarted) => {
-  const saved = await run.save({ state: 'started', message: undefined, results: resultsOf(run.current(), message) });
+  const before = run.current().results;
+  const fresh = resultsOf(run.current(), message);
+  const fetched = before?.seed === fresh.seed && before.files.some((file) => file.saved !== undefined || file.refused !== undefined);
+  await run.save({ state: 'started', message: undefined, results: fetched ? { ...fresh, files: before.files } : fresh });
+  if (fetched || run.flags.fetching) return;
+  run.flags.fetching = true;
   const files = await fetchFiles(run, message);
-  if (saved.results && files.length > 0) await run.save({ results: { ...saved.results, files } });
+  await run.save({ results: { ...(run.current().results ?? fresh), files } });
 };
 
 const onRoom = (run: JoinRun, message: RoomStatus) => {
@@ -38,6 +43,12 @@ const onRoom = (run: JoinRun, message: RoomStatus) => {
 };
 
 const onError = (run: JoinRun, message: ErrorMessage) => {
+  if (message.code === 'slot-name-taken') {
+    const saved = run.save({ state: 'failed', token: undefined, message: `${message.message} ${TEXT.pickAnotherName}` });
+    run.link.send({ type: 'leave' });
+    run.link.close();
+    return saved;
+  }
   if (!message.fatal) return run.save({ message: message.message });
   const ending = ENDING_CODES.some((code) => code === message.code);
   const state = message.code === 'refused' ? 'refused' : 'ended';
@@ -45,7 +56,10 @@ const onError = (run: JoinRun, message: ErrorMessage) => {
 };
 
 const onWelcome = (run: JoinRun, { member, lobby }: Welcome) =>
-  run.save({ memberId: member.id, token: member.token, lobbyName: lobby.name, ap: lobby.engine.ap, state: member.admission === 'approved' ? 'approved' : 'pending', message: undefined });
+  run.save({
+    memberId: member.id, token: member.token, lobbyName: lobby.name, ap: lobby.engine.ap, message: undefined,
+    state: member.admission === 'approved' ? 'approved' : 'pending', admission: member.admission === 'approved' ? 'approved' : 'pending',
+  });
 
 const onLobby = (run: JoinRun, message: LobbyProgress | LobbyFailed) =>
   run.save({ message: message.type === 'lobby.failed' ? `${TEXT.failed}${message.message}` : TEXT.making });

@@ -11,7 +11,7 @@ const resultFacts = (results: JoinResults): FactsPanelFact[] => [
   { label: 'Game', value: results.game },
   { label: 'Seed', value: results.seed, mono: true },
   ...(results.roomUrl ? [{ label: 'Room page', value: results.roomUrl, mono: true, copyable: 'room page' }] : []),
-  ...results.files.map((file) => ({ label: file.name, value: file.saved ?? formatBytes(file.size), mono: true, copyable: file.saved ? 'file path' : false })),
+  ...results.files.map((file) => ({ label: file.name, value: file.saved ?? file.refused ?? formatBytes(file.size), mono: file.refused === undefined, copyable: file.saved ? 'file path' : false })),
 ];
 
 export { resultFacts };

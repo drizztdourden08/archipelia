@@ -1,6 +1,6 @@
 /* @layer electron-main @kind types */
 import type { ClientInfo, ProtocolMessage } from '@drizztdourden08/archipelia-lobby-protocol';
-import type { Transport } from '@drizztdourden08/archipelia-lobby-protocol/node';
+import type { SocketTransport } from '@drizztdourden08/archipelia-lobby-protocol/node';
 import type { DataFiles, InstalledGame } from '@archipelia/model';
 import type { Core } from '@archipelia/server';
 import type { PlayerSources } from '@archipelia/sessions/players';
@@ -13,7 +13,7 @@ type Waiter = { match: (message: LinkMessage) => boolean; resolve: (message: Lin
 type LobbyLink = {
   send: (message: Record<string, unknown>) => void;
   request: (message: Record<string, unknown>) => Promise<LinkMessage>;
-  stream: (message: Record<string, unknown>, isEnd: (message: LinkMessage) => boolean) => Promise<LinkMessage[]>;
+  stream: (message: Record<string, unknown>, isEnd: (message: LinkMessage) => boolean, accept: (part: LinkMessage) => boolean) => Promise<LinkMessage[]>;
   waitFor: (match: (message: LinkMessage) => boolean, timeoutMs: number) => Promise<LinkMessage>;
   onMessage: (listener: (message: LinkMessage) => void) => () => void;
   onClose: (listener: (code: number) => void) => void;
@@ -24,17 +24,20 @@ type JoinWorld = { module: string; worldVersion: string; sha256: string; size: n
 
 type JoinYaml = { text: string; sha256: string; size: number };
 
-type JoinRecord = JoinView & { memberId?: string; token?: string; yaml: JoinYaml; world?: JoinWorld };
+type JoinRecord = JoinView & { memberId?: string; token?: string; admission?: 'pending' | 'approved'; yaml: JoinYaml; world?: JoinWorld };
 
 type JoinDeps = {
   files: DataFiles;
-  connect: (address: string) => Promise<Transport>;
+  connect: (address: string) => Promise<SocketTransport>;
   readWorld: (path: string) => Promise<Uint8Array>;
   client: ClientInfo;
   engineAp: () => Promise<string | undefined>;
   emit: (view: JoinView) => void;
   now?: () => number;
+  timing?: Partial<JoinTiming>;
 };
+
+type JoinTiming = { pingMs: number; idleMs: number; retryMs: number; retryMaxMs: number };
 
 type JoinStop = Error & { state: JoinState; forget: boolean };
 
@@ -43,7 +46,7 @@ type JoinRun = {
   files: DataFiles;
   current: () => JoinRecord;
   save: (patch: Partial<JoinRecord>) => Promise<JoinRecord>;
-  flags: { uploaded: boolean; readySent: boolean };
+  flags: { uploaded: boolean; readySent: boolean; fetching: boolean };
 };
 
 type JoinBook = {
@@ -53,7 +56,15 @@ type JoinBook = {
   remove: (id: string) => Promise<void>;
 };
 
-type JoinContext = { deps: JoinDeps; book: JoinBook; live: Map<string, LobbyLink>; now: () => number };
+type JoinContext = {
+  deps: JoinDeps;
+  book: JoinBook;
+  live: Map<string, LobbyLink>;
+  now: () => number;
+  timing: JoinTiming;
+  retry: (id: string) => number;
+  settled: (id: string) => void;
+};
 
 type RecordDeps = {
   installed: () => Promise<InstalledGame[]>;
@@ -69,4 +80,4 @@ type JoinHandlers = { [Type in LinkMessage['type']]?: (run: JoinRun, message: Ex
 
 type UploadFile = { sha256: string; kind: 'world' | 'yaml'; bytes: () => Promise<Uint8Array> };
 
-export type { JoinContext, JoinDeps, JoinHandlers, JoinRecord, JoinRun, JoinServicesDeps, JoinStop, RecordDeps, JoinWorld, LinkMessage, LobbyLink, UploadFile, Waiter };
+export type { JoinContext, JoinDeps, JoinHandlers, JoinRecord, JoinRun, JoinServicesDeps, JoinStop, JoinTiming, RecordDeps, JoinWorld, LinkMessage, LobbyLink, UploadFile, Waiter };
