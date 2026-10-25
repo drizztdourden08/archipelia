@@ -28,6 +28,9 @@ const LIST = {
   nameLabel: 'Server label',
   submit: 'Add',
   width: 'servers.list-width',
+  listWidth: 400,
+  minListWidth: 320,
+  maxListWidth: 560,
   empty: 'No server yet.',
 } as const;
 

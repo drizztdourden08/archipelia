@@ -65,6 +65,8 @@ const FAILURE = {
   trust: 'Could not trust the certificate.',
 } as const;
 
+const LIST_WIDTH = { initial: 400, min: 320, max: 560 } as const;
+
 const NO_SERVER = 'Pick This computer, a remote server, or add a remote server to manage its lobbies here.';
 
 const REMOTE_EMPTY = 'No remote server yet. Add one to manage its lobbies from here.';
@@ -75,4 +77,4 @@ const PROBLEM = {
   pin: 'The pin is 64 hexadecimal digits, with or without colons.',
 } as const;
 
-export { EMPTY_DRAFT, FAILURE, FORM_TEXT, LAN_TEXT, MATCH_LABEL, MODE_OPTIONS, MODE_VALUES, NETWORK_TEXT, NO_PIN, NO_SERVER, PROBLEM, REACH_TEXT, REMOTE_EMPTY };
+export { EMPTY_DRAFT, FAILURE, FORM_TEXT, LAN_TEXT, LIST_WIDTH, MATCH_LABEL, MODE_OPTIONS, MODE_VALUES, NETWORK_TEXT, NO_PIN, NO_SERVER, PROBLEM, REACH_TEXT, REMOTE_EMPTY };

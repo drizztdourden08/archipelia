@@ -5,7 +5,7 @@ import { EmptyState, Icon, Status } from '@drizztdourden08/tessera/primitives';
 import type { LobbyServerEntry } from '@archipelia/model';
 import { ErrorCallout } from '@archipelia/design';
 import { LOCAL_SERVER } from '../../lobbies/lobbies.constants';
-import { NO_SERVER, REMOTE_EMPTY } from './ArchipeliaServers.constants';
+import { LIST_WIDTH, NO_SERVER, REMOTE_EMPTY } from './ArchipeliaServers.constants';
 import { entryStatus } from './behavior/entry-status';
 import { useArchipeliaServers } from './behavior/useArchipeliaServers';
 import { LanList } from './sub-components/LanList';
@@ -69,6 +69,9 @@ const ArchipeliaServers = () => {
       detailLabel="server"
       listShowTitle={false}
       storageKey="archipelia-servers.list"
+      listWidth={LIST_WIDTH.initial}
+      minListWidth={LIST_WIDTH.min}
+      maxListWidth={LIST_WIDTH.max}
     />
   );
 };
