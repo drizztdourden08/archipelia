@@ -2,6 +2,7 @@
 import { formatLobbyCode } from '@drizztdourden08/archipelia-lobby-protocol';
 import { defineReviewStep, nav } from '@drizztdourden08/brock-react';
 import type { AppReviewTour } from '@drizztdourden08/brock-react';
+import { openLobby } from '../hooks/open-lobby';
 import { ROUTE } from '../hooks/app-navigation.constants';
 import { appApi } from '../ipc/app-api';
 import type { LobbyReviewHost } from '../lobbies/lobbies.type';
@@ -9,7 +10,10 @@ import { LOCAL_SERVER } from '../lobbies/lobbies.constants';
 import { useLobbyStore } from '../stores/useLobbyStore';
 import { LOBBY_UI, REVIEW_LOBBY, REVIEW_PLAYER } from './review.constants';
 import { SELECTOR } from './review-dom.constants';
+import { chooseHosting } from './choose-hosting';
 import { clickNamed } from './click-named';
+import { hostPlays } from './host-plays';
+import { lookAtLobby } from './look-at-lobby';
 import { named } from './named';
 import { nameOf } from './name-of';
 import { waitNamed } from './wait-named';
@@ -32,21 +36,11 @@ const createInScreen = async (tour: AppReviewTour) => {
   const toggle = await waitNamed(tour, SELECTOR.toggle, new RegExp(LOBBY_UI.unlisted), layer(tour));
   if (toggle) tour.click(toggle);
   await tour.capture('lobby-form');
-  const priv = (await appApi().lobbyServerStatus()).options.mode === 'off';
   await clickNamed(tour, SELECTOR.button, LOBBY_UI.submit, layer(tour));
-  if (priv) await openToNetwork(tour);
   const made = await tour.waitFor(() => lobbyNow(before), 15000);
   if (!made) await tour.capture('lobby-create-failed');
   tour.check('lobby-created', made !== null, 'Create lobby opens the lobby on the embedded server', 'the lobby was not created');
   return made;
-};
-
-const openToNetwork = async (tour: AppReviewTour) => {
-  const ask = await waitNamed(tour, SELECTOR.dialog, LOBBY_UI.openTitle);
-  tour.check('lobby-private-asks', ask !== null, 'a private server asks before the first lobby opens it to the network', 'the private server did not ask');
-  if (ask) await clickNamed(tour, SELECTOR.button, LOBBY_UI.open, ask);
-  const mode = (await appApi().lobbyServerStatus()).options.mode;
-  tour.check('lobby-opens-lan', mode === 'lan', 'the answer switches the network mode to LAN only', `the network mode is ${mode}`);
 };
 
 const allowWorld = async (tour: AppReviewTour) => {
@@ -99,11 +93,15 @@ export default defineReviewStep({
     const status = await appApi().lobbyServerStatus();
     tour.check('lobby-server', status.state === 'listening', 'the embedded lobby server listens', `the lobby server is ${status.state}: ${status.error ?? ''}`);
     if (status.state !== 'listening') return;
+    await chooseHosting(tour);
     const lobby = await createInScreen(tour);
     if (!lobby) return;
     const code = formatLobbyCode(lobby.code) ?? lobby.code;
     const shown = await waitText(tour, code, () => layer(tour) ?? null);
     tour.check('lobby-code', shown, 'the lobby screen shows the code in a copy box', 'the lobby screen does not show the code');
+    await lookAtLobby(tour, code);
+    openLobby(LOCAL_SERVER, lobby.id);
+    await hostPlays(tour, lobby.id);
     await joinFakeClient(tour, lobby.engine.ap, code);
     await startAndCheck(tour);
     await closeLobby(tour);

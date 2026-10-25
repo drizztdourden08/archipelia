@@ -391,6 +391,7 @@ On success each approved member gets its own results:
 ```
 
 - `room.tls` is `yes`, `no` or `auto` (try `wss://`, then `ws://`). `password` is absent for a room without one. Only approved members of this lobby receive it.
+- `room.localAddress` (optional) is present when the room runs on the computer of the server. It is the loopback address of the room, `127.0.0.1:<port>`. A client that joined the lobby through a loopback address, so it runs on the same computer as the server, SHOULD use `localAddress` instead of `address`. A client on another computer MUST ignore it.
 - `files` lists any per-slot output (patch files for games that need one): `{ fileId, name, size, sha256 }`. The client fetches one with `{ "type": "file.get", "seq": n, "fileId": "f_1" }` and receives `file.chunk` messages (`fileId`, `offset`, base64 `data`) then `file.done` with the hash.
 - A member that connects or resumes after the start gets `lobby.started` again at once.
 - Later room changes: `{ "type": "room.status", "state": "hosting" | "stopped", "address": "..." }`. A room that moves (restart on another port) sends the new address.
@@ -628,3 +629,8 @@ A scenario fails with a text such as `line 12 (s2c): members[0].id: expected "m_
 - Every error code has a row in the table above, the right fatal flag and the right close code.
 - The `lobby.info` reply holds no member data, the request has its size limit, and the 31st request in a minute is rate limited.
 - The discovery record and the beacon parse, reject an unknown protocol version as incompatible, and reject an oversize datagram.
+
+## Changes
+
+- 1.2.0: `lobby.started` carries an optional `room.localAddress`, the loopback address of a room that runs on the computer of the server. A client that joined through a loopback address SHOULD use it. The change is additive, so protocol major 1 is unchanged.
+- 1.1.0: the socket transport has a client-side masking option.

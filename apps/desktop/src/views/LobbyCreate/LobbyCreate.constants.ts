@@ -25,11 +25,7 @@ const TEXT = {
   slots: { title: 'Maximum slots', description: 'How many slots all players together may bring.', hint: 'A player with several slots uses several.' },
 } as const;
 
-const PRIVATE_NOTE = 'This server answers only this computer until you open it to your network. Other computers need to reach it to join.';
-
-const OPEN_TITLE = 'Open this server to your network?';
-
-const OPEN_MESSAGE = 'Players on your network need to reach this server, so its network mode goes from Off to LAN only. You can change it in Servers.';
+const PRIVATE_NOTE = 'This lobby is private: only this computer can join it. To let other computers join, choose My local network (LAN) under Where to host on the Lobbies page.';
 
 const NO_ENGINE = 'This server has no Archipelago engine yet, so it cannot open a lobby. Set one up in Engine first.';
 
@@ -43,4 +39,4 @@ const PROBLEM = {
 
 const FAILURE = { create: 'Could not open the lobby.', view: 'Could not read the engine of the server.' } as const;
 
-export { DEFAULT_GG_SITE, DEFAULT_MAX_SLOTS, FAILURE, NO_ENGINE, OPEN_MESSAGE, OPEN_TITLE, PRIVATE_NOTE, NO_MACHINE, PROBLEM, ROOM_OPTIONS, SLOT_RANGE, TEXT };
+export { DEFAULT_GG_SITE, DEFAULT_MAX_SLOTS, FAILURE, NO_ENGINE, PRIVATE_NOTE, NO_MACHINE, PROBLEM, ROOM_OPTIONS, SLOT_RANGE, TEXT };

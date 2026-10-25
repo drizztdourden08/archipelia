@@ -5,13 +5,13 @@ import { Callout, Stack, Text } from '@drizztdourden08/tessera/primitives';
 import { resultsFacts } from '../../behavior/results-facts';
 import type { ResultsPanelProps } from './ResultsPanel.type';
 
-const ResultsPanel = ({ lobby }: ResultsPanelProps) => {
+const ResultsPanel = ({ lobby, onThisComputer }: ResultsPanelProps) => {
   const { room, failure } = lobby;
   return (
     <PanelContainer title="Results">
       <Stack gap="sm">
         {failure && <Callout tone="danger">{`The ${failure.stage === 'generate' ? 'generation' : 'room'} failed: ${failure.message}`}</Callout>}
-        {room && <FactsPanel label="Room" groups={[resultsFacts(lobby)]} layout="boxed" />}
+        {room && <FactsPanel label="Room" groups={[resultsFacts(lobby, onThisComputer)]} layout="boxed" />}
         {room?.files.length === 0 && <Text variant="caption" tone="dim">The seed made no files for the players.</Text>}
         {room && room.files.length > 0 && (
           <ListItemList label="Files for the players" heading="Files for the players" count={room.files.length}>

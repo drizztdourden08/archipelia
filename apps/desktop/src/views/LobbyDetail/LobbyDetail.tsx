@@ -5,6 +5,7 @@ import { ErrorCallout } from '@archipelia/design';
 import { RESULT_PHASES } from './LobbyDetail.constants';
 import type { LobbyDetailProps } from './LobbyDetail.type';
 import { useLobbyDetail } from './behavior/useLobbyDetail';
+import { HostPlayer } from '../HostPlayer';
 import { LobbyHeader } from './sub-components/LobbyHeader';
 import { LobbyMissing } from './sub-components/LobbyMissing';
 import { MemberCard } from './sub-components/MemberCard';
@@ -24,7 +25,8 @@ const LobbyDetail = (props: LobbyDetailProps) => {
           {lobby.members.map((member) => <MemberCard key={member.id} lobby={lobby} member={member} model={model} />)}
         </Stack>
       </PanelContainer>
-      {(RESULT_PHASES.includes(lobby.phase) || lobby.failure) && <ResultsPanel lobby={lobby} />}
+      {lobby.phase === 'open' && <HostPlayer serverId={props.serverId} lobbyId={props.lobbyId} />}
+      {(RESULT_PHASES.includes(lobby.phase) || lobby.failure) && <ResultsPanel lobby={lobby} onThisComputer={model.place.local && lobby.options.room.kind === 'local'} />}
     </Stack>
   );
 };

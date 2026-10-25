@@ -15,8 +15,8 @@ const createEngineUsage = () => {
     else generating.delete(session.id);
   };
 
-  const watch = (hostFor: HostFor): HostFor => async (target, runtime) => {
-    const host = await hostFor(target, runtime);
+  const watch = (hostFor: HostFor): HostFor => async (target, runtime, binding) => {
+    const host = binding ? await hostFor(target, runtime, binding) : await hostFor(target, runtime);
     if (host.kind !== 'local' || !runtime) return host;
     hosting.set(host, runtime.id);
     const stop = async () => {

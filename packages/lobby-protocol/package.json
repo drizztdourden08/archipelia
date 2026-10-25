@@ -1,6 +1,6 @@
 {
   "name": "@drizztdourden08/archipelia-lobby-protocol",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "The Archipelia lobby protocol: message types, JSON Schemas, codec, version rules, fixtures, a fake client and a fake server.",
   "type": "module",
   "license": "UNLICENSED",

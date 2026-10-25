@@ -1,7 +1,7 @@
 /* @layer renderer-app @kind component */
 import { ItemList } from '@drizztdourden08/tessera/composites';
 import type { ItemListRowParts, ListItemColumn } from '@drizztdourden08/tessera/composites';
-import { Icon, Stack, Status, Tag } from '@drizztdourden08/tessera/primitives';
+import { Callout, Icon, Stack, Status, Tag } from '@drizztdourden08/tessera/primitives';
 import type { AdminLobby } from '@archipelia/model';
 import { ErrorCallout } from '@archipelia/design';
 import { LOBBY_PHASES } from '../../lobbies/lobby-statuses.constants';
@@ -9,7 +9,8 @@ import { EMPTY } from './LobbyList.constants';
 import { lobbyMeta } from './behavior/lobby-meta';
 import { useLobbyList } from './behavior/useLobbyList';
 import { waitingCount } from './behavior/waiting-count';
-import { ServerBar } from './sub-components/ServerBar';
+import { HostChoice } from '../HostChoice';
+import { JoinLobby } from '../JoinLobby';
 
 const columnsOf = (lobby: AdminLobby): ListItemColumn[] => {
   const waiting = waitingCount(lobby);
@@ -30,7 +31,9 @@ const LobbyList = () => {
   const model = useLobbyList();
   return (
     <Stack>
-      <ServerBar serverId={model.serverId} options={model.options} place={model.place} notice={model.notice} onSelect={model.select} />
+      <HostChoice />
+      {model.notice && <Callout tone="warning">{model.notice}</Callout>}
+      <JoinLobby />
       {model.error && <ErrorCallout message={model.error} onRetry={() => void model.reload()} />}
       {!model.error && (
         <ItemList

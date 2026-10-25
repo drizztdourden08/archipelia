@@ -6,6 +6,7 @@ import { createLocalHost } from '../local/local-host';
 import { createRemoteHost } from '../remote/remote-host';
 import type { SessionHost } from '../session-host.type';
 import { credentialsOf } from './credentials-of';
+import type { HostBinding } from './host-binding.type';
 import type { HostFactoryDeps, SecretStore } from './servers.type';
 
 const ggOwnerId = async (secrets: SecretStore, name: string) => {
@@ -17,9 +18,9 @@ const ggOwnerId = async (secrets: SecretStore, name: string) => {
 };
 
 const createHostFactory = ({ runtime, secrets, servers, advertiseHost, bindHost, ggOwnerSecret }: HostFactoryDeps) =>
-  async (target: HostTarget, own?: EngineRuntime): Promise<SessionHost> => {
+  async (target: HostTarget, own?: EngineRuntime, binding?: HostBinding): Promise<SessionHost> => {
     if (target.kind === 'local') {
-      return createLocalHost({ runtime: own ?? await runtime(), port: target.port, bindHost, advertiseHost: advertiseHost() });
+      return createLocalHost({ runtime: own ?? await runtime(), port: target.port, bindHost: binding?.bindHost ?? bindHost, advertiseHost: (binding?.advertiseHost ?? advertiseHost)() });
     }
     if (target.kind === 'archipelago-gg') {
       return createGgHost({ ownerId: await ggOwnerId(secrets, ggOwnerSecret), baseUrl: target.baseUrl });

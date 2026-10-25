@@ -8,6 +8,7 @@ import { bakesPassword } from './bakes-password';
 import { roomPasswordOf } from './room-password';
 import { pickHostEngine } from '../engine/pick-host-engine';
 import type { HostEngine } from '../engine/pick-host-engine.type';
+import { hostForSession } from './host-for-session';
 import { hostWarning } from './host-warning';
 import { warnSession } from './warn-session';
 
@@ -18,7 +19,7 @@ const hostSession = async (run: HostRun, session: Session) => {
   const { deps, live, signal } = run;
   const { server, host: hostTarget } = session.snapshot;
   const picked = hostTarget.kind === 'local' ? await localEngine(run, session) : undefined;
-  const target = await deps.hostFor(hostTarget, picked?.runtime);
+  const target = await hostForSession(deps, session, picked?.runtime);
   const entry: LiveSession = { host: target, log: [] };
   live.set(session.id, entry);
   target.onLog((line) => {

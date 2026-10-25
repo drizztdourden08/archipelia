@@ -7,6 +7,7 @@ const ROUTE = {
   engine: 'multiworld/engine',
   lobbies: 'multiworld/lobbies',
   newLobby: 'multiworld/lobbies/new',
+  archipeliaServers: 'multiworld/servers/archipelia',
 } as const;
 
 const EDIT_SUB = 'edit';

@@ -9,7 +9,7 @@ import type { HostLogLine, ServerTestResult } from '@archipelia/hosts';
 import type { PresetInput } from '@archipelia/presets';
 import type { SessionEvent } from '@archipelia/sessions';
 import type {
-  LanEntry, LobbyEvent, LobbyRequest, LobbyReviewHost, LobbyReviewPlay, LobbyServerOptions, LobbyServerStatus, LobbyServerTest, LobbyServerView,
+  LanEntry, LobbyEvent, LobbyProbe, LobbyRequest, LobbyReviewHost, LobbyReviewPlay, LobbyServerOptions, LobbyServerStatus, LobbyServerTest, LobbyServerView,
 } from '../lobbies/lobbies.type';
 
 const APP_CHANNELS = defineChannels({
@@ -58,6 +58,7 @@ const APP_CHANNELS = defineChannels({
   lobbyServersRemove: invoke<(id: string) => Promise<void>>()('ap:lobby:serversRemove'),
   lobbyServersTest: invoke<(id: string) => Promise<LobbyServerTest>>()('ap:lobby:serversTest'),
   lanBrowse: invoke<(on: boolean) => Promise<LanEntry[]>>()('ap:lan:browse'),
+  lobbyProbe: invoke<(address: string, code: string) => Promise<LobbyProbe>>()('ap:lobby:probe'),
   lobbyReviewPlay: invoke<(request: LobbyReviewPlay) => Promise<{ ok: boolean; failure?: string }>>()('ap:lobby:reviewPlay'),
   lobbyReviewHostDone: invoke<(id: number) => Promise<void>>()('ap:lobby:reviewHostDone'),
   onEngineEvent: event<(event: EngineEvent) => void>()('ap:engine:event'),

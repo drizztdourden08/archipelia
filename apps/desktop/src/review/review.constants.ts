@@ -34,13 +34,20 @@ const REVIEW_LOBBY = 'Review lobby';
 
 const REVIEW_PLAYER = 'Zelda';
 
-const LOBBY_UI = { create: 'New lobby', submit: 'Create lobby', unlisted: 'Allow unlisted clients', start: 'Start', close: 'Close lobby', openTitle: 'Open this server to your network?', open: 'Open to my network' } as const;
+const LOBBY_UI = { create: 'New lobby', submit: 'Create lobby', unlisted: 'Allow unlisted clients', start: 'Start', close: 'Close lobby' } as const;
+
+const HOST_UI = {
+  private: /^This computer only/, lan: /^My local network/, remote: /^A remote Archipelia server/, askTitle: 'Open this computer to your network?', open: 'Open to my network',
+  stop: 'Stop', addPlayer: 'Add my player', find: 'Find servers on my network', stopFind: 'Stop looking', look: 'Look at the lobby',
+} as const;
+
+const REVIEW_HOST_PLAYER = 'Host';
 
 const STORAGE_FOLDERS = ['Sessions', 'Presets', 'Installed games'];
 
 const GUARD_DIALOG = 'Unsaved changes';
 
 export {
-  GUARD_DIALOG, HEARTBEAT_MS, LOBBY_UI, REVIEW_CHECKS, REVIEW_GAME, REVIEW_LOBBY, REVIEW_PLAYER, REVIEW_PLAYERS, REVIEW_PORT, REVIEW_PRESET, REVIEW_SERVER, REVIEW_SESSION, RUN_TIMEOUT_MS, SAVE_STATE, SERVER_FIELDS, SERVER_PROBLEMS,
+  GUARD_DIALOG, HEARTBEAT_MS, HOST_UI, LOBBY_UI, REVIEW_HOST_PLAYER, REVIEW_CHECKS, REVIEW_GAME, REVIEW_LOBBY, REVIEW_PLAYER, REVIEW_PLAYERS, REVIEW_PORT, REVIEW_PRESET, REVIEW_SERVER, REVIEW_SESSION, RUN_TIMEOUT_MS, SAVE_STATE, SERVER_FIELDS, SERVER_PROBLEMS,
   SERVER_UI, SERVER_UNTOUCHED, STORAGE_FOLDERS,
 };

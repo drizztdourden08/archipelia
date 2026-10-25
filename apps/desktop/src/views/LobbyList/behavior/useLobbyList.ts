@@ -9,10 +9,9 @@ import { serverPlace } from '../../../lobbies/server-place';
 import { useLobbyStore } from '../../../stores/useLobbyStore';
 import { FAILURE } from '../LobbyList.constants';
 import { serverNotice } from './server-notice';
-import { serverOptions } from './server-options';
 
 const useLobbyList = () => {
-  const { serverId, entries, select } = useActiveServer();
+  const { serverId, entries } = useActiveServer();
   const load = useLobbyStore((state) => state.load);
   const { status } = useLocalServerStatus();
   const { guard, errorOf, isBusy } = useKeyedGuard();
@@ -26,8 +25,7 @@ const useLobbyList = () => {
   const open = useCallback((lobbyId: string) => openLobby(serverId, lobbyId), [serverId]);
 
   return {
-    serverId, place, select, reload,
-    options: serverOptions(entries),
+    serverId, place, reload,
     notice: serverNotice(place.local, status),
     lobbies: lobbies ?? [],
     loading: !opened || isBusy('load'),

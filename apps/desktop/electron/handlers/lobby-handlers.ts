@@ -1,6 +1,7 @@
 /* @layer electron-main @kind logic */
 import type { HandlerGroup } from '@drizztdourden08/brock-electron/main';
 import { APP_CHANNELS } from '../../src/ipc/contract.constants';
+import { probeLobby } from '../lobbies/join/probe-lobby';
 import { saveLobbyServerEntry } from '../lobbies/save-lobby-server-entry';
 import { testLobbyServer } from '../lobbies/test-lobby-server';
 
@@ -25,6 +26,7 @@ const lobbyHandlers: HandlerGroup = {
     });
     ctx.handle(APP_CHANNELS.lobbyServersTest, (_event, id) => testLobbyServer(lobbyServers, secrets, id));
     ctx.handle(APP_CHANNELS.lanBrowse, (_event, on) => lanBrowser.browse(on));
+    ctx.handle(APP_CHANNELS.lobbyProbe, (_event, address, code) => probeLobby(address, code));
   },
 };
 

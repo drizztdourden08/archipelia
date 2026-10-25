@@ -4,17 +4,17 @@ import type { Socket } from 'node:net';
 import type { ServerTarget } from '../../../src/lobbies/lobbies.type';
 import { ADMIN_PATH, CONNECT_TIMEOUT_MS, HEAD_END, KEY_BYTES, MAX_HEAD_BYTES, TIMEOUT_TEXT, WEBSOCKET_GUID } from './remote.constants';
 
-const requestFor = (target: ServerTarget, key: string): string =>
+const requestFor = (target: ServerTarget, key: string, path: string): string =>
   [
-    `GET ${ADMIN_PATH} HTTP/1.1`, `Host: ${target.host}:${target.port}`, 'Upgrade: websocket', 'Connection: Upgrade',
+    `GET ${path} HTTP/1.1`, `Host: ${target.host}:${target.port}`, 'Upgrade: websocket', 'Connection: Upgrade',
     `Sec-WebSocket-Key: ${key}`, 'Sec-WebSocket-Version: 13', '', '',
   ].join('\r\n');
 
 const acceptOf = (key: string): string => createHash('sha1').update(key + WEBSOCKET_GUID).digest('base64');
 
-const refusal = (head: string): Error => new Error(`The server did not accept the admin connection (${head.split('\r\n')[0] ?? 'no answer'}).`);
+const refusal = (head: string): Error => new Error(`The server did not accept the connection (${head.split('\r\n')[0] ?? 'no answer'}).`);
 
-const upgradeSocket = (socket: Socket, target: ServerTarget): Promise<void> =>
+const upgradeSocket = (socket: Socket, target: ServerTarget, path = ADMIN_PATH): Promise<void> =>
   new Promise((resolve, reject) => {
     const key = randomBytes(KEY_BYTES).toString('base64');
     let buffered = Buffer.alloc(0);
@@ -46,7 +46,7 @@ const upgradeSocket = (socket: Socket, target: ServerTarget): Promise<void> =>
     };
     socket.on('data', onData);
     socket.once('error', fail);
-    socket.write(requestFor(target, key));
+    socket.write(requestFor(target, key, path));
   });
 
 export { upgradeSocket };
