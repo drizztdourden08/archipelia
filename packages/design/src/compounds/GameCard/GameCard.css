@@ -1,15 +1,25 @@
 /* @layer renderer-app @kind style */
-.game-card.game-card--first-party {
-  border-color: var(--c-tertiary);
+.game-card {
+  padding: var(--space-xs) var(--space-sm);
+}
+
+.game-card__kind {
+  display: flex;
+  flex: none;
+  inline-size: var(--size-40);
+  block-size: var(--size-40);
 }
 
 .game-card__media {
   position: relative;
   display: flex;
+  flex: 1;
   align-items: center;
   justify-content: center;
-  inline-size: 100%;
-  block-size: 100%;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  background: var(--c-primary-dim);
+  color: var(--c-text);
 }
 
 .game-card__badge {
@@ -25,6 +35,40 @@
   color: var(--c-text);
 }
 
+.game-card[data-kind='community'] .game-card__media {
+  background: var(--c-info-dim);
+}
+
+.game-card[data-kind='first-party'] .game-card__media {
+  background: var(--c-tertiary-dim);
+}
+
+.game-card[data-kind='file'] .game-card__media {
+  background: var(--c-secondary-dim);
+}
+
+.game-card[data-kind='first-party'] {
+  border-color: var(--c-tertiary);
+}
+
+.game-card__main {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-2xs);
+  min-inline-size: 0;
+}
+
+.game-card__title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.game-card__actions {
+  flex: none;
+}
+
 .game-card__note {
   display: inline-flex;
   color: var(--c-text-dim);
@@ -34,3 +78,22 @@
   color: var(--c-warning);
 }
 
+.game-card__summary-anchor {
+  display: flex;
+  min-inline-size: 0;
+}
+
+.game-card__summary {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.game-card__hint {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 12;
+  white-space: pre-line;
+}
