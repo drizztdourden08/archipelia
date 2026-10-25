@@ -14,11 +14,11 @@ import { meta as multiworldHostingServersMachinesTabMeta } from '../src/screens/
 import { meta as multiworldHostingServersPageMetaMeta } from '../src/screens/multiworld/hosting/servers.page';
 import { meta as multiworldLibraryGamesPageMeta } from '../src/screens/multiworld/library/games.page';
 import { meta as multiworldLibraryPresetsPageMeta } from '../src/screens/multiworld/library/presets.page';
+import { meta as multiworldTopSessionsEditSubMeta } from '../src/screens/multiworld/top/sessions/edit.sub';
+import { meta as multiworldTopSessionsJoinSubMeta } from '../src/screens/multiworld/top/sessions/join.sub';
+import { meta as multiworldTopSessionsNewSubMeta } from '../src/screens/multiworld/top/sessions/new.sub';
+import { meta as multiworldTopSessionsPageMeta } from '../src/screens/multiworld/top/sessions.page';
 import { meta as sessionBaseMeta } from '../src/screens/session.base';
-import { meta as sessionsSessionsEditSubMeta } from '../src/screens/sessions/sessions/edit.sub';
-import { meta as sessionsSessionsJoinSubMeta } from '../src/screens/sessions/sessions/join.sub';
-import { meta as sessionsSessionsNewSubMeta } from '../src/screens/sessions/sessions/new.sub';
-import { meta as sessionsSessionsPageMeta } from '../src/screens/sessions/sessions.page';
 
 const screenTree = buildScreenTree(config, [
   { kind: 'page', bucket: 'data', id: 'old-runs', component: lazyComponent(() => import('../src/screens/data/old-runs.page')), meta: dataOldRunsPageMeta },
@@ -33,11 +33,11 @@ const screenTree = buildScreenTree(config, [
   { kind: 'page-meta', bucket: 'multiworld', group: 'hosting', id: 'servers', meta: multiworldHostingServersPageMetaMeta },
   { kind: 'page', bucket: 'multiworld', group: 'library', id: 'games', component: lazyComponent(() => import('../src/screens/multiworld/library/games.page')), meta: multiworldLibraryGamesPageMeta },
   { kind: 'page', bucket: 'multiworld', group: 'library', id: 'presets', component: lazyComponent(() => import('../src/screens/multiworld/library/presets.page')), meta: multiworldLibraryPresetsPageMeta },
+  { kind: 'sub', bucket: 'multiworld', group: 'top', page: 'sessions', id: 'edit', component: lazyComponent(() => import('../src/screens/multiworld/top/sessions/edit.sub')), meta: multiworldTopSessionsEditSubMeta },
+  { kind: 'sub', bucket: 'multiworld', group: 'top', page: 'sessions', id: 'join', component: lazyComponent(() => import('../src/screens/multiworld/top/sessions/join.sub')), meta: multiworldTopSessionsJoinSubMeta },
+  { kind: 'sub', bucket: 'multiworld', group: 'top', page: 'sessions', id: 'new', component: lazyComponent(() => import('../src/screens/multiworld/top/sessions/new.sub')), meta: multiworldTopSessionsNewSubMeta },
+  { kind: 'page', bucket: 'multiworld', group: 'top', id: 'sessions', component: lazyComponent(() => import('../src/screens/multiworld/top/sessions.page')), meta: multiworldTopSessionsPageMeta },
   { kind: 'base', id: 'session', component: lazyComponent(() => import('../src/screens/session.base')), meta: sessionBaseMeta },
-  { kind: 'sub', bucket: 'sessions', page: 'sessions', id: 'edit', component: lazyComponent(() => import('../src/screens/sessions/sessions/edit.sub')), meta: sessionsSessionsEditSubMeta },
-  { kind: 'sub', bucket: 'sessions', page: 'sessions', id: 'join', component: lazyComponent(() => import('../src/screens/sessions/sessions/join.sub')), meta: sessionsSessionsJoinSubMeta },
-  { kind: 'sub', bucket: 'sessions', page: 'sessions', id: 'new', component: lazyComponent(() => import('../src/screens/sessions/sessions/new.sub')), meta: sessionsSessionsNewSubMeta },
-  { kind: 'page', bucket: 'sessions', id: 'sessions', component: lazyComponent(() => import('../src/screens/sessions/sessions.page')), meta: sessionsSessionsPageMeta },
 ], searchIndex);
 
 export { screenTree };

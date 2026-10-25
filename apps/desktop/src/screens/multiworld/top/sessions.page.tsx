@@ -1,6 +1,6 @@
 /* @layer renderer-app @kind component */
 import type { ScreenMeta } from '@drizztdourden08/brock-react';
-import { SessionsLibrary } from '../../views/SessionsLibrary';
+import { SessionsLibrary } from '../../../views/SessionsLibrary';
 
 const meta: ScreenMeta = {
   title: 'Sessions',
