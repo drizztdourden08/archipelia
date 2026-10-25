@@ -22,4 +22,4 @@ type CloserDeps = {
 
 type TemplateStore = { get: (id: string) => Promise<SessionTemplate | null>; remove: (id: string) => Promise<void> };
 
-export type { CloserDeps, DirectRunDeps, LobbyOps, TemplateStore };
+export type { CloserDeps, DirectRunDeps, TemplateStore };
