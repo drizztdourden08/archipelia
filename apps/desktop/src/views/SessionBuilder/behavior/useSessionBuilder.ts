@@ -16,6 +16,7 @@ import { withoutPassword } from './without-password';
 import { UNSAVED_SESSION } from '../SessionBuilder.constants';
 import { failWith } from '../../../hooks/fail-with';
 import { failureOf } from './failure-of';
+import { appApi } from '../../../ipc/app-api';
 
 const useSessionBuilder = ({ initial, onRun }: BuilderParams) => {
   const [draft, setDraft] = useState<SessionTemplate>(initial);
@@ -50,6 +51,7 @@ const useSessionBuilder = ({ initial, onRun }: BuilderParams) => {
 
   const persistTemplate = useCallback(async (template: SessionTemplate) => {
     const saved = await saveTemplate(await commit(template));
+    if (saved.direct) await appApi().sessionsSyncDirect(saved);
     setDraft(saved);
     setSavedJson(JSON.stringify(saved));
     return saved;
