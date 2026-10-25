@@ -2,6 +2,7 @@
 import type { OptionDef, OptionValue } from '@archipelia/model';
 
 type OptionRowProps = {
+  id?: string;
   def: OptionDef;
   value: OptionValue;
   problem?: string;

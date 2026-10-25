@@ -2,7 +2,7 @@
 import type { ComponentUsage } from '@drizztdourden08/tessera';
 
 const usage = {
-  job: 'One game option drawn from its definition: a FormRow with its name, its description that folds when long, its hint, the changed mark and reset, around the input that fits its kind.',
+  job: 'One game option drawn from its definition: a FormRow with its name, its description cut at two lines with the full text in a help hint when long, its hint, the changed mark and reset, around the input that fits its kind.',
   useWhen: [
     'Each option of a preset editor.',
     'Each override row in the session builder.',
@@ -15,12 +15,13 @@ const usage = {
     'Pass the definition and the current value; the row takes the label, the description and the advanced tag from the definition.',
     'Compute changed against what reset goes back to.',
     'Pass a hint only when it adds something the description does not say.',
+    'Pass id when something must reach the row, such as a link from a list of problems; it becomes the id of the input.',
     'The row writes the problem of a JSON option that does not parse under the field; pass onProblem with a stable callback to hold a save meanwhile.',
   ],
   a11y: [
     'The name of the row is the label of its control, so the control is named after the option display name.',
     'The reset button is named Reset and the label, and the problem line is an alert.',
-    'A description past two lines folds behind the More and Less of FormRow, a button that reports whether it is expanded and controls the folded text; the hint comes first, so it stays in view.',
+    'A description past two lines is cut there and the row never grows; its full text is in the help mark beside the name, a button that opens the hint on focus or hover; the default hint comes first, so it stays in view.',
   ],
   tree: {
     path: ['a value the user sets', 'a game option', 'the whole row from its definition'],
@@ -36,7 +37,7 @@ const OptionFieldRowSample = ({ def, value, onChange, onReset }: {
   onReset: () => void;
 }) => <OptionFieldRow def={def} value={value} changed={false} onChange={onChange} onReset={onReset} />;
 `,
-  propsHash: '75283e39062d4e64',
+  propsHash: '6149f22fc331aa8e',
 } satisfies ComponentUsage;
 
 export { usage };

@@ -98,8 +98,8 @@ describe('editor helpers', () => {
   test('problems read as sentences with option names', () => {
     const problems = [{ key: 'goal', expected: 'one of the listed choices' }];
     expect(problemMap(problems).get('goal')).toBe('Expected one of the listed choices.');
-    expect(problemSummary(DEMO, problems)).toBe('1 option needs a fix before saving: Goal.');
-    expect(problemSummary(DEMO, [])).toBeNull();
+    expect(problemSummary(problems)).toBe('1 option needs a fix before saving. They are listed above the options.');
+    expect(problemSummary([])).toBeNull();
   });
 });
 
@@ -120,7 +120,7 @@ describe('save bar', () => {
     const problems = [{ key: 'goal', expected: 'one of the listed choices' }];
     expect(saveBlock(DEMO, ' ', problems, ['bosses'])).toBe('Give the preset a name before saving.');
     expect(saveBlock(DEMO, 'Fast', problems, ['bosses'])).toBe('Fix the JSON of bosses before saving.');
-    expect(saveBlock(DEMO, 'Fast', problems, [])).toBe('1 option needs a fix before saving: Goal.');
+    expect(saveBlock(DEMO, 'Fast', problems, [])).toBe('1 option needs a fix before saving. They are listed above the options.');
     expect(saveBlock(DEMO, 'Fast', [], [])).toBeNull();
   });
 
