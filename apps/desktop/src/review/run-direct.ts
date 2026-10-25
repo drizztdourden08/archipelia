@@ -23,7 +23,7 @@ const runDirect = async (tour: AppReviewTour, templateId: string, lobbyId: strin
   tour.check('direct-one-seed', all === true,'one generation holds the host player, the fake client and the Archipelia player', 'the results do not list a file for each kind of player');
   await tour.capture('direct-results');
   nav.open(ROUTE.joinSession);
-  const room = await waitText(tour, /Room open[\s\S]*On this computer\s*127\.0\.0\.1:\d+/, layer, 20000);
+  const room = await waitText(tour, /Room open[\s\S]*On this computer\s*127\.0\.0\.1:\d+/i, layer, 20000);
   tour.check('join-results', room, 'the joined session shows the room address and the address on this computer', 'the joined session does not show its room');
   await tour.capture('join-results');
 };

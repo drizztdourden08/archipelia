@@ -1,5 +1,5 @@
 /* @layer renderer-app @kind config */
-const DEFAULTS_VALUE = '';
+const DEFAULTS_VALUE = 'defaults';
 
 const YAML_VALUE = 'yaml';
 
