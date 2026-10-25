@@ -34,7 +34,7 @@ const DirectConnectionSample = () => (
   <DirectConnection templateId="t1" busy={false} onEnable={() => undefined} onDisable={() => undefined} onOptions={() => undefined} onServer={() => undefined} />
 );
 `,
-  propsHash: '51c7a775bf9ac6c0',
+  propsHash: '8b54c18222015d62',
 } satisfies ComponentUsage;
 
 export { usage };

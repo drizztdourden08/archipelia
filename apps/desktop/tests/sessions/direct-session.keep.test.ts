@@ -103,7 +103,8 @@ describe('the slots of the host in a session that takes direct connections', () 
     joins.service.closeAll();
     await store.remove();
     await runDirect(template, directDeps(on));
-    await vi.waitFor(() => expect(on.templates[0]?.players.map((player) => player.name)).toEqual(['Cy']));
+    await vi.waitFor(() => expect(on.templates).toHaveLength(1));
+    expect(on.templates[0]?.players.map((player) => player.name)).toEqual(['Cy']);
   }, 30000);
 });
 
