@@ -36,4 +36,11 @@ describe('games store view', () => {
     expect(cardPropsOf(community, handlers([]))).toMatchObject({ kind: 'community', version: '1.2.0', status: undefined });
     expect(cardPropsOf(row, handlers([]))).toMatchObject({ kind: 'official', version: undefined });
   });
+
+  test('an official card shows a version only when the world has its own, never the engine version', () => {
+    const own: GameRow = { entry: { ...entry, versions: [{ version: '2.1.0', url: 'u' }] }, latest: { version: '2.1.0', url: 'u' }, state: 'available' };
+    expect(cardPropsOf(own, handlers([])).version).toBe('2.1.0');
+    const game = { apworld: 'hk', game: 'HK', version: '0.6.7', source: 'official', installedAt: 0 } as GameRow['installed'];
+    expect(cardPropsOf({ entry, installed: game, state: 'installed' }, handlers([])).version).toBeUndefined();
+  });
 });

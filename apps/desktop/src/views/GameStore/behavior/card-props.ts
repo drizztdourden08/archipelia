@@ -16,6 +16,7 @@ const statusOf = ({ state, entry }: GameRow): GameCardStatus | undefined => {
 };
 
 const versionOf = ({ installed, latest, entry, state }: GameRow) => {
+  if (entry.source === 'official') return latest?.version;
   if (installed && state === 'update' && latest) return `${installed.version} to ${latest.version}`;
   if (installed) return installed.version;
   return latest?.version ?? entry.firstParty?.worldVersion;

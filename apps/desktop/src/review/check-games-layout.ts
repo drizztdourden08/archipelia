@@ -1,5 +1,6 @@
 /* @layer renderer-app @kind logic */
 import type { AppReviewTour } from '@drizztdourden08/brock-react';
+import { appApi } from '../ipc/app-api';
 import { SECTION_ORDER } from './check-games-layout.constants';
 import { SELECTOR } from './review-dom.constants';
 import { waitNamed } from './wait-named';
@@ -13,6 +14,13 @@ const inOrder = (layer: HTMLElement) => {
   return drawn.length > 0 && drawn.every((el, at) => at === 0 || follows(drawn[at - 1] ?? el, el));
 };
 
+const checkOfficialVersions = async (tour: AppReviewTour, layer: HTMLElement | undefined): Promise<void> => {
+  const official = layer ? sectionNamed(layer, 'Official') : null;
+  const apVersion = (await appApi().engineStatus()).apVersion;
+  const repeated = official !== null && apVersion !== undefined && official.innerText.includes(apVersion);
+  tour.check('games-no-repeated-version', !repeated, 'the official cards do not repeat the engine version', `the official cards show ${apVersion ?? 'the engine version'} on every card`);
+};
+
 const checkGamesLayout = async (tour: AppReviewTour): Promise<void> => {
   const layer = (await tour.waitFor(() => tour.find(SELECTOR.layer))) ?? undefined;
   const search = layer ? await waitNamed(tour, SELECTOR.field, 'Search worlds', layer) : null;
@@ -22,6 +30,7 @@ const checkGamesLayout = async (tour: AppReviewTour): Promise<void> => {
   const bar = layer?.querySelector('section[aria-label="Games status"]') ?? null;
   const add = layer ? await waitNamed(tour, SELECTOR.button, 'Add from file', layer) : null;
   tour.check('games-status-bar', bar !== null && add !== null, 'the status bar at the foot has the totals and Add from file', 'the Games status bar or Add from file is missing');
+  await checkOfficialVersions(tour, layer);
   await tour.capture('games');
 };
 
