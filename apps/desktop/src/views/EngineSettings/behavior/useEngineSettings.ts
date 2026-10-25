@@ -14,6 +14,7 @@ import { chosenVersions } from './chosen-versions';
 import { engineActions } from './engine-actions';
 import { engineView } from './engine-view';
 import { finishInstall } from './finish-install';
+import { offerFirstRun } from './offer-first-run';
 import { removeEngineConfirm } from './remove-engine-confirm';
 import { setupProgress } from './setup-progress';
 
@@ -56,10 +57,13 @@ const useEngineSettings = () => {
   const switchEngine = useCallback((id: string) => { void guard('apply', failWith(FAILURE.apply, () => switchTo(id))); }, [guard, switchTo]);
 
   const removeEngine = useCallback((engine: EngineEntry) => {
-    void confirmDelete(removeEngineConfirm(engine)).then((confirmed) => (
-      confirmed ? guard('remove', failWith(FAILURE.remove, () => remove(engine.id))) : undefined
-    ));
-  }, [guard, remove]);
+    const wasActive = engine.id === overview?.active?.id;
+    void confirmDelete(removeEngineConfirm(engine, wasActive)).then(async (confirmed) => {
+      if (!confirmed) return;
+      const removed = await guard('remove', failWith(FAILURE.remove, async () => { await remove(engine.id); return true; }));
+      if (removed && wasActive) await guard('offer', failWith(FAILURE.apply, () => offerFirstRun(settings)));
+    });
+  }, [guard, remove, overview, settings]);
 
   return {
     overview, chosen, plan, busy, lastError, view, failure, actions, progress: setupProgress(job),

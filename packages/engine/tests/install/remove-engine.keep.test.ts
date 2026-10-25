@@ -33,9 +33,17 @@ const fakeRemove = (inUse?: string) => ({
 }) satisfies RemoveDeps;
 
 describe('removing an engine', () => {
-  test('refuses the engine in use', async () => {
+  test('removes the active engine once no session uses it', async () => {
     const deps = fakeRemove();
-    await expect(removeEngine(deps, 'in-use')).rejects.toThrow(ENGINE_TEXT.removeActive);
+    await removeEngine(deps, 'in-use');
+    expect(deps.forget).toHaveBeenCalledWith('in-use');
+    expect(deps.discard).toHaveBeenCalledWith('in-use');
+  });
+
+  test('refuses the active engine while a session uses it', async () => {
+    const deps = fakeRemove(ENGINE_TEXT.hosting);
+    await expect(removeEngine(deps, 'in-use')).rejects.toThrow(ENGINE_TEXT.hosting);
+    expect(deps.forget).not.toHaveBeenCalled();
     expect(deps.discard).not.toHaveBeenCalled();
   });
 

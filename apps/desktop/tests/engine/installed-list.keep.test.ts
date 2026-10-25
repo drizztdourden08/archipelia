@@ -37,6 +37,13 @@ describe('engine questions and failures', () => {
     expect(options.consequence).toContain('hosted with the engine in use');
   });
 
+  test('removing the engine in use says no session can run until one is installed and that the install window opens', () => {
+    const options = removeEngineConfirm(engine('0.6.7', '3.12.14'), true);
+    expect(options.consequence).toContain('It is the engine in use');
+    expect(options.consequence).toContain('The install window opens right after');
+    expect(options.consequence).not.toContain('hosted with the engine in use');
+  });
+
   test('worlds that do not load are listed before switching', () => {
     expect(brokenWorldsConfirm('0.6.8', ['A', 'B', 'C']).message).toBe('3 installed worlds do not load on 0.6.8: A, B, C.');
     expect(brokenWorldsConfirm('0.6.8', ['A']).message).toBe('1 installed world does not load on 0.6.8: A.');

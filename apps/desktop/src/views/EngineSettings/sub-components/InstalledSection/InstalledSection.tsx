@@ -27,7 +27,7 @@ const InstalledSection = ({ engines, activeId, busy, onSwitch, onRemove }: Insta
                   {!active && engine.state === 'ready' && (
                     <Button size="sm" variant="secondary" disabled={busy} onClick={() => onSwitch(engine.id)}>{LIST_TEXT.switchLabel}</Button>
                   )}
-                  <IconButton size="sm" variant="ghost" tone="danger" label={engine.inUse ?? `${LIST_TEXT.removeLabel} Archipelago ${engine.ap}`} disabled={busy || active || engine.inUse !== undefined} onClick={() => onRemove(engine)}>
+                  <IconButton size="sm" variant="ghost" tone="danger" label={engine.inUse ?? `${LIST_TEXT.removeLabel} Archipelago ${engine.ap}`} disabled={busy || engine.inUse !== undefined} onClick={() => onRemove(engine)}>
                     <Icon name="trash-2" />
                   </IconButton>
                 </Flex>

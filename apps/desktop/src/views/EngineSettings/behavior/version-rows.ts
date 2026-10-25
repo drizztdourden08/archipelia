@@ -22,6 +22,7 @@ const versionRows = (input: VersionRowsInput): SettingsSectionRow[] => {
       ...rowOf('python', ROW_TEXT.python), badge: tag, disabled: busy, ...(chosen.note ? { problem: chosen.note } : {}),
       input: { kind: 'select', searchable: true, value: chosen.python ?? '', options: pythonOptions(overview, chosen.ap), onChange: input.onPython },
     },
+    { ...change, hint: CHANGE_HINT[plan.kind], actions: changeActions(plan, busy, input.onApply) },
     ...(overview.active ? [{ ...rowOf('dependencies', ROW_TEXT.dependencies), content: dependencies }] : []),
     {
       ...rowOf('list', ROW_TEXT.list), hint: feedLine(overview.feed, when), problem: feedNotice(overview.feed, when),
@@ -31,7 +32,6 @@ const versionRows = (input: VersionRowsInput): SettingsSectionRow[] => {
       ...rowOf('start-check', ROW_TEXT.startCheck),
       input: { kind: 'toggle', value: input.checkAtStart, onChange: input.onCheckAtStart },
     },
-    { ...change, hint: CHANGE_HINT[plan.kind], actions: changeActions(plan, busy, input.onApply) },
   ];
 };
 

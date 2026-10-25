@@ -7,7 +7,6 @@ const removeEngine = async (deps: RemoveDeps, id: string): Promise<void> => {
   const state = await deps.state();
   const engine = state.installed.find((entry) => entry.id === id);
   if (!engine) throw new Error(ENGINE_TEXT.unknown);
-  if (state.active === id) throw new Error(ENGINE_TEXT.removeActive);
   const use = deps.inUse(id);
   if (use) throw new Error(use);
   await deps.forget(id);
