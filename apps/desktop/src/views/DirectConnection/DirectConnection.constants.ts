@@ -28,6 +28,7 @@ const TEXT = {
   gone: 'The lobby of this session is not on the server any more. Turn Allow direct connection off and on again to open a new one.',
   ran: 'This session already ran. Turn Allow direct connection off and on again to take players for a new run.',
   join: 'How players join',
+  closing: 'An earlier lobby of this session is not closed yet, because its server did not answer. Archipelia keeps trying until it closes.',
 } as const;
 
 export { RESULT_PHASES, SERVER_DOWN, SERVER_STARTING, TEXT, TLS_TEXT };

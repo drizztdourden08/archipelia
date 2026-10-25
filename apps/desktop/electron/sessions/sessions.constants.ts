@@ -3,6 +3,12 @@ import type { LobbyPhase } from '@archipelia/model';
 
 const HOST_NAME = 'Host';
 
+const PENDING_CLOSES_FILE = 'pending-closes.json';
+
+const CLOSE_RETRY_MS = 5000;
+
+const CLOSE_RETRY_MAX_MS = 300000;
+
 const RUNNABLE_PHASES: readonly LobbyPhase[] = ['open', 'locked', 'failed'];
 
 const TEXT = {
@@ -12,4 +18,4 @@ const TEXT = {
   notInstalled: (game: string) => `${game} is not installed.`,
 } as const;
 
-export { HOST_NAME, RUNNABLE_PHASES, TEXT };
+export { CLOSE_RETRY_MAX_MS, CLOSE_RETRY_MS, HOST_NAME, PENDING_CLOSES_FILE, RUNNABLE_PHASES, TEXT };

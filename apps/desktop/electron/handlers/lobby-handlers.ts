@@ -8,7 +8,7 @@ import { testLobbyServer } from '../lobbies/test-lobby-server';
 const lobbyHandlers: HandlerGroup = {
   id: 'archipelia-lobbies',
   register: (ctx) => {
-    const { admins, lanBrowser, lobbyServer, lobbyServers, secrets } = ctx.services;
+    const { admins, closer, lanBrowser, lobbyServer, lobbyServers, secrets } = ctx.services;
     ctx.handle(APP_CHANNELS.lobbyServerStatus, () => lobbyServer.status());
     ctx.handle(APP_CHANNELS.lobbyServerApply, (_event, options) => lobbyServer.apply(options));
     ctx.handle(APP_CHANNELS.lobbyServerView, async (_event, serverId) => (await admins.opsFor(serverId)).view());
@@ -27,6 +27,8 @@ const lobbyHandlers: HandlerGroup = {
     ctx.handle(APP_CHANNELS.lobbyServersTest, (_event, id) => testLobbyServer(lobbyServers, secrets, id));
     ctx.handle(APP_CHANNELS.lanBrowse, (_event, on) => lanBrowser.browse(on));
     ctx.handle(APP_CHANNELS.lobbyProbe, (_event, address, code) => probeLobby(address, code));
+    ctx.handle(APP_CHANNELS.lobbyClose, (_event, ref) => closer.close(ref));
+    ctx.handle(APP_CHANNELS.lobbyPendingCloses, () => closer.list());
   },
 };
 

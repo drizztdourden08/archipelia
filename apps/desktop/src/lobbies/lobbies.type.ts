@@ -29,6 +29,8 @@ type LobbyServerView = { info: ServerInfo; engine?: SessionEngine };
 
 type DirectOptions = Pick<DirectConnection, 'admission' | 'allowUnlisted'>;
 
+type PendingClose = { templateId: string; serverId: string; lobbyId: string };
+
 type LobbyRequestType = (typeof LOBBY_REQUESTS)[number];
 
 type LobbyRequest = { type: LobbyRequestType; params: Record<string, unknown> };
@@ -65,5 +67,5 @@ type HostPlayerSlot = { name: string; game: string; yaml: string; worldVersion: 
 
 export type {
   DirectOptions, HostPlayerSlot, JoinAddress, LanEntry, LobbyEvent, LobbyProbe, LobbyRequest, LobbyReviewHost, LobbyReviewPlay, LobbyServerOptions, LobbyServerState,
-  LobbyServerStatus, LobbyServerTest, LobbyServerView, ServerInfo, ServerPlace, ServerTarget,
+  LobbyServerStatus, LobbyServerTest, LobbyServerView, PendingClose, ServerInfo, ServerPlace, ServerTarget,
 };

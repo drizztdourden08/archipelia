@@ -23,6 +23,7 @@ const BuilderSettings = ({ builder }: BuilderSettingsProps) => {
         onClearPassword={builder.clearPassword}
       />
       <DirectConnection
+        templateId={draft.id}
         direct={draft.direct}
         busy={builder.busy}
         onEnable={builder.direct.enable}

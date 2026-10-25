@@ -12,7 +12,7 @@ const usage = {
   ],
   rules: [
     'Turning Allow direct connection on opens a lobby on the server picked under Where to host and saves the session with it.',
-    'Turning it off asks first, then closes the lobby.',
+    'Turning it off asks first, then closes the lobby; a lobby whose server does not answer stays in a pending close that retries, and the section says so.',
     'Host approval is on by default; turning it off accepts every player at once.',
     'Allow unlisted clients is off by default.',
     'Where to host shows only once direct connection is on, so nothing listens on the network before. Picking another server moves the lobby there; while players are connected the server stays.',
@@ -31,7 +31,7 @@ const usage = {
   example: `import { DirectConnection } from '../DirectConnection';
 
 const DirectConnectionSample = () => (
-  <DirectConnection busy={false} onEnable={() => undefined} onDisable={() => undefined} onOptions={() => undefined} onServer={() => undefined} />
+  <DirectConnection templateId="t1" busy={false} onEnable={() => undefined} onDisable={() => undefined} onOptions={() => undefined} onServer={() => undefined} />
 );
 `,
   propsHash: '51c7a775bf9ac6c0',

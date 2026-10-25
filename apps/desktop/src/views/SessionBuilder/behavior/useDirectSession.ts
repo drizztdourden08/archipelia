@@ -2,6 +2,7 @@
 import { useCallback } from 'react';
 import { confirmAction } from '@drizztdourden08/brock-react';
 import { useActiveServer } from '../../../hooks/useActiveServer';
+import { appApi } from '../../../ipc/app-api';
 import type { DirectOptions } from '../../../lobbies/lobbies.type';
 import { lobbyRequest } from '../../../lobbies/lobby-request';
 import { useLobbyStore } from '../../../stores/useLobbyStore';
@@ -21,7 +22,7 @@ const useDirectSession = ({ draft, persist, guard }: DirectDeps) => {
   const disable = useCallback(() => guard('direct', async () => {
     const { direct } = draft;
     if (!direct || !(await confirmAction(DISABLE_DIRECT))) return;
-    await act(direct.serverId, lobbyRequest.close(direct.lobbyId)).catch(() => undefined);
+    await appApi().lobbyClose({ templateId: draft.id, serverId: direct.serverId, lobbyId: direct.lobbyId });
     await persist(withoutDirect(draft));
   }), [act, draft, guard, persist]);
 
@@ -37,8 +38,8 @@ const useDirectSession = ({ draft, persist, guard }: DirectDeps) => {
     select(next);
     if (!direct || direct.serverId === next) return;
     const lobby = await act(next, lobbyRequest.open(draft, direct));
-    await act(direct.serverId, lobbyRequest.close(direct.lobbyId)).catch(() => undefined);
     await persist({ ...draft, direct: { ...direct, serverId: next, lobbyId: lobby.id } });
+    await appApi().lobbyClose({ templateId: draft.id, serverId: direct.serverId, lobbyId: direct.lobbyId });
   }), [act, draft, guard, persist, select]);
 
   return { enable, disable, setOptions, moveTo };

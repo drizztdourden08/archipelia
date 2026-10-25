@@ -9,7 +9,7 @@ import type { HostLogLine, ServerTestResult } from '@archipelia/hosts';
 import type { PresetInput } from '@archipelia/presets';
 import type { SessionEvent } from '@archipelia/sessions';
 import type {
-  LanEntry, LobbyEvent, LobbyProbe, LobbyRequest, LobbyReviewHost, LobbyReviewPlay, LobbyServerOptions, LobbyServerStatus, LobbyServerTest, LobbyServerView,
+  LanEntry, LobbyEvent, LobbyProbe, LobbyRequest, LobbyReviewHost, LobbyReviewPlay, LobbyServerOptions, LobbyServerStatus, LobbyServerTest, LobbyServerView, PendingClose,
 } from '../lobbies/lobbies.type';
 import type { JoinRequest, JoinView } from '../joins/joins.type';
 
@@ -39,6 +39,7 @@ const APP_CHANNELS = defineChannels({
   sessionsList: invoke<() => Promise<Session[]>>()('ap:sessions:list'),
   sessionsRun: invoke<(template: SessionTemplate) => Promise<Session>>()('ap:sessions:run'),
   sessionsRunDirect: invoke<(template: SessionTemplate) => Promise<AdminLobby>>()('ap:sessions:runDirect'),
+  sessionsSyncDirect: invoke<(template: SessionTemplate) => Promise<AdminLobby>>()('ap:sessions:syncDirect'),
   sessionsStop: invoke<(id: string) => Promise<Session | undefined>>()('ap:sessions:stop'),
   sessionsCancel: invoke<(id: string) => Promise<void>>()('ap:sessions:cancel'),
   sessionsCommand: invoke<(id: string, cmd: string) => Promise<void>>()('ap:sessions:command'),
@@ -62,6 +63,8 @@ const APP_CHANNELS = defineChannels({
   lobbyServersTest: invoke<(id: string) => Promise<LobbyServerTest>>()('ap:lobby:serversTest'),
   lanBrowse: invoke<(on: boolean) => Promise<LanEntry[]>>()('ap:lan:browse'),
   lobbyProbe: invoke<(address: string, code: string) => Promise<LobbyProbe>>()('ap:lobby:probe'),
+  lobbyClose: invoke<(ref: PendingClose) => Promise<{ closed: boolean }>>()('ap:lobby:close'),
+  lobbyPendingCloses: invoke<() => Promise<PendingClose[]>>()('ap:lobby:pendingCloses'),
   lobbyReviewPlay: invoke<(request: LobbyReviewPlay) => Promise<{ ok: boolean; failure?: string }>>()('ap:lobby:reviewPlay'),
   lobbyReviewHostDone: invoke<(id: number) => Promise<void>>()('ap:lobby:reviewHostDone'),
   joinsList: invoke<() => Promise<JoinView[]>>()('ap:joins:list'),
@@ -75,6 +78,7 @@ const APP_CHANNELS = defineChannels({
   onLanServers: event<(servers: LanEntry[]) => void>()('ap:lan:servers'),
   onLobbyReviewHost: event<(host: LobbyReviewHost) => void>()('ap:lobby:reviewHost'),
   onJoinEvent: event<(view: JoinView) => void>()('ap:joins:event'),
+  onPendingCloses: event<(pending: PendingClose[]) => void>()('ap:lobby:pendingCloses'),
 });
 
 const APP_INVOKE_MAP = APP_CHANNELS.maps.invoke;

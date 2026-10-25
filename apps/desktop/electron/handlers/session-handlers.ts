@@ -5,6 +5,7 @@ import { APP_CHANNELS } from '../../src/ipc/contract.constants';
 import { runJobId } from '@archipelia/model';
 import { hostSlotOf } from '../sessions/host-slot-of';
 import { runDirect } from '../sessions/run-direct';
+import { syncDirect } from '../sessions/sync-direct';
 
 const sessionHandlers: HandlerGroup = {
   id: 'archipelia-sessions',
@@ -12,10 +13,12 @@ const sessionHandlers: HandlerGroup = {
     const { admins, installed, presets, runJobs, runs, sessionFiles, sessions } = ctx.services;
     ctx.handle(APP_CHANNELS.sessionsList, () => runs.newest());
     ctx.handle(APP_CHANNELS.sessionsRun, (_event, template) => sessions.run(template));
-    ctx.handle(APP_CHANNELS.sessionsRunDirect, async (_event, template) => {
-      const ops = await admins.opsFor(template.direct?.serverId ?? '');
-      return runDirect(template, { act: ops.act, list: ops.list, slotOf: hostSlotOf(installed, presets) });
-    });
+    const directDeps = async (serverId: string) => {
+      const ops = await admins.opsFor(serverId);
+      return { act: ops.act, list: ops.list, slotOf: hostSlotOf(installed, presets) };
+    };
+    ctx.handle(APP_CHANNELS.sessionsRunDirect, async (_event, template) => runDirect(template, await directDeps(template.direct?.serverId ?? '')));
+    ctx.handle(APP_CHANNELS.sessionsSyncDirect, async (_event, template) => syncDirect(template, await directDeps(template.direct?.serverId ?? '')));
     ctx.handle(APP_CHANNELS.sessionsStop, (_event, id) => sessions.stop(id));
     ctx.handle(APP_CHANNELS.sessionsCancel, (_event, id) => sessions.cancel(id));
     ctx.handle(APP_CHANNELS.sessionsCommand, (_event, id, cmd) => sessions.command(id, cmd));

@@ -1,6 +1,6 @@
 /* @layer electron-main @kind types */
-import type { AdminLobby, SessionPlayer } from '@archipelia/model';
-import type { HostPlayerSlot, LobbyRequest } from '../../src/lobbies/lobbies.type';
+import type { AdminLobby, DataFiles, SessionPlayer, SessionTemplate } from '@archipelia/model';
+import type { HostPlayerSlot, LobbyRequest, PendingClose } from '../../src/lobbies/lobbies.type';
 
 type DirectRunDeps = {
   act: (request: LobbyRequest) => Promise<AdminLobby>;
@@ -8,4 +8,18 @@ type DirectRunDeps = {
   slotOf: (player: SessionPlayer) => Promise<HostPlayerSlot>;
 };
 
-export type { DirectRunDeps };
+type LobbyOps = Pick<DirectRunDeps, 'act' | 'list'>;
+
+type CloserDeps = {
+  files: DataFiles;
+  opsFor: (serverId: string) => Promise<LobbyOps>;
+  templates: () => Promise<SessionTemplate[]>;
+  quiet: () => Promise<unknown>;
+  emit: (pending: PendingClose[]) => void;
+  retryMs?: number;
+  retryMaxMs?: number;
+};
+
+type TemplateStore = { get: (id: string) => Promise<SessionTemplate | null>; remove: (id: string) => Promise<void> };
+
+export type { CloserDeps, DirectRunDeps, LobbyOps, TemplateStore };

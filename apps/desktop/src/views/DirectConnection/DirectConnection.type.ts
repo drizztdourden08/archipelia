@@ -3,6 +3,7 @@ import type { DirectConnection as Direct } from '@archipelia/model';
 import type { DirectOptions } from '../../lobbies/lobbies.type';
 
 type DirectConnectionProps = {
+  templateId: string;
   direct?: Direct;
   busy: boolean;
   onEnable: () => void;
