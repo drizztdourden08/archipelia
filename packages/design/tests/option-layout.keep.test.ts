@@ -4,7 +4,6 @@ import { optionDef as option } from '@archipelia/model';
 import { choiceOptions } from '../src/compounds/OptionControl/behavior/choice-options';
 import { controlSizeOf } from '../src/compounds/OptionControl/behavior/control-size';
 import { hintOf } from '../src/compounds/OptionControl/behavior/option-hint';
-import { helpOf } from '../src/compounds/OptionFieldRow/behavior/help-of';
 import { defOf } from './option-defs';
 
 const choice = (labels: string[]) => option({ key: 'c', kind: 'choice', default: labels[0] ?? '', choices: labels.map((label) => ({ value: label, label })) });
@@ -26,15 +25,6 @@ describe('controlSizeOf', () => {
   test('lists and tables take the row', () => {
     expect(controlSizeOf(defOf('bosses'), 'json-object')).toBe('full');
     expect(controlSizeOf(defOf('exclude'), 'tags')).toBe('full');
-  });
-});
-
-describe('helpOf', () => {
-  test('a short one-line description needs no hint, a long or multi-line one gets its full text', () => {
-    expect(helpOf('Pick the goal.')).toBeUndefined();
-    expect(helpOf('')).toBeUndefined();
-    expect(helpOf('x'.repeat(61))).toBe('x'.repeat(61));
-    expect(helpOf('First line.\nSecond line.')).toBe('First line.\nSecond line.');
   });
 });
 

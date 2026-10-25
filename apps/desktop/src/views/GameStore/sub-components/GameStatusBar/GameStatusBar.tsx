@@ -1,7 +1,6 @@
 /* @layer renderer-app @kind component */
-import { Box, Icon, IconButton, Tooltip } from '@drizztdourden08/tessera/primitives';
 import { StatusBar } from '@drizztdourden08/tessera/composites';
-import type { StatusBarEntry } from '@drizztdourden08/tessera/composites';
+import type { StatusBarAction, StatusBarEntry } from '@drizztdourden08/tessera/composites';
 import type { GameStatusBarProps } from './GameStatusBar.type';
 
 const itemsOf = ({ summary, filtered }: Pick<GameStatusBarProps, 'summary' | 'filtered'>): StatusBarEntry[] => [
@@ -11,15 +10,12 @@ const itemsOf = ({ summary, filtered }: Pick<GameStatusBarProps, 'summary' | 'fi
   ...(summary.apVersion ? [{ id: 'index', label: 'Index for AP', value: summary.apVersion, align: 'end' as const, priority: 2 }] : []),
 ];
 
+const actionsOf = ({ adding, onAddFromFile }: Pick<GameStatusBarProps, 'adding' | 'onAddFromFile'>): StatusBarAction[] => [
+  { id: 'add-from-file', label: 'Add from file', icon: 'plus', loading: adding, onSelect: onAddFromFile },
+];
+
 const GameStatusBar = ({ summary, loading, filtered, adding, onAddFromFile }: GameStatusBarProps) => (
-  <Box className="game-store__foot">
-    <StatusBar className="game-store__foot-bar" label="Games status" items={loading && summary.worlds === 0 ? [] : itemsOf({ summary, filtered })} />
-    <Box className="game-store__foot-action">
-      <Tooltip content="Add a world from a file" placement="top">
-        <IconButton size="sm" variant="ghost" label="Add from file" loading={adding} onClick={onAddFromFile}><Icon name="plus" /></IconButton>
-      </Tooltip>
-    </Box>
-  </Box>
+  <StatusBar label="Games status" items={loading && summary.worlds === 0 ? [] : itemsOf({ summary, filtered })} actions={actionsOf({ adding, onAddFromFile })} />
 );
 
 export { GameStatusBar };

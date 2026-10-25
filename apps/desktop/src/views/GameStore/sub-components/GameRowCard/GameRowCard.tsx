@@ -1,17 +1,17 @@
 /* @layer renderer-app @kind component */
-import { Box } from '@drizztdourden08/tessera/primitives';
+import { Box, useInView } from '@drizztdourden08/tessera/primitives';
 import { GameCard } from '@archipelia/design';
 import { useEffect, useRef } from 'react';
 import { cardPropsOf } from '../../behavior/card-props';
 import { enrichKey } from '../../behavior/enrich-key';
 import { enrichProps } from '../../behavior/enrich-props';
 import { useEnrichStore } from '../../behavior/useEnrichStore';
-import { useSeen } from '../../behavior/useSeen';
+import { SEEN_DWELL_MS } from '../../GameStore.constants';
 import type { GameRowCardProps } from './GameRowCard.type';
 
 const GameRowCard = ({ row, handlers }: GameRowCardProps) => {
   const holder = useRef<HTMLElement>(null);
-  const seen = useSeen(holder);
+  const seen = useInView(holder, { dwell: SEEN_DWELL_MS, once: true });
   const { apworld, source } = row.entry;
   const found = useEnrichStore((state) => state.found[enrichKey({ apworld, source })]);
   const ask = useEnrichStore((state) => state.ask);
