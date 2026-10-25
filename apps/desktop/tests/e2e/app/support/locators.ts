@@ -40,7 +40,8 @@ const sectionsNav = (scope: Locator) => scope.getByRole('navigation', { name: 'S
 const currentPage = (scope: Locator, label: string) =>
   sectionsNav(scope).getByRole('button', { name: label, exact: true }).and(scope.locator('[aria-current="page"]'));
 
-const cardOf = (scope: Locator, title: string) => scope.getByRole('group', { name: title, exact: true });
+const cardOf = (scope: Locator, title: string) =>
+  scope.locator('.item-card').filter({ has: scope.getByRole('heading', { level: 3, name: title, exact: true }) });
 
 const playerRowOf = (scope: Locator, slot: number) =>
   scope.getByRole('region', { name: 'Players', exact: true }).getByRole('group', { name: new RegExp(`, row ${slot}$`) });
