@@ -38,7 +38,7 @@
     "@drizztdourden08/brock-react": "^0.96.1",
     "@drizztdourden08/brock-secrets": "^0.96.1",
     "@drizztdourden08/brock-updater": "^0.96.1",
-    "@drizztdourden08/tessera": "^0.63.0",
+    "@drizztdourden08/tessera": "^0.64.0",
     "@electron-toolkit/utils": "catalog:",
     "@peculiar/x509": "^2.1.0",
     "@runonflux/nat-upnp": "^2.0.5",
@@ -77,7 +77,7 @@
     "vite": "catalog:"
   },
   "brock": {
-    "tessera": "0.63.0",
+    "tessera": "0.64.0",
     "version": "0.96.1"
   }
 }
