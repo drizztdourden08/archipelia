@@ -24,7 +24,7 @@ const checkHistory = async (launched: LaunchedApp) => {
   expect(await nestedButtons(page), 'no button inside a button on Home or Sessions').toBe(0);
   await settledProof(launched, '28-sessions-runs-stopped');
   await open.click();
-  await hub(page, 'Sessions').waitFor({ state: 'detached' });
+  await hub(page, 'Multiworld').waitFor({ state: 'detached' });
   await base(page).getByText(TEMPLATE, { exact: true }).first().waitFor();
 };
 
