@@ -7,6 +7,8 @@ const INTRO_STEPS: readonly TourStepDef[] = [
     id: 'hello',
     title: 'Welcome to Archipelia',
     body: 'Archipelia is a multiworld manager for Archipelago. Pick your games, set their options, host the session here, on your network or on a remote server, and let friends join. The goal is one shared game for everyone, without a command line. I am Pelago, and I will show you around.',
+    intro: true,
+    art: 'product-mark',
     mascot: 'wave',
     open: TOUR_ROUTE.home,
   },
