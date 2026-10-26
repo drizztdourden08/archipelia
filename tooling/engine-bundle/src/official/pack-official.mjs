@@ -3,7 +3,7 @@ import { mkdir, readFile, rename, rm, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { exists } from '../download.mjs';
 import { looseWorldGames } from './loose-worlds.mjs';
-import { packWorld, pythonSources, readWorld } from './pack-world.mjs';
+import { packWorld, pythonSources, readGlobalIgnore, readWorld } from './pack-world.mjs';
 import { gameOfWorld, loadedGames } from './world-games.mjs';
 import { officialWorldNames } from './world-folders.mjs';
 import { worldImports } from './world-imports.mjs';
@@ -18,7 +18,7 @@ const packAll = async ({ out, python, into, onLine }) => {
   const official = new Set(names);
   const { games, failed } = await loadedGames({ python: join(out, python), apDir, onLine });
   if (failed.length > 0) (onLine ?? console.warn)(`worlds that did not load: ${failed.join(', ')}`);
-  const globalIgnore = (await readFile(join(apDir, 'data', 'GLOBAL.apignore'), 'utf8')).split(/\r?\n/);
+  const globalIgnore = await readGlobalIgnore(apDir);
   const loose = await looseWorldGames(apDir);
   const index = [];
   for (const name of names) {

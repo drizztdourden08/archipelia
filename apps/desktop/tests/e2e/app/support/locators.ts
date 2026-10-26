@@ -1,13 +1,13 @@
 /* @layer tests @kind helper */
 import type { Locator, Page } from 'playwright-core';
 
-type HubTitle = 'Multiworld' | 'Sessions' | 'Data';
+type HubTitle = 'Multiworld' | 'Data';
 
 type MenuEntry = 'Home' | 'Sessions' | 'Games' | 'Presets' | 'Servers' | 'Data' | 'Settings';
 
 const HUB_OF: Record<MenuEntry, HubTitle> = {
   Home: 'Multiworld',
-  Sessions: 'Sessions',
+  Sessions: 'Multiworld',
   Games: 'Multiworld',
   Presets: 'Multiworld',
   Servers: 'Multiworld',
@@ -51,7 +51,7 @@ const openScreen = async (page: Page, entry: MenuEntry) => {
   if (LIBRARY_ENTRIES.includes(entry)) await page.getByRole('menuitem', { name: 'Library', exact: true }).click();
   await page.getByRole('menuitem', { name: entry, exact: true }).click();
   const opened = hub(page, HUB_OF[entry]);
-  if (entry !== 'Sessions') await currentPage(opened, PAGE_OF[entry]).waitFor();
+  await currentPage(opened, PAGE_OF[entry]).waitFor();
   return opened;
 };
 

@@ -6,7 +6,6 @@ const ENGINE_TEXT = {
   external: 'ARCHIPELIA_ENGINE_DIR points at an engine managed outside the app.',
   notSetUp: 'The engine is not set up yet: open Settings, Engine.',
   unknown: 'This engine is not installed.',
-  removeActive: 'The engine in use cannot be removed. Switch to another engine first.',
   hosting: 'A running session is hosted with this engine. Stop the session first.',
   generating: 'A session is being generated with this engine. Wait for it to end.',
   badChoice: 'The engine choice is not valid.',

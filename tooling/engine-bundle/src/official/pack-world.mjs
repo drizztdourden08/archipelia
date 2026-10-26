@@ -8,6 +8,8 @@ import { listFiles } from './world-folders.mjs';
 
 const MANIFEST = 'archipelago.json';
 const CONTAINER_VERSION = 7;
+const GLOBAL_IGNORE_FILE = 'GLOBAL.apignore';
+const DEFAULT_GLOBAL_IGNORE = ['__MACOSX', '.DS_Store', '.DS_STORE', '__pycache__'];
 
 const readLines = async (file) => {
   try {
@@ -17,7 +19,12 @@ const readLines = async (file) => {
   }
 };
 
-const readWorld = async ({ worldsDir, globalIgnore, name }) => {
+const readGlobalIgnore = async (apDir) => {
+  const lines = await readLines(join(apDir, 'data', GLOBAL_IGNORE_FILE));
+  return lines.length > 0 ? lines : DEFAULT_GLOBAL_IGNORE;
+};
+
+const readWorld =async ({ worldsDir, globalIgnore, name }) => {
   const dir = join(worldsDir, name);
   const ignored = createIgnore([...globalIgnore, ...(await readLines(join(dir, '.apignore')))]);
   const paths = (await listFiles(dir)).filter((path) => !ignored(path));
@@ -43,4 +50,4 @@ const packWorld = async (world, game, into) => {
   return { file, sha256: createHash('sha256').update(bytes).digest('hex'), worldVersion: manifest.world_version };
 };
 
-export { packWorld, pythonSources, readWorld };
+export { packWorld, pythonSources, readGlobalIgnore, readWorld };

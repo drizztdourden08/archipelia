@@ -1,8 +1,8 @@
 /* @layer renderer-app @kind config */
 const ROUTE = {
-  sessions: 'sessions/sessions',
-  newSession: 'sessions/sessions/new',
-  joinSession: 'sessions/sessions/join',
+  sessions: 'multiworld/sessions',
+  newSession: 'multiworld/sessions/new',
+  joinSession: 'multiworld/sessions/join',
   games: 'multiworld/games',
   officialGames: 'multiworld/games/official',
   presets: 'multiworld/presets',

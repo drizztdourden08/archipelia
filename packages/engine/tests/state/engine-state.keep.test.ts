@@ -2,7 +2,7 @@
 import type { InstalledEngine } from '@archipelia/model';
 import { afterEach, describe, expect, test } from 'vitest';
 import {
-  activateEngine, findActiveEngine, findInstalledEngine, forgetEngine, markOffered, readEngineState, registerEngine,
+  activateEngine, findActiveEngine, findInstalledEngine, forgetEngine, markOffered, readActiveEngineStatus, readEngineState, registerEngine,
 } from '../../src';
 import { cleanTempRoots, tempRoot } from './temp-root';
 
@@ -51,16 +51,34 @@ describe('engine state', () => {
     await expect(activateEngine(root, 'nope')).rejects.toThrow('not installed');
   });
 
-  test('the active engine cannot be forgotten and a forgotten last good engine is cleared', async () => {
-    const root = await tempRoot();
-    await registerEngine(root, engine('0.6.7', '3.12.14'));
-    await registerEngine(root, engine('0.6.8', '3.12.15'));
-    await activateEngine(root, 'ap-0.6.7_py-3.12.14_win32-x64');
-    await activateEngine(root, 'ap-0.6.8_py-3.12.15_win32-x64');
-    await expect(forgetEngine(root, 'ap-0.6.8_py-3.12.15_win32-x64')).rejects.toThrow('active');
+});
+
+const twoEnginesNewestActive = async (): Promise<string> => {
+  const root = await tempRoot();
+  await registerEngine(root, engine('0.6.7', '3.12.14'));
+  await registerEngine(root, engine('0.6.8', '3.12.15'));
+  await activateEngine(root, 'ap-0.6.7_py-3.12.14_win32-x64');
+  await activateEngine(root, 'ap-0.6.8_py-3.12.15_win32-x64');
+  return root;
+};
+
+describe('engine state, forgetting and offers', () => {
+  test('a forgotten last good engine is cleared and the active one stays', async () => {
+    const root = await twoEnginesNewestActive();
     const state = await forgetEngine(root, 'ap-0.6.7_py-3.12.14_win32-x64');
     expect(state.lastGood).toBeUndefined();
+    expect(state.active).toBe('ap-0.6.8_py-3.12.15_win32-x64');
     expect(state.installed.map((entry) => entry.ap)).toEqual(['0.6.8']);
+  });
+
+  test('forgetting the active engine clears the active pointer and keeps the others', async () => {
+    const root = await twoEnginesNewestActive();
+    const state = await forgetEngine(root, 'ap-0.6.8_py-3.12.15_win32-x64');
+    expect(state.active).toBeUndefined();
+    expect(findActiveEngine(state)).toBeUndefined();
+    expect(state.installed.map((entry) => entry.ap)).toEqual(['0.6.7']);
+    expect((await readEngineState(root)).active).toBeUndefined();
+    expect(await readActiveEngineStatus(root)).toEqual({ state: 'missing', dir: root });
   });
 
   test('the offered version is stored', async () => {
