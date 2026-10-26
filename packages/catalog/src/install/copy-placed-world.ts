@@ -2,6 +2,7 @@
 import { cp, mkdir, rm, stat } from 'node:fs/promises';
 import { dirname, resolve, sep } from 'node:path';
 import { apRoot } from '@archipelia/engine';
+import { installWorldPackages } from './install-world-packages';
 import type { CopyPlacedRequest } from './copy-placed-world.type';
 import { PLACED } from './remove-world.constants';
 
@@ -17,6 +18,7 @@ const copyPlacedWorld = async ({ from, to, record }: CopyPlacedRequest) => {
   await rm(target, { recursive: true, force: true });
   await mkdir(dirname(target), { recursive: true });
   await cp(source, target, { recursive: true });
+  await installWorldPackages(to, record.game, record.packages ?? []);
 };
 
 export { copyPlacedWorld };

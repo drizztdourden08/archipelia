@@ -24,4 +24,6 @@ export { readOfficialIndex } from './official/read-official-index';
 export type { OfficialWorld } from './official/official-index.type';
 export { createCatalogService } from './service/create-catalog-service';
 export type { CatalogServiceDeps, CatalogView, InstallRequest } from './service/catalog-service.type';
+export type { PackageConsent } from './install/package-consent.type';
+export type { PackagePreview } from './install/package-preview.type';
 export type { EnrichRequest, GameEnrichment } from './enrich/enrich.type';

@@ -11,7 +11,7 @@ import { hashFile } from './hash-file';
 import { readApworld } from './read-apworld';
 import { commitInstall } from './commit-install';
 
-const installWorld = async ({ engineDir, files, entry, version, fetch: request = fetch, trust }: InstallWorldParams): Promise<InstalledGame> => {
+const installWorld = async ({ engineDir, files, entry, version, fetch: request = fetch, trust, packages }: InstallWorldParams): Promise<InstalledGame> => {
   if (entry.unavailable) throw new Error(`${entry.displayName}: ${entry.unavailable}`);
   const runtime = await readRuntime(engineDir);
   const { target, bundleUrl } = chooseRelease(entry, version, runtime.apVersion);
@@ -26,6 +26,7 @@ const installWorld = async ({ engineDir, files, entry, version, fetch: request =
       runtime, files, file: download.file, info, apworld: entry.apworld, game: entry.game, version,
       source: entry.firstParty ? 'first-party' : 'index', layout: 'apworld', hash, requires: entry.requires ?? [],
       ...(vetted ? { trust: vetted } : {}),
+      ...(packages ? { packages } : {}),
     });
   } finally {
     await download.dispose();
