@@ -6,7 +6,7 @@ import { waitText } from './wait-text';
 
 export default defineReviewStep({
   run: async (tour) => {
-    nav.open('data/storage');
+    nav.open('multiworld/storage');
     const layer = () => tour.find(SELECTOR.layer);
     for (const folder of STORAGE_FOLDERS) {
       const sized = await waitText(tour, new RegExp(`${folder}\\s+[\\d.]+ [KMG]?B · [1-9]\\d* items?`), layer, 8000);
@@ -15,7 +15,7 @@ export default defineReviewStep({
     const transfer = await waitText(tour, 'Export to zip', layer);
     tour.check('storage-transfer', transfer, 'the Storage page offers the zip and folder export and import', 'the Storage page has no export');
     await tour.capture('storage');
-    nav.open('data/old-runs');
+    nav.open('multiworld/old-runs');
     const kept = await waitText(tour, /[1-9]\d* runs? kept/, layer);
     tour.check('old-runs', kept, 'the Old runs page counts the kept runs', 'the Old runs page counts no run');
     await tour.capture('old-runs');

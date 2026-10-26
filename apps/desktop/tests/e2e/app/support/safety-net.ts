@@ -8,7 +8,7 @@ import type { HubTitle } from './locators';
 
 const QUICK = { timeout: 5000 };
 
-const HUBS: HubTitle[] = ['Multiworld', 'Data'];
+const HUBS: HubTitle[] = ['Multiworld'];
 
 const closeOpenHubs = async ({ page }: LaunchedApp) => {
   for (const title of HUBS) {

@@ -1,18 +1,18 @@
 /* @layer renderer-app @kind component */
-import { DialogShell } from '@drizztdourden08/tessera/composites';
+import { DialogShell, Markdown } from '@drizztdourden08/tessera/composites';
 import { Flex, Stack, Tag, Text } from '@drizztdourden08/tessera/primitives';
 import { GAME_STATUS } from '../GameCard/GameCard.constants';
 import { ErrorCallout } from '../ErrorCallout';
-import { LOADING_DESCRIPTION, NO_DESCRIPTION } from './GameDetails.constants';
+import { LOADING_DESCRIPTION, NO_DESCRIPTION, README_HEADING_OFFSET } from './GameDetails.constants';
 import type { GameDetailsProps } from './GameDetails.type';
 import { GameDetailsActions } from './sub-components/GameDetailsActions';
 import { GameDetailsMedia } from './sub-components/GameDetailsMedia';
+import { GameDetailsNeed } from './sub-components/GameDetailsNeed';
 import { GameDetailsNotes } from './sub-components/GameDetailsNotes';
 import './GameDetails.css';
 
 const GameDetails = (props: GameDetailsProps) => {
-  const { title, kind, kindLabel, version, status, notes, tags, actions, summary, details, art, busy, error, loading, onClose } = props;
-  const text = details ?? summary;
+  const { title, kind, kindLabel, version, status, notes, tags, actions, markdown, art, busy, error, need, loading, onLink, onClose } = props;
   return (
     <DialogShell open onClose={onClose} title={title} className="game-details" actions={<GameDetailsActions actions={actions} busy={busy} />}>
       <Stack gap="md">
@@ -27,7 +27,10 @@ const GameDetails = (props: GameDetailsProps) => {
           </Stack>
         </Flex>
         {error && <ErrorCallout message={error} />}
-        <Text className="game-details__text" tone={text ? undefined : 'dim'}>{text ?? (loading ? LOADING_DESCRIPTION : NO_DESCRIPTION)}</Text>
+        {need && <GameDetailsNeed message={need.message} href={need.href} onLink={onLink} />}
+        {markdown
+          ? <Markdown source={markdown} size="sm" headingOffset={README_HEADING_OFFSET} hideTitle onLink={onLink} />
+          : <Text tone="dim">{loading ? LOADING_DESCRIPTION : NO_DESCRIPTION}</Text>}
         {notes.length > 0 && <GameDetailsNotes notes={notes} />}
         {tags.length > 0 && <Flex gap="xs" wrap>{tags.map((tag) => <Tag key={tag}>{tag}</Tag>)}</Flex>}
       </Stack>

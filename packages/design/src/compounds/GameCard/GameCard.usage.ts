@@ -14,7 +14,7 @@ const usage = {
   rules: [
     'Say what kind of world it is with the kind icon and its tint, never with a word on the card; kindLabel names the icon for the hint and for a screen reader.',
     'Show the world version once, such as 1.2.0 or 1.0.0 to 1.2.1 for an update.',
-    'Pass one status only: installed, update, no release yet, not available, adding, updating, removing or failed. Leave it out for a world that is only there to add.',
+    'Pass one status only: installed, update, no release yet, not available, adding, updating, removing, needs a package Archipelia cannot install, or failed. Leave it out for a world that is only there to add.',
     'Put detail that is rare in a note, shown as an icon with a name, and leave out what every card would repeat. The long text and the full notes belong in GameDetails.',
     'Mark at most one action primary: the next step for that world.',
     'Disable an action while that world is busy; never hide it.',
@@ -51,7 +51,7 @@ const GameCardSample = ({ onInstall }: { onInstall: () => void }) => (
   />
 );
 `,
-  propsHash: 'd66259fc15c3d84b',
+  propsHash: 'fcb9a3497fd98ddf',
 } satisfies ComponentUsage;
 
 export { usage };

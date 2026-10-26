@@ -1,6 +1,7 @@
 /* @layer renderer-app @kind hook */
 import { confirmDelete, toast, useKeyedGuard, useNavigation, useScreenState } from '@drizztdourden08/brock-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { failureTextOf } from '@archipelia/model';
 import { useLibraryStore } from '../../../stores/useLibraryStore';
 import type { FilterClause } from '@drizztdourden08/tessera/data';
 import type { GameRow, GameTab } from '../GameStore.type';
@@ -57,7 +58,8 @@ const useGameStore = (tab: GameTab) => {
   const openOfficial = useCallback(() => open(ROUTE.officialGames), [open]);
 
   const loadFailed = errorOf('load') !== null;
-  const error = errorOf('load') ?? errorOf('file');
+  const failed = errorOf('load') ?? errorOf('file');
+  const error = failed === null ? null : failureTextOf(failed);
 
   return {
     addFromFile, consent, empty, error, errorOf, filtered, filters, installWorld, isBusy, loadFailed, loading, openOfficial, query, refresh, remove, retry, rows, sections, setFilters, setQuery, shown, summary,

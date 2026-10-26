@@ -1,11 +1,11 @@
 /* @layer core @kind logic */
-import type { EnrichRecord, ReadmeRead } from './enrich.type';
-import { blocksOf } from './blocks-of';
-import { introOf } from './intro-of';
+import type { EnrichRecord, GithubRepo, ReadmeRead } from './enrich.type';
+import { markdownOf } from './markdown-of';
 
-const readmeFields = (read: ReadmeRead): Partial<EnrichRecord> => {
+const readmeFields = (read: ReadmeRead, repo: GithubRepo): Partial<EnrichRecord> => {
   if (read.kind !== 'text') return {};
-  return { ...introOf(blocksOf(read.text)), readmeUrl: read.url, ...(read.etag ? { etag: read.etag } : {}) };
+  const markdown = markdownOf(read.text, repo);
+  return { ...(markdown ? { markdown } : {}), readmeUrl: read.url, ...(read.etag ? { etag: read.etag } : {}) };
 };
 
 export { readmeFields };

@@ -7,6 +7,8 @@ import { busyText } from '../../behavior/busy-text';
 import { cardPropsOf } from '../../behavior/card-props';
 import { enrichKey } from '../../behavior/enrich-key';
 import { failureOf } from '../../behavior/failure-of';
+import { needOf } from '../../behavior/need-of';
+import { needProps } from '../../behavior/need-props';
 import { textOf } from '../../behavior/text-of';
 import { useEnrichStore } from '../../behavior/useEnrichStore';
 import type { GameDetailsDialogProps } from './GameDetailsDialog.type';
@@ -18,15 +20,18 @@ const GameDetailsDialog = ({ row, handlers, onClose }: GameDetailsDialogProps) =
   useEffect(() => ask({ apworld, source }), [ask, apworld, source]);
 
   const busy = busyOf(row, handlers);
-  const error = failureOf(row, handlers);
+  const need = needOf(row, handlers);
+  const error = need ? undefined : failureOf(row, handlers);
   return (
     <GameDetails
       {...cardPropsOf(row, handlers)}
       {...artOf(found)}
       {...textOf(found)}
+      {...needProps(need)}
       {...(busy ? { busy: busyText(busy, displayName) } : {})}
       {...(error ? { error } : {})}
       loading={found === undefined}
+      onLink={handlers.openHome}
       onClose={onClose}
     />
   );

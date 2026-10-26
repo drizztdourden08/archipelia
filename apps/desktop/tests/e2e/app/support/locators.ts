@@ -1,9 +1,9 @@
 /* @layer tests @kind helper */
 import type { Locator, Page } from 'playwright-core';
 
-type HubTitle = 'Multiworld' | 'Data';
+type HubTitle = 'Multiworld';
 
-type MenuEntry = 'Home' | 'Sessions' | 'Games' | 'Presets' | 'Servers' | 'Data' | 'Settings';
+type MenuEntry = 'Home' | 'Sessions' | 'Games' | 'Presets' | 'Servers' | 'Storage' | 'Settings';
 
 const HUB_OF: Record<MenuEntry, HubTitle> = {
   Home: 'Multiworld',
@@ -12,7 +12,7 @@ const HUB_OF: Record<MenuEntry, HubTitle> = {
   Presets: 'Multiworld',
   Servers: 'Multiworld',
   Settings: 'Multiworld',
-  Data: 'Data',
+  Storage: 'Multiworld',
 };
 
 const LIBRARY_ENTRIES: readonly MenuEntry[] = ['Games', 'Presets'];
@@ -24,8 +24,10 @@ const PAGE_OF: Record<MenuEntry, string> = {
   Presets: 'Presets',
   Servers: 'Servers',
   Settings: 'General',
-  Data: 'Storage',
+  Storage: 'Storage',
 };
+
+const OPENED_BY: Partial<Record<MenuEntry, MenuEntry>> = { Sessions: 'Home', Storage: 'Settings' };
 
 const dialogOf = (page: Page, title: string) => page.getByRole('dialog', { name: title, exact: true });
 
@@ -46,19 +48,21 @@ const cardOf = (scope: Locator, title: string) =>
 const playerRowOf = (scope: Locator, slot: number) =>
   scope.getByRole('region', { name: 'Players', exact: true }).getByRole('group', { name: new RegExp(`, row ${slot}$`) });
 
-const openScreen = async (page: Page, entry: MenuEntry) => {
+const openSection = async (scope: Locator, label: string) => {
+  await sectionsNav(scope).getByRole('button', { name: label, exact: true }).click();
+  await currentPage(scope, label).waitFor();
+  return scope;
+};
+
+const openScreen = async (page: Page, entry: MenuEntry): Promise<Locator> => {
+  const via = OPENED_BY[entry];
+  if (via !== undefined) return openSection(await openScreen(page, via), PAGE_OF[entry]);
   await page.getByRole('button', { name: 'Menu', exact: true }).click();
   if (LIBRARY_ENTRIES.includes(entry)) await page.getByRole('menuitem', { name: 'Library', exact: true }).click();
   await page.getByRole('menuitem', { name: entry, exact: true }).click();
   const opened = hub(page, HUB_OF[entry]);
   await currentPage(opened, PAGE_OF[entry]).waitFor();
   return opened;
-};
-
-const openSection = async (scope: Locator, label: string) => {
-  await sectionsNav(scope).getByRole('button', { name: label, exact: true }).click();
-  await currentPage(scope, label).waitFor();
-  return scope;
 };
 
 const closeHub = async (page: Page, title: HubTitle) => {
