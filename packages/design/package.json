@@ -31,7 +31,7 @@
     "vite": "catalog:"
   },
   "dependencies": {
-    "@drizztdourden08/tessera": ">=0.74.0 <1",
+    "@drizztdourden08/tessera": ">=0.75.0 <1",
     "react": "catalog:",
     "@archipelia/model": "workspace:*"
   }
