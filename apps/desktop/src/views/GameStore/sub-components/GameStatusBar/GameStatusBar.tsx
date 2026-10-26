@@ -4,9 +4,10 @@ import type { StatusBarAction, StatusBarEntry } from '@drizztdourden08/tessera/c
 import type { GameStatusBarProps } from './GameStatusBar.type';
 
 const itemsOf = ({ summary, filtered }: Pick<GameStatusBarProps, 'summary' | 'filtered'>): StatusBarEntry[] => [
-  { id: 'worlds', label: 'Worlds', value: filtered ? `${summary.shown} of ${summary.worlds}` : summary.worlds, icon: 'gamepad-2' },
+  { id: 'worlds', label: 'All worlds', value: filtered ? `${summary.shown} of ${summary.worlds}` : summary.worlds, icon: 'gamepad-2' },
   { id: 'installed', label: 'Installed', value: summary.installed, icon: 'circle-check' },
   ...(summary.updates > 0 ? [{ id: 'updates', label: 'Updates', value: summary.updates, tone: 'warning' as const, icon: 'arrow-big-up-dash' as const, priority: 1 }] : []),
+  ...(summary.noRelease > 0 ? [{ id: 'no-release', label: 'No release yet', value: summary.noRelease, icon: 'clock' as const, priority: 3 }] : []),
   ...(summary.apVersion ? [{ id: 'index', label: 'Index for AP', value: summary.apVersion, align: 'end' as const, priority: 2 }] : []),
 ];
 

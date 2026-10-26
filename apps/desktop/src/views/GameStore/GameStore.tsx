@@ -1,19 +1,28 @@
 /* @layer renderer-app @kind component */
-import { openExternal } from '@drizztdourden08/brock-react';
-import { Box, EmptyState, Icon, IconButton, ScrollArea, Spinner, Stack, Tooltip } from '@drizztdourden08/tessera/primitives';
-import { FilterBar } from '@drizztdourden08/tessera/composites';
+import { openExternal, SearchAnchor } from '@drizztdourden08/brock-react';
+import { Box, Button, EmptyState, Icon, IconButton, Spinner, Tooltip } from '@drizztdourden08/tessera/primitives';
+import { FilterBar, VirtualGrid } from '@drizztdourden08/tessera/composites';
 import { ErrorCallout } from '@archipelia/design';
-import { useGameStore } from './behavior/useGameStore';
+import { useState } from 'react';
+import { gameAnchor } from './behavior/game-anchor';
 import { GAME_FIELDS } from './behavior/game-schema.constants';
-import { EMPTY_TEXT } from './GameStore.constants';
-import { GameSection } from './sub-components/GameSection';
+import { gridSectionsOf } from './behavior/grid-sections-of';
+import { rowKey } from './behavior/row-key';
+import { useGameStore } from './behavior/useGameStore';
+import { EMPTY_TEXT, TILE } from './GameStore.constants';
+import type { GameRow, GameStoreProps } from './GameStore.type';
+import { GameDetailsDialog } from './sub-components/GameDetailsDialog';
+import { GameRowCard } from './sub-components/GameRowCard';
 import { GameStatusBar } from './sub-components/GameStatusBar';
+import { SectionLabel } from './sub-components/SectionLabel';
 import './GameStore.css';
 
-const GameStore = () => {
-  const store = useGameStore();
-  const handlers = { isBusy: store.isBusy, installWorld: store.installWorld, remove: store.remove, openHome: openExternal };
-  const resetKey = `${store.query}:${store.filters.length}`;
+const GameStore = ({ tab }: GameStoreProps) => {
+  const store = useGameStore(tab);
+  const [opened, setOpened] = useState<string | null>(null);
+  const handlers = { isBusy: store.isBusy, errorOf: store.errorOf, open: (row: GameRow) => setOpened(rowKey(row)), installWorld: store.installWorld, remove: store.remove, openHome: openExternal };
+  const sections = gridSectionsOf(store.sections, tab, store.filtered);
+  const openRow = opened === null ? undefined : store.rows.find((row) => rowKey(row) === opened);
 
   return (
     <Box className="game-store">
@@ -34,17 +43,28 @@ const GameStore = () => {
         />
       </Box>
       {store.error && <ErrorCallout message={store.error} onRetry={store.loadFailed ? store.retry : undefined} />}
-      <ScrollArea scrollbar="slim" className="game-store__body">
-        {store.visible.length === 0
-          ? <EmptyState icon={store.loading ? <Spinner /> : undefined} message={EMPTY_TEXT[store.empty]} />
+      <Box className="game-store__body">
+        {store.shown === 0
+          ? (
+            <EmptyState icon={store.loading ? <Spinner /> : undefined} message={EMPTY_TEXT[store.empty]}
+              action={store.empty === 'installed' ? <Button variant="primary" onClick={store.openOfficial}>Open Official</Button> : undefined} />
+          )
           : (
-            <Stack gap="lg">
-              {store.sections.map((section) => (
-                <GameSection key={section.id} section={section} resetKey={resetKey} filtered={store.filtered} handlers={handlers} />
-              ))}
-            </Stack>
+            <VirtualGrid
+              label="Games"
+              tileWidth={TILE.width}
+              tileHeight={TILE.height}
+              sections={sections.map(({ id, rows }) => ({ key: id, label: <SectionLabel id={id} empty={rows.length === 0} />, items: rows }))}
+              getKey={rowKey}
+              renderItem={(row) => (
+                <SearchAnchor anchor={gameAnchor(row.entry.apworld)} className="game-store__anchor">
+                  <GameRowCard row={row} handlers={handlers} />
+                </SearchAnchor>
+              )}
+            />
           )}
-      </ScrollArea>
+      </Box>
+      {openRow && <GameDetailsDialog row={openRow} handlers={handlers} onClose={() => setOpened(null)} />}
       <GameStatusBar summary={store.summary} loading={store.loading} filtered={store.filtered} adding={store.isBusy('file')} onAddFromFile={store.addFromFile} />
     </Box>
   );

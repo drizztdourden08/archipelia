@@ -9,6 +9,7 @@ declare module '@drizztdourden08/tessera' {
         | 'ConnectionStatus'
         | 'ErrorCallout'
         | 'GameCard'
+        | 'GameDetails'
         | 'HintRow'
         | 'LogLines'
         | 'OptionControl'

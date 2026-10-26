@@ -28,9 +28,8 @@ type GameCardProps = {
   notes: GameCardNote[];
   tags: string[];
   actions: GameCardAction[];
-  summary?: string;
-  summaryHint?: string;
   art?: string;
+  onOpen?: () => void;
 };
 
 export type { GameCardAction, GameCardKind, GameCardNote, GameCardProps, GameCardStatus };

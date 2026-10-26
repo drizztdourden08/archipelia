@@ -7,7 +7,7 @@ type FuzzToml = { version: string; verdict: 'clean' | 'flaky' | 'broken'; fuzzed
 type EntryToml = {
   name: string;
   display_name?: string;
-  home?: string;
+  home?: string | string[];
   tags?: string[];
   stability?: string;
   setup_guide?: string;

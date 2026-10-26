@@ -9,6 +9,10 @@ const GAME_STATUS = defineStatuses({
   update: { label: 'Update', tone: 'warning', icon: 'arrow-big-up-dash' },
   'no-release': { label: 'No release yet', tone: 'neutral', icon: 'clock' },
   unavailable: { label: 'Not available', tone: 'warning', icon: 'circle-alert' },
+  adding: { label: 'Adding...', tone: 'info', icon: 'download' },
+  updating: { label: 'Updating...', tone: 'info', icon: 'download' },
+  removing: { label: 'Removing...', tone: 'info', icon: 'trash-2' },
+  failed: { label: 'Failed', tone: 'danger', icon: 'circle-alert' },
 });
 
 const KIND_ICON: Record<GameCardKind, IconName> = {

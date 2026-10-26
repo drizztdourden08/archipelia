@@ -1,5 +1,5 @@
 /* @layer renderer-app @kind logic */
-import { SECTIONS } from '../GameStore.constants';
+import { MIXED_SECTIONS } from '../GameStore.constants';
 import type { GameRow, GameSectionId, GameSectionRows } from '../GameStore.type';
 
 const sectionOf = ({ state, entry }: GameRow): GameSectionId => {
@@ -8,6 +8,6 @@ const sectionOf = ({ state, entry }: GameRow): GameSectionId => {
 };
 
 const groupSections = (rows: GameRow[]): GameSectionRows[] =>
-  SECTIONS.map(({ id }) => ({ id, rows: rows.filter((row) => sectionOf(row) === id) }));
+  MIXED_SECTIONS.map((id) => ({ id, rows: rows.filter((row) => sectionOf(row) === id) }));
 
 export { groupSections };

@@ -1,0 +1,31 @@
+/* @layer renderer-app @kind style */
+.game-details__media {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--size-64);
+  block-size: var(--size-64);
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  background: var(--c-surface);
+}
+
+.game-details__text {
+  white-space: pre-line;
+}
+
+.game-details__notes {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.game-details__note {
+  display: inline-flex;
+  color: var(--c-text-dim);
+}
+
+.game-details__note[data-warning] {
+  color: var(--c-warning);
+}

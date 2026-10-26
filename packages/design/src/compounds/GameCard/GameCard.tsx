@@ -1,6 +1,6 @@
 /* @layer renderer-app @kind component */
 import { ItemCard } from '@drizztdourden08/tessera/composites';
-import { Text, Tag, Tooltip } from '@drizztdourden08/tessera/primitives';
+import { Text, Tag } from '@drizztdourden08/tessera/primitives';
 import { actionOf } from './behavior/action-of';
 import { GAME_STATUS, KIND_TONE, MAX_TAGS } from './GameCard.constants';
 import type { GameCardProps } from './GameCard.type';
@@ -8,7 +8,7 @@ import { GameCardMedia } from './sub-components/GameCardMedia';
 import { GameCardNotes } from './sub-components/GameCardNotes';
 import './GameCard.css';
 
-const GameCard = ({ title, kind, kindLabel, version, status, notes, tags, actions, summary, summaryHint, art }: GameCardProps) => {
+const GameCard = ({ title, kind, kindLabel, version, status, notes, tags, actions, art, onOpen }: GameCardProps) => {
   const state = status ? GAME_STATUS[status] : undefined;
   return (
     <ItemCard
@@ -23,9 +23,9 @@ const GameCard = ({ title, kind, kindLabel, version, status, notes, tags, action
       details={[
         ...(version ? [<Text key="version" variant="caption" mono numeric>{version}</Text>] : []),
         ...(notes.length > 0 ? [<GameCardNotes key="notes" notes={notes} />] : []),
-        ...(summary ? [<Tooltip key="summary" content={<Text className="game-card__hint">{summaryHint ?? summary}</Text>} placement="bottom"><Text variant="caption" tone="dim">{summary}</Text></Tooltip>] : []),
       ]}
       actions={actions.map((action) => actionOf(action, title))}
+      onOpen={onOpen}
     />
   );
 };
