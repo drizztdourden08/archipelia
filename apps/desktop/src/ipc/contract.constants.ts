@@ -3,7 +3,8 @@ import { defineChannels, event, invoke } from '@drizztdourden08/brock-core';
 import type { CatalogView, EnrichRequest, GameEnrichment, InstallRequest, PackagePreview } from '@archipelia/catalog';
 import type {
   AdminLobby, CatalogEntry, EngineChoice, EngineEvent, EngineInstallResult, EngineOverview, EngineStatus, GamePreset,
-  InstalledGame, LobbyServerEntry, ServerEntry, Session, SessionTemplate, StartupDecision,
+  InstalledGame, LobbyServerEntry, ServerEntry, Session, SessionTemplate, SourcePlan, SourcePypiInstall, SourceRef, SourceSuggestions, StartupDecision,
+  SuggestRequest,
 } from '@archipelia/model';
 import type { HostLogLine, ServerTestResult } from '@archipelia/hosts';
 import type { PresetInput } from '@archipelia/presets';
@@ -29,6 +30,10 @@ const APP_CHANNELS = defineChannels({
   gamesInstall: invoke<(request: InstallRequest) => Promise<InstalledGame>>()('ap:games:install'),
   gamesPackages: invoke<(request: InstallRequest) => Promise<PackagePreview>>()('ap:games:packages'),
   gamesRemove: invoke<(apworld: string) => Promise<void>>()('ap:games:remove'),
+  sourcesSuggest: invoke<(request: SuggestRequest) => Promise<SourceSuggestions>>()('ap:sources:suggest'),
+  sourcesPlan: invoke<(ref: SourceRef) => Promise<SourcePlan>>()('ap:sources:plan'),
+  sourcesPypiPreview: invoke<(ref: SourceRef) => Promise<PackagePreview>>()('ap:sources:pypiPreview'),
+  sourcesPypiInstall: invoke<(request: SourcePypiInstall) => Promise<void>>()('ap:sources:pypiInstall'),
   presetsList: invoke<() => Promise<GamePreset[]>>()('ap:presets:list'),
   presetsCreate: invoke<(preset: PresetInput) => Promise<GamePreset>>()('ap:presets:create'),
   presetsSave: invoke<(preset: GamePreset) => Promise<GamePreset>>()('ap:presets:save'),
