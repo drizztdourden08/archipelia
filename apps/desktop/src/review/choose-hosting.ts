@@ -13,7 +13,7 @@ const layer = (tour: AppReviewTour) => tour.find(SELECTOR.layer);
 const modeNow = async () => (await appApi().lobbyServerStatus()).options.mode;
 
 const openLan = async (tour: AppReviewTour) => {
-  await clickNamed(tour, SELECTOR.radio, HOST_UI.lan, layer(tour) ?? undefined);
+  await clickNamed(tour, SELECTOR.segment, HOST_UI.lan, layer(tour) ?? undefined);
   const ask = await waitNamed(tour, SELECTOR.dialog, HOST_UI.askTitle);
   tour.check('hosting-lan-asks', ask !== null, 'choosing LAN asks once, in plain words, before it opens a port', 'choosing LAN did not ask');
   if (ask) await clickNamed(tour, SELECTOR.button, HOST_UI.open, ask);
@@ -33,7 +33,7 @@ const stopLan = async (tour: AppReviewTour) => {
   tour.check('hosting-stop', stopped, 'Stop switches the network mode back to Off', 'Stop did not switch the network mode off');
 };
 
-const placeChoice = (tour: AppReviewTour) => tour.findAll(SELECTOR.radio, layer(tour) ?? undefined).map(nameOf).filter((name) => [HOST_UI.local, HOST_UI.lan, HOST_UI.remote].some((label) => label.test(name)));
+const placeChoice = (tour: AppReviewTour) => tour.findAll(SELECTOR.segment, layer(tour) ?? undefined).map(nameOf).filter((name) => [HOST_UI.local, HOST_UI.lan, HOST_UI.remote].some((label) => label.test(name)));
 
 const chooseHosting = async (tour: AppReviewTour) => {
   const asked = await waitText(tour, DIRECT_UI.section, () => layer(tour));

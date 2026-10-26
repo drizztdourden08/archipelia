@@ -33,7 +33,7 @@ const YAML_EXTENSIONS = ['yaml', 'yml'];
 
 const PLAYER_GRID_CLASS = 'session-builder__players';
 
-const BUILDER_COLUMN_MIN = 520;
+const BUILDER_COLUMN_MIN = 420;
 
 const PLAYERS_TEXT = {
   manual: 'A player picks any installed game, then one of its presets or an imported file.',

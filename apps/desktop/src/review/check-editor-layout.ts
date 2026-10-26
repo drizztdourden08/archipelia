@@ -11,6 +11,20 @@ const roomForTwo = (grid: HTMLElement | null) => {
   return grid.clientWidth >= 2 * BUILDER_COLUMN_MIN + gap;
 };
 
+const layoutOf = (join: HTMLElement, players: HTMLElement, world: HTMLElement) => {
+  const a = join.getBoundingClientRect();
+  const p = players.getBoundingClientRect();
+  const w = world.getBoundingClientRect();
+  const grid = join.closest<HTMLElement>('.grid');
+  const wide = roomForTwo(grid);
+  const side = w.left >= a.right && Math.abs(w.top - a.top) < 2;
+  return {
+    pass: p.top >= a.bottom && (wide ? side : w.top >= p.bottom),
+    shape: wide ? 'two columns: How players join and the players on the left, the world settings on the right' : 'one column: How players join, the players, then the world settings',
+    width: grid?.clientWidth ?? 0,
+  };
+};
+
 const checkEditorLayout = async (tour: AppReviewTour) => {
   const root = tour.find(SELECTOR.layer);
   const join = await tour.waitFor(() => sectionOf(root, 'how-players-join'));
@@ -20,14 +34,8 @@ const checkEditorLayout = async (tour: AppReviewTour) => {
     tour.check('editor-layout', false, '', 'the editor misses How players join, the players or the world settings');
     return;
   }
-  const a = join.getBoundingClientRect();
-  const p = players.getBoundingClientRect();
-  const w = world.getBoundingClientRect();
-  const wide = roomForTwo(join.closest<HTMLElement>('.grid'));
-  const side = w.left >= a.right && Math.abs(w.top - a.top) < 2;
-  const pass = p.top >= a.bottom && (wide ? side : w.top >= p.bottom);
-  const shape = wide ? 'two columns: How players join and the players on the left, the world settings on the right' : 'one column: How players join, the players, then the world settings';
-  tour.check('editor-layout', pass, `the editor lays out in ${shape}`, `the editor is not in ${shape}`);
+  const { pass, shape, width } = layoutOf(join, players, world);
+  tour.check('editor-layout', pass, `the editor lays out in ${shape} at ${width} px wide`, `the editor is not in ${shape}`);
 };
 
 export { checkEditorLayout };

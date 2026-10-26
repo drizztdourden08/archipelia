@@ -10,6 +10,7 @@ const SELECTOR = {
   status: '[role="status"]',
   toggle: '[role="switch"]',
   radio: 'input[type="radio"], [role="radio"]',
+  segment: '[role="radio"]:not([inert] *)',
   tab: '[role="tab"]',
   paletteInput: '.command-palette--open input.command-palette__input, .command-palette--open .command-palette__input input',
   paletteRow: '.command-palette--open .command-palette-row',
