@@ -1,6 +1,7 @@
 /* @layer renderer-app @kind logic */
 import type { AppReviewTour } from '@drizztdourden08/brock-react';
 import { clickNamed } from './click-named';
+import { named } from './named';
 import { REVIEW_GAME } from './review.constants';
 import { SELECTOR } from './review-dom.constants';
 import { waitNamed } from './wait-named';
@@ -12,7 +13,7 @@ const checkGameDetails = async (tour: AppReviewTour, layer: HTMLElement | undefi
   if (dialog === null) return;
   await tour.capture('games-details');
   tour.press({ key: 'Escape' });
-  const closed = await tour.waitFor(() => (tour.find(SELECTOR.dialog) ? null : true));
+  const closed = await tour.waitFor(() => (named(tour, SELECTOR.dialog, REVIEW_GAME.card) ? null : true));
   tour.check('games-details-escape', closed === true, 'Escape closes the details dialog', 'Escape left the details dialog open');
 };
 
