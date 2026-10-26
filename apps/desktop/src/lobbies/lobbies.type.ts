@@ -4,7 +4,7 @@ import type { ReachStatus } from '@archipelia/server';
 import type { LanServer, NetworkMode } from '@archipelia/server/network';
 import type { LOBBY_REQUESTS } from './lobbies.constants';
 
-type LobbyServerOptions = { mode: NetworkMode; publicLookup: boolean };
+type LobbyServerOptions = { mode: NetworkMode; publicLookup: boolean; lanConsent?: boolean };
 
 type LobbyServerState = 'starting' | 'listening' | 'failed';
 

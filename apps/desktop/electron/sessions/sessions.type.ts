@@ -8,7 +8,8 @@ type SessionLobbyDeps = {
   act: (request: LobbyRequest) => Promise<AdminLobby>;
   list: () => Promise<AdminLobby[]>;
   slotOf: (player: SessionPlayer) => Promise<HostPlayerSlot>;
-  sharePassword?: (lobbyId: string, passwordRef: string) => Promise<void>;
+  beforeOpen?: (template: SessionTemplate) => Promise<void>;
+  beforeRun?: (lobbyId: string, template: SessionTemplate) => Promise<void>;
 };
 
 type LobbyOps = Pick<SessionLobbyDeps, 'act' | 'list'>;
@@ -19,10 +20,17 @@ type CloserDeps = {
   templates: () => Promise<SessionTemplate[]>;
   quiet: () => Promise<unknown>;
   emit: (pending: PendingClose[]) => void;
+  forget?: (lobbyId: string) => Promise<void>;
   retryMs?: number;
   retryMaxMs?: number;
 };
 
+type RunPreparation = {
+  server: NetworkSwitch;
+  setLanRoom: (lobbyId: string, lan: boolean) => unknown;
+  sharePassword: (lobbyId: string, passwordRef: string) => Promise<void>;
+};
+
 type TemplateStore = { get: (id: string) => Promise<SessionTemplate | null>; remove: (id: string) => Promise<void> };
 
-export type { CloserDeps, NetworkSwitch, SessionLobbyDeps, TemplateStore };
+export type { CloserDeps, NetworkSwitch, RunPreparation, SessionLobbyDeps, TemplateStore };

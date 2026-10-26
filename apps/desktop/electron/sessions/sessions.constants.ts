@@ -16,6 +16,7 @@ const TEXT = {
   gone: 'The lobby of this session is gone. Start session opens a new one.',
   ran: 'This session already ran on its lobby. Close the lobby, then Start session opens a new one.',
   nobodyReady: 'No player is ready yet. Add a player of your own, or approve a player who joined.',
+  noLanConsent: 'This computer is not open to your network yet. Start session asks first.',
   notInstalled: (game: string) => `${game} is not installed.`,
 } as const;
 

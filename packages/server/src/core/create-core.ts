@@ -15,7 +15,7 @@ import { createCoreLobbies } from './create-core-lobbies';
 import { coreSandbox } from './core-sandbox';
 import { createRoomSecrets } from './room-secrets/create-room-secrets';
 import { roomBinding } from './room-binding';
-import { shareRoomPassword } from './room-secrets/share-room-password';
+import { lobbyPasswords } from './room-secrets/lobby-passwords';
 import type { NetworkMode } from '../network';
 
 const createCore = (ports: CorePorts) => {
@@ -23,6 +23,7 @@ const createCore = (ports: CorePorts) => {
   const secrets = createRoomSecrets({ vault: ports.secrets, canStore: ports.canStoreSecrets ?? (() => true), log });
   const binding = hostBinding(network.automation, network.lanHost);
   let lobbyMode: NetworkMode = 'off';
+  const lanRooms = new Set<string>();
   const sessionFiles = domain(DOMAIN.sessions);
   const games = domain(DOMAIN.games);
   const cache = domain(DOMAIN.cache);
@@ -48,7 +49,7 @@ const createCore = (ports: CorePorts) => {
   const sessions = createSessionService({
     files: sessionFiles, presets, runs, runtime, runtimeFor, remoteApVersion, schemaOf,
     hostFor: usage.watch(createHostFactory({ runtime, secrets, servers, ...binding, ggOwnerSecret: GG_OWNER_SECRET })),
-    lobbyBinding: () => roomBinding(lobbyMode, network),
+    lobbyBinding: (lobbyId) => roomBinding(lanRooms.has(lobbyId) ? 'lan' : lobbyMode, network),
     resolveSecret: (ref) => secrets.get(ref),
     emit: (event) => {
       usage.track(event);
@@ -63,9 +64,10 @@ const createCore = (ports: CorePorts) => {
   const setLobbyNetworkMode = (mode: NetworkMode) => {
     lobbyMode = mode;
   };
+  const setLanRoom = (lobbyId: string, lan: boolean) => (lan ? lanRooms.add(lobbyId) : lanRooms.delete(lobbyId));
   return {
-    adminToken, catalog, dispose, engine, installed, lobbies, presets, runJobs, runs, runtime, sandbox, servers, sessionFiles, sessions, setLobbyNetworkMode,
-    shareRoomPassword: shareRoomPassword(secrets), templates, watchLobbies,
+    adminToken, catalog, dispose, engine, installed, lobbies, presets, runJobs, runs, runtime, sandbox, servers, sessionFiles, sessions, setLanRoom, setLobbyNetworkMode,
+    lobbyPasswords: lobbyPasswords(secrets), templates, watchLobbies,
   };
 };
 

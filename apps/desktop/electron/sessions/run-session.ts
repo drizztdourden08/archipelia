@@ -10,8 +10,7 @@ const runSession = async (template: SessionTemplate, deps: SessionLobbyDeps) => 
   const lobby = await syncSession(template, deps);
   if (!RUNNABLE_PHASES.includes(lobby.phase)) throw new Error(TEXT.ran);
   if (readySlots(lobby.members) === 0) throw new Error(TEXT.nobodyReady);
-  const passwordRef = template.server.passwordRef;
-  if (passwordRef && deps.sharePassword) await deps.sharePassword(lobby.id, passwordRef);
+  await deps.beforeRun?.(lobby.id, template);
   return deps.act(lobbyRequest.start(lobby.id));
 };
 

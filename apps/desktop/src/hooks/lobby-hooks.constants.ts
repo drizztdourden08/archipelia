@@ -20,7 +20,7 @@ const UNSAVED_SESSION = 'A session has changes that are not saved.';
 
 const OPEN_LAN = {
   title: 'Open this computer to your network?',
-  message: 'This session runs on your network, so this opens a network port and announces the server there. Windows may ask about the firewall: allow it for private networks. Stop on the lobby screen closes it.',
+  message: 'This session runs on your network, so its room opens a network port, and with direct connections on the lobby opens one too and is announced there. Archipelia asks this once. Windows may ask about the firewall: allow it for private networks.',
   confirmLabel: 'Open to my network',
   cancelLabel: 'Keep it private',
 } as const;

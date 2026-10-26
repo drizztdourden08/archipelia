@@ -18,7 +18,7 @@ afterEach(async () => {
 
 const REF = { templateId: 't1', serverId: 'local', lobbyId: 'lb_1' };
 
-const lanOf = (lobbyId: string): SessionTemplate => ({ ...newTemplate(lobbyId), lan: true, lobby: { serverId: 'local', lobbyId } });
+const lanOf = (lobbyId: string): SessionTemplate => ({ ...newTemplate(lobbyId), lan: true, lobby: { serverId: 'local', lobbyId }, direct: { admission: 'host-approval', allowUnlisted: false } });
 
 const setUp = async (failures: number, templates: SessionTemplate[] = []) => {
   const store = await tempFiles('server');
@@ -52,7 +52,7 @@ describe('closing the lobby of a session', () => {
     expect(quiet).toHaveBeenCalledTimes(1);
   });
 
-  test('stays on the network while another LAN session still has its lobby open here', async () => {
+  test('stays on the network while another LAN session with direct connections still has its lobby open here', async () => {
     const { closer, quiet } = await setUp(0, [lanOf('lb_1'), lanOf('lb_2')]);
     expect(await closer.close(REF)).toEqual({ closed: true });
     expect(quiet).not.toHaveBeenCalled();

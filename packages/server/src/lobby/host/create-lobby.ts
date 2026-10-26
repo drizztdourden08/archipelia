@@ -22,7 +22,7 @@ const createLobby = async (ctx: LobbyContext, input: CreateLobbyInput): Promise<
   if (!engine) throw new Error('install an Archipelago engine before opening a lobby');
   const now = ctx.now();
   const lobby: Lobby = {
-    id: `${LOBBY_ID_PREFIX}${randomBytes(LOBBY_ID_BYTES).toString('hex')}`, code: await freeCode(ctx), name: input.name, phase: 'open', rev: 1,
+    id: `${LOBBY_ID_PREFIX}${randomBytes(LOBBY_ID_BYTES).toString('hex')}`, code: await freeCode(ctx), name: input.name, phase: input.locked ? 'locked' : 'open', rev: 1,
     engine, options: lobbyOptions(input.options), members: [], worlds: [], nextMember: 1, createdAt: now, closesAt: now + OPEN_TTL_MS,
   };
   const added = await ctx.book.add(lobby);

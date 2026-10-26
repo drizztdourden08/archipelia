@@ -7,7 +7,7 @@ import { duplicateTemplate } from '../../src/views/SessionBuilder/behavior/dupli
 import { freeName } from '../../src/views/SessionLobby/behavior/free-name';
 import { newTemplate } from '../../src/views/SessionBuilder/behavior/new-template';
 import { nextSlot } from '../../src/views/SessionLobby/behavior/next-slot';
-import { passwordNameOf } from '../../src/views/SessionBuilder/behavior/password-name-of';
+import { passwordNameOf } from '../../src/lobbies/password-name-of';
 import { removePlayer } from '../../src/views/SessionLobby/behavior/remove-player';
 import { presetPlayer } from './session-fixtures';
 

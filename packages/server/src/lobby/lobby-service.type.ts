@@ -61,7 +61,7 @@ type HostSlotInput = { name: string; game: string; yaml: string; worldVersion: s
 
 type HostMemberInput = { displayName: string; slots: HostSlotInput[] };
 
-type CreateLobbyInput = { name: string; engine?: SessionEngine; options?: Partial<LobbyOptions> };
+type CreateLobbyInput = { name: string; engine?: SessionEngine; options?: Partial<LobbyOptions>; locked?: boolean };
 
 type LobbyPatch = { name?: string; options?: Partial<LobbyOptions> };
 

@@ -4,7 +4,7 @@ import type { HostPlayerSlot, LobbyRequest } from './lobbies.type';
 import { sessionLobby } from './session-lobby';
 
 const lobbyRequest = {
-  open: (template: SessionTemplate): LobbyRequest => ({ type: 'lobby.create', params: sessionLobby(template) }),
+  open: (template: SessionTemplate): LobbyRequest => ({ type: 'lobby.create', params: { ...sessionLobby(template), ...(template.direct ? {} : { locked: true }) } }),
   update: (lobbyId: string, template: SessionTemplate): LobbyRequest => ({ type: 'lobby.update', params: { lobbyId, ...sessionLobby(template) } }),
   lock: (lobbyId: string): LobbyRequest => ({ type: 'lobby.lock', params: { lobbyId } }),
   start: (lobbyId: string): LobbyRequest => ({ type: 'lobby.start', params: { lobbyId } }),

@@ -56,6 +56,7 @@ const createAppServices = async (ctx: MainContext) => {
     files: ctx.storage.domain(DOMAIN.server), opsFor: (serverId) => lobbies.admins.opsFor(serverId), templates: () => core.templates.list(),
     quiet: () => (lobbyServer.status().options.mode === 'off' ? Promise.resolve() : lobbyServer.apply({ ...lobbyServer.status().options, mode: 'off' })),
     emit: (pending) => ctx.emit(APP_CHANNELS.onPendingCloses, pending),
+    forget: (lobbyId) => core.lobbyPasswords.forget(lobbyId),
   });
   void closer.retryAll().catch((error: unknown) => ctx.log(`the pending lobby closes did not run: ${String(error)}`));
   return { ...core, secrets, ...lobbies, joins, closer };

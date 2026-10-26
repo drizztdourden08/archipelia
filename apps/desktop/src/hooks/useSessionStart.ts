@@ -10,19 +10,24 @@ import { OPEN_LAN } from './lobby-hooks.constants';
 import { useLocalServerStatus } from './useLocalServerStatus';
 
 const useSessionStart = () => {
-  const { status, reload } = useLocalServerStatus();
+  const { status, setStatus, reload } = useLocalServerStatus();
   const apply = useLobbyStore((state) => state.apply);
-  const mode = status?.options.mode;
+
+  const consent = useCallback(async (template: SessionTemplate): Promise<boolean> => {
+    if (template.lan !== true || lobbyServerOf(template) !== LOCAL_SERVER || status?.options.lanConsent === true) return true;
+    if (!status || !(await confirmAction(OPEN_LAN))) return false;
+    setStatus(await appApi().lobbyServerApply({ ...status.options, lanConsent: true }));
+    return true;
+  }, [setStatus, status]);
 
   return useCallback(async (template: SessionTemplate, keep: (saved: SessionTemplate) => Promise<SessionTemplate>): Promise<SessionTemplate | null> => {
+    if (!(await consent(template))) return null;
     const serverId = lobbyServerOf(template);
-    const opens = template.lan === true && serverId === LOCAL_SERVER && (mode === undefined || mode === 'off');
-    if (opens && !(await confirmAction(OPEN_LAN))) return null;
     const lobby = await appApi().sessionsStart(template);
     apply({ serverId, lobby });
-    if (opens) await reload();
+    await reload();
     return keep({ ...template, lobby: { serverId, lobbyId: lobby.id } });
-  }, [apply, mode, reload]);
+  }, [apply, consent, reload]);
 };
 
 export { useSessionStart };

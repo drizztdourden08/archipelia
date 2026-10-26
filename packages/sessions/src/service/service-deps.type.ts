@@ -11,7 +11,7 @@ type ServiceDeps = PlayerDeps & {
   runtimeFor?: (engine: SessionEngine) => Promise<EngineRuntime | undefined>;
   remoteApVersion?: (serverId: string) => Promise<string | undefined>;
   hostFor: (target: HostTarget, runtime?: EngineRuntime, binding?: HostBinding) => Promise<SessionHost>;
-  lobbyBinding?: () => HostBinding;
+  lobbyBinding?: (lobbyId: string) => HostBinding;
   resolveSecret: (ref: string) => Promise<string | null>;
   emit: (event: SessionEvent) => void;
 };

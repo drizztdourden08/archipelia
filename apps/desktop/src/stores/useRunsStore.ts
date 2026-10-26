@@ -21,7 +21,6 @@ const useRunsStore = createSessionStore<RunsState>((set, get) => ({
       throw err;
     }
   },
-  run: (template) => appApi().sessionsRun(template),
   stop: async (id) => { await appApi().sessionsStop(id); },
   cancel: (id) => appApi().sessionsCancel(id),
   command: (id, cmd) => appApi().sessionsCommand(id, cmd),

@@ -4,12 +4,14 @@ import type { AdminLobby, SessionTemplate } from '@archipelia/model';
 import type { Bindings, HostLine } from '@drizztdourden08/archipelia-lobby-protocol/testing';
 import { connectWebSocket, createFakeClient, createScenarioKit, loadScenario } from '@drizztdourden08/archipelia-lobby-protocol/testing';
 import { startLobbyRig } from '@archipelia/server/testing';
+import { openToNetwork } from '../../electron/sessions/open-to-network';
+import { prepareRun } from '../../electron/sessions/prepare-run';
 import { runSession } from '../../electron/sessions/run-session';
 import { startSession } from '../../electron/sessions/start-session';
 import { syncSession } from '../../electron/sessions/sync-session';
 import { joinRecord, startJoins } from '../lobbies/join-kit';
 import { tempFiles } from '../lobbies/temp-files';
-import type { LobbyRequest } from '../../src/lobbies/lobbies.type';
+import type { LobbyRequest, LobbyServerStatus } from '../../src/lobbies/lobbies.type';
 import { launchOf } from '../../src/runs/launch-of';
 import { newTemplate } from '../../src/views/SessionBuilder/behavior/new-template';
 import { runAction } from '../../src/views/SessionLobby/behavior/run-action';
@@ -103,15 +105,20 @@ describe('a session that takes direct connections', () => {
 });
 
 describe('a session without direct connections', () => {
-  test('still opens a lobby on Start session, locked to clients, and runs the players of the host', async () => {
+  test('creates its lobby already locked to clients, never open, and runs the players of the host', async () => {
     rig = await startLobbyRig();
     const on = rig;
-    const sharePassword = vi.fn(() => Promise.resolve());
-    const { lobby, template } = await started(on, sessionOf({ host: { kind: 'local', port: 38281 }, server: { ...sessionOf().server, passwordRef: 'room-password-t1' } }));
+    const sent: LobbyRequest[] = [];
+    const deps = { ...lobbyDeps(on), act: (request: LobbyRequest) => { sent.push(request); return actOn(on)(request); } };
+    const beforeRun = vi.fn(() => Promise.resolve());
+    const lobby = await startSession(sessionOf({ host: { kind: 'local', port: 38281 } }), deps);
+    expect(sent[0]).toMatchObject({ type: 'lobby.create', params: { locked: true } });
+    expect(sent.map((request) => request.type)).not.toContain('lobby.lock');
     expect(lobby.phase).toBe('locked');
     expect(hostSlotNames(lobby)).toEqual(['Ana']);
-    await runSession(template, { ...lobbyDeps(on), sharePassword });
-    expect(sharePassword).toHaveBeenCalledWith(lobby.id, 'room-password-t1');
+    const template = sessionOf({ host: { kind: 'local', port: 38281 }, lobby: { serverId: 'local', lobbyId: lobby.id } });
+    await runSession(template, { ...lobbyDeps(on), beforeRun });
+    expect(beforeRun).toHaveBeenCalledWith(lobby.id, template);
     await vi.waitFor(() => expect(on.templates).toHaveLength(1));
     expect(on.templates[0]?.players.map((player) => player.name)).toEqual(['Ana']);
   });
@@ -160,4 +167,60 @@ describe('the slots of the host in a session that takes direct connections', () 
     await vi.waitFor(() => expect(on.templates).toHaveLength(1));
     expect(on.templates[0]?.players.map((player) => player.name)).toEqual(['Cy']);
   }, 30000);
+});
+
+describe('turning direct connections off on a lobby with joined players', () => {
+  test('removes every joined player before it locks, so none can resume or run', async () => {
+    rig = await startLobbyRig();
+    const on = rig;
+    const { lobby, template } = await started(on, sessionOf({ direct: { admission: 'host-approval', allowUnlisted: true }, players: [] }));
+    const store = await tempFiles('joins');
+    const joins = startJoins(store.files, '0.6.8');
+    await joins.service.start(await joinRecord(on.address, lobby.code));
+    await joins.until((view) => view.state === 'pending');
+    const joinedId = (await on.service.get(lobby.id))?.members.find((member) => member.kind === 'client')?.id ?? '';
+    await actOn(on)({ type: 'member.approve', params: { lobbyId: lobby.id, memberId: joinedId } });
+    const closed = await syncSession({ ...template, direct: undefined, players: sessionOf().players }, lobbyDeps(on));
+    joins.service.closeAll();
+    await store.remove();
+    expect(closed.phase).toBe('locked');
+    expect(closed.members.find((member) => member.id === joinedId)?.admission).toBe('removed');
+    expect(hostSlotNames(closed)).toEqual(['Ana']);
+  }, 30000);
+});
+
+const serverAt = (options: Partial<LobbyServerStatus['options']>) => {
+  const apply = vi.fn((_options: unknown) => Promise.resolve());
+  const status = (): LobbyServerStatus => ({ state: 'listening', options: { mode: 'off', publicLookup: true, ...options }, automation: false, roomPasswords: 'vault', lanAddress: '192.168.1.5' });
+  return { server: { status, apply }, apply };
+};
+
+describe('what a session opens on the network', () => {
+  const lan = sessionOf({ host: { kind: 'local', port: 38281 }, lan: true });
+
+  test('opens the lobby port on LAN only with direct connections, and only after the recorded consent', async () => {
+    const consented = serverAt({ lanConsent: true });
+    await openToNetwork(consented.server)(lan);
+    expect(consented.apply).not.toHaveBeenCalled();
+    await openToNetwork(consented.server)({ ...lan, direct: DIRECT });
+    expect(consented.apply).toHaveBeenCalledWith(expect.objectContaining({ mode: 'lan' }));
+    const asked = serverAt({});
+    await expect(openToNetwork(asked.server)(lan)).rejects.toThrow('not open to your network');
+    await openToNetwork(asked.server)(sessionOf({ host: { kind: 'local', port: 38281 } }));
+    expect(asked.apply).not.toHaveBeenCalled();
+  });
+
+  test('opens the room on LAN for a LAN session, and shares only the password the session itself keeps', async () => {
+    const sharePassword = vi.fn(() => Promise.resolve());
+    const setLanRoom = vi.fn();
+    const before = prepareRun({ server: serverAt({ lanConsent: true }).server, setLanRoom, sharePassword });
+    const forged = { ...lan, server: { ...lan.server, passwordRef: 'ssh-password-box' } };
+    await before('lb_1', forged);
+    expect(setLanRoom).toHaveBeenCalledWith('lb_1', true);
+    expect(sharePassword).toHaveBeenCalledWith('lb_1', 'room-password-t1');
+    expect(sharePassword).not.toHaveBeenCalledWith('lb_1', 'ssh-password-box');
+    await before('lb_2', sessionOf({ host: { kind: 'local', port: 38281 }, lobby: { serverId: 'r1' } }));
+    expect(sharePassword).toHaveBeenCalledTimes(1);
+    await expect(prepareRun({ server: serverAt({}).server, setLanRoom, sharePassword })('lb_3', lan)).rejects.toThrow('not open to your network');
+  });
 });

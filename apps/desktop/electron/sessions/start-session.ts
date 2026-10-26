@@ -9,6 +9,7 @@ const openLobbyId = async (template: SessionTemplate, deps: SessionLobbyDeps): P
   const lobbyId = template.lobby?.lobbyId;
   const current = lobbyId ? (await deps.list()).find((entry) => entry.id === lobbyId) : undefined;
   if (current && current.phase !== 'closed') return current.id;
+  await deps.beforeOpen?.(template);
   return (await deps.act(lobbyRequest.open(template))).id;
 };
 
