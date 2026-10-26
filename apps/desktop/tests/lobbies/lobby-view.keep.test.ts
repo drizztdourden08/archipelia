@@ -1,10 +1,13 @@
 /* @layer tests @kind test */
 import { describe, expect, test } from 'vitest';
 import { mergeLobby } from '../../src/stores/merge-lobby';
-import { directRows } from '../../src/views/DirectConnection/behavior/direct-rows';
-import { joinFacts } from '../../src/views/DirectConnection/behavior/join-facts';
-import { resultsFacts } from '../../src/views/DirectConnection/behavior/results-facts';
-import { serverNotice } from '../../src/views/DirectConnection/behavior/server-notice';
+import type { SessionTemplate } from '@archipelia/model';
+import { joinFacts } from '../../src/views/SessionBuilder/behavior/join-facts';
+import { joinRows } from '../../src/views/SessionBuilder/behavior/join-rows';
+import { newTemplate } from '../../src/views/SessionBuilder/behavior/new-template';
+import { resultsFacts } from '../../src/views/SessionBuilder/behavior/results-facts';
+import { serverNotice } from '../../src/views/SessionBuilder/behavior/server-notice';
+import type { SessionPlace } from '../../src/views/SessionBuilder/SessionBuilder.type';
 import { consentOptions } from '../../src/views/LobbyMembers/behavior/consent-options';
 import { memberActions } from '../../src/views/LobbyMembers/behavior/member-actions';
 import { pendingWorlds } from '../../src/views/LobbyMembers/behavior/pending-worlds';
@@ -20,17 +23,23 @@ describe('what the session lets the host do with a connected player', () => {
   });
 });
 
-describe('the direct connection section', () => {
-  const handlers = { templateId: 't1', busy: false, onEnable: () => undefined, onDisable: () => undefined, onOptions: () => undefined, onServer: () => undefined };
+describe('the How players join section', () => {
+  const noop = () => undefined;
+  const rowsOf = (draft: SessionTemplate, place: SessionPlace = 'local') => joinRows({
+    draft, place, placeOptions: [], remoteOptions: [], remoteValue: 'gg', busy: false, password: null,
+    onPlace: noop, onRemote: noop, onPort: noop, onAllow: noop, onOptions: noop,
+  });
+  const local = newTemplate('t1');
 
-  test('offers only the switch while the session takes no direct connection', () => {
-    expect(directRows(handlers).map((row) => row.id)).toEqual(['allow']);
+  test('puts Where first, then the port, the switch and the room password, while the session takes no direct connection', () => {
+    expect(rowsOf(local).map((row) => row.id)).toEqual(['where', 'port', 'allow', 'password']);
+    expect(rowsOf({ ...local, host: { kind: 'archipelago-gg' } }, 'remote').map((row) => row.id)).toEqual(['where', 'server', 'allow', 'password']);
   });
 
-  test('offers Host approval on and unlisted clients off for a session with a lobby', () => {
-    const rows = directRows({ ...handlers, direct: { serverId: 'local', lobbyId: 'lb_1', admission: 'host-approval', allowUnlisted: false } });
-    expect(rows.map((row) => row.id)).toEqual(['allow', 'approval', 'unlisted']);
-    expect(rows.map((row) => ('input' in row && row.input?.kind === 'toggle' ? row.input.value : null))).toEqual([true, true, false]);
+  test('offers Host approval on and unlisted clients off once direct connections are on, before any lobby opens', () => {
+    const rows = rowsOf({ ...local, direct: { serverId: 'local', admission: 'host-approval', allowUnlisted: false } });
+    expect(rows.map((row) => row.id)).toEqual(['where', 'port', 'allow', 'approval', 'unlisted', 'password']);
+    expect(rows.map((row) => ('input' in row && row.input?.kind === 'toggle' ? row.input.value : null))).toEqual([null, null, true, true, false, null]);
   });
 
   test('shows the session code with a copy button, the server address and the Archipelago version', () => {

@@ -36,7 +36,7 @@ type ServerSettings = {
 
 type DirectConnection = {
   serverId: string;
-  lobbyId: string;
+  lobbyId?: string;
   admission: LobbyAdmission;
   allowUnlisted: boolean;
 };

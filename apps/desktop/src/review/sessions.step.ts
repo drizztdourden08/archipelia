@@ -6,6 +6,7 @@ import { showRunJob } from '../runs/show-run-job';
 import { useRunsStore } from '../stores/useRunsStore';
 import { REVIEW_SESSION, GUARD_DIALOG } from './review.constants';
 import { SELECTOR } from './review-dom.constants';
+import { checkEditorLayout } from './check-editor-layout';
 import { clickNamed } from './click-named';
 import { named } from './named';
 import { pickInPalette } from './pick-in-palette';
@@ -78,7 +79,10 @@ export default defineReviewStep({
     const picked = await pickInPalette(tour, REVIEW_SESSION);
     const editor = picked && await waitText(tour, 'Edit session', () => layer(tour));
     tour.check('session-search-entry', editor, 'the palette lists the session and picking it opens Edit session', 'the session search entry did not open its editor');
-    if (editor) await tour.capture('editor');
+    if (editor) {
+      await checkEditorLayout(tour);
+      await tour.capture('editor');
+    }
     await guardBuilder(tour);
   },
 });

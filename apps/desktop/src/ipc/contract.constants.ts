@@ -38,6 +38,7 @@ const APP_CHANNELS = defineChannels({
   templatesRemove: invoke<(id: string) => Promise<void>>()('ap:templates:remove'),
   sessionsList: invoke<() => Promise<Session[]>>()('ap:sessions:list'),
   sessionsRun: invoke<(template: SessionTemplate) => Promise<Session>>()('ap:sessions:run'),
+  sessionsOpenDirect: invoke<(template: SessionTemplate) => Promise<AdminLobby>>()('ap:sessions:openDirect'),
   sessionsRunDirect: invoke<(template: SessionTemplate) => Promise<AdminLobby>>()('ap:sessions:runDirect'),
   sessionsSyncDirect: invoke<(template: SessionTemplate) => Promise<AdminLobby>>()('ap:sessions:syncDirect'),
   sessionsStop: invoke<(id: string) => Promise<Session | undefined>>()('ap:sessions:stop'),

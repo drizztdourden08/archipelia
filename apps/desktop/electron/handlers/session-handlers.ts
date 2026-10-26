@@ -4,6 +4,7 @@ import { assertSafeName } from '@drizztdourden08/brock-core/storage';
 import { APP_CHANNELS } from '../../src/ipc/contract.constants';
 import { runJobId } from '@archipelia/model';
 import { hostSlotOf } from '../sessions/host-slot-of';
+import { openDirect } from '../sessions/open-direct';
 import { runDirect } from '../sessions/run-direct';
 import { syncDirect } from '../sessions/sync-direct';
 
@@ -17,6 +18,7 @@ const sessionHandlers: HandlerGroup = {
       const ops = await admins.opsFor(serverId);
       return { act: ops.act, list: ops.list, slotOf: hostSlotOf(installed, presets) };
     };
+    ctx.handle(APP_CHANNELS.sessionsOpenDirect, async (_event, template) => openDirect(template, await directDeps(template.direct?.serverId ?? '')));
     ctx.handle(APP_CHANNELS.sessionsRunDirect, async (_event, template) => runDirect(template, await directDeps(template.direct?.serverId ?? '')));
     ctx.handle(APP_CHANNELS.sessionsSyncDirect, async (_event, template) => syncDirect(template, await directDeps(template.direct?.serverId ?? '')));
     ctx.handle(APP_CHANNELS.sessionsStop, (_event, id) => sessions.stop(id));

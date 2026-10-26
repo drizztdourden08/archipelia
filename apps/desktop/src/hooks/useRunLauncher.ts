@@ -8,6 +8,7 @@ import { findLaunchedRun } from '../runs/find-launched-run';
 import { launchOf } from '../runs/launch-of';
 import type { RunLaunch } from '../runs/run-launch.type';
 import { useRunsStore } from '../stores/useRunsStore';
+import { logFailure } from './log-failure';
 import { useAppNavigation } from './useAppNavigation';
 
 const useRunLauncher = () => {
@@ -35,7 +36,9 @@ const useRunLauncher = () => {
       await (template.direct ? appApi().sessionsRunDirect(template) : run(template));
     } catch (err) {
       setLaunch(null);
-      toast(`${template.name} did not run: ${(err as Error).message}`, { variant: 'danger' });
+      const sentence = `${template.name} did not run. The app log has the cause.`;
+      logFailure(sentence, err);
+      toast(sentence, { variant: 'danger' });
     }
   }, [run]);
 

@@ -6,7 +6,7 @@ import type { RunLaunch } from './run-launch.type';
 
 const launchOf = ({ id, direct }: SessionTemplate, startedAt: number): RunLaunch | null => {
   if (!direct) return { templateId: id, startedAt };
-  return direct.serverId === LOCAL_SERVER ? { templateId: lobbyTemplateId(direct.lobbyId), startedAt } : null;
+  return direct.serverId === LOCAL_SERVER && direct.lobbyId ? { templateId: lobbyTemplateId(direct.lobbyId), startedAt } : null;
 };
 
 export { launchOf };

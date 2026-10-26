@@ -1,9 +1,10 @@
 /* @layer renderer-app @kind logic */
 import type { AppReviewTour } from '@drizztdourden08/brock-react';
 import { appApi } from '../ipc/app-api';
-import { HOST_UI } from './review.constants';
+import { DIRECT_UI, HOST_UI } from './review.constants';
 import { SELECTOR } from './review-dom.constants';
 import { clickNamed } from './click-named';
+import { nameOf } from './name-of';
 import { waitNamed } from './wait-named';
 import { waitText } from './wait-text';
 
@@ -14,7 +15,7 @@ const modeNow = async () => (await appApi().lobbyServerStatus()).options.mode;
 const openLan = async (tour: AppReviewTour) => {
   await clickNamed(tour, SELECTOR.radio, HOST_UI.lan, layer(tour) ?? undefined);
   const ask = await waitNamed(tour, SELECTOR.dialog, HOST_UI.askTitle);
-  tour.check('hosting-lan-asks', ask !== null, 'choosing My local network asks once, in plain words, before it opens a port', 'choosing My local network did not ask');
+  tour.check('hosting-lan-asks', ask !== null, 'choosing LAN asks once, in plain words, before it opens a port', 'choosing LAN did not ask');
   if (ask) await clickNamed(tour, SELECTOR.button, HOST_UI.open, ask);
   const running = await waitText(tour, /On your network at \S+:\d+/, () => layer(tour));
   tour.check('hosting-lan-running', running, 'the page shows On your network at the LAN address and port', 'the page does not show the LAN address');
@@ -32,10 +33,12 @@ const stopLan = async (tour: AppReviewTour) => {
   tour.check('hosting-stop', stopped, 'Stop switches the network mode back to Off', 'Stop did not switch the network mode off');
 };
 
+const placeChoice = (tour: AppReviewTour) => tour.findAll(SELECTOR.radio, layer(tour) ?? undefined).map(nameOf).filter((name) => [HOST_UI.local, HOST_UI.lan, HOST_UI.remote].some((label) => label.test(name)));
+
 const chooseHosting = async (tour: AppReviewTour) => {
-  const asked = await waitText(tour, /where to host/i, () => layer(tour));
-  const options = await waitText(tour, /This computer only[\s\S]*My local network \(LAN\)[\s\S]*A remote Archipelia server/, () => layer(tour));
-  tour.check('hosting-choice', asked && options, 'the Direct connection section asks where to host with three options', 'the Where to host choice is missing or incomplete');
+  const asked = await waitText(tour, DIRECT_UI.section, () => layer(tour));
+  const options = await tour.waitFor(() => (placeChoice(tour).length === 3 ? true : null));
+  tour.check('hosting-choice', asked && options === true, 'How players join offers one Where choice: Local, LAN and Remote', 'the Where choice is missing or incomplete');
   await tour.capture('lobby-hosting-private');
   await openLan(tour);
   await stopLan(tour);

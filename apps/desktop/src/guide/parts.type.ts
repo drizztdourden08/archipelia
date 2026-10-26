@@ -6,11 +6,9 @@ declare module '@drizztdourden08/tessera' {
     '@archipelia/desktop': {
       parts:
         | 'ArchipeliaServers'
-        | 'DirectConnection'
         | 'EngineSettings'
         | 'GameStore'
         | 'HomeView'
-        | 'HostChoice'
         | 'JoinSession'
         | 'LobbyMembers'
         | 'OldRuns'

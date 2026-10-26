@@ -8,7 +8,7 @@ const usage = {
   ],
   avoidWhen: [
     { case: 'The players the host adds by hand.', use: 'SessionBuilder' },
-    { case: 'The settings of the direct connection and the results of the room.', use: 'DirectConnection' },
+    { case: 'The settings of the direct connection and the results of the room.', use: 'SessionBuilder' },
   ],
   rules: [
     'Pass the id of the server and of the lobby of the session; the view loads the lobby and follows its changes.',

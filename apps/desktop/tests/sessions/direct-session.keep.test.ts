@@ -4,6 +4,7 @@ import type { AdminLobby, SessionTemplate } from '@archipelia/model';
 import type { Bindings, HostLine } from '@drizztdourden08/archipelia-lobby-protocol/testing';
 import { connectWebSocket, createFakeClient, createScenarioKit, loadScenario } from '@drizztdourden08/archipelia-lobby-protocol/testing';
 import { startLobbyRig } from '@archipelia/server/testing';
+import { openDirect } from '../../electron/sessions/open-direct';
 import { runDirect } from '../../electron/sessions/run-direct';
 import { syncDirect } from '../../electron/sessions/sync-direct';
 import { joinRecord, startJoins } from '../lobbies/join-kit';
@@ -13,6 +14,7 @@ import { lobbyRequest } from '../../src/lobbies/lobby-request';
 import { launchOf } from '../../src/runs/launch-of';
 import { validateTemplate } from '../../src/views/SessionBuilder/behavior/template-validation';
 import { newTemplate } from '../../src/views/SessionBuilder/behavior/new-template';
+import { runAction } from '../../src/views/SessionBuilder/behavior/run-action';
 
 type Rig = Awaited<ReturnType<typeof startLobbyRig>>;
 
@@ -81,7 +83,44 @@ describe('a session that takes direct connections', () => {
     rig = await startLobbyRig();
     const { template } = await openSession(rig);
     await runDirect(template, directDeps(rig));
-    await expect(runDirect(template, directDeps(rig))).rejects.toThrow('Turn Allow direct connection off and on again');
+    await expect(runDirect(template, directDeps(rig))).rejects.toThrow('Open lobby opens a new one');
+  });
+
+  test('opens the lobby with no player and makes no seed, then refuses Run in plain words until a player is ready', async () => {
+    rig = await startLobbyRig();
+    const on = rig;
+    const draft = { ...sessionOf(), players: [], direct: { serverId: 'local', ...DIRECT } };
+    const deps = { ...directDeps(on), act: async (request: LobbyRequest) => actOn(on)(request.type === 'lobby.create' ? { ...request, params: { ...request.params, engine: ENGINE } } : request) };
+    const lobby = await openDirect(draft, deps);
+    expect(lobby.phase).toBe('open');
+    expect(on.templates).toHaveLength(0);
+    expect(await openDirect({ ...draft, direct: { ...draft.direct, lobbyId: lobby.id } }, deps)).toMatchObject({ id: lobby.id });
+    await expect(runDirect({ ...draft, direct: { ...draft.direct, lobbyId: lobby.id } }, deps)).rejects.toThrow('No player is ready yet');
+    await expect(runDirect(draft, deps)).rejects.toThrow('The lobby of this session is not open yet');
+    expect(on.templates).toHaveLength(0);
+  });
+});
+
+describe('the header action of the session editor', () => {
+  const handlers = { run: () => undefined, open: () => undefined };
+  const direct = { serverId: 'local', ...DIRECT } as const;
+
+  test('runs a session without direct connection only once it has a player', () => {
+    expect(runAction({ ...sessionOf(), players: [] }, undefined, handlers)).toMatchObject({ label: 'Run', reason: 'Add at least one player' });
+    expect(runAction(sessionOf(), undefined, handlers)).toEqual({ label: 'Run', reason: undefined, onClick: handlers.run });
+  });
+
+  test('opens the lobby first, then runs once a player is ready', async () => {
+    rig = await startLobbyRig();
+    const { lobby } = await openSession(rig);
+    const empty = { ...sessionOf(), players: [] };
+    expect(runAction({ ...empty, direct }, undefined, handlers)).toEqual({ label: 'Open lobby', onClick: handlers.open });
+    expect(runAction({ ...empty, direct: { ...direct, lobbyId: lobby.id } }, undefined, handlers).reason).toBe('Loading the lobby');
+    expect(runAction({ ...empty, direct: { ...direct, lobbyId: lobby.id } }, [lobby], handlers).reason).toContain('No player is ready yet');
+    expect(runAction({ ...sessionOf(), direct: { ...direct, lobbyId: lobby.id } }, [lobby], handlers).reason).toBeUndefined();
+    expect(runAction({ ...empty, direct: { ...direct, lobbyId: lobby.id } }, [{ ...lobby, phase: 'hosting' }], handlers).reason).toContain('running');
+    expect(runAction({ ...empty, direct: { ...direct, lobbyId: lobby.id } }, [{ ...lobby, phase: 'closed' }], handlers).label).toBe('Open lobby');
+    expect(runAction({ ...empty, direct: { ...direct, lobbyId: 'gone' } }, [lobby], handlers).label).toBe('Open lobby');
   });
 });
 
