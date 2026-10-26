@@ -10,7 +10,7 @@ const fromGithub = async ({ fetch: net, repo, stamp, old, now }: GithubParams): 
   const read = await fetchReadme({ fetch: net, repo, etag: same?.etag, url: same?.readmeUrl });
   const art = same?.art ?? await fetchArt(net, repo).catch(() => undefined);
   const kept = read.kind === 'same' ? same : undefined;
-  return { ...(kept ?? readmeFields(read)), version: RECORD_VERSION, stamp, fetchedAt: now, ...(art ? { art } : {}) };
+  return { ...(kept ?? readmeFields(read, repo)), version: RECORD_VERSION, stamp, fetchedAt: now, ...(art ? { art } : {}) };
 };
 
 export { fromGithub };

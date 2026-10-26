@@ -57,9 +57,9 @@ describe('parseGithubHome', () => {
 describe('a community world on GitHub', () => {
   const ok = { [README_URL]: () => textResponse(README, { etag: '"v1"' }), [ART_URL]: () => imageResponse() };
 
-  test('reads the README intro and the preview image, as plain text and a data uri', async () => {
+  test('keeps the README as markdown and the preview image as a data uri', async () => {
     const found = await ask(setup(ok).enricher);
-    expect(found?.summary).toBe('A community world for Timespinner that shuffles every item across time.');
+    expect(found?.markdown).toBe(README.trim());
     expect(found?.origin).toBe('github');
     expect(found?.art?.startsWith('data:image/png;base64,')).toBe(true);
   });
@@ -70,7 +70,7 @@ describe('a community world on GitHub', () => {
       [`${RAW}/master/README.md`]: () => textResponse(README), [ART_URL]: gone,
     });
     const found = await ask(t.enricher);
-    expect(found?.summary).toContain('community world');
+    expect(found?.markdown).toContain('community world');
     expect(found?.art).toBeUndefined();
   });
 
@@ -79,7 +79,7 @@ describe('a community world on GitHub', () => {
     await ask(t.enricher);
     const before = t.calls.length;
     t.advance(TTL_MS - 1);
-    expect((await ask(t.enricher))?.summary).toContain('community world');
+    expect((await ask(t.enricher))?.markdown).toContain('community world');
     expect(t.calls.length).toBe(before);
     expect([...t.cache.store.keys()]).toEqual(['enrich/ts_world.json']);
   });
@@ -95,7 +95,7 @@ describe('a community world on GitHub', () => {
     status = 304;
     t.advance(TTL_MS + 1);
     const again = await ask(t.enricher);
-    expect(again?.summary).toContain('community world');
+    expect(again?.markdown).toContain('community world');
     expect(again?.art).toBeDefined();
     const last = t.calls[t.calls.length - 1];
     expect(last?.url).toBe(README_URL);
@@ -129,7 +129,7 @@ describe('a community world on GitHub, offline and edge cases', () => {
     await ask(t.enricher);
     online = false;
     t.advance(TTL_MS + 1);
-    expect((await ask(t.enricher))?.summary).toContain('community world');
+    expect((await ask(t.enricher))?.markdown).toContain('community world');
   });
 
   test('a repo with no README is remembered for a day, not asked again', async () => {

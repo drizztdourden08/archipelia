@@ -44,7 +44,7 @@ describe('the limit on fetching', () => {
     const net = slowFetch();
     const enricher = enricherOn(net.fetchFn);
     const found = await Promise.all(WORLDS.slice(0, 8).map((apworld) => enricher.enrich({ apworld, source: 'index' })));
-    expect(found.every((entry) => entry?.summary !== undefined)).toBe(true);
+    expect(found.every((entry) => entry?.markdown !== undefined)).toBe(true);
     expect(net.state.peak).toBeLessThanOrEqual(MAX_PARALLEL);
     expect(net.state.peak).toBeGreaterThan(1);
     expect(net.state.urls.some((url) => url.includes('world_9'))).toBe(false);

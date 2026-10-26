@@ -12,6 +12,7 @@ const GAME_STATUS = defineStatuses({
   adding: { label: 'Adding...', tone: 'info', icon: 'download' },
   updating: { label: 'Updating...', tone: 'info', icon: 'download' },
   removing: { label: 'Removing...', tone: 'info', icon: 'trash-2' },
+  'needs-package': { label: 'Needs a package Archipelia cannot install', tone: 'warning', icon: 'circle-alert' },
   failed: { label: 'Failed', tone: 'danger', icon: 'circle-alert' },
 });
 
