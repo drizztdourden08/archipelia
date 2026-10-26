@@ -6,7 +6,7 @@ import { cardPropsOf } from '../../src/views/GameStore/behavior/card-props';
 import { groupSections } from '../../src/views/GameStore/behavior/group-sections';
 
 const noop = () => {};
-const handlers = { isBusy: () => false, errorOf: () => null, needOf: () => undefined, open: noop, installWorld: noop, remove: noop, openHome: noop };
+const handlers = { isBusy: () => false, errorOf: () => null, needOf: () => undefined, open: noop, installWorld: noop, remove: noop, openHome: noop, getPackage: noop };
 
 const firstParty = (patch: Partial<CatalogEntry> = {}): CatalogEntry => ({
   apworld: 'relic_of_the_past', game: 'Relic of the Past', displayName: 'Relic of the Past', tags: [], source: 'first-party', stability: 'unknown',

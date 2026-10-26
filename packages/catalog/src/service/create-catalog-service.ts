@@ -17,6 +17,8 @@ import { removeWorld } from '../install/remove-world';
 import { createEnricher } from '../enrich/create-enricher';
 import { createEnrichEntry } from '../enrich/create-enrich-entry';
 import { officialEntries } from '../official/official-entries';
+import { createSourceService } from '../source/create-source-service';
+import { createWorldInfo } from './create-world-info';
 import { withListedGuides } from '../official/with-listed-guides';
 import type { CatalogServiceDeps, CatalogView, InstallRequest, Latest } from './catalog-service.type';
 import { CACHE_DIR } from './catalog-service.constants';
@@ -87,7 +89,9 @@ const createCatalogService = ({ games: files, cache, engineDir, fetch: fetchFn, 
     cache, engineDir, entryOf: createEnrichEntry(engineDir, () => latest?.entries ?? []), ...(fetchFn ? { fetch: fetchFn } : {}),
   });
 
-  return { enrich, install, official, packages, read, remove };
+  const sources = createSourceService({ engineDir, worldOf: createWorldInfo(indexEntry, enrich), ...(fetchFn ? { fetch: fetchFn } : {}) });
+
+  return { enrich, install, official, packages, read, remove, sources };
 };
 
 export { createCatalogService };

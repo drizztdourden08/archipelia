@@ -10,6 +10,7 @@ type CardHandlers = {
   installWorld: (request: InstallRequest, key: string) => void;
   remove: (row: GameRow) => void;
   openHome: (url: string) => void;
+  getPackage: (row: GameRow) => void;
 };
 
 type GameRowState = 'installed' | 'update' | 'available';
