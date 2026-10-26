@@ -1,5 +1,6 @@
 /* @layer renderer-app @kind component */
 import { Card, EmptyState, SectionHeader, Spinner, Stack } from '@drizztdourden08/tessera/primitives';
+import { TOUR_TARGET } from '../../../../hooks/tour-targets.constants';
 import type { SessionsCardProps } from './SessionsCard.type';
 import { SessionRow } from '@archipelia/design';
 import { templateMeta } from '../../behavior/template-meta';
@@ -10,7 +11,7 @@ const SessionsCard = ({ templates, total, loading, servers, isBusy, onEdit, onSt
     ? <EmptyState icon={<Spinner />} message="Loading your sessions" />
     : <EmptyState message={total ? 'No session matches' : 'No session yet. New session builds one.'} />;
   return (
-    <Card>
+    <Card data-tour={TOUR_TARGET.sessionsList}>
       <Stack gap="sm">
         <SectionHeader title={`Sessions · ${total}`} />
         {templates.length === 0

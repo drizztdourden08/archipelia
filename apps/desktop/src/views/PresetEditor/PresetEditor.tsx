@@ -3,6 +3,7 @@ import { useCallback } from 'react';
 import { Box, Callout, EmptyState, Stack, Text } from '@drizztdourden08/tessera/primitives';
 import { FormGroupTabs, SaveBar, ValidationSummary } from '@drizztdourden08/tessera/composites';
 import { valueOf } from '@archipelia/presets';
+import { TOUR_TARGET } from '../../hooks/tour-targets.constants';
 import { optionDomId } from './behavior/option-dom-id';
 import { usePresetEditor } from './behavior/usePresetEditor';
 import type { PresetEditorProps } from './PresetEditor.type';
@@ -34,16 +35,18 @@ const PresetEditor = (props: PresetEditorProps) => {
       {status?.tone === 'error' && <Box role="alert"><Callout tone="danger">{status.text}</Callout></Box>}
       {status?.tone === 'info' && <Text variant="caption" role="status" className="preset-editor__status">{status.text}</Text>}
       <ValidationSummary problems={items} onFocusField={jump} />
-      <FormGroupTabs
-        tabs={filter.tabs}
-        activeTab={filter.tab}
-        onTabChange={filter.setTab}
-        query={filter.query}
-        onQueryChange={filter.setQuery}
-        advanced={filter.showAdvanced}
-        onAdvancedChange={filter.advanced > 0 ? filter.setShowAdvanced : undefined}
-        advancedCount={filter.advanced}
-      />
+      <Box data-tour={TOUR_TARGET.presetsOptions}>
+        <FormGroupTabs
+          tabs={filter.tabs}
+          activeTab={filter.tab}
+          onTabChange={filter.setTab}
+          query={filter.query}
+          onQueryChange={filter.setQuery}
+          advanced={filter.showAdvanced}
+          onAdvancedChange={filter.advanced > 0 ? filter.setShowAdvanced : undefined}
+          advancedCount={filter.advanced}
+        />
+      </Box>
       <Box>
         {filter.visible.length === 0 && <EmptyState message="No option matches here." />}
         {filter.visible.map((def) => (

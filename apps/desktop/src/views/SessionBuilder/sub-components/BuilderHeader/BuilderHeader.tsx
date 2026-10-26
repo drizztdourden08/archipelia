@@ -2,13 +2,14 @@
 import { useCallback, useId } from 'react';
 import type { ChangeEvent } from 'react';
 import { Button, ButtonRow, Flex, Text, TextInput } from '@drizztdourden08/tessera/primitives';
+import { TOUR_TARGET } from '../../../../hooks/tour-targets.constants';
 import type { BuilderHeaderProps } from './BuilderHeader.type';
 
 const BuilderHeader = ({ name, saved, busy, action, onName, onSave }: BuilderHeaderProps) => {
   const handleName = useCallback((event: ChangeEvent<HTMLInputElement>) => onName(event.target.value), [onName]);
   const reasonId = useId();
   return (
-    <Flex justify="between" align="center" gap="sm" wrap>
+    <Flex justify="between" align="center" gap="sm" wrap data-tour={TOUR_TARGET.builderBar}>
       <Flex gap="sm" align="center" wrap>
         <TextInput aria-label="Session name" value={name} placeholder="Session name" onChange={handleName} />
         {saved && <Text variant="caption">Saved</Text>}

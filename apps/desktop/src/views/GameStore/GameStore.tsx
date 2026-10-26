@@ -5,6 +5,7 @@ import { FilterBar, VirtualGrid } from '@drizztdourden08/tessera/composites';
 import type { VirtualGridHandle } from '@drizztdourden08/tessera/composites';
 import { ErrorCallout, PackageConsentDialog, PackageSourceDialog } from '@archipelia/design';
 import { useMemo, useRef, useState } from 'react';
+import { TOUR_TARGET } from '../../hooks/tour-targets.constants';
 import { gameAnchor } from './behavior/game-anchor';
 import { GAME_FIELDS } from './behavior/game-schema.constants';
 import { gridSectionsOf } from './behavior/grid-sections-of';
@@ -31,7 +32,7 @@ const GameStore = ({ tab }: GameStoreProps) => {
 
   return (
     <Box className="game-store">
-      <Box data-tour="game-store-tools">
+      <Box data-tour={TOUR_TARGET.gamesTools}>
         <FilterBar
           search={store.query}
           onSearchChange={store.setQuery}
@@ -48,7 +49,7 @@ const GameStore = ({ tab }: GameStoreProps) => {
         />
       </Box>
       {store.error && <ErrorCallout message={store.error} onRetry={store.loadFailed ? store.retry : undefined} />}
-      <Box className="game-store__body">
+      <Box className="game-store__body" data-tour={TOUR_TARGET.gamesGrid}>
         {store.shown === 0
           ? (
             <EmptyState icon={store.loading ? <Spinner /> : undefined} message={EMPTY_TEXT[store.empty]}

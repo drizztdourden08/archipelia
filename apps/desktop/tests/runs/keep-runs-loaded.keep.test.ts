@@ -1,27 +1,12 @@
 /* @layer tests @kind test */
+import { resetAllSessionStores } from '@drizztdourden08/brock-react';
 import { afterEach, beforeEach, expect, test, vi } from 'vitest';
 import { keepRunsLoaded } from '../../src/runs/keep-runs-loaded';
 import { useRunsStore } from '../../src/stores/useRunsStore';
 
-const { sessionsList, resets } = vi.hoisted(() => ({ sessionsList: vi.fn(), resets: [] as (() => void)[] }));
+const { sessionsList } = vi.hoisted(() => ({ sessionsList: vi.fn() }));
 
 vi.mock('../../src/ipc/app-api', () => ({ appApi: () => ({ sessionsList }) }));
-
-vi.mock('@drizztdourden08/brock-react', async () => {
-  const { create } = await import('zustand');
-  type Initializer = Parameters<ReturnType<typeof create<object>>>[0];
-  return {
-    createSessionStore: (initializer: Initializer) => {
-      const store = create<object>()(initializer);
-      const initial = store.getInitialState();
-      resets.push(() => store.setState(initial, true));
-      return store;
-    },
-    getAppLog: () => ({ log: () => {} }),
-  };
-});
-
-const resetAllSessionStores = () => resets.forEach((reset) => reset());
 
 const settle = () => new Promise((resolve) => setTimeout(resolve, 0));
 
