@@ -12,7 +12,9 @@ import { listInstalled } from './list-installed';
 import { saveInstalled } from './save-installed';
 import { placeWorld } from './place-world';
 import { placedPath } from './placed-path';
-import { worldPackages } from './world-packages';
+import { installWheels } from '../wheel/install-wheels';
+import { recordedExtras } from './recorded-extras';
+import { worldNeeds } from './world-needs';
 
 const assertNoClash = (installed: InstalledGame[], apworld: string, path: string, game?: string) => {
   const clash = installed.find((other) => other.apworld !== apworld && (other.path === path || other.game === game));
@@ -31,12 +33,14 @@ const detectGame = async (job: InstallJob, others: InstalledGame[], context: Loa
 const commitInstall = async (job: InstallJob): Promise<InstalledGame> => {
   const { runtime, files, info, apworld, layout } = job;
   const label = job.game ?? apworld;
-  const declared = job.source === 'official' ? [] : worldPackages(info, label);
+  const { wheels, declared } = await worldNeeds(job, label);
   const installed = await listInstalled(files);
   assertNoClash(installed, apworld, placedPath(layout, info.module), job.game);
   const packages = (await resolveWorldPackages(runtime, label, declared)).map((found) => found.pin);
-  assertPackagesAccepted(label, packages, job.hash.sha256, job.packages);
+  const sources = wheels.map((wheel) => wheel.source);
+  assertPackagesAccepted(label, { pins: packages, sha256: job.hash.sha256, sources }, job.packages);
   await installWorldPackages(runtime, label, packages);
+  await installWheels(runtime, label, wheels);
   const placement = await placeWorld({ runtime, file: job.file, info, layout });
   try {
     const context: LoadContext = { label, module: info.module, packages: declared };
@@ -46,8 +50,7 @@ const commitInstall = async (job: InstallJob): Promise<InstalledGame> => {
     const record: InstalledGame = {
       apworld, game, version: job.version ?? info.manifest.world_version ?? 'unknown', source: job.source,
       installedAt: Date.now(), schema, ...job.hash, layout, path: placement.path, requires: job.requires,
-      ...(packages.length > 0 ? { packages } : {}),
-      ...(job.trust ? { trust: job.trust } : {}),
+      ...recordedExtras(packages, sources, job.trust),
     };
     await saveInstalled(files, record);
     await placement.commit();

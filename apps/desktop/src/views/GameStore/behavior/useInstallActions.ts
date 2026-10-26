@@ -20,9 +20,11 @@ const useInstallActions = ({ guard, rows }: InstallActionsParams) => {
   const { ask } = consent;
   const { needOf, track } = useInstallNeeds();
 
-  const installConsented = useCallback(async (request: InstallRequest, title: string) => {
+  const installConsented = useCallback(async (request: InstallRequest, title: string): Promise<boolean> => {
     const ready = await consentedRequest({ request, title, preview: (asked) => appApi().gamesPackages(asked), ask });
-    if (ready) toastInstalled(await install(ready));
+    if (!ready) return false;
+    toastInstalled(await install(ready));
+    return true;
   }, [ask, install]);
 
   const installWorld = useCallback((request: InstallRequest, key: string) => {

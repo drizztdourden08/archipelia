@@ -21,6 +21,11 @@ const gamesHandlers: HandlerGroup = {
     ctx.handle(APP_CHANNELS.gamesInstall, (_event, request) => wired(catalog.install(request)));
     ctx.handle(APP_CHANNELS.gamesPackages, (_event, request) => wired(catalog.packages(request)));
     ctx.handle(APP_CHANNELS.gamesRemove, (_event, apworld) => catalog.remove(apworld));
+    ctx.handle(APP_CHANNELS.sourcesSuggest, (_event, request) => catalog.sources.suggest(request));
+    ctx.handle(APP_CHANNELS.sourcesPlan, (_event, ref) => catalog.sources.plan(ref));
+    ctx.handle(APP_CHANNELS.sourcesPypiPreview, (_event, ref) => catalog.sources.pypiPreview(ref));
+    ctx.handle(APP_CHANNELS.sourcesPypiInstall, (_event, request) => catalog.sources.pypiInstall(request));
+    ctx.handle(APP_CHANNELS.sourcesWheel, (_event, request) => catalog.sources.wheel(request));
   },
 };
 

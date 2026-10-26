@@ -8,13 +8,13 @@ import { hashFile } from './hash-file';
 import { previewPackages } from './preview-packages';
 import { readApworld } from './read-apworld';
 
-const previewWorldPackages = async ({ engineDir, entry, version, fetch: request = fetch }: PreviewWorldParams): Promise<PackagePreview> => {
+const previewWorldPackages = async ({ engineDir, entry, version, fetch: request = fetch, wheels }: PreviewWorldParams): Promise<PackagePreview> => {
   if (entry.unavailable) throw new Error(`${entry.displayName}: ${entry.unavailable}`);
   const runtime = await readRuntime(engineDir);
   const { target } = chooseRelease(entry, version, runtime.apVersion);
   const download = await downloadWorld(target.url, request);
   try {
-    return await previewPackages(runtime, entry.displayName, await readApworld(download.file), await hashFile(download.file));
+    return await previewPackages(runtime, entry.displayName, { info: await readApworld(download.file), sha256: await hashFile(download.file) }, wheels);
   } finally {
     await download.dispose();
   }

@@ -1,6 +1,8 @@
 /* @layer renderer-app @kind types */
-import type { ConsentPackage } from '@archipelia/design';
+import type { ConsentPackage, ConsentWheel } from '@archipelia/design';
 
-type PendingConsent = { title: string; packages: readonly ConsentPackage[] };
+type PendingConsent = { title: string; packages: readonly ConsentPackage[]; wheels: readonly ConsentWheel[] };
 
-export type { PendingConsent };
+type AskConsent = (title: string, packages: readonly ConsentPackage[], wheels?: readonly ConsentWheel[]) => Promise<boolean>;
+
+export type { AskConsent, PendingConsent };

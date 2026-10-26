@@ -3,7 +3,7 @@ import { openExternal, SearchAnchor } from '@drizztdourden08/brock-react';
 import { Box, Button, EmptyState, Icon, IconButton, Spinner, Tooltip } from '@drizztdourden08/tessera/primitives';
 import { FilterBar, VirtualGrid } from '@drizztdourden08/tessera/composites';
 import type { VirtualGridHandle } from '@drizztdourden08/tessera/composites';
-import { ErrorCallout, PackageConsentDialog } from '@archipelia/design';
+import { ErrorCallout, PackageConsentDialog, PackageSourceDialog } from '@archipelia/design';
 import { useMemo, useRef, useState } from 'react';
 import { TOUR_TARGET } from '../../hooks/tour-targets.constants';
 import { gameAnchor } from './behavior/game-anchor';
@@ -11,9 +11,10 @@ import { GAME_FIELDS } from './behavior/game-schema.constants';
 import { gridSectionsOf } from './behavior/grid-sections-of';
 import { rowKey } from './behavior/row-key';
 import { useGameStore } from './behavior/useGameStore';
+import { useCardHandlers } from './behavior/useCardHandlers';
 import { useRevealGame } from './behavior/useRevealGame';
 import { EMPTY_TEXT, TILE } from './GameStore.constants';
-import type { GameRow, GameStoreProps } from './GameStore.type';
+import type { GameStoreProps } from './GameStore.type';
 import { GameDetailsDialog } from './sub-components/GameDetailsDialog';
 import { GameRowCard } from './sub-components/GameRowCard';
 import { GameStatusBar } from './sub-components/GameStatusBar';
@@ -23,7 +24,7 @@ import './GameStore.css';
 const GameStore = ({ tab }: GameStoreProps) => {
   const store = useGameStore(tab);
   const [opened, setOpened] = useState<string | null>(null);
-  const handlers = { isBusy: store.isBusy, errorOf: store.errorOf, needOf: store.needOf, open: (row: GameRow) => setOpened(rowKey(row)), installWorld: store.installWorld, remove: store.remove, openHome: openExternal };
+  const { handlers, sourceDialog } = useCardHandlers({ store, setOpened });
   const sections = useMemo(() => gridSectionsOf(store.sections, tab, store.filtered), [store.sections, tab, store.filtered]);
   const grid = useRef<VirtualGridHandle>(null);
   useRevealGame(sections, grid);
@@ -70,6 +71,7 @@ const GameStore = ({ tab }: GameStoreProps) => {
             />
           )}
       </Box>
+      {sourceDialog && <PackageSourceDialog {...sourceDialog} />}
       {store.consent.pending && (
         <PackageConsentDialog {...store.consent.pending} onAccept={store.consent.accept} onCancel={store.consent.cancel} onOpenLink={openExternal} />
       )}

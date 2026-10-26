@@ -15,6 +15,7 @@ declare module '@drizztdourden08/tessera' {
         | 'OptionControl'
         | 'OptionFieldRow'
         | 'PackageConsentDialog'
+        | 'PackageSourceDialog'
         | 'PlayerStatusRow'
         | 'RunRow'
         | 'ServerOptionsForm'

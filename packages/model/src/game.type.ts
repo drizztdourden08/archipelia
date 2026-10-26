@@ -1,5 +1,6 @@
 /* @layer core @kind types */
 import type { GameSchema } from './options.type';
+import type { PackageSource } from './package-source/package-source.type';
 
 type GameSource = 'official' | 'index' | 'file' | 'first-party';
 
@@ -53,6 +54,7 @@ type InstalledGame = {
   path: string;
   requires: string[];
   packages?: string[];
+  sources?: PackageSource[];
   trust?: WorldTrust;
 };
 

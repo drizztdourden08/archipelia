@@ -47,6 +47,7 @@ const APP_TREE = [
     },
   },
   { at: ['layout', 'window chrome'], answers: { 'the bar of a hosted room': null } },
+  { at: ['something over the page'], answers: { 'a way to pick where a missing package comes from': null } },
 ] as const satisfies AppTree;
 
 export { APP_TREE };

@@ -1,0 +1,10 @@
+/* @layer renderer-app @kind style */
+.package-source__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.package-source__card[data-muted] {
+  opacity: var(--opacity-muted);
+}

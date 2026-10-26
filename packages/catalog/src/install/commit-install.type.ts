@@ -18,6 +18,7 @@ type InstallJob = {
   requires: string[];
   trust?: WorldTrust;
   packages?: PackageConsent;
+  wheels?: string[];
 };
 
 export type { InstallJob };
