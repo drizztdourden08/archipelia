@@ -14,7 +14,7 @@ import { appTours } from '../.brock/tours';
 import { appWidgetKits } from '../.brock/widget-kits';
 import { appStartupPrompts } from '../.brock/startup';
 import { appToolbars } from '../.brock/toolbars';
-import { SETTINGS } from './main.constants';
+import { SETTINGS, TITLE_BAR_MENU } from './main.constants';
 import { product } from './product';
 import { quitWhileHosting } from './rooms/quit-while-hosting';
 import type { AppSettings } from './settings.type';
@@ -35,6 +35,7 @@ createRoot(root).render(
       beforeQuit={quitWhileHosting}
       review={appReview}
       titleBar={appTitleBar}
+      titleBarMenu={TITLE_BAR_MENU}
       tours={appTours}
       widgetKits={appWidgetKits}
       startupPrompts={appStartupPrompts}

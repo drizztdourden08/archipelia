@@ -2,10 +2,10 @@
 import { buildScreenTree, lazyComponent } from '@drizztdourden08/brock-react';
 import config from '../src/screens/screens.config';
 import { searchIndex } from './search';
-import { meta as dataOldRunsPageMeta } from '../src/screens/data/old-runs.page';
-import { meta as dataStoragePageMeta } from '../src/screens/data/storage.page';
 import { meta as multiworldAppEnginePageMeta } from '../src/screens/multiworld/app/engine.page';
 import MultiworldAppGeneralSettings, { meta as multiworldAppGeneralSettingsMeta } from '../src/screens/multiworld/app/general.settings';
+import { meta as multiworldAppOldRunsPageMeta } from '../src/screens/multiworld/app/old-runs.page';
+import { meta as multiworldAppStoragePageMeta } from '../src/screens/multiworld/app/storage.page';
 import { meta as multiworldHomeHeroMeta } from '../src/screens/multiworld/home.hero';
 import MultiworldHostingArchipelagoGgSettings, { meta as multiworldHostingArchipelagoGgSettingsMeta } from '../src/screens/multiworld/hosting/archipelago-gg.settings';
 import MultiworldHostingHostingSettings, { meta as multiworldHostingHostingSettingsMeta } from '../src/screens/multiworld/hosting/hosting.settings';
@@ -26,10 +26,10 @@ import { meta as multiworldTopSessionsPageMeta } from '../src/screens/multiworld
 import { meta as sessionBaseMeta } from '../src/screens/session.base';
 
 const screenTree = buildScreenTree(config, [
-  { kind: 'page', bucket: 'data', id: 'old-runs', component: lazyComponent(() => import('../src/screens/data/old-runs.page')), meta: dataOldRunsPageMeta },
-  { kind: 'page', bucket: 'data', id: 'storage', component: lazyComponent(() => import('../src/screens/data/storage.page')), meta: dataStoragePageMeta },
   { kind: 'page', bucket: 'multiworld', group: 'app', id: 'engine', component: lazyComponent(() => import('../src/screens/multiworld/app/engine.page')), meta: multiworldAppEnginePageMeta },
   { kind: 'settings', bucket: 'multiworld', group: 'app', id: 'general', sections: MultiworldAppGeneralSettings, meta: multiworldAppGeneralSettingsMeta },
+  { kind: 'page', bucket: 'multiworld', group: 'app', id: 'old-runs', component: lazyComponent(() => import('../src/screens/multiworld/app/old-runs.page')), meta: multiworldAppOldRunsPageMeta },
+  { kind: 'page', bucket: 'multiworld', group: 'app', id: 'storage', component: lazyComponent(() => import('../src/screens/multiworld/app/storage.page')), meta: multiworldAppStoragePageMeta },
   { kind: 'hero', bucket: 'multiworld', id: 'home', component: lazyComponent(() => import('../src/screens/multiworld/home.hero')), meta: multiworldHomeHeroMeta },
   { kind: 'settings', bucket: 'multiworld', group: 'hosting', id: 'archipelago-gg', sections: MultiworldHostingArchipelagoGgSettings, meta: multiworldHostingArchipelagoGgSettingsMeta },
   { kind: 'settings', bucket: 'multiworld', group: 'hosting', id: 'hosting', sections: MultiworldHostingHostingSettings, meta: multiworldHostingHostingSettingsMeta },
