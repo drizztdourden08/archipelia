@@ -5,8 +5,7 @@ type EnrichRequest = { apworld: string; source: GameSource };
 
 type GameEnrichment = {
   apworld: string;
-  summary: string;
-  details?: string;
+  markdown?: string;
   art?: string;
   origin: 'engine' | 'github';
 };
@@ -15,8 +14,7 @@ type EnrichRecord = {
   version: number;
   stamp: string;
   fetchedAt: number;
-  summary?: string;
-  details?: string;
+  markdown?: string;
   art?: string;
   etag?: string;
   readmeUrl?: string;
@@ -36,10 +34,6 @@ type EnrichPlan = { entry: EnrichEntry; stamp: string; repo?: GithubRepo };
 
 type GithubParams = { fetch: typeof fetch; repo: GithubRepo; stamp: string; old: EnrichRecord | undefined; now: number };
 
-type TextBlock = { heading: string; text: string; prose: boolean };
-
-type Intro = { summary?: string; details?: string };
-
 type GithubRepo = { owner: string; repo: string };
 
 type ReadmeRead =
@@ -51,4 +45,4 @@ type ReadmeParams = { fetch: typeof fetch; repo: GithubRepo; etag?: string | und
 
 type DocsParams = { engineDir: string; apworld: string; game: string; file?: string };
 
-export type { DocsParams, EnrichDeps, EnrichEntry, EnrichPlan, EnrichRecord, EnrichRequest, GameEnrichment, GithubParams, GithubRepo, Intro, ReadmeParams, ReadmeRead, TextBlock };
+export type { DocsParams, EnrichDeps, EnrichEntry, EnrichPlan, EnrichRecord, EnrichRequest, GameEnrichment, GithubParams, GithubRepo, ReadmeParams, ReadmeRead };

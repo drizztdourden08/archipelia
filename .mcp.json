@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "coord-dashboard": {
+      "command": "cmd",
+      "args": [
+        "/c",
+        "dashboard",
+        "mcp",
+        "--project",
+        "archipelia"
+      ]
+    }
+  }
+}
