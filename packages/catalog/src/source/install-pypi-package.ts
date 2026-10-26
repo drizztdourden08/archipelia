@@ -9,7 +9,7 @@ import type { PlanDeps } from './source.type';
 const installPypiPackage = async (deps: PlanDeps, ref: SourceRef, accepted: string[]): Promise<void> => {
   const { packages } = await previewPypiPackage(deps, ref);
   const pins = packages.map((entry) => entry.pin);
-  assertPackagesAccepted(ref.module, pins, '', { sha256: '', packages: accepted });
+  assertPackagesAccepted(ref.module, { pins, sha256: '' }, { sha256: '', packages: accepted });
   await installWorldPackages(await readRuntime(await deps.engineDir()), ref.module, pins);
 };
 

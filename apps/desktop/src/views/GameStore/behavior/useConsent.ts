@@ -1,7 +1,6 @@
 /* @layer renderer-app @kind hook */
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { ConsentPackage } from '@archipelia/design';
-import type { PendingConsent } from './useConsent.type';
+import type { AskConsent, PendingConsent } from './useConsent.type';
 
 const useConsent = () => {
   const [pending, setPending] = useState<PendingConsent | null>(null);
@@ -12,9 +11,9 @@ const useConsent = () => {
     resolver.current = null;
     setPending(null);
   }, []);
-  const ask = useCallback((title: string, packages: readonly ConsentPackage[]) => new Promise<boolean>((resolve) => {
+  const ask = useCallback<AskConsent>((title, packages, wheels = []) => new Promise<boolean>((resolve) => {
     resolver.current = resolve;
-    setPending({ title, packages });
+    setPending({ title, packages, wheels });
   }), []);
   const accept = useCallback(() => answer(true), [answer]);
   const cancel = useCallback(() => answer(false), [answer]);

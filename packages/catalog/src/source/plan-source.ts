@@ -9,6 +9,7 @@ import { readRepoFacts } from './read-repo-facts';
 import { readSetupFiles } from './read-setup-files';
 import type { PlanDeps } from './source.type';
 import { treeFactsOf } from './tree-facts-of';
+import { wheelOffer } from '../wheel/wheel-offer';
 
 const planSource = async ({ client, fetch: lookup, engineDir }: PlanDeps, ref: SourceRef): Promise<SourcePlan> => {
   const facts = await readRepoFacts(client, ref);
@@ -20,7 +21,10 @@ const planSource = async ({ client, fetch: lookup, engineDir }: PlanDeps, ref: S
     engineDir().then(readRuntime),
   ]);
   const projectName = projectNameOf(files);
-  const pypi = projectName ? await pypiOffer(projectName, repo, lookup) : undefined;
+  const [pypi, offer] = await Promise.all([
+    projectName ? pypiOffer(projectName, repo, lookup) : undefined,
+    wheelOffer(client, repo, [ref.module, repo.repo, ...(projectName ? [projectName] : [])], runtime),
+  ]);
   return {
     ...repo,
     url: `https://github.com/${repo.owner}/${repo.repo}`,
@@ -31,6 +35,8 @@ const planSource = async ({ client, fetch: lookup, engineDir }: PlanDeps, ref: S
     ...treeFactsOf(tree),
     projectName,
     pypi,
+    wheel: offer.wheel,
+    wheelState: offer.state,
   };
 };
 

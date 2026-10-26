@@ -32,6 +32,16 @@ type SourcePin = { kind: 'tag' | 'head'; ref: string; sha: string; date?: string
 
 type SourcePypi = { name: string; version: string; linked: boolean };
 
+type SourceWheelFit = 'exact' | 'abi3' | 'pure';
+
+type SourceWheel = { tag: string; asset: string; size: number; digest: string | undefined; fit: SourceWheelFit; newest?: string | undefined };
+
+type SourceWheelState = 'found' | 'none' | 'unknown';
+
+type SourceWheelRequest = SourceRef & { tag: string; asset: string; typed?: string | undefined };
+
+type PackageSource = { repo: string; tag: string; asset: string; sha256: string; verified: boolean; name: string; version: string; newest?: string | undefined };
+
 type SourcePlan = {
   owner: string;
   repo: string;
@@ -45,6 +55,11 @@ type SourcePlan = {
   unsure: boolean;
   projectName?: string | undefined;
   pypi?: SourcePypi | undefined;
+  wheel?: SourceWheel | undefined;
+  wheelState: SourceWheelState;
 };
 
-export type { SourceCandidate, SourceOrigin, SourcePin, SourcePlan, SourcePypi, SourcePypiInstall, SourceRef, SourceSuggestions, SourceWarning, SuggestRequest };
+export type {
+  PackageSource, SourceCandidate, SourceOrigin, SourcePin, SourcePlan, SourcePypi, SourcePypiInstall, SourceRef, SourceSuggestions, SourceWarning, SourceWheel,
+  SourceWheelFit, SourceWheelRequest, SourceWheelState, SuggestRequest,
+};

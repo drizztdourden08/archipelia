@@ -8,7 +8,7 @@ import { commitInstall } from './commit-install';
 import { hashDecision } from './hash-decision';
 import { hashFile } from './hash-file';
 
-const installFromFile = async ({ engineDir, files, path, packages }: InstallFromFileParams): Promise<InstalledGame> => {
+const installFromFile = async ({ engineDir, files, path, packages, wheels }: InstallFromFileParams): Promise<InstalledGame> => {
   const runtime = await readRuntime(engineDir);
   const info = await readApworld(path);
   const apworld = assertSafeName(info.module, 'apworld');
@@ -16,6 +16,7 @@ const installFromFile = async ({ engineDir, files, path, packages }: InstallFrom
     runtime, files, file: path, info, apworld, game: info.manifest.game, source: 'file', layout: 'apworld',
     hash: hashDecision(undefined, await hashFile(path), path), requires: [],
     ...(packages ? { packages } : {}),
+    ...(wheels ? { wheels } : {}),
   });
 };
 

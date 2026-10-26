@@ -5,7 +5,7 @@ import type { Fetch } from './fetch-file.type';
 import type { PackageConsent } from './package-consent.type';
 
 type InstallWorldParams = {
-  engineDir: string; files: DataFiles; entry: CatalogEntry; version: string; fetch?: Fetch; trust?: TrustDeps; packages?: PackageConsent;
+  engineDir: string; files: DataFiles; entry: CatalogEntry; version: string; fetch?: Fetch; trust?: TrustDeps; packages?: PackageConsent; wheels?: string[];
 };
 
 export type { InstallWorldParams };

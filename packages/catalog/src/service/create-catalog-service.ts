@@ -18,6 +18,8 @@ import { createEnricher } from '../enrich/create-enricher';
 import { createEnrichEntry } from '../enrich/create-enrich-entry';
 import { officialEntries } from '../official/official-entries';
 import { createSourceService } from '../source/create-source-service';
+import { wheelIdsOf } from '../wheel/wheel-ids-of';
+import { consentOf } from './consent-of';
 import { createWorldInfo } from './create-world-info';
 import { withListedGuides } from '../official/with-listed-guides';
 import type { CatalogServiceDeps, CatalogView, InstallRequest, Latest } from './catalog-service.type';
@@ -65,7 +67,7 @@ const createCatalogService = ({ games: files, cache, engineDir, fetch: fetchFn, 
   const install = async (request: InstallRequest): Promise<InstalledGame> => {
     const base = { engineDir: await engineDir(), files };
     if (request.kind === 'official') return installOfficial({ ...base, apworld: request.apworld });
-    const consent = request.acceptPackages ? { packages: request.acceptPackages } : {};
+    const consent = consentOf(request);
     if (request.kind === 'file') {
       return withTempFile(request.fileName, request.bytes, (path) => installFromFile({ ...base, path, ...consent }));
     }
@@ -78,9 +80,11 @@ const createCatalogService = ({ games: files, cache, engineDir, fetch: fetchFn, 
 
   const packages = async (request: InstallRequest): Promise<PackagePreview> => {
     if (request.kind === 'official') return { sha256: '', packages: [] };
-    if (request.kind === 'file') return withTempFile(request.fileName, request.bytes, async (path) => previewFilePackages(await engineDir(), path));
+    if (request.kind === 'file') return withTempFile(request.fileName, request.bytes, async (path) => previewFilePackages(await engineDir(), path, wheelIdsOf(request.wheels)));
     const { entry } = await indexEntry(request.apworld);
-    return previewWorldPackages({ engineDir: await engineDir(), entry, version: request.version, ...(fetchFn ? { fetch: fetchFn } : {}) });
+    return previewWorldPackages({
+      engineDir: await engineDir(), entry, version: request.version, wheels: wheelIdsOf(request.wheels), ...(fetchFn ? { fetch: fetchFn } : {}),
+    });
   };
 
   const remove = async (apworld: string) => removeWorld({ engineDir: await engineDir(), files, apworld });

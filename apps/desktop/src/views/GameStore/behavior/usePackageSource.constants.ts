@@ -7,6 +7,7 @@ const SOURCE_FAILURE = {
   search: 'Could not look for the package on GitHub.',
   plan: 'Could not read that project.',
   pypi: 'Could not install the package from the Python Package Index.',
+  wheel: 'Could not get the ready-made build from GitHub.',
 } as const;
 
 export { SEARCHING, SOURCE_FAILURE };

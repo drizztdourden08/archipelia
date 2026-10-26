@@ -3,15 +3,17 @@ import { Box, Button, Flex, Icon, Stack, Text } from '@drizztdourden08/tessera/p
 import { PLAN_TEXT } from '../../PackageSourceDialog.constants';
 import type { PlanStepProps } from '../../PackageSourceDialog.type';
 import { ManualSteps } from '../ManualSteps';
+import { WheelOffer } from '../WheelOffer';
 
-const PlanStep = ({ module, plan, checking, stillMissing, installing, onInstallFromPypi, onCheckAgain }: PlanStepProps) => {
-  const { pin, pypi, owner, repo } = plan;
+const PlanStep = ({ module, plan, checking, stillMissing, installing, onInstallFromPypi, onUseWheel, onCheckAgain }: PlanStepProps) => {
+  const { pin, pypi, owner, repo, wheel } = plan;
   const short = pin.sha.slice(0, 7);
   const version = pin.kind === 'tag' ? `${pin.ref} (${short})` : short;
   const date = pin.date ? new Date(pin.date).toLocaleDateString() : undefined;
   return (
     <Stack gap="lg">
-      <Text>{PLAN_TEXT.noBuild(version, date)}</Text>
+      <WheelOffer plan={plan} installing={installing} onUseWheel={onUseWheel} />
+      <Text>{wheel ? PLAN_TEXT.orBuild(version, date) : PLAN_TEXT.noBuild(version, date)}</Text>
       {pypi?.linked && (
         <Stack gap="sm" as="section" aria-label={pypi.name}>
           <Text>{PLAN_TEXT.pypiLinked(`${owner}/${repo}`, pypi.name)}</Text>

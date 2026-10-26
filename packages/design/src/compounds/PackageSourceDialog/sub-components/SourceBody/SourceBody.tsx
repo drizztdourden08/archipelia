@@ -20,7 +20,7 @@ const SourceBody = ({ module, step, ...handlers }: PackageSourceDialogProps) => 
     case 'plan':
       return (
         <PlanStep module={module} plan={step.plan} checking={step.checking} stillMissing={step.stillMissing} installing={step.installing}
-          onInstallFromPypi={handlers.onInstallFromPypi} onCheckAgain={handlers.onCheckAgain} />
+          onInstallFromPypi={handlers.onInstallFromPypi} onUseWheel={handlers.onUseWheel} onCheckAgain={handlers.onCheckAgain} />
       );
     case 'failed':
       return <ErrorCallout message={step.message} onRetry={handlers.onRetry} />;

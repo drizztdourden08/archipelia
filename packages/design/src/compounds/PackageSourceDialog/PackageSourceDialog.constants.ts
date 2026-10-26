@@ -52,7 +52,21 @@ const WARNING_HELP: Record<SourceWarning, string> = {
 
 const PLAN_TEXT = {
   noBuild: (version: string, date: string | undefined) =>
-    `There is no ready-made build. It has to be built from its source code, version ${version}${date ? ` from ${date}` : ''}.`,
+    `It has to be built from its source code, version ${version}${date ? ` from ${date}` : ''}.`,
+  orBuild: (version: string, date: string | undefined) =>
+    `You can also build it from its source code, version ${version}${date ? ` from ${date}` : ''}.`,
+  wheelFound: (asset: string, tag: string) => `A ready-made build for your setup exists: ${asset} from release ${tag}.`,
+  wheelFit: {
+    exact: 'It was built for this exact engine.',
+    abi3: 'It was built for this engine and for newer ones.',
+    pure: 'It is plain Python, so it runs on any engine.',
+  },
+  wheelOlder: (newest: string, tag: string) => `The newest release is ${newest}, but it has no build for this engine. This one is the older release ${tag}.`,
+  wheelAction: 'Use the ready-made build',
+  wheelNoDigest: 'GitHub published no checksum for this file, so Archipelia cannot check that it is the file the author uploaded. It will install it only if you ask.',
+  wheelType: (repo: string) => `Type ${repo} to use it anyway.`,
+  wheelNone: 'No ready-made build for this engine.',
+  wheelUnknown: 'Archipelia could not read the releases of this project just now, so it does not know if a ready-made build exists.',
   pypiLinked: (repo: string, name: string) => `Good news. ${repo} is on the Python Package Index as ${name}. Archipelia can install it the usual way.`,
   pypiUnlinked: (name: string) => `A project called ${name} is on the Python Package Index, but it does not point back to this repository, so Archipelia does not offer it.`,
   pypiAction: 'Install from the Python Package Index',
