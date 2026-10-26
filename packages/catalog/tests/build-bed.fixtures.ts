@@ -4,7 +4,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterAll, afterEach, beforeAll, beforeEach, vi } from 'vitest';
 import type { EngineRuntime, SourceBuildJob } from '@archipelia/model';
-import type { BuildRunner } from '../src/build/build.type';
+import type { BuildDeps, BuildRunner } from '../src/build/build.type';
 import { createBuilds } from '../src/build/create-builds';
 import { behaviour, engine, WHEEL_BYTES, ZIP } from './build-engine.fixtures';
 import { PLAN, SOURCE_URL, WHEEL } from './build.fixtures';
@@ -36,13 +36,13 @@ const registerBuildBed = () => {
   return { cached: () => readdir(join((behaviour.runtime as EngineRuntime).root, 'wheels')).catch(() => []) };
 };
 
-const bed = () => {
+const bed = (sandbox?: BuildDeps['sandbox']) => {
   const calls: Call[] = [];
   const logs: string[] = [];
   const { net, seen } = routedFetch({ [SOURCE_URL]: () => new Response(behaviour.served) });
   const holder: { builds?: ReturnType<typeof createBuilds> } = {};
   const run: BuildRunner = async (job, buildId) => {
-    const spec = (holder.builds as ReturnType<typeof createBuilds>).specOf(job, { buildId });
+    const spec = await (holder.builds as ReturnType<typeof createBuilds>).specOf(job, { buildId });
     calls.push({
       job, command: spec.command, args: spec.args, env: spec.env, sourceSeen: await exists(join(spec.cwd, 'src', 'pyproject.toml')),
       toolsFile: job === 'tools' ? await readFile(argAfter(spec.args, '-r'), 'utf8') : undefined,
@@ -50,7 +50,7 @@ const bed = () => {
     if (job === 'wheel' && behaviour.wheel) await writeFile(join(argAfter(spec.args, '-w'), WHEEL), behaviour.wheel);
     return behaviour.runs[job] ?? { status: 'done', code: 0, lines: [] };
   };
-  const builds = createBuilds({ fetch: net, engineDir: () => Promise.resolve('engine'), run, log: (message) => logs.push(message) });
+  const builds = createBuilds({ fetch: net, engineDir: () => Promise.resolve('engine'), run, sandbox, log: (message) => logs.push(message) });
   holder.builds = builds;
   const prepared = async () => {
     const made = await builds.prepare(PLAN);

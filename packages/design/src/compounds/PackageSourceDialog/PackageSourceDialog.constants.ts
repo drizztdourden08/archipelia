@@ -87,6 +87,8 @@ const PLAN_TEXT = {
 const BUILD_TEXT = {
   warning: (repo: string) =>
     `Building runs the code of ${repo} on your computer, with your access. Archipelia cannot check that code. Nothing is downloaded until you click Download the source.`,
+  confined: 'The build runs in a sandbox. It can write only to its private build folder, and it has no network while it builds.',
+  unconfined: 'The build runs with your user rights and can read your files and use the network.',
   how: 'Archipelia downloads the source at the version shown, checks it, installs the build tools into a private folder and builds there. The tools come from the Python Package Index as ready-made files. Only this project is built from source.',
   download: 'Download the source',
   preparing: 'Downloading the source and setting up a private build folder.',

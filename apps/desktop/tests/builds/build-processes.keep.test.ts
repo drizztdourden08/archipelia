@@ -9,7 +9,7 @@ import { defineBuildProcesses } from '../../electron/builds/define-build-process
 
 const ID = '123e4567-e89b-42d3-a456-426614174000';
 
-type Stored = { label: string; timeoutMs: number | undefined; parse: (raw: unknown) => unknown; resolve: (raw: unknown) => unknown; progress: (line: string) => void };
+type Stored = { label: string; timeoutMs: number | undefined; allow: unknown; parse: (raw: unknown) => unknown; resolve: (raw: unknown) => unknown; progress: (line: string) => void };
 
 const fakeProcesses = (outcome: ProcessJobOutcome = { status: 'done', exitCode: 0, tail: [] }) => {
   const defined = new Map<string, Stored>();
@@ -17,6 +17,7 @@ const fakeProcesses = (outcome: ProcessJobOutcome = { status: 'done', exitCode: 
     defined.set(id, {
       label: def.label,
       timeoutMs: def.timeoutMs,
+      allow: def.allow,
       parse: def.parse,
       resolve: (raw) => def.resolve(def.parse(raw), undefined as never),
       progress: (line) => { def.progress?.(line, 'stdout'); },
@@ -31,17 +32,18 @@ const SPEC = { command: 'python', args: [], cwd: 'work', env: {} };
 describe('the processes of a build', () => {
   test('declares the venv, the tools and the wheel step with a label and a time limit, and nothing else', () => {
     const { define, defined } = fakeProcesses();
-    defineBuildProcesses({ define }, () => SPEC, createBuildLines());
+    defineBuildProcesses({ define }, () => Promise.resolve(SPEC), createBuildLines());
     expect([...defined.keys()]).toEqual([BUILD_JOB.venv, BUILD_JOB.tools, BUILD_JOB.wheel]);
     for (const stored of defined.values()) {
       expect(stored.label).toMatch(/\w/);
       expect(stored.timeoutMs).toBeGreaterThan(0);
+      expect(stored.allow).toEqual({ env: ['PATH'] });
     }
   });
 
   test('takes only a build id from the renderer and lets the app build the command', () => {
     const { define, defined } = fakeProcesses();
-    const specOf = vi.fn(() => SPEC);
+    const specOf = vi.fn(() => Promise.resolve(SPEC));
     defineBuildProcesses({ define }, specOf, createBuildLines());
     const wheel = defined.get(BUILD_JOB.wheel) as Stored;
     expect(wheel.parse({ buildId: ID })).toEqual({ buildId: ID });
@@ -55,7 +57,7 @@ describe('the processes of a build', () => {
   test('keeps every line of the step for the diagnosis and starts the step by its id with the build id only', async () => {
     const { define, defined, start } = fakeProcesses();
     const lines = createBuildLines();
-    defineBuildProcesses({ define }, () => SPEC, lines);
+    defineBuildProcesses({ define }, () => Promise.resolve(SPEC), lines);
     start.mockImplementation(() => {
       const wheel = defined.get(BUILD_JOB.wheel) as Stored;
       wheel.progress('first');

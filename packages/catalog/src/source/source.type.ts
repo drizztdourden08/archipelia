@@ -1,6 +1,6 @@
 /* @layer core @kind types */
 import type { SourceCandidate, SourceOrigin } from '@archipelia/model';
-import type { BuildRunner } from '../build/build.type';
+import type { BuildRunner, BuildSandbox } from '../build/build.type';
 import type { GithubRepo } from '../enrich/enrich.type';
 
 type RepoFacts = {
@@ -35,6 +35,7 @@ type SourceServiceDeps = {
   engineDir: () => Promise<string>;
   worldOf: (apworld: string) => Promise<WorldInfo>;
   run?: BuildRunner | undefined;
+  sandbox?: (() => Promise<BuildSandbox>) | undefined;
   log?: ((message: string) => void) | undefined;
 };
 

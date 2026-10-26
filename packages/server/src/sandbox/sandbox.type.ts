@@ -3,7 +3,7 @@ import type { SpawnWrap } from '@archipelia/engine';
 
 type SandboxMode = 'none' | 'bwrap';
 
-type SandboxScope = { readOnly: string[]; readWrite: string[] };
+type SandboxScope = { readOnly: string[]; readWrite: string[]; network?: boolean };
 
 type SandboxRunner = { mode: SandboxMode; reason?: string; confine: (scope: SandboxScope) => SpawnWrap | undefined };
 

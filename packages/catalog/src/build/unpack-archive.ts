@@ -1,5 +1,5 @@
 /* @layer core @kind logic */
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { mkdir, writeFile } from 'node:fs/promises';
 import { dirname, isAbsolute, join, relative } from 'node:path';
 import { zipEntryBytes } from '@archipelia/model/zip';
 import { indexArchive } from './index-archive';
@@ -9,8 +9,7 @@ const insideOf = (root: string, target: string): boolean => {
   return path !== '' && !path.startsWith('..') && !isAbsolute(path);
 };
 
-const unpackArchive = async (file: string, dest: string): Promise<number> => {
-  const bytes = new Uint8Array(await readFile(file));
+const unpackArchive = async (bytes: Uint8Array, dest: string): Promise<number> => {
   const entries = indexArchive(bytes);
   await mkdir(dest, { recursive: true });
   for (const { entry, parts, folder } of entries) {

@@ -51,11 +51,11 @@ describe('what the consent is bound to', () => {
   test('a process step starts only for the build and the phase it belongs to', async () => {
     const { prepared, builds } = bed();
     const plan = await prepared();
-    expect(() => builds.specOf('wheel', { buildId: plan.buildId })).toThrow('no build to continue');
-    expect(() => builds.specOf('tools', { buildId: plan.buildId })).toThrow('no build to continue');
-    expect(() => builds.specOf('venv', { buildId: NONE })).toThrow('no build to continue');
-    expect(() => builds.specOf('venv', { buildId: 'not an id' })).toThrow('not valid');
-    expect(() => builds.specOf('venv', undefined)).toThrow('not valid');
+    await expect(builds.specOf('wheel', { buildId: plan.buildId })).rejects.toThrow('no build to continue');
+    await expect(builds.specOf('tools', { buildId: plan.buildId })).rejects.toThrow('no build to continue');
+    await expect(builds.specOf('venv', { buildId: NONE })).rejects.toThrow('no build to continue');
+    await expect(builds.specOf('venv', { buildId: 'not an id' })).rejects.toThrow('not valid');
+    await expect(builds.specOf('venv', undefined)).rejects.toThrow('not valid');
     await builds.dispose();
   });
 });

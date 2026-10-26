@@ -2,7 +2,7 @@
 import type { ProcessJobs } from '@drizztdourden08/brock-electron/main';
 import { BUILD_JOB } from '@archipelia/model';
 import { parseBuildId } from '@archipelia/catalog';
-import { BUILD_JOBS, BUILD_LABEL, BUILD_TIMEOUT_MS } from './builds.constants';
+import { BUILD_ALLOW, BUILD_JOBS, BUILD_LABEL, BUILD_TIMEOUT_MS } from './builds.constants';
 import type { createBuildLines } from './create-build-lines';
 import type { SpecOf } from './define-build-processes.type';
 
@@ -12,6 +12,7 @@ const defineBuildProcesses = (processes: Pick<ProcessJobs, 'define'>, specOf: Sp
     processes.define(id, {
       label: BUILD_LABEL[job],
       timeoutMs: BUILD_TIMEOUT_MS[job],
+      allow: BUILD_ALLOW,
       parse: (raw) => ({ buildId: parseBuildId(raw) }),
       resolve: (args) => specOf(job, args),
       progress: (line) => {

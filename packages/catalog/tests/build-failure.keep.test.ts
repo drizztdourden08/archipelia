@@ -14,7 +14,7 @@ registerBuildBed();
 const MSVC = ['running build_ext', 'error: Microsoft Visual C++ 14.0 or greater is required.', 'ERROR: Failed building wheel for ctrando'];
 
 describe('a build that fails', () => {
-  test('names the missing tool, keeps the log without paths and lets Check again run the build without downloading again', async () => {
+  test('names the missing tool, keeps the log without paths and lets Check again make a new venv and build without downloading again', async () => {
     behaviour.runs.wheel = { status: 'failed', code: 1, lines: [...MSVC, 'copying C:\\Users\\someone\\AppData\\Local\\Temp\\x.c'] };
     const { prepared, requestOf, builds, calls, seen } = bed();
     const plan = await prepared();
@@ -24,7 +24,7 @@ describe('a build that fails', () => {
     behaviour.runs = {};
     expect((await builds.build(requestOf(plan))).status).toBe('built');
     expect(seen).toEqual([SOURCE_URL]);
-    expect(calls.map((call) => call.job)).toEqual(['venv', 'tools', 'wheel', 'tools', 'wheel']);
+    expect(calls.map((call) => call.job)).toEqual(['venv', 'tools', 'wheel', 'venv', 'tools', 'wheel']);
   });
 
   test('says the build failed with its log when nothing known is missing, and offers to try again', async () => {

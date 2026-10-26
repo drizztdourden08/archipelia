@@ -5,6 +5,8 @@ const COMPILER_VARS = [
   'WINDOWSSDKDIR', 'UNIVERSALCRTSDKDIR', 'DEVENVDIR', 'CARGO_HOME', 'RUSTUP_HOME', 'SDKROOT', 'DEVELOPER_DIR', 'MACOSX_DEPLOYMENT_TARGET',
 ] as const;
 
+const SYSTEM_VARS = ['SYSTEMROOT', 'WINDIR', 'SYSTEMDRIVE', 'COMSPEC', 'PATHEXT', 'HOME', 'USERPROFILE'] as const;
+
 const BUILD_ENV = {
   PIP_NO_INPUT: '1',
   PIP_DISABLE_PIP_VERSION_CHECK: '1',
@@ -19,4 +21,4 @@ const PYTHON_FLAGS = ['-X', 'utf8', '-I'] as const;
 
 const BUILD_PIP_FLAGS = ['--isolated', '--disable-pip-version-check', '--no-warn-script-location', '--no-input', '--no-cache-dir'] as const;
 
-export { BUILD_ENV, BUILD_PIP_FLAGS, COMPILER_VARS, PYTHON_FLAGS, SCRATCH_VARS };
+export { BUILD_ENV, BUILD_PIP_FLAGS, COMPILER_VARS, PYTHON_FLAGS, SCRATCH_VARS, SYSTEM_VARS };

@@ -1,7 +1,7 @@
 /* @layer core @kind types */
 import type { EngineRuntime, SourceBuildJob, SourcePlan } from '@archipelia/model';
 import type { ZipEntry } from '@archipelia/model/zip';
-import type { BuildDirs, ResolvedPackage } from '@archipelia/engine';
+import type { BuildDirs, ResolvedPackage, SpawnWrap } from '@archipelia/engine';
 import type { Fetch } from '../install/fetch-file.type';
 
 type Archive = { file: string; sha256: string; size: number };
@@ -16,10 +16,15 @@ type BuildRun = { status: 'done' | 'failed' | 'cancelled' | 'rejected'; code: nu
 
 type BuildRunner = (job: SourceBuildJob, buildId: string) => Promise<BuildRun>;
 
+type BuildScope = { readOnly: string[]; readWrite: string[]; network?: boolean };
+
+type BuildSandbox = { confine: (scope: BuildScope) => SpawnWrap | undefined };
+
 type BuildDeps = {
   fetch: Fetch;
   engineDir: () => Promise<string>;
   run?: BuildRunner | undefined;
+  sandbox?: (() => Promise<BuildSandbox>) | undefined;
   log?: ((message: string) => void) | undefined;
 };
 
@@ -32,6 +37,7 @@ type ActiveBuild = {
   dirs: BuildDirs;
   controller: AbortController;
   phase: BuildPhase;
+  used: boolean;
   archive?: Archive;
   pins: ResolvedPackage[];
 };
@@ -42,4 +48,4 @@ type BuildSession = {
   close: () => Promise<void>;
 };
 
-export type { ActiveBuild, Archive, ArchiveEntry, ArchiveLimits, ArchiveSite, BuildDeps, BuildPhase, BuildRun, BuildRunner, BuildSession };
+export type { ActiveBuild, Archive, ArchiveEntry, ArchiveLimits, ArchiveSite, BuildDeps, BuildPhase, BuildRun, BuildRunner, BuildSandbox, BuildScope, BuildSession };

@@ -72,6 +72,7 @@ type SourceBuildPlan = {
   commit: string;
   archiveSha256: string;
   size: number;
+  confined: boolean;
   tools: SourceBuildPin[];
 };
 

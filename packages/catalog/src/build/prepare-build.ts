@@ -3,6 +3,8 @@ import type { SourcePlan, SourceBuildPrepared } from '@archipelia/model';
 import { resolvePackages, venvPython } from '@archipelia/engine';
 import type { BuildDeps, BuildSession } from './build.type';
 import { buildPlanOf } from './build-plan-of';
+import { assertPinsHashed } from './assert-pins-hashed';
+import { isConfined } from './is-confined';
 import { downloadArchive } from './download-archive';
 import { endBuild } from './end-build';
 import { openBuild } from './open-build';
@@ -26,8 +28,9 @@ const prepareBuild = async (deps: BuildDeps, session: BuildSession, plan: Source
       return stopped;
     }
     build.pins = await resolvePackages({ ...runtime, python: venvPython(dirs.venv) }, requires, { signal: controller.signal });
+    assertPinsHashed(build.pins);
     build.phase = 'ready';
-    return { status: 'ready', plan: buildPlanOf(build, archive) };
+    return { status: 'ready', plan: buildPlanOf(build, archive, await isConfined(deps, build)) };
   } catch (err) {
     return endBuild(deps, session, build, err);
   }

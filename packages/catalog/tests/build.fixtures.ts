@@ -35,8 +35,8 @@ const PROJECT_FILES = { 'pyproject.toml': PYPROJECT, 'src/ctrando/__init__.py': 
 const WHEEL = 'ctrando-1.2.0-cp312-cp312-win_amd64.whl';
 
 const TOOLS = [
-  { name: 'setuptools', version: '80.1.0', pin: 'setuptools==80.1.0', url: 'https://pypi.org/project/setuptools/80.1.0/', direct: true },
-  { name: 'wheel', version: '0.45.1', pin: 'wheel==0.45.1', url: 'https://pypi.org/project/wheel/0.45.1/', direct: true },
+  { name: 'setuptools', version: '80.1.0', pin: 'setuptools==80.1.0', sha256: 'a'.repeat(64), url: 'https://pypi.org/project/setuptools/80.1.0/', direct: true },
+  { name: 'wheel', version: '0.45.1', pin: 'wheel==0.45.1', sha256: 'b'.repeat(64), url: 'https://pypi.org/project/wheel/0.45.1/', direct: true },
 ];
 
 export { archiveOf, COMMIT, PLAN, PROJECT_FILES, rawArchive, SOURCE_URL, TOOLS, TOP, WHEEL };

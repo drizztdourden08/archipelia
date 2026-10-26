@@ -25,6 +25,8 @@ const fresh = async (name: string) => {
   return dir;
 };
 
+const unpack = async (file: string, dest: string) => unpackArchive(new Uint8Array(await readFile(file)), dest);
+
 const site = { owner: 'Pseudoarc', repo: 'ctrando', sha: COMMIT };
 
 const signal = new AbortController().signal;
@@ -59,7 +61,7 @@ describe('unpacking the source archive', () => {
     const dir = await fresh('unpack');
     const file = join(dir, 'source.zip');
     await writeFile(file, archiveOf(PROJECT_FILES));
-    expect(await unpackArchive(file, join(dir, 'src'))).toBe(3);
+    expect(await unpack(file, join(dir, 'src'))).toBe(3);
     expect(await readFile(join(dir, 'src', 'pyproject.toml'), 'utf8')).toContain('[build-system]');
     expect((await readdir(join(dir, 'src', 'src', 'ctrando'))).sort()).toEqual(['__init__.py', 'compression']);
     expect(await readArchiveFile(file, 'pyproject.toml')).toContain('setuptools>=61');
@@ -80,7 +82,7 @@ describe('unpacking the source archive', () => {
     const dir = await fresh(`hostile-${label.replace(/\W+/g, '-')}`);
     const file = join(dir, 'source.zip');
     await writeFile(file, rawArchive({ [`${TOP}/ok.txt`]: 'fine', ...hostile[label] }));
-    await expect(unpackArchive(file, join(dir, 'src'))).rejects.toThrow(/will not unpack|outside its folder/);
+    await expect(unpack(file, join(dir, 'src'))).rejects.toThrow(/will not unpack|outside its folder/);
     expect(await stat(join(dir, 'evil.txt')).then(() => true, () => false)).toBe(false);
     expect(await stat(join(base, 'evil.txt')).then(() => true, () => false)).toBe(false);
     expect(await stat(join(dir, 'src')).then(() => true, () => false)).toBe(false);
@@ -101,17 +103,17 @@ describe('unpacking the source archive', () => {
     const dir = await fresh('layout');
     const file = join(dir, 'source.zip');
     await writeFile(file, rawArchive({ [`${TOP}/ok.txt`]: 'a', 'other/ok.txt': 'b' }));
-    await expect(unpackArchive(file, join(dir, 'one'))).rejects.toThrow('does not hold one project folder');
+    await expect(unpack(file, join(dir, 'one'))).rejects.toThrow('does not hold one project folder');
     await writeFile(file, rawArchive({ 'loose.txt': 'a' }));
-    await expect(unpackArchive(file, join(dir, 'two'))).rejects.toThrow('does not hold one project folder');
+    await expect(unpack(file, join(dir, 'two'))).rejects.toThrow('does not hold one project folder');
     await writeFile(file, rawArchive({ [`${TOP}/Readme.md`]: 'a', [`${TOP}/README.md`]: 'b' }));
-    await expect(unpackArchive(file, join(dir, 'three'))).rejects.toThrow('same path twice');
+    await expect(unpack(file, join(dir, 'three'))).rejects.toThrow('same path twice');
   });
 
   test('refuses an archive that is not a zip', async () => {
     const dir = await fresh('garbage');
     const file = join(dir, 'source.zip');
     await writeFile(file, 'this is not a zip file at all, it has no central directory');
-    await expect(unpackArchive(file, join(dir, 'src'))).rejects.toThrow('no central directory');
+    await expect(unpack(file, join(dir, 'src'))).rejects.toThrow('no central directory');
   });
 });

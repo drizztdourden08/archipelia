@@ -19,7 +19,7 @@ import { createOfferedWheels } from '../wheel/create-offered-wheels';
 import { parseWheelRequest } from '../wheel/parse-wheel-request';
 import { prepareWheel } from '../wheel/prepare-wheel';
 
-const createSourceService = ({ fetch: request = fetch, engineDir, worldOf, run, log }: SourceServiceDeps) => {
+const createSourceService = ({ fetch: request = fetch, engineDir, worldOf, run, sandbox, log }: SourceServiceDeps) => {
   const client = createGithubClient({ fetch: request });
   const deps = { client, fetch: request, engineDir };
 
@@ -31,7 +31,7 @@ const createSourceService = ({ fetch: request = fetch, engineDir, worldOf, run, 
 
   const offers = createOfferedWheels();
   const planned = createPlannedSources();
-  const builds = createBuilds({ fetch: request, engineDir, run, log });
+  const builds = createBuilds({ fetch: request, engineDir, run, sandbox, log });
 
   const plan = async (raw: SourceRef) => {
     const made = await planSource(deps, parseSourceRef(raw));

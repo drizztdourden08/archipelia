@@ -3,7 +3,7 @@ import { RESERVED_NAMES } from './build.constants';
 
 const refusal = (name: string) => new Error(`The source archive holds a path Archipelia will not unpack: ${name.slice(0, 120)}`);
 
-const climbs = (part: string): boolean => part === '' || part === '.' || part === '..';
+const climbs = (part: string): boolean => part === '' || part === '.' || part === '..' || /^[A-Za-z]:/.test(part);
 
 const windowsUnsafe = (part: string): boolean =>
   part.includes(':') || /[ .]$/.test(part) || RESERVED_NAMES.has((part.split('.')[0] ?? '').toLowerCase());

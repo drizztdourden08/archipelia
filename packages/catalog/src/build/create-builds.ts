@@ -16,7 +16,7 @@ const createBuilds = (deps: BuildDeps) => {
       build?.controller.abort();
       if (build?.phase === 'ready') void session.close();
     },
-    specOf: (job: SourceBuildJob, raw: unknown) => buildSpecOf(session, job, raw),
+    specOf: (job: SourceBuildJob, raw: unknown) => buildSpecOf(deps, session, job, raw),
     dispose: () => session.close(),
   };
 };

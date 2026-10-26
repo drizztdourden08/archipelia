@@ -22,8 +22,8 @@ describe('building', () => {
     expect(done.status).toBe('built');
     expect(calls.map((call) => call.job)).toEqual(['venv', 'tools', 'wheel']);
     const [, tools, wheel] = calls;
-    expect(tools?.toolsFile).toBe('setuptools==80.1.0\nwheel==0.45.1');
-    expect(tools?.args).toEqual(expect.arrayContaining(['install', '--only-binary=:all:', '--no-deps', '--isolated', '--no-input']));
+    expect(tools?.toolsFile).toBe(`setuptools==80.1.0 --hash=sha256:${'a'.repeat(64)}\nwheel==0.45.1 --hash=sha256:${'b'.repeat(64)}`);
+    expect(tools?.args).toEqual(expect.arrayContaining(['install', '--only-binary=:all:', '--no-deps', '--require-hashes', '--isolated', '--no-input']));
     expect(wheel?.args.slice(0, 5)).toEqual(['-X', 'utf8', '-I', '-m', 'pip']);
     expect(wheel?.args).toEqual(expect.arrayContaining(['wheel', '--no-deps', '--no-build-isolation', '--no-index', '--isolated', '--no-input']));
     expect(wheel?.sourceSeen).toBe(true);
