@@ -11,7 +11,7 @@ const YAML_EXTENSIONS = ['yaml', 'yml'];
 
 const PLAYER_GRID_CLASS = 'session-lobby__players';
 
-const LOBBY_COLUMN_MIN = 420;
+const LOBBY_COLUMN_MIN = 360;
 
 const PLAYERS_TEXT = {
   manual: 'Your own players. Each picks an installed game, then one of its presets or an imported file.',
