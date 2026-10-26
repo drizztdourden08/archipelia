@@ -1,10 +1,11 @@
 /* @layer renderer-app @kind types */
-import type { CatalogEntry, CatalogVersion, InstalledGame } from '@archipelia/model';
+import type { CatalogEntry, CatalogVersion, InstalledGame, InstallFailure } from '@archipelia/model';
 import type { InstallRequest } from '@archipelia/catalog';
 
 type CardHandlers = {
   isBusy: (key: string) => boolean;
   errorOf: (key: string) => string | null;
+  needOf: (key: string) => InstallFailure | undefined;
   open: (row: GameRow) => void;
   installWorld: (request: InstallRequest, key: string) => void;
   remove: (row: GameRow) => void;

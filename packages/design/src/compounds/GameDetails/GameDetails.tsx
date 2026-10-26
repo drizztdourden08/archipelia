@@ -14,7 +14,7 @@ import './GameDetails.css';
 const GameDetails = (props: GameDetailsProps) => {
   const { title, kind, kindLabel, version, status, notes, tags, actions, markdown, art, busy, error, need, loading, onLink, onClose } = props;
   return (
-    <DialogShell open onClose={onClose} title={title} className="game-details" actions={<GameDetailsActions actions={actions} busy={busy} />}>
+    <DialogShell open onClose={onClose} title={title} size="lg" actions={<GameDetailsActions actions={actions} busy={busy} />}>
       <Stack gap="md">
         <Flex align="center" gap="md">
           <GameDetailsMedia kind={kind} kindLabel={kindLabel} art={art} />
