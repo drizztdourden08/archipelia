@@ -1,31 +1,18 @@
 /* @layer tests @kind test */
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { afterAll, beforeAll, beforeEach, describe, expect, test, vi } from 'vitest';
+import { describe, expect, test, vi } from 'vitest';
 import type { EngineRuntime } from '@archipelia/model';
 import { recordOf } from './memory-files.fixtures';
-import { createBed, GAME, loaded, MISSING, notLoaded, resolveLike } from './world-packages.fixtures';
+import { engine, GAME, MISSING, notLoaded, registerBed } from './world-packages.fixtures';
 
-const engine = vi.hoisted(() => ({ installPackages: vi.fn(), readOptionsSchema: vi.fn(), resolvePackages: vi.fn() }));
-
-vi.mock('@archipelia/engine', async (original) => ({ ...(await original<object>()), ...engine }));
+vi.mock('@archipelia/engine', async () => (await import('./world-packages.fixtures')).mockedEngine());
 
 const { commitInstall } = await import('../src/install/commit-install');
 const { readApworld } = await import('../src/install/read-apworld');
 const { copyPlacedWorld } = await import('../src/install/copy-placed-world');
 
-const bed = createBed();
-
-beforeAll(bed.setup);
-
-afterAll(bed.teardown);
-
-beforeEach(async () => {
-  await bed.clear();
-  engine.installPackages.mockReset().mockResolvedValue(undefined);
-  engine.resolvePackages.mockReset().mockImplementation(resolveLike);
-  engine.readOptionsSchema.mockReset().mockResolvedValue(loaded());
-});
+const bed = registerBed();
 
 describe('reading the requirements of an apworld', () => {
   test('reads requirements.txt from the world folder, and nothing nested deeper', async () => {

@@ -1,5 +1,6 @@
 /* @layer tests @kind fixture */
 import { mkdir, mkdtemp, rm, stat } from 'node:fs/promises';
+import { afterAll, beforeAll, beforeEach, vi } from 'vitest';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import type { EngineRuntime } from '@archipelia/model';
@@ -61,4 +62,22 @@ const createBed = () => {
   };
 };
 
-export { consentOf, createBed, GAME, loaded, MISSING, notLoaded, resolveLike, RESOLVED };
+const engine = { installPackages: vi.fn(), readOptionsSchema: vi.fn(), resolvePackages: vi.fn(), readRuntime: vi.fn() };
+
+const mockedEngine = async () => ({ ...(await vi.importActual<object>('@archipelia/engine')), ...engine });
+
+const registerBed = () => {
+  const bed = createBed();
+  beforeAll(bed.setup);
+  afterAll(bed.teardown);
+  beforeEach(async () => {
+    await bed.clear();
+    engine.installPackages.mockReset().mockResolvedValue(undefined);
+    engine.resolvePackages.mockReset().mockImplementation(resolveLike);
+    engine.readRuntime.mockReset().mockResolvedValue(bed.bed.runtime);
+    engine.readOptionsSchema.mockReset().mockResolvedValue(loaded());
+  });
+  return bed;
+};
+
+export { consentOf, engine, GAME, loaded, MISSING, mockedEngine, notLoaded, RESOLVED, registerBed };

@@ -1,30 +1,16 @@
 /* @layer tests @kind test */
 import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
-import { afterAll, beforeAll, beforeEach, describe, expect, test, vi } from 'vitest';
-import { consentOf, createBed, GAME, loaded, resolveLike, RESOLVED } from './world-packages.fixtures';
+import { describe, expect, test, vi } from 'vitest';
+import { consentOf, engine, GAME, loaded, RESOLVED, registerBed } from './world-packages.fixtures';
 
-const engine = vi.hoisted(() => ({ installPackages: vi.fn(), readOptionsSchema: vi.fn(), resolvePackages: vi.fn(), readRuntime: vi.fn() }));
-
-vi.mock('@archipelia/engine', async (original) => ({ ...(await original<object>()), ...engine }));
+vi.mock('@archipelia/engine', async () => (await import('./world-packages.fixtures')).mockedEngine());
 
 const { commitInstall } = await import('../src/install/commit-install');
 const { installFromFile } = await import('../src/install/install-from-file');
 const { previewFilePackages } = await import('../src/install/preview-file-packages');
 
-const bed = createBed();
-
-beforeAll(bed.setup);
-
-afterAll(bed.teardown);
-
-beforeEach(async () => {
-  await bed.clear();
-  engine.installPackages.mockReset().mockResolvedValue(undefined);
-  engine.resolvePackages.mockReset().mockImplementation(resolveLike);
-  engine.readRuntime.mockReset().mockResolvedValue(bed.bed.runtime);
-  engine.readOptionsSchema.mockReset().mockResolvedValue(loaded());
-});
+const bed = registerBed();
 
 describe('consent to the packages of a world', () => {
   test('is required for the whole resolved set, and nothing is installed without it', async () => {
