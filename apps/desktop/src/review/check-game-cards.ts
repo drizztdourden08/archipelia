@@ -6,7 +6,7 @@ import { nameOf } from './name-of';
 import { SELECTOR } from './review-dom.constants';
 
 const actionNames = (tour: AppReviewTour, card: HTMLElement) =>
-  tour.findAll('button', card).filter((button) => !button.matches(OVERFLOW_BUTTON)).map(nameOf);
+  tour.findAll('button', card).filter((button) => !button.matches(OVERFLOW_BUTTON) && button.closest('h3') === null).map(nameOf);
 
 const checkActionNames = async (tour: AppReviewTour): Promise<void> => {
   const card = await tour.waitFor(() => tour.find(`${SELECTOR.layer} .item-card`));

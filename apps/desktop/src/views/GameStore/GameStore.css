@@ -8,10 +8,14 @@
 }
 
 .game-store__body {
+  display: flex;
   flex: 1;
+  flex-direction: column;
   min-block-size: 0;
 }
 
 .game-store__anchor {
   display: grid;
+  inline-size: 100%;
+  block-size: 100%;
 }

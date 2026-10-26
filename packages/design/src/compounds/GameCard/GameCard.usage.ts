@@ -14,21 +14,22 @@ const usage = {
   rules: [
     'Say what kind of world it is with the kind icon and its tint, never with a word on the card; kindLabel names the icon for the hint and for a screen reader.',
     'Show the world version once, such as 1.2.0 or 1.0.0 to 1.2.1 for an update.',
-    'Pass one status only: installed, update, no release yet or not available. Leave it out for a world that is only there to add.',
-    'Put detail that is rare or long in a note, shown as an icon with a hint, and leave out what every card would repeat.',
+    'Pass one status only: installed, update, no release yet, not available, adding, updating, removing or failed. Leave it out for a world that is only there to add.',
+    'Put detail that is rare in a note, shown as an icon with a name, and leave out what every card would repeat. The long text and the full notes belong in GameDetails.',
     'Mark at most one action primary: the next step for that world.',
     'Disable an action while that world is busy; never hide it.',
     'Mark the action that is running as loading, so only that card shows the work.',
     'Mark an action that deletes something as danger.',
-    'Pass summary as one plain text description, shown on the one detail line after the version and the notes and cut with an ellipsis; pass summaryHint with the longer text for the hint. Never pass markup.',
+    'Pass onOpen to open GameDetails: the title of the card becomes the button and the card shows it can be opened. Never put the description or a hover hint on the card.',
     'Pass art as a small picture of the world, a data address, and it fills the media tile with the kind icon as a badge; leave it out and the tile shows the kind icon alone.',
     'Pass at most two tags; they show on a line of their own under the detail line.',
   ],
   a11y: [
     'The title of the card is a level 3 heading.',
-    'The media tile is a named image, named by kindLabel, and its hint opens on hover.',
+    'The media tile is a named image, named by kindLabel.',
     'Each icon button is named with the action and the world, such as Add Timespinner, and shows that name as a hint.',
-    'Each note is a named image with a hint that opens on focus.',
+    'Enter on the title of the card opens GameDetails.',
+    'Each note is a named image.',
     'A loading action is busy and turned off until its work ends.',
   ],
   tree: {
@@ -50,7 +51,7 @@ const GameCardSample = ({ onInstall }: { onInstall: () => void }) => (
   />
 );
 `,
-  propsHash: '1997f4629b33569c',
+  propsHash: 'd66259fc15c3d84b',
 } satisfies ComponentUsage;
 
 export { usage };

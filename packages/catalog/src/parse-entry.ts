@@ -37,7 +37,7 @@ const parseEntry = (source: IndexSource, apworld: string, text: string, lock: Lo
     apworld,
     game: toml.name,
     displayName: toml.display_name ?? toml.name,
-    home: toml.home,
+    home: Array.isArray(toml.home) ? toml.home[0] : toml.home,
     setupGuide: toml.setup_guide,
     tracker: toml.tracker,
     tags: toml.tags ?? [],

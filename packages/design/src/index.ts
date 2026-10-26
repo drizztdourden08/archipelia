@@ -5,6 +5,8 @@ export type { ConnectionPhase } from './compounds/ConnectionStatus';
 export { ErrorCallout } from './compounds/ErrorCallout';
 export { GameCard } from './compounds/GameCard';
 export type { GameCardAction, GameCardKind, GameCardNote, GameCardProps, GameCardStatus } from './compounds/GameCard';
+export { GameDetails } from './compounds/GameDetails';
+export type { GameDetailsProps } from './compounds/GameDetails';
 export { HintRow } from './compounds/HintRow';
 export { LogLines, logCopyText } from './compounds/LogLines';
 export { OptionControl, coercePresetValues, hintOf, isChangedValue, isLoose } from './compounds/OptionControl';

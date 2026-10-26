@@ -4,6 +4,7 @@ const ROUTE = {
   newSession: 'multiworld/sessions/new',
   joinSession: 'multiworld/sessions/join',
   games: 'multiworld/games',
+  officialGames: 'multiworld/games/official',
   presets: 'multiworld/presets',
   engine: 'multiworld/engine',
   archipeliaServers: 'multiworld/servers/archipelia',

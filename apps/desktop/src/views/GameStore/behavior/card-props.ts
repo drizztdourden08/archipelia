@@ -3,6 +3,8 @@ import type { CardHandlers, GameRow } from '../GameStore.type';
 import type { InstallRequest } from '@archipelia/catalog';
 import type { GameCardAction, GameCardNote, GameCardProps, GameCardStatus } from '@archipelia/design';
 import { KIND_LABEL, KIND_OF, NO_RELEASE } from '../GameStore.constants';
+import { busyOf } from './busy-of';
+import { failureOf } from './failure-of';
 import { removeKey } from './remove-key';
 
 const requestOf = ({ entry, latest }: GameRow): InstallRequest | undefined => {
@@ -10,7 +12,11 @@ const requestOf = ({ entry, latest }: GameRow): InstallRequest | undefined => {
   return latest ? { kind: 'index', apworld: entry.apworld, version: latest.version } : undefined;
 };
 
-const statusOf = ({ state, entry }: GameRow): GameCardStatus | undefined => {
+const statusOf = (row: GameRow, handlers: CardHandlers): GameCardStatus | undefined => {
+  const { state, entry } = row;
+  const busy = busyOf(row, handlers);
+  if (busy) return busy;
+  if (failureOf(row, handlers)) return 'failed';
   if (entry.unavailable) return entry.unavailable === NO_RELEASE ? 'no-release' : 'unavailable';
   return state === 'update' ? 'update' : undefined;
 };
@@ -50,12 +56,13 @@ const installLabel = ({ state }: GameRow, installing: boolean) => {
 const actionsOf = (row: GameRow, { isBusy, installWorld, remove, openHome }: CardHandlers): GameCardAction[] => {
   const request = requestOf(row);
   const installing = isBusy(row.entry.apworld);
-  const working = installing || isBusy(removeKey(row.entry.apworld));
+  const removing = isBusy(removeKey(row.entry.apworld));
+  const working = installing || removing;
   const install: GameCardAction[] = request && row.state !== 'installed'
     ? [{ id: 'install', label: installLabel(row, installing), icon: 'download', primary: true, disabled: working || Boolean(row.entry.unavailable), loading: installing, onClick: () => installWorld(request, row.entry.apworld) }]
     : [];
-  const removal: GameCardAction[] = row.installed ? [{ id: 'remove', label: 'Remove', icon: 'trash-2', tone: 'danger', disabled: working, onClick: () => remove(row) }] : [];
-  const home: GameCardAction[] = row.entry.home ? [{ id: 'home', label: 'Home page', icon: 'external-link', onClick: () => openHome(row.entry.home ?? '') }] : [];
+  const removal: GameCardAction[] = row.installed ? [{ id: 'remove', label: removing ? 'Removing...' : 'Remove', icon: 'trash-2', tone: 'danger', disabled: working, loading: removing, onClick: () => remove(row) }] : [];
+  const home: GameCardAction[] = row.entry.home ? [{ id: 'home', label: 'Home page', icon: 'external-link', disabled: working, onClick: () => openHome(row.entry.home ?? '') }] : [];
   return [...install, ...home, ...removal];
 };
 
@@ -64,10 +71,11 @@ const cardPropsOf = (row: GameRow, handlers: CardHandlers): GameCardProps => ({
   kind: KIND_OF[row.entry.source],
   kindLabel: KIND_LABEL[row.entry.source],
   version: versionOf(row),
-  status: statusOf(row),
+  status: statusOf(row, handlers),
   notes: notesOf(row),
   tags: row.entry.tags,
   actions: actionsOf(row, handlers),
+  onOpen: () => handlers.open(row),
 });
 
 export { cardPropsOf };

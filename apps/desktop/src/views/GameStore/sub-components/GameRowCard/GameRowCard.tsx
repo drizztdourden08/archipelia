@@ -4,7 +4,7 @@ import { GameCard } from '@archipelia/design';
 import { useEffect, useRef } from 'react';
 import { cardPropsOf } from '../../behavior/card-props';
 import { enrichKey } from '../../behavior/enrich-key';
-import { enrichProps } from '../../behavior/enrich-props';
+import { artOf } from '../../behavior/art-of';
 import { useEnrichStore } from '../../behavior/useEnrichStore';
 import { SEEN_DWELL_MS } from '../../GameStore.constants';
 import type { GameRowCardProps } from './GameRowCard.type';
@@ -21,7 +21,7 @@ const GameRowCard = ({ row, handlers }: GameRowCardProps) => {
 
   return (
     <Box ref={holder} className="game-store__anchor">
-      <GameCard {...cardPropsOf(row, handlers)} {...enrichProps(found)} />
+      <GameCard {...cardPropsOf(row, handlers)} {...artOf(found)} />
     </Box>
   );
 };

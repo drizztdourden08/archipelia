@@ -2,7 +2,7 @@
 import type { ComponentUsage } from '@drizztdourden08/tessera';
 
 const usage = {
-  job: 'The games store: every world in three sections, Installed, Official and Community, with one search and filters over all of them, a refresh of the index and a status bar.',
+  job: 'The games store: the worlds of the Games page in a tab each, All with its three sections Installed, Official and Community, then one tab per section and an Updates tab, with one search and filters over the tab, a refresh of the index and a status bar.',
   useWhen: [
     'The Games page.',
   ],
@@ -12,12 +12,15 @@ const usage = {
   ],
   rules: [
     'Put each installed game in search, pointing at the Games page.',
-    'Show the sections in this order: Installed, Official, Community. Hide a section the search or filters empty.',
-    'One search field and the filters the user adds (source, installed, version fit, stability, tags) cover all the sections at once.',
+    'Keep the dedicated tabs Installed, Official, Community and Updates beside All; each shows only its own worlds under its own heading and count.',
+    'On the All tab show the sections in this order: Installed, Official, Community, each under a heading with its own count. Hide a section the search or filters empty.',
+    'One search field and the filters the user adds (source, installed, version fit, stability, tags) cover every section of the tab at once.',
     'Guard each install with its world as the key, through useKeyedGuard, so only its card shows it working, with its Add button loading.',
     'Guard Refresh index and Add from file with their own keys, so a card install leaves them on.',
-    'Cap the number of cards drawn in each section, say how many are shown of how many, and offer Show more.',
-    'Keep the totals and Add from file in the status bar at the foot.',
+    'Draw only the cards in view, in a virtual grid whose section headings carry the true count of the section; never cap a section.',
+    'Open a card in its details dialog with the title or Enter; the card carries no hover hint.',
+    'Show the reason an install or removal failed on the card and in its dialog, never as a banner at the top of the page.',
+    'Keep the totals and Add from file in the status bar at the foot. All worlds counts every section of the library, and a world without a release is counted apart.',
     'Removing a game asks first with the number of presets and sessions that use it.',
     'Toast each install and removal once it is done.',
   ],
@@ -33,9 +36,9 @@ const usage = {
   },
   example: `import { GameStore } from '../GameStore';
 
-const GameStoreSample = () => <GameStore />;
+const GameStoreSample = () => <GameStore tab="all" />;
 `,
-  propsHash: '69a6789bb8733db8',
+  propsHash: 'f4019f58fc894462',
 } satisfies ComponentUsage;
 
 export { usage };

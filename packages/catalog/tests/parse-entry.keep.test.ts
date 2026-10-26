@@ -43,6 +43,16 @@ describe('parseEntry', () => {
     expect(parse('name = "Demo"\nstability = "shiny"\n')?.stability).toBe('unknown');
   });
 
+  test('a home that lists several links reads as its first link and the world is kept', () => {
+    const entry = parse('name = "Demo"\nhome = ["https://x/a", "https://x/b"]\n[versions]\n"1.0.0" = { url = "https://x/demo.apworld" }\n');
+    expect(entry?.home).toBe('https://x/a');
+    expect(entry?.versions).toHaveLength(1);
+  });
+
+  test('a home that is neither text nor a list of text is rejected', () => {
+    expect(() => parse('name = "Demo"\nhome = 3\n')).toThrow(/expected shape/);
+  });
+
   test('a file without a name is rejected', () => {
     expect(() => parse('home = "https://x"\n')).toThrow(/expected shape/);
   });

@@ -2,18 +2,12 @@
 import { describe, expect, test } from 'vitest';
 import '@drizztdourden08/tessera/field-kits';
 import { createClause } from '@drizztdourden08/tessera/data';
-import type { CatalogEntry, InstalledGame } from '@archipelia/model';
+import type { CatalogEntry } from '@archipelia/model';
+import { worldEntry as entry, worldInstalled as installed } from './game-handlers.fixtures';
 import { buildRows } from '../../src/views/GameStore/behavior/build-rows';
 import { compareVersions } from '../../src/views/GameStore/behavior/compare-versions';
 import { filterRows } from '../../src/views/GameStore/behavior/filter-rows';
 import { groupSections } from '../../src/views/GameStore/behavior/group-sections';
-
-const entry = (apworld: string, source: CatalogEntry['source'], versions: string[] = []): CatalogEntry => ({
-  apworld, game: apworld.toUpperCase(), displayName: apworld, tags: [], source, stability: 'unknown',
-  versions: versions.map((version) => ({ version, url: `https://x/${version}` })),
-});
-const installed = (apworld: string, version: string): InstalledGame =>
-  ({ apworld, game: apworld.toUpperCase(), version, source: 'index', installedAt: 0 } as InstalledGame);
 
 const apworldOf = (row: { entry: CatalogEntry }) => row.entry.apworld;
 
