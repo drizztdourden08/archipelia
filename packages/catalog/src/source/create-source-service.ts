@@ -1,5 +1,5 @@
 /* @layer core @kind logic */
-import type { SourcePypiInstall, SourceRef, SuggestRequest } from '@archipelia/model';
+import type { SourcePypiInstall, SourceRef, SourceWheelRequest, SuggestRequest } from '@archipelia/model';
 import { isRecord, isStringList } from '@archipelia/model';
 import { createGithubClient } from './create-github-client';
 import { installPypiPackage } from './install-pypi-package';
@@ -11,6 +11,8 @@ import { previewPypiPackage } from './preview-pypi-package';
 import type { SourceServiceDeps } from './source.type';
 import { suggestSources } from './suggest-sources';
 import { worldContextOf } from './world-context-of';
+import { parseWheelRequest } from '../wheel/parse-wheel-request';
+import { prepareWheel } from '../wheel/prepare-wheel';
 
 const createSourceService = ({ fetch: request = fetch, engineDir, worldOf }: SourceServiceDeps) => {
   const client = createGithubClient({ fetch: request });
@@ -31,7 +33,9 @@ const createSourceService = ({ fetch: request = fetch, engineDir, worldOf }: Sou
     return installPypiPackage(deps, parseSourceRef(raw), accepted);
   };
 
-  return { plan, pypiInstall, pypiPreview, suggest };
+  const wheel = (raw: SourceWheelRequest) => prepareWheel(deps, parseWheelRequest(raw));
+
+  return { plan, pypiInstall, pypiPreview, suggest, wheel };
 };
 
 export { createSourceService };

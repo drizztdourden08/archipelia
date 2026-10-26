@@ -15,6 +15,7 @@ const usage = {
     'Preselect nothing: the user picks a repo with Use this one, and a repo that does not hold the module cannot be picked.',
     'Ask for trust before any plan: a checkbox, or the typed owner and repo name when the repo has a warning badge.',
     'Run nothing from a repo in this dialog; the plan only reads files and the commands are for the user to copy.',
+    'Offer a ready-made build only when the plan holds one that fits the engine, and say plainly when there is none. When the host published no checksum for it, ask for the typed owner and repo name before the button works.',
     'Keep Let Archipelia build it disabled with its Coming soon note until building from source exists.',
     'Open every link with onOpenLink, never inside the app window.',
   ],
@@ -40,13 +41,14 @@ const PackageSourceSample = ({ onClose }: { onClose: () => void }) => (
     onBack={() => undefined}
     onRetry={() => undefined}
     onInstallFromPypi={() => undefined}
+    onUseWheel={() => undefined}
     onCheckAgain={() => undefined}
     onOpenLink={() => undefined}
     onClose={onClose}
   />
 );
 `,
-  propsHash: 'aabec7217985b008',
+  propsHash: '950fde7c2900550d',
 } satisfies ComponentUsage;
 
 export { usage };

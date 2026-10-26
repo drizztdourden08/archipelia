@@ -5,6 +5,7 @@ import { sourceCheck } from './source-check';
 import { sourcePlan } from './source-plan';
 import { sourcePypi } from './source-pypi';
 import { sourceSearch } from './source-search';
+import { sourceWheel } from './source-wheel';
 import type { SourceHandlers, SourceHandlersRun } from './usePackageSource.type';
 
 const sourceHandlersOf = (run: SourceHandlersRun): SourceHandlers => {
@@ -18,6 +19,7 @@ const sourceHandlersOf = (run: SourceHandlersRun): SourceHandlers => {
     onBack: () => setStep(results ? { kind: 'results', suggestions: results, looking: false } : SEARCHING),
     onRetry: () => void sourceSearch({ aim, setStep, setResults }),
     onInstallFromPypi: () => { if (plan) void sourcePypi({ aim, state: plan, ask, setStep }).then((done) => (done ? check() : undefined)); },
+    onUseWheel: (typed) => { if (plan) void sourceWheel({ aim, state: plan, typed, install: installWorld, setStep, close }); },
     onCheckAgain: () => void check(),
     onOpenLink: openExternal,
     onClose: close,

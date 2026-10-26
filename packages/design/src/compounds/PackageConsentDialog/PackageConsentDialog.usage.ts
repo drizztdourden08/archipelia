@@ -15,6 +15,7 @@ const usage = {
     'Say in one plain sentence that the packages install into the engine\'s Python.',
     'Show every package as its name and version, linked to its page; open the link with onOpenLink, never inside the app window.',
     'Keep the packages the world asks for under their own heading, apart from the packages those need.',
+    'List a ready-made build apart from the others, with its release, its repo and its sha256, and say when the host published no checksum for it.',
     'Cancel and Escape install nothing and call onCancel; only the install button calls onAccept.',
   ],
   a11y: [
@@ -38,7 +39,7 @@ const PackageConsentSample = ({ onAccept, onCancel, onOpenLink }: { onAccept: ()
   />
 );
 `,
-  propsHash: 'e764dc8da8d15ef1',
+  propsHash: '398f056f353e4cfe',
 } satisfies ComponentUsage;
 
 export { usage };

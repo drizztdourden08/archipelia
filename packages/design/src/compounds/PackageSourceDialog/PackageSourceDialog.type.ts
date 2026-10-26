@@ -16,6 +16,7 @@ type PackageSourceHandlers = {
   onBack: () => void;
   onRetry: () => void;
   onInstallFromPypi: () => void;
+  onUseWheel: (typed: string) => void;
   onCheckAgain: () => void;
   onOpenLink: (url: string) => void;
   onClose: () => void;
@@ -42,13 +43,15 @@ type PasteFieldProps = Pick<PackageSourceHandlers, 'onPaste'> & { failed: boolea
 
 type TrustStepProps = Pick<PackageSourceHandlers, 'onTrust'> & { module: string; candidate: SourceCandidate };
 
-type PlanStepProps = Pick<PackageSourceHandlers, 'onInstallFromPypi' | 'onCheckAgain'> & {
+type PlanStepProps = Pick<PackageSourceHandlers, 'onInstallFromPypi' | 'onUseWheel' | 'onCheckAgain'> & {
   module: string;
   plan: SourcePlan;
   checking: boolean;
   stillMissing: boolean;
   installing: boolean;
 };
+
+type WheelOfferProps = Pick<PackageSourceHandlers, 'onUseWheel'> & { plan: SourcePlan; installing: boolean };
 
 type ManualStepsProps = Pick<PackageSourceHandlers, 'onCheckAgain'> & {
   module: string;
@@ -59,5 +62,5 @@ type ManualStepsProps = Pick<PackageSourceHandlers, 'onCheckAgain'> & {
 
 export type {
   CandidateCardProps, CandidateListProps, ManualStepsProps, PackageSourceDialogProps, PackageSourceStep, PasteFieldProps, PlanStepProps,
-  TrustStepProps,
+  TrustStepProps, WheelOfferProps,
 };

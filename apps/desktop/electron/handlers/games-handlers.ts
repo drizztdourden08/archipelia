@@ -25,6 +25,7 @@ const gamesHandlers: HandlerGroup = {
     ctx.handle(APP_CHANNELS.sourcesPlan, (_event, ref) => catalog.sources.plan(ref));
     ctx.handle(APP_CHANNELS.sourcesPypiPreview, (_event, ref) => catalog.sources.pypiPreview(ref));
     ctx.handle(APP_CHANNELS.sourcesPypiInstall, (_event, request) => catalog.sources.pypiInstall(request));
+    ctx.handle(APP_CHANNELS.sourcesWheel, (_event, request) => catalog.sources.wheel(request));
   },
 };
 

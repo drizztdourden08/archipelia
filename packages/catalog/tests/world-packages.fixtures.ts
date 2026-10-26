@@ -7,6 +7,7 @@ import type { EngineRuntime } from '@archipelia/model';
 import { readApworld } from '../src/install/read-apworld';
 import { memoryFiles } from './memory-files.fixtures';
 import { writeZip } from './zip-file.fixtures';
+import { TAGS } from './wheel.fixtures';
 
 const GAME = 'Chrono Trigger Rando-Dalton Imperial';
 
@@ -64,7 +65,9 @@ const createBed = () => {
 
 const pypi = vi.fn();
 
-const engine = { installPackages: vi.fn(), readOptionsSchema: vi.fn(), resolvePackages: vi.fn(), readRuntime: vi.fn() };
+const engine = {
+  installPackages: vi.fn(), readOptionsSchema: vi.fn(), resolvePackages: vi.fn(), readRuntime: vi.fn(), installWheel: vi.fn(), engineTags: vi.fn(),
+};
 
 const mockedEngine = async () => ({ ...(await vi.importActual<object>('@archipelia/engine')), ...engine });
 
@@ -83,6 +86,8 @@ const registerBed = () => {
     engine.resolvePackages.mockReset().mockImplementation(resolveLike);
     engine.readRuntime.mockReset().mockResolvedValue(bed.bed.runtime);
     engine.readOptionsSchema.mockReset().mockResolvedValue(loaded());
+    engine.installWheel.mockReset().mockResolvedValue(undefined);
+    engine.engineTags.mockReset().mockResolvedValue(TAGS);
   });
   return bed;
 };

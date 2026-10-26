@@ -5,6 +5,7 @@ import { apRoot } from '@archipelia/engine';
 import { installWorldPackages } from './install-world-packages';
 import type { CopyPlacedRequest } from './copy-placed-world.type';
 import { PLACED } from './remove-world.constants';
+import { reinstallSources } from '../wheel/reinstall-sources';
 
 const exists = (path: string) => stat(path).then(() => true, () => false);
 
@@ -19,6 +20,7 @@ const copyPlacedWorld = async ({ from, to, record }: CopyPlacedRequest) => {
   await mkdir(dirname(target), { recursive: true });
   await cp(source, target, { recursive: true });
   await installWorldPackages(to, record.game, record.packages ?? []);
+  await reinstallSources(to, record);
 };
 
 export { copyPlacedWorld };

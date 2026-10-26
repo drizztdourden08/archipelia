@@ -1,7 +1,8 @@
 /* @layer renderer-app @kind types */
-import type { ConsentPackage, PackageSourceDialogProps, PackageSourceStep } from '@archipelia/design';
+import type { PackageSourceDialogProps, PackageSourceStep } from '@archipelia/design';
 import type { InstallRequest } from '@archipelia/catalog';
 import type { InstallFailure, SourceCandidate, SourceSuggestions } from '@archipelia/model';
+import type { AskConsent } from './useConsent.type';
 
 type SourceAim = { key: string; title: string; module: string; linked?: string | undefined; request?: InstallRequest | undefined };
 
@@ -17,7 +18,9 @@ type InstallWorld = (request: InstallRequest, key: string) => Promise<boolean | 
 
 type CheckRun = { aim: SourceAim; state: PlanState; install: InstallWorld; setStep: SetStep; close: () => void };
 
-type PypiRun = { aim: SourceAim; state: PlanState; ask: (title: string, packages: readonly ConsentPackage[]) => Promise<boolean>; setStep: SetStep };
+type PypiRun = { aim: SourceAim; state: PlanState; ask: AskConsent; setStep: SetStep };
+
+type WheelRun = { aim: SourceAim; state: PlanState; typed: string; install: InstallWorld; setStep: SetStep; close: () => void };
 
 type SourceHandlers = Omit<PackageSourceDialogProps, 'title' | 'module' | 'step'>;
 
@@ -35,4 +38,4 @@ type PackageSourceParams = {
   ask: PypiRun['ask'];
 };
 
-export type { CheckRun, PackageSourceParams, PlanRun, PypiRun, SearchRun, SourceAim, SourceHandlers, SourceHandlersRun };
+export type { CheckRun, PackageSourceParams, PlanRun, PypiRun, SearchRun, SourceAim, SourceHandlers, SourceHandlersRun, WheelRun };

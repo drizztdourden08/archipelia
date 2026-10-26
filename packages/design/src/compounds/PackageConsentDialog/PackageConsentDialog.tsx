@@ -4,9 +4,10 @@ import { Button, Flex, Icon, Stack, Text } from '@drizztdourden08/tessera/primit
 import { CONSENT_TEXT } from './PackageConsentDialog.constants';
 import type { PackageConsentDialogProps } from './PackageConsentDialog.type';
 import { PackageList } from './sub-components/PackageList';
+import { WheelList } from './sub-components/WheelList';
 import './PackageConsentDialog.css';
 
-const PackageConsentDialog = ({ title, packages, onAccept, onCancel, onOpenLink }: PackageConsentDialogProps) => (
+const PackageConsentDialog = ({ title, packages, wheels = [], onAccept, onCancel, onOpenLink }: PackageConsentDialogProps) => (
   <DialogShell
     open
     size="md"
@@ -22,6 +23,7 @@ const PackageConsentDialog = ({ title, packages, onAccept, onCancel, onOpenLink 
     <Stack gap="md">
       <Text>{CONSENT_TEXT.intro(title)}</Text>
       <PackageList heading={CONSENT_TEXT.direct(title)} packages={packages.filter((entry) => entry.direct)} onOpenLink={onOpenLink} />
+      <WheelList heading={CONSENT_TEXT.wheels} wheels={wheels} onOpenLink={onOpenLink} />
       <PackageList heading={CONSENT_TEXT.dependencies} packages={packages.filter((entry) => !entry.direct)} onOpenLink={onOpenLink} />
     </Stack>
   </DialogShell>
