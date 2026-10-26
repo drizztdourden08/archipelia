@@ -25,7 +25,7 @@ import { withListedGuides } from '../official/with-listed-guides';
 import type { CatalogServiceDeps, CatalogView, InstallRequest, Latest } from './catalog-service.type';
 import { CACHE_DIR } from './catalog-service.constants';
 
-const createCatalogService = ({ games: files, cache, engineDir, fetch: fetchFn, trustRoot }: CatalogServiceDeps) => {
+const createCatalogService = ({ games: files, cache, engineDir, fetch: fetchFn, trustRoot, build, buildSandbox, log }: CatalogServiceDeps) => {
   let latest: Latest | undefined;
   let pending: Promise<Latest> | undefined;
 
@@ -93,7 +93,7 @@ const createCatalogService = ({ games: files, cache, engineDir, fetch: fetchFn, 
     cache, engineDir, entryOf: createEnrichEntry(engineDir, () => latest?.entries ?? []), ...(fetchFn ? { fetch: fetchFn } : {}),
   });
 
-  const sources = createSourceService({ engineDir, worldOf: createWorldInfo(indexEntry, enrich), ...(fetchFn ? { fetch: fetchFn } : {}) });
+  const sources = createSourceService({ engineDir, worldOf: createWorldInfo(indexEntry, enrich), run: build, sandbox: buildSandbox, log, ...(fetchFn ? { fetch: fetchFn } : {}) });
 
   return { enrich, install, official, packages, read, remove, sources };
 };

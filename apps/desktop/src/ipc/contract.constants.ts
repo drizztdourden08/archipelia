@@ -3,8 +3,8 @@ import { defineChannels, event, invoke } from '@drizztdourden08/brock-core';
 import type { CatalogView, EnrichRequest, GameEnrichment, InstallRequest, PackagePreview } from '@archipelia/catalog';
 import type {
   AdminLobby, CatalogEntry, EngineChoice, EngineEvent, EngineInstallResult, EngineOverview, EngineStatus, GamePreset,
-  InstalledGame, LobbyServerEntry, PackageSource, ServerEntry, Session, SessionTemplate, SourcePlan, SourcePypiInstall, SourceRef, SourceSuggestions,
-  SourceWheelRequest, StartupDecision, SuggestRequest,
+  InstalledGame, LobbyServerEntry, PackageSource, ServerEntry, Session, SessionTemplate, SourceBuildPrepared, SourceBuildRequest, SourceBuildStart, SourceBuilt,
+  SourcePlan, SourcePypiInstall, SourceRef, SourceSuggestions, SourceWheelRequest, StartupDecision, SuggestRequest,
 } from '@archipelia/model';
 import type { HostLogLine, ServerTestResult } from '@archipelia/hosts';
 import type { PresetInput } from '@archipelia/presets';
@@ -35,6 +35,9 @@ const APP_CHANNELS = defineChannels({
   sourcesPypiPreview: invoke<(ref: SourceRef) => Promise<PackagePreview>>()('ap:sources:pypiPreview'),
   sourcesPypiInstall: invoke<(request: SourcePypiInstall) => Promise<void>>()('ap:sources:pypiInstall'),
   sourcesWheel: invoke<(request: SourceWheelRequest) => Promise<PackageSource>>()('ap:sources:wheel'),
+  sourcesBuildPrepare: invoke<(request: SourceBuildStart) => Promise<SourceBuildPrepared>>()('ap:sources:buildPrepare'),
+  sourcesBuildStart: invoke<(request: SourceBuildRequest) => Promise<SourceBuilt>>()('ap:sources:buildStart'),
+  sourcesBuildCancel: invoke<() => Promise<void>>()('ap:sources:buildCancel'),
   presetsList: invoke<() => Promise<GamePreset[]>>()('ap:presets:list'),
   presetsCreate: invoke<(preset: PresetInput) => Promise<GamePreset>>()('ap:presets:create'),
   presetsSave: invoke<(preset: GamePreset) => Promise<GamePreset>>()('ap:presets:save'),

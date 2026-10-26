@@ -105,6 +105,22 @@ describe('resolvePackages', () => {
     ]);
   });
 
+  test('takes the sha256 of every file from the report, and leaves it out when the report holds none or a malformed one', async () => {
+    const hex = 'a1'.repeat(32);
+    const run = vi.fn(async (_runtime: unknown, { args }: PythonRun) => {
+      if (args.includes('list')) return { code: 0, lines: FROZEN };
+      await writeFile(args[args.indexOf('--report') + 1] ?? '', JSON.stringify({ install: [
+        { metadata: { name: 'one', version: '1' }, download_info: { url: 'https://files.example/one.whl', archive_info: { hashes: { sha256: hex } } } },
+        { metadata: { name: 'two', version: '2' }, download_info: { url: 'https://files.example/two.whl', archive_info: { hash: `sha256=${hex.toUpperCase()}` } } },
+        { metadata: { name: 'three', version: '3' }, download_info: { archive_info: { hashes: { sha256: 'not hex' } } } },
+        { metadata: { name: 'four', version: '4' } },
+      ] }));
+      return { code: 0, lines: [] };
+    });
+    const resolved = await resolvePackages(runtimeOf('old'), ['one'], { run });
+    expect(resolved.map((found) => found.sha256)).toEqual([hex, hex, undefined, undefined]);
+  });
+
   test('resolves nothing for no requirements and runs nothing', async () => {
     const { run } = fakePip();
     expect(await resolvePackages(runtimeOf('old'), [], { run })).toEqual([]);

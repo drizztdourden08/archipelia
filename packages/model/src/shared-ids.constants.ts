@@ -14,8 +14,10 @@ const DOMAIN = {
 
 const ENGINE_JOB = 'archipelia-engine-setup';
 
+const BUILD_JOB = { venv: 'ap-build-venv', tools: 'ap-build-tools', wheel: 'ap-build-wheel' } as const;
+
 const RUN_JOB_PREFIX = 'archipelia-run-';
 
 const LOBBY_TEMPLATE_PREFIX = 'lobby-';
 
-export { DOMAIN, ENGINE_JOB, LOBBY_TEMPLATE_PREFIX, RUN_JOB_PREFIX };
+export { BUILD_JOB, DOMAIN, ENGINE_JOB, LOBBY_TEMPLATE_PREFIX, RUN_JOB_PREFIX };

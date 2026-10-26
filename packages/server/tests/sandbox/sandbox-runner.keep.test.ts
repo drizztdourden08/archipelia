@@ -66,6 +66,21 @@ describe('the bwrap runner', () => {
     ]);
   });
 
+  test('shares the network and binds only the name resolution files when a scope asks for the network, and never otherwise', () => {
+    const online = bwrapCommand({ bwrap: '/usr/bin/bwrap', features: BASIC_FEATURES }, { ...scope, network: true }, generate).args;
+    expect(online.indexOf('--share-net')).toBeGreaterThan(online.indexOf('--unshare-all'));
+    expect(online).toEqual(expect.arrayContaining(['--ro-bind-try', '/etc/resolv.conf', '/etc/resolv.conf']));
+    const offline = bwrapCommand({ bwrap: '/usr/bin/bwrap', features: BASIC_FEATURES }, { ...scope, network: false }, generate).args;
+    expect(offline).not.toContain('--share-net');
+    expect(offline).not.toContain('/etc/resolv.conf');
+  });
+
+  test('passes the build variables of a pip and compiler run into the sandbox and still nothing else', () => {
+    const { env } = bwrapCommand({ bwrap: '/usr/bin/bwrap', features: BASIC_FEATURES }, scope, { ...generate, env: { ...generate.env, CC: 'gcc', PIP_NO_INPUT: '1', GH_TOKEN: 'secret' } });
+    expect(env).toMatchObject({ CC: 'gcc', PIP_NO_INPUT: '1' });
+    expect(env.GH_TOKEN).toBeUndefined();
+  });
+
   test('never passes the host environment into the sandbox', () => {
     const { env } = bwrapCommand({ bwrap: '/usr/bin/bwrap', features: BASIC_FEATURES }, scope, generate);
     expect(env.ARCHIPELIA_TOKEN).toBeUndefined();

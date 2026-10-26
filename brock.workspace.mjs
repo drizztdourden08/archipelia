@@ -1,6 +1,6 @@
 /* @layer root-config @kind config */
 import { defineWorkspace, electronTarget, serverTarget, brockProfile } from '@drizztdourden08/brock-thread';
-import { engineProvision } from './tooling/engine-bundle/src/provision/index.mjs';
+import { engineProvision } from '@archipelia/engine-bundle/provision';
 
 export default defineWorkspace({
   name: 'archipelia',

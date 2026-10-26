@@ -1,6 +1,7 @@
 /* @layer core @kind types */
 import type { CatalogEntry, DataFiles } from '@archipelia/model';
 import type { TrustedRootLoad } from '@archipelia/trust';
+import type { BuildRunner, BuildSandbox } from '../build/build.type';
 import type { PackageConsent } from '../install/package-consent.type';
 import type { FirstPartyRead } from '../first-party/first-party.type';
 import type { Catalog } from '../read-catalog.type';
@@ -18,6 +19,9 @@ type CatalogServiceDeps = {
   engineDir: () => Promise<string>;
   fetch?: typeof fetch;
   trustRoot?: () => Promise<TrustedRootLoad['root']>;
+  build?: BuildRunner | undefined;
+  buildSandbox?: (() => Promise<BuildSandbox>) | undefined;
+  log?: ((message: string) => void) | undefined;
 };
 
 type Latest = Catalog & { fetchedAt: number; firstParty: FirstPartyRead };

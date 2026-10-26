@@ -2,7 +2,18 @@
 
 type ConsentPackage = { name: string; version: string; url: string; direct: boolean };
 
-type ConsentWheel = { name: string; version: string; tag: string; repo: string; sha256: string; verified: boolean; newest?: string | undefined };
+type ConsentWheel = {
+  name: string;
+  version: string;
+  tag: string;
+  repo: string;
+  sha256: string;
+  verified: boolean;
+  newest?: string | undefined;
+  built?: boolean | undefined;
+  commit?: string | undefined;
+  archiveSha256?: string | undefined;
+};
 
 type PackageConsentDialogProps = {
   title: string;

@@ -40,7 +40,8 @@ const createCore = (ports: CorePorts) => {
     emit: (event) => emit({ kind: 'engine', event }), sessions: () => runs.list(), inUse: usage.inUse,
   });
   const { runtime, runtimeFor } = engine;
-  const catalog = createCatalogService({ games, cache, engineDir: engine.engineDir });
+  const sandbox = coreSandbox(environment.platform ?? process.platform, log);
+  const catalog = createCatalogService({ games, cache, engineDir: engine.engineDir, build: ports.build, buildSandbox: sandbox, log: (message) => log(message) });
   const installed = () => listInstalled(games);
   const schemaOf = async (game: string): Promise<GameSchema | undefined> =>
     (await installed()).find((record) => record.game === game)?.schema;
@@ -58,9 +59,11 @@ const createCore = (ports: CorePorts) => {
       emit({ kind: 'session', event });
     },
   });
-  const sandbox = coreSandbox(environment.platform ?? process.platform, log);
   const { lobbies, watchLobbies, adminToken } = createCoreLobbies({ ports: { ...ports, secrets }, sessions: () => sessions, runtime, runtimeFor, sessionFiles, sandbox });
-  const dispose = () => sessions.stopLocal().catch((err: unknown) => log(`the core did not stop its local servers: ${String(err)}`, 'error'));
+  const dispose = async () => {
+    await catalog.sources.dispose().catch((err: unknown) => log(`the core did not remove its build folder: ${String(err)}`, 'error'));
+    await sessions.stopLocal().catch((err: unknown) => log(`the core did not stop its local servers: ${String(err)}`, 'error'));
+  };
   const setLobbyNetworkMode = (mode: NetworkMode) => {
     lobbyMode = mode;
   };

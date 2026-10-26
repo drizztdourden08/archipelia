@@ -11,7 +11,7 @@ export { HintRow } from './compounds/HintRow';
 export { PackageConsentDialog } from './compounds/PackageConsentDialog';
 export type { ConsentPackage, ConsentWheel, PackageConsentDialogProps } from './compounds/PackageConsentDialog';
 export { PackageSourceDialog } from './compounds/PackageSourceDialog';
-export type { PackageSourceDialogProps, PackageSourceStep } from './compounds/PackageSourceDialog';
+export type { BuildLogView, BuildStage, PackageSourceDialogProps, PackageSourceStep } from './compounds/PackageSourceDialog';
 export { LogLines, logCopyText } from './compounds/LogLines';
 export { OptionControl, coercePresetValues, hintOf, isChangedValue, isLoose } from './compounds/OptionControl';
 export type { CoercedValues } from './compounds/OptionControl';
