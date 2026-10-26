@@ -9,10 +9,16 @@ import { storeWheel } from './store-wheel';
 import type { LoadedWheel } from './wheel.type';
 import { REPO_PATH } from './wheel.constants';
 
-const noFitText = (game: string, { name, version, tag, repo }: PackageSource) =>
-  `${game} used ${name} ${version} from GitHub release ${tag} of ${repo}, and that build does not fit this engine. Install the package again from the game card.`;
+const noFitText = (game: string, { name, version, tag, repo, built, commit }: PackageSource) =>
+  (built === true
+    ? `${game} used ${name} ${version}, built from ${repo} at ${(commit ?? tag).slice(0, 7)}, and that build does not fit this engine. Archipelia does not build again on its own. Build the package again from the game card.`
+    : `${game} used ${name} ${version} from GitHub release ${tag} of ${repo}, and that build does not fit this engine. Install the package again from the game card.`);
+
+const goneText = ({ name, version, repo, commit, tag }: PackageSource) =>
+  `The build of ${name} ${version} from ${repo} at ${(commit ?? tag).slice(0, 7)} is no longer stored. Archipelia does not build again on its own. Build the package again from the game card.`;
 
 const fetched = async (runtime: EngineRuntime, source: PackageSource, request: Fetch): Promise<LoadedWheel> => {
+  if (source.built === true) throw new Error(goneText(source));
   const [, owner, repo] = REPO_PATH.exec(source.repo) ?? [];
   if (owner === undefined || repo === undefined) throw new Error(`${source.repo} is not a GitHub repository.`);
   const download = await downloadWheel({ owner, repo, tag: source.tag, asset: source.asset }, request, { dir: wheelRoot(runtime), expected: source.sha256 });

@@ -19,7 +19,7 @@ type DownloadLimits = { dir: string; size?: number | undefined; expected?: strin
 
 type LoadedWheel = { source: PackageSource; file: string; requires: string[] };
 
-type WheelLabel = Pick<PackageSource, 'repo' | 'tag' | 'asset' | 'verified' | 'newest'>;
+type WheelLabel = Pick<PackageSource, 'repo' | 'tag' | 'asset' | 'verified' | 'newest' | 'built' | 'commit' | 'archiveSha256'>;
 
 type CachedWheel = { name: string; dir: string; size: number; at: number };
 

@@ -1,5 +1,6 @@
 /* @layer core @kind types */
 import type { SourceCandidate, SourceOrigin } from '@archipelia/model';
+import type { BuildRunner, BuildSandbox } from '../build/build.type';
 import type { GithubRepo } from '../enrich/enrich.type';
 
 type RepoFacts = {
@@ -29,7 +30,14 @@ type WorldTexts = { linked?: string | undefined; home?: string | undefined; text
 
 type WorldInfo = Omit<WorldTexts, 'linked'>;
 
-type SourceServiceDeps = { fetch?: typeof fetch; engineDir: () => Promise<string>; worldOf: (apworld: string) => Promise<WorldInfo> };
+type SourceServiceDeps = {
+  fetch?: typeof fetch;
+  engineDir: () => Promise<string>;
+  worldOf: (apworld: string) => Promise<WorldInfo>;
+  run?: BuildRunner | undefined;
+  sandbox?: (() => Promise<BuildSandbox>) | undefined;
+  log?: ((message: string) => void) | undefined;
+};
 
 type Wanted ={ module: string; world: WorldContext; paste?: string | undefined };
 

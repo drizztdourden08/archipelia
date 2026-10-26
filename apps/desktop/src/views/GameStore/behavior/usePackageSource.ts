@@ -4,6 +4,7 @@ import type { PackageSourceDialogProps, PackageSourceStep } from '@archipelia/de
 import type { SourceSuggestions } from '@archipelia/model';
 import type { GameRow } from '../GameStore.type';
 import { sourceAimOf } from './source-aim-of';
+import { useBuildLog } from './useBuildLog';
 import { sourceHandlersOf } from './source-handlers-of';
 import { sourceSearch } from './source-search';
 import { SEARCHING } from './usePackageSource.constants';
@@ -13,6 +14,7 @@ const usePackageSource = ({ needOf, installWorld, ask }: PackageSourceParams) =>
   const [aim, setAim] = useState<SourceAim | null>(null);
   const [step, setStep] = useState<PackageSourceStep>(SEARCHING);
   const [results, setResults] = useState<SourceSuggestions | null>(null);
+  const buildLog = useBuildLog();
 
   const close = useCallback(() => { setAim(null); setResults(null); setStep(SEARCHING); }, []);
   const open = useCallback((row: GameRow) => {
@@ -27,6 +29,7 @@ const usePackageSource = ({ needOf, installWorld, ask }: PackageSourceParams) =>
     title: aim.title,
     module: aim.module,
     step,
+    buildLog,
     ...sourceHandlersOf({ aim, step, results, ask, installWorld, setStep, setResults, close }),
   };
 

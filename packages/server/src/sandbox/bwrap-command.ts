@@ -1,6 +1,6 @@
 /* @layer core @kind logic */
 import type { SpawnCommand } from '@archipelia/engine';
-import { ISOLATION_FLAGS, NO_USERNS_FLAGS, NPROC_MARGIN, RUN_LIMITS, SANDBOX_TMP, SYSTEM_PATHS, TMP_BYTES } from './sandbox.constants';
+import { ISOLATION_FLAGS, NETWORK_PATHS, NO_USERNS_FLAGS, NPROC_MARGIN, RUN_LIMITS, SANDBOX_TMP, SHARE_NET_FLAG, SYSTEM_PATHS, TMP_BYTES } from './sandbox.constants';
 import { sandboxEnv } from './sandbox-env';
 import type { BwrapFeatures, BwrapSetup, SandboxScope } from './sandbox.type';
 
@@ -15,8 +15,10 @@ const bwrapCommand = ({ bwrap, features, tasks }: BwrapSetup, scope: SandboxScop
   const [file = bwrap, ...args] = [
     ...launcher(bwrap, features, tasks),
     ...ISOLATION_FLAGS,
+    ...(scope.network ? [SHARE_NET_FLAG] : []),
     ...(features.disableUserns ? NO_USERNS_FLAGS : []),
     ...binds('--ro-bind-try', SYSTEM_PATHS),
+    ...(scope.network ? binds('--ro-bind-try', NETWORK_PATHS) : []),
     '--proc', '/proc', '--dev', '/dev',
     ...(features.tmpfsSize ? ['--size', TMP_BYTES] : []),
     '--tmpfs', SANDBOX_TMP,

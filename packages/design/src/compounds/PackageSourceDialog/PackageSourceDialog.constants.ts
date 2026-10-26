@@ -1,5 +1,5 @@
 /* @layer renderer-app @kind config */
-import type { SourceOrigin, SourceWarning } from '@archipelia/model';
+import type { SourceBuildTool, SourceOrigin, SourceWarning } from '@archipelia/model';
 
 const SOURCE_TEXT = {
   title: (module: string) => `Get the package ${module}`,
@@ -71,7 +71,6 @@ const PLAN_TEXT = {
   pypiUnlinked: (name: string) => `A project called ${name} is on the Python Package Index, but it does not point back to this repository, so Archipelia does not offer it.`,
   pypiAction: 'Install from the Python Package Index',
   build: 'Let Archipelia build it',
-  buildSoon: 'Coming soon: building from source',
   manualHeading: 'I will do it myself',
   manualIntro: 'Run these steps in a terminal, in order. Then click Check again.',
   python: 'Archipelia\'s own Python is at:',
@@ -85,6 +84,77 @@ const PLAN_TEXT = {
   still: (module: string) => `Archipelia still cannot find ${module}. Check the last step's output.`,
 } as const;
 
-const BACKABLE_STEPS: ReadonlySet<string> = new Set(['trust', 'plan']);
+const BUILD_TEXT = {
+  warning: (repo: string) =>
+    `Building runs the code of ${repo} on your computer, with your access. Archipelia cannot check that code. Nothing is downloaded until you click Download the source.`,
+  confined: 'The build runs in a sandbox. It can write only to its private build folder, and it has no network while it builds.',
+  unconfined: 'The build runs with your user rights and can read your files and use the network.',
+  how: 'Archipelia downloads the source at the version shown, checks it, installs the build tools into a private folder and builds there. The tools come from the Python Package Index as ready-made files. Only this project is built from source.',
+  download: 'Download the source',
+  preparing: 'Downloading the source and setting up a private build folder.',
+  readyHeading: (module: string) => `Ready to build ${module}`,
+  source: (repo: string, short: string) => `Source: ${repo} at ${short}`,
+  size: (megabytes: string) => `Archive size: ${megabytes} MB`,
+  checksum: (sha256: string) => `sha256 ${sha256}`,
+  checksumNote: 'Archipelia checks the source against this checksum again before it builds.',
+  tools: 'Build tools Archipelia will install in the private folder',
+  noTools: 'This project needs no extra build tools.',
+  action: (module: string) => `Build ${module}`,
+  building: (module: string) => `Building ${module}. This can take a few minutes.`,
+  cancel: 'Cancel',
+  checkAgain: 'Check again',
+  tryAgain: 'Try again',
+  failedHeading: 'The build failed',
+  failedHelp: 'The log says why. You can copy it to ask the author of the world.',
+  logLabel: 'Build log',
+  logEmpty: 'No output yet.',
+} as const;
 
-export { BACKABLE_STEPS, ORIGIN_LABEL, PLAN_TEXT, SOURCE_TEXT, WARNING_HELP, WARNING_LABEL };
+const MISSING_TEXT: Record<SourceBuildTool, { title: string; body: string; link: string; url: string }> = {
+  msvc: {
+    title: 'The Microsoft C++ Build Tools are missing',
+    body: 'Windows needs the Microsoft C++ Build Tools to compile this project. Install them, then click Check again.',
+    link: 'Get the Microsoft C++ Build Tools',
+    url: 'https://visualstudio.microsoft.com/visual-cpp-build-tools/',
+  },
+  compiler: {
+    title: 'A C compiler is missing',
+    body: 'Install gcc or clang. On Linux that is the build tools of your distribution, such as build-essential. On macOS it is the Xcode command line tools. Then click Check again.',
+    link: 'How to install gcc',
+    url: 'https://gcc.gnu.org/install/',
+  },
+  xcode: {
+    title: 'The Xcode command line tools are missing',
+    body: 'Run xcode-select --install in a terminal and finish the Apple installer. Then click Check again.',
+    link: 'Xcode downloads',
+    url: 'https://developer.apple.com/xcode/resources/',
+  },
+  'python-headers': {
+    title: 'The Python headers are missing',
+    body: 'The build could not find Python.h. The engine Python should ship it, so this engine may be damaged. Reinstall the engine, then click Check again.',
+    link: 'About the Python headers',
+    url: 'https://docs.python.org/3/c-api/intro.html#include-files',
+  },
+  headers: {
+    title: 'A system library is missing',
+    body: 'The build needs a header file that is not on this computer. Install the development package of that library, then click Check again.',
+    link: 'Find the package',
+    url: 'https://pkgs.org/',
+  },
+  rust: {
+    title: 'Rust is missing',
+    body: 'This project is written in Rust. Install Rust with rustup, then click Check again. On Windows it also needs the Microsoft C++ Build Tools.',
+    link: 'Get Rust',
+    url: 'https://www.rust-lang.org/tools/install',
+  },
+  cmake: {
+    title: 'CMake is missing',
+    body: 'This project builds with CMake. Install CMake, then click Check again.',
+    link: 'Get CMake',
+    url: 'https://cmake.org/download/',
+  },
+};
+
+const BACKABLE_STEPS: ReadonlySet<string> = new Set(['trust', 'plan', 'build']);
+
+export { BACKABLE_STEPS, BUILD_TEXT, MISSING_TEXT, ORIGIN_LABEL, PLAN_TEXT, SOURCE_TEXT, WARNING_HELP, WARNING_LABEL };

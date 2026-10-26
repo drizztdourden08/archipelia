@@ -14,9 +14,11 @@ const usage = {
     'Show the warning at the top of every step: code from a GitHub repo runs on this computer with the user\'s access and Archipelia cannot check it.',
     'Preselect nothing: the user picks a repo with Use this one, and a repo that does not hold the module cannot be picked.',
     'Ask for trust before any plan: a checkbox, or the typed owner and repo name when the repo has a warning badge.',
-    'Run nothing from a repo in this dialog; the plan only reads files and the commands are for the user to copy.',
+    'Run nothing from a repo before the user asks for the build: the plan only reads files and the commands are for the user to copy.',
     'Offer a ready-made build only when the plan holds one that fits the engine, and say plainly when there is none. When the host published no checksum for it, ask for the typed owner and repo name before the button works.',
-    'Keep Let Archipelia build it disabled with its Coming soon note until building from source exists.',
+    'Let Archipelia build it opens a step that says plainly that the code of the project will run on this computer, and downloads nothing until the user clicks Download the source.',
+    'Show the commit, the size and the sha256 of the source and every build tool before the build button works, and keep Cancel on every step that runs.',
+    'When a build fails, name the missing piece (compiler, headers, Rust, CMake) in plain words with a link to its install page and Check again; keep the log for the user to copy.',
     'Open every link with onOpenLink, never inside the app window.',
   ],
   a11y: [
@@ -43,12 +45,16 @@ const PackageSourceSample = ({ onClose }: { onClose: () => void }) => (
     onInstallFromPypi={() => undefined}
     onUseWheel={() => undefined}
     onCheckAgain={() => undefined}
+    onBuild={() => undefined}
+    onBuildDownload={() => undefined}
+    onBuildStart={() => undefined}
+    onBuildCancel={() => undefined}
     onOpenLink={() => undefined}
     onClose={onClose}
   />
 );
 `,
-  propsHash: '950fde7c2900550d',
+  propsHash: 'ea9c8e0e8ad39cb2',
 } satisfies ComponentUsage;
 
 export { usage };

@@ -18,7 +18,7 @@ export type * from './world-carry.type';
 export { lobbyTemplateId } from './lobby-template-id';
 export { templateOf } from './template-of';
 export { runJobId } from './run-job-id';
-export { DOMAIN, ENGINE_JOB, RUN_JOB_PREFIX } from './shared-ids.constants';
+export { BUILD_JOB, DOMAIN, ENGINE_JOB, RUN_JOB_PREFIX } from './shared-ids.constants';
 export type * from './install-failure';
 export type * from './package-source';
 export { INSTALL_FAILURE_CODE, installFailureFrom, installFailureOf } from './install-failure';

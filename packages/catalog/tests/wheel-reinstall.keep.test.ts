@@ -6,6 +6,7 @@ import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { memoryFiles, recordOf } from './memory-files.fixtures';
+import { COMMIT } from './build.fixtures';
 import { cacheWheel, downloadUrl, sha256Of, TAGS, WHEEL, wheelBytes } from './wheel.fixtures';
 
 const state = vi.hoisted(() => ({ tags: [] as string[], installed: [] as unknown[] }));
@@ -133,5 +134,39 @@ describe('carrying a world with a ready-made build to another engine', () => {
     expect(bad.problems).toHaveLength(1);
     expect(bad.problems[0]).toMatchObject({ apworld: 'ctrdi', game: 'Chrono' });
     expect(bad.problems[0]?.reason).toContain('does not fit this engine');
+  });
+});
+
+describe('a wheel built from source after an engine change', () => {
+  const built = { repo: 'Pseudoarc/ctrando', tag: COMMIT, asset: WHEEL, verified: true, built: true, commit: COMMIT, archiveSha256: 'b'.repeat(64) };
+  const builtOn = sourceOf(built);
+  const at = COMMIT.slice(0, 7);
+
+  test('installs the very wheel on record from the cache of the engine when it fits, with no download and no build', async () => {
+    const runtime = await runtimeIn('built-cached');
+    const { file } = await cacheWheel(runtime, BYTES, built);
+    const { net, seen } = serving();
+    await reinstallSources(runtime, recordWith([{ ...builtOn, sha256: sha256Of(BYTES) }]), net);
+    expect(state.installed).toEqual([[runtime, { file, sha256: sha256Of(BYTES) }]]);
+    expect(seen).toEqual([]);
+  });
+
+  test('asks again, and does not build or download on its own, when the new Python has another tag', async () => {
+    const runtime = await runtimeIn('built-newpython');
+    await cacheWheel(runtime, BYTES, built);
+    state.tags = ['cp313-cp313-win_amd64', 'cp313-none-any'];
+    const { net, seen } = serving();
+    await expect(reinstallSources(runtime, recordWith([builtOn]), net)).rejects.toThrow(
+      `Chrono used ctrando 1.2.0, built from Pseudoarc/ctrando at ${at}, and that build does not fit this engine. Archipelia does not build again on its own.`,
+    );
+    expect([state.installed, seen]).toEqual([[], []]);
+  });
+
+  test('asks again, and does not download a replacement, when the stored wheel is gone', async () => {
+    const { net, seen } = serving();
+    await expect(reinstallSources(await runtimeIn('built-gone'), recordWith([builtOn]), net)).rejects.toThrow(
+      `The build of ctrando 1.2.0 from Pseudoarc/ctrando at ${at} is no longer stored. Archipelia does not build again on its own.`,
+    );
+    expect([state.installed, seen]).toEqual([[], []]);
   });
 });
