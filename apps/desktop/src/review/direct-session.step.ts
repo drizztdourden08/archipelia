@@ -22,7 +22,7 @@ import { waitText } from './wait-text';
 
 const openLobbyScreen = async (tour: AppReviewTour, id: string) => {
   openSessionLobby(id);
-  return waitText(tour, /Players · \d/, () => tour.find(SELECTOR.layer), 15000);
+  return waitText(tour, /Players · \d/i, () => tour.find(SELECTOR.layer), 15000);
 };
 
 const showsLobby = async (tour: AppReviewTour, lobby: AdminLobby) => {

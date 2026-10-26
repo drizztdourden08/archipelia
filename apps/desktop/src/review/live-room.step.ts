@@ -34,7 +34,7 @@ const startFromSessions = async (tour: AppReviewTour) => {
   await openSavedLobby(tour);
   const template = useLibraryStore.getState().templates.find((entry) => entry.name === REVIEW_SESSION);
   nav.close();
-  if (template) void appApi().sessionsRun(template);
+  if (template) void appApi().sessionsRun(template).then((run) => useFocusStore.getState().focus(run.id), () => undefined);
 };
 
 const stopFromDashboard = async (tour: AppReviewTour) => {
