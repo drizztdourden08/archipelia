@@ -1,0 +1,395 @@
+{
+  "$generator": "ai-config/ai/ai-config.mjs",
+  "ai": "claude",
+  "projectKey": "archipelia",
+  "sourceCommit": "69fc60df48bcb77416305376de89406a260f35c3",
+  "mcpKeys": [
+    "coord-dashboard"
+  ],
+  "files": [
+    {
+      "path": ".claude/settings.json",
+      "sha256": "3526e2078975f5626bb31a3370e5d1e601b7929d3e175191bba33f64980ae9af"
+    },
+    {
+      "path": ".claude/skills/architecture/SKILL.md",
+      "sha256": "fd5be6559b75185fa9926cafa64f4e7402aed7dffb97f4d4fd005076de7dc53b"
+    },
+    {
+      "path": ".claude/skills/brock-standard/SKILL.md",
+      "sha256": "4488a9104db3b47e4ab8c81738e24707cf1007bc7c23076c2c6e4882fc642e2b"
+    },
+    {
+      "path": ".claude/skills/brock-thread/SKILL.md",
+      "sha256": "e416e5b02b7d3df2a9c653583314700e5a75d070d4a15d8e4b9c198000a31d4c"
+    },
+    {
+      "path": ".claude/skills/codex/SKILL.md",
+      "sha256": "ca0326f2d80116a9cf6882734b8b73361ee1f7ea4c0c9e0124015ecb99323f3b"
+    },
+    {
+      "path": ".claude/skills/coding-standards/SKILL.md",
+      "sha256": "c1f3b61200ca387581e1faad485887a8099f58d22ec7445ecf4c296ec918f69c"
+    },
+    {
+      "path": ".claude/skills/comment-tools/SKILL.md",
+      "sha256": "ee72931f626c48e4a59d3b32ce7d19b58c3fe1a6590d6816b576d91a037ad4f3"
+    },
+    {
+      "path": ".claude/skills/coord/coordinator.md",
+      "sha256": "de3f90684dfb5f140561a7a26710f4ffaf4cefd1c9c44575173829b3b377968f"
+    },
+    {
+      "path": ".claude/skills/coord/portfolio.md",
+      "sha256": "70d422b4b9d924cdc194c6d5196fb71b40698024ccc1915b04024729c7a5d58b"
+    },
+    {
+      "path": ".claude/skills/coord/processes.md",
+      "sha256": "397660ba1d6094cf1e891eaf46eda7ffb0388f62b4501bc072a7eb616cfe397c"
+    },
+    {
+      "path": ".claude/skills/coord/SKILL.md",
+      "sha256": "2026db3d533835a6e4618636fb5107e840879782bfaaf73d007959d13cea28a4"
+    },
+    {
+      "path": ".claude/skills/coord/tests.md",
+      "sha256": "df9c9bb61edbefe106a691f741bad041095b478ad10884415688d301008d0977"
+    },
+    {
+      "path": ".claude/skills/design-system/SKILL.md",
+      "sha256": "72720631fad67d15a13f938291b724fa3b1bb4048a6b2135693be420c1f7f30e"
+    },
+    {
+      "path": ".claude/skills/electron/SKILL.md",
+      "sha256": "1ba21c2800acd7010e5a1f1ab811ecb8e9037508665b40e0fa350a98d1f83013"
+    },
+    {
+      "path": ".claude/skills/refactoring-guru/references/code-smells.md",
+      "sha256": "11f56c1ed945e0e05d6bf5b98eb1a7c33ba2f4a68ba542d684306d0ba1142c0e"
+    },
+    {
+      "path": ".claude/skills/refactoring-guru/references/design-patterns.md",
+      "sha256": "97a4a5a92811d1755620115aba2cbebe30ea95202eb0f7295926f6b9c258a056"
+    },
+    {
+      "path": ".claude/skills/refactoring-guru/references/refactoring-techniques.md",
+      "sha256": "9576a042fa7411ef3505f5925eb9a63cce904442ab9852c8125db47e26329cce"
+    },
+    {
+      "path": ".claude/skills/refactoring-guru/references/solid.md",
+      "sha256": "9ea3e166018091a3113d0f5bb5e9eaf7406fc5c91efe72f45b2c0f914c84a2e4"
+    },
+    {
+      "path": ".claude/skills/refactoring-guru/SKILL.md",
+      "sha256": "dba44e72d7c95496ada6577cd06d54c34550f6c96d6af3ab065e23d31438bccb"
+    },
+    {
+      "path": ".claude/skills/tooling/SKILL.md",
+      "sha256": "e57a03c70160e97d0974e5c59e995bcada02ee74e79a1951d3d6b04720457512"
+    },
+    {
+      "path": ".claude/skills/wireframe-ui/SKILL.md",
+      "sha256": "5c42695107d17bcaab42b39b810fa0b9e843689f9d88b1722550009957bf783b"
+    },
+    {
+      "path": ".claude/tools/brock-gate/brock-gate.mjs",
+      "sha256": "08e58a2684b50fac00651864586da44e1d86bd66cadd0fb683b1b741b8daf9cb"
+    },
+    {
+      "path": ".claude/tools/brock-gate/changed-files.mjs",
+      "sha256": "b1ef800efd5044c494556bf3f82aecdec8025cc11c5623010eb3348b7db6a5ef"
+    },
+    {
+      "path": ".claude/tools/brock-gate/gate-plan.mjs",
+      "sha256": "35b7a8e3266d15960d1efb9f915f441d5842a04d9b9592569116681827251a12"
+    },
+    {
+      "path": ".claude/tools/brock-gate/stop-gate.mjs",
+      "sha256": "2928442fc055a2b8b3ea213c9da49bc9523d55da06425f8d5aa12701d5333db4"
+    },
+    {
+      "path": ".claude/tools/brock-plugin-ai/guards/approval-rules.mjs",
+      "sha256": "41b172bc4774bba2309bfd676676b3754519f0ab97fd4de623ed6601c39fe78c"
+    },
+    {
+      "path": ".claude/tools/brock-plugin-ai/guards/container-rules.mjs",
+      "sha256": "d3fe9d0b85d09c8a35e5352a10780f492fab371f7d106358a27cbc71b1721486"
+    },
+    {
+      "path": ".claude/tools/brock-plugin-ai/guards/guards.mjs",
+      "sha256": "5ac4b481b6b156e7fd04bcd051ad4ce7967a92b520c78b147bc6a5f6db03f6c4"
+    },
+    {
+      "path": ".claude/tools/brock-plugin-ai/guards/launch-rules.mjs",
+      "sha256": "d2e4f86fb48ab58875472295ae1ed7291162665ed550a05141dc28eb610d548e"
+    },
+    {
+      "path": ".claude/tools/brock-plugin-ai/guards/path-rules.mjs",
+      "sha256": "2873738940be7936ca7e6a5464b7010a1358470bd33d8c37e9270e0b9fc90da8"
+    },
+    {
+      "path": ".claude/tools/brock-plugin-ai/guards/plan-rules.mjs",
+      "sha256": "64ecb6037ab156eaf7f5ee83c2383be405b151c48f8dd347b17d9971bb444aab"
+    },
+    {
+      "path": ".claude/tools/brock-plugin-ai/guards/plumbing-rules.mjs",
+      "sha256": "3e23c7240aed92b7124d81786995c0e0b3f14517115a280c354957727923c40d"
+    },
+    {
+      "path": ".claude/tools/brock-plugin-ai/guards/project-rules.mjs",
+      "sha256": "06c9115633048e99d1e21d833f270db64252bc78e71c5a80f3afe3da70ae492c"
+    },
+    {
+      "path": ".claude/tools/brock-plugin-ai/guards/shell.mjs",
+      "sha256": "4e514d48695bbadc60d27bb53f90faa6191996a8ae50900c0d39fe8922c38573"
+    },
+    {
+      "path": ".claude/tools/brock-plugin-ai/guards/window-rules.mjs",
+      "sha256": "84c0389c28e12194c32f49aa8d98e7077ebc28bb6dcbbb4727e2f68e3dd1eb3d"
+    },
+    {
+      "path": ".claude/tools/brock-plugin-ai/hooks/pre-tool-use.mjs",
+      "sha256": "d5036621d112e10c37cef31013ba4901f73f24797b65788ede3e43eda1ce5f43"
+    },
+    {
+      "path": ".claude/tools/brock-plugin-ai/index.mjs",
+      "sha256": "1f4a577145dba7af0d4fc1847262769b955d96926e7fc2942ff81a16a0a43403"
+    },
+    {
+      "path": ".claude/tools/brock-plugin-ai/README.md",
+      "sha256": "dea478334537730c199e85395c865477fbc98ed56f90ebb6ad53ddcb0861b2c2"
+    },
+    {
+      "path": ".claude/tools/brock-plugin-ai/steps/wire-ai-config.mjs",
+      "sha256": "b0663d4af60854488fc71ad12d167fcdb7f855861137d81bf46cab39cc3f08f0"
+    },
+    {
+      "path": ".claude/tools/brock-plugin-ai/verbs/ai.mjs",
+      "sha256": "d84572b7990594f3269550ae3fa82535736cf03f73bb2f192decaef9dbdc3d43"
+    },
+    {
+      "path": ".claude/tools/codex/codex-bin.mjs",
+      "sha256": "06d29715d0b34e3592af5e3004fab08a5c3ed48e7f6200df89eca5df144e80ab"
+    },
+    {
+      "path": ".claude/tools/codex/codex.mjs",
+      "sha256": "1fd9ca55aa0c7cc85cfaced48901aefd99518b587b38eff584ed6f14869da7b9"
+    },
+    {
+      "path": ".claude/tools/codex/generate-image.mjs",
+      "sha256": "ad306e8e0c91f65e1983cf2c25ed324c3a3ad76bce318c70a64cf396ecbc783e"
+    },
+    {
+      "path": ".claude/tools/codex/pixelize.mjs",
+      "sha256": "8a16262ca2d104ca93b7fe18fd015d37cae5610bc57c17a0beafdc02f3a62133"
+    },
+    {
+      "path": ".claude/tools/codex/png.mjs",
+      "sha256": "5379285066ada99382faa05f3a7b40251b843b900e76e145e5c532caee493c64"
+    },
+    {
+      "path": ".claude/tools/codex/run-codex.mjs",
+      "sha256": "85d062b21d35d96c712b3906087ee84bc9b1673573249cafc14f43f6bf71bf49"
+    },
+    {
+      "path": ".claude/tools/comment-tools/comment-ast.mjs",
+      "sha256": "b2717e81bedbadccd84730884af67276555debc03484868eea0bb9808e39c1e8"
+    },
+    {
+      "path": ".claude/tools/comment-tools/list-comments.mjs",
+      "sha256": "994691c602b04ac99920264401e71a4f91b4741738cbfe9844c240a6a8d79711"
+    },
+    {
+      "path": ".claude/tools/comment-tools/scan-comments.mjs",
+      "sha256": "cdd8f7b368f12056abeec7d37801b90f79537245b1bea7cc29c4719bcbebd4fe"
+    },
+    {
+      "path": ".claude/tools/comment-tools/strip-comments.mjs",
+      "sha256": "f362582ebf60c6b941ec7d063e80125d14024369b8c6ef52821a3fed77f5071f"
+    },
+    {
+      "path": ".claude/tools/coord/agents.mjs",
+      "sha256": "3c41bd428c4e8f7af53f4abccfd67b7abf3df7b4056474bf2e25e9d2ac56f274"
+    },
+    {
+      "path": ".claude/tools/coord/board.html",
+      "sha256": "84ef101d707c6ba944b04e8af005e9988fadfa154f2019c8147b0556c1fe5360"
+    },
+    {
+      "path": ".claude/tools/coord/cli-args.mjs",
+      "sha256": "bbfaa1e87be01fad391e14d86845444f68e883a327dff35221dcf602e8ec427b"
+    },
+    {
+      "path": ".claude/tools/coord/coord",
+      "sha256": "73b844815480333d1679278d74366f7f409d3857b1073329a23130d0fe41e272"
+    },
+    {
+      "path": ".claude/tools/coord/coord.mjs",
+      "sha256": "5dfa46c1c9e500dee5e9de0f725b33e1540be3166359aeaf034461debdfb6e3b"
+    },
+    {
+      "path": ".claude/tools/coord/dashboard-client.mjs",
+      "sha256": "e42c7613f23d0a0ce4fcbdcce9e509f67312b9573d6f27ef53be6e25bffd62a4"
+    },
+    {
+      "path": ".claude/tools/coord/format.mjs",
+      "sha256": "b7b5ca941cb6eb310a1d5d38b63fbb79a06797a7f7bb9655ede80b1916133f1f"
+    },
+    {
+      "path": ".claude/tools/coord/launchers.mjs",
+      "sha256": "17fe581039a93688cafe232669f045969eabe331ce777040e17b2d1d58c68f39"
+    },
+    {
+      "path": ".claude/tools/coord/limits.mjs",
+      "sha256": "6dc3ba68cd8983aef649e674dce093b537a6b1dd8c0d1d1018e9fbfde3a77d16"
+    },
+    {
+      "path": ".claude/tools/coord/names.mjs",
+      "sha256": "38097d6d875a31906a2647416b244910b708006bac83fa740a77afd096873b2d"
+    },
+    {
+      "path": ".claude/tools/coord/ops.mjs",
+      "sha256": "1a5c7ad92dd57cbe179ca3f53fb2b6ebb8aad031ce42854e90e902aa2189c249"
+    },
+    {
+      "path": ".claude/tools/coord/pause.mjs",
+      "sha256": "289dd33fb1ebdfc86bec10392763ec602714bec995013d343c667c5bcf344599"
+    },
+    {
+      "path": ".claude/tools/coord/portfolio.html",
+      "sha256": "acb09f339a23ee25146e0f9ac1f88da262397ead0da7818bdce611fda8c56b18"
+    },
+    {
+      "path": ".claude/tools/coord/project.mjs",
+      "sha256": "acc54b679c18ff25491d3620d5a0bc3157b417ad83bf549f1a25c2e3a251d999"
+    },
+    {
+      "path": ".claude/tools/coord/README.md",
+      "sha256": "eed3545a060534ec284c7c603486074dbfe3a408c825df0f07d0f591231d562c"
+    },
+    {
+      "path": ".claude/tools/coord/shortcut.mjs",
+      "sha256": "7c47fa28ed2480d50748b51cd1f3b1f9611c2c3b3868c30f2cd1856610235fbe"
+    },
+    {
+      "path": ".claude/tools/coord/store.mjs",
+      "sha256": "c3a54e56651aba87f3930ebe96038f2ef8f4e2a01aeef7e4eda7c9a68220b499"
+    },
+    {
+      "path": ".claude/tools/coord/verbs/action.mjs",
+      "sha256": "8423eb1445b56a4ff954ea9a845b551bbb8d07a44451d5401ff35f01d3069776"
+    },
+    {
+      "path": ".claude/tools/coord/verbs/activity.mjs",
+      "sha256": "a2ae29540394e8a681e11dadc6030393f19fa9b583bdb17fbe014f41f0a6727f"
+    },
+    {
+      "path": ".claude/tools/coord/verbs/agent.mjs",
+      "sha256": "39333645df27c4477004a5bb1372db004b02f0240cda7cbc0289314b3d3326f1"
+    },
+    {
+      "path": ".claude/tools/coord/verbs/board.mjs",
+      "sha256": "22ec53068e2294b51a458fb7b52caee90ecbeed69e397e2eb9c58b631689be60"
+    },
+    {
+      "path": ".claude/tools/coord/verbs/build.mjs",
+      "sha256": "32fa55ea1a168f5431d59808f5a04994d496c6de472352e8b132d3d21a3d7e63"
+    },
+    {
+      "path": ".claude/tools/coord/verbs/check.mjs",
+      "sha256": "58763d9bdec872bc43755d1dab659d18388897c8fd63ad07b925e06836c152b2"
+    },
+    {
+      "path": ".claude/tools/coord/verbs/crud.mjs",
+      "sha256": "59a58aed66a42790fa8e39c02b2ba43eb7497dc7123990081ff9c773f5771faf"
+    },
+    {
+      "path": ".claude/tools/coord/verbs/dashboard.mjs",
+      "sha256": "ec45465d17fa0826fba49f89120d05c1f30a1ca4d747f230814b4063af3f4ae9"
+    },
+    {
+      "path": ".claude/tools/coord/verbs/dispatch.mjs",
+      "sha256": "45459000cbd89a5d575173a9537bda7c31186f44d56cfc3723be362d90935003"
+    },
+    {
+      "path": ".claude/tools/coord/verbs/entry.mjs",
+      "sha256": "e16aa608af203fe20c566576d57b1dddda376d8db2844ac4accfb0d80e4a4aa4"
+    },
+    {
+      "path": ".claude/tools/coord/verbs/hook.mjs",
+      "sha256": "63bed275a9bf5f51d6a05b93a95d85aad786c153446c3e6ff496b711bb8fc880"
+    },
+    {
+      "path": ".claude/tools/coord/verbs/inbox.mjs",
+      "sha256": "ceb7ac7f422d58ec39d6758084d853f9249a60617046f7a9f59946ee4c54263b"
+    },
+    {
+      "path": ".claude/tools/coord/verbs/item.mjs",
+      "sha256": "477b322497be551fe8400bbaa45f67eb9cf5ee20665ff9fc360f6242b4edf6a0"
+    },
+    {
+      "path": ".claude/tools/coord/verbs/launcher.mjs",
+      "sha256": "c1184150d2ac4fb354d08f4547528dfa1ea10002822fa1078adbbc2e4e0dfd4a"
+    },
+    {
+      "path": ".claude/tools/coord/verbs/lead.mjs",
+      "sha256": "4986433f13c1851c366b577855cdbdcfb296d8a042365d36abcc2e61fc9aa46a"
+    },
+    {
+      "path": ".claude/tools/coord/verbs/lock.mjs",
+      "sha256": "64abca22e33cd82c40e7cdd3727f34e73a40932de17b910b993c38f2e13b9573"
+    },
+    {
+      "path": ".claude/tools/coord/verbs/log.mjs",
+      "sha256": "b1ae3b426e81eeb43c6b133af9f1f09a38a7e549063cce240d27ba055d2b1908"
+    },
+    {
+      "path": ".claude/tools/coord/verbs/portfolio.mjs",
+      "sha256": "c2accb0d8f091486ca63bfc47df6706feab0594c888a3e8741716740d4d6fa58"
+    },
+    {
+      "path": ".claude/tools/coord/verbs/proc.mjs",
+      "sha256": "545a16262fe9e11a33539f1e1acb182290ce6ec2d12b35177f466f0ee791b079"
+    },
+    {
+      "path": ".claude/tools/coord/verbs/purge.mjs",
+      "sha256": "8cf97f7790b0a327ffdd315c062c205e68c8e601b470676572bb6cbfbc3a77b8"
+    },
+    {
+      "path": ".claude/tools/coord/verbs/run.mjs",
+      "sha256": "52d0b4ba6f87ea94f25cc75bdd5f2fec5dc2c4bda0a39ee6481fa6d1e2e13780"
+    },
+    {
+      "path": ".claude/tools/coord/verbs/sync.mjs",
+      "sha256": "462d5efbf61e4caa6f14b9daaeba3871a694d6f36c34d723fa8fdc0a7c2d2d39"
+    },
+    {
+      "path": ".claude/tools/coord/verbs/test.mjs",
+      "sha256": "d6af082d5e03497fe6ca34c0cb0564443c969bab35b433ad2ec81dce94551b82"
+    },
+    {
+      "path": ".claude/tools/coord/verbs/thread.mjs",
+      "sha256": "2c887d1d2ce0bea33f3c8f66ab9a56700c5d04508434b5897c0ea57a9e9eb1e3"
+    },
+    {
+      "path": ".claude/tools/coord/verbs/tick.mjs",
+      "sha256": "fbf7af7e9abe40133cd66c70cdcafc8238ec8e19dbaa8f9cb58f1e759e889401"
+    },
+    {
+      "path": ".claude/tools/coord/verbs/wakefault.mjs",
+      "sha256": "c20e0462a78dca691cc7bdbff7309d898d369469e3b85e706570a3070c02968d"
+    },
+    {
+      "path": ".claude/tools/coord/verbs/worktree.mjs",
+      "sha256": "1930f3a6361304e2f1a476318af9d2b4a9603758488264b44fd6e6e7467bd950"
+    },
+    {
+      "path": ".claude/tools/coord/worktrees.mjs",
+      "sha256": "9669a548e61ef7fbf89be947664603321b288a6453ba83cf3a6b8c38ce357c72"
+    },
+    {
+      "path": "CLAUDE.md",
+      "sha256": "a0790b1f3475fe3f9adfd8cdb42ac02d715f54721856e514da66bfa42c6e70a0"
+    }
+  ]
+}
