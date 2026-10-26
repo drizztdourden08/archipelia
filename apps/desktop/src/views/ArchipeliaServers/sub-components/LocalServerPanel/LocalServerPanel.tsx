@@ -1,6 +1,7 @@
 /* @layer renderer-app @kind component */
 import { FactsPanel, SettingsSection } from '@drizztdourden08/tessera/composites';
-import { Button, Icon, Stack, Status } from '@drizztdourden08/tessera/primitives';
+import { Box, Button, Icon, Stack, Status } from '@drizztdourden08/tessera/primitives';
+import { TOUR_TARGET } from '../../../../hooks/tour-targets.constants';
 import { SERVER_STATES } from '../../../../lobbies/lobby-statuses.constants';
 import { networkRows } from '../../behavior/network-rows';
 import { reachFacts } from '../../behavior/reach-facts';
@@ -18,7 +19,11 @@ const LocalServerPanel = ({ status, names, busy, error, onApply, onRefresh }: Lo
         actions={<Button size="sm" variant="secondary" icon={<Icon name="refresh-cw" />} onClick={onRefresh}>Refresh</Button>}
       />
       <LocalNotices status={status} error={error} />
-      {status && <SettingsSection id="network" title="Network" rows={networkRows(status.options, busy, onApply)} />}
+      {status && (
+        <Box data-tour={TOUR_TARGET.serversDetail}>
+          <SettingsSection id="network" title="Network" rows={networkRows(status.options, busy, onApply)} />
+        </Box>
+      )}
       {facts.length > 0 && <FactsPanel label="Reach" groups={[facts]} layout="boxed" />}
     </Stack>
   );

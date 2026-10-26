@@ -1,5 +1,6 @@
 /* @layer renderer-app @kind component */
 import { Card, EmptyState, SectionHeader, Spinner, Stack } from '@drizztdourden08/tessera/primitives';
+import { TOUR_TARGET } from '../../../../hooks/tour-targets.constants';
 import type { RunsCardProps } from './RunsCard.type';
 import { RunRow } from '@archipelia/design';
 import { runSummary } from '../../behavior/run-summary';
@@ -9,7 +10,7 @@ const RunsCard = ({ runs, total, loading, isBusy, onOpen, onShowLog, onDelete }:
     ? <EmptyState icon={<Spinner />} message="Loading your runs" />
     : <EmptyState message={total ? 'No run matches' : 'No run yet. Run a session to start one.'} />;
   return (
-    <Card>
+    <Card data-tour={TOUR_TARGET.sessionsRuns}>
       <Stack gap="sm">
         <SectionHeader title={`Runs · ${total}`} />
         {runs.length === 0

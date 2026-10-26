@@ -1,6 +1,8 @@
 /* @layer renderer-app @kind component */
 import { useMemo } from 'react';
 import { SettingsSection } from '@drizztdourden08/tessera/composites';
+import { Box } from '@drizztdourden08/tessera/primitives';
+import { TOUR_TARGET } from '../../../../hooks/tour-targets.constants';
 import { versionRows } from '../../behavior/version-rows';
 import { whenText } from '../../behavior/when-text';
 import { SECTION_TEXT } from '../../EngineSettings.constants';
@@ -18,7 +20,11 @@ const VersionsSection = ({ overview, chosen, plan, busy, checking, checkAtStart,
     }),
     [overview, chosen, plan, busy, checking, checkAtStart, onAp, onPython, onApply, onCheck, onCheckAtStart],
   );
-  return <SettingsSection id="versions" title={SECTION_TEXT.versions.title} description={SECTION_TEXT.versions.description} rows={rows} />;
+  return (
+    <Box data-tour={TOUR_TARGET.engineVersions}>
+      <SettingsSection id="versions" title={SECTION_TEXT.versions.title} description={SECTION_TEXT.versions.description} rows={rows} />
+    </Box>
+  );
 };
 
 export { VersionsSection };
