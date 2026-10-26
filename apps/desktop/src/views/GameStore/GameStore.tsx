@@ -22,7 +22,7 @@ import './GameStore.css';
 const GameStore = ({ tab }: GameStoreProps) => {
   const store = useGameStore(tab);
   const [opened, setOpened] = useState<string | null>(null);
-  const handlers = { isBusy: store.isBusy, errorOf: store.errorOf, open: (row: GameRow) => setOpened(rowKey(row)), installWorld: store.installWorld, remove: store.remove, openHome: openExternal };
+  const handlers = { isBusy: store.isBusy, errorOf: store.errorOf, needOf: store.needOf, open: (row: GameRow) => setOpened(rowKey(row)), installWorld: store.installWorld, remove: store.remove, openHome: openExternal };
   const sections = useMemo(() => gridSectionsOf(store.sections, tab, store.filtered), [store.sections, tab, store.filtered]);
   const grid = useRef<VirtualGridHandle>(null);
   useRevealGame(sections, grid);

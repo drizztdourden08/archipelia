@@ -1,13 +1,19 @@
 /* @layer electron-main @kind logic */
 import type { HandlerGroup } from '@drizztdourden08/brock-electron/main';
-import { wireInstallFailure } from '@archipelia/model';
+import { AppError } from '@drizztdourden08/brock-core/ipc';
+import { installFailureOf } from '@archipelia/model';
 import { APP_CHANNELS } from '../../src/ipc/contract.constants';
+
+const coded = (err: unknown): unknown => {
+  const failure = installFailureOf(err);
+  return failure ? new AppError(failure.message, { code: failure.code, data: { packages: failure.packages }, cause: err }) : err;
+};
 
 const gamesHandlers: HandlerGroup = {
   id: 'archipelia-games',
   register: (ctx) => {
     const { catalog, installed } = ctx.services;
-    const wired = <T,>(work: Promise<T>) => work.catch((err: unknown) => { throw wireInstallFailure(err); });
+    const wired = <T,>(work: Promise<T>) => work.catch((err: unknown) => { throw coded(err); });
     ctx.handle(APP_CHANNELS.catalogRead, (_event, refresh) => catalog.read(refresh));
     ctx.handle(APP_CHANNELS.catalogOfficial, () => catalog.official());
     ctx.handle(APP_CHANNELS.catalogEnrich, (_event, request) => catalog.enrich(request));

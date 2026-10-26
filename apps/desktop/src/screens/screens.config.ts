@@ -9,11 +9,11 @@ export default defineScreens({
       icon: 'layers',
       menu: 'entry',
       groups: [
-        { id: 'top', label: '' },
         { id: 'library', label: 'Library' },
         { id: 'hosting', label: 'Hosting' },
         { id: 'app', label: 'App' },
       ],
+      top: ['sessions'],
     },
   ],
   home: 'multiworld',

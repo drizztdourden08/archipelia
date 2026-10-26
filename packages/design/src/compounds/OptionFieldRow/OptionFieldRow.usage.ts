@@ -2,7 +2,7 @@
 import type { ComponentUsage } from '@drizztdourden08/tessera';
 
 const usage = {
-  job: 'One game option drawn from its definition: a FormRow with its name, its description cut at two lines with the full text in an info mark when long, its hint, the changed mark and reset, around the input that fits its kind.',
+  job: 'One game option drawn from its definition: a FormRow with its name, its description cut at two lines with the full text behind the ? help mark, its hint, the changed mark and reset, around the input that fits its kind.',
   useWhen: [
     'Each option of a preset editor.',
     'Each override row in the session builder.',
@@ -21,7 +21,7 @@ const usage = {
   a11y: [
     'The name of the row is the label of its control, so the control is named after the option display name.',
     'The reset button is named Reset and the label, and the problem line is an alert.',
-    'A description past two lines is cut there and the row never grows; its full text is in the info mark beside it, one Tab stop that opens the same text as a tip; the default hint comes first, so it stays in view.',
+    'A description past two lines is cut there and the row never grows; its full text is behind the ? after the name, one Tab stop that opens the same text; the default hint comes first, so it stays in view.',
   ],
   tree: {
     path: ['a value the user sets', 'a game option', 'the whole row from its definition'],

@@ -9,4 +9,6 @@ type InstallFailure = {
   packages: PackageNeed[];
 };
 
-export type { InstallFailure, PackageNeed };
+type FailureSource = { code: string; message: string; data?: unknown };
+
+export type { FailureSource, InstallFailure, PackageNeed };

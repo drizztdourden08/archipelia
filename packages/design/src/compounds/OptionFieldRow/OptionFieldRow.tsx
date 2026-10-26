@@ -24,7 +24,7 @@ const OptionFieldRow = ({ id, def, value, hint, changed, problem, onChange, onRe
         </>
       ) : undefined}
       help={about ? <Text variant="caption" className="option-field-row__help">{about}</Text> : undefined}
-      descriptionLines={0}
+      descriptionOverflow="clip"
       changed={changed}
       advanced={def.visibility.length === 0}
       problem={problem ?? jsonProblem ?? undefined}

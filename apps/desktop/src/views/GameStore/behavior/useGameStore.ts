@@ -1,7 +1,6 @@
 /* @layer renderer-app @kind hook */
 import { confirmDelete, toast, useKeyedGuard, useNavigation, useScreenState } from '@drizztdourden08/brock-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { failureTextOf } from '@archipelia/model';
 import { useLibraryStore } from '../../../stores/useLibraryStore';
 import type { FilterClause } from '@drizztdourden08/tessera/data';
 import type { GameRow, GameTab } from '../GameStore.type';
@@ -44,7 +43,7 @@ const useGameStore = (tab: GameTab) => {
   const summary = useMemo(() => summaryOf(rows, shown, catalog?.apVersion, noReleaseCount(catalog?.entries)), [rows, shown, catalog]);
   const empty = emptyKind(filtered, loading, tab);
 
-  const { addFromFile, consent, installWorld } = useInstallActions({ guard, rows });
+  const { addFromFile, consent, installWorld, needOf } = useInstallActions({ guard, rows });
   const remove = useCallback(({ entry, installed: game }: GameRow) => guard(removeKey(entry.apworld), failOnWorld(FAILURE.remove, async () => {
     const [presets, templates] = await Promise.all([appApi().presetsList(), appApi().templatesList()]);
     const confirm = removeGameConfirm(entry.displayName, game?.game ?? entry.displayName, presets, templates);
@@ -58,11 +57,10 @@ const useGameStore = (tab: GameTab) => {
   const openOfficial = useCallback(() => open(ROUTE.officialGames), [open]);
 
   const loadFailed = errorOf('load') !== null;
-  const failed = errorOf('load') ?? errorOf('file');
-  const error = failed === null ? null : failureTextOf(failed);
+  const error = errorOf('load') ?? errorOf('file');
 
   return {
-    addFromFile, consent, empty, error, errorOf, filtered, filters, installWorld, isBusy, loadFailed, loading, openOfficial, query, refresh, remove, retry, rows, sections, setFilters, setQuery, shown, summary,
+    addFromFile, consent, empty, error, errorOf, filtered, filters, installWorld, isBusy, loadFailed, loading, needOf, openOfficial, query, refresh, remove, retry, rows, sections, setFilters, setQuery, shown, summary,
   };
 };
 
