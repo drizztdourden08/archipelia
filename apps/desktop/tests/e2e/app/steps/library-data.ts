@@ -30,16 +30,16 @@ const checkHistory = async (launched: LaunchedApp) => {
 
 const exportData = async (launched: LaunchedApp) => {
   const { page } = launched;
-  await openScreen(page, 'Data');
+  await openScreen(page, 'Storage');
   const target = exportPath(launched.userData, 'archipelia-data.zip');
   await answerSaveDialogWith(launched.app, target);
-  await hub(page, 'Data').getByRole('button', { name: 'Export to zip', exact: true }).click();
+  await hub(page, 'Multiworld').getByRole('button', { name: 'Export to zip', exact: true }).click();
   await page.getByText(/^Exported \d+ files? .* to /).first().waitFor();
   expect((await stat(target)).size).toBeGreaterThan(0);
   await settledProof(launched, '30-data-exported');
   const job = dialogOf(page, 'Exporting data');
   if (await job.count()) await job.getByRole('button', { name: 'Close', exact: true }).last().click();
-  await closeHub(page, 'Data');
+  await closeHub(page, 'Multiworld');
 };
 
 export { checkHistory, exportData };

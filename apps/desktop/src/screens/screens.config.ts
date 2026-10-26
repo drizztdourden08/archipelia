@@ -15,12 +15,6 @@ export default defineScreens({
         { id: 'app', label: 'App' },
       ],
     },
-    {
-      id: 'data',
-      title: 'Data',
-      icon: 'hard-drive',
-      menu: 'entry',
-    },
   ],
   home: 'multiworld',
   settings: { bucket: 'multiworld', page: 'general' },
