@@ -5,15 +5,21 @@ import type { SettingsOption } from '@drizztdourden08/tessera/composites';
 import { joinAddress } from '../../src/lobbies/join-address';
 import type { LobbyServerStatus } from '../../src/lobbies/lobbies.type';
 import { lobbyRequest } from '../../src/lobbies/lobby-request';
+import { sessionReach } from '../../src/lobbies/session-reach';
+import { hostingDefaults } from '../../src/views/SessionBuilder/behavior/hosting-defaults';
 import { newTemplate } from '../../src/views/SessionBuilder/behavior/new-template';
 import { placeOf } from '../../src/views/SessionBuilder/behavior/place-of';
 import { placeOptions } from '../../src/views/SessionBuilder/behavior/place-options';
 import { remoteOptions } from '../../src/views/SessionBuilder/behavior/remote-options';
 import { remoteValue } from '../../src/views/SessionBuilder/behavior/remote-value';
-import { yourNetwork } from '../../src/views/SessionBuilder/behavior/your-network';
-import { networkFacts } from '../../src/views/SessionBuilder/behavior/network-facts';
-import { privateFacts } from '../../src/views/SessionBuilder/behavior/private-facts';
+import { withPlace } from '../../src/views/SessionBuilder/behavior/with-place';
+import { withRemote } from '../../src/views/SessionBuilder/behavior/with-remote';
+import { yourNetwork } from '../../src/views/SessionLobby/behavior/your-network';
+import { networkFacts } from '../../src/views/SessionLobby/behavior/network-facts';
+import { privateFacts } from '../../src/views/SessionLobby/behavior/private-facts';
+import { roomFacts } from '../../src/views/SessionLobby/behavior/room-facts';
 import { hostSlotOf } from '../../electron/sessions/host-slot-of';
+import { DEFAULT_SETTINGS } from '../../src/settings.constants';
 
 const LISTENING: LobbyServerStatus = {
   state: 'listening', options: { mode: 'lan', publicLookup: true }, automation: false, roomPasswords: 'vault', lanAddress: '192.168.1.5', port: 38290, secure: false,
@@ -23,47 +29,65 @@ const status = (patch: Partial<LobbyServerStatus> = {}): LobbyServerStatus => ({
 
 const LOCAL = newTemplate('t1');
 
-const DIRECT: SessionTemplate = { ...LOCAL, direct: { serverId: 'local', admission: 'host-approval', allowUnlisted: false } };
+const DIRECT = { admission: 'host-approval', allowUnlisted: false } as const;
 
-const ON_FRIEND: SessionTemplate = { ...LOCAL, direct: { serverId: 'r1', lobbyId: 'lb_1', admission: 'host-approval', allowUnlisted: false } };
+const LAN: SessionTemplate = { ...LOCAL, lan: true };
+
+const ON_FRIEND: SessionTemplate = { ...LOCAL, lobby: { serverId: 'r1', lobbyId: 'lb_1' }, direct: DIRECT };
 
 const FRIEND: LobbyServerEntry = { id: 'r1', label: 'Friend', url: 'wss://friend.example:38290', tokenRef: 'token' };
 
 const BOX = { id: 's1', label: 'Box', host: '192.0.2.10', gamePort: 38281 } as ServerEntry;
 
+const HOSTING = hostingDefaults(DEFAULT_SETTINGS);
+
+const CONTEXT = { lobbyServers: [FRIEND], servers: [BOX], hosting: HOSTING };
+
 const offs = (options: readonly SettingsOption[]) => options.map((option) => Boolean(option.disabled));
 
 describe('where a session lives', () => {
-  test('reads Local, LAN or Remote from the host, the direct connection and the network mode', () => {
-    expect(placeOf(LOCAL, 'lan')).toBe('local');
-    expect(placeOf({ ...LOCAL, host: { kind: 'archipelago-gg' } }, 'off')).toBe('remote');
-    expect(placeOf({ ...LOCAL, host: { kind: 'remote', serverId: 's1' } }, 'off')).toBe('remote');
-    expect(placeOf(DIRECT, 'off')).toBe('local');
-    expect(placeOf(DIRECT, undefined)).toBe('local');
-    expect(placeOf(DIRECT, 'lan')).toBe('lan');
-    expect(placeOf(DIRECT, 'lan-and-internet')).toBe('lan');
-    expect(placeOf(ON_FRIEND, 'lan')).toBe('remote');
+  test('reads Local, LAN or Remote from the session alone, never from the network mode or direct connections', () => {
+    expect(placeOf(LOCAL)).toBe('local');
+    expect(placeOf({ ...LOCAL, direct: DIRECT })).toBe('local');
+    expect(placeOf(LAN)).toBe('lan');
+    expect(placeOf({ ...LAN, direct: DIRECT })).toBe('lan');
+    expect(placeOf({ ...LOCAL, host: { kind: 'archipelago-gg' } })).toBe('remote');
+    expect(placeOf({ ...LOCAL, host: { kind: 'remote', serverId: 's1' } })).toBe('remote');
+    expect(placeOf(ON_FRIEND)).toBe('remote');
+    expect(sessionReach(ON_FRIEND)).toBe('archipelia');
   });
 
-  test('offers LAN only with direct connections, and Remote with them only when an Archipelia server is saved', () => {
-    expect(offs(placeOptions({ draft: LOCAL, lobbyServers: [], connected: 0 }))).toEqual([false, true, false]);
-    expect(offs(placeOptions({ draft: DIRECT, lobbyServers: [FRIEND], connected: 0 }))).toEqual([false, false, false]);
-    expect(offs(placeOptions({ draft: DIRECT, lobbyServers: [], connected: 0 }))).toEqual([false, false, true]);
+  test('offers LAN without direct connections, and locks Where while the lobby is open', () => {
+    expect(offs(placeOptions({ draft: LOCAL, lobbyServers: [], live: false }))).toEqual([false, false, false]);
+    expect(offs(placeOptions({ draft: { ...LOCAL, direct: DIRECT }, lobbyServers: [], live: false }))).toEqual([false, false, true]);
+    expect(offs(placeOptions({ draft: { ...LOCAL, direct: DIRECT }, lobbyServers: [FRIEND], live: false }))).toEqual([false, false, false]);
+    expect(offs(placeOptions({ draft: LOCAL, lobbyServers: [FRIEND], live: true }))).toEqual([true, true, true]);
   });
 
-  test('keeps the server of a session while players are connected, with the reason', () => {
-    expect(offs(placeOptions({ draft: DIRECT, lobbyServers: [FRIEND], connected: 2 }))).toEqual([false, false, true]);
-    expect(offs(placeOptions({ draft: ON_FRIEND, lobbyServers: [FRIEND], connected: 2 }))).toEqual([true, true, false]);
+  test('never changes Where when direct connections change, and keeps them when Where changes', () => {
+    const lan = withPlace({ ...LOCAL, direct: DIRECT }, 'lan', CONTEXT);
+    expect(lan).toMatchObject({ lan: true, direct: DIRECT, host: { kind: 'local' } });
+    expect(withPlace(lan, 'local', CONTEXT).lan).toBeUndefined();
+    expect(withPlace(LOCAL, 'remote', CONTEXT).host).toEqual({ kind: 'remote', serverId: 's1' });
+    expect(withPlace({ ...LOCAL, direct: DIRECT }, 'remote', CONTEXT)).toMatchObject({ lobby: { serverId: 'r1' }, direct: DIRECT });
+    expect(withRemote(LOCAL, 'lobby:r1', HOSTING)).toMatchObject({ lobby: { serverId: 'r1' }, host: { kind: 'local' } });
+    expect(withRemote(ON_FRIEND, 'gg', HOSTING).lobby).toBeUndefined();
   });
 
-  test('lists archipelago.gg, the machines over SSH and the Archipelia servers, each with the direct choice it needs', () => {
-    const labels = remoteOptions({ draft: LOCAL, lobbyServers: [FRIEND], servers: [BOX], connected: 0 });
+  test('lists archipelago.gg, the machines over SSH and the Archipelia servers, each with what it needs', () => {
+    const labels = remoteOptions({ draft: LOCAL, lobbyServers: [FRIEND], servers: [BOX] });
     expect(labels.map((option) => option.label)).toEqual(['archipelago.gg', 'Box over SSH', 'Friend, an Archipelia server']);
-    expect(offs(labels)).toEqual([false, false, true]);
-    expect(offs(remoteOptions({ draft: ON_FRIEND, lobbyServers: [FRIEND], servers: [BOX], connected: 0 }))).toEqual([true, true, false]);
+    expect(offs(labels)).toEqual([false, false, false]);
+    expect(offs(remoteOptions({ draft: ON_FRIEND, lobbyServers: [FRIEND], servers: [BOX] }))).toEqual([true, true, false]);
     expect(remoteValue({ ...LOCAL, host: { kind: 'archipelago-gg' } })).toBe('gg');
     expect(remoteValue({ ...LOCAL, host: { kind: 'remote', serverId: 's1' } })).toBe('ssh:s1');
     expect(remoteValue(ON_FRIEND)).toBe('lobby:r1');
+  });
+
+  test('shows the room addresses of a LAN session to copy, and none for a local one', () => {
+    expect(roomFacts(LAN, status()).map((fact) => fact.value)).toEqual(['192.168.1.5:38281', '127.0.0.1:38281']);
+    expect(roomFacts(LOCAL, status())).toEqual([]);
+    expect(roomFacts(LAN, null)).toEqual([]);
   });
 
   test('shows both addresses of a server on the network, each to copy', () => {

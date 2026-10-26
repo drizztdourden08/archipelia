@@ -22,8 +22,8 @@ describe('createCore', () => {
     const { ports } = await fakePorts();
     const core = createCore(ports);
     expect(Object.keys(core).sort()).toEqual([
-      'adminToken', 'catalog', 'dispose', 'engine', 'installed', 'lobbies', 'presets', 'runJobs', 'runs', 'runtime', 'sandbox', 'servers', 'sessionFiles', 'sessions',
-      'setLobbyNetworkMode', 'templates', 'watchLobbies',
+      'adminToken', 'catalog', 'dispose', 'engine', 'installed', 'lobbies', 'lobbyPasswords', 'presets', 'runJobs', 'runs', 'runtime', 'sandbox', 'servers', 'sessionFiles', 'sessions',
+      'setLanRoom', 'setLobbyNetworkMode', 'templates', 'watchLobbies',
     ]);
     expect(await core.installed()).toEqual([]);
     expect(await core.presets.list()).toEqual([]);

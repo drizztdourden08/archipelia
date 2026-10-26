@@ -12,4 +12,6 @@ const ROUTE = {
 
 const EDIT_SUB = 'edit';
 
-export { EDIT_SUB, ROUTE };
+const LOBBY_SUB = 'lobby';
+
+export { EDIT_SUB, LOBBY_SUB, ROUTE };

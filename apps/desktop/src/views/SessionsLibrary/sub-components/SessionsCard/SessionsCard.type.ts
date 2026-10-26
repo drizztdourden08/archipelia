@@ -8,7 +8,7 @@ type SessionsCardProps = {
   servers: ServerEntry[];
   isBusy: (key: string) => boolean;
   onEdit: (id: string) => void;
-  onRun: (id: string) => void;
+  onStart: (id: string) => void;
   onDuplicate: (id: string) => void;
   onDelete: (id: string) => void;
 };

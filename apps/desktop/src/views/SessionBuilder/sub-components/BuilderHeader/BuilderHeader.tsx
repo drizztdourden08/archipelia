@@ -10,7 +10,7 @@ const BuilderHeader = ({ name, saved, busy, action, onName, onSave }: BuilderHea
   return (
     <Flex justify="between" align="center" gap="sm" wrap>
       <Flex gap="sm" align="center" wrap>
-        <TextInput aria-label="Session name" data-problem-target="session-name" value={name} placeholder="Session name" onChange={handleName} />
+        <TextInput aria-label="Session name" value={name} placeholder="Session name" onChange={handleName} />
         {saved && <Text variant="caption">Saved</Text>}
       </Flex>
       <Flex gap="sm" align="center" wrap>

@@ -1,0 +1,17 @@
+/* @layer renderer-app @kind style */
+.session-lobby__problem {
+  align-self: flex-start;
+}
+
+.session-lobby__problem-text {
+  color: var(--c-danger);
+}
+
+.session-lobby__file {
+  font-family: var(--font-mono);
+  overflow-wrap: anywhere;
+}
+
+.session-lobby__override-rows {
+  max-height: var(--size-512);
+}

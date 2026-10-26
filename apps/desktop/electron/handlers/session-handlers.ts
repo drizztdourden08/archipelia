@@ -1,26 +1,30 @@
 /* @layer electron-main @kind logic */
 import type { HandlerGroup } from '@drizztdourden08/brock-electron/main';
 import { assertSafeName } from '@drizztdourden08/brock-core/storage';
+import type { SessionTemplate } from '@archipelia/model';
 import { APP_CHANNELS } from '../../src/ipc/contract.constants';
 import { runJobId } from '@archipelia/model';
+import { lobbyServerOf } from '../../src/lobbies/lobby-server-of';
 import { hostSlotOf } from '../sessions/host-slot-of';
-import { openDirect } from '../sessions/open-direct';
-import { runDirect } from '../sessions/run-direct';
-import { syncDirect } from '../sessions/sync-direct';
+import { openToNetwork } from '../sessions/open-to-network';
+import { prepareRun } from '../sessions/prepare-run';
+import { runSession } from '../sessions/run-session';
+import { startSession } from '../sessions/start-session';
 
 const sessionHandlers: HandlerGroup = {
   id: 'archipelia-sessions',
   register: (ctx) => {
-    const { admins, installed, presets, runJobs, runs, sessionFiles, sessions } = ctx.services;
+    const { admins, installed, lobbyPasswords, lobbyServer, presets, runJobs, runs, sessionFiles, sessions, setLanRoom } = ctx.services;
+    const beforeOpen = openToNetwork(lobbyServer);
+    const beforeRun = prepareRun({ server: lobbyServer, setLanRoom, sharePassword: lobbyPasswords.share });
     ctx.handle(APP_CHANNELS.sessionsList, () => runs.newest());
     ctx.handle(APP_CHANNELS.sessionsRun, (_event, template) => sessions.run(template));
-    const directDeps = async (serverId: string) => {
-      const ops = await admins.opsFor(serverId);
-      return { act: ops.act, list: ops.list, slotOf: hostSlotOf(installed, presets) };
+    const lobbyDeps = async (template: SessionTemplate) => {
+      const ops = await admins.opsFor(lobbyServerOf(template));
+      return { act: ops.act, list: ops.list, slotOf: hostSlotOf(installed, presets), beforeOpen, beforeRun };
     };
-    ctx.handle(APP_CHANNELS.sessionsOpenDirect, async (_event, template) => openDirect(template, await directDeps(template.direct?.serverId ?? '')));
-    ctx.handle(APP_CHANNELS.sessionsRunDirect, async (_event, template) => runDirect(template, await directDeps(template.direct?.serverId ?? '')));
-    ctx.handle(APP_CHANNELS.sessionsSyncDirect, async (_event, template) => syncDirect(template, await directDeps(template.direct?.serverId ?? '')));
+    ctx.handle(APP_CHANNELS.sessionsStart, async (_event, template) => startSession(template, await lobbyDeps(template)));
+    ctx.handle(APP_CHANNELS.sessionsRunLobby, async (_event, template) => runSession(template, await lobbyDeps(template)));
     ctx.handle(APP_CHANNELS.sessionsStop, (_event, id) => sessions.stop(id));
     ctx.handle(APP_CHANNELS.sessionsCancel, (_event, id) => sessions.cancel(id));
     ctx.handle(APP_CHANNELS.sessionsCommand, (_event, id, cmd) => sessions.command(id, cmd));

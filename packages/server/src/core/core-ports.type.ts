@@ -1,7 +1,7 @@
 /* @layer core @kind types */
 import type { StartJob } from '@drizztdourden08/brock-core/jobs';
 import type { FetchLike } from '@archipelia/engine';
-import type { SecretStore } from '@archipelia/hosts';
+import type { RoomVault } from './room-secrets/room-secrets.type';
 import type { DataFiles, EngineEvent, Lobby, Session, SessionTemplate } from '@archipelia/model';
 import type { LobbyRun, SessionEvent } from '@archipelia/sessions';
 
@@ -39,7 +39,7 @@ type CorePorts = {
   domain: CoreDomains['domain'];
   job: StartJob;
   emit: (event: CoreEvent) => void;
-  secrets: SecretStore;
+  secrets: RoomVault;
   log: (message: string, level?: CoreLogLevel) => void;
   network: CoreNetwork;
   environment?: CoreEnvironment;

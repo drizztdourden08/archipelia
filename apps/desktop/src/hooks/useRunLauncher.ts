@@ -9,12 +9,9 @@ import { launchOf } from '../runs/launch-of';
 import type { RunLaunch } from '../runs/run-launch.type';
 import { useRunsStore } from '../stores/useRunsStore';
 import { logFailure } from './log-failure';
-import { useAppNavigation } from './useAppNavigation';
 
 const useRunLauncher = () => {
-  const run = useRunsStore((state) => state.run);
   const runs = useRunsStore((state) => state.runs);
-  const { openSession } = useAppNavigation();
   const [launch, setLaunch] = useState<RunLaunch | null>(null);
   const launched = useMemo(() => (launch ? findLaunchedRun(runs, launch) : undefined), [runs, launch]);
   const launchedId = launched?.id;
@@ -25,22 +22,20 @@ const useRunLauncher = () => {
   useEffect(() => {
     if (!launchedId || (status !== 'hosting' && status !== 'failed')) return;
     setLaunch(null);
-    if (status !== 'hosting') return;
-    jobs.dismiss(runJobId(launchedId));
-    openSession(launchedId);
-  }, [launchedId, openSession, status]);
+    if (status === 'hosting') jobs.dismiss(runJobId(launchedId));
+  }, [launchedId, status]);
 
   const start = useCallback(async (template: SessionTemplate) => {
     setLaunch(launchOf(template, Date.now()));
     try {
-      await (template.direct ? appApi().sessionsRunDirect(template) : run(template));
+      await appApi().sessionsRunLobby(template);
     } catch (err) {
       setLaunch(null);
       const sentence = `${template.name} did not run. The app log has the cause.`;
       logFailure(sentence, err);
       toast(sentence, { variant: 'danger' });
     }
-  }, [run]);
+  }, []);
 
   return { start };
 };

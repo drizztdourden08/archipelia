@@ -1,9 +1,11 @@
 /* @layer renderer-app @kind config */
-import type { MemberAdmission } from '@archipelia/model';
+import type { DirectConnection, MemberAdmission } from '@archipelia/model';
 import type { NetworkMode } from '@archipelia/server/network';
 import type { LobbyServerOptions } from './lobbies.type';
 
 const LOCAL_SERVER = 'local';
+
+const CLOSED_DOOR: DirectConnection = { admission: 'host-approval', allowUnlisted: false };
 
 const CONNECTED_ADMISSIONS: readonly MemberAdmission[] = ['pending', 'approved'];
 
@@ -45,4 +47,4 @@ const MAX_PORT = 65535;
 
 export {
   AUTHORITY, BRACKETS, LOOPBACK, LOOPBACK_HOST, MAX_PORT, NEEDS_WSS, NOT_A_JOIN_ADDRESS, PLAIN_REMOTE, PRIVATE_HOST, SCHEME, PIN_DIGEST, PIN_PAIR, PIN_SEPARATORS, WRITTEN_PORT,
-  CONNECTED_ADMISSIONS, ROOM_PASSWORDS_IN_MEMORY, DEFAULT_SERVER_OPTIONS, INITIAL_NETWORK_MODE, LOBBY_REQUESTS, LOCAL_SERVER, NOT_AN_ADDRESS, SERVER_OPTIONS_FILE };
+  CLOSED_DOOR, CONNECTED_ADMISSIONS, ROOM_PASSWORDS_IN_MEMORY, DEFAULT_SERVER_OPTIONS, INITIAL_NETWORK_MODE, LOBBY_REQUESTS, LOCAL_SERVER, NOT_AN_ADDRESS, SERVER_OPTIONS_FILE };

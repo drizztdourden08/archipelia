@@ -12,7 +12,8 @@ export default defineBrockConfig({
     icons: { brand: 'archipelia', rim: 'light' },
     menu: {
       entries: {
-        'menu:/library': { after: 'home' },
+        'bucket:multiworld:sessions': { after: 'home' },
+        'menu:/library': { after: 'bucket:multiworld:sessions' },
         'bucket:multiworld:servers': { after: 'menu:/library' },
         settings: { after: 'bucket:multiworld:servers' },
         profiles: { before: 'about' },

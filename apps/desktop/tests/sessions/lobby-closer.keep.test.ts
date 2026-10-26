@@ -18,7 +18,7 @@ afterEach(async () => {
 
 const REF = { templateId: 't1', serverId: 'local', lobbyId: 'lb_1' };
 
-const directOf = (lobbyId: string): SessionTemplate => ({ ...newTemplate(lobbyId), direct: { serverId: 'local', lobbyId, admission: 'host-approval', allowUnlisted: false } });
+const lanOf = (lobbyId: string): SessionTemplate => ({ ...newTemplate(lobbyId), lan: true, lobby: { serverId: 'local', lobbyId }, direct: { admission: 'host-approval', allowUnlisted: false } });
 
 const setUp = async (failures: number, templates: SessionTemplate[] = []) => {
   const store = await tempFiles('server');
@@ -43,7 +43,7 @@ const setUp = async (failures: number, templates: SessionTemplate[] = []) => {
 };
 
 describe('closing the lobby of a session', () => {
-  test('keeps a pending close while the server does not answer, retries, then goes private when no session takes direct connections', async () => {
+  test('keeps a pending close while the server does not answer, retries, then goes private when no other session runs on your network', async () => {
     const { closer, closed, quiet } = await setUp(2);
     expect(await closer.close(REF)).toEqual({ closed: false });
     expect(await closer.list()).toEqual([REF]);
@@ -52,8 +52,8 @@ describe('closing the lobby of a session', () => {
     expect(quiet).toHaveBeenCalledTimes(1);
   });
 
-  test('stays on the network while another session still takes direct connections here', async () => {
-    const { closer, quiet } = await setUp(0, [directOf('lb_1'), directOf('lb_2')]);
+  test('stays on the network while another LAN session with direct connections still has its lobby open here', async () => {
+    const { closer, quiet } = await setUp(0, [lanOf('lb_1'), lanOf('lb_2')]);
     expect(await closer.close(REF)).toEqual({ closed: true });
     expect(quiet).not.toHaveBeenCalled();
   });
@@ -61,7 +61,7 @@ describe('closing the lobby of a session', () => {
   test('closes the lobby of a session that is deleted', async () => {
     const { closer, closed } = await setUp(0);
     const remove = vi.fn(() => Promise.resolve());
-    await removeTemplate('t1', { get: () => Promise.resolve(directOf('lb_1')), remove }, closer.close);
+    await removeTemplate('t1', { get: () => Promise.resolve(lanOf('lb_1')), remove }, closer.close);
     expect(closed).toEqual(['lb_1']);
     expect(remove).toHaveBeenCalledWith('t1');
   });

@@ -9,6 +9,7 @@ const SPOILER_LABEL: Record<SpoilerLevel, string> = { 0: 'no spoiler', 1: 'spoil
 
 const FAILURE = {
   load: 'Could not load your sessions.',
+  start: 'Could not start the session.',
   duplicate: 'Could not duplicate the session.',
   deleteSession: 'Could not delete the session.',
   deleteRun: 'Could not delete the run.',
