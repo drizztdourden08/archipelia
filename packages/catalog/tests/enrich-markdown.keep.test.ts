@@ -1,70 +1,94 @@
 /* @layer tests @kind test */
 import { describe, expect, test } from 'vitest';
-import { blocksOf } from '../src/enrich/blocks-of';
-import { clampText } from '../src/enrich/clamp-text';
-import { introOf } from '../src/enrich/intro-of';
-import { stripInline } from '../src/enrich/strip-inline';
+import { absoluteLink } from '../src/enrich/absolute-link';
+import { absoluteLinks } from '../src/enrich/absolute-links';
+import { clampDoc } from '../src/enrich/clamp-doc';
+import { MAX_DOC_CHARS } from '../src/enrich/enrich.constants';
+import { markdownOf } from '../src/enrich/markdown-of';
 
-const README = `<!-- hidden note -->
-<p align="center"><img src="logo.png"></p>
+const REPO = { owner: 'someone', repo: 'ts-world' };
+const BLOB = 'https://github.com/someone/ts-world/blob/HEAD';
 
-# Timespinner Archipelago
+const README = `# Timespinner Archipelago
 
-[![Build](https://img.shields.io/badge.svg)](https://ci.example.com) [![Discord](https://img.shields.io/d.svg)](https://discord.gg/x)
+A **randomizer** world with [setup](docs/setup.md) and [chat](https://discord.gg/x).
 
-> **Note** This is a quote and not the description.
+- first item
+- second item with [guide](./GUIDE.md)
 
-A **randomizer** world for [Timespinner](https://example.com/ts), with \`items\`
-and <b>locations</b> shuffled across time.
-<script>alert(1)</script>
-
-## Installation
-
-Copy the apworld into your custom_worlds folder and restart everything you have open.
+[![Build](badge.svg)](https://ci.example.com)
 
 \`\`\`bash
-pip install nothing
+see [not a link](kept/as/is.md)
 \`\`\`
+
+[ref]: docs/ref.md
 `;
 
-describe('stripInline', () => {
-  test('drops images, badges, tags and comments but keeps the words', () => {
-    expect(stripInline('![logo](a.png) Hello [world](https://x.y) <b>bold</b> <!-- c --> `code` &amp; more')).toBe('Hello world bold code & more');
+describe('markdownOf', () => {
+  test('keeps the headings, lists and emphasis as written', () => {
+    const kept = markdownOf(README, REPO);
+    expect(kept).toContain('# Timespinner Archipelago');
+    expect(kept).toContain('- first item');
+    expect(kept).toContain('**randomizer**');
   });
 
-  test('never leaves markup that could be rendered', () => {
-    const text = stripInline('<img src=x onerror=alert(1)>text<script>bad()</script>');
-    expect(text).not.toContain('<');
-    expect(text).toContain('text');
+  test('turns relative links into links on the repo and leaves absolute ones alone', () => {
+    const kept = markdownOf(README, REPO);
+    expect(kept).toContain(`[setup](${BLOB}/docs/setup.md)`);
+    expect(kept).toContain(`[guide](${BLOB}/GUIDE.md)`);
+    expect(kept).toContain(`[ref]: ${BLOB}/docs/ref.md`);
+    expect(kept).toContain('[chat](https://discord.gg/x)');
+    expect(kept).toContain('(https://ci.example.com)');
+  });
+
+  test('leaves fenced code alone', () => {
+    const kept = markdownOf(README, REPO);
+    expect(kept).toContain('see [not a link](kept/as/is.md)');
+  });
+
+  test('has no repo to resolve against for a world doc', () => {
+    expect(markdownOf('See [options](../player-options).')).toBe('See [options](../player-options).');
+  });
+
+  test('normalizes line endings and drops the byte order mark', () => {
+    expect(markdownOf('﻿# Title\r\n\r\nSome text here.\r\n')).toBe('# Title\n\nSome text here.');
+  });
+
+  test('has nothing to show for an empty or wordless text', () => {
+    expect(markdownOf('')).toBeUndefined();
+    expect(markdownOf(undefined)).toBeUndefined();
+    expect(markdownOf('![](y)\n\n---\n')).toBeUndefined();
+  });
+
+  test('is bounded and cut at a paragraph', () => {
+    const long = `${'word '.repeat(10).trim()}\n\n`.repeat(MAX_DOC_CHARS);
+    const kept = markdownOf(long) ?? '';
+    expect(kept.length).toBeLessThanOrEqual(MAX_DOC_CHARS);
+    expect(kept.endsWith('word')).toBe(true);
   });
 });
 
-describe('README to description', () => {
-  const intro = introOf(blocksOf(README));
-
-  test('the summary is the first prose paragraph as plain text', () => {
-    expect(intro.summary).toBe('A randomizer world for Timespinner, with items and locations shuffled across time.');
+describe('absoluteLink', () => {
+  test('resolves paths from the repo root and never leaves the repo', () => {
+    expect(absoluteLink('/docs/a.md', REPO)).toBe(`${BLOB}/docs/a.md`);
+    expect(absoluteLink('../../../../elsewhere', REPO)).toBe('https://github.com/someone/ts-world');
   });
 
-  test('the details leave out installation sections and code', () => {
-    expect(intro.details).toContain('Timespinner Archipelago');
-    expect(intro.details).not.toContain('custom_worlds');
-    expect(intro.details).not.toContain('pip install');
-  });
-
-  test('a README with only badges and a quote has no description', () => {
-    expect(introOf(blocksOf('# X\n\n[![a](b.svg)](c)\n\n> only a quote that is quite long\n'))).toEqual({});
-  });
-
-  test('a setext title is a heading, not the description', () => {
-    expect(introOf(blocksOf('Cool Game\n=========\n\nA short but real description of the game.\n')).summary).toBe('A short but real description of the game.');
+  test('keeps schemes and anchors, and gives protocol relative links https', () => {
+    expect(absoluteLink('mailto:a@b.c', REPO)).toBe('mailto:a@b.c');
+    expect(absoluteLink('#install', REPO)).toBe('#install');
+    expect(absoluteLink('//example.com/x', REPO)).toBe('https://example.com/x');
   });
 });
 
-describe('clampText', () => {
-  test('keeps whole sentences when it can, else cuts at a word', () => {
-    expect(clampText('One short sentence here. Another sentence that runs on and on.', 40)).toBe('One short sentence here.');
-    expect(clampText('word '.repeat(100).trim(), 22)).toBe('word word word word...');
-    expect(clampText('short', 40)).toBe('short');
+describe('absoluteLinks and clampDoc', () => {
+  test('skips tilde fences too', () => {
+    expect(absoluteLinks('~~~\n[a](b.md)\n~~~\n[c](d.md)', REPO)).toBe(`~~~\n[a](b.md)\n~~~\n[c](${BLOB}/d.md)`);
+  });
+
+  test('cuts at a line when there is no blank line, and keeps short text whole', () => {
+    expect(clampDoc('short', 40)).toBe('short');
+    expect(clampDoc(`${'a'.repeat(30)}\n${'b'.repeat(30)}`, 40)).toBe('a'.repeat(30));
   });
 });

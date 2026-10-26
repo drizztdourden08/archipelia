@@ -38,7 +38,7 @@ describe('an official world', () => {
     expect(await readWorldDocs({ engineDir: dir, apworld: 'alttp', game: 'A Link to the Past' })).toContain('What does randomization do');
   });
 
-  test('the short description skips the options page answer and the full text is kept', async () => {
+  test('the docs are kept as markdown, headings and all', async () => {
     await engineFolder(dir, { alttp: { game: 'A Link to the Past', docs: DOCS } });
     const noNetwork: typeof fetch = () => Promise.reject(new Error('no network for an official world'));
     const enricher = createEnricher({
@@ -47,9 +47,8 @@ describe('an official world', () => {
     });
     const found = await enricher.enrich({ apworld: 'alttp', source: 'official' });
     expect(found?.origin).toBe('engine');
-    expect(found?.summary.startsWith('Items which the player would normally acquire')).toBe(true);
-    expect(found?.summary).not.toContain('options');
-    expect(found?.details).toContain('What items and locations get shuffled?');
+    expect(found?.markdown).toContain('## What items and locations get shuffled?');
+    expect(found?.markdown).toContain('[player options page for this game](../player-options)');
     expect(found?.art).toBeUndefined();
   });
 

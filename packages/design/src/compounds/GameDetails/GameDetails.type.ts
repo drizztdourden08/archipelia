@@ -1,6 +1,8 @@
 /* @layer renderer-app @kind types */
 import type { GameCardAction, GameCardKind, GameCardNote, GameCardStatus } from '../GameCard';
 
+type GameDetailsNeed = { message: string; href?: string };
+
 type GameDetailsProps = {
   title: string;
   kind: GameCardKind;
@@ -10,12 +12,13 @@ type GameDetailsProps = {
   notes: GameCardNote[];
   tags: string[];
   actions: GameCardAction[];
-  summary?: string;
-  details?: string;
+  markdown?: string;
   art?: string;
   busy?: string;
   error?: string;
+  need?: GameDetailsNeed;
   loading?: boolean;
+  onLink?: (href: string) => void;
   onClose: () => void;
 };
 

@@ -1,8 +1,8 @@
 /* @layer renderer-app @kind component */
 import type { ScreenMeta } from '@drizztdourden08/brock-react';
-import { OldRuns } from '../../views/OldRuns';
+import { OldRuns } from '../../../views/OldRuns';
 
-const meta: ScreenMeta = { title: 'Old runs', icon: 'history', order: 2, keywords: ['session runs', 'clean', 'old runs'], showHeader: true };
+const meta: ScreenMeta = { title: 'Old runs', icon: 'history', order: 4, keywords: ['session runs', 'clean', 'old runs'], showHeader: true };
 
 const OldRunsPage = () => <OldRuns />;
 

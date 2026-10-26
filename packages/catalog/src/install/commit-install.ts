@@ -4,7 +4,7 @@ import type { InstallJob } from './commit-install.type';
 import type { LoadContext } from './load-failure.type';
 import { assertPackagesAccepted } from './assert-packages-accepted';
 import { installWorldPackages } from './install-world-packages';
-import { loadFailure } from './load-failure';
+import { loadError } from './load-error';
 import { resolveWorldPackages } from './resolve-world-packages';
 import { newGames } from './new-games';
 import { readGameSchema } from './read-game-schema';
@@ -23,7 +23,7 @@ const detectGame = async (job: InstallJob, others: InstalledGame[], context: Loa
   if (job.game) return job.game;
   const { games, read } = await newGames(job.runtime, others.map((other) => other.game));
   const [game] = games;
-  if (games.length === 0 && read.failedWorlds.includes(context.module)) throw new Error(loadFailure(read, context.label, context));
+  if (games.length === 0 && read.failedWorlds.includes(context.module)) throw await loadError(read, context.label, context);
   if (games.length !== 1 || game === undefined) throw new Error(`${job.file}: expected one new game, found ${games.length}`);
   return game;
 };

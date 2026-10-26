@@ -5,6 +5,7 @@ import type { GameCardAction, GameCardNote, GameCardProps, GameCardStatus } from
 import { KIND_LABEL, KIND_OF, NO_RELEASE } from '../GameStore.constants';
 import { busyOf } from './busy-of';
 import { failureOf } from './failure-of';
+import { needOf } from './need-of';
 import { removeKey } from './remove-key';
 
 const requestOf = ({ entry, latest }: GameRow): InstallRequest | undefined => {
@@ -16,6 +17,7 @@ const statusOf = (row: GameRow, handlers: CardHandlers): GameCardStatus | undefi
   const { state, entry } = row;
   const busy = busyOf(row, handlers);
   if (busy) return busy;
+  if (needOf(row, handlers)) return 'needs-package';
   if (failureOf(row, handlers)) return 'failed';
   if (entry.unavailable) return entry.unavailable === NO_RELEASE ? 'no-release' : 'unavailable';
   return state === 'update' ? 'update' : undefined;

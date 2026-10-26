@@ -11,10 +11,6 @@
   background: var(--c-surface);
 }
 
-.game-details__text {
-  white-space: pre-line;
-}
-
 .game-details__notes {
   margin: 0;
   padding: 0;

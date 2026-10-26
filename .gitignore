@@ -28,3 +28,12 @@ apps/desktop/public/logos/icon-bot.ico
 apps/desktop/public/logos/icon-bot-256.png
 apps/desktop/public/logos/mark.svg
 # brock sync: generated icon files, end.
+
+# AI config — managed in the private ai-config repo, never committed here
+.ai-config.json
+CLAUDE.md
+.claude/settings.json
+AGENTS.md
+.codex/config.toml
+.github/copilot-instructions.md
+.mcp.json

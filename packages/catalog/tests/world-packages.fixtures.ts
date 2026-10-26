@@ -62,6 +62,8 @@ const createBed = () => {
   };
 };
 
+const pypi = vi.fn();
+
 const engine = { installPackages: vi.fn(), readOptionsSchema: vi.fn(), resolvePackages: vi.fn(), readRuntime: vi.fn() };
 
 const mockedEngine = async () => ({ ...(await vi.importActual<object>('@archipelia/engine')), ...engine });
@@ -69,9 +71,14 @@ const mockedEngine = async () => ({ ...(await vi.importActual<object>('@archipel
 const registerBed = () => {
   const bed = createBed();
   beforeAll(bed.setup);
-  afterAll(bed.teardown);
+  afterAll(async () => {
+    vi.unstubAllGlobals();
+    await bed.teardown();
+  });
   beforeEach(async () => {
     await bed.clear();
+    pypi.mockReset().mockRejectedValue(new Error('offline'));
+    vi.stubGlobal('fetch', pypi);
     engine.installPackages.mockReset().mockResolvedValue(undefined);
     engine.resolvePackages.mockReset().mockImplementation(resolveLike);
     engine.readRuntime.mockReset().mockResolvedValue(bed.bed.runtime);
@@ -80,4 +87,4 @@ const registerBed = () => {
   return bed;
 };
 
-export { consentOf, engine, GAME, loaded, MISSING, mockedEngine, notLoaded, RESOLVED, registerBed };
+export { consentOf, engine, GAME, loaded, MISSING, mockedEngine, notLoaded, pypi, RESOLVED, registerBed };
