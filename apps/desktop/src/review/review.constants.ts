@@ -37,13 +37,13 @@ const DIRECT_RUN_MS = 30000;
 const REVIEW_PLAYER = 'Zelda';
 
 const DIRECT_UI = {
-  allow: /^Allow direct connection/, unlisted: /^Allow unlisted clients/, run: 'Run', offTitle: 'Turn off direct connection?', off: 'Turn it off', section: /direct connection/i,
+  allow: /^Allow direct connection/, unlisted: /^Allow unlisted clients/, run: 'Run', open: 'Open lobby', offTitle: 'Turn off direct connection?', off: 'Turn it off', section: /how players join/i,
 } as const;
 
 const JOIN_UI = { player: /^Player name/, display: /^Your name/, join: 'Join as a player', address: /^Server address/, code: /^Session code/, look: 'Look at the session' } as const;
 
 const HOST_UI = {
-  private: /^This computer only/, lan: /^My local network/, remote: /^A remote Archipelia server/, askTitle: 'Open this computer to your network?', open: 'Open to my network',
+  local: /^Local\b/, lan: /^LAN\b/, remote: /^Remote\b/, askTitle: 'Open this computer to your network?', open: 'Open to my network',
   stop: 'Stop', find: 'Find servers on my network', stopFind: 'Stop looking',
 } as const;
 

@@ -29,10 +29,6 @@ const HOST_OPTIONS: SettingsOption[] = [
   { value: 'remote', label: 'Remote server', hint: 'Runs the server on a saved server over SSH.' },
 ];
 
-const NO_SERVER_TEXT = 'No remote server yet. Add one in Servers.';
-
-const PASSWORD_STORED_HINT = 'A password is stored. Type to replace it.';
-
 const HINT_COST_RANGE = { min: 0, max: 100, step: 1 };
 
 const PORT_RANGE = { min: 1024, max: 65535, step: 1 };
@@ -82,13 +78,6 @@ const GENERATION_TEXT = {
   },
 } as const satisfies Record<string, RowText>;
 
-const HOST_TEXT = {
-  host: { label: 'Host', description: 'Where this session runs its server.', hint: 'The Hosting settings pick it for new sessions.' },
-  server: { label: 'Server', description: 'The saved server that hosts the room.', hint: 'Add or edit servers in Servers.' },
-  password: { label: 'Room password', description: 'Players type it to join the room.', hint: 'Kept in the vault, never in the saved session.' },
-} as const satisfies Record<string, RowText>;
-
 export {
-  GENERATION_TEXT, HINT_COST_RANGE, HOST_OPTIONS, HOST_TEXT, NO_SERVER_TEXT, PASSWORD_STORED_HINT, PORT_PROBLEM, PORT_RANGE, RELEASE_OPTIONS, REMAINING_OPTIONS,
-  SERVER_TEXT, SHUTDOWN_RANGE, SPOILER_OPTIONS,
+  GENERATION_TEXT, HINT_COST_RANGE, HOST_OPTIONS, PORT_PROBLEM, PORT_RANGE, RELEASE_OPTIONS, REMAINING_OPTIONS, SERVER_TEXT, SHUTDOWN_RANGE, SPOILER_OPTIONS,
 };

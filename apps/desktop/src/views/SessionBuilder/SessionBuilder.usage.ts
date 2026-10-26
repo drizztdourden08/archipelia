@@ -2,7 +2,7 @@
 import type { ComponentUsage } from '@drizztdourden08/tessera';
 
 const usage = {
-  job: 'The session builder: its name, the players with their games and presets, the overrides of the picked player, and the generation and server options.',
+  job: 'The session builder: its name, how players join, the players with their games and presets, the overrides of the picked player, and the world settings.',
   useWhen: [
     'The New session and Edit session sub-pages of the Sessions page.',
   ],
@@ -15,6 +15,11 @@ const usage = {
     'Draw the players with RowGrid, one column per field, and keep the rows in the draft: add, duplicate and remove change the draft and renumber the slots.',
     'Keep the problem list hidden until the first Run; a Run with problems shows the list and runs nothing.',
     'Save the session before running it.',
+    'Lay it out in two columns once the width allows, with a Grid and a minimum column width: How players join, then the players, on the left, the world settings on the right; one column in that order when narrow.',
+    'How players join holds the one Where choice (Local, LAN, Remote), the port or the remote server, Allow direct connections with Host approval and Allow unlisted clients, the room password, the addresses and the lobby.',
+    'LAN needs direct connections and asks once before it opens a port; with direct connections on, Remote lists only Archipelia servers, and archipelago.gg or a machine over SSH needs them off.',
+    'Without direct connections the header action is Run, off with the reason Add at least one player while there is none.',
+    'With direct connections the header action is Open lobby until a lobby is open; then Run, off with a plain reason until at least one player is ready, own or joined and approved.',
     'Guard unsaved edits with useUnsavedChanges, so Back, Escape, the hub switch, the close button and Quit ask first.',
     'Show the run dialog over the builder once Run saves the session.',
   ],

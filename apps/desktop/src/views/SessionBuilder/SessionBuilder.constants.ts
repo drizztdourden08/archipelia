@@ -33,6 +33,8 @@ const YAML_EXTENSIONS = ['yaml', 'yml'];
 
 const PLAYER_GRID_CLASS = 'session-builder__players';
 
+const BUILDER_COLUMN_MIN = 420;
+
 const PLAYERS_TEXT = {
   manual: 'A player picks any installed game, then one of its presets or an imported file.',
   direct: 'The players you host yourself. Players who connect show below; the list can stay empty.',
@@ -54,9 +56,10 @@ const FAILURE = {
   yaml: 'Could not import that YAML file.',
   preset: 'Could not make a preset for that player.',
   direct: 'Could not change the direct connection of the session.',
+  lobby: 'Could not open the lobby of the session.',
   other: 'Something went wrong. Try again.',
 } as const;
 
-const ACTION_KEYS = ['save', 'run', 'password', 'yaml', 'preset', 'direct'] as const;
+const ACTION_KEYS = ['save', 'run', 'password', 'yaml', 'preset', 'direct', 'lobby'] as const;
 
-export { ACTION_KEYS, DEFAULT_DIRECT, DEFAULT_GENERATOR, DISABLE_DIRECT, DEFAULT_GG_SITE, DEFAULT_PORT, DEFAULT_SERVER, FAILURE, NAME_LIMIT, NEW_PRESET_VALUE, PLAYER_GRID_CLASS, PLAYERS_TEXT, PRESET_PREFIX, UNSAVED_SESSION, YAML_EXTENSIONS, YAML_VALUE };
+export { ACTION_KEYS, BUILDER_COLUMN_MIN, DEFAULT_DIRECT, DEFAULT_GENERATOR, DISABLE_DIRECT, DEFAULT_GG_SITE, DEFAULT_PORT, DEFAULT_SERVER, FAILURE, NAME_LIMIT, NEW_PRESET_VALUE, PLAYER_GRID_CLASS, PLAYERS_TEXT, PRESET_PREFIX, UNSAVED_SESSION, YAML_EXTENSIONS, YAML_VALUE };

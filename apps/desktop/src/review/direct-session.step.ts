@@ -40,7 +40,7 @@ export default defineReviewStep({
     const template = status.state === 'listening' ? await seedDirect() : null;
     if (!template) return;
     const section = await openEditor(tour, template.id);
-    tour.check('direct-section', section, 'the session editor has a Direct connection section', 'the session editor has no Direct connection section');
+    tour.check('direct-section', section, 'the session editor has a How players join section', 'the session editor has no How players join section');
     const lobby = await enableDirect(tour);
     if (!lobby) return;
     await chooseHosting(tour);

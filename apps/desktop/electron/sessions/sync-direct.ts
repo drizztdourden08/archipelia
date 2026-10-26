@@ -8,6 +8,7 @@ const syncDirect = async (template: SessionTemplate, deps: DirectRunDeps) => {
   const { direct } = template;
   if (!direct) throw new Error(TEXT.notDirect);
   const { lobbyId } = direct;
+  if (!lobbyId) throw new Error(TEXT.notOpen);
   const lobby = (await deps.list()).find((entry) => entry.id === lobbyId);
   if (!lobby) throw new Error(TEXT.gone);
   if (!RUNNABLE_PHASES.includes(lobby.phase)) return lobby;

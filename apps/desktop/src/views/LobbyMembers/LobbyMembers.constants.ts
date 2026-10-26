@@ -8,7 +8,7 @@ const HEADING = 'Connected through direct connection';
 
 const CONNECTED_TAG = { text: 'Connected', title: 'This player connected with its own client.' } as const;
 
-const EMPTY = 'Nobody has connected yet. Give players the address and the session code under Direct connection.';
+const EMPTY = 'Nobody has connected yet. Give players the address and the session code under How players join.';
 
 const FAILURE = {
   approve: 'Could not approve the player.',

@@ -1,14 +1,18 @@
 /* @layer tests @kind test */
 import { describe, expect, test } from 'vitest';
-import type { GamePreset, InstalledGame } from '@archipelia/model';
+import type { GamePreset, InstalledGame, LobbyServerEntry, ServerEntry, SessionTemplate } from '@archipelia/model';
+import type { SettingsOption } from '@drizztdourden08/tessera/composites';
 import { joinAddress } from '../../src/lobbies/join-address';
 import type { LobbyServerStatus } from '../../src/lobbies/lobbies.type';
 import { lobbyRequest } from '../../src/lobbies/lobby-request';
-import { chooseWhere } from '../../src/views/HostChoice/behavior/choose-where';
-import { yourNetwork } from '../../src/views/HostChoice/behavior/your-network';
-import { networkFacts } from '../../src/views/HostChoice/behavior/network-facts';
-import { privateFacts } from '../../src/views/HostChoice/behavior/private-facts';
-import { whereOptions } from '../../src/views/HostChoice/behavior/where-options';
+import { newTemplate } from '../../src/views/SessionBuilder/behavior/new-template';
+import { placeOf } from '../../src/views/SessionBuilder/behavior/place-of';
+import { placeOptions } from '../../src/views/SessionBuilder/behavior/place-options';
+import { remoteOptions } from '../../src/views/SessionBuilder/behavior/remote-options';
+import { remoteValue } from '../../src/views/SessionBuilder/behavior/remote-value';
+import { yourNetwork } from '../../src/views/SessionBuilder/behavior/your-network';
+import { networkFacts } from '../../src/views/SessionBuilder/behavior/network-facts';
+import { privateFacts } from '../../src/views/SessionBuilder/behavior/private-facts';
 import { hostSlotOf } from '../../electron/sessions/host-slot-of';
 
 const LISTENING: LobbyServerStatus = {
@@ -17,14 +21,49 @@ const LISTENING: LobbyServerStatus = {
 
 const status = (patch: Partial<LobbyServerStatus> = {}): LobbyServerStatus => ({ ...LISTENING, ...patch });
 
-describe('where to host', () => {
-  test('reads the choice from the server picked and the network mode', () => {
-    expect(chooseWhere('local', false, status({ options: { mode: 'off', publicLookup: true } }))).toBe('private');
-    expect(chooseWhere('local', false, status())).toBe('lan');
-    expect(chooseWhere('local', false, status({ options: { mode: 'lan-and-internet', publicLookup: true } }))).toBe('lan');
-    expect(chooseWhere('local', false, null)).toBe('private');
-    expect(chooseWhere('r1', false, status())).toBe('remote');
-    expect(chooseWhere('local', true, status())).toBe('remote');
+const LOCAL = newTemplate('t1');
+
+const DIRECT: SessionTemplate = { ...LOCAL, direct: { serverId: 'local', admission: 'host-approval', allowUnlisted: false } };
+
+const ON_FRIEND: SessionTemplate = { ...LOCAL, direct: { serverId: 'r1', lobbyId: 'lb_1', admission: 'host-approval', allowUnlisted: false } };
+
+const FRIEND: LobbyServerEntry = { id: 'r1', label: 'Friend', url: 'wss://friend.example:38290', tokenRef: 'token' };
+
+const BOX = { id: 's1', label: 'Box', host: '192.0.2.10', gamePort: 38281 } as ServerEntry;
+
+const offs = (options: readonly SettingsOption[]) => options.map((option) => Boolean(option.disabled));
+
+describe('where a session lives', () => {
+  test('reads Local, LAN or Remote from the host, the direct connection and the network mode', () => {
+    expect(placeOf(LOCAL, 'lan')).toBe('local');
+    expect(placeOf({ ...LOCAL, host: { kind: 'archipelago-gg' } }, 'off')).toBe('remote');
+    expect(placeOf({ ...LOCAL, host: { kind: 'remote', serverId: 's1' } }, 'off')).toBe('remote');
+    expect(placeOf(DIRECT, 'off')).toBe('local');
+    expect(placeOf(DIRECT, undefined)).toBe('local');
+    expect(placeOf(DIRECT, 'lan')).toBe('lan');
+    expect(placeOf(DIRECT, 'lan-and-internet')).toBe('lan');
+    expect(placeOf(ON_FRIEND, 'lan')).toBe('remote');
+  });
+
+  test('offers LAN only with direct connections, and Remote with them only when an Archipelia server is saved', () => {
+    expect(offs(placeOptions({ draft: LOCAL, lobbyServers: [], connected: 0 }))).toEqual([false, true, false]);
+    expect(offs(placeOptions({ draft: DIRECT, lobbyServers: [FRIEND], connected: 0 }))).toEqual([false, false, false]);
+    expect(offs(placeOptions({ draft: DIRECT, lobbyServers: [], connected: 0 }))).toEqual([false, false, true]);
+  });
+
+  test('keeps the server of a session while players are connected, with the reason', () => {
+    expect(offs(placeOptions({ draft: DIRECT, lobbyServers: [FRIEND], connected: 2 }))).toEqual([false, false, true]);
+    expect(offs(placeOptions({ draft: ON_FRIEND, lobbyServers: [FRIEND], connected: 2 }))).toEqual([true, true, false]);
+  });
+
+  test('lists archipelago.gg, the machines over SSH and the Archipelia servers, each with the direct choice it needs', () => {
+    const labels = remoteOptions({ draft: LOCAL, lobbyServers: [FRIEND], servers: [BOX], connected: 0 });
+    expect(labels.map((option) => option.label)).toEqual(['archipelago.gg', 'Box over SSH', 'Friend, an Archipelia server']);
+    expect(offs(labels)).toEqual([false, false, true]);
+    expect(offs(remoteOptions({ draft: ON_FRIEND, lobbyServers: [FRIEND], servers: [BOX], connected: 0 }))).toEqual([true, true, false]);
+    expect(remoteValue({ ...LOCAL, host: { kind: 'archipelago-gg' } })).toBe('gg');
+    expect(remoteValue({ ...LOCAL, host: { kind: 'remote', serverId: 's1' } })).toBe('ssh:s1');
+    expect(remoteValue(ON_FRIEND)).toBe('lobby:r1');
   });
 
   test('shows both addresses of a server on the network, each to copy', () => {
@@ -87,11 +126,5 @@ describe('the players and the place of a session with direct connection', () => 
   test('sends the players of the session through the admin request member.host', async () => {
     const slots = [await slotOf({ slot: 1, name: 'Ana', game: 'A Link to the Past', source: { kind: 'preset', presetId: 'p1', overrides: {} } })];
     expect(lobbyRequest.host('lb1', 'Host', slots)).toEqual({ type: 'member.host', params: { lobbyId: 'lb1', displayName: 'Host', slots } });
-  });
-
-  test('keeps the server of a session with a lobby: the other kind of place is off, with the reason', () => {
-    expect(whereOptions(undefined).every((option) => !option.disabled)).toBe(true);
-    expect(whereOptions('local').map((option) => Boolean(option.disabled))).toEqual([false, false, true]);
-    expect(whereOptions('srv_1').map((option) => Boolean(option.disabled))).toEqual([true, true, false]);
   });
 });
