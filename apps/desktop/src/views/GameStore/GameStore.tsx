@@ -2,13 +2,15 @@
 import { openExternal, SearchAnchor } from '@drizztdourden08/brock-react';
 import { Box, Button, EmptyState, Icon, IconButton, Spinner, Tooltip } from '@drizztdourden08/tessera/primitives';
 import { FilterBar, VirtualGrid } from '@drizztdourden08/tessera/composites';
-import { ErrorCallout } from '@archipelia/design';
-import { useState } from 'react';
+import type { VirtualGridHandle } from '@drizztdourden08/tessera/composites';
+import { ErrorCallout, PackageConsentDialog } from '@archipelia/design';
+import { useMemo, useRef, useState } from 'react';
 import { gameAnchor } from './behavior/game-anchor';
 import { GAME_FIELDS } from './behavior/game-schema.constants';
 import { gridSectionsOf } from './behavior/grid-sections-of';
 import { rowKey } from './behavior/row-key';
 import { useGameStore } from './behavior/useGameStore';
+import { useRevealGame } from './behavior/useRevealGame';
 import { EMPTY_TEXT, TILE } from './GameStore.constants';
 import type { GameRow, GameStoreProps } from './GameStore.type';
 import { GameDetailsDialog } from './sub-components/GameDetailsDialog';
@@ -21,7 +23,9 @@ const GameStore = ({ tab }: GameStoreProps) => {
   const store = useGameStore(tab);
   const [opened, setOpened] = useState<string | null>(null);
   const handlers = { isBusy: store.isBusy, errorOf: store.errorOf, open: (row: GameRow) => setOpened(rowKey(row)), installWorld: store.installWorld, remove: store.remove, openHome: openExternal };
-  const sections = gridSectionsOf(store.sections, tab, store.filtered);
+  const sections = useMemo(() => gridSectionsOf(store.sections, tab, store.filtered), [store.sections, tab, store.filtered]);
+  const grid = useRef<VirtualGridHandle>(null);
+  useRevealGame(sections, grid);
   const openRow = opened === null ? undefined : store.rows.find((row) => rowKey(row) === opened);
 
   return (
@@ -51,6 +55,7 @@ const GameStore = ({ tab }: GameStoreProps) => {
           )
           : (
             <VirtualGrid
+              ref={grid}
               label="Games"
               tileWidth={TILE.width}
               tileHeight={TILE.height}
@@ -64,6 +69,9 @@ const GameStore = ({ tab }: GameStoreProps) => {
             />
           )}
       </Box>
+      {store.consent.pending && (
+        <PackageConsentDialog {...store.consent.pending} onAccept={store.consent.accept} onCancel={store.consent.cancel} onOpenLink={openExternal} />
+      )}
       {openRow && <GameDetailsDialog row={openRow} handlers={handlers} onClose={() => setOpened(null)} />}
       <GameStatusBar summary={store.summary} loading={store.loading} filtered={store.filtered} adding={store.isBusy('file')} onAddFromFile={store.addFromFile} />
     </Box>

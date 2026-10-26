@@ -5,6 +5,7 @@ import { HEADER, MAX_MOUNTED_CARDS, SECTION_ORDER } from './check-games-layout.c
 import { SELECTOR } from './review-dom.constants';
 import { checkGameCards } from './check-game-cards';
 import { checkGameDetails } from './check-game-details';
+import { checkGameReveal } from './check-game-reveal';
 import { waitNamed } from './wait-named';
 
 const headerNamed = (tour: AppReviewTour, layer: HTMLElement, name: string) =>
@@ -45,6 +46,7 @@ const checkGamesLayout = async (tour: AppReviewTour): Promise<void> => {
   checkMounted(tour, layer);
   await tour.capture('games');
   await checkGameDetails(tour, layer);
+  await checkGameReveal(tour);
 };
 
 export { checkGamesLayout };
