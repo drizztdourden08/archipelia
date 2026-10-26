@@ -8,6 +8,8 @@ export type { GameCardAction, GameCardKind, GameCardNote, GameCardProps, GameCar
 export { GameDetails } from './compounds/GameDetails';
 export type { GameDetailsProps } from './compounds/GameDetails';
 export { HintRow } from './compounds/HintRow';
+export { PackageConsentDialog } from './compounds/PackageConsentDialog';
+export type { ConsentPackage, PackageConsentDialogProps } from './compounds/PackageConsentDialog';
 export { LogLines, logCopyText } from './compounds/LogLines';
 export { OptionControl, coercePresetValues, hintOf, isChangedValue, isLoose } from './compounds/OptionControl';
 export type { CoercedValues } from './compounds/OptionControl';
