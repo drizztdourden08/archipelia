@@ -22,6 +22,8 @@ export type { Fetch } from './install/fetch-file.type';
 export { officialEntries } from './official/official-entries';
 export { readOfficialIndex } from './official/read-official-index';
 export type { OfficialWorld } from './official/official-index.type';
+export type { BuildRun, BuildRunner } from './build/build.type';
+export { parseBuildId } from './build/parse-build-id';
 export { createCatalogService } from './service/create-catalog-service';
 export type { CatalogServiceDeps, CatalogView, InstallRequest } from './service/catalog-service.type';
 export type { PackageConsent } from './install/package-consent.type';

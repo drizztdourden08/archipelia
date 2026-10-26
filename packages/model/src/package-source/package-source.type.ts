@@ -40,7 +40,51 @@ type SourceWheelState = 'found' | 'none' | 'unknown';
 
 type SourceWheelRequest = SourceRef & { tag: string; asset: string; typed?: string | undefined };
 
-type PackageSource = { repo: string; tag: string; asset: string; sha256: string; verified: boolean; name: string; version: string; newest?: string | undefined };
+type PackageSource = {
+  repo: string;
+  tag: string;
+  asset: string;
+  sha256: string;
+  verified: boolean;
+  name: string;
+  version: string;
+  newest?: string | undefined;
+  built?: boolean | undefined;
+  commit?: string | undefined;
+  archiveSha256?: string | undefined;
+};
+
+type SourceBuildJob = 'venv' | 'tools' | 'wheel';
+
+type SourceBuildTool = 'msvc' | 'compiler' | 'xcode' | 'python-headers' | 'headers' | 'rust' | 'cmake';
+
+type SourceBuildMissing = { tool: SourceBuildTool; detail?: string | undefined };
+
+type SourceBuildStart = SourceRef & { confirmed: boolean };
+
+type SourceBuildPin = { name: string; version: string; pin: string };
+
+type SourceBuildPlan = {
+  buildId: string;
+  owner: string;
+  repo: string;
+  module: string;
+  commit: string;
+  archiveSha256: string;
+  size: number;
+  tools: SourceBuildPin[];
+};
+
+type SourceBuildRequest = { buildId: string; archiveSha256: string; tools: string[] };
+
+type SourceBuildEnd =
+  | { status: 'cancelled' }
+  | { status: 'failed'; message: string; log: string[]; retry: boolean }
+  | { status: 'missing'; missing: SourceBuildMissing; log: string[] };
+
+type SourceBuildPrepared = { status: 'ready'; plan: SourceBuildPlan } | SourceBuildEnd;
+
+type SourceBuilt = { status: 'built'; source: PackageSource } | SourceBuildEnd;
 
 type SourcePlan = {
   owner: string;
@@ -60,6 +104,7 @@ type SourcePlan = {
 };
 
 export type {
-  PackageSource, SourceCandidate, SourceOrigin, SourcePin, SourcePlan, SourcePypi, SourcePypiInstall, SourceRef, SourceSuggestions, SourceWarning, SourceWheel,
-  SourceWheelFit, SourceWheelRequest, SourceWheelState, SuggestRequest,
+  PackageSource, SourceBuildEnd, SourceBuildJob, SourceBuildMissing, SourceBuildPin, SourceBuildPlan, SourceBuildPrepared, SourceBuildRequest, SourceBuildStart,
+  SourceBuildTool, SourceBuilt, SourceCandidate, SourceOrigin, SourcePin, SourcePlan, SourcePypi, SourcePypiInstall, SourceRef, SourceSuggestions, SourceWarning,
+  SourceWheel, SourceWheelFit, SourceWheelRequest, SourceWheelState, SuggestRequest,
 };
