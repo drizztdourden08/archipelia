@@ -14,7 +14,7 @@ const SHELL_STEPS: readonly TourStepDef[] = [
   {
     id: 'title-bar',
     title: 'The title bar',
-    body: 'The title bar stays with you on every screen. It holds the menu, search and the bug button, and while a room is hosting it shows a status you can press to open the room.',
+    body: 'The title bar stays with you on every screen. It holds the menu, search and the bug button, and while a room is hosting it adds a Hosting menu to open the room.',
     target: { shell: 'title-bar' },
     mascot: 'point',
     open: TOUR_ROUTE.home,

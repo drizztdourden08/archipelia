@@ -23,8 +23,8 @@ const TOUR_ROUTE = {
   hosting: 'multiworld/hosting',
   archipelagoGg: 'multiworld/archipelago-gg',
   general: 'multiworld/general',
-  storage: 'data/storage',
-  oldRuns: 'data/old-runs',
+  storage: 'multiworld/storage',
+  oldRuns: 'multiworld/old-runs',
 } as const;
 
 const SCREEN_LAYER = '.screen-layer:not(.screen-layer--hidden)';

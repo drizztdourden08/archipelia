@@ -5,6 +5,22 @@ import { TOUR_PART, TOUR_ROUTE, TOUR_TARGET } from '../hooks/tour-targets.consta
 
 const APP_STEPS: readonly TourStepDef[] = [
   {
+    id: 'general',
+    title: 'General',
+    body: 'General holds the options of the window and the developer tools.',
+    target: TOUR_PART.page,
+    mascot: 'idea',
+    open: TOUR_ROUTE.general,
+  },
+  {
+    id: 'general-window',
+    title: 'Window mode',
+    body: 'Run windowed, borderless or fullscreen.',
+    target: { setting: 'windowMode' },
+    mascot: 'point',
+    open: TOUR_ROUTE.general,
+  },
+  {
     id: 'engine',
     title: 'Engine',
     body: 'The engine is the copy of Archipelago that Archipelia keeps for itself. It generates seeds and hosts rooms, so you install nothing else.',
@@ -27,22 +43,6 @@ const APP_STEPS: readonly TourStepDef[] = [
     target: { tour: TOUR_TARGET.engineVersions },
     mascot: 'curious',
     open: ROUTE.engine,
-  },
-  {
-    id: 'general',
-    title: 'General',
-    body: 'General holds the options of the window and the developer tools.',
-    target: TOUR_PART.page,
-    mascot: 'idea',
-    open: TOUR_ROUTE.general,
-  },
-  {
-    id: 'general-window',
-    title: 'Window mode',
-    body: 'Run windowed, borderless or fullscreen.',
-    target: { setting: 'windowMode' },
-    mascot: 'point',
-    open: TOUR_ROUTE.general,
   },
   {
     id: 'storage',
