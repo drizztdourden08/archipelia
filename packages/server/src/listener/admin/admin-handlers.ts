@@ -15,7 +15,8 @@ const lobbyCalls: Record<string, AdminHandler> = {
     const params = adminParams(request);
     const engine = readEngine(params.record('engine'));
     const options = readLobbyOptions(params.record('options'), lobbyOptions());
-    return adminView(sandbox, await service.create({ name: readText('name', params.text('name')), ...(engine ? { engine } : {}), ...(options ? { options } : {}) }));
+    const locked = request.locked === true ? { locked: true } : {};
+    return adminView(sandbox, await service.create({ name: readText('name', params.text('name')), ...(engine ? { engine } : {}), ...(options ? { options } : {}), ...locked }));
   },
   'lobby.update': async ({ service, sandbox }, request) => {
     const params = adminParams(request);

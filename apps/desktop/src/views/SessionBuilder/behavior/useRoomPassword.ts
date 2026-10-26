@@ -2,7 +2,7 @@
 import { secretsApi } from '@drizztdourden08/brock-secrets/renderer';
 import { useCallback, useState } from 'react';
 import type { SessionTemplate } from '@archipelia/model';
-import { passwordNameOf } from './password-name-of';
+import { passwordNameOf } from '../../../lobbies/password-name-of';
 import { withoutPassword } from './without-password';
 
 const vault = () => {

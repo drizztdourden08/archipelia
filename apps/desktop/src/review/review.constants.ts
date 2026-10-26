@@ -36,8 +36,10 @@ const DIRECT_RUN_MS = 30000;
 
 const REVIEW_PLAYER = 'Zelda';
 
-const DIRECT_UI = {
-  allow: /^Allow direct connection/, unlisted: /^Allow unlisted clients/, run: 'Run', open: 'Open lobby', offTitle: 'Turn off direct connection?', off: 'Turn it off', section: /how players join/i,
+const DIRECT_UI = { allow: /^Allow direct connection/, unlisted: /^Allow unlisted clients/, section: /how players join/i } as const;
+
+const LOBBY_UI = {
+  start: 'Start session', run: 'Run', close: 'Close lobby', closeTitle: 'Close the lobby?', setup: /how players join/i, open: 'Open lobby',
 } as const;
 
 const JOIN_UI = { player: /^Player name/, display: /^Your name/, join: 'Join as a player', address: /^Server address/, code: /^Session code/, look: 'Look at the session' } as const;
@@ -54,6 +56,6 @@ const STORAGE_FOLDERS = ['Sessions', 'Presets', 'Installed games'];
 const GUARD_DIALOG = 'Unsaved changes';
 
 export {
-  DIRECT_RUN_MS, DIRECT_UI, GUARD_DIALOG, HEARTBEAT_MS, HOST_UI, JOIN_UI, REVIEW_CHECKS, REVIEW_DIRECT, REVIEW_GAME, REVIEW_JOINER, REVIEW_PLAYER, REVIEW_PLAYERS, REVIEW_PORT, REVIEW_PRESET, REVIEW_SERVER, REVIEW_SESSION, RUN_TIMEOUT_MS, SAVE_STATE, SERVER_FIELDS, SERVER_PROBLEMS,
+  DIRECT_RUN_MS, DIRECT_UI, GUARD_DIALOG, HEARTBEAT_MS, HOST_UI, JOIN_UI, LOBBY_UI, REVIEW_CHECKS, REVIEW_DIRECT, REVIEW_GAME, REVIEW_JOINER, REVIEW_PLAYER, REVIEW_PLAYERS, REVIEW_PORT, REVIEW_PRESET, REVIEW_SERVER, REVIEW_SESSION, RUN_TIMEOUT_MS, SAVE_STATE, SERVER_FIELDS, SERVER_PROBLEMS,
   SERVER_UI, SERVER_UNTOUCHED, STORAGE_FOLDERS,
 };

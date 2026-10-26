@@ -10,7 +10,7 @@ const seedDirect = async (): Promise<SessionTemplate | null> => {
   const preset = (await api.presetsList()).find((entry) => entry.name === REVIEW_PRESET);
   if (!preset) return null;
   const saved = (await api.templatesList()).find((entry) => entry.name === REVIEW_DIRECT);
-  const template = await api.templatesSave({ ...reviewTemplate(preset, saved?.id), name: REVIEW_DIRECT, host: { kind: 'local', port: REVIEW_PORT + 1 }, direct: undefined });
+  const template = await api.templatesSave({ ...reviewTemplate(preset, saved?.id), name: REVIEW_DIRECT, host: { kind: 'local', port: REVIEW_PORT + 1 } });
   await useLibraryStore.getState().loadTemplates();
   return template;
 };

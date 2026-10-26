@@ -1,81 +1,51 @@
 /* @layer renderer-app @kind hook */
-import { useCallback, useState } from 'react';
-import { useKeyedGuard, useUnsavedChanges } from '@drizztdourden08/brock-react';
-import type { GeneratorSettings, HostTarget, ServerSettings, SessionTemplate } from '@archipelia/model';
-import type { BuilderParams } from '../SessionBuilder.type';
-import { useBuilderData } from './useBuilderData';
+import { useCallback, useEffect, useState } from 'react';
+import type { SessionTemplate } from '@archipelia/model';
+import { openSessionLobby } from '../../../hooks/open-session-lobby';
+import { useActionGuard } from '../../../hooks/useActionGuard';
+import { useLibraryData } from '../../../hooks/useLibraryData';
+import { useSavedDraft } from '../../../hooks/useSavedDraft';
+import { useSessionLobby } from '../../../hooks/useSessionLobby';
+import { useSessionStart } from '../../../hooks/useSessionStart';
+import { lobbyServerOf } from '../../../lobbies/lobby-server-of';
+import { BUILDER_FAILURE, SETUP_TEXT } from '../SessionBuilder.constants';
+import type { StartAction } from '../SessionBuilder.type';
+import { setupProblems } from './setup-problems';
 import { useHostingDefaults } from './useHostingDefaults';
 import { useRoomPassword } from './useRoomPassword';
-import { usePlayersEditor } from './usePlayersEditor';
-import { useProblems } from './useProblems';
-import { useDirectSession } from './useDirectSession';
-import { hostOfKind } from './host-of-kind';
-import { withPort } from './with-port';
+import { useSetupEdits } from './useSetupEdits';
 import { withoutPassword } from './without-password';
-import { UNSAVED_SESSION } from '../SessionBuilder.constants';
-import { failWith } from '../../../hooks/fail-with';
-import { failureOf } from './failure-of';
-import { appApi } from '../../../ipc/app-api';
 
-const useSessionBuilder = ({ initial, onRun }: BuilderParams) => {
-  const [draft, setDraft] = useState<SessionTemplate>(initial);
-  const [selectedSlot, setSelectedSlot] = useState<number | null>(null);
-  const { guard: keyed, isBusy, clearError, lastError } = useKeyedGuard();
-  const [savedJson, setSavedJson] = useState<string | null>(null);
-  const data = useBuilderData();
-  const { installed, presets, servers, templates, saveTemplate, createPreset } = data;
+const useSessionBuilder = (initial: SessionTemplate) => {
+  const data = useLibraryData();
+  const { templates, saveTemplate } = data;
   const hosting = useHostingDefaults();
   const room = useRoomPassword();
   const { commit, clear } = room;
+  const { draft, setDraft, keep, saved, dirty } = useSavedDraft(initial, Boolean(room.password));
+  const { guard, busy, error } = useActionGuard(BUILDER_FAILURE);
+  const startSession = useSessionStart();
+  const [started, setStarted] = useState<string | null>(null);
+  const { lobby } = useSessionLobby(lobbyServerOf(draft), draft.lobby?.lobbyId ?? '');
 
-  const guard = useCallback((key: string, work: () => Promise<unknown>) => {
-    clearError();
-    return keyed(key, failWith(failureOf(key), work));
-  }, [clearError, keyed]);
-
-  const players = usePlayersEditor({ setDraft, installed, presets, createPreset, guard });
-  const check = useProblems(draft, { installed, presets }, setSelectedSlot);
-  const { attemptRun } = check;
-
-  const setName = useCallback((name: string) => setDraft((current) => ({ ...current, name })), []);
-  const setGenerator = useCallback((patch: Partial<GeneratorSettings>) =>
-    setDraft((current) => ({ ...current, generator: { ...current.generator, ...patch } })), []);
-  const setServer = useCallback((patch: Partial<ServerSettings>) =>
-    setDraft((current) => ({ ...current, server: { ...current.server, ...patch } })), []);
-  const setHost = useCallback((change: (host: HostTarget) => HostTarget) =>
-    setDraft((current) => ({ ...current, host: change(current.host) })), []);
-  const localHost = useCallback((host: HostTarget) => hostOfKind('local', host, servers, hosting), [hosting, servers]);
-  const setPort = useCallback((port: number) => setHost((host) => withPort(host, port)), [setHost]);
-
-  const persistTemplate = useCallback(async (template: SessionTemplate) => {
-    const saved = await saveTemplate(await commit(template));
-    if (saved.direct?.lobbyId) await appApi().sessionsSyncDirect(saved);
-    setDraft(saved);
-    setSavedJson(JSON.stringify(saved));
-    return saved;
-  }, [commit, saveTemplate]);
-  const persist = useCallback(() => persistTemplate(draft), [draft, persistTemplate]);
-  const direct = useDirectSession({ draft, setDraft, persist: persistTemplate, guard, localHost });
-
-  const save = useCallback(() => guard('save', persist), [guard, persist]);
-  const run = useCallback(() => (attemptRun() ? guard('run', async () => onRun(await persist())) : undefined), [attemptRun, guard, onRun, persist]);
+  const save = useCallback(() => guard('save', async () => keep(await commit(draft))), [commit, draft, guard, keep]);
+  const start = useCallback(() => guard('start', async () => {
+    const launched = await startSession(await commit(draft), keep);
+    if (launched) setStarted(launched.id);
+  }), [commit, draft, guard, keep, startSession]);
+  useEffect(() => { if (started && !dirty) openSessionLobby(started); }, [dirty, started]);
 
   const clearPassword = useCallback(() => guard('password', async () => {
     setDraft(await clear(draft));
     const stored = templates.find((template) => template.id === draft.id);
     if (stored) await saveTemplate(withoutPassword(stored));
-  }), [clear, draft, guard, saveTemplate, templates]);
+  }), [clear, draft, guard, saveTemplate, setDraft, templates]);
 
-  const toggleSelected = useCallback((slot: number) => setSelectedSlot((current) => (current === slot ? null : slot)), []);
-  const selected = draft.players.find((player) => player.slot === selectedSlot);
-  const draftJson = JSON.stringify(draft);
-  const saved = savedJson !== null && !room.password && savedJson === draftJson;
-  const dirty = Boolean(room.password) || draftJson !== (savedJson ?? JSON.stringify(initial));
-  useUnsavedChanges(dirty, UNSAVED_SESSION);
-
+  const problems = setupProblems(draft);
+  const action: StartAction = { label: SETUP_TEXT.start, reason: problems[0], onClick: () => void start() };
+  const live = lobby !== undefined && lobby.phase !== 'closed';
   return {
-    ...data, ...check, busy: isBusy(), clearPassword, direct, draft, error: lastError, hosting, password: room.password, players, run, save, saved, selected,
-    setGenerator, setHost, setName, setPassword: room.setPassword, setPort, setServer, toggleSelected,
+    ...data, ...useSetupEdits(setDraft), action, busy, clearPassword, draft, error, hosting, live, password: room.password, save, saved, setDraft, setPassword: room.setPassword,
   };
 };
 

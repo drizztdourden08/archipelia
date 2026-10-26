@@ -11,6 +11,7 @@ const readServerOptions = async (files: DataFiles): Promise<LobbyServerOptions> 
   return {
     mode: isNetworkMode(stored.mode) ? stored.mode : DEFAULT_SERVER_OPTIONS.mode,
     publicLookup: typeof stored.publicLookup === 'boolean' ? stored.publicLookup : DEFAULT_SERVER_OPTIONS.publicLookup,
+    ...(stored.lanConsent === true ? { lanConsent: true } : {}),
   };
 };
 

@@ -1,6 +1,7 @@
 /* @layer renderer-app @kind config */
 import type { TourStepDef } from '@drizztdourden08/brock-react';
 import { ROUTE } from '../hooks/app-navigation.constants';
+import { openFirstLobby } from '../hooks/open-first-lobby';
 import { TOUR_PART, TOUR_TARGET } from '../hooks/tour-targets.constants';
 
 const SESSIONS_STEPS: readonly TourStepDef[] = [
@@ -15,7 +16,7 @@ const SESSIONS_STEPS: readonly TourStepDef[] = [
   {
     id: 'sessions-list',
     title: 'Your sessions',
-    body: 'Run makes a seed and hosts the room. Edit changes the setup. The menu on a row duplicates or deletes it.',
+    body: 'Start opens the lobby of the session. Edit changes the setup. The menu on a row duplicates or deletes it.',
     target: { tour: TOUR_TARGET.sessionsList },
     mascot: 'curious',
     open: ROUTE.sessions,
@@ -38,11 +39,43 @@ const SESSIONS_STEPS: readonly TourStepDef[] = [
   },
   {
     id: 'sessions-builder',
-    title: 'The session builder',
-    body: 'The builder sets the players, the game and preset of each one, and the server options. Name the session here, then Save keeps it and Run hosts it.',
+    title: 'The session setup',
+    body: 'The setup page holds the session itself: its name, where the room runs, direct connection and the server options. Save keeps it. Start session opens its lobby.',
     target: { tour: TOUR_TARGET.builderBar },
     mascot: 'idea',
     open: ROUTE.newSession,
+  },
+  {
+    id: 'lobby',
+    title: 'The lobby',
+    body: 'The lobby is where you add the players, let friends in and run the room. Nothing goes on the network until you start the session.',
+    target: TOUR_PART.page,
+    mascot: 'curious',
+    before: openFirstLobby,
+  },
+  {
+    id: 'lobby-players',
+    title: 'Players',
+    body: 'Add a player for each game. Pick the game and its preset. Friends who join with their own Archipelia show up here, and you approve them before the run.',
+    target: { tour: TOUR_TARGET.lobbyPlayers },
+    mascot: 'scan',
+    before: openFirstLobby,
+  },
+  {
+    id: 'lobby-connection',
+    title: 'Connection',
+    body: 'This card shows where the room runs and the addresses friends use to connect.',
+    target: { tour: TOUR_TARGET.lobbyConnection },
+    mascot: 'point',
+    before: openFirstLobby,
+  },
+  {
+    id: 'lobby-run',
+    title: 'Start and run',
+    body: 'Start session opens the lobby to friends. Run then makes the seed and hosts the room. When the button is off, the reason sits beside it.',
+    target: { tour: TOUR_TARGET.lobbyRun },
+    mascot: 'happy',
+    before: openFirstLobby,
   },
 ];
 

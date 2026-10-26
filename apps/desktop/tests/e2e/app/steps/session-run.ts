@@ -4,7 +4,7 @@ import type { Locator, Page } from 'playwright-core';
 import type { LaunchedApp } from '../support/launched-app.type';
 import { settledProof } from '../support/settled-proof';
 import { LOCAL_PORT, SOH, TEMPLATE, TIMESPINNER } from '../support/flow-constants';
-import { base, docked, hub, openScreen, pickOption, playerRowOf } from '../support/locators';
+import { base, closeHub, docked, openScreen, pickOption, playerRowOf } from '../support/locators';
 
 const RUN_TIMEOUT = 300000;
 
@@ -33,19 +33,22 @@ const buildSession = async (launched: LaunchedApp) => {
   await sessions.getByRole('button', { name: 'New session' }).click();
   await sessions.getByRole('textbox', { name: 'Session name' }).waitFor();
   await settledProof(launched, '18-sessions-new');
-  for (const player of PLAYERS) await fillPlayer(page, sessions, player);
+  expect(await sessions.getByRole('region', { name: 'Players', exact: true }).count()).toBe(0);
   expect(await sessions.getByRole('spinbutton', { name: 'Local port', exact: true }).inputValue()).toBe(String(LOCAL_PORT));
   const where = sessions.getByRole('radiogroup', { name: 'Where', exact: true });
   expect(await where.getByRole('radio', { name: 'Local', exact: true }).getAttribute('aria-checked')).toBe('true');
-  expect(await where.getByRole('radio', { name: 'LAN', exact: true }).isDisabled()).toBe(true);
+  expect(await where.getByRole('radio', { name: 'LAN', exact: true }).isDisabled()).toBe(false);
   await sessions.getByRole('switch', { name: /^Allow direct connections/ }).waitFor();
   await sessions.getByRole('slider', { name: 'Hint cost', exact: true }).waitFor();
   await pickOption(page, sessions.getByRole('combobox', { name: 'Spoiler', exact: true }), 'Full with paths');
   await sessions.getByRole('textbox', { name: 'Session name' }).fill(TEMPLATE);
-  await settledProof(launched, '19-sessions-two-players');
   await sessions.getByRole('button', { name: 'Save', exact: true }).click();
   await sessions.getByText('Saved', { exact: true }).waitFor();
-  await settledProof(launched, '20-sessions-saved');
+  await settledProof(launched, '19-sessions-saved');
+  await sessions.getByRole('button', { name: 'Start session', exact: true }).click();
+  await sessions.getByRole('region', { name: 'Players', exact: true }).waitFor();
+  for (const player of PLAYERS) await fillPlayer(page, sessions, player);
+  await settledProof(launched, '20-lobby-two-players');
   return sessions;
 };
 
@@ -55,13 +58,15 @@ const runSession = async (launched: LaunchedApp, sessions: Locator) => {
   const progress = page.getByRole('dialog', { name: `Running ${TEMPLATE}` });
   await progress.getByRole('progressbar', { name: `Running ${TEMPLATE}`, exact: true }).waitFor();
   await settledProof(launched, '21-run-progress');
-  await hub(page, 'Multiworld').waitFor({ state: 'detached', timeout: RUN_TIMEOUT });
+  await sessions.locator('.session-dashboard').getByText(/^hosting$/i).first().waitFor({ timeout: RUN_TIMEOUT });
+  await settledProof(launched, '22-lobby-hosting');
+  await closeHub(page, 'Multiworld');
   const dashboard = base(page);
   await dashboard.getByText(/^hosting$/i).first().waitFor({ timeout: RUN_TIMEOUT });
   await dashboard.getByText(new RegExp(`^[\\w.-]+:${LOCAL_PORT}$`)).first().waitFor();
   await docked(page).getByText(/_Spoiler\.txt$/).waitFor();
   await page.getByText(`Hosting: ${TEMPLATE}`, { exact: true }).filter({ visible: true }).first().waitFor();
-  await settledProof(launched, '22-dashboard-hosting');
+  await settledProof(launched, '23-dashboard-hosting');
   return dashboard;
 };
 

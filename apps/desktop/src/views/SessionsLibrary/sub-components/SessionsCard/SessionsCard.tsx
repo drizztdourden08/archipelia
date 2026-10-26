@@ -6,7 +6,7 @@ import { SessionRow } from '@archipelia/design';
 import { templateMeta } from '../../behavior/template-meta';
 import { playersLabel } from '../../behavior/players-label';
 
-const SessionsCard = ({ templates, total, loading, servers, isBusy, onEdit, onRun, onDuplicate, onDelete }: SessionsCardProps) => {
+const SessionsCard = ({ templates, total, loading, servers, isBusy, onEdit, onStart, onDuplicate, onDelete }: SessionsCardProps) => {
   const empty = loading
     ? <EmptyState icon={<Spinner />} message="Loading your sessions" />
     : <EmptyState message={total ? 'No session matches' : 'No session yet. New session builds one.'} />;
@@ -25,7 +25,7 @@ const SessionsCard = ({ templates, total, loading, servers, isBusy, onEdit, onRu
               playersLabel={playersLabel(template.players.length)}
               busy={isBusy(template.id)}
               onEdit={onEdit}
-              onRun={onRun}
+              onStart={onStart}
               onDuplicate={onDuplicate}
               onDelete={onDelete}
             />

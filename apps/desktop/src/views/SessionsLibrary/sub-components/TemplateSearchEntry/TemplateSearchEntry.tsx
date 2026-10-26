@@ -1,7 +1,7 @@
 /* @layer renderer-app @kind component */
 import { useMemo } from 'react';
 import { useSearchEntries } from '@drizztdourden08/brock-react';
-import { sessionEditorRoute } from '../../../../hooks/session-editor-route';
+import { sessionRoute } from '../../../../hooks/session-route';
 import { templateMeta } from '../../behavior/template-meta';
 import type { TemplateSearchEntryProps } from './TemplateSearchEntry.type';
 
@@ -12,7 +12,7 @@ const TemplateSearchEntry = ({ template, servers }: TemplateSearchEntryProps) =>
     description: templateMeta(template, servers),
     keywords: ['session', 'saved session', 'edit', ...template.players.map((player) => player.game)],
   }], [template, servers]);
-  useSearchEntries(entries, sessionEditorRoute(template.id));
+  useSearchEntries(entries, sessionRoute(template.id));
   return null;
 };
 

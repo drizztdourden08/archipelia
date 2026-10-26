@@ -12,6 +12,9 @@ const TOUR_TARGET = {
   gamesGrid: 'games-grid',
   presetsOptions: 'presets-options',
   builderBar: 'builder-bar',
+  lobbyPlayers: 'lobby-players',
+  lobbyConnection: 'lobby-connection',
+  lobbyRun: 'lobby-run',
   serversDetail: 'servers-detail',
   engineStatus: 'engine-status',
   engineVersions: 'engine-versions',
@@ -31,8 +34,9 @@ const SCREEN_LAYER = '.screen-layer:not(.screen-layer--hidden)';
 
 const TOUR_PART = {
   page: { selector: `${SCREEN_LAYER} :is(.screen-page, .hub-bare-page, .hero)` },
-  rail: { selector: `${SCREEN_LAYER} .side-nav` },
-  tabs: { selector: `${SCREEN_LAYER} .settings-page__tabs` },
+  rail: { selector: `${SCREEN_LAYER} nav.side-nav` },
+  hero: { shell: 'hero' },
+  tabs: { shell: 'tabs' },
   gamesStatus: { selector: 'section[aria-label="Games status"]' },
 } as const;
 

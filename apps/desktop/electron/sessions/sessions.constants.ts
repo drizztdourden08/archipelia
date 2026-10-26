@@ -12,11 +12,11 @@ const CLOSE_RETRY_MAX_MS = 300000;
 const RUNNABLE_PHASES: readonly LobbyPhase[] = ['open', 'locked', 'failed'];
 
 const TEXT = {
-  notDirect: 'This session does not take direct connections.',
-  notOpen: 'The lobby of this session is not open yet. Open lobby opens it.',
-  gone: 'The lobby of this session is gone. Open lobby opens a new one.',
-  ran: 'This session already ran on its lobby. Open lobby opens a new one for players.',
-  nobodyReady: 'No player is ready yet. Approve a player who joined, or add one of your own.',
+  notStarted: 'This session is not started yet. Start session opens its lobby.',
+  gone: 'The lobby of this session is gone. Start session opens a new one.',
+  ran: 'This session already ran on its lobby. Close the lobby, then Start session opens a new one.',
+  nobodyReady: 'No player is ready yet. Add a player of your own, or approve a player who joined.',
+  noLanConsent: 'This computer is not open to your network yet. Start session asks first.',
   notInstalled: (game: string) => `${game} is not installed.`,
 } as const;
 

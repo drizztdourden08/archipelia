@@ -25,7 +25,7 @@ const useHome = () => {
 
   const recent = useMemo(() => newestRuns(runs, RECENT_COUNT), [runs]);
   const last = recent[0] ?? null;
-  const again = useRunAgain(last, openSession);
+  const again = useRunAgain(last);
 
   const act = useCallback((id: string) => {
     if (id === 'again') void again.runAgain();

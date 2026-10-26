@@ -1,6 +1,7 @@
 /* @layer tests @kind test */
+import { AppError, decodeAppError, encodeAppError, isAppError } from '@drizztdourden08/brock-core/ipc';
 import { describe, expect, test } from 'vitest';
-import { wireInstallFailure } from '@archipelia/model';
+import { INSTALL_FAILURE_CODE, installFailureFrom } from '@archipelia/model';
 import { cardPropsOf } from '../../src/views/GameStore/behavior/card-props';
 import { failureOf } from '../../src/views/GameStore/behavior/failure-of';
 import { needOf } from '../../src/views/GameStore/behavior/need-of';
@@ -12,22 +13,29 @@ const MESSAGE = 'Chrono Trigger needs the Python package ctrando (not on PyPI, o
 
 const PACKAGES = [{ name: 'ctrando', githubUrl: 'https://github.com/Pseudoarc/ctrando' }];
 
-const wireOf = () => {
-  const wire = wireInstallFailure(Object.assign(new Error(MESSAGE), { code: 'package-unavailable', packages: PACKAGES }));
-  return wire instanceof Error ? wire.message : '';
+const code = INSTALL_FAILURE_CODE.packageUnavailable;
+
+const ipcError = () => {
+  const sent = new AppError(MESSAGE, { code, data: { packages: PACKAGES } });
+  return new Error(`Error invoking remote method 'ap:games:install': Error: ${encodeAppError(sent)}`);
 };
 
-const ipcError = () => new Error(`Error invoking remote method 'ap:games:install': Error: ${wireOf()}`);
+const needOfError = (error: Error) => (isAppError(error, code) ? installFailureFrom(error) : undefined);
 
 describe('a world that needs a package Archipelia cannot install', () => {
-  const failed = () => handlers([], { hk: reasonOf(ipcError(), 'Could not install the game.') });
+  const failed = () => {
+    const error = ipcError();
+    const found = needOfError(error);
+    return handlers([], { hk: reasonOf(error, 'Could not install the game.') }, found ? { hk: found } : {});
+  };
 
   test('the card has its own state with the sentence of the owner, not Failed', () => {
     expect(cardPropsOf(row, failed()).status).toBe('needs-package');
   });
 
-  test('the code survives the IPC wrapper and the plain sentence names the package', () => {
-    expect(needOf(row, failed())).toMatchObject({ code: 'package-unavailable', packages: PACKAGES });
+  test('the code and the packages survive the IPC wrapper and the plain sentence names the package', () => {
+    expect(decodeAppError(ipcError().message)?.code).toBe(code);
+    expect(needOf(row, failed())).toMatchObject({ code, message: MESSAGE, packages: PACKAGES });
     expect(failureOf(row, failed())).toBe(MESSAGE);
   });
 

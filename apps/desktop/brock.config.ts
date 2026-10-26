@@ -10,9 +10,11 @@ export default defineBrockConfig({
     author: { name: 'drizztdourden_', email: 'drizztdourden08@users.noreply.github.com' },
     repo: { owner: 'drizztdourden08', name: 'archipelia' },
     icons: { brand: 'archipelia', rim: 'light' },
+    initialProfile: 'Default',
     menu: {
       entries: {
-        'menu:/library': { after: 'home' },
+        'bucket:multiworld:sessions': { after: 'home' },
+        'menu:/library': { after: 'bucket:multiworld:sessions' },
         'bucket:multiworld:servers': { after: 'menu:/library' },
         settings: { after: 'bucket:multiworld:servers' },
         profiles: { before: 'about' },

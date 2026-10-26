@@ -2,8 +2,7 @@
 import { nav } from '@drizztdourden08/brock-react';
 import type { AppReviewTour } from '@drizztdourden08/brock-react';
 import { ROUTE } from '../hooks/app-navigation.constants';
-import { openSessionEditor } from '../hooks/open-session-editor';
-import { DIRECT_UI, DIRECT_RUN_MS, REVIEW_JOINER, REVIEW_PLAYER, REVIEW_PLAYERS } from './review.constants';
+import { DIRECT_RUN_MS, LOBBY_UI, REVIEW_JOINER, REVIEW_PLAYER, REVIEW_PLAYERS } from './review.constants';
 import { SELECTOR } from './review-dom.constants';
 import { clickNamed } from './click-named';
 import { directLobby } from './direct-lobby';
@@ -12,15 +11,14 @@ import { withHeartbeat } from './with-heartbeat';
 
 const layer = () => document.querySelector<HTMLElement>(SELECTOR.layer);
 
-const runDirect = async (tour: AppReviewTour, templateId: string, lobbyId: string) => {
-  await clickNamed(tour, SELECTOR.button, DIRECT_UI.run, tour.find(SELECTOR.layer) ?? undefined);
+const runDirect = async (tour: AppReviewTour, lobbyId: string) => {
+  await clickNamed(tour, SELECTOR.button, LOBBY_UI.run, tour.find(SELECTOR.layer) ?? undefined);
   const hosting = await withHeartbeat(tour, tour.waitFor(() => (directLobby(lobbyId)?.phase === 'hosting' ? true : null), DIRECT_RUN_MS), () => 'the session is still making its seed');
-  tour.check('direct-run', hosting === true, 'Run starts the lobby of the session and the room is hosting', 'the session with direct connection did not reach hosting');
+  tour.check('direct-run', hosting === true, 'Run on the lobby screen starts the lobby and the room is hosting', 'the session with direct connections did not reach hosting');
   if (!hosting) return;
-  openSessionEditor(templateId);
   const files = [REVIEW_PLAYERS[0], REVIEW_PLAYER, REVIEW_JOINER].map((name) => `${name}.apreview`);
   const all = await tour.waitFor(() => (files.every((file) => (layer()?.innerText ?? '').includes(file)) ? true : null), 20000);
-  tour.check('direct-one-seed', all === true,'one generation holds the host player, the fake client and the Archipelia player', 'the results do not list a file for each kind of player');
+  tour.check('direct-one-seed', all === true, 'the same lobby screen lists one generation for the host player, the fake client and the Archipelia player', 'the results do not list a file for each kind of player');
   await tour.capture('direct-results');
   nav.open(ROUTE.joinSession);
   const room = await waitText(tour, /Room open[\s\S]*On this computer\s*127\.0\.0\.1:\d+/i, layer, 20000);

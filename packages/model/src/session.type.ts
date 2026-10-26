@@ -35,11 +35,16 @@ type ServerSettings = {
 };
 
 type DirectConnection = {
-  serverId: string;
-  lobbyId?: string;
   admission: LobbyAdmission;
   allowUnlisted: boolean;
 };
+
+type SessionLobby = {
+  serverId: string;
+  lobbyId?: string;
+};
+
+type StoredDirect = DirectConnection & Partial<SessionLobby>;
 
 type SessionTemplate = {
   id: string;
@@ -48,9 +53,13 @@ type SessionTemplate = {
   generator: GeneratorSettings;
   server: ServerSettings;
   host: HostTarget;
+  lan?: boolean;
+  lobby?: SessionLobby;
   direct?: DirectConnection;
   updatedAt: number;
 };
+
+type StoredTemplate = Omit<SessionTemplate, 'direct'> & { direct?: StoredDirect };
 
 type SessionStatus = 'draft' | 'generating' | 'starting' | 'hosting' | 'stopped' | 'failed';
 
@@ -80,5 +89,5 @@ type Session = {
 
 export type {
   DirectConnection, Endpoint, GeneratorSettings, HostTarget, PlayerSource, ReleaseMode, RemainingMode, ServerSettings, Session,
-  SessionEngine, SessionOutput, SessionPlayer, SessionStatus, SessionTemplate, SessionWorld, SpoilerLevel,
+  SessionEngine, SessionLobby, SessionOutput, SessionPlayer, SessionStatus, SessionTemplate, SessionWorld, SpoilerLevel, StoredTemplate,
 };

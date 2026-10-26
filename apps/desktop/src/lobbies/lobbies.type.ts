@@ -1,10 +1,10 @@
 /* @layer renderer-app @kind types */
-import type { AdminLobby, DirectConnection, SessionEngine } from '@archipelia/model';
+import type { AdminLobby, SessionEngine } from '@archipelia/model';
 import type { ReachStatus } from '@archipelia/server';
 import type { LanServer, NetworkMode } from '@archipelia/server/network';
 import type { LOBBY_REQUESTS } from './lobbies.constants';
 
-type LobbyServerOptions = { mode: NetworkMode; publicLookup: boolean };
+type LobbyServerOptions = { mode: NetworkMode; publicLookup: boolean; lanConsent?: boolean };
 
 type LobbyServerState = 'starting' | 'listening' | 'failed';
 
@@ -27,7 +27,7 @@ type ServerInfo = { name: string; version: string; port: number; sandbox: string
 
 type LobbyServerView = { info: ServerInfo; engine?: SessionEngine };
 
-type DirectOptions = Pick<DirectConnection, 'admission' | 'allowUnlisted'>;
+type SessionReach = 'local' | 'lan' | 'gg' | 'ssh' | 'archipelia';
 
 type PendingClose = { templateId: string; serverId: string; lobbyId: string };
 
@@ -66,6 +66,6 @@ type LobbyProbe = {
 type HostPlayerSlot = { name: string; game: string; yaml: string; worldVersion: string };
 
 export type {
-  DirectOptions, HostPlayerSlot, JoinAddress, LanEntry, LobbyEvent, LobbyProbe, LobbyRequest, LobbyReviewHost, LobbyReviewPlay, LobbyServerOptions, LobbyServerState,
-  LobbyServerStatus, LobbyServerTest, LobbyServerView, PendingClose, ServerInfo, ServerPlace, ServerTarget,
+  HostPlayerSlot, JoinAddress, LanEntry, LobbyEvent, LobbyProbe, LobbyRequest, LobbyReviewHost, LobbyReviewPlay, LobbyServerOptions, LobbyServerState,
+  LobbyServerStatus, LobbyServerTest, LobbyServerView, PendingClose, ServerInfo, ServerPlace, ServerTarget, SessionReach,
 };

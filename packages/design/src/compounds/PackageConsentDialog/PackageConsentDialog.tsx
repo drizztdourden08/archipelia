@@ -9,6 +9,7 @@ import './PackageConsentDialog.css';
 const PackageConsentDialog = ({ title, packages, onAccept, onCancel, onOpenLink }: PackageConsentDialogProps) => (
   <DialogShell
     open
+    size="md"
     onClose={onCancel}
     title={`Install packages for ${title}`}
     actions={(
