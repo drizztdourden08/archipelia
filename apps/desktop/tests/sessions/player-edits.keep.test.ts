@@ -1,15 +1,15 @@
 /* @layer tests @kind test */
 import { describe, expect, test } from 'vitest';
-import { overrideRows } from '../../src/views/SessionBuilder/behavior/override-rows';
-import { overridesLabel } from '../../src/views/SessionBuilder/behavior/overrides-label';
-import { withGame } from '../../src/views/SessionBuilder/behavior/with-game';
-import { withOverride } from '../../src/views/SessionBuilder/behavior/with-override';
-import { withoutOverride } from '../../src/views/SessionBuilder/behavior/without-override';
-import { withYaml } from '../../src/views/SessionBuilder/behavior/with-yaml';
-import { gameOptionsOf } from '../../src/views/SessionBuilder/behavior/game-options-of';
-import { parseSource } from '../../src/views/SessionBuilder/behavior/parse-source';
-import { sourceOptionsOf } from '../../src/views/SessionBuilder/behavior/source-options-of';
-import { sourceValueOf } from '../../src/views/SessionBuilder/behavior/source-value-of';
+import { overrideRows } from '../../src/views/SessionLobby/behavior/override-rows';
+import { overridesLabel } from '../../src/views/SessionLobby/behavior/overrides-label';
+import { withGame } from '../../src/views/SessionLobby/behavior/with-game';
+import { withOverride } from '../../src/views/SessionLobby/behavior/with-override';
+import { withoutOverride } from '../../src/views/SessionLobby/behavior/without-override';
+import { withYaml } from '../../src/views/SessionLobby/behavior/with-yaml';
+import { gameOptionsOf } from '../../src/views/SessionLobby/behavior/game-options-of';
+import { parseSource } from '../../src/views/SessionLobby/behavior/parse-source';
+import { sourceOptionsOf } from '../../src/views/SessionLobby/behavior/source-options-of';
+import { sourceValueOf } from '../../src/views/SessionLobby/behavior/source-value-of';
 import { GAME, PRESET, presetPlayer } from './session-fixtures';
 
 describe('player edits', () => {

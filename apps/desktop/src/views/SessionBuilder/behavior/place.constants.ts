@@ -5,16 +5,15 @@ const SSH_PREFIX = 'ssh:';
 
 const LOBBY_PREFIX = 'lobby:';
 
+const NEEDS_PLACE = 'Direct connections need Local, LAN or an Archipelia server under Where.';
+
 const PLACE_TEXT = {
-  where: { title: 'Where', description: 'Where the session lives: on this computer, open to your network, or on a remote server.' },
-  local: 'The room runs on this computer.',
-  localDirect: 'This computer only. The lobby is private and nothing is announced on your network.',
-  lan: 'My local network. Other computers on your network find the lobby and join it. This opens a network port.',
-  lanOff: 'Turn on Allow direct connections first, so players on your network have a lobby to join.',
+  where: { title: 'Where', description: 'Where the room runs and who can reach it: this computer, your network, or a remote server.' },
+  local: 'This computer only. The room and the lobby stay on this computer, and nothing is announced on your network.',
+  lan: 'This computer, open to your local network. Start session asks once before it opens a network port.',
   remote: 'A remote server: archipelago.gg, a machine over SSH, or an Archipelia server.',
-  noArchipelia: 'No Archipelia server is saved yet. Add one on the Servers page.',
-  lockedHere: 'Players are connected to this session on this computer. Remove them first to move the session to another server.',
-  lockedRemote: 'Players are connected to this session on a remote server. Remove them first to move the session.',
+  live: 'Close the lobby of this session first to change where it runs.',
+  noArchipelia: 'Direct connections on a remote server need an Archipelia server, and none is saved yet. Add one on the Servers page.',
 } as const;
 
 const REMOTE_TEXT = {
@@ -22,16 +21,23 @@ const REMOTE_TEXT = {
   gg: 'The website hosts the room.',
   ssh: 'Runs the room on this machine over SSH.',
   lobby: 'Runs the lobby and the room on this server.',
-  needsNoDirect: 'Direct connections need Local, LAN or an Archipelia server.',
-  needsDirect: 'An Archipelia server takes direct connections. Turn on Allow direct connections to use it.',
+  needsNoDirect: 'Direct connections on a remote server need an Archipelia server. Turn them off to use this one.',
 } as const;
 
 const DIRECT_TEXT = {
   allow: {
     title: 'Allow direct connections',
-    description: 'Players with an Archipelia client join the lobby of this session and become its players.',
-    hint: 'Direct connections run on this computer or an Archipelia server, so turning it on moves a room on archipelago.gg or SSH to Local.',
+    description: 'Players with an Archipelia client join the lobby of this session and add their own players.',
   },
+  reach: {
+    local: 'Only clients on this computer can join, because Where is Local.',
+    lan: 'Clients on your network can join, because Where is LAN.',
+    archipelia: 'Clients that reach the Archipelia server can join.',
+    gg: NEEDS_PLACE,
+    ssh: NEEDS_PLACE,
+  },
+  mismatch: 'Direct connections do not work with archipelago.gg or SSH. Pick Local, LAN or an Archipelia server under Where, or turn this off.',
+  live: 'Close the lobby of this session first to change this.',
   approval: {
     title: 'Host approval',
     description: 'You approve each player before the server parses or runs anything they sent. Turn it off to accept every player at once.',
@@ -44,15 +50,7 @@ const DIRECT_TEXT = {
   },
   password: { title: 'Room password', description: 'Players type it to join the room.', hint: 'Kept in the vault, never in the saved session.' },
   passwordStored: 'A password is stored. Type to replace it.',
+  passwordRemote: 'An Archipelia server makes its own room password and gives it to the players with their files.',
 } as const;
 
-const OPEN_LAN = {
-  title: 'Open this computer to your network?',
-  message: 'This opens a network port and announces the server on your network, so other computers can find your lobbies and join them. Windows may ask about the firewall: allow it for private networks. You can stop it here at any time.',
-  confirmLabel: 'Open to my network',
-  cancelLabel: 'Keep it private',
-} as const;
-
-const MODE_FAILURE = 'Could not change where this computer hosts.';
-
-export { DIRECT_TEXT, GG_VALUE, LOBBY_PREFIX, MODE_FAILURE, OPEN_LAN, PLACE_TEXT, REMOTE_TEXT, SSH_PREFIX };
+export { DIRECT_TEXT, GG_VALUE, LOBBY_PREFIX, PLACE_TEXT, REMOTE_TEXT, SSH_PREFIX };

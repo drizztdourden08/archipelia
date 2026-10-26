@@ -31,7 +31,7 @@ const createLobbyCloser = (deps: CloserDeps) => {
 
   const quietIfIdle = async (ref: PendingClose) => {
     if (ref.serverId !== LOCAL_SERVER) return;
-    const still = (await deps.templates()).some(({ direct }) => direct?.serverId === LOCAL_SERVER && direct.lobbyId !== ref.lobbyId);
+    const still = (await deps.templates()).some(({ lan, lobby }) => lan === true && lobby?.serverId === LOCAL_SERVER && lobby.lobbyId !== undefined && lobby.lobbyId !== ref.lobbyId);
     if (!still) await deps.quiet();
   };
 

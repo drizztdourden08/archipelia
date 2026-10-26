@@ -16,5 +16,6 @@ export type * from './server.type';
 export type * from './session.type';
 export type * from './world-carry.type';
 export { lobbyTemplateId } from './lobby-template-id';
+export { templateOf } from './template-of';
 export { runJobId } from './run-job-id';
 export { DOMAIN, ENGINE_JOB, RUN_JOB_PREFIX } from './shared-ids.constants';

@@ -15,6 +15,7 @@ import { createCoreLobbies } from './create-core-lobbies';
 import { coreSandbox } from './core-sandbox';
 import { createRoomSecrets } from './room-secrets/create-room-secrets';
 import { roomBinding } from './room-binding';
+import { shareRoomPassword } from './room-secrets/share-room-password';
 import type { NetworkMode } from '../network';
 
 const createCore = (ports: CorePorts) => {
@@ -62,7 +63,10 @@ const createCore = (ports: CorePorts) => {
   const setLobbyNetworkMode = (mode: NetworkMode) => {
     lobbyMode = mode;
   };
-  return { adminToken, catalog, dispose, engine, installed, lobbies, presets, runJobs, runs, runtime, sandbox, servers, sessionFiles, sessions, setLobbyNetworkMode, templates, watchLobbies };
+  return {
+    adminToken, catalog, dispose, engine, installed, lobbies, presets, runJobs, runs, runtime, sandbox, servers, sessionFiles, sessions, setLobbyNetworkMode,
+    shareRoomPassword: shareRoomPassword(secrets), templates, watchLobbies,
+  };
 };
 
 export { createCore };

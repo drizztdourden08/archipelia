@@ -4,7 +4,6 @@ import { nav } from '@drizztdourden08/brock-react';
 import { Button, Flex, Grid, Icon, Stack, Text } from '@drizztdourden08/tessera/primitives';
 import { ErrorCallout } from '@archipelia/design';
 import { ROUTE } from '../../hooks/app-navigation.constants';
-import { useRunLauncher } from '../../hooks/useRunLauncher';
 import { isWorking } from '../../runs/is-working';
 import { showRunJob } from '../../runs/show-run-job';
 import { useSessionsLibrary } from './behavior/useSessionsLibrary';
@@ -14,14 +13,7 @@ import { TemplateSearchEntry } from './sub-components/TemplateSearchEntry';
 
 const SessionsLibrary = () => {
   const hub = useSessionsLibrary();
-  const { byId, runs, openRun } = hub;
-  const { start } = useRunLauncher();
-
-  const runTemplate = useCallback((id: string) => {
-    const template = byId(id);
-    if (template) void start(template);
-  }, [byId, start]);
-
+  const { runs, openRun } = hub;
   const showLog = useCallback((id: string) => {
     const run = runs.find((entry) => entry.id === id);
     if (run) void showRunJob(run);
@@ -36,7 +28,7 @@ const SessionsLibrary = () => {
   return (
     <Stack>
       <Flex justify="between" align="center" gap="sm" wrap>
-        <Text variant="caption">A session is a saved setup you can run again. Each run makes a seed and a room, kept in Runs with its files.</Text>
+        <Text variant="caption">A session is a saved setup. Start opens its lobby, where you add players and run it. Each run makes a seed and a room, kept in Runs with its files.</Text>
         <Button size="sm" variant="secondary" icon={<Icon name="log-in" />} onClick={() => nav.open(ROUTE.joinSession)}>Join a session</Button>
       </Flex>
       {hub.loadError && <ErrorCallout message={hub.loadError} onRetry={hub.reload} />}
@@ -51,7 +43,7 @@ const SessionsLibrary = () => {
             servers={hub.servers}
             isBusy={hub.isBusy}
             onEdit={hub.edit}
-            onRun={runTemplate}
+            onStart={hub.start}
             onDuplicate={hub.duplicate}
             onDelete={hub.deleteTemplate}
           />

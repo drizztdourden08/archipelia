@@ -1,11 +1,11 @@
 /* @layer renderer-app @kind logic */
 import type { SessionTemplate } from '@archipelia/model';
-import type { DirectOptions, HostPlayerSlot, LobbyRequest } from './lobbies.type';
+import type { HostPlayerSlot, LobbyRequest } from './lobbies.type';
 import { sessionLobby } from './session-lobby';
 
 const lobbyRequest = {
-  open: (template: SessionTemplate, direct: DirectOptions): LobbyRequest => ({ type: 'lobby.create', params: sessionLobby(template, direct) }),
-  update: (lobbyId: string, template: SessionTemplate, direct: DirectOptions): LobbyRequest => ({ type: 'lobby.update', params: { lobbyId, ...sessionLobby(template, direct) } }),
+  open: (template: SessionTemplate): LobbyRequest => ({ type: 'lobby.create', params: sessionLobby(template) }),
+  update: (lobbyId: string, template: SessionTemplate): LobbyRequest => ({ type: 'lobby.update', params: { lobbyId, ...sessionLobby(template) } }),
   lock: (lobbyId: string): LobbyRequest => ({ type: 'lobby.lock', params: { lobbyId } }),
   start: (lobbyId: string): LobbyRequest => ({ type: 'lobby.start', params: { lobbyId } }),
   close: (lobbyId: string): LobbyRequest => ({ type: 'lobby.close', params: { lobbyId } }),

@@ -6,6 +6,8 @@ import type { ServerEntry } from '@archipelia/model';
 import { appApi } from '../../../ipc/app-api';
 import { failWith } from '../../../hooks/fail-with';
 import { openSessionEditor } from '../../../hooks/open-session-editor';
+import { openSessionLobby } from '../../../hooks/open-session-lobby';
+import { useSessionStart } from '../../../hooks/useSessionStart';
 import { useAppNavigation } from '../../../hooks/useAppNavigation';
 import { useLibraryStore } from '../../../stores/useLibraryStore';
 import { useRunsStore } from '../../../stores/useRunsStore';
@@ -35,6 +37,15 @@ const useSessionsLibrary = () => {
   const byId = useCallback((id: string) => templates.find((template) => template.id === id), [templates]);
 
   const edit = openSessionEditor;
+
+  const startSession = useSessionStart();
+  const start = useCallback((id: string) => {
+    const template = byId(id);
+    if (template) void guard(id, failWith(FAILURE.start, async () => {
+      const started = await startSession(template, saveTemplate);
+      if (started) openSessionLobby(started.id);
+    }));
+  }, [byId, guard, saveTemplate, startSession]);
 
   const duplicate = useCallback((id: string) => {
     const template = byId(id);
@@ -70,8 +81,8 @@ const useSessionsLibrary = () => {
   const loading = !opened || isBusy('load');
 
   return {
-    actionError: lastError === loadError ? null : lastError, byId, deleteRun, deleteTemplate, duplicate, edit, isBusy, loadError, loading, openRun, query,
-    reload, runs, servers, templates, visibleRuns, visibleTemplates,
+    actionError: lastError === loadError ? null : lastError, deleteRun, deleteTemplate, duplicate, edit, isBusy, loadError, loading, openRun, query,
+    reload, runs, servers, start, templates, visibleRuns, visibleTemplates,
   };
 };
 

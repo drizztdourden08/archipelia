@@ -1,14 +1,14 @@
 /* @layer tests @kind test */
 import { describe, expect, test } from 'vitest';
-import { addPlayer } from '../../src/views/SessionBuilder/behavior/add-player';
+import { addPlayer } from '../../src/views/SessionLobby/behavior/add-player';
 import { DEFAULT_PORT } from '../../src/views/SessionBuilder/SessionBuilder.constants';
-import { duplicatePlayer } from '../../src/views/SessionBuilder/behavior/duplicate-player';
+import { duplicatePlayer } from '../../src/views/SessionLobby/behavior/duplicate-player';
 import { duplicateTemplate } from '../../src/views/SessionBuilder/behavior/duplicate-template';
-import { freeName } from '../../src/views/SessionBuilder/behavior/free-name';
+import { freeName } from '../../src/views/SessionLobby/behavior/free-name';
 import { newTemplate } from '../../src/views/SessionBuilder/behavior/new-template';
-import { nextSlot } from '../../src/views/SessionBuilder/behavior/next-slot';
+import { nextSlot } from '../../src/views/SessionLobby/behavior/next-slot';
 import { passwordNameOf } from '../../src/views/SessionBuilder/behavior/password-name-of';
-import { removePlayer } from '../../src/views/SessionBuilder/behavior/remove-player';
+import { removePlayer } from '../../src/views/SessionLobby/behavior/remove-player';
 import { presetPlayer } from './session-fixtures';
 
 describe('new session defaults', () => {

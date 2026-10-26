@@ -3,7 +3,9 @@ import { defineReviewStep, nav, widgets } from '@drizztdourden08/brock-react';
 import type { AppReviewTour } from '@drizztdourden08/brock-react';
 import type { Client } from 'archipelago.js';
 import { ROUTE } from '../hooks/app-navigation.constants';
+import { appApi } from '../ipc/app-api';
 import { useFocusStore } from '../stores/useFocusStore';
+import { useLibraryStore } from '../stores/useLibraryStore';
 import { useRunsStore } from '../stores/useRunsStore';
 import { REVIEW_PORT, REVIEW_SESSION, RUN_TIMEOUT_MS } from './review.constants';
 import { SELECTOR } from './review-dom.constants';
@@ -11,6 +13,7 @@ import { checkWidgets } from './check-widgets';
 import { clickNamed } from './click-named';
 import { joinRoom } from './join-room';
 import { checkLiveStatus } from './check-live-status';
+import { openSavedLobby } from './open-saved-lobby';
 import { sendFromConsole } from './send-from-console';
 import { waitNamed } from './wait-named';
 import { waitText } from './wait-text';
@@ -28,10 +31,10 @@ const hosting = (tour: AppReviewTour) => withHeartbeat(
 const startFromSessions = async (tour: AppReviewTour) => {
   nav.open(ROUTE.sessions);
   await waitText(tour, REVIEW_SESSION, () => tour.find(SELECTOR.layer));
-  await clickNamed(tour, SELECTOR.button, `Run ${REVIEW_SESSION}`, tour.find(SELECTOR.layer) ?? undefined);
-  const job = await tour.waitFor(() => tour.find(`${SELECTOR.runJob}[data-state="running"]`), 15000);
-  tour.check('run-job-opens', job !== null, 'Run opens the run job dialog while the seed generates', 'Run showed no run job dialog');
-  if (job) await tour.capture('run-job');
+  await openSavedLobby(tour);
+  const template = useLibraryStore.getState().templates.find((entry) => entry.name === REVIEW_SESSION);
+  nav.close();
+  if (template) void appApi().sessionsRun(template);
 };
 
 const stopFromDashboard = async (tour: AppReviewTour) => {

@@ -1,14 +1,17 @@
 /* @layer electron-main @kind types */
 import type { AdminLobby, DataFiles, SessionPlayer, SessionTemplate } from '@archipelia/model';
-import type { HostPlayerSlot, LobbyRequest, PendingClose } from '../../src/lobbies/lobbies.type';
+import type { HostPlayerSlot, LobbyRequest, LobbyServerStatus, PendingClose } from '../../src/lobbies/lobbies.type';
 
-type DirectRunDeps = {
+type NetworkSwitch = { status: () => LobbyServerStatus; apply: (options: unknown) => Promise<unknown> };
+
+type SessionLobbyDeps = {
   act: (request: LobbyRequest) => Promise<AdminLobby>;
   list: () => Promise<AdminLobby[]>;
   slotOf: (player: SessionPlayer) => Promise<HostPlayerSlot>;
+  sharePassword?: (lobbyId: string, passwordRef: string) => Promise<void>;
 };
 
-type LobbyOps = Pick<DirectRunDeps, 'act' | 'list'>;
+type LobbyOps = Pick<SessionLobbyDeps, 'act' | 'list'>;
 
 type CloserDeps = {
   files: DataFiles;
@@ -22,4 +25,4 @@ type CloserDeps = {
 
 type TemplateStore = { get: (id: string) => Promise<SessionTemplate | null>; remove: (id: string) => Promise<void> };
 
-export type { CloserDeps, DirectRunDeps, TemplateStore };
+export type { CloserDeps, NetworkSwitch, SessionLobbyDeps, TemplateStore };

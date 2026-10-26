@@ -3,8 +3,8 @@ import type { PendingClose } from '../../src/lobbies/lobbies.type';
 import type { TemplateStore } from './sessions.type';
 
 const removeTemplate = async (id: string, store: TemplateStore, close: (ref: PendingClose) => Promise<unknown>) => {
-  const direct = (await store.get(id))?.direct;
-  if (direct?.lobbyId) await close({ templateId: id, serverId: direct.serverId, lobbyId: direct.lobbyId });
+  const lobby = (await store.get(id))?.lobby;
+  if (lobby?.lobbyId) await close({ templateId: id, serverId: lobby.serverId, lobbyId: lobby.lobbyId });
   await store.remove(id);
 };
 

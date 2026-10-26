@@ -4,7 +4,7 @@ import type { TrustTag } from './LobbyMembers.type';
 
 const MEMBER_EDITABLE_PHASES: readonly LobbyPhase[] = ['open', 'locked', 'failed'];
 
-const HEADING = 'Connected through direct connection';
+const HEADING = 'Joined through direct connections';
 
 const CONNECTED_TAG = { text: 'Connected', title: 'This player connected with its own client.' } as const;
 

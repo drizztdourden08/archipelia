@@ -5,9 +5,9 @@ import type { MenuGroup } from '@drizztdourden08/tessera/composites';
 import { Button, ButtonRow, Tag } from '@drizztdourden08/tessera/primitives';
 import type { SessionRowProps } from './SessionRow.type';
 
-const SessionRow = ({ id, name, meta, playersLabel, busy, onEdit, onRun, onDuplicate, onDelete }: SessionRowProps) => {
+const SessionRow = ({ id, name, meta, playersLabel, busy, onEdit, onStart, onDuplicate, onDelete }: SessionRowProps) => {
   const edit = useCallback(() => onEdit(id), [id, onEdit]);
-  const run = useCallback(() => onRun(id), [id, onRun]);
+  const start = useCallback(() => onStart(id), [id, onStart]);
   const more = useMemo<MenuGroup[]>(() => [{
     id: 'session',
     items: [
@@ -19,7 +19,7 @@ const SessionRow = ({ id, name, meta, playersLabel, busy, onEdit, onRun, onDupli
     <ButtonRow gap="xs">
       <Tag>{playersLabel}</Tag>
       <Button size="sm" variant="ghost" aria-label={`Edit session ${name}`} onClick={edit}>Edit</Button>
-      <Button size="sm" variant="primary" disabled={busy} aria-label={`Run ${name}`} onClick={run}>Run</Button>
+      <Button size="sm" variant="primary" disabled={busy} aria-label={`Start ${name}`} onClick={start}>Start</Button>
       <DropdownMenu trigger={{ label: `More actions for ${name}`, icon: 'ellipsis', iconOnly: true }} variant="ghost" size="sm" groups={more} />
     </ButtonRow>
   );
