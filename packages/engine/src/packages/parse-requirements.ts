@@ -1,6 +1,7 @@
 /* @layer core @kind logic */
 import type { ParsedRequirements } from './parse-requirements.type';
-import { PLAIN_REQUIREMENT } from './parse-requirements.constants';
+import { isValidMarker } from './is-valid-marker';
+import { ARCHIVE_NAME, PLAIN_REQUIREMENT } from './parse-requirements.constants';
 
 const withoutBom = (text: string) => (text.charCodeAt(0) === 0xfeff ? text.slice(1) : text);
 
@@ -21,11 +22,19 @@ const logicalLines = (text: string): string[] => {
 
 const stripComment = (line: string) => line.replace(/(^|\s)#.*$/, '').trim();
 
+const isPlain = (line: string): boolean => {
+  const cut = line.indexOf(';');
+  const head = (cut === -1 ? line : line.slice(0, cut)).trim();
+  const name = PLAIN_REQUIREMENT.exec(head)?.[1];
+  if (name === undefined || ARCHIVE_NAME.test(name)) return false;
+  return cut === -1 || isValidMarker(line.slice(cut + 1));
+};
+
 const parseRequirements = (text: string): ParsedRequirements => {
   const result: ParsedRequirements = { packages: [], refused: [] };
   for (const line of logicalLines(text).map(stripComment)) {
     if (line === '') continue;
-    (PLAIN_REQUIREMENT.test(line) ? result.packages : result.refused).push(line);
+    (isPlain(line) ? result.packages : result.refused).push(line);
   }
   return result;
 };

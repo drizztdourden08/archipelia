@@ -1,10 +1,14 @@
 /* @layer core @kind logic */
 import type { PackageConsent } from './package-consent.type';
 import { acceptText } from './accept-text';
+import { staleText } from './stale-text';
 
-const assertPackagesAccepted = (label: string, packages: string[], consent: PackageConsent = []) => {
-  if (packages.length === 0 || consent === 'any') return;
-  if (!packages.every((spec) => consent.includes(spec))) throw new Error(acceptText(label, packages));
+const sameSet = (left: string[], right: string[]) => left.length === right.length && left.every((pin) => right.includes(pin));
+
+const assertPackagesAccepted = (label: string, pins: string[], sha256: string, consent?: PackageConsent) => {
+  if (pins.length === 0) return;
+  if (!consent) throw new Error(acceptText(label, pins));
+  if (consent.sha256.toLowerCase() !== sha256.toLowerCase() || !sameSet(consent.packages, pins)) throw new Error(staleText(label));
 };
 
 export { assertPackagesAccepted };

@@ -1,6 +1,7 @@
 /* @layer core @kind logic */
-import { requirementName } from '@archipelia/engine';
+import { normalizePackageName } from '@archipelia/engine';
+import { LEADING_NAME } from './names-of.constants';
 
-const namesOf = (packages: string[]) => [...new Set(packages.map(requirementName))];
+const namesOf = (specs: string[]) => [...new Set(specs.map((spec) => normalizePackageName(LEADING_NAME.exec(spec)?.[0] ?? spec)))];
 
 export { namesOf };

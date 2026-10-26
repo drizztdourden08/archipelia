@@ -4,12 +4,12 @@ import { installPackages } from '@archipelia/engine';
 import { failedText } from './failed-text';
 import { namesOf } from './names-of';
 
-const installWorldPackages = async (runtime: EngineRuntime, label: string, packages: string[]): Promise<void> => {
-  if (packages.length === 0) return;
+const installWorldPackages = async (runtime: EngineRuntime, label: string, pins: string[]): Promise<void> => {
+  if (pins.length === 0) return;
   try {
-    await installPackages(runtime, packages);
+    await installPackages(runtime, pins);
   } catch (err) {
-    throw new Error(failedText(label, namesOf(packages), err instanceof Error ? err.message : String(err)), { cause: err });
+    throw new Error(failedText(label, namesOf(pins), err instanceof Error ? err.message : String(err)), { cause: err });
   }
 };
 

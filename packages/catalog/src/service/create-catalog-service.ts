@@ -8,6 +8,7 @@ import { mergeCatalog } from '../first-party/merge-catalog';
 import { readFirstParty } from '../first-party/read-first-party';
 import { installFromFile } from '../install/install-from-file';
 import { installOfficial } from '../install/install-official';
+import type { PackagePreview } from '../install/package-preview.type';
 import { previewFilePackages } from '../install/preview-file-packages';
 import { previewWorldPackages } from '../install/preview-world-packages';
 import { installWorld } from '../install/install-world';
@@ -62,7 +63,7 @@ const createCatalogService = ({ games: files, cache, engineDir, fetch: fetchFn, 
   const install = async (request: InstallRequest): Promise<InstalledGame> => {
     const base = { engineDir: await engineDir(), files };
     if (request.kind === 'official') return installOfficial({ ...base, apworld: request.apworld });
-    const consent = request.acceptPackages ? { packages: 'any' as const } : {};
+    const consent = request.acceptPackages ? { packages: request.acceptPackages } : {};
     if (request.kind === 'file') {
       return withTempFile(request.fileName, request.bytes, (path) => installFromFile({ ...base, path, ...consent }));
     }
@@ -73,9 +74,9 @@ const createCatalogService = ({ games: files, cache, engineDir, fetch: fetchFn, 
     });
   };
 
-  const packages = async (request: InstallRequest): Promise<string[]> => {
-    if (request.kind === 'official') return [];
-    if (request.kind === 'file') return withTempFile(request.fileName, request.bytes, previewFilePackages);
+  const packages = async (request: InstallRequest): Promise<PackagePreview> => {
+    if (request.kind === 'official') return { sha256: '', packages: [] };
+    if (request.kind === 'file') return withTempFile(request.fileName, request.bytes, async (path) => previewFilePackages(await engineDir(), path));
     const { entry } = await indexEntry(request.apworld);
     return previewWorldPackages({ engineDir: await engineDir(), entry, version: request.version, ...(fetchFn ? { fetch: fetchFn } : {}) });
   };

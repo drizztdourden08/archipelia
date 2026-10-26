@@ -1,5 +1,5 @@
 /* @layer core @kind types */
 
-type PackageConsent = 'any' | string[];
+type PackageConsent = { sha256: string; packages: string[] };
 
 export type { PackageConsent };

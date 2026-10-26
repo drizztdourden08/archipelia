@@ -5,6 +5,7 @@ import type { LoadContext } from './load-failure.type';
 import { assertPackagesAccepted } from './assert-packages-accepted';
 import { installWorldPackages } from './install-world-packages';
 import { loadFailure } from './load-failure';
+import { resolveWorldPackages } from './resolve-world-packages';
 import { newGames } from './new-games';
 import { readGameSchema } from './read-game-schema';
 import { listInstalled } from './list-installed';
@@ -30,14 +31,15 @@ const detectGame = async (job: InstallJob, others: InstalledGame[], context: Loa
 const commitInstall = async (job: InstallJob): Promise<InstalledGame> => {
   const { runtime, files, info, apworld, layout } = job;
   const label = job.game ?? apworld;
-  const packages = job.source === 'official' ? [] : worldPackages(info, label);
-  assertPackagesAccepted(label, packages, job.packages);
+  const declared = job.source === 'official' ? [] : worldPackages(info, label);
   const installed = await listInstalled(files);
   assertNoClash(installed, apworld, placedPath(layout, info.module), job.game);
+  const packages = (await resolveWorldPackages(runtime, label, declared)).map((found) => found.pin);
+  assertPackagesAccepted(label, packages, job.hash.sha256, job.packages);
+  await installWorldPackages(runtime, label, packages);
   const placement = await placeWorld({ runtime, file: job.file, info, layout });
   try {
-    await installWorldPackages(runtime, label, packages);
-    const context: LoadContext = { label, module: info.module, packages };
+    const context: LoadContext = { label, module: info.module, packages: declared };
     const game = await detectGame(job, installed.filter((other) => other.apworld !== apworld), context);
     assertNoClash(installed, apworld, placement.path, game);
     const schema = await readGameSchema(runtime, game, { ...context, label: game });

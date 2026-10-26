@@ -1,10 +1,13 @@
 /* @layer core @kind logic */
+import { readRuntime } from '@archipelia/engine';
+import type { PackagePreview } from './package-preview.type';
+import { hashFile } from './hash-file';
+import { previewPackages } from './preview-packages';
 import { readApworld } from './read-apworld';
-import { worldPackages } from './world-packages';
 
-const previewFilePackages = async (path: string): Promise<string[]> => {
+const previewFilePackages = async (engineDir: string, path: string): Promise<PackagePreview> => {
   const info = await readApworld(path);
-  return worldPackages(info, info.manifest.game ?? info.module);
+  return previewPackages(await readRuntime(engineDir), info.manifest.game ?? info.module, info, await hashFile(path));
 };
 
 export { previewFilePackages };

@@ -14,7 +14,7 @@ const reinstallFirstParty = async ({ engineDir, files, cache, apworld, fetch: fe
   if (!entry) throw new Error(`${apworld} is no longer a first-party game in the registry`);
   const before = await readInstalled(files, apworld);
   return installWorld({
-    engineDir, files, entry, version: version ?? '', packages: before?.packages ?? [], trust: { clients: read.clients, root: trustRoot ?? (() => trustRootOf(cache)) },
+    engineDir, files, entry, version: version ?? '', ...(before ? { packages: { sha256: before.sha256, packages: before.packages ?? [] } } : {}), trust: { clients: read.clients, root: trustRoot ?? (() => trustRootOf(cache)) },
     ...(fetchFn ? { fetch: fetchFn } : {}),
   });
 };
