@@ -61,6 +61,7 @@ const PLAN_TEXT = {
     abi3: 'It was built for this engine and for newer ones.',
     pure: 'It is plain Python, so it runs on any engine.',
   },
+  wheelOlder: (newest: string, tag: string) => `The newest release is ${newest}, but it has no build for this engine. This one is the older release ${tag}.`,
   wheelAction: 'Use the ready-made build',
   wheelNoDigest: 'GitHub published no checksum for this file, so Archipelia cannot check that it is the file the author uploaded. It will install it only if you ask.',
   wheelType: (repo: string) => `Type ${repo} to use it anyway.`,

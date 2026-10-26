@@ -16,7 +16,7 @@ const fetched = async (runtime: EngineRuntime, source: PackageSource, request: F
   const [, owner, repo] = REPO_PATH.exec(source.repo) ?? [];
   if (owner === undefined || repo === undefined) throw new Error(`${source.repo} is not a GitHub repository.`);
   const download = await downloadWheel({ owner, repo, tag: source.tag, asset: source.asset }, request, { dir: wheelRoot(runtime), expected: source.sha256 });
-  return storeWheel(runtime, download, { repo: source.repo, tag: source.tag, asset: source.asset, verified: source.verified });
+  return storeWheel(runtime, download, { repo: source.repo, tag: source.tag, asset: source.asset, verified: source.verified, newest: source.newest });
 };
 
 const reinstallSources = async (runtime: EngineRuntime, record: InstalledGame, request: Fetch = fetch): Promise<void> => {

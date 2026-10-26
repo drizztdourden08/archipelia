@@ -132,6 +132,41 @@ describe('where a download may come from', () => {
     expect(await cached()).toEqual([]);
   });
 
+  test('takes only the two GitHub file hosts after the release address, and never another GitHub host or the same address twice', async () => {
+    for (const hop of ['https://raw.githubusercontent.com/o/r/main/x.whl', 'https://github.com/other/repo/releases/download/v1/x.whl', 'https://objects.githubusercontent.com:8443/x']) {
+      await expect(bed({ hop }).prepare()).rejects.toThrow('only downloads release files');
+    }
+    const { prepare } = bed({ hop: 'https://objects.githubusercontent.com/github-production-release-asset/abc' });
+    await expect(prepare()).rejects.toThrow('GitHub answered 404');
+  });
+
+  test('records that the release is not the newest when an older one is used', async () => {
+    const { net } = routedFetch({
+      [`${API}/repos/Pseudoarc/ctrando/releases`]: json([
+        releaseJson('v2.0.0', [assetJson('ctrando-2.0.0-cp313-cp313-win_amd64.whl', BYTES)]), releaseJson('v1.2.0', [assetJson(WHEEL, BYTES)]),
+      ]),
+      [downloadUrl('v1.2.0', WHEEL)]: redirect(CDN),
+      [CDN]: () => new Response(BYTES),
+    });
+    const deps = { client: createGithubClient({ fetch: net, now: () => NOW }), fetch: net, engineDir: () => Promise.resolve('engine') };
+    expect(await prepareWheel(deps, request())).toMatchObject({ tag: 'v1.2.0', newest: 'v2.0.0' });
+    expect((await prepareWheel(deps, request())).newest).toBe('v2.0.0');
+  });
+
+  test.each(['--index-url https://evil.example/simple', 'evil @ git+https://evil.example/x.git', '-r /etc/passwd'])(
+    'a wheel that lists %j as a dependency is refused when it is downloaded, and keeps nothing',
+    async (line) => {
+      const hostile = wheelBytes({ requires: [line] });
+      const { net } = routedFetch({
+        [`${API}/repos/Pseudoarc/ctrando/releases`]: json([releaseJson('v1.2.0', [assetJson(WHEEL, hostile)])]),
+        [downloadUrl('v1.2.0', WHEEL)]: () => new Response(hostile),
+      });
+      const deps = { client: createGithubClient({ fetch: net, now: () => NOW }), fetch: net, engineDir: () => Promise.resolve('engine') };
+      await expect(prepareWheel(deps, request())).rejects.toThrow('lists a requirement Archipelia will not install');
+      expect(await cached()).toEqual([]);
+    },
+  );
+
   test('a download that grows past the size the release lists is stopped', async () => {
     const { prepare } = bed({ served: new Uint8Array([...BYTES, 1, 2, 3]) });
     await expect(prepare()).rejects.toThrow('bytes, the release says');

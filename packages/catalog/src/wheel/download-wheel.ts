@@ -11,11 +11,8 @@ import type { DownloadLimits, WheelDownload, WheelSite } from './wheel.type';
 import { fetchReleaseAsset } from './fetch-release-asset';
 import { MAX_WHEEL_BYTES, PART_SUFFIX } from './wheel.constants';
 
-const urlOf = ({ owner, repo, tag, asset }: WheelSite) =>
-  `https://github.com/${owner}/${repo}/releases/download/${encodeURIComponent(tag)}/${encodeURIComponent(asset)}`;
-
 const downloadWheel = async (site: WheelSite, request: Fetch, { dir, size, expected }: DownloadLimits): Promise<WheelDownload> => {
-  const res = await fetchReleaseAsset(urlOf(site), request);
+  const res = await fetchReleaseAsset(site, request);
   if (!res.ok || !res.body) throw new Error(`GitHub answered ${res.status} for ${site.asset}.`);
   if (Number(res.headers.get('content-length') ?? 0) > MAX_WHEEL_BYTES) throw new Error(`${site.asset} is larger than Archipelia takes.`);
   await mkdir(dir, { recursive: true });

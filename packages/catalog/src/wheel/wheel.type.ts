@@ -7,7 +7,9 @@ type AssetFact = { name: string; size: number; digest: string | undefined };
 
 type ReleaseFact = { tag: string; prerelease: boolean; assets: AssetFact[] };
 
-type WheelPick = { tag: string; asset: string; size: number; digest: string | undefined; fit: SourceWheelFit };
+type WheelPick = { tag: string; asset: string; size: number; digest: string | undefined; fit: SourceWheelFit; newest?: string | undefined };
+
+type FoundAsset = { asset: AssetFact; newest: string | undefined };
 
 type WheelSite = { owner: string; repo: string; tag: string; asset: string };
 
@@ -17,8 +19,10 @@ type DownloadLimits = { dir: string; size?: number | undefined; expected?: strin
 
 type LoadedWheel = { source: PackageSource; file: string; requires: string[] };
 
-type WheelLabel = Pick<PackageSource, 'repo' | 'tag' | 'asset' | 'verified'>;
+type WheelLabel = Pick<PackageSource, 'repo' | 'tag' | 'asset' | 'verified' | 'newest'>;
+
+type CachedWheel = { name: string; dir: string; size: number; at: number };
 
 type WheelDeps = { client: GithubClient; fetch: Fetch; engineDir: () => Promise<string> };
 
-export type { AssetFact, DownloadLimits, LoadedWheel, ReleaseFact, WheelDeps, WheelDownload, WheelLabel, WheelPick, WheelSite };
+export type { AssetFact, CachedWheel, DownloadLimits, FoundAsset, LoadedWheel, ReleaseFact, WheelDeps, WheelDownload, WheelLabel, WheelPick, WheelSite };

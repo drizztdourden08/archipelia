@@ -4,4 +4,6 @@ const NO_DIGEST = 'GitHub publishes no checksum for this file, so Archipelia can
 
 const NO_BUILD = 'No ready-made build for this engine.';
 
-export { NO_BUILD, NO_DIGEST };
+const NOT_OFFERED = 'Archipelia only downloads the ready-made build it offered for a project you opened. Open the project from the list again.';
+
+export { NO_BUILD, NO_DIGEST, NOT_OFFERED };

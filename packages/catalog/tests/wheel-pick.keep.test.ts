@@ -18,6 +18,7 @@ describe('picking the wheel of a release for this engine', () => {
     ]);
     expect(found).toMatchObject({ tag: 'v1.2.0', asset: 'ctrando-1.2.0-cp312-cp312-win_amd64.whl', fit: 'exact' });
     expect(found?.digest).toMatch(/^[0-9a-f]{64}$/);
+    expect(found?.newest).toBeUndefined();
   });
 
   test('prefers an exact build over a stable ABI build over a pure Python wheel in the same release', () => {
@@ -45,7 +46,7 @@ describe('picking the wheel of a release for this engine', () => {
       releaseJson('v2.0.0', [asset('ctrando-2.0.0-cp313-cp313-win_amd64.whl')]),
       releaseJson('v1.9.0', [asset('ctrando-1.9.0-cp312-cp312-win_amd64.whl')]),
     ]);
-    expect(found?.tag).toBe('v1.9.0');
+    expect(found).toMatchObject({ tag: 'v1.9.0', newest: 'v2.0.0' });
   });
 
   test('skips prereleases while a stable release exists, and uses them when none does', () => {

@@ -15,6 +15,7 @@ const WheelList = ({ heading, wheels, onOpenLink }: WheelListProps) => {
               {`${wheel.name} ${wheel.version}`}
             </Link>
             <Text>{CONSENT_TEXT.wheelFrom(wheel.tag, wheel.repo)}</Text>
+            {wheel.newest && <Text variant="caption" tone="warning">{CONSENT_TEXT.wheelOlder(wheel.newest, wheel.tag)}</Text>}
             <Text mono variant="caption" tone="dim">{CONSENT_TEXT.wheelDigest(wheel.sha256)}</Text>
             <Text variant="caption" tone={wheel.verified ? 'dim' : 'warning'}>{wheel.verified ? CONSENT_TEXT.wheelChecked : CONSENT_TEXT.wheelUnchecked}</Text>
           </Box>

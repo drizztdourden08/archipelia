@@ -1,6 +1,7 @@
 /* @layer core @kind logic */
 import { normalizePackageName, parseWheelName, wheelFit } from '@archipelia/engine';
 import type { AssetFact, ReleaseFact, WheelPick } from './wheel.type';
+import { releasePool } from './release-pool';
 
 const fitOf = (asset: AssetFact, tags: readonly string[], names: ReadonlySet<string>) => {
   const name = parseWheelName(asset.name);
@@ -16,11 +17,11 @@ const bestIn = (release: ReleaseFact, tags: readonly string[], names: ReadonlySe
 };
 
 const pickWheel = (releases: readonly ReleaseFact[], tags: readonly string[], names: readonly string[]): WheelPick | undefined => {
-  const stable = releases.filter((release) => !release.prerelease);
   const wanted = new Set(names.map(normalizePackageName));
-  for (const release of stable.length > 0 ? stable : releases) {
+  const pool = releasePool(releases);
+  for (const release of pool) {
     const pick = bestIn(release, tags, wanted);
-    if (pick) return pick;
+    if (pick) return release === pool[0] ? pick : { ...pick, newest: pool[0]?.tag };
   }
   return undefined;
 };

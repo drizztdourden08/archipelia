@@ -15,6 +15,7 @@ const WheelOffer = ({ plan, installing, onUseWheel }: WheelOfferProps) => {
     <Stack gap="sm" as="section" aria-label={wheel.asset}>
       <Text>{PLAN_TEXT.wheelFound(wheel.asset, wheel.tag)}</Text>
       <Text variant="caption" tone="dim">{PLAN_TEXT.wheelFit[wheel.fit]}</Text>
+      {wheel.newest && <Text tone="warning">{PLAN_TEXT.wheelOlder(wheel.newest, wheel.tag)}</Text>}
       {unchecked && (
         <Stack gap="xs">
           <Text tone="warning">{PLAN_TEXT.wheelNoDigest}</Text>

@@ -11,6 +11,7 @@ import { previewPypiPackage } from './preview-pypi-package';
 import type { SourceServiceDeps } from './source.type';
 import { suggestSources } from './suggest-sources';
 import { worldContextOf } from './world-context-of';
+import { createOfferedWheels } from '../wheel/create-offered-wheels';
 import { parseWheelRequest } from '../wheel/parse-wheel-request';
 import { prepareWheel } from '../wheel/prepare-wheel';
 
@@ -24,7 +25,13 @@ const createSourceService = ({ fetch: request = fetch, engineDir, worldOf }: Sou
     return suggestSources({ client, now: Date.now }, { module: moduleNameOf(module), world, paste });
   };
 
-  const plan = (raw: SourceRef) => planSource(deps, parseSourceRef(raw));
+  const offers = createOfferedWheels();
+
+  const plan = async (raw: SourceRef) => {
+    const planned = await planSource(deps, parseSourceRef(raw));
+    offers.offer(planned);
+    return planned;
+  };
 
   const pypiPreview = (raw: SourceRef) => previewPypiPackage(deps, parseSourceRef(raw));
 
@@ -33,7 +40,11 @@ const createSourceService = ({ fetch: request = fetch, engineDir, worldOf }: Sou
     return installPypiPackage(deps, parseSourceRef(raw), accepted);
   };
 
-  const wheel = (raw: SourceWheelRequest) => prepareWheel(deps, parseWheelRequest(raw));
+  const wheel = (raw: SourceWheelRequest) => {
+    const ask = parseWheelRequest(raw);
+    offers.assertOffered(ask);
+    return prepareWheel(deps, ask);
+  };
 
   return { plan, pypiInstall, pypiPreview, suggest, wheel };
 };

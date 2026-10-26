@@ -132,6 +132,38 @@ describe('what the consent is bound to', () => {
   });
 });
 
+const INJECTIONS = [
+  '--index-url https://evil.example/simple', '-f https://evil.example/links', '-r /etc/passwd', '-e .', '-c /tmp/other.txt',
+  'evil @ git+https://evil.example/x.git', 'evil @ https://evil.example/evil.whl', 'evil @ file:///tmp/evil.whl', 'evil (@ git+https://evil.example/x.git)',
+  'evil; --hash=sha256:abc', '',
+];
+
+describe('the dependencies a wheel lists', () => {
+  test.each(INJECTIONS)('%j is refused before pip is asked anything, and nothing is installed', async (line) => {
+    const cached = await cacheWheel(bed.bed.runtime, wheelBytes({ requires: ['numpy==2.5.1', line] }), LABEL);
+    await expect(commitInstall(await bed.jobOf('', { wheels: [cached.sha256], packages: accepted(sourceOf(cached.sha256)) }))).rejects.toThrow(
+      'lists a requirement Archipelia will not install',
+    );
+    expect(engine.resolvePackages).not.toHaveBeenCalled();
+    expect(engine.installPackages).not.toHaveBeenCalled();
+    expect(engine.installWheel).not.toHaveBeenCalled();
+    expect(await bed.placed()).toBe(false);
+  });
+
+  test('a preview refuses them too, so a direct address or a repo address never reaches the resolver', async () => {
+    const cached = await cacheWheel(bed.bed.runtime, wheelBytes({ requires: ['evil @ git+https://evil.example/x.git'] }), LABEL);
+    await expect(previewFilePackages(bed.bed.base, await bed.worldFile(''), [cached.sha256])).rejects.toThrow('will not install');
+    expect(engine.resolvePackages).not.toHaveBeenCalled();
+  });
+
+  test('plain names with versions, extras and markers are kept as they are', async () => {
+    const lines = ['numpy==2.5.1', 'colorama>=0.4 ; sys_platform == "win32"', 'rich[jupyter]>=13'];
+    const cached = await cacheWheel(bed.bed.runtime, wheelBytes({ requires: lines }), LABEL);
+    await previewFilePackages(bed.bed.base, await bed.worldFile(''), [cached.sha256]);
+    expect(engine.resolvePackages).toHaveBeenCalledWith(bed.bed.runtime, lines);
+  });
+});
+
 describe('the preview and the install see the same wheel', () => {
   test('lists the wheel as a source, resolves its dependencies, and what it returned is accepted by the install of the same file', async () => {
     const { sha256, source } = await stocked();
