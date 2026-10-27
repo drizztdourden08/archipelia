@@ -2,7 +2,7 @@
 import { Button, Field, Flex, Icon, TextInput } from '@drizztdourden08/tessera/primitives';
 import { useState } from 'react';
 import { SOURCE_TEXT } from '../../PackageSourceDialog.constants';
-import type { PasteFieldProps } from '../../PackageSourceDialog.type';
+import type { PasteFieldProps } from './PasteField.type';
 
 const PasteField = ({ failed, looking, onPaste }: PasteFieldProps) => {
   const [text, setText] = useState('');

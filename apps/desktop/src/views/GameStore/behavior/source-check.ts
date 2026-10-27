@@ -1,12 +1,10 @@
 /* @layer renderer-app @kind logic */
+import { SOURCE_FAILURE } from './usePackageSource.constants';
 import type { CheckRun } from './usePackageSource.type';
 
-const sourceCheck = async ({ aim, state, install, setStep, close }: CheckRun): Promise<void> => {
-  if (!aim.request) return;
-  setStep({ ...state, checking: true, stillMissing: false });
-  const result = await install(aim.request, aim.key);
-  if (result === true) close();
-  else setStep({ ...state, checking: false, stillMissing: result === undefined });
+const sourceCheck = async ({ aim, install, finishing }: CheckRun): Promise<void> => {
+  const { request, key } = aim;
+  if (request) await finishing(SOURCE_FAILURE.check, () => install(request, key));
 };
 
 export { sourceCheck };

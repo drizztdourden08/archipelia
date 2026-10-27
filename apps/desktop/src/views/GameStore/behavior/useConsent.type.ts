@@ -5,4 +5,6 @@ type PendingConsent = { title: string; packages: readonly ConsentPackage[]; whee
 
 type AskConsent = (title: string, packages: readonly ConsentPackage[], wheels?: readonly ConsentWheel[]) => Promise<boolean>;
 
-export type { AskConsent, PendingConsent };
+type UseConsent = { ask: AskConsent; accept: () => void; cancel: () => void; pending: PendingConsent | null };
+
+export type { AskConsent, PendingConsent, UseConsent };

@@ -1,36 +1,45 @@
 /* @layer renderer-app @kind hook */
 import { useCallback, useState } from 'react';
-import type { PackageSourceDialogProps, PackageSourceStep } from '@archipelia/design';
-import type { SourceSuggestions } from '@archipelia/model';
+import type { PackageSourceDialogProps, PackageSourceStep, SourceSearch } from '@archipelia/design';
 import type { GameRow } from '../GameStore.type';
+import { finishViewOf } from './finish-view-of';
 import { sourceAimOf } from './source-aim-of';
-import { useBuildLog } from './useBuildLog';
 import { sourceHandlersOf } from './source-handlers-of';
 import { sourceSearch } from './source-search';
-import { SEARCHING } from './usePackageSource.constants';
-import type { PackageSourceParams, SourceAim } from './usePackageSource.type';
+import { useBuildLog } from './useBuildLog';
+import { FINISH, FIRST_SEARCH, IDLE } from './usePackageSource.constants';
+import type { FinishState, PackageSourceParams, SourceAim } from './usePackageSource.type';
 
-const usePackageSource = ({ needOf, installWorld, ask }: PackageSourceParams) => {
+const usePackageSource = ({ needOf, errorOf, installWorld, consent }: PackageSourceParams) => {
   const [aim, setAim] = useState<SourceAim | null>(null);
-  const [step, setStep] = useState<PackageSourceStep>(SEARCHING);
-  const [results, setResults] = useState<SourceSuggestions | null>(null);
+  const [search, setSearch] = useState<SourceSearch>(FIRST_SEARCH);
+  const [step, setStep] = useState<PackageSourceStep>(IDLE);
+  const [finish, setFinish] = useState<FinishState>(FINISH.idle);
   const buildLog = useBuildLog();
 
-  const close = useCallback(() => { setAim(null); setResults(null); setStep(SEARCHING); }, []);
+  const reset = useCallback((target: SourceAim | null) => {
+    setAim(target);
+    setSearch(FIRST_SEARCH);
+    setStep(IDLE);
+    setFinish(FINISH.idle);
+  }, []);
+  const close = useCallback(() => reset(null), [reset]);
   const open = useCallback((row: GameRow) => {
     const target = sourceAimOf(row, needOf(row.entry.apworld));
     if (!target) return;
-    setAim(target);
-    setResults(null);
-    void sourceSearch({ aim: target, setStep, setResults });
-  }, [needOf]);
+    reset(target);
+    void sourceSearch({ aim: target, search: FIRST_SEARCH, setSearch });
+  }, [needOf, reset]);
 
   const dialog: PackageSourceDialogProps | null = aim && {
     title: aim.title,
     module: aim.module,
+    search,
     step,
+    finish: finishViewOf(finish, aim, { needOf, errorOf }),
+    consent: consent.pending,
     buildLog,
-    ...sourceHandlersOf({ aim, step, results, ask, installWorld, setStep, setResults, close }),
+    ...sourceHandlersOf({ aim, step, search, consent, installWorld, setStep, setSearch, setFinish, close }),
   };
 
   return { dialog, open };

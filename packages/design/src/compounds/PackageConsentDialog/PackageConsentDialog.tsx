@@ -1,10 +1,9 @@
 /* @layer renderer-app @kind component */
 import { DialogShell } from '@drizztdourden08/tessera/composites';
-import { Button, Flex, Icon, Stack, Text } from '@drizztdourden08/tessera/primitives';
+import { Button, Flex, Icon } from '@drizztdourden08/tessera/primitives';
 import { CONSENT_TEXT } from './PackageConsentDialog.constants';
 import type { PackageConsentDialogProps } from './PackageConsentDialog.type';
-import { PackageList } from './sub-components/PackageList';
-import { WheelList } from './sub-components/WheelList';
+import { PackageConsentBody } from './sub-components/PackageConsentBody';
 import './PackageConsentDialog.css';
 
 const PackageConsentDialog = ({ title, packages, wheels = [], onAccept, onCancel, onOpenLink }: PackageConsentDialogProps) => (
@@ -20,12 +19,7 @@ const PackageConsentDialog = ({ title, packages, wheels = [], onAccept, onCancel
       </Flex>
     )}
   >
-    <Stack gap="md">
-      <Text>{CONSENT_TEXT.intro(title)}</Text>
-      <PackageList heading={CONSENT_TEXT.direct(title)} packages={packages.filter((entry) => entry.direct)} onOpenLink={onOpenLink} />
-      <WheelList heading={CONSENT_TEXT.wheels} wheels={wheels} onOpenLink={onOpenLink} />
-      <PackageList heading={CONSENT_TEXT.dependencies} packages={packages.filter((entry) => !entry.direct)} onOpenLink={onOpenLink} />
-    </Stack>
+    <PackageConsentBody title={title} packages={packages} wheels={wheels} onOpenLink={onOpenLink} />
   </DialogShell>
 );
 

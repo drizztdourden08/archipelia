@@ -2,9 +2,9 @@
 import { Button, Card, Flex, Icon, Stack, Tag, Text } from '@drizztdourden08/tessera/primitives';
 import { DateText } from '@drizztdourden08/tessera/composites';
 import { ORIGIN_LABEL, SOURCE_TEXT, WARNING_LABEL } from '../../PackageSourceDialog.constants';
-import type { CandidateCardProps } from '../../PackageSourceDialog.type';
+import type { CandidateCardProps } from './CandidateCard.type';
 
-const CandidateCard = ({ module, candidate, onPick, onOpenLink }: CandidateCardProps) => {
+const CandidateCard = ({ module, candidate, picked, onPick, onOpenLink }: CandidateCardProps) => {
   const { id, url, description, stars, pushedAt, createdAt, contains, origins, warnings } = candidate;
   return (
     <Card
@@ -15,7 +15,9 @@ const CandidateCard = ({ module, candidate, onPick, onOpenLink }: CandidateCardP
       actions={(
         <Flex gap="sm" wrap>
           <Button size="sm" variant="secondary" icon={<Icon name="external-link" />} onClick={() => onOpenLink(url)}>{SOURCE_TEXT.openRepo}</Button>
-          <Button size="sm" variant="primary" disabled={!contains} onClick={() => onPick(candidate)}>{SOURCE_TEXT.use}</Button>
+          <Button size="sm" variant={picked ? 'primary' : 'secondary'} icon={picked ? <Icon name="check" /> : undefined} disabled={!contains} aria-pressed={picked} onClick={() => onPick(candidate)}>
+            {picked ? SOURCE_TEXT.picked : SOURCE_TEXT.use}
+          </Button>
         </Flex>
       )}
     >

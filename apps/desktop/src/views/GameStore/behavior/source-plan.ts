@@ -8,9 +8,9 @@ const sourcePlan = async ({ aim, candidate, setStep }: PlanRun): Promise<void> =
   setStep({ kind: 'planning', candidate });
   try {
     const plan = await appApi().sourcesPlan({ owner: candidate.owner, repo: candidate.repo, module: aim.module });
-    setStep({ kind: 'plan', candidate, plan, checking: false, stillMissing: false, installing: false });
+    setStep({ kind: 'plan', candidate, plan });
   } catch (err) {
-    setStep({ kind: 'failed', message: reasonOf(err, SOURCE_FAILURE.plan) });
+    setStep({ kind: 'planFailed', candidate, message: reasonOf(err, SOURCE_FAILURE.plan) });
   }
 };
 

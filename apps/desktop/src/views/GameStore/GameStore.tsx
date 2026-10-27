@@ -24,7 +24,7 @@ import './GameStore.css';
 const GameStore = ({ tab }: GameStoreProps) => {
   const store = useGameStore(tab);
   const [opened, setOpened] = useState<string | null>(null);
-  const { handlers, sourceDialog } = useCardHandlers({ store, setOpened });
+  const { handlers, sourceDialog, consentDialog } = useCardHandlers({ store, setOpened });
   const sections = useMemo(() => gridSectionsOf(store.sections, tab, store.filtered), [store.sections, tab, store.filtered]);
   const grid = useRef<VirtualGridHandle>(null);
   useRevealGame(sections, grid);
@@ -72,8 +72,8 @@ const GameStore = ({ tab }: GameStoreProps) => {
           )}
       </Box>
       {sourceDialog && <PackageSourceDialog {...sourceDialog} />}
-      {store.consent.pending && (
-        <PackageConsentDialog {...store.consent.pending} onAccept={store.consent.accept} onCancel={store.consent.cancel} onOpenLink={openExternal} />
+      {consentDialog && (
+        <PackageConsentDialog {...consentDialog} onAccept={store.consent.accept} onCancel={store.consent.cancel} onOpenLink={openExternal} />
       )}
       {openRow && <GameDetailsDialog row={openRow} handlers={handlers} onClose={() => setOpened(null)} />}
       <GameStatusBar summary={store.summary} loading={store.loading} filtered={store.filtered} adding={store.isBusy('file')} onAddFromFile={store.addFromFile} />

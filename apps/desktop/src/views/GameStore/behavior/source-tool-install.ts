@@ -11,13 +11,14 @@ const sourceToolInstall = async (run: ToolInstallRun): Promise<void> => {
   const { state, build, tool, setStep } = run;
   const offer = tool.install;
   if (!offer) return;
+  const { candidate, plan } = state;
   for (const id of Object.values(TOOL_JOB)) jobs.dismiss(id);
-  setStep({ ...state, stage: { kind: 'installing', build, tool } });
+  setStep({ kind: 'build', candidate, plan, stage: { kind: 'installing', build, tool } });
   try {
     const end = await appApi().sourcesToolInstall({ tool: tool.tool, buildId: build.buildId, command: offer.command, confirmed: true });
     await toolEnded({ run, end });
   } catch (err) {
-    setStep({ ...state, stage: { kind: 'failed', build, message: reasonOf(err, SOURCE_FAILURE.tool), log: [] } });
+    setStep({ kind: 'build', candidate, plan, stage: { kind: 'failed', build, message: reasonOf(err, SOURCE_FAILURE.tool), log: [] } });
   }
 };
 

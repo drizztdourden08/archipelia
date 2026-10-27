@@ -24,6 +24,8 @@ type PackageConsentDialogProps = {
   onOpenLink: (url: string) => void;
 };
 
+type PackageConsentBodyProps = Pick<PackageConsentDialogProps, 'title' | 'packages' | 'wheels' | 'onOpenLink'>;
+
 type PackageListProps = {
   heading: string;
   packages: readonly ConsentPackage[];
@@ -36,4 +38,4 @@ type WheelListProps = {
   onOpenLink: (url: string) => void;
 };
 
-export type { ConsentPackage, ConsentWheel, PackageConsentDialogProps, PackageListProps, WheelListProps };
+export type { ConsentPackage, ConsentWheel, PackageConsentBodyProps, PackageConsentDialogProps, PackageListProps, WheelListProps };

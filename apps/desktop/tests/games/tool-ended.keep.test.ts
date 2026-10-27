@@ -40,7 +40,7 @@ const run = () => {
   const setStep = (step: PackageSourceStep) => steps.push(step as Build);
   const install = vi.fn(() => Promise.resolve(undefined));
   const base = {
-    aim: { key: 'ctrdi', title: 'Chrono Trigger', module: 'ctrando' }, state, build: BUILD, install, setStep, close: vi.fn(), missing: { tool: 'msvc' as const }, log: ['old line'], tool: TOOL,
+    aim: { key: 'ctrdi', title: 'Chrono Trigger', module: 'ctrando' }, state, build: BUILD, install, finishing: vi.fn(() => Promise.resolve(undefined)), setStep, missing: { tool: 'msvc' as const }, log: ['old line'], tool: TOOL,
   };
   const ended = (end: SourceToolEnd) => toolEnded({ run: base, end });
   return { steps, ended, stages: () => steps.map((step) => step.stage) };

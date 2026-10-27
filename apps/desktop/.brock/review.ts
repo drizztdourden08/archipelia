@@ -10,6 +10,7 @@ const appReview: AppReview = {
     { id: 'engine-startup', load: () => import('../src/review/engine-startup.step') },
     { id: 'live-room', load: () => import('../src/review/live-room.step') },
     { id: 'lobby-server', load: () => import('../src/review/lobby-server.step') },
+    { id: 'package-wizard', load: () => import('../src/review/package-wizard.step') },
     { id: 'presets', load: () => import('../src/review/presets.step') },
     { id: 'servers', load: () => import('../src/review/servers.step') },
     { id: 'sessions', load: () => import('../src/review/sessions.step') },
