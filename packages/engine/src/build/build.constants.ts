@@ -19,6 +19,8 @@ const SCRATCH_VARS = ['TEMP', 'TMP', 'TMPDIR'] as const;
 
 const PYTHON_FLAGS = ['-X', 'utf8', '-I'] as const;
 
-const BUILD_PIP_FLAGS = ['--isolated', '--disable-pip-version-check', '--no-warn-script-location', '--no-input', '--no-cache-dir'] as const;
+const BUILD_PIP_FLAGS = ['--isolated', '--disable-pip-version-check', '--no-input', '--no-cache-dir'] as const;
 
-export { BUILD_ENV, BUILD_PIP_FLAGS, COMPILER_VARS, PYTHON_FLAGS, SCRATCH_VARS, SYSTEM_VARS };
+const INSTALL_ONLY_FLAGS = ['--no-warn-script-location'] as const;
+
+export { BUILD_ENV, BUILD_PIP_FLAGS, COMPILER_VARS, INSTALL_ONLY_FLAGS, PYTHON_FLAGS, SCRATCH_VARS, SYSTEM_VARS };
