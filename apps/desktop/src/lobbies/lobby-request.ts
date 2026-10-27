@@ -11,6 +11,7 @@ const lobbyRequest = {
     type: 'lobby.update', params: { lobbyId, ...sessionLobby(template), ...(source ? { source } : {}) },
   }),
   lock: (lobbyId: string): LobbyRequest => ({ type: 'lobby.lock', params: { lobbyId } }),
+  unlock: (lobbyId: string): LobbyRequest => ({ type: 'lobby.unlock', params: { lobbyId } }),
   start: (lobbyId: string): LobbyRequest => ({ type: 'lobby.start', params: { lobbyId } }),
   close: (lobbyId: string): LobbyRequest => ({ type: 'lobby.close', params: { lobbyId } }),
   stopRoom: (lobbyId: string): LobbyRequest => ({ type: 'room.stop', params: { lobbyId } }),

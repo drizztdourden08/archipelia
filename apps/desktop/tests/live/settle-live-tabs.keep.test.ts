@@ -31,8 +31,8 @@ const settleWith = async (templates: SessionTemplate[], lobbies: () => Promise<A
   const deps: LiveServiceDeps = {
     store, templates: { get: (id) => Promise.resolve(kept.get(id) ?? null), list: () => Promise.resolve([...kept.values()]), save },
     library: () => Promise.resolve({ installed: [], presets: [] }), lobbies: () => Promise.resolve({ act: () => Promise.reject(new Error('unused')), list: lobbies }),
-    slotOf: () => Promise.reject(new Error('unused')), beforeOpen: () => Promise.resolve(), beforeRun: () => Promise.resolve(),
-    closer: { close: () => Promise.resolve({ closed: true }) }, cancelRun: () => Promise.resolve(),
+    slotOf: () => Promise.reject(new Error('unused')), beforeOpen: () => Promise.resolve(), assertConsent: () => undefined, beforeRun: () => Promise.resolve(),
+    closer: { close: () => Promise.resolve({ closed: true }), quietIfIdle: () => Promise.resolve() }, cancelRun: () => Promise.resolve(),
   };
   await settleLiveTabs(deps);
   return { store, kept, save };

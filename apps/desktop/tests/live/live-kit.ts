@@ -5,12 +5,14 @@ import type { AdminLobby, InstalledGame, SessionPlayer, SessionTemplate } from '
 import { createLiveService } from '../../electron/live/create-live-service';
 import { createLiveSessions } from '../../electron/live/create-live-sessions';
 import type { LiveServiceDeps } from '../../electron/live/live.type';
+import { assertLanConsent } from '../../electron/sessions/assert-lan-consent';
 import { openToNetwork } from '../../electron/sessions/open-to-network';
 import { prepareRun } from '../../electron/sessions/prepare-run';
 import type { LobbyRequest, LobbyServerStatus, PendingClose } from '../../src/lobbies/lobbies.type';
 import type { LiveTab } from '../../src/live/live.type';
 import { newTemplate } from '../../src/views/SessionBuilder/behavior/new-template';
 import { tempFiles } from '../lobbies/temp-files';
+import { GAME as DEMO_GAME } from '../sessions/session-fixtures';
 
 type Rig = Awaited<ReturnType<typeof startLobbyRig>>;
 
@@ -70,16 +72,18 @@ const liveKit = async (on: Rig, options: KitOptions = {}) => {
   const sent: LobbyRequest[] = [];
   const act = (request: LobbyRequest) => { sent.push(request); return actOn(on)(request); };
   const cancelRun = vi.fn(() => Promise.resolve());
+  const quiet = vi.fn(() => Promise.resolve());
   const deps: LiveServiceDeps = {
     store, templates, cancelRun,
-    library: () => Promise.resolve({ installed: [GAME], presets: [] }),
+    library: () => Promise.resolve({ installed: [GAME, DEMO_GAME], presets: [] }),
     lobbies: options.lobbies ?? (() => Promise.resolve({ act, list: listOn(on) })),
     slotOf: (player) => Promise.resolve({ name: player.name, game: player.game, yaml: player.source.kind === 'yaml' ? player.source.yaml : '', worldVersion: '1.0.0' }),
     beforeOpen: openToNetwork(network.server),
+    assertConsent: (template) => assertLanConsent(network.server, template),
     beforeRun: prepareRun({ server: network.server, setLanRoom, sharePassword }),
-    closer: { close: (ref) => { closed.push(ref); return Promise.resolve({ closed: true }); } },
+    closer: { close: (ref) => { closed.push(ref); return Promise.resolve({ closed: true }); }, quietIfIdle: quiet },
   };
-  return { deps, live: createLiveService(deps), store, files, saved, events, network, closed, sharePassword, sent, cancelRun };
+  return { deps, live: createLiveService(deps), store, files, saved, events, network, closed, sharePassword, sent, cancelRun, quiet };
 };
 
 const liveSuite = () => {
@@ -103,4 +107,3 @@ const liveSuite = () => {
 };
 
 export { actOn, listOn, liveSuite, playerOf, sessionOf };
-export type { Rig };

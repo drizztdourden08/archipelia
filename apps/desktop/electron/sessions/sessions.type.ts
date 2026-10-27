@@ -10,6 +10,7 @@ type SessionLobbyDeps = {
   list: () => Promise<AdminLobby[]>;
   slotOf: (player: SessionPlayer) => Promise<HostPlayerSlot>;
   beforeOpen?: (template: SessionTemplate) => Promise<void>;
+  assertConsent?: (template: SessionTemplate) => void;
   beforeRun?: (lobbyId: string, template: SessionTemplate) => Promise<void>;
 };
 

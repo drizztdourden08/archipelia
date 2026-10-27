@@ -7,6 +7,7 @@ import { assertRunnable } from './assert-runnable';
 import type { LiveServiceDeps } from './live.type';
 import { lobbyDepsOf } from './lobby-deps-of';
 import { planOf } from './plan-of';
+import { settleNetwork } from './settle-network';
 
 const runLive = async (deps: LiveServiceDeps, tabId: string) => {
   const tab = await deps.store.get(tabId);
@@ -16,7 +17,8 @@ const runLive = async (deps: LiveServiceDeps, tabId: string) => {
   const { plan, changes } = planOf(saved, tab.overrides);
   if (lobbyServerOf(plan.template) !== tab.serverId) throw new Error(LIVE_TEXT.moved);
   assertRunnable(plan.template, await deps.library());
-  await deps.store.patch(tabId, { changes, lan: onLan(plan.template), direct: plan.template.direct !== undefined });
+  const patched = await deps.store.patch(tabId, { changes, lan: onLan(plan.template), direct: plan.template.direct !== undefined });
+  await settleNetwork(deps, tab, patched);
   return runSession({ ...plan, lobbyId: tab.lobbyId }, await lobbyDepsOf(deps, tab.serverId));
 };
 

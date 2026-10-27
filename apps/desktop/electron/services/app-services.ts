@@ -14,6 +14,7 @@ import { createLobbyServices } from '../lobbies/create-lobby-services';
 import { createLiveService } from '../live/create-live-service';
 import { createLiveSessions } from '../live/create-live-sessions';
 import { createLobbyCloser } from '../sessions/create-lobby-closer';
+import { assertLanConsent } from '../sessions/assert-lan-consent';
 import { hostSlotOf } from '../sessions/host-slot-of';
 import { openToNetwork } from '../sessions/open-to-network';
 import { prepareRun } from '../sessions/prepare-run';
@@ -82,7 +83,7 @@ const createAppServices = async (ctx: MainContext) => {
     store: liveStore, templates: core.templates, closer, cancelRun: (runId) => core.sessions.cancel(runId),
     library: async () => ({ installed: await core.installed(), presets: await core.presets.list() }),
     lobbies: (serverId) => lobbies.admins.opsFor(serverId), slotOf: hostSlotOf(core.installed, core.presets),
-    beforeOpen: openToNetwork(lobbyServer), beforeRun: prepareRun({ server: lobbyServer, setLanRoom: core.setLanRoom, sharePassword: core.lobbyPasswords.share }),
+    beforeOpen: openToNetwork(lobbyServer), assertConsent: (template) => assertLanConsent(lobbyServer, template), beforeRun: prepareRun({ server: lobbyServer, setLanRoom: core.setLanRoom, sharePassword: core.lobbyPasswords.share }),
   });
   onSession = ({ id, lobbyId }) => { if (lobbyId) void live.attachRun(lobbyId, id).catch((error: unknown) => ctx.log(`the live tab did not get its run: ${String(error)}`)); };
   void live.settle().catch((error: unknown) => ctx.log(`the live tabs did not settle: ${String(error)}`));

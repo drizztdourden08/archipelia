@@ -36,6 +36,8 @@ const LIVE_TEXT = {
   remoteCancel: 'A run on an Archipelia server cannot be cancelled from here.',
   notAnOverride: (key: string) => `The override ${key} is not allowed.`,
   badOverride: (key: string) => `The override ${key} has a wrong value.`,
+  notInstalled: (game: string) => `${game} is not installed, so its player cannot be checked.`,
+  notAnOption: (player: string, key: string) => `${player} has a setting ${key} that its game does not have.`,
   badMode: 'The close mode must be lobby, room or run.',
 } as const;
 

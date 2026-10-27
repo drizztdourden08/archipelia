@@ -33,8 +33,9 @@ type LiveServiceDeps = {
   lobbies: (serverId: string) => Promise<LobbyOps>;
   slotOf: SessionLobbyDeps['slotOf'];
   beforeOpen: NonNullable<SessionLobbyDeps['beforeOpen']>;
+  assertConsent: NonNullable<SessionLobbyDeps['assertConsent']>;
   beforeRun: NonNullable<SessionLobbyDeps['beforeRun']>;
-  closer: { close: (ref: PendingClose) => Promise<{ closed: boolean }> };
+  closer: { close: (ref: PendingClose) => Promise<{ closed: boolean }>; quietIfIdle: () => Promise<unknown> };
   cancelRun: (runId: string) => Promise<unknown>;
 };
 

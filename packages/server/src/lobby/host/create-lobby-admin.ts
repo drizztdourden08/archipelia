@@ -9,6 +9,7 @@ import { closeLobby } from './close-lobby';
 import { consentWorld } from './consent-world';
 import { createLobby } from './create-lobby';
 import { lockLobby } from './lock-lobby';
+import { unlockLobby } from './unlock-lobby';
 import { sweepLobbies } from './sweep-lobbies';
 import { updateLobby } from './update-lobby';
 
@@ -31,6 +32,7 @@ const createLobbyAdmin = (ctx: LobbyContext) => {
     create: (input: CreateLobbyInput) => createLobby(ctx, input),
     update: (lobbyId: string, patch: LobbyPatch) => updateLobby(ctx, lobbyId, patch),
     lock: (lobbyId: string) => lockLobby(ctx, lobbyId),
+    unlock: (lobbyId: string) => unlockLobby(ctx, lobbyId),
     close: (lobbyId: string) => closeLobby(ctx, lobbyId),
     start: (lobbyId: string) => startLobby(ctx, lobbyId),
     stopRoom,

@@ -6,6 +6,7 @@ const lobbyDepsOf = async (deps: LiveServiceDeps, serverId: string): Promise<Ses
   ...(await deps.lobbies(serverId)),
   slotOf: deps.slotOf,
   beforeOpen: deps.beforeOpen,
+  assertConsent: deps.assertConsent,
   beforeRun: deps.beforeRun,
 });
 

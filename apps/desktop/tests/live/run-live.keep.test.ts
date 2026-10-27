@@ -98,6 +98,81 @@ describe('the four security fixes, asserted in main from the id', () => {
   }, 30000);
 });
 
+describe('turning direct on and off on a live tab', () => {
+  const LAN_DIRECT = { lan: true, direct: DIRECT };
+
+  test('goes quiet on the network once no open tab is both LAN and direct, and only then', async () => {
+    const { live, quiet } = await kitOn({ saved: [sessionOf(LAN_DIRECT)] });
+    await live.start('t1');
+    await live.start('t1', { players: [playerOf(1, 'Ana'), playerOf(2, 'Bob')] });
+    expect(quiet).not.toHaveBeenCalled();
+    const off = await live.start('t1', { direct: null });
+    expect(off.tab).toMatchObject({ lan: true, direct: false });
+    expect(quiet).toHaveBeenCalledTimes(1);
+    await live.start('t1', { direct: null, server: { hintCost: 3 } });
+    expect(quiet).toHaveBeenCalledTimes(1);
+  });
+
+  test('opens a lobby that was created locked when direct is turned on, and locks it again when it is turned off', async () => {
+    const { live, sent } = await kitOn();
+    const first = await live.start('t1');
+    expect(first.lobby.phase).toBe('locked');
+    const on = await live.start('t1', { direct: DIRECT });
+    expect(on.lobby.phase).toBe('open');
+    expect(on.lobby.options).toMatchObject({ admission: 'host-approval', allowUnlisted: true });
+    expect(sent.map((request) => request.type)).toContain('lobby.unlock');
+    expect((await live.start('t1', { direct: null })).lobby.phase).toBe('locked');
+  });
+
+  test('needs the LAN consent before it opens a locked lobby to the network', async () => {
+    const { live, network, rig: on } = await kitOn({ saved: [sessionOf({ lan: true })] });
+    await live.start('t1');
+    network.revoke();
+    await expect(live.start('t1', { direct: DIRECT })).rejects.toThrow('not open to your network');
+    expect((await listOn(on)())[0]?.phase).toBe('locked');
+  });
+
+  test('never restarts the network listener for a lobby that is already open, so joined players stay connected', async () => {
+    const { live, network } = await kitOn({ saved: [sessionOf(LAN_DIRECT)] });
+    const { tab } = await live.start('t1');
+    await network.server.apply({ ...network.server.status().options, mode: 'off' });
+    network.apply.mockClear();
+    await live.start('t1');
+    await live.run(tab.tabId);
+    expect(network.apply).not.toHaveBeenCalled();
+  });
+
+  test('refuses to unlock a lobby that is not locked', async () => {
+    const { live, rig: on } = await kitOn({ saved: [sessionOf({ direct: DIRECT })] });
+    const { lobby } = await live.start('t1');
+    await expect(on.call('lobby.unlock', { lobbyId: lobby.id })).rejects.toThrow('cannot unlock');
+  });
+});
+
+describe('the preset settings in the players override', () => {
+  const preset = (overrides: Record<string, unknown>, game = 'Demo') =>
+    ({ players: [{ slot: 1, name: 'Dee', game, source: { kind: 'preset', presetId: 'p1', overrides } }] });
+
+  test('may only name options that exist in the schema of the game', async () => {
+    const { live, rig: on } = await kitOn();
+    await expect(live.start('t1', preset({ not_an_option: 1 }))).rejects.toThrow('Dee has a setting not_an_option that its game does not have');
+    await expect(live.start('t1', preset({ death_link: true }, 'Missing'))).rejects.toThrow('Missing is not installed');
+    expect(await listOn(on)()).toEqual([]);
+    const { tab } = await live.start('t1', preset({ death_link: true, crystals: 3 }));
+    expect(tab.overrides.players?.[0]?.name).toBe('Dee');
+  });
+});
+
+describe('two runs of one tab that arrive together', () => {
+  test('share one run, never a second start of the lobby', async () => {
+    const { live, rig: on } = await kitOn();
+    const { tab } = await live.start('t1');
+    const [one, two] = await Promise.all([live.run(tab.tabId), live.run(tab.tabId)]);
+    expect(one.id).toBe(two.id);
+    await vi.waitFor(() => expect(on.templates).toHaveLength(1));
+  });
+});
+
 describe('close by tab id', () => {
   test('closes the lobby through the pending closes and drops the tab', async () => {
     const { live, closed } = await kitOn();

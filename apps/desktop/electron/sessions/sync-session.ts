@@ -17,12 +17,14 @@ const slotWithOrigin = (plan: SyncPlan, deps: SessionLobbyDeps) => async (player
 
 const syncSession = async (plan: SyncPlan, deps: SessionLobbyDeps) => {
   const { template, lobbyId, source } = plan;
+  deps.assertConsent?.(template);
   const lobby = (await deps.list()).find((entry) => entry.id === lobbyId);
   if (!lobby) throw new Error(TEXT.gone);
   if (!RUNNABLE_PHASES.includes(lobby.phase)) return lobby;
   const slots = await Promise.all(template.players.map(slotWithOrigin(plan, deps)));
   await deps.act(lobbyRequest.update(lobbyId, template, source));
   if (!template.direct) await closeToClients(lobby, deps);
+  else if (lobby.phase === 'locked') await deps.act(lobbyRequest.unlock(lobbyId));
   return deps.act(lobbyRequest.host(lobbyId, HOST_NAME, slots));
 };
 
