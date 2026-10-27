@@ -5,16 +5,17 @@ import type { MenuGroup } from '@drizztdourden08/tessera/composites';
 import { Button, ButtonRow, Tag } from '@drizztdourden08/tessera/primitives';
 import type { SessionRowProps } from './SessionRow.type';
 
-const SessionRow = ({ id, name, meta, playersLabel, busy, onEdit, onStart, onDuplicate, onDelete }: SessionRowProps) => {
+const SessionRow = ({ id, name, meta, playersLabel, historyLabel, busy, onEdit, onStart, onHistory, onDuplicate, onDelete }: SessionRowProps) => {
   const edit = useCallback(() => onEdit(id), [id, onEdit]);
   const start = useCallback(() => onStart(id), [id, onStart]);
   const more = useMemo<MenuGroup[]>(() => [{
     id: 'session',
     items: [
+      { id: 'history', label: historyLabel, icon: 'history', onSelect: () => onHistory(id) },
       { id: 'duplicate', label: 'Duplicate', icon: 'copy', disabled: busy, onSelect: () => onDuplicate(id) },
       { id: 'delete', label: 'Delete', icon: 'trash-2', tone: 'danger', disabled: busy, onSelect: () => onDelete(id) },
     ],
-  }], [busy, id, onDelete, onDuplicate]);
+  }], [busy, historyLabel, id, onDelete, onDuplicate, onHistory]);
   const actions = (
     <ButtonRow gap="xs">
       <Tag>{playersLabel}</Tag>

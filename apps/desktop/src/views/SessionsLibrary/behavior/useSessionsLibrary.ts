@@ -5,14 +5,14 @@ import { secretsApi } from '@drizztdourden08/brock-secrets/renderer';
 import type { ServerEntry } from '@archipelia/model';
 import { appApi } from '../../../ipc/app-api';
 import { failWith } from '../../../hooks/fail-with';
+import { openHistory } from '../../../hooks/open-history';
 import { openSessionEditor } from '../../../hooks/open-session-editor';
 import { openSessionLobby } from '../../../hooks/open-session-lobby';
 import { useSessionStart } from '../../../hooks/useSessionStart';
-import { useAppNavigation } from '../../../hooks/useAppNavigation';
 import { useLibraryStore } from '../../../stores/useLibraryStore';
 import { useRunsStore } from '../../../stores/useRunsStore';
 import { duplicateTemplate, passwordNameOf } from '../../SessionBuilder';
-import { matchesRun } from './matches-run';
+import { runCountsOf } from './run-counts-of';
 import { matchesTemplate } from './matches-template';
 import { FAILURE } from '../SessionsLibrary.constants';
 
@@ -20,8 +20,6 @@ const useSessionsLibrary = () => {
   const { templates, loadTemplates, saveTemplate, removeTemplate } = useLibraryStore();
   const runs = useRunsStore((state) => state.runs);
   const loadRuns = useRunsStore((state) => state.load);
-  const removeRun = useRunsStore((state) => state.remove);
-  const { openSession } = useAppNavigation();
   const [servers, setServers] = useState<ServerEntry[]>([]);
   const query = usePageSearch();
   const { guard, isBusy, errorOf, lastError } = useKeyedGuard();
@@ -55,7 +53,7 @@ const useSessionsLibrary = () => {
   const deleteTemplate = useCallback((id: string) => {
     const template = byId(id);
     if (!template) return;
-    void confirmDelete({ what: template.name, consequence: 'Its runs stay in Runs.' }).then((confirmed) => {
+    void confirmDelete({ what: template.name, consequence: 'Its runs stay in History.' }).then((confirmed) => {
       if (!confirmed) return;
       void guard(id, failWith(FAILURE.deleteSession, async () => {
         if (template.server.passwordRef === passwordNameOf(id)) await secretsApi()?.delete(passwordNameOf(id));
@@ -64,25 +62,17 @@ const useSessionsLibrary = () => {
     });
   }, [byId, guard, removeTemplate]);
 
-  const openRun = openSession;
-
-  const deleteRun = useCallback((id: string) => {
-    const run = runs.find((entry) => entry.id === id);
-    const what = `this run of ${run?.snapshot.name ?? 'the session'}`;
-    void confirmDelete({ what, consequence: 'Its output files go with it.' }).then((confirmed) => {
-      if (confirmed) void guard(id, failWith(FAILURE.deleteRun, () => removeRun(id)));
-    });
-  }, [guard, removeRun, runs]);
+  const history = openHistory;
 
   const visibleTemplates = useMemo(() => templates.filter((template) => matchesTemplate(template, query)), [templates, query]);
-  const visibleRuns = useMemo(() => runs.filter((run) => matchesRun(run, query)), [runs, query]);
+  const runCounts = useMemo(() => runCountsOf(runs), [runs]);
 
   const loadError = errorOf('load');
   const loading = !opened || isBusy('load');
 
   return {
-    actionError: lastError === loadError ? null : lastError, deleteRun, deleteTemplate, duplicate, edit, isBusy, loadError, loading, openRun, query,
-    reload, runs, servers, start, templates, visibleRuns, visibleTemplates,
+    actionError: lastError === loadError ? null : lastError, deleteTemplate, duplicate, edit, history, isBusy, loadError, loading, query,
+    reload, runCounts, servers, start, templates, visibleTemplates,
   };
 };
 

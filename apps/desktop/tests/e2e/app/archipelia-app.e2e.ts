@@ -45,7 +45,7 @@ describe('Archipelia app, headless, every screen end to end', () => {
 
   test('7a. session: stop from the dashboard', () => stopFromDashboard(app(), state.clients));
 
-  test('7b. sessions: Runs shows the stopped run and Open returns to it', () => checkHistory(app()));
+  test('7b. history: the stopped run is listed with its source and Open returns to it', () => checkHistory(app()));
 
   test('7c. data: a zip export of the data folders', () => exportData(app()));
 

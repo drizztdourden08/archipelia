@@ -4,7 +4,7 @@ const NEW_PRESET_TOUR = 'new-preset';
 const TOUR_TARGET = {
   homeAside: 'home-aside',
   sessionsList: 'sessions-list',
-  sessionsRuns: 'sessions-runs',
+  historyList: 'history-list',
   sessionsJoin: 'sessions-join',
   gamesTools: 'game-store-tools',
   gamesGrid: 'games-grid',
