@@ -60,6 +60,6 @@ type PackageSourceParams = {
 };
 
 export type {
-  BuildPrepareRun, BuildStartRun, BuildState, CheckRun, FinishState, Finishing, InstallWorld, PackageSourceParams, PlanRun, PlanState, PypiRun, SearchRun, SetFinish, SetStep, SourceAim,
+  BuildPrepareRun, BuildStartRun, CheckRun, FinishState, Finishing, PackageSourceParams, PlanRun, PypiRun, SearchRun, SetFinish, SourceAim,
   SourceHandlers, SourceHandlersRun, ToolEndRun, ToolInstallRun, WheelRun,
 };
