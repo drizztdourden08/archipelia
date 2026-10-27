@@ -2,7 +2,6 @@
 import { useId } from 'react';
 import { ContentHeader } from '@drizztdourden08/tessera/composites';
 import { Button, ButtonRow, Icon, Inline, Status, Text } from '@drizztdourden08/tessera/primitives';
-import { TOUR_TARGET } from '../../../../hooks/tour-targets.constants';
 import { LOBBY_PHASES } from '../../../../lobbies/lobby-statuses.constants';
 import { LOBBY_SCREEN } from '../../SessionLobby.constants';
 import { shownPhase } from '../../behavior/shown-phase';
@@ -24,7 +23,7 @@ const LobbyHeader = ({ name, phase, direct, saved, busy, action, onSave, onEdit,
       <Button variant="ghost" icon={<Icon name="pencil" />} onClick={onEdit}>{LOBBY_SCREEN.edit}</Button>
       {live && <Button variant="secondary" icon={<Icon name="square" />} disabled={busy} onClick={onClose}>{LOBBY_SCREEN.close}</Button>}
       {live && <Button variant="secondary" disabled={busy} onClick={onSave}>Save</Button>}
-      <Button variant="primary" disabled={busy || reason !== undefined} aria-describedby={reason && reasonId} data-tour={TOUR_TARGET.lobbyRun} onClick={action.onClick}>{action.label}</Button>
+      <Button variant="primary" disabled={busy || reason !== undefined} aria-describedby={reason && reasonId} onClick={action.onClick}>{action.label}</Button>
     </ButtonRow>
   );
   return <ContentHeader title={name} level={2} compact strip={strip} actions={actions} />;

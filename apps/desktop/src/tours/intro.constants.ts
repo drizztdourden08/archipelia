@@ -1,6 +1,7 @@
 /* @layer renderer-app @kind config */
 import type { TourStepDef } from '@drizztdourden08/brock-react';
-import { TOUR_ROUTE } from '../hooks/tour-targets.constants';
+import { closeScreens } from '../hooks/close-screens';
+import { TOUR_PART } from '../hooks/tour-targets.constants';
 
 const INTRO_STEPS: readonly TourStepDef[] = [
   {
@@ -10,7 +11,34 @@ const INTRO_STEPS: readonly TourStepDef[] = [
     intro: true,
     art: 'product-mark',
     mascot: 'wave',
-    open: TOUR_ROUTE.home,
+  },
+  {
+    id: 'menu-open',
+    title: 'The menu',
+    body: 'Everything starts in the menu, in the top left corner.',
+    hint: 'Click the menu button to open it.',
+    advanceOn: { click: { shell: 'menu' } },
+    mascot: 'point',
+    before: closeScreens,
+  },
+  {
+    id: 'menu-entries',
+    title: 'What the menu holds',
+    body: 'The menu opens every screen and the window options. Search and Report a bug sit here too, and so does Take the tour.',
+    target: TOUR_PART.menuPanel,
+    openMenu: 'menu',
+    placement: 'right-start',
+    mascot: 'scan',
+  },
+  {
+    id: 'menu-home',
+    title: 'Open Home',
+    body: 'Home is where Archipelia starts.',
+    hint: 'Click Home in the menu.',
+    advanceOn: { click: { menuEntry: 'Home' } },
+    openMenu: 'menu',
+    placement: 'right-start',
+    mascot: 'point',
   },
 ];
 

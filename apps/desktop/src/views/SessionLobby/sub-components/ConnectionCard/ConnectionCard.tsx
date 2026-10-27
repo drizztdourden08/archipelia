@@ -2,7 +2,6 @@
 import { FactsPanel } from '@drizztdourden08/tessera/composites';
 import { Callout, Card, SectionHeader, Stack } from '@drizztdourden08/tessera/primitives';
 import { ErrorCallout } from '@archipelia/design';
-import { TOUR_TARGET } from '../../../../hooks/tour-targets.constants';
 import { CONNECTION_TEXT, LOBBY_TEXT } from '../../behavior/lobby-view.constants';
 import { useConnection } from '../../behavior/useConnection';
 import { LobbyState } from '../LobbyState';
@@ -14,7 +13,7 @@ const ConnectionCard = ({ template }: ConnectionCardProps) => {
   const link = useConnection(template);
   const lobbyId = template.lobby?.lobbyId;
   return (
-    <Card data-tour={TOUR_TARGET.lobbyConnection}>
+    <Card>
       <Stack gap="sm">
         <SectionHeader title={CONNECTION_TEXT.heading} subtitle={CONNECTION_TEXT[link.reach]} />
         {link.error && <ErrorCallout message={link.error} />}
