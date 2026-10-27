@@ -54,13 +54,13 @@ const useGameStore = (tab: GameTab) => {
   const refresh = useCallback(() => load(true), [load]);
   const retry = useCallback(() => load(false), [load]);
 
-  const openOfficial = useCallback(() => open(ROUTE.officialGames), [open]);
+  const openBuiltIn = useCallback(() => open(ROUTE.builtInGames), [open]);
 
   const loadFailed = errorOf('load') !== null;
   const error = errorOf('load') ?? errorOf('file');
 
   return {
-    addFromFile, consent, empty, error, errorOf, filtered, filters, installWorld, isBusy, loadFailed, loading, needOf, openOfficial, query, refresh, remove, retry, rows, sections, setFilters, setQuery, shown, summary,
+    addFromFile, consent, empty, error, errorOf, filtered, filters, installWorld, isBusy, loadFailed, loading, needOf, openBuiltIn, query, refresh, remove, retry, rows, sections, setFilters, setQuery, shown, summary,
   };
 };
 

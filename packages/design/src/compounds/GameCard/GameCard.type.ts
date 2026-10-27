@@ -2,7 +2,7 @@
 import type { IconName } from '@drizztdourden08/tessera/primitives';
 import type { GAME_STATUS } from './GameCard.constants';
 
-type GameCardKind = 'official' | 'community' | 'first-party' | 'file';
+type GameCardKind = 'built-in' | 'archipelia-ready' | 'archipelago-index' | 'file';
 
 type GameCardStatus = keyof typeof GAME_STATUS;
 
@@ -29,6 +29,7 @@ type GameCardProps = {
   tags: string[];
   actions: GameCardAction[];
   art?: string;
+  verified?: boolean;
   onOpen?: () => void;
 };
 

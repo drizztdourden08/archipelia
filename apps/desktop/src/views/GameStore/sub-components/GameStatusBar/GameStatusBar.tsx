@@ -8,7 +8,7 @@ const itemsOf = ({ summary, filtered }: Pick<GameStatusBarProps, 'summary' | 'fi
   { id: 'installed', label: 'Installed', value: summary.installed, icon: 'circle-check' },
   ...(summary.updates > 0 ? [{ id: 'updates', label: 'Updates', value: summary.updates, tone: 'warning' as const, icon: 'arrow-big-up-dash' as const, priority: 1 }] : []),
   ...(summary.noRelease > 0 ? [{ id: 'no-release', label: 'No release yet', value: summary.noRelease, icon: 'clock' as const, priority: 3 }] : []),
-  ...(summary.apVersion ? [{ id: 'index', label: 'Index for AP', value: summary.apVersion, align: 'end' as const, priority: 2 }] : []),
+  ...(summary.apVersion ? [{ id: 'index', label: 'Archipelago index for AP', value: summary.apVersion, align: 'end' as const, priority: 2 }] : []),
 ];
 
 const actionsOf = ({ adding, onAddFromFile }: Pick<GameStatusBarProps, 'adding' | 'onAddFromFile'>): StatusBarAction[] => [

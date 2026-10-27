@@ -3,7 +3,7 @@ export { CommandConsole } from './compounds/CommandConsole';
 export { CONNECTION_STATUS, ConnectionStatus } from './compounds/ConnectionStatus';
 export type { ConnectionPhase } from './compounds/ConnectionStatus';
 export { ErrorCallout } from './compounds/ErrorCallout';
-export { GameCard } from './compounds/GameCard';
+export { GameCard, VERIFIED_LABEL } from './compounds/GameCard';
 export type { GameCardAction, GameCardKind, GameCardNote, GameCardProps, GameCardStatus } from './compounds/GameCard';
 export { GameDetails } from './compounds/GameDetails';
 export type { GameDetailsProps } from './compounds/GameDetails';

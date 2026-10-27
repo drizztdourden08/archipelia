@@ -16,6 +16,7 @@ const usage = {
     'Pass markdown with the README of the world as Markdown, unchanged; the dialog draws it with headings, lists, links and code, and opens a link through onLink. Leave it out while the README is not read and set loading, so it reads Reading the description.',
     'Make the links of the Markdown absolute before you pass it; a relative link shows as plain text, and images show as their alt text.',
     'While a world is busy, pass busy with the sentence, such as Adding Timespinner..., and the actions give way to a spinner with that sentence.',
+    'Pass verified for a world listed and checked by Archipelia, so the kind line shows the Verified tag with its hint, as the card does.',
     'Pass error with the reason the last action failed, in the words the main process gave; it shows in the dialog next to the world.',
     'Pass need when the world needs a Python package that Archipelia cannot install: the message says which, and href is the page of the package when it is known. The status of the card then reads Needs a package Archipelia cannot install, and the dialog shows the message as a warning, not as an error.',
     'Pass onLink so a link of the README and the package page open in the browser of the user.',
@@ -35,8 +36,8 @@ const usage = {
 const GameDetailsSample = ({ onClose, onInstall }: { onClose: () => void; onInstall: () => void }) => (
   <GameDetails
     title="Timespinner"
-    kind="community"
-    kindLabel="Community world"
+    kind="archipelago-index"
+    kindLabel="Archipelago index world"
     version="1.2.0"
     notes={[]}
     tags={['time']}
@@ -46,7 +47,7 @@ const GameDetailsSample = ({ onClose, onInstall }: { onClose: () => void; onInst
   />
 );
 `,
-  propsHash: 'a8cc7b6266872014',
+  propsHash: '643e22ac49df1120',
 } satisfies ComponentUsage;
 
 export { usage };

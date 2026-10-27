@@ -22,6 +22,7 @@ const usage = {
     'Mark an action that deletes something as danger.',
     'Pass onOpen to open GameDetails: the title of the card becomes the button and the card shows it can be opened. Never put the description or a hover hint on the card.',
     'Pass art as a small picture of the world, a data address, and it fills the media tile with the kind icon as a badge; leave it out and the tile shows the kind icon alone.',
+    'Pass verified for a world listed and checked by Archipelia: a Verified tag shows on the card with the hint Listed and checked by Archipelia.',
     'Pass at most two tags; they show on a line of their own under the detail line.',
   ],
   a11y: [
@@ -41,8 +42,8 @@ const usage = {
 const GameCardSample = ({ onInstall }: { onInstall: () => void }) => (
   <GameCard
     title="Timespinner"
-    kind="community"
-    kindLabel="Community world"
+    kind="archipelago-index"
+    kindLabel="Archipelago index world"
     version="1.0.0 to 1.2.0"
     status="update"
     notes={[]}
@@ -51,7 +52,7 @@ const GameCardSample = ({ onInstall }: { onInstall: () => void }) => (
   />
 );
 `,
-  propsHash: 'fcb9a3497fd98ddf',
+  propsHash: '7e0313b9eaab40e1',
 } satisfies ComponentUsage;
 
 export { usage };

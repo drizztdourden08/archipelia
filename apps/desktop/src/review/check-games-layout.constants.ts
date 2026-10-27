@@ -1,5 +1,5 @@
 /* @layer renderer-app @kind config */
-const SECTION_ORDER = ['Installed', 'Official', 'Community'] as const;
+const SECTION_ORDER = ['Installed', 'Built-in', 'Archipelia ready', 'Archipelago index'] as const;
 
 const HEADER = '[role="gridcell"][aria-expanded]';
 
