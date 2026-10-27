@@ -13,7 +13,6 @@ import { createLobbyServices } from '../lobbies/create-lobby-services';
 import { createLobbyCloser } from '../sessions/create-lobby-closer';
 import { fakeLobbyRun } from '../lobbies/review/fake-lobby-run';
 import { REVIEW_FLAG } from '../lobbies/review/review.constants';
-import { createBuildLines } from '../builds/create-build-lines';
 import { createBuildRunner } from '../builds/create-build-runner';
 import { defineBuildProcesses } from '../builds/define-build-processes';
 
@@ -30,7 +29,6 @@ const createAppServices = async (ctx: MainContext) => {
   const version = app.getVersion();
   const review = ctx.flags.hasFlag(REVIEW_FLAG);
   const canStoreSecrets = () => !review && secrets.canStore();
-  const buildLines = createBuildLines();
   let started: StartedCore | undefined;
   await embedServer<CoreDomains>((host) => {
     started = startCore(host, {
@@ -40,14 +38,14 @@ const createAppServices = async (ctx: MainContext) => {
       canStoreSecrets,
       network: { automation, lanHost },
       environment: { version },
-      build: createBuildRunner(ctx.processes, buildLines),
+      build: createBuildRunner(ctx.processes),
       ...(review ? { lobbyRun: fakeLobbyRun } : {}),
     });
     return started;
   }, ctx, { domains: () => ctx.storage });
   if (!started) throw new Error('the embedded core did not start');
   const { core, listen } = started;
-  defineBuildProcesses(ctx.processes, (job, raw) => core.catalog.sources.processSpec(job, raw), buildLines);
+  defineBuildProcesses(ctx.processes, (job, raw) => core.catalog.sources.processSpec(job, raw));
   const lobbies = await createLobbyServices({
     core, listen, domain: ctx.storage.domain, secrets, canStoreSecrets, automation, lanHost, version, log: ctx.log,
     onLobby: (event) => ctx.emit(APP_CHANNELS.onLobbyEvent, event),
