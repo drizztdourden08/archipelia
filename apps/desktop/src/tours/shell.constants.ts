@@ -38,8 +38,8 @@ const SHELL_STEPS: readonly TourStepDef[] = [
   {
     id: 'menu-tour',
     title: 'Take the tour',
-    body: 'Take the tour sits under Advanced in the menu. Choose it to see this tour again.',
-    target: { menuEntry: ['Advanced', 'Take the tour'] },
+    body: 'Take the tour sits in the menu. Choose it to see this tour again.',
+    target: { menuEntry: 'Take the tour' },
     openMenu: 'menu',
     placement: 'right-start',
     mascot: 'point',

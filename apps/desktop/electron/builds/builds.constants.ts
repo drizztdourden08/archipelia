@@ -17,6 +17,4 @@ const BUILD_JOBS: readonly SourceBuildJob[] = ['venv', 'tools', 'wheel'];
 
 const BUILD_ALLOW = { env: ['PATH'] } as const;
 
-const MAX_BUILD_LINES = 4000;
-
-export { BUILD_ALLOW, BUILD_JOBS, BUILD_LABEL, BUILD_TIMEOUT_MS, MAX_BUILD_LINES };
+export { BUILD_ALLOW, BUILD_JOBS, BUILD_LABEL, BUILD_TIMEOUT_MS };
