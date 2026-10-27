@@ -1,7 +1,7 @@
 /* @layer core @kind types */
 import type { SecretStore } from '@archipelia/hosts';
 import type { Failure, ServerMessage } from '@drizztdourden08/archipelia-lobby-protocol';
-import type { DataFiles, EngineRuntime, Lobby, LobbyOptions, Session, SessionEngine, SessionTemplate } from '@archipelia/model';
+import type { DataFiles, EngineRuntime, Lobby, LobbyOptions, LobbySource, Session, SessionEngine, SessionTemplate, SlotOrigin } from '@archipelia/model';
 import type { LobbyRun } from '@archipelia/sessions';
 import type { ProofVerdict, Registry, RegistryClient, WorldVerdict } from '@archipelia/trust';
 import type { SandboxRunner } from '../sandbox/sandbox.type';
@@ -57,13 +57,13 @@ type MemberRef = { lobbyId: string; memberId: string };
 
 type Outcome<T = undefined> = { ok: true; value: T } | { ok: false; failure: Failure };
 
-type HostSlotInput = { name: string; game: string; yaml: string; worldVersion: string };
+type HostSlotInput = { name: string; game: string; yaml: string; worldVersion: string; origin?: SlotOrigin };
 
 type HostMemberInput = { displayName: string; slots: HostSlotInput[] };
 
-type CreateLobbyInput = { name: string; engine?: SessionEngine; options?: Partial<LobbyOptions>; locked?: boolean };
+type CreateLobbyInput = { name: string; engine?: SessionEngine; options?: Partial<LobbyOptions>; locked?: boolean; source?: LobbySource };
 
-type LobbyPatch = { name?: string; options?: Partial<LobbyOptions> };
+type LobbyPatch = { name?: string; options?: Partial<LobbyOptions>; source?: LobbySource };
 
 export type {
   CreateLobbyInput, HostMemberInput, HostSlotInput, LobbyLink, LobbyPatch, LobbyServiceDeps, LobbyStore, LobbyTrust,

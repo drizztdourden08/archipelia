@@ -27,7 +27,6 @@ const lobbyHandlers: HandlerGroup = {
     ctx.handle(APP_CHANNELS.lobbyServersTest, (_event, id) => testLobbyServer(lobbyServers, secrets, id));
     ctx.handle(APP_CHANNELS.lanBrowse, (_event, on) => lanBrowser.browse(on));
     ctx.handle(APP_CHANNELS.lobbyProbe, (_event, address, code) => probeLobby(address, code));
-    ctx.handle(APP_CHANNELS.lobbyClose, (_event, ref) => closer.close(ref));
     ctx.handle(APP_CHANNELS.lobbyPendingCloses, () => closer.list());
   },
 };

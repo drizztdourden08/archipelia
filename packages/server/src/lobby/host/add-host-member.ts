@@ -18,6 +18,7 @@ const addHostMember = async (ctx: LobbyContext, lobbyId: string, input: HostMemb
   const files = input.slots.map((slot) => ({ slot, bytes: new TextEncoder().encode(slot.yaml) }));
   const uploads: SlotUpload[] = files.map(({ slot, bytes }) => ({
     name: slot.name, game: slot.game, yamlSha256: sha256Hex(bytes), yamlSize: bytes.length, worldVersion: slot.worldVersion, state: 'uploading',
+    ...(slot.origin ? { origin: slot.origin } : {}),
   }));
   for (const { bytes } of files) await ctx.deps.store.writeFile(lobbyId, sha256Hex(bytes), bytes);
   const lobby = await ctx.book.commit(lobbyId, (draft) => {

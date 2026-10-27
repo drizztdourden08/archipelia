@@ -7,8 +7,16 @@ import { appApi } from '../ipc/app-api';
 import { findLaunchedRun } from '../runs/find-launched-run';
 import { launchOf } from '../runs/launch-of';
 import type { RunLaunch } from '../runs/run-launch.type';
+import { useLiveStore } from '../stores/useLiveStore';
 import { useRunsStore } from '../stores/useRunsStore';
 import { logFailure } from './log-failure';
+
+const tabIdOf = async (sessionId: string): Promise<string> => {
+  const known = useLiveStore.getState().tabs.find((tab) => tab.sessionId === sessionId);
+  const tab = known ?? (await appApi().liveList()).find((entry) => entry.sessionId === sessionId);
+  if (!tab) throw new Error(`The session ${sessionId} has no open lobby.`);
+  return tab.tabId;
+};
 
 const useRunLauncher = () => {
   const runs = useRunsStore((state) => state.runs);
@@ -28,7 +36,7 @@ const useRunLauncher = () => {
   const start = useCallback(async (template: SessionTemplate) => {
     setLaunch(launchOf(template, Date.now()));
     try {
-      await appApi().sessionsRunLobby(template);
+      await appApi().sessionsRunLobby(await tabIdOf(template.id));
     } catch (err) {
       setLaunch(null);
       const sentence = `${template.name} did not run. The app log has the cause.`;

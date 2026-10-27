@@ -22,11 +22,11 @@ const useSessionStart = () => {
 
   return useCallback(async (template: SessionTemplate, keep: (saved: SessionTemplate) => Promise<SessionTemplate>): Promise<SessionTemplate | null> => {
     if (!(await consent(template))) return null;
-    const serverId = lobbyServerOf(template);
-    const lobby = await appApi().sessionsStart(template);
-    apply({ serverId, lobby });
+    const saved = await keep(template);
+    const { tab, lobby } = await appApi().sessionsStart(saved.id);
+    apply({ serverId: tab.serverId, lobby });
     await reload();
-    return keep({ ...template, lobby: { serverId, lobbyId: lobby.id } });
+    return keep({ ...saved, lobby: { serverId: tab.serverId, lobbyId: tab.lobbyId } });
   }, [apply, consent, reload]);
 };
 

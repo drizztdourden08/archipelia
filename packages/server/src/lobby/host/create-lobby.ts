@@ -23,7 +23,7 @@ const createLobby = async (ctx: LobbyContext, input: CreateLobbyInput): Promise<
   const now = ctx.now();
   const lobby: Lobby = {
     id: `${LOBBY_ID_PREFIX}${randomBytes(LOBBY_ID_BYTES).toString('hex')}`, code: await freeCode(ctx), name: input.name, phase: input.locked ? 'locked' : 'open', rev: 1,
-    engine, options: lobbyOptions(input.options), members: [], worlds: [], nextMember: 1, createdAt: now, closesAt: now + OPEN_TTL_MS,
+    engine, options: lobbyOptions(input.options), ...(input.source ? { source: input.source } : {}), members: [], worlds: [], nextMember: 1, createdAt: now, closesAt: now + OPEN_TTL_MS,
   };
   const added = await ctx.book.add(lobby);
   ctx.publish(added);

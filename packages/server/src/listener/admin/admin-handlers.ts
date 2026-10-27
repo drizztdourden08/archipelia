@@ -6,6 +6,7 @@ import { adminView } from './admin-view';
 import { hostSlotsOf } from './host-slots-of';
 import { readEngine } from './options/read-engine';
 import { readLobbyOptions } from './options/read-lobby-options';
+import { readSource } from './options/read-source';
 import { readText } from './options/read-text';
 
 const lobbyCalls: Record<string, AdminHandler> = {
@@ -16,7 +17,8 @@ const lobbyCalls: Record<string, AdminHandler> = {
     const engine = readEngine(params.record('engine'));
     const options = readLobbyOptions(params.record('options'), lobbyOptions());
     const locked = request.locked === true ? { locked: true } : {};
-    return adminView(sandbox, await service.create({ name: readText('name', params.text('name')), ...(engine ? { engine } : {}), ...(options ? { options } : {}), ...locked }));
+    const source = readSource(params.record('source'));
+    return adminView(sandbox, await service.create({ name: readText('name', params.text('name')), ...(engine ? { engine } : {}), ...(options ? { options } : {}), ...(source ? { source } : {}), ...locked }));
   },
   'lobby.update': async ({ service, sandbox }, request) => {
     const params = adminParams(request);
@@ -25,7 +27,8 @@ const lobbyCalls: Record<string, AdminHandler> = {
     const current = await service.get(lobbyId);
     if (!current) throw new Error(`no lobby has the id ${lobbyId}`);
     const options = readLobbyOptions(params.record('options'), current.options);
-    return adminView(sandbox, await service.update(lobbyId, { ...(name ? { name: readText('name', name) } : {}), ...(options ? { options } : {}) }));
+    const source = readSource(params.record('source'));
+    return adminView(sandbox, await service.update(lobbyId, { ...(name ? { name: readText('name', name) } : {}), ...(options ? { options } : {}), ...(source ? { source } : {}) }));
   },
   'lobby.lock': async ({ service, sandbox }, request) => adminView(sandbox, await service.lock(adminParams(request).text('lobbyId'))),
   'lobby.close': async ({ service, sandbox }, request) => adminView(sandbox, await service.close(adminParams(request).text('lobbyId'))),

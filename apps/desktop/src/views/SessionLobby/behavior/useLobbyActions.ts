@@ -6,13 +6,13 @@ import { appApi } from '../../../ipc/app-api';
 import { openSessionEditor } from '../../../hooks/open-session-editor';
 import { useRunLauncher } from '../../../hooks/useRunLauncher';
 import { useSessionStart } from '../../../hooks/useSessionStart';
+import { closeModeOf } from '../../../live/close-mode-of';
+import { useLiveStore } from '../../../stores/useLiveStore';
+import { useLobbyStore } from '../../../stores/useLobbyStore';
 import { CLOSE_LOBBY } from '../SessionLobby.constants';
 import type { LobbyActionDeps } from '../SessionLobby.type';
 
-const withoutLobbyId = (template: SessionTemplate): SessionTemplate => {
-  const { lobby, ...rest } = template;
-  return lobby ? { ...rest, lobby: { serverId: lobby.serverId } } : rest;
-};
+const openLobbyOf = (serverId: string, lobbyId: string) => useLobbyStore.getState().lobbies[serverId]?.find((entry) => entry.id === lobbyId);
 
 const useLobbyActions = ({ draft, keep, dirty, guard, attemptRun }: LobbyActionDeps) => {
   const startSession = useSessionStart();
@@ -30,9 +30,9 @@ const useLobbyActions = ({ draft, keep, dirty, guard, attemptRun }: LobbyActionD
 
   const close = useCallback(() => guard('close', async () => {
     if (!(await confirmAction(CLOSE_LOBBY))) return;
-    const { lobby } = draft;
-    if (lobby?.lobbyId) await appApi().lobbyClose({ templateId: draft.id, serverId: lobby.serverId, lobbyId: lobby.lobbyId });
-    await keep(withoutLobbyId(draft));
+    const tab = useLiveStore.getState().tabs.find((entry) => entry.sessionId === draft.id);
+    if (tab) await appApi().liveClose(tab.tabId, closeModeOf(openLobbyOf(tab.serverId, tab.lobbyId)));
+    await keep(draft);
     setClosed(true);
   }), [draft, guard, keep]);
 

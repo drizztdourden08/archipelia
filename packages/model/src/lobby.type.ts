@@ -1,5 +1,5 @@
 /* @layer core @kind types */
-import type { GeneratorSettings, HostTarget, ServerSettings, SessionEngine } from './session.type';
+import type { GeneratorSettings, HostTarget, PlayerOrigin, RunSource, ServerSettings, SessionEngine } from './session.type';
 
 type LobbyAdmission = 'open' | 'host-approval';
 
@@ -46,6 +46,10 @@ type WorldUpload = {
   consent?: { allowed: boolean; at: number };
 };
 
+type SlotOrigin = Exclude<PlayerOrigin, 'joined'>;
+
+type LobbySource = Omit<RunSource, 'match'>;
+
 type SlotState = 'uploading' | 'checking' | 'waiting-consent' | 'ok' | 'refused';
 
 type SlotUpload = {
@@ -55,6 +59,7 @@ type SlotUpload = {
   yamlSize: number;
   worldSha256?: string;
   worldVersion?: string;
+  origin?: SlotOrigin;
   state: SlotState;
   reason?: string;
 };
@@ -98,6 +103,7 @@ type Lobby = {
   rev: number;
   engine: SessionEngine;
   options: LobbyOptions;
+  source?: LobbySource;
   members: LobbyMember[];
   worlds: WorldUpload[];
   nextMember: number;
@@ -115,6 +121,6 @@ type AdminWorld = Omit<WorldUpload, 'proof'> & { proofSent: boolean; runsUnconfi
 type AdminLobby = Omit<Lobby, 'members' | 'worlds'> & { members: AdminLobbyMember[]; worlds: AdminWorld[] };
 
 export type {
-  AdminLobby, AdminLobbyMember, AdminWorld, ClientMeta, Lobby, LobbyAdmission, LobbyFailure, LobbyLimits, LobbyMember, LobbyOptions, LobbyPhase, LobbyRoom, LobbyRoomFile,
-  MemberAdmission, SlotState, SlotUpload, TrustLevel, UploadTrust, WorldUpload,
+  AdminLobby, AdminLobbyMember, AdminWorld, ClientMeta, Lobby, LobbyAdmission, LobbyFailure, LobbyLimits, LobbyMember, LobbySource, LobbyOptions, LobbyPhase, LobbyRoom, LobbyRoomFile,
+  MemberAdmission, SlotOrigin, SlotState, SlotUpload, TrustLevel, UploadTrust, WorldUpload,
 };

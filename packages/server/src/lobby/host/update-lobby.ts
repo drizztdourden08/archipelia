@@ -8,6 +8,7 @@ const updateLobby = async (ctx: LobbyContext, lobbyId: string, patch: LobbyPatch
     if (!EDITABLE_PHASES.includes(draft.phase)) throw new Error(`the lobby is ${draft.phase} and cannot change`);
     if (patch.name !== undefined) draft.name = patch.name;
     draft.options = { ...draft.options, ...patch.options };
+    if (patch.source !== undefined) draft.source = patch.source;
   });
   ctx.publish(lobby);
   return lobby;

@@ -1,11 +1,5 @@
 /* @layer core @kind config */
-const ADMISSIONS = ['open', 'host-approval'] as const;
-
-const RELEASE_MODES = ['disabled', 'enabled', 'auto', 'auto-enabled', 'goal'] as const;
-
-const REMAINING_MODES = ['disabled', 'enabled', 'goal'] as const;
-
-const SPOILER_LEVELS = [0, 1, 2, 3] as const;
+import { ADMISSIONS, RELEASE_MODES, REMAINING_MODES, SPOILER_LEVELS } from '@archipelia/model';
 
 const OPTION_KEYS = ['admission', 'allowUnlisted', 'maxSlots', 'room', 'generator', 'server'] as const;
 
@@ -17,7 +11,17 @@ const ROOM_KEYS = { local: ['kind', 'port'], 'archipelago-gg': ['kind', 'baseUrl
 
 const ENGINE_KEYS = ['id', 'ap', 'python'] as const;
 
-const SLOT_RANGE = { min: 1, max: 500 };
+const SOURCE_KEYS = ['sessionId', 'sessionName', 'overrides'] as const;
+
+const OVERRIDE_KEYS = ['field', 'label', 'from', 'to'] as const;
+
+const SLOT_ORIGINS = ['saved', 'added'] as const;
+
+const OVERRIDES_MAX = 100;
+
+const OVERRIDE_TEXT_LIMIT = 1000;
+
+const SLOT_RANGE ={ min: 1, max: 500 };
 
 const PORT_RANGE = { min: 1024, max: 65535 };
 
@@ -28,6 +32,6 @@ const SHUTDOWN_RANGE = { min: 0, max: 525600 };
 const TEXT_LIMIT = 200;
 
 export {
-  ADMISSIONS, ENGINE_KEYS, GENERATOR_KEYS, HINT_RANGE, OPTION_KEYS, PORT_RANGE, RELEASE_MODES, REMAINING_MODES, ROOM_KEYS, SERVER_KEYS, SHUTDOWN_RANGE, SLOT_RANGE,
-  SPOILER_LEVELS, TEXT_LIMIT,
+  ADMISSIONS, ENGINE_KEYS, GENERATOR_KEYS, HINT_RANGE, OPTION_KEYS, OVERRIDE_KEYS, OVERRIDE_TEXT_LIMIT, OVERRIDES_MAX, PORT_RANGE, RELEASE_MODES, REMAINING_MODES, ROOM_KEYS,
+  SERVER_KEYS, SHUTDOWN_RANGE, SLOT_ORIGINS, SLOT_RANGE, SOURCE_KEYS, SPOILER_LEVELS, TEXT_LIMIT,
 };

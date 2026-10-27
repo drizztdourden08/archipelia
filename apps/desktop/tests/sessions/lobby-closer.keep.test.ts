@@ -1,12 +1,10 @@
 /* @layer tests @kind test */
 import { afterEach, describe, expect, test, vi } from 'vitest';
-import type { SessionTemplate } from '@archipelia/model';
 import { createJoinService } from '../../electron/joins/create-join-service';
 import { clientInfo } from '../../electron/joins/client-info';
 import { createLobbyCloser } from '../../electron/sessions/create-lobby-closer';
-import { removeTemplate } from '../../electron/sessions/remove-template';
 import type { LobbyRequest } from '../../src/lobbies/lobbies.type';
-import { newTemplate } from '../../src/views/SessionBuilder/behavior/new-template';
+import type { LiveTab } from '../../src/live/live.type';
 import { lobby } from '../lobbies/lobby-fixtures';
 import { tempFiles } from '../lobbies/temp-files';
 
@@ -18,9 +16,9 @@ afterEach(async () => {
 
 const REF = { templateId: 't1', serverId: 'local', lobbyId: 'lb_1' };
 
-const lanOf = (lobbyId: string): SessionTemplate => ({ ...newTemplate(lobbyId), lan: true, lobby: { serverId: 'local', lobbyId }, direct: { admission: 'host-approval', allowUnlisted: false } });
+const lanOf = (lobbyId: string): LiveTab => ({ tabId: `tab-${lobbyId}`, sessionId: lobbyId, serverId: 'local', lobbyId, overrides: {}, changes: [], lan: true, direct: true, openedAt: 1 });
 
-const setUp = async (failures: number, templates: SessionTemplate[] = []) => {
+const setUp = async (failures: number, tabs: LiveTab[] = []) => {
   const store = await tempFiles('server');
   cleanups.push(store.remove);
   const closed: string[] = [];
@@ -35,7 +33,7 @@ const setUp = async (failures: number, templates: SessionTemplate[] = []) => {
     return Promise.resolve(lobby({ phase: 'closed' }));
   };
   const closer = createLobbyCloser({
-    files: store.files, opsFor: () => Promise.resolve({ act, list: () => Promise.resolve([lobby()]) }), templates: () => Promise.resolve(templates),
+    files: store.files, opsFor: () => Promise.resolve({ act, list: () => Promise.resolve([lobby()]) }), live: () => Promise.resolve(tabs),
     quiet, emit: () => undefined, retryMs: 10, retryMaxMs: 20,
   });
   cleanups.push(closer.stop);
@@ -49,21 +47,13 @@ describe('closing the lobby of a session', () => {
     expect(await closer.list()).toEqual([REF]);
     await vi.waitFor(() => expect(closed).toEqual(['lb_1']));
     await vi.waitFor(async () => expect(await closer.list()).toEqual([]));
-    expect(quiet).toHaveBeenCalledTimes(1);
+    await vi.waitFor(() => expect(quiet).toHaveBeenCalledTimes(1));
   });
 
-  test('stays on the network while another LAN session with direct connections still has its lobby open here', async () => {
+  test('stays on the network while another open tab is a LAN session with direct connections on its lobby here', async () => {
     const { closer, quiet } = await setUp(0, [lanOf('lb_1'), lanOf('lb_2')]);
     expect(await closer.close(REF)).toEqual({ closed: true });
     expect(quiet).not.toHaveBeenCalled();
-  });
-
-  test('closes the lobby of a session that is deleted', async () => {
-    const { closer, closed } = await setUp(0);
-    const remove = vi.fn(() => Promise.resolve());
-    await removeTemplate('t1', { get: () => Promise.resolve(lanOf('lb_1')), remove }, closer.close);
-    expect(closed).toEqual(['lb_1']);
-    expect(remove).toHaveBeenCalledWith('t1');
   });
 });
 
@@ -85,6 +75,8 @@ describe('the joins resumed at start', () => {
     cleanups.push(service.closeAll);
     await service.resumeAll();
     await vi.waitFor(() => expect(tried).toHaveLength(2));
+    const offline = async () => (await service.list()).filter((view) => view.state === 'offline');
+    await vi.waitFor(async () => expect(await offline()).toHaveLength(2));
     const views = await service.list();
     expect(views.filter((view) => view.state === 'offline').map((view) => view.id).sort()).toEqual(['a', 'b']);
     expect(views.find((view) => view.id === 'a')?.message).toContain('tries again');

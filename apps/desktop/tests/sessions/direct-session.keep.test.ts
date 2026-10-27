@@ -9,16 +9,16 @@ import { prepareRun } from '../../electron/sessions/prepare-run';
 import { runSession } from '../../electron/sessions/run-session';
 import { startSession } from '../../electron/sessions/start-session';
 import { syncSession } from '../../electron/sessions/sync-session';
-import { joinRecord, startJoins } from '../lobbies/join-kit';
+import { approvedJoiner, joinRecord, startJoins } from '../lobbies/join-kit';
 import { tempFiles } from '../lobbies/temp-files';
 import type { LobbyRequest, LobbyServerStatus } from '../../src/lobbies/lobbies.type';
 import { launchOf } from '../../src/runs/launch-of';
 import { newTemplate } from '../../src/views/SessionBuilder/behavior/new-template';
+import { actOn, listOn } from '../live/live-kit';
+import { startPlan, syncPlan } from './plan-fixtures';
 import { runAction } from '../../src/views/SessionLobby/behavior/run-action';
 
 type Rig = Awaited<ReturnType<typeof startLobbyRig>>;
-
-const ENGINE = { id: 'ap-0.6.8', ap: '0.6.8', python: '3.12.0' };
 
 const DIRECT = { admission: 'host-approval', allowUnlisted: false } as const;
 
@@ -39,14 +39,9 @@ const sessionOf = (patch: Partial<SessionTemplate> = {}): SessionTemplate => ({
   ...patch,
 });
 
-const actOn = (on: Rig) => async (request: LobbyRequest) => {
-  const params = request.type === 'lobby.create' ? { ...request.params, engine: ENGINE } : request.params;
-  return (await on.call(request.type, params)) as AdminLobby;
-};
-
 const lobbyDeps = (on: Rig) => ({
   act: actOn(on),
-  list: async () => (await on.call('lobby.list')) as AdminLobby[],
+  list: listOn(on),
   slotOf: (player: SessionTemplate['players'][number]) =>
     Promise.resolve({ name: player.name, game: player.game, yaml: player.source.kind === 'yaml' ? player.source.yaml : '', worldVersion: '1.0.0' }),
 });
@@ -54,14 +49,13 @@ const lobbyDeps = (on: Rig) => ({
 const hostSlotNames = (lobby: AdminLobby) => lobby.members.filter((member) => member.kind === 'host').flatMap((member) => member.slots).map((slot) => slot.name);
 
 const started = async (on: Rig, draft: SessionTemplate) => {
-  const lobby = await startSession(draft, lobbyDeps(on));
-  return { lobby, template: { ...draft, lobby: { serverId: 'local', lobbyId: lobby.id } } };
+  const { lobby } = await startSession(startPlan(draft), lobbyDeps(on));
+  return { lobby, template: draft };
 };
 
-const hostHook = (on: Rig, template: SessionTemplate) => async (line: HostLine, bindings: Bindings) => {
-  const lobbyId = template.lobby?.lobbyId ?? '';
+const hostHook = (on: Rig, template: SessionTemplate, lobbyId: string) => async (line: HostLine, bindings: Bindings) => {
   if (line.action === 'approve') await actOn(on)({ type: 'member.approve', params: { lobbyId, memberId: String(bindings.member) } });
-  if (line.action === 'start') await runSession(template, lobbyDeps(on));
+  if (line.action === 'start') await runSession(syncPlan(template, lobbyId), lobbyDeps(on));
 };
 
 describe('a session that takes direct connections', () => {
@@ -72,7 +66,7 @@ describe('a session that takes direct connections', () => {
     expect(lobby).toMatchObject({ name: 'Friday seed', phase: 'open', options: { admission: 'host-approval', allowUnlisted: false, room: { kind: 'archipelago-gg' } } });
     const client = createFakeClient({
       scenario: loadScenario('approval-join'), kit: createScenarioKit(), ignore: ['lobby.state'], timeoutMs: 15000,
-      connect: () => connectWebSocket(`ws://${on.address}/archipelia/lobby`), host: hostHook(on, { ...template, players: sessionOf().players }),
+      connect: () => connectWebSocket(`ws://${on.address}/archipelia/lobby`), host: hostHook(on, { ...template, players: sessionOf().players }, lobby.id),
     });
     const result = await client.play();
     expect(result.failure).toBeUndefined();
@@ -85,9 +79,9 @@ describe('a session that takes direct connections', () => {
 
   test('refuses a second run on a lobby that already ran, and names the way out', async () => {
     rig = await startLobbyRig();
-    const { template } = await started(rig, sessionOf({ direct: DIRECT }));
-    await runSession(template, lobbyDeps(rig));
-    await expect(runSession(template, lobbyDeps(rig))).rejects.toThrow('Start session opens a new one');
+    const { lobby, template } = await started(rig, sessionOf({ direct: DIRECT }));
+    await runSession(syncPlan(template, lobby.id), lobbyDeps(rig));
+    await expect(runSession(syncPlan(template, lobby.id), lobbyDeps(rig))).rejects.toThrow('Start session opens a new one');
   });
 
   test('opens the lobby with no player and makes no seed, reuses it on the next start, and refuses Run until a player is ready', async () => {
@@ -97,9 +91,9 @@ describe('a session that takes direct connections', () => {
     const { lobby, template } = await started(on, draft);
     expect(lobby.phase).toBe('open');
     expect(on.templates).toHaveLength(0);
-    expect(await startSession(template, lobbyDeps(on))).toMatchObject({ id: lobby.id });
-    await expect(runSession(template, lobbyDeps(on))).rejects.toThrow('No player is ready yet');
-    await expect(runSession(draft, lobbyDeps(on))).rejects.toThrow('This session is not started yet');
+    expect(await startSession(startPlan(template, lobby.id), lobbyDeps(on))).toMatchObject({ lobbyId: lobby.id });
+    await expect(runSession(syncPlan(template, lobby.id), lobbyDeps(on))).rejects.toThrow('No player is ready yet');
+    await expect(runSession(syncPlan(draft, 'gone'), lobbyDeps(on))).rejects.toThrow('The lobby of this session is gone');
     expect(on.templates).toHaveLength(0);
   });
 });
@@ -111,13 +105,13 @@ describe('a session without direct connections', () => {
     const sent: LobbyRequest[] = [];
     const deps = { ...lobbyDeps(on), act: (request: LobbyRequest) => { sent.push(request); return actOn(on)(request); } };
     const beforeRun = vi.fn(() => Promise.resolve());
-    const lobby = await startSession(sessionOf({ host: { kind: 'local', port: 38281 } }), deps);
+    const { lobby } = await startSession(startPlan(sessionOf({ host: { kind: 'local', port: 38281 } })), deps);
     expect(sent[0]).toMatchObject({ type: 'lobby.create', params: { locked: true } });
     expect(sent.map((request) => request.type)).not.toContain('lobby.lock');
     expect(lobby.phase).toBe('locked');
     expect(hostSlotNames(lobby)).toEqual(['Ana']);
-    const template = sessionOf({ host: { kind: 'local', port: 38281 }, lobby: { serverId: 'local', lobbyId: lobby.id } });
-    await runSession(template, { ...lobbyDeps(on), beforeRun });
+    const template = sessionOf({ host: { kind: 'local', port: 38281 } });
+    await runSession(syncPlan(template, lobby.id), { ...lobbyDeps(on), beforeRun });
     expect(beforeRun).toHaveBeenCalledWith(lobby.id, template);
     await vi.waitFor(() => expect(on.templates).toHaveLength(1));
     expect(on.templates[0]?.players.map((player) => player.name)).toEqual(['Ana']);
@@ -155,7 +149,7 @@ describe('the slots of the host in a session that takes direct connections', () 
     const on = rig;
     const draft = sessionOf({ direct: { admission: 'open', allowUnlisted: true }, players: [{ slot: 1, name: 'Cy', game: 'Quest', source: { kind: 'yaml', fileName: 'cy.yaml', yaml: CY_YAML } }] });
     const { lobby, template } = await started(on, draft);
-    await syncSession(template, lobbyDeps(on));
+    await syncSession(syncPlan(template, lobby.id), lobbyDeps(on));
     const store = await tempFiles('joins');
     const joins = startJoins(store.files, '0.6.8');
     await joins.service.start(await joinRecord(on.address, lobby.code));
@@ -163,7 +157,7 @@ describe('the slots of the host in a session that takes direct connections', () 
     expect(failed.message).toContain('slot name Cy');
     joins.service.closeAll();
     await store.remove();
-    await runSession(template, lobbyDeps(on));
+    await runSession(syncPlan(template, lobby.id), lobbyDeps(on));
     await vi.waitFor(() => expect(on.templates).toHaveLength(1));
     expect(on.templates[0]?.players.map((player) => player.name)).toEqual(['Cy']);
   }, 30000);
@@ -174,15 +168,10 @@ describe('turning direct connections off on a lobby with joined players', () => 
     rig = await startLobbyRig();
     const on = rig;
     const { lobby, template } = await started(on, sessionOf({ direct: { admission: 'host-approval', allowUnlisted: true }, players: [] }));
-    const store = await tempFiles('joins');
-    const joins = startJoins(store.files, '0.6.8');
-    await joins.service.start(await joinRecord(on.address, lobby.code));
-    await joins.until((view) => view.state === 'pending');
-    const joinedId = (await on.service.get(lobby.id))?.members.find((member) => member.kind === 'client')?.id ?? '';
-    await actOn(on)({ type: 'member.approve', params: { lobbyId: lobby.id, memberId: joinedId } });
-    const closed = await syncSession({ ...template, direct: undefined, players: sessionOf().players }, lobbyDeps(on));
-    joins.service.closeAll();
-    await store.remove();
+    const joiner = await approvedJoiner(on, lobby);
+    const { joinedId } = joiner;
+    const closed = await syncSession(syncPlan({ ...template, direct: undefined, players: sessionOf().players }, lobby.id), lobbyDeps(on));
+    await joiner.close();
     expect(closed.phase).toBe('locked');
     expect(closed.members.find((member) => member.id === joinedId)?.admission).toBe('removed');
     expect(hostSlotNames(closed)).toEqual(['Ana']);

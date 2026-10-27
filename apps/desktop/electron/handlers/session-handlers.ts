@@ -1,30 +1,19 @@
 /* @layer electron-main @kind logic */
 import type { HandlerGroup } from '@drizztdourden08/brock-electron/main';
 import { assertSafeName } from '@drizztdourden08/brock-core/storage';
-import type { SessionTemplate } from '@archipelia/model';
 import { APP_CHANNELS } from '../../src/ipc/contract.constants';
 import { runJobId } from '@archipelia/model';
-import { lobbyServerOf } from '../../src/lobbies/lobby-server-of';
-import { hostSlotOf } from '../sessions/host-slot-of';
-import { openToNetwork } from '../sessions/open-to-network';
-import { prepareRun } from '../sessions/prepare-run';
-import { runSession } from '../sessions/run-session';
-import { startSession } from '../sessions/start-session';
 
 const sessionHandlers: HandlerGroup = {
   id: 'archipelia-sessions',
   register: (ctx) => {
-    const { admins, installed, lobbyPasswords, lobbyServer, presets, runJobs, runs, sessionFiles, sessions, setLanRoom } = ctx.services;
-    const beforeOpen = openToNetwork(lobbyServer);
-    const beforeRun = prepareRun({ server: lobbyServer, setLanRoom, sharePassword: lobbyPasswords.share });
+    const { live, runJobs, runs, sessionFiles, sessions } = ctx.services;
     ctx.handle(APP_CHANNELS.sessionsList, () => runs.newest());
     ctx.handle(APP_CHANNELS.sessionsRun, (_event, template) => sessions.run(template));
-    const lobbyDeps = async (template: SessionTemplate) => {
-      const ops = await admins.opsFor(lobbyServerOf(template));
-      return { act: ops.act, list: ops.list, slotOf: hostSlotOf(installed, presets), beforeOpen, beforeRun };
-    };
-    ctx.handle(APP_CHANNELS.sessionsStart, async (_event, template) => startSession(template, await lobbyDeps(template)));
-    ctx.handle(APP_CHANNELS.sessionsRunLobby, async (_event, template) => runSession(template, await lobbyDeps(template)));
+    ctx.handle(APP_CHANNELS.sessionsStart, (_event, sessionId, overrides) => live.start(sessionId, overrides));
+    ctx.handle(APP_CHANNELS.sessionsRunLobby, (_event, tabId) => live.run(tabId));
+    ctx.handle(APP_CHANNELS.liveList, () => live.list());
+    ctx.handle(APP_CHANNELS.liveClose, (_event, tabId, mode) => live.close(tabId, mode));
     ctx.handle(APP_CHANNELS.sessionsStop, (_event, id) => sessions.stop(id));
     ctx.handle(APP_CHANNELS.sessionsCancel, (_event, id) => sessions.cancel(id));
     ctx.handle(APP_CHANNELS.sessionsCommand, (_event, id, cmd) => sessions.command(id, cmd));
