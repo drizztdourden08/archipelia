@@ -1,6 +1,7 @@
 /* @layer renderer-app @kind component */
 import { useMemo } from 'react';
 import { Box, Button, Callout, EmptyState, Stack, Text } from '@drizztdourden08/tessera/primitives';
+import { TOUR_TARGET } from '../../hooks/tour-targets.constants';
 import { useHome } from './behavior/useHome';
 import { engineLine } from './behavior/engine-line';
 import { heroActions } from './behavior/hero-actions';
@@ -30,7 +31,7 @@ const HomeView = ({ slots }: HomeViewProps) => {
       <Facts rows={facts} />
       <Aside>
         {home.firstRun ? <SetupChecklist steps={home.steps} onStep={home.act} /> : (
-          <Stack gap="sm">
+          <Stack gap="sm" data-tour={TOUR_TARGET.homeAside}>
             <Text variant="label">Recent runs</Text>
             {home.error && <Box role="alert"><Callout tone="danger">{home.error}</Callout></Box>}
             {home.recent.length === 0

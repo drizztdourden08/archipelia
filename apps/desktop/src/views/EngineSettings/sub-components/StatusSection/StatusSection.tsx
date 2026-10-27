@@ -3,6 +3,7 @@ import { SettingActions } from '@drizztdourden08/brock-react';
 import { SettingsSection } from '@drizztdourden08/tessera/composites';
 import { Button, Flex, Icon, ProgressBar, Stack, StatRow, Status, Text } from '@drizztdourden08/tessera/primitives';
 import { ErrorCallout } from '@archipelia/design';
+import { TOUR_TARGET } from '../../../../hooks/tour-targets.constants';
 import { openEngineFolder } from '../../behavior/open-engine-folder';
 import { SECTION_TEXT } from '../../EngineSettings.constants';
 import type { StatusSectionProps } from './StatusSection.type';
@@ -10,7 +11,7 @@ import type { StatusSectionProps } from './StatusSection.type';
 const StatusSection = ({ state, progress, apVersion, dir, openable, failure, actions }: StatusSectionProps) => (
   <SettingsSection id="status" title={SECTION_TEXT.status.title} description={SECTION_TEXT.status.description}>
     <Stack>
-      <Stack gap="xs" data-tour="engine-status">
+      <Stack gap="xs" data-tour={TOUR_TARGET.engineStatus}>
         <Status tone={state.tone}>{state.label}</Status>
         {progress && <ProgressBar value={progress.percent} label="Engine setup" showValue live />}
         {progress && <Text variant="caption">{progress.step}</Text>}

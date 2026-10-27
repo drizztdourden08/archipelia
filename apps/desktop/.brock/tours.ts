@@ -2,7 +2,7 @@
 import { lazyTour, toursFromFiles } from '@drizztdourden08/brock-react';
 
 const appTours = toursFromFiles([
-  { id: 'welcome', tour: lazyTour({"title":"Welcome to Archipelia","description":"Four steps from a fresh install to your first hosted multiworld.","trigger":"first-run"}, () => import('../src/tours/welcome.tour')) },
+  { id: 'welcome', tour: lazyTour({"title":"Welcome to Archipelia","description":"A walk through every part of Archipelia, from the engine to your first hosted multiworld.","trigger":"first-run"}, () => import('../src/tours/welcome.tour')) },
 ]);
 
 export { appTours };

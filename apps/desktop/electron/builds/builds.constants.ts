@@ -19,8 +19,6 @@ const BUILD_JOBS: readonly SourceBuildJob[] = ['venv', 'tools', 'crates', 'wheel
 
 const BUILD_ALLOW = { env: ['PATH'] } as const;
 
-const MAX_BUILD_LINES = 4000;
-
 const TOOL_ELEVATIONS: readonly SourceToolElevation[] = ['none', 'system'];
 
 const TOOL_LABEL: Record<SourceToolElevation, string> = {
@@ -32,4 +30,6 @@ const TOOL_TIMEOUT_MS: Record<SourceToolElevation, number> = { none: 30 * 60 * 1
 
 const TOOL_SUCCESS_CODES: readonly number[] = [0, 3010];
 
-export { BUILD_ALLOW, BUILD_JOBS, BUILD_LABEL, BUILD_TIMEOUT_MS, MAX_BUILD_LINES, TOOL_ELEVATIONS, TOOL_LABEL, TOOL_SUCCESS_CODES, TOOL_TIMEOUT_MS };
+const TOOL_DETACHED = 'The installer may still be running. Wait for it to end, then click Check again.';
+
+export { BUILD_ALLOW, BUILD_JOBS, BUILD_LABEL, BUILD_TIMEOUT_MS, TOOL_DETACHED, TOOL_ELEVATIONS, TOOL_LABEL, TOOL_SUCCESS_CODES, TOOL_TIMEOUT_MS };

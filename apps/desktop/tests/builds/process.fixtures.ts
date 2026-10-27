@@ -11,7 +11,6 @@ type Stored = {
   allow: unknown;
   parse: (raw: unknown) => unknown;
   resolve: (raw: unknown) => unknown;
-  progress: (line: string) => void;
 };
 
 const fakeProcesses = (outcome: ProcessJobOutcome = { status: 'done', exitCode: 0, tail: [] }) => {
@@ -25,7 +24,6 @@ const fakeProcesses = (outcome: ProcessJobOutcome = { status: 'done', exitCode: 
       allow: def.allow,
       parse: def.parse,
       resolve: (raw) => def.resolve(def.parse(raw), undefined as never),
-      progress: (line) => { def.progress?.(line, 'stdout'); },
     });
   };
   const start = vi.fn<ProcessJobs['start']>(() => Promise.resolve(outcome));

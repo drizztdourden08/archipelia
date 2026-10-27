@@ -1,5 +1,6 @@
 /* @layer renderer-app @kind component */
 import { Stack } from '@drizztdourden08/tessera/primitives';
+import { TOUR_TARGET } from '../../../../hooks/tour-targets.constants';
 import { useConnectedCount } from '../../../../hooks/useConnectedCount';
 import { LobbyMembers } from '../../../LobbyMembers';
 import { sourcesOf } from '../../behavior/player-sources';
@@ -14,7 +15,7 @@ const PlayersPane = ({ screen }: PlayersPaneProps) => {
   const { lobby } = draft;
   const joined = draft.direct && lobby?.lobbyId ? <LobbyMembers serverId={lobby.serverId} lobbyId={lobby.lobbyId} /> : undefined;
   return (
-    <Stack gap="md">
+    <Stack gap="md" data-tour={TOUR_TARGET.lobbyPlayers}>
       <PlayersCard
         players={draft.players}
         installed={screen.installed}

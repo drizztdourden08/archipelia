@@ -171,7 +171,6 @@ const TOOL_TEXT = {
   license: (name: string) => `Clicking Install accepts the ${name}.`,
   licenseLink: 'Read the licence',
   action: 'Install',
-  uncancellable: 'Once the system installer has started, it cannot be stopped from here.',
   installing: (what: string) => `Installing ${what}. Archipelia checks again when it ends.`,
   distro: (name: string) => `Detected system: ${name}`,
 } as const;

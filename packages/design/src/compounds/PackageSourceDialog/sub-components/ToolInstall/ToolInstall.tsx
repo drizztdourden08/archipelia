@@ -18,7 +18,6 @@ const ToolInstall = ({ build, tool, onToolInstall, onOpenLink }: ToolInstallProp
         {tool.distro && <Text variant="caption" tone="dim">{TOOL_TEXT.distro(tool.distro)}</Text>}
         {install.elevation === 'system' && <Text>{TOOL_ELEVATION_TEXT[tool.os]}</Text>}
         <Text variant="caption" tone="dim">{TOOL_TEXT.never}</Text>
-        {install.elevation === 'system' && <Text variant="caption" tone="dim">{TOOL_TEXT.uncancellable}</Text>}
         {install.restart && <Text variant="caption" tone="dim">{TOOL_TEXT.restart}</Text>}
       </Stack>
       {install.license && (
