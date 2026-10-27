@@ -1,8 +1,7 @@
 /* @layer renderer-app @kind config */
 import type { TourStepDef } from '@drizztdourden08/brock-react';
 import { ROUTE } from '../hooks/app-navigation.constants';
-import { resetScreens } from '../hooks/reset-screens';
-import { TOUR_PART, TOUR_RAIL, TOUR_ROUTE, TOUR_SCOPE, TOUR_TARGET } from '../hooks/tour-targets.constants';
+import { TOUR_PART, TOUR_RAIL, TOUR_ROUTE, TOUR_TARGET } from '../hooks/tour-targets.constants';
 
 const LIBRARY_STEPS: readonly TourStepDef[] = [
   {
@@ -20,7 +19,7 @@ const LIBRARY_STEPS: readonly TourStepDef[] = [
     target: TOUR_PART.page,
     mascot: 'curious',
     open: TOUR_ROUTE.games,
-    before: resetScreens(TOUR_SCOPE.games),
+    reset: true,
   },
   {
     id: 'games-tabs',
@@ -53,7 +52,7 @@ const LIBRARY_STEPS: readonly TourStepDef[] = [
     target: TOUR_PART.page,
     mascot: 'idea',
     open: ROUTE.presets,
-    before: resetScreens(TOUR_SCOPE.presets),
+    reset: true,
   },
 ];
 

@@ -14,7 +14,7 @@ const ToolRunning = ({ dialog, wizard, view }: StepBodyProps) => {
   if (stage?.kind !== 'building') return <Text>{STEP_TEXT.toolDone}</Text>;
   const cancel = () => {
     dialog.onBuildCancel();
-    wizard.goTo('tools');
+    wizard.goTo('tools', { force: true });
   };
   return <BuildRunning text={STEP_TEXT.buildBusy(dialog.module)} buildLog={dialog.buildLog} onCancel={dialog.finish.kind === 'idle' ? cancel : undefined} />;
 };
