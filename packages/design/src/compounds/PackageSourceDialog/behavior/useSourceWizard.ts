@@ -1,6 +1,5 @@
 /* @layer renderer-app @kind hook */
 import { useWizard } from '@drizztdourden08/tessera/composites';
-import type { WizardApi } from '@drizztdourden08/tessera/composites';
 import type { PackageSourceDialogProps, SourceValues } from '../PackageSourceDialog.type';
 import { FINISHED, INITIAL_VALUES } from './source-values.constants';
 import { sourceSteps } from './source-steps';
@@ -17,13 +16,7 @@ const useSourceWizard = (props: PackageSourceDialogProps): SourceWizard => {
   });
   const view = sourceView(props, wizard.values);
   useAdvance(wizard, { props, view });
-  const shown: WizardApi<SourceValues> = {
-    ...wizard,
-    dirty: false,
-    busy: wizard.busy || view.running,
-    canGoTo: (id) => !view.running && wizard.canGoTo(id),
-  };
-  return { wizard: shown, view };
+  return { wizard: { ...wizard, dirty: false }, view };
 };
 
 export { useSourceWizard };

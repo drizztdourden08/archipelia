@@ -21,36 +21,26 @@ const TOUR_ROUTE = {
   hosting: 'multiworld/hosting',
 } as const;
 
-const TOUR_SCOPE = {
-  sessions: 'multiworld/sessions',
-  games: 'multiworld/games',
-  presets: 'multiworld/presets',
-  servers: 'multiworld/servers',
-  hosting: 'multiworld/hosting',
-} as const;
-
 const SCREEN_LAYER = '.screen-layer:not(.screen-layer--hidden)';
 
-const RAIL_ENTRY = `${SCREEN_LAYER} nav.side-nav .side-nav__item`;
-
 const TOUR_RAIL = {
-  sessions: { selector: `${RAIL_ENTRY}[aria-label="Sessions"]` },
-  games: { selector: `${RAIL_ENTRY}[aria-label="Games"]` },
-  presets: { selector: `${RAIL_ENTRY}[aria-label="Presets"]` },
-  servers: { selector: `${RAIL_ENTRY}[aria-label="Servers"]` },
-  hosting: { selector: `${RAIL_ENTRY}[aria-label="Hosting"]` },
-  engine: { selector: `${RAIL_ENTRY}[aria-label="Engine"]` },
+  sessions: { shell: 'rail', entry: 'Sessions' },
+  games: { shell: 'rail', entry: 'Games' },
+  presets: { shell: 'rail', entry: 'Presets' },
+  servers: { shell: 'rail', entry: 'Servers' },
+  hosting: { shell: 'rail', entry: 'Hosting' },
+  engine: { shell: 'rail', entry: 'Engine' },
 } as const;
 
 const TOUR_PART = {
-  menuPanel: { selector: '[role="menu"]:not(.dropdown-menu--sub)' },
-  newSession: { selector: `${SCREEN_LAYER} .header-actions .btn--primary` },
-  back: { selector: `${SCREEN_LAYER} .content-header__back` },
+  menuPanel: { shell: 'menu-panel' },
+  menuHome: { menuEntry: 'Home' },
+  newSession: { shell: 'primary' },
+  back: { shell: 'back' },
   page: { selector: `${SCREEN_LAYER} :is(.screen-page, .hub-bare-page, .hero)` },
-  rail: { selector: `${SCREEN_LAYER} nav.side-nav` },
+  rail: { shell: 'rail' },
   hero: { shell: 'hero' },
   tabs: { shell: 'tabs' },
-  gamesStatus: { selector: 'section[aria-label="Games status"]' },
 } as const;
 
-export { NEW_PRESET_TOUR, TOUR_PART, TOUR_RAIL, TOUR_ROUTE, TOUR_SCOPE, TOUR_TARGET };
+export { NEW_PRESET_TOUR, TOUR_PART, TOUR_RAIL, TOUR_ROUTE, TOUR_TARGET };

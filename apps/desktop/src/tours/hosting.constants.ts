@@ -1,8 +1,7 @@
 /* @layer renderer-app @kind config */
 import type { TourStepDef } from '@drizztdourden08/brock-react';
 import { ROUTE } from '../hooks/app-navigation.constants';
-import { resetScreens } from '../hooks/reset-screens';
-import { TOUR_PART, TOUR_RAIL, TOUR_ROUTE, TOUR_SCOPE, TOUR_TARGET } from '../hooks/tour-targets.constants';
+import { TOUR_PART, TOUR_RAIL, TOUR_ROUTE, TOUR_TARGET } from '../hooks/tour-targets.constants';
 
 const HOSTING_STEPS: readonly TourStepDef[] = [
   {
@@ -20,7 +19,7 @@ const HOSTING_STEPS: readonly TourStepDef[] = [
     target: TOUR_PART.page,
     mascot: 'curious',
     open: ROUTE.archipeliaServers,
-    before: resetScreens(TOUR_SCOPE.servers),
+    reset: true,
   },
   {
     id: 'servers-local',
@@ -45,7 +44,7 @@ const HOSTING_STEPS: readonly TourStepDef[] = [
     target: TOUR_PART.page,
     mascot: 'idea',
     open: TOUR_ROUTE.hosting,
-    before: resetScreens(TOUR_SCOPE.hosting),
+    reset: true,
   },
 ];
 
