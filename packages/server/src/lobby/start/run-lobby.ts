@@ -11,6 +11,8 @@ import { hostLobby } from './host-lobby';
 import { lobbyTemplate } from './lobby-template';
 import { participantWorlds } from './participant-worlds';
 import { participants } from './participants';
+import { runRecordOf } from './run-record-of';
+import type { Participant } from './start.type';
 
 const overlayWorlds = (ctx: LobbyContext, lobby: Lobby, owned: WorldUpload[]): Promise<OverlayWorld[]> =>
   Promise.all(owned.map(async ({ module, sha256 }) => {
@@ -19,10 +21,10 @@ const overlayWorlds = (ctx: LobbyContext, lobby: Lobby, owned: WorldUpload[]): P
     return { module, sha256, bytes };
   }));
 
-const lobbyRun = async (ctx: LobbyContext, lobby: Lobby, engine: EngineRuntime, owned: WorldUpload[]): Promise<LobbyRun> => {
+const lobbyRun = async (ctx: LobbyContext, lobby: Lobby, engine: EngineRuntime, { owned, players }: { owned: WorldUpload[]; players: Participant[] }): Promise<LobbyRun> => {
   const worlds = await overlayWorlds(ctx, lobby, owned);
   const overlay = await ctx.deps.overlay({ lobbyId: lobby.id, dir: `${ctx.deps.store.dir(lobby.id)}/${OVERLAY_DIR}`, runtime: engine, worlds });
-  const run = { lobbyId: lobby.id, worlds: owned.map(({ game, sha256 }) => ({ game, sha256 })), runtime: overlay, timeoutMs: GENERATE_TIMEOUT_MS };
+  const run = { lobbyId: lobby.id, worlds: owned.map(({ game, sha256 }) => ({ game, sha256 })), runtime: overlay, timeoutMs: GENERATE_TIMEOUT_MS, ...runRecordOf(lobby, players) };
   if (!owned.some((world) => world.trust.level === 'unlisted')) return run;
   const readOnly = [pythonHome(engine)];
   const sandbox = await ctx.deps.sandbox();
@@ -37,7 +39,7 @@ const generateAndHost = async (ctx: LobbyContext, lobby: Lobby) => {
   if (!runtime) return failLobby(ctx, lobby.id, { stage: 'generate', message: `Archipelago ${lobby.engine.ap} is not installed on this server.` });
   const players = participants(lobby);
   const owned = await participantWorlds(ctx, lobby, players);
-  const run = await lobbyRun(ctx, lobby, runtime, owned);
+  const run = await lobbyRun(ctx, lobby, runtime, { owned, players });
   const template = await lobbyTemplate(ctx, lobby, players);
   const session = await ctx.deps.runner.run(template, run);
   if (session.status === 'hosting') return hostLobby(ctx, lobby.id, session, players);

@@ -1,12 +1,17 @@
 /* @layer renderer-app @kind logic */
-import type { SessionTemplate } from '@archipelia/model';
+import type { LobbySource, SessionTemplate } from '@archipelia/model';
 import type { HostPlayerSlot, LobbyRequest } from './lobbies.type';
 import { sessionLobby } from './session-lobby';
 
 const lobbyRequest = {
-  open: (template: SessionTemplate): LobbyRequest => ({ type: 'lobby.create', params: { ...sessionLobby(template), ...(template.direct ? {} : { locked: true }) } }),
-  update: (lobbyId: string, template: SessionTemplate): LobbyRequest => ({ type: 'lobby.update', params: { lobbyId, ...sessionLobby(template) } }),
+  open: (template: SessionTemplate, source?: LobbySource): LobbyRequest => ({
+    type: 'lobby.create', params: { ...sessionLobby(template), ...(source ? { source } : {}), ...(template.direct ? {} : { locked: true }) },
+  }),
+  update: (lobbyId: string, template: SessionTemplate, source?: LobbySource): LobbyRequest => ({
+    type: 'lobby.update', params: { lobbyId, ...sessionLobby(template), ...(source ? { source } : {}) },
+  }),
   lock: (lobbyId: string): LobbyRequest => ({ type: 'lobby.lock', params: { lobbyId } }),
+  unlock: (lobbyId: string): LobbyRequest => ({ type: 'lobby.unlock', params: { lobbyId } }),
   start: (lobbyId: string): LobbyRequest => ({ type: 'lobby.start', params: { lobbyId } }),
   close: (lobbyId: string): LobbyRequest => ({ type: 'lobby.close', params: { lobbyId } }),
   stopRoom: (lobbyId: string): LobbyRequest => ({ type: 'room.stop', params: { lobbyId } }),

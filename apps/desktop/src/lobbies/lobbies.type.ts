@@ -1,5 +1,5 @@
 /* @layer renderer-app @kind types */
-import type { AdminLobby, SessionEngine } from '@archipelia/model';
+import type { AdminLobby, SessionEngine, SlotOrigin } from '@archipelia/model';
 import type { ReachStatus } from '@archipelia/server';
 import type { LanServer, NetworkMode } from '@archipelia/server/network';
 import type { LOBBY_REQUESTS } from './lobbies.constants';
@@ -63,7 +63,7 @@ type LobbyProbe = {
   games?: string[];
 };
 
-type HostPlayerSlot = { name: string; game: string; yaml: string; worldVersion: string };
+type HostPlayerSlot = { name: string; game: string; yaml: string; worldVersion: string; origin?: SlotOrigin };
 
 export type {
   HostPlayerSlot, JoinAddress, LanEntry, LobbyEvent, LobbyProbe, LobbyRequest, LobbyReviewHost, LobbyReviewPlay, LobbyServerOptions, LobbyServerState,

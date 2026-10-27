@@ -29,9 +29,9 @@ const createLobbyCloser = (deps: CloserDeps) => {
     }
   };
 
-  const quietIfIdle = async (ref: PendingClose) => {
-    if (ref.serverId !== LOCAL_SERVER) return;
-    const still = (await deps.templates()).some(({ lan, lobby, direct }) => lan === true && direct !== undefined && lobby?.serverId === LOCAL_SERVER && lobby.lobbyId !== undefined && lobby.lobbyId !== ref.lobbyId);
+  const quietIfIdle = async (ref?: PendingClose) => {
+    if (ref && ref.serverId !== LOCAL_SERVER) return;
+    const still = (await deps.live()).some((tab) => tab.lan && tab.direct && tab.serverId === LOCAL_SERVER && tab.lobbyId !== ref?.lobbyId);
     if (!still) await deps.quiet();
   };
 
@@ -54,6 +54,7 @@ const createLobbyCloser = (deps: CloserDeps) => {
 
   return {
     list,
+    quietIfIdle,
     close: async (ref: PendingClose) => {
       await change((pending) => [...pending.filter((entry) => !same(entry, ref)), ref]);
       return { closed: await settle(ref) };

@@ -20,8 +20,10 @@ const startLobbyRig = async () => {
   const domains = createNodeDomains(dataDir);
   const output = domains.domain('sessions');
   const templates: SessionTemplate[] = [];
+  const lobbyRuns: LobbyRun[] = [];
   const run = async (template: SessionTemplate, lobby: LobbyRun): Promise<Session> => {
     templates.push(template);
+    lobbyRuns.push(lobby);
     const id = `rig-${templates.length}`;
     await output.writeBytes(`${id}/output/${RIG_ZIP}`, zipSync({ 'AP_1234.archipelago': new Uint8Array([1]) }));
     const generating: Session = { id, snapshot: template, status: 'generating', createdAt: 0, lobbyId: lobby.lobbyId, worlds: lobby.worlds };
@@ -43,7 +45,7 @@ const startLobbyRig = async () => {
     await listener.stop();
     await rm(dataDir, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 });
   };
-  return { service, call, templates, address: `${RIG_HOST}:${listener.port}`, stop };
+  return { service, call, templates, lobbyRuns, address: `${RIG_HOST}:${listener.port}`, stop };
 };
 
 export { startLobbyRig };

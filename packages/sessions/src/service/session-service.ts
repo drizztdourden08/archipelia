@@ -5,6 +5,7 @@ import { newId } from '@drizztdourden08/brock-core/storage';
 import type { LiveSession, ServiceDeps } from './service-deps.type';
 import type { LobbyRun } from './lobby-run.type';
 import { lobbyEngines } from './lobby-engines';
+import { startedRun } from './started-run';
 import { produceSession } from './produce-session';
 import { hostSession } from './host-session';
 import { sessionEngineOf } from '../engine/session-engine-of';
@@ -23,8 +24,7 @@ const createSessionService = (deps: ServiceDeps) => {
   };
 
   const run = async (template: SessionTemplate, outer?: AbortSignal, lobby?: LobbyRun) => {
-    const origin = lobby ? { lobbyId: lobby.lobbyId, worlds: lobby.worlds } : {};
-    let session = await update({ id: newId(), templateId: template.id, snapshot: template, status: 'generating', createdAt: Date.now(), ...origin }, {});
+    let session = await update(startedRun(template, lobby, newId(), Date.now()), {});
     const controller = new AbortController();
     pending.set(session.id, controller);
     const signal = outer ? AbortSignal.any([outer, controller.signal]) : controller.signal;

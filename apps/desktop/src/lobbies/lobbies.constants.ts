@@ -10,7 +10,7 @@ const CLOSED_DOOR: DirectConnection = { admission: 'host-approval', allowUnliste
 const CONNECTED_ADMISSIONS: readonly MemberAdmission[] = ['pending', 'approved'];
 
 const LOBBY_REQUESTS = [
-  'lobby.create', 'lobby.update', 'lobby.lock', 'lobby.close', 'lobby.start', 'member.approve', 'member.refuse', 'member.remove', 'member.host', 'world.consent', 'room.stop',
+  'lobby.create', 'lobby.update', 'lobby.lock', 'lobby.unlock', 'lobby.close', 'lobby.start', 'member.approve', 'member.refuse', 'member.remove', 'member.host', 'world.consent', 'room.stop',
 ] as const;
 
 const INITIAL_NETWORK_MODE: NetworkMode = 'off';

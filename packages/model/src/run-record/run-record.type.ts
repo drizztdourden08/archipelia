@@ -1,4 +1,5 @@
 /* @layer core @kind types */
+import type { LobbySource } from '../lobby.type';
 import type { RunMember, RunPlayer, SessionPlayer, SessionStatus, SessionTemplate } from '../session.type';
 
 type OverrideField = { field: string; label: string; read: (template: SessionTemplate) => string };
@@ -13,6 +14,7 @@ type RunBuild = {
   saved: SessionTemplate;
   used: SessionTemplate;
   players: RunPlayer[];
+  source?: LobbySource;
   status?: SessionStatus;
 };
 

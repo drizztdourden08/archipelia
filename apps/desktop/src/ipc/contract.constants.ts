@@ -13,6 +13,7 @@ import type {
   LanEntry, LobbyEvent, LobbyProbe, LobbyRequest, LobbyReviewHost, LobbyReviewPlay, LobbyServerOptions, LobbyServerStatus, LobbyServerTest, LobbyServerView, PendingClose,
 } from '../lobbies/lobbies.type';
 import type { JoinRequest, JoinView } from '../joins/joins.type';
+import type { LiveCloseMode, LiveStart, LiveTab, SessionOverrides } from '../live/live.type';
 
 const APP_CHANNELS = defineChannels({
   engineStatus: invoke<() => Promise<EngineStatus>>()('ap:engine:status'),
@@ -51,8 +52,10 @@ const APP_CHANNELS = defineChannels({
   templatesRemove: invoke<(id: string) => Promise<void>>()('ap:templates:remove'),
   sessionsList: invoke<() => Promise<Session[]>>()('ap:sessions:list'),
   sessionsRun: invoke<(template: SessionTemplate) => Promise<Session>>()('ap:sessions:run'),
-  sessionsStart: invoke<(template: SessionTemplate) => Promise<AdminLobby>>()('ap:sessions:start'),
-  sessionsRunLobby: invoke<(template: SessionTemplate) => Promise<AdminLobby>>()('ap:sessions:runLobby'),
+  sessionsStart: invoke<(sessionId: string, overrides?: SessionOverrides) => Promise<LiveStart>>()('ap:sessions:start'),
+  sessionsRunLobby: invoke<(tabId: string) => Promise<AdminLobby>>()('ap:sessions:runLobby'),
+  liveList: invoke<() => Promise<LiveTab[]>>()('ap:live:list'),
+  liveClose: invoke<(tabId: string, mode: LiveCloseMode) => Promise<{ closed: boolean }>>()('ap:live:close'),
   sessionsStop: invoke<(id: string) => Promise<Session | undefined>>()('ap:sessions:stop'),
   sessionsCancel: invoke<(id: string) => Promise<void>>()('ap:sessions:cancel'),
   sessionsCommand: invoke<(id: string, cmd: string) => Promise<void>>()('ap:sessions:command'),
@@ -76,7 +79,6 @@ const APP_CHANNELS = defineChannels({
   lobbyServersTest: invoke<(id: string) => Promise<LobbyServerTest>>()('ap:lobby:serversTest'),
   lanBrowse: invoke<(on: boolean) => Promise<LanEntry[]>>()('ap:lan:browse'),
   lobbyProbe: invoke<(address: string, code: string) => Promise<LobbyProbe>>()('ap:lobby:probe'),
-  lobbyClose: invoke<(ref: PendingClose) => Promise<{ closed: boolean }>>()('ap:lobby:close'),
   lobbyPendingCloses: invoke<() => Promise<PendingClose[]>>()('ap:lobby:pendingCloses'),
   lobbyReviewPlay: invoke<(request: LobbyReviewPlay) => Promise<{ ok: boolean; failure?: string }>>()('ap:lobby:reviewPlay'),
   lobbyReviewHostDone: invoke<(id: number) => Promise<void>>()('ap:lobby:reviewHostDone'),
@@ -92,6 +94,7 @@ const APP_CHANNELS = defineChannels({
   onLobbyReviewHost: event<(host: LobbyReviewHost) => void>()('ap:lobby:reviewHost'),
   onJoinEvent: event<(view: JoinView) => void>()('ap:joins:event'),
   onPendingCloses: event<(pending: PendingClose[]) => void>()('ap:lobby:pendingCloses'),
+  onLiveEvent: event<(tabs: LiveTab[]) => void>()('ap:live:event'),
 });
 
 const APP_INVOKE_MAP = APP_CHANNELS.maps.invoke;

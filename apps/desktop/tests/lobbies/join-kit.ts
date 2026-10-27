@@ -1,11 +1,15 @@
 /* @layer tests @kind helper */
 import { zipSync } from 'fflate';
-import type { DataFiles, InstalledGame } from '@archipelia/model';
+import type { startLobbyRig } from '@archipelia/server/testing';
+import type { AdminLobby, DataFiles, InstalledGame } from '@archipelia/model';
 import type { JoinView } from '../../src/joins/joins.type';
 import { buildJoinRecord } from '../../electron/joins/build-join-record';
 import { clientInfo } from '../../electron/joins/client-info';
 import { connectJoin } from '../../electron/joins/connect-join';
 import { createJoinService } from '../../electron/joins/create-join-service';
+import { tempFiles } from './temp-files';
+
+type JoinHost = Pick<Awaited<ReturnType<typeof startLobbyRig>>, 'address' | 'service' | 'call'>;
 
 const WORLD_PATH = 'custom_worlds/quest_world.apworld';
 
@@ -44,4 +48,14 @@ const startJoins = (files: DataFiles, ap: string) => {
   return { service, views, until };
 };
 
-export { joinRecord, startJoins };
+const approvedJoiner = async (on: JoinHost, lobby: AdminLobby) => {
+  const store = await tempFiles('joins');
+  const joins = startJoins(store.files, '0.6.8');
+  await joins.service.start(await joinRecord(on.address, lobby.code));
+  await joins.until((view) => view.state === 'pending');
+  const joinedId = (await on.service.get(lobby.id))?.members.find((member) => member.kind === 'client')?.id ?? '';
+  await on.call('member.approve', { lobbyId: lobby.id, memberId: joinedId });
+  return { joinedId, close: async () => { joins.service.closeAll(); await store.remove(); } };
+};
+
+export { approvedJoiner, joinRecord, startJoins };

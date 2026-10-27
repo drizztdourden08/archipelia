@@ -1,5 +1,6 @@
 /* @layer electron-main @kind types */
-import type { AdminLobby, DataFiles, SessionPlayer, SessionTemplate } from '@archipelia/model';
+import type { AdminLobby, DataFiles, LobbySource, SessionPlayer, SessionTemplate } from '@archipelia/model';
+import type { LiveTab } from '../../src/live/live.type';
 import type { HostPlayerSlot, LobbyRequest, LobbyServerStatus, PendingClose } from '../../src/lobbies/lobbies.type';
 
 type NetworkSwitch = { status: () => LobbyServerStatus; apply: (options: unknown) => Promise<unknown> };
@@ -9,6 +10,7 @@ type SessionLobbyDeps = {
   list: () => Promise<AdminLobby[]>;
   slotOf: (player: SessionPlayer) => Promise<HostPlayerSlot>;
   beforeOpen?: (template: SessionTemplate) => Promise<void>;
+  assertConsent?: (template: SessionTemplate) => void;
   beforeRun?: (lobbyId: string, template: SessionTemplate) => Promise<void>;
 };
 
@@ -17,7 +19,7 @@ type LobbyOps = Pick<SessionLobbyDeps, 'act' | 'list'>;
 type CloserDeps = {
   files: DataFiles;
   opsFor: (serverId: string) => Promise<LobbyOps>;
-  templates: () => Promise<SessionTemplate[]>;
+  live: () => Promise<LiveTab[]>;
   quiet: () => Promise<unknown>;
   emit: (pending: PendingClose[]) => void;
   forget?: (lobbyId: string) => Promise<void>;
@@ -31,6 +33,8 @@ type RunPreparation = {
   sharePassword: (lobbyId: string, passwordRef: string) => Promise<void>;
 };
 
-type TemplateStore = { get: (id: string) => Promise<SessionTemplate | null>; remove: (id: string) => Promise<void> };
+type SyncPlan = { template: SessionTemplate; lobbyId: string; source: LobbySource; savedNames: ReadonlySet<string> };
 
-export type { CloserDeps, NetworkSwitch, RunPreparation, SessionLobbyDeps, TemplateStore };
+type StartPlan = Omit<SyncPlan, 'lobbyId'> & { lobbyId?: string };
+
+export type { CloserDeps, NetworkSwitch, RunPreparation, SessionLobbyDeps, StartPlan, SyncPlan };

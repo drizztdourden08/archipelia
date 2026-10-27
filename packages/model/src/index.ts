@@ -16,6 +16,7 @@ export type * from './server.type';
 export type * from './session.type';
 export type * from './world-carry.type';
 export { lobbyTemplateId } from './lobby-template-id';
+export { ADMISSIONS, RELEASE_MODES, REMAINING_MODES, SPOILER_LEVELS } from './session-choices.constants';
 export { templateOf } from './template-of';
 export type * from './run-record';
 export { UNKNOWN_SOURCE_NAME, buildRun, runOf, runOverridesOf, runPlayersOf } from './run-record';
