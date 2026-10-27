@@ -28,8 +28,8 @@ const createProfile = async (launched: LaunchedApp) => {
   expect(await nestedButtons(page), 'no button inside a button on Home').toBe(0);
   await settledProof(launched, '02-home-engine-ready');
   await closeHub(page, 'Multiworld');
-  await base(page).getByText('No room is hosting right now.', { exact: true }).waitFor();
-  for (const name of ['New session', 'Games', 'Presets']) await base(page).getByRole('button', { name, exact: true }).waitFor();
+  await base(page).getByText('No session is open. Run a session to open it here.', { exact: true }).waitFor();
+  for (const name of ['Open Sessions', 'New session', 'Join a session']) await base(page).getByRole('button', { name, exact: true }).waitFor();
   await settledProof(launched, '02b-base-idle');
 };
 

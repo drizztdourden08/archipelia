@@ -13,10 +13,10 @@ import { SERVER_VERSION } from './core-lobbies.constants';
 
 const createCoreLobbies = ({ ports, sessions, runtime, runtimeFor, sessionFiles, sandbox }: CoreLobbyDeps) => {
   const watchers = new Set<(lobby: Lobby) => void>();
-  const runOf = (template: SessionTemplate, lobby: LobbyRun) =>
-    ports.lobbyRun
-      ? ports.lobbyRun(template, lobby, { output: sessionFiles, report: (event) => lobbies.onSessionEvent(event) })
-      : sessions().run(template, undefined, lobby);
+  const runOf = (template: SessionTemplate, lobby: LobbyRun) => {
+    const run = () => sessions().run(template, undefined, lobby);
+    return ports.lobbyRun ? ports.lobbyRun(template, lobby, { output: sessionFiles, report: (event) => lobbies.onSessionEvent(event), run }) : run();
+  };
   const lobbies = createLobbyService({
     store: createLobbyStore(ports.domain(DOMAIN.lobbies)),
     trust: createLobbyTrust(ports.domain(DOMAIN.cache)),

@@ -17,6 +17,7 @@ import { joinAsPlayer } from './join-as-player';
 import { closeSessionTab } from './close-session-tab';
 import { tabBody } from './tab-body';
 import { runDirect } from './run-direct';
+import { resetLanConsent } from './reset-lan-consent';
 import { seedDirect } from './seed-direct';
 import { waitText } from './wait-text';
 
@@ -47,6 +48,7 @@ export default defineReviewStep({
     tour.check('lobby-server', status.state === 'listening', 'the embedded lobby server listens', `the lobby server is ${status.state}: ${status.error ?? ''}`);
     const template = status.state === 'listening' ? await seedDirect() : null;
     if (!template) return;
+    await resetLanConsent();
     openSessionEditor(template.id);
     const section = await waitText(tour, DIRECT_UI.section, () => tour.find(SELECTOR.layer));
     tour.check('direct-section', section, 'the setup page has a How players join section', 'the setup page has no How players join section');

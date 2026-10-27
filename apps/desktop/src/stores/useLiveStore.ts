@@ -18,7 +18,7 @@ const useLiveStore = createSessionStore<LiveState>((set, get) => ({
     const tabs = mergeTabs(state.tabs, incoming);
     return { tabs, activeId: activeAfter(state.tabs, tabs, state.activeId) };
   }),
-  include: (tab) => set((state) => ({ tabs: mergeTabs(state.tabs, [...state.tabs.filter((entry) => entry.tabId !== tab.tabId), tab]) })),
+  include: (tab) => set((state) => ({ tabs: state.tabs.some((entry) => entry.tabId === tab.tabId) ? state.tabs.map((entry) => (entry.tabId === tab.tabId ? tab : entry)) : [...state.tabs, tab] })),
   activate: (tabId) => set((state) => (state.tabs.some((tab) => tab.tabId === tabId) ? { activeId: tabId } : state)),
   move: (from, to) => set((state) => ({ tabs: moveTab(state.tabs, from, to) })),
 }));

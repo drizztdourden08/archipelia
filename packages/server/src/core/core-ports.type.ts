@@ -32,7 +32,7 @@ type CoreEnvironment = {
   version?: string;
 };
 
-type CoreLobbyRunContext = { output: DataFiles; report: (event: SessionEvent) => void };
+type CoreLobbyRunContext = { output: DataFiles; report: (event: SessionEvent) => void; run: () => Promise<Session> };
 
 type CoreLobbyRun = (template: SessionTemplate, lobby: LobbyRun, context: CoreLobbyRunContext) => Promise<Session>;
 

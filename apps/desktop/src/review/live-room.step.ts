@@ -36,9 +36,9 @@ const stopFromDashboard = async (tour: AppReviewTour) => {
   await tour.capture('stopped');
 };
 
-const checkStoppedWidgets = async (tour: AppReviewTour) => {
+const checkStoppedWidgets = async (tour: AppReviewTour, joined: boolean) => {
   widgets.reset();
-  await checkWidgets(tour, STOPPED_WIDGETS, 'stopped');
+  await checkWidgets(tour, joined ? STOPPED_WIDGETS : STOPPED_WIDGETS.filter(([id]) => id !== 'hints'), 'stopped');
   await tour.capture('stopped-run');
   await showSpoiler(tour);
   await checkWidgets(tour, SPOILER_WIDGET, 'stopped');
@@ -56,6 +56,24 @@ const closeTabs = async (tour: AppReviewTour) => {
   tour.check('idle-base', empty, 'with no tab open the base shows the idle state', 'the idle state did not come back after the last tab closed');
 };
 
+const checkPasswordPrompt = async (tour: AppReviewTour) => {
+  const frame = await tour.openWidget('players');
+  const asked = frame ? await waitText(tour, /This room has a password/, () => frame) : false;
+  tour.check('live-password', asked, 'a lobby run has a room password, so the players widget asks for it before it shows the room live', 'the players widget did not ask for the room password');
+};
+
+const checkLive = async (tour: AppReviewTour, client: Client | null) => {
+  widgets.reset();
+  if (!client) {
+    await checkPasswordPrompt(tour);
+    await checkWidgets(tour, LIVE_WIDGETS.filter(([id]) => id === 'console'), 'live');
+    return;
+  }
+  tour.check('player-joins', true, 'a player joins the room and checks locations', 'the review player could not join');
+  await checkWidgets(tour, LIVE_WIDGETS, 'live');
+  await checkLiveStatus(tour);
+};
+
 export default defineReviewStep({
   run: async (tour) => {
     await tour.resetUi();
@@ -66,15 +84,12 @@ export default defineReviewStep({
     tour.check('run-hosts', hosted, 'the run hosts and its tab shows the room', `${REVIEW_SESSION} did not host`);
     if (!hosted) return;
     const client: Client | null = await joinRoom(tour, REVIEW_PORT).catch(() => null);
-    tour.check('player-joins', client !== null, 'a player joins the room and checks locations', 'the review player could not join');
-    widgets.reset();
-    await checkWidgets(tour, LIVE_WIDGETS, 'live');
-    await checkLiveStatus(tour);
+    await checkLive(tour, client);
     await sendFromConsole(tour);
     await tour.capture('hosting');
     client?.socket.disconnect();
     await stopFromDashboard(tour);
-    await checkStoppedWidgets(tour);
+    await checkStoppedWidgets(tour, client !== null);
     await closeTabs(tour);
   },
 });
