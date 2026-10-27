@@ -17,7 +17,6 @@ declare module '@drizztdourden08/tessera' {
         | 'PackageConsentDialog'
         | 'PackageSourceDialog'
         | 'PlayerStatusRow'
-        | 'RunRow'
         | 'ServerOptionsForm'
         | 'SessionRow'
         | 'SessionStatusBar';

@@ -13,7 +13,7 @@ export default defineScreens({
         { id: 'hosting', label: 'Hosting' },
         { id: 'app', label: 'App' },
       ],
-      top: ['sessions'],
+      top: ['sessions', 'history'],
     },
   ],
   home: 'multiworld',

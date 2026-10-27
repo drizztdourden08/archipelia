@@ -17,13 +17,13 @@ export { OptionControl, coercePresetValues, hintOf, isChangedValue, isLoose } fr
 export type { CoercedValues } from './compounds/OptionControl';
 export { OptionFieldRow } from './compounds/OptionFieldRow';
 export { PlayerStatusRow } from './compounds/PlayerStatusRow';
-export { RUN_STATUS, RunRow } from './compounds/RunRow';
-export type { RunStatusView } from './compounds/RunRow';
 export {
   HINT_COST_RANGE, HOST_OPTIONS, PORT_PROBLEM, PORT_RANGE, RELEASE_OPTIONS, REMAINING_OPTIONS, SERVER_TEXT, SHUTDOWN_RANGE, ServerOptionsForm, inPortRange,
   percentText,
 } from './compounds/ServerOptionsForm';
-export { SessionStatusBar } from './compounds/SessionStatusBar';
+export { RUN_STATUS, SessionStatusBar } from './compounds/SessionStatusBar';
+export type { RunStatusView } from './compounds/SessionStatusBar';
 export { SessionRow } from './compounds/SessionRow';
+export type { SessionRowProps } from './compounds/SessionRow';
 export type * from './guide/app-tree.type';
 export type * from './guide/parts.type';

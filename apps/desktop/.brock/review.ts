@@ -8,6 +8,7 @@ const appReview: AppReview = {
     { id: 'direct-session', load: () => import('../src/review/direct-session.step') },
     { id: 'engine', load: () => import('../src/review/engine.step') },
     { id: 'engine-startup', load: () => import('../src/review/engine-startup.step') },
+    { id: 'history', load: () => import('../src/review/history.step') },
     { id: 'live-room', load: () => import('../src/review/live-room.step') },
     { id: 'lobby-server', load: () => import('../src/review/lobby-server.step') },
     { id: 'package-wizard', load: () => import('../src/review/package-wizard.step') },

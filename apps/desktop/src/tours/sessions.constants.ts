@@ -7,7 +7,7 @@ const SESSIONS_STEPS: readonly TourStepDef[] = [
   {
     id: 'sessions',
     title: 'Sessions',
-    body: 'A session is a saved setup: who plays, which games and presets, and where the room runs. This page lists your sessions and every run made from them. To play in a room that someone else hosts, use Join a session.',
+    body: 'A session is a saved setup: who plays, which games and presets, and where the room runs. This page lists your sessions. Their runs are kept in History. To play in a room that someone else hosts, use Join a session.',
     target: TOUR_PART.page,
     mascot: 'point',
     open: ROUTE.sessions,
@@ -46,6 +46,14 @@ const SESSIONS_STEPS: readonly TourStepDef[] = [
     advanceOn: { click: TOUR_PART.back },
     mascot: 'point',
     open: ROUTE.newSession,
+  },
+  {
+    id: 'history',
+    title: 'History',
+    body: 'Every run is kept here with the session it came from, the changes it ran with, who played and its seed and files. Pick a run to see them. The menu of a session has a link to the runs of that session.',
+    target: { tour: TOUR_TARGET.historyList },
+    mascot: 'curious',
+    open: ROUTE.history,
   },
 ];
 

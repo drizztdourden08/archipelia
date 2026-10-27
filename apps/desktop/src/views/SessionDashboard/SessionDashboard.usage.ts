@@ -7,7 +7,7 @@ const usage = {
     'The base layer under every hub, drawn by the session screen.',
   ],
   avoidWhen: [
-    { case: 'Past runs of a session.', use: 'RunRow' },
+    { case: 'Past runs of a session.', use: 'History' },
   ],
   rules: [
     'Leave sessionId out to follow the focused session; an empty focus shows the newest hosting run.',
