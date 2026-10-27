@@ -31,8 +31,8 @@ The package has two entry points and one command. It imports nothing from Electr
 
 | Import | Holds | Needs Node |
 | --- | --- | --- |
-| `@drizztdourden08/archipelia-client-kit` | the YAML builder, option schema checks, the `archipelago.json` helpers, the zip writer and reader, the version rules, the index builder and parser | no |
-| `@drizztdourden08/archipelia-client-kit/node` | `buildApworld`, `buildApworldSet`, `readApworldFile`, `collectPackage`, `writeApworld`, `sha256Hex` | yes (file system, `node:crypto`) |
+| `@drizztdourden08/archipelia-client-kit` | the YAML builder, option schema checks, the `archipelago.json` helpers, the zip writer and reader, the version rules, the index builder and parser, the `archipelia.json` release manifest, the thumbnail and description checks | no |
+| `@drizztdourden08/archipelia-client-kit/node` | `buildApworld`, `buildApworldSet`, `writeReleaseFiles`, `readApworldFile`, `collectPackage`, `writeApworld`, `sha256Hex` | yes (file system, `node:crypto`) |
 | `archipelia-kit` | the command line, see below | yes |
 
 The pure entry point is safe for a renderer. The Node entry point reads and writes files and belongs to a build script or a main process. In a checkout of the Archipelia repository, `bin/archipelia-kit.mjs` runs the TypeScript source directly when `dist` does not exist.
@@ -233,9 +233,63 @@ It returns `{ index, indexPath, latestPath, files }`.
 - `builds` is sorted from the oldest Archipelago version to the newest. The last one is the build copied to `<module>.apworld`.
 - `file` is a file name, never a path. `bundle` is `<file>.sigstore.json`.
 - The kit only names the bundle. The client's CI attests each file (GitHub attestations) and puts each Sigstore bundle beside its file under that name. The kit never signs and never reads a bundle.
-- Archipelia's first-party catalog reads this file from the release assets.
+- The index keeps its old name, `<module>.apworld.json`, as an alias. The catalog can still read it, and `release-files` (below) builds `archipelia.json` from it. The old shape does not change.
 
 `buildApworldIndex(input)` builds the object from `{ game, module, worldVersion, appVersion, minimumAp, maximumAp?, builds: [{ archipelagoVersion, sha256, size }] }` and checks it: the module is a Python name, versions look like `0.6.8`, no version twice, hashes are 64 lowercase hex characters, sizes are positive, and every build fits the declared range. `serializeApworldIndex` writes it as indented JSON with a trailing newline, `parseApworldIndex` reads and re-checks a file (including the naming rule), `newestBuild` picks the newest build and `apworldNames(module, version)` gives `{ file, bundle, latest, latestBundle, index }`.
+
+## The release manifest and the release files
+
+A release that Archipelia can list carries three standard files next to the apworlds. They have fixed names, so the app finds them without any other lookup.
+
+| File | Holds | Rules |
+| --- | --- | --- |
+| `archipelia.json` | the release manifest | at most 64 KB, required |
+| `archipelia-thumbnail.png` or `archipelia-thumbnail.webp` | the art for the world's card | optional, see below |
+| `archipelia-description.md` | the text for the world's details | optional, see below |
+
+### archipelia.json
+
+It is the builds index above under a fixed name, with three keys added: `format`, `direct` and `kit`. `appVersion` becomes optional, because a world without a client of its own has none.
+
+```json
+{
+  "format": 1,
+  "game": "Relic of the Past",
+  "module": "relic_of_the_past",
+  "worldVersion": "0.1.0",
+  "minimumAp": "0.6.4",
+  "maximumAp": "0.6.8",
+  "direct": true,
+  "kit": "0.2.0",
+  "appVersion": "0.22.0",
+  "builds": [{ "archipelagoVersion": "0.6.7", "file": "relic_of_the_past-ap0.6.7.apworld", "sha256": "<64 lowercase hex>", "size": 812345, "bundle": "relic_of_the_past-ap0.6.7.apworld.sigstore.json" }]
+}
+```
+
+- `format` is `1`. A reader refuses any other value.
+- `direct` says whether the game's own client joins Archipelia lobbies. It is for display. The repository topic is what search uses, and the lobby `hello` is the truth.
+- `kit` is the version of this package that wrote the file.
+- A world with a single apworld can give `world: { file, sha256, size, bundle? }` in place of `builds`. Give one of the two, never both. `file` is a plain file name ending in `.apworld`, and `bundle` is `<file>.sigstore.json`.
+- `maximumAp` and `appVersion` are left out when not given.
+
+The functions are pure and work in a renderer: `buildReleaseManifest(input)` builds and checks the object (the input is the index input plus `direct`, an optional `kit` that defaults to the kit's own version, and `appVersion` optional), `checkReleaseManifest(input)` returns the list of issues without throwing, `serializeReleaseManifest` writes indented JSON with a trailing newline, `parseReleaseManifest(text)` reads and re-checks a file (size cap, `format`, the naming rule), and `indexOfRelease(manifest)` gives the old index shape back when the manifest has `builds` and an `appVersion`. Failures throw a `KitError` of code `invalid-release`.
+
+### The thumbnail
+
+`inspectThumbnail(bytes)` returns `{ header?, issues }`. The image must be:
+
+- a PNG or a WebP, found from its first bytes (a file name or a content type is never trusted);
+- square, and at most 1024 by 1024 pixels, read from the header only (no image decoder);
+- at most 1 MB (1,048,576 bytes);
+- not an animated WebP.
+
+### The description
+
+`checkDescription(bytes)` returns `{ issues, warnings }`. The text must be UTF-8 and at most 64 KB (65,536 bytes). Raw HTML (a tag or a comment, outside code) is a warning, not an error: Archipelia drops it when it shows the text, so use Markdown.
+
+### Writing the files
+
+`writeReleaseFiles({ dir, direct, module?, kit?, thumbnail?, description? })` (Node) reads the index `<module>.apworld.json` that `buildApworldSet` wrote into `dir` (the only `*.apworld.json` there when `module` is left out), then writes `archipelia.json`. When `thumbnail` and `description` are paths, it checks them and copies them to the standard names. The thumbnail name follows the real format (`archipelia-thumbnail.png` or `.webp`), and an older thumbnail of the other format is removed. If any check fails it throws a `KitError` of code `invalid-release-file` listing every problem and writes nothing. It returns `{ manifest, manifestPath, thumbnailPath?, descriptionPath?, warnings }`.
 
 ## Command line
 
@@ -245,6 +299,7 @@ It returns `{ index, indexPath, latestPath, files }`.
 | --- | --- |
 | `build-apworld --world <dir> --out <file> --game <name> --world-version <x.y.z> --minimum-ap <x.y.z> [--maximum-ap <x.y.z>] [--module <name>] [--data <dir>] [--author <name>]... [--exclude <path>]... [--line-endings lf\|keep]` | Builds one apworld and prints `{ file, module, sha256, size }` as one JSON line. |
 | `build-set --config <file.json>` | Builds the set and the index. Prints `{ index, latest, files }` as one JSON line. |
+| `release-files --dir <release folder> [--module <name>] [--direct] [--thumbnail <image>] [--description <file.md>]` | Writes `archipelia.json` from the index in the folder, and checks and copies the thumbnail and description into it under their standard names. Prints `{ manifest, thumbnail?, description?, warnings }` as one JSON line and each warning on stderr. Exit 1 when a file is refused. |
 | `inspect <file.apworld>` | Prints the module, the manifest, the sha256, the size and the entry count. |
 | `check-fit <file.apworld> --ap <x.y.z>` | Exit 0 when the world supports that exact version, 1 with the sentence on stderr when it does not. |
 | `player-yaml --input <file.json> [--schema <options.json>] [--out <file>] [--allow-unknown] [--allow-roll] [--with-defaults]` | Writes the YAML to stdout or a file. The input is `{ game, slotName, options, description?, preRolled?, preRolledKey? }`. |
@@ -266,9 +321,91 @@ The `build-set` config is JSON. Paths are relative to the folder the command run
 
 It also accepts `module`, `maximumAp` and `authors`. Exit codes: 0 done, 1 the work failed or the input is not valid, 2 the command line is wrong. Errors go to stderr, start with `archipelia-kit:` and name the problem.
 
+## Publish your world for Archipelia
+
+Archipelia lists a world from a public GitHub repository that follows this convention. It needs no account and no form.
+
+1. **Add the topic `archipelia-world`** to the repository (About, then the gear icon, then Topics). Also add `archipelia-direct` if the game's own client joins Archipelia lobbies. A topic is lowercase, at most 50 characters, and a repository can have 20.
+2. **Attach the files to a stable release** (not a draft, not a pre-release): the apworlds, `archipelia.json` and, if you have them, the thumbnail and the description. The app reads the newest stable release only. The workflow below does all of it.
+3. **Keep the repository public and not archived.** Forks are not listed.
+4. **Ask for Verified.** A listing in the Archipelia `registry/registry.json` gives the Verified badge. Open a pull request there that adds your game, the client it belongs to and the repository that releases it. Attest your release files as in the workflow below, so Archipelia can check that each download was built by your repository. Without a listing the world still appears, with a note that Archipelia has not reviewed it.
+
+A world needs `archipelia.json` to appear. The thumbnail and the description are optional: without them the app falls back to the repository's social image and its README.
+
+### The release workflow
+
+This GitHub Actions workflow builds one apworld per Archipelago version, writes the release files, attests the apworlds and `archipelia.json`, and uploads everything to the release. Put the `build-set` config (see "Command line") in `kit.json` and your art and text where the paths below say. Drop `--direct` if the client does not join lobbies.
+
+```yaml
+name: Release
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write # create the release
+  packages: read # install the kit from GitHub Packages
+  id-token: write # sign the attestation
+  attestations: write # store the attestation
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          registry-url: https://npm.pkg.github.com
+          scope: '@drizztdourden08'
+      - run: npm ci
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build the apworlds and the index
+        run: npx archipelia-kit build-set --config kit.json
+
+      - name: Write the release files
+        run: >
+          npx archipelia-kit release-files --dir release --direct
+          --thumbnail art/thumbnail.png --description docs/archipelia.md
+
+      - name: Attest the apworlds and archipelia.json
+        id: attest
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: |
+            release/*.apworld
+            release/archipelia.json
+
+      - name: Name the bundles
+        env:
+          BUNDLE: ${{ steps.attest.outputs.bundle-path }}
+        run: |
+          for file in release/*.apworld release/archipelia.json; do
+            cp "$BUNDLE" "$file.sigstore.json"
+          done
+
+      - name: Upload the release assets
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          flag=""
+          case "$GITHUB_REF_NAME" in *-*) flag="--prerelease" ;; esac
+          gh release create "$GITHUB_REF_NAME" release/* --title "$GITHUB_REF_NAME" --verify-tag $flag
+```
+
+How it fits together:
+
+- `build-set` writes `<module>-ap<version>.apworld` for each version, `<module>.apworld` and the old index `<module>.apworld.json`.
+- `release-files` adds `archipelia.json` and copies the thumbnail and description to their standard names. It fails the job when the image or the text is refused, so a bad file never reaches a release.
+- `actions/attest-build-provenance` signs one attestation that covers every listed file. The step copies its bundle beside each file as `<file>.sigstore.json`, the name the manifest gives. Anyone can check a download with `gh attestation verify <file> --repo <owner>/<repo>`.
+- A tag with a hyphen, such as `v1.2.0-beta.1`, is uploaded as a pre-release. Pre-releases are never shown on the card.
+- `release/*` uploads the apworlds, the index, `archipelia.json`, the thumbnail, the description and the bundles.
+
 ## Errors
 
-Every failure the kit raises is a `KitError`: an `Error` with `name` `KitError`, a `code` and an `issues` list. The codes are `usage`, `invalid-version`, `invalid-manifest`, `invalid-schema`, `invalid-input`, `invalid-package`, `invalid-apworld`, `invalid-index`, `invalid-config` and `unsupported-value`. `isKitError(value)` tells them from other errors.
+Every failure the kit raises is a `KitError`: an `Error` with `name` `KitError`, a `code` and an `issues` list. The codes are `usage`, `invalid-version`, `invalid-manifest`, `invalid-schema`, `invalid-input`, `invalid-package`, `invalid-apworld`, `invalid-index`, `invalid-release`, `invalid-release-file`, `invalid-config` and `unsupported-value`. `isKitError(value)` tells them from other errors.
 
 ## Migration note for RotP
 

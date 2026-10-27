@@ -5,10 +5,12 @@ import { buildSetCommand } from './commands/build-set-command';
 import { checkFitCommand } from './commands/check-fit-command';
 import { inspectCommand } from './commands/inspect-command';
 import { playerYamlCommand } from './commands/player-yaml-command';
+import { releaseFilesCommand } from './commands/release-files-command';
 
 const COMMANDS: Readonly<Record<string, Command>> = {
   'build-apworld': buildApworldCommand,
   'build-set': buildSetCommand,
+  'release-files': releaseFilesCommand,
   inspect: inspectCommand,
   'check-fit': checkFitCommand,
   'player-yaml': playerYamlCommand,

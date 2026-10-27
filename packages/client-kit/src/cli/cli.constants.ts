@@ -10,6 +10,8 @@ const USAGE = [
   '      Build one reproducible .apworld. Prints { file, module, sha256, size } as JSON.',
   '  build-set --config <file.json>',
   '      Build one .apworld per Archipelago version, the newest copy and the index manifest.',
+  '  release-files --dir <release folder> [--module <name>] [--direct] [--thumbnail <image>] [--description <file.md>]',
+  '      Write archipelia.json from the index in the folder, and check and copy the thumbnail and description into it.',
   '  inspect <file.apworld>',
   '      Print the archipelago.json of a built apworld with its sha256 and size.',
   '  check-fit <file.apworld> --ap <x.y.z>',
