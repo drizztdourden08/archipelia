@@ -11,7 +11,9 @@ export { nextRetry } from './next-retry';
 export { onlineFromLog } from './online-from-log';
 export { playerRows } from './player-rows';
 export { presenceOf } from './presence-of';
+export { roomPasswordNeed } from './room-password-need';
 export { roomPlayersOf } from './room-players-of';
+export { scopedTo } from './scoped-to';
 export { roomUrls } from './room-urls';
 export { statusKey } from './status-key';
 export { statusOf } from './status-of';
@@ -20,6 +22,7 @@ export { watchTarget } from './watch-target';
 export { withPresence } from './with-presence';
 export { HINTS_KEY_PREFIX, STATUS_KEY_PREFIX } from './client-status.constants';
 export { RECONNECT_DELAYS_MS } from './reconnect.constants';
+export type { PasswordNeed, PasswordView } from './room-password-need.type';
 export type {
   HintLookup, HintState, HintView, LiveRoomPhase, LiveRoomTarget, PlayerStatus, PlayerView, ProtocolHint, RetryPlan, RoomPlayer,
   WatchedChecks,

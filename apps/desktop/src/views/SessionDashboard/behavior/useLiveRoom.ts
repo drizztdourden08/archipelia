@@ -2,13 +2,17 @@
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 import type { Session } from '@archipelia/model';
 import type { HostLogLine } from '@archipelia/hosts';
-import { checksFromLog, hintsFromLog, playerRows, presenceOf, roomPlayersOf, targetKey, watchTarget } from '@archipelia/sessions/live-room';
+import { checksFromLog, hintsFromLog, playerRows, presenceOf, roomPasswordNeed, roomPlayersOf, scopedTo, targetKey, watchTarget } from '@archipelia/sessions/live-room';
 import { holdLiveRoom } from './hold-live-room';
+import { IDLE } from '../../../stores/live-room-store.constants';
 import { useLiveRoomStore } from '../../../stores/useLiveRoomStore';
 import type { LiveConnection } from '../SessionDashboard.type';
 
 const useLiveRoom = (session: Session | null, lines: readonly HostLogLine[]) => {
-  const { phase, error, players, statuses, watched, hints, passwordRequired, connect, retry, retryAt, attempt, attempts, retrying } = useLiveRoomStore();
+  const store = useLiveRoomStore();
+  const sessionId = session?.id ?? null;
+  const { phase, error, players, statuses, watched, hints, connect, retry, retryAt, attempt, attempts, retrying } = scopedTo(store, sessionId, { ...store, ...IDLE });
+  const passwordNeed = roomPasswordNeed(store, sessionId);
   const target = useMemo(() => (session ? watchTarget(session) : null), [session]);
   const targetRef = useRef(target);
   targetRef.current = target;
@@ -38,7 +42,7 @@ const useLiveRoom = (session: Session | null, lines: readonly HostLogLine[]) => 
     [phase, error, retryAt, attempt, attempts, retrying, submitPassword, retry],
   );
 
-  return { connection, hints: phase === 'live' ? hints : logHints, passwordRequired, phase, players: rows };
+  return { connection, hints: phase === 'live' ? hints : logHints, passwordNeed, phase, players: rows };
 };
 
 export { useLiveRoom };
