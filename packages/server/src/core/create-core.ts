@@ -30,7 +30,7 @@ const createCore = (ports: CorePorts) => {
   const engineFiles = domain(DOMAIN.engine);
   const presets = createPresetStore(domain(DOMAIN.presets));
   const templates = createTemplateStore(sessionFiles);
-  const runs = createRunStore(sessionFiles);
+  const runs = createRunStore(sessionFiles, () => templates.list());
   const servers = createServerStore(domain(DOMAIN.servers));
   const usage = createEngineUsage();
   const engine = createEngineService({
