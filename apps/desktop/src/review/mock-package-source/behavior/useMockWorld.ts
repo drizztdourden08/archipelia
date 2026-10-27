@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import type { BuildLogView, PackageSourceDialogProps, PackageSourceStep, SourceConsent, SourceFinish } from '@archipelia/design';
 import { MOCK_DELAY_MS, MOCK_MODULE, MOCK_SUGGESTIONS, MOCK_TITLE } from '../mock-package-source.constants';
 import { mockHandlersOf } from './mock-handlers-of';
-import { NO_LOG } from './useMockWorld.constants';
+import { NO_LOG } from './mock-world.constants';
 
 const useMockWorld = (onClose: () => void): PackageSourceDialogProps => {
   const [step, setStep] = useState<PackageSourceStep>({ kind: 'idle' });

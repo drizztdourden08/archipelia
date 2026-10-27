@@ -3,7 +3,7 @@ import type { PackageSourceHandlers } from '@archipelia/design';
 import type { SourceBuildPlan } from '@archipelia/model';
 import { MOCK_BUILD, MOCK_CONSENT, MOCK_LOG, MOCK_MODULE, MOCK_PLAN, MOCK_SUGGESTIONS, MOCK_TOOL } from '../mock-package-source.constants';
 import type { BuildStep, MockWorld } from './mock-handlers-of.type';
-import { logOf, NO_OP } from './useMockWorld.constants';
+import { logOf, NO_OP } from './mock-world.constants';
 
 const mockHandlersOf = (world: MockWorld): Omit<PackageSourceHandlers, 'onClose'> => {
   const { setStep, setFinish, setConsent, setBuildLog, later, missed } = world;
