@@ -23,7 +23,7 @@
     "lint": "tsc --noEmit && eslint ."
   },
   "devDependencies": {
-    "@drizztdourden08/brock-lint-config": "^0.109.0",
+    "@drizztdourden08/brock-lint-config": "^0.109.1",
     "@types/multicast-dns": "^7.2.4",
     "@types/node": "catalog:",
     "eslint": "catalog:",
@@ -39,9 +39,9 @@
     "@archipelia/presets": "workspace:*",
     "@archipelia/sessions": "workspace:*",
     "@archipelia/trust": "workspace:*",
-    "@drizztdourden08/brock-core": "^0.109.0",
-    "@drizztdourden08/brock-electron": "^0.109.0",
-    "@drizztdourden08/brock-secrets": "^0.109.0",
+    "@drizztdourden08/brock-core": "^0.109.1",
+    "@drizztdourden08/brock-electron": "^0.109.1",
+    "@drizztdourden08/brock-secrets": "^0.109.1",
     "@runonflux/nat-upnp": "^2.0.5",
     "fflate": "catalog:",
     "multicast-dns": "^7.2.5",
