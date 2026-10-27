@@ -3,9 +3,11 @@ import { Button, Callout, Flex, Icon, Link, Stack, Text } from '@drizztdourden08
 import { BUILD_TEXT, MISSING_TEXT } from '../../PackageSourceDialog.constants';
 import type { BuildMissingProps } from '../../PackageSourceDialog.type';
 import { BuildLog } from '../BuildLog';
+import { ToolChoice } from '../ToolChoice';
 
-const BuildMissing = ({ build, missing, log, onBuildStart, onOpenLink }: BuildMissingProps) => {
+const BuildMissing = ({ build, missing, log, tool, onBuildStart, onOpenLink, onToolInstall }: BuildMissingProps) => {
   const text = MISSING_TEXT[missing.tool];
+  const offered = tool !== undefined && (tool.install !== undefined || tool.how !== '');
   return (
     <Stack gap="md">
       <Callout tone="warning">
@@ -16,8 +18,9 @@ const BuildMissing = ({ build, missing, log, onBuildStart, onOpenLink }: BuildMi
           <Link href={text.url} external navigate={onOpenLink}>{text.link}</Link>
         </Stack>
       </Callout>
+      {tool && offered && <ToolChoice build={build} tool={tool} onToolInstall={onToolInstall} />}
       <Flex>
-        <Button variant="primary" icon={<Icon name="refresh-cw" />} onClick={() => onBuildStart(build)}>{BUILD_TEXT.checkAgain}</Button>
+        <Button variant={offered ? 'secondary' : 'primary'} icon={<Icon name="refresh-cw" />} onClick={() => onBuildStart(build)}>{BUILD_TEXT.checkAgain}</Button>
       </Flex>
       <BuildLog lines={log} label={BUILD_TEXT.logLabel} />
     </Stack>

@@ -18,8 +18,12 @@ import { parseBuildStart } from '../build/parse-build-start';
 import { createOfferedWheels } from '../wheel/create-offered-wheels';
 import { parseWheelRequest } from '../wheel/parse-wheel-request';
 import { prepareWheel } from '../wheel/prepare-wheel';
+import { createTools } from '../tool/create-tools';
+import { readHost } from '../tool/read-host';
+import { runProbe } from '../tool/run-probe';
+import { TOOL_TEXT } from '../tool/tool-text.constants';
 
-const createSourceService = ({ fetch: request = fetch, engineDir, worldOf, run, sandbox, log }: SourceServiceDeps) => {
+const createSourceService = ({ fetch: request = fetch, engineDir, worldOf, run, sandbox, tools, log }: SourceServiceDeps) => {
   const client = createGithubClient({ fetch: request });
   const deps = { client, fetch: request, engineDir };
 
@@ -31,7 +35,11 @@ const createSourceService = ({ fetch: request = fetch, engineDir, worldOf, run, 
 
   const offers = createOfferedWheels();
   const planned = createPlannedSources();
-  const builds = createBuilds({ fetch: request, engineDir, run, sandbox, log });
+  const toolsDir = tools?.dir ?? (() => Promise.reject(new Error(TOOL_TEXT.desktopOnly)));
+  const builds = createBuilds({ fetch: request, engineDir, run, sandbox, toolsDir, log });
+  const toolbox = createTools({
+    fetch: request, toolsDir, readHost: tools?.readHost ?? readHost, probe: tools?.probe ?? runProbe, run: tools?.run, hasTool: builds.hasTool, addTool: builds.addTool, log,
+  });
 
   const plan = async (raw: SourceRef) => {
     const made = await planSource(deps, parseSourceRef(raw));
@@ -57,7 +65,10 @@ const createSourceService = ({ fetch: request = fetch, engineDir, worldOf, run, 
 
   const buildStart = (raw: SourceBuildRequest) => builds.build(parseBuildRequest(raw));
 
-  return { buildCancel: builds.cancel, buildPrepare, buildStart, dispose: builds.dispose, plan, processSpec: builds.specOf, pypiInstall, pypiPreview, suggest, wheel };
+  return {
+    buildCancel: builds.cancel, buildPrepare, buildStart, dispose: builds.dispose, plan, processSpec: builds.specOf, pypiInstall, pypiPreview, suggest, toolInstall: toolbox.install, toolPlan: toolbox.plan,
+    toolSpec: toolbox.specOf, wheel,
+  };
 };
 
 export { createSourceService };

@@ -14,7 +14,7 @@ const specOf = (job: SourceBuildJob, { runtime, dirs }: ActiveBuild): BuildSpec 
   return wheelSpec(dirs);
 };
 
-const buildSpecOf = async (deps: Pick<BuildDeps, 'sandbox'>, session: BuildSession, job: SourceBuildJob, raw: unknown): Promise<BuildSpec> => {
+const buildSpecOf = async (deps: Pick<BuildDeps, 'sandbox' | 'toolsDir'>, session: BuildSession, job: SourceBuildJob, raw: unknown): Promise<BuildSpec> => {
   const build = session.current();
   if (build?.id !== parseBuildId(raw) || !JOB_PHASE[job].includes(build.phase)) throw new Error(BUILD_TEXT.none);
   return confineBuild(deps, build, job, specOf(job, build));

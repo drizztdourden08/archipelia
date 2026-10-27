@@ -19,10 +19,12 @@ type Behaviour = {
 
 const behaviour: Behaviour = { runtime: undefined, tags: [], runs: {}, wheel: WHEEL_BYTES, served: ZIP };
 
+type Pinned = Omit<(typeof TOOLS)[number], 'sha256'> & { sha256?: string | undefined };
+
 const engine = {
   readRuntime: vi.fn(() => Promise.resolve(behaviour.runtime)),
   engineTags: vi.fn(() => Promise.resolve(behaviour.tags)),
-  resolvePackages: vi.fn((_runtime: unknown, _specs: unknown, _options?: unknown) => Promise.resolve(TOOLS)),
+  resolvePackages: vi.fn((_runtime: unknown, _specs: unknown, _options?: unknown): Promise<Pinned[]> => Promise.resolve(TOOLS)),
 };
 
 const mockedEngine = async () => ({ ...(await vi.importActual<object>('@archipelia/engine')), ...engine });

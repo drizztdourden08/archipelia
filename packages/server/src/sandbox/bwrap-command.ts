@@ -27,7 +27,7 @@ const bwrapCommand = ({ bwrap, features, tasks }: BwrapSetup, scope: SandboxScop
     '--chdir', command.cwd,
     '--', command.file, ...command.args,
   ];
-  return { file, args, cwd: command.cwd, env: sandboxEnv(command.env) };
+  return { file, args, cwd: command.cwd, env: sandboxEnv(command.env, scope.path) };
 };
 
 export { bwrapCommand };

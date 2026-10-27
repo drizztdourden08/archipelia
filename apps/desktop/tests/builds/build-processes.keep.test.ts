@@ -1,31 +1,14 @@
 /* @layer tests @kind test */
 import { describe, expect, test, vi } from 'vitest';
-import type { ProcessJobs } from '@drizztdourden08/brock-electron/main';
 import type { ProcessJobOutcome } from '@drizztdourden08/brock-core/types';
 import { BUILD_JOB } from '@archipelia/model';
 import { createBuildLines } from '../../electron/builds/create-build-lines';
 import { createBuildRunner } from '../../electron/builds/create-build-runner';
 import { defineBuildProcesses } from '../../electron/builds/define-build-processes';
+import type { Stored } from './process.fixtures';
+import { fakeProcesses } from './process.fixtures';
 
 const ID = '123e4567-e89b-42d3-a456-426614174000';
-
-type Stored = { label: string; timeoutMs: number | undefined; allow: unknown; parse: (raw: unknown) => unknown; resolve: (raw: unknown) => unknown; progress: (line: string) => void };
-
-const fakeProcesses = (outcome: ProcessJobOutcome = { status: 'done', exitCode: 0, tail: [] }) => {
-  const defined = new Map<string, Stored>();
-  const define: ProcessJobs['define'] = (id, def) => {
-    defined.set(id, {
-      label: def.label,
-      timeoutMs: def.timeoutMs,
-      allow: def.allow,
-      parse: def.parse,
-      resolve: (raw) => def.resolve(def.parse(raw), undefined as never),
-      progress: (line) => { def.progress?.(line, 'stdout'); },
-    });
-  };
-  const start = vi.fn<ProcessJobs['start']>(() => Promise.resolve(outcome));
-  return { define, start, defined };
-};
 
 const SPEC = { command: 'python', args: [], cwd: 'work', env: {} };
 

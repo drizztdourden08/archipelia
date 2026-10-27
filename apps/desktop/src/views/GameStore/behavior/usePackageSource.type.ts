@@ -1,7 +1,7 @@
 /* @layer renderer-app @kind types */
 import type { PackageSourceDialogProps, PackageSourceStep } from '@archipelia/design';
 import type { InstallRequest } from '@archipelia/catalog';
-import type { InstallFailure, SourceBuildPlan, SourceCandidate, SourceSuggestions } from '@archipelia/model';
+import type { InstallFailure, SourceBuildMissing, SourceBuildPlan, SourceCandidate, SourceSuggestions, SourceToolEnd, SourceToolPlan } from '@archipelia/model';
 import type { AskConsent } from './useConsent.type';
 
 type SourceAim = { key: string; title: string; module: string; linked?: string | undefined; request?: InstallRequest | undefined };
@@ -28,6 +28,10 @@ type BuildPrepareRun = { aim: SourceAim; state: BuildState; setStep: SetStep };
 
 type BuildStartRun = { aim: SourceAim; state: BuildState; build: SourceBuildPlan; install: InstallWorld; setStep: SetStep; close: () => void };
 
+type ToolInstallRun = BuildStartRun & { missing: SourceBuildMissing; log: readonly string[]; tool: SourceToolPlan };
+
+type ToolEndRun = { run: ToolInstallRun; end: SourceToolEnd };
+
 type SourceHandlers = Omit<PackageSourceDialogProps, 'title' | 'module' | 'step'>;
 
 type SourceHandlersRun = Pick<PypiRun, 'aim' | 'ask' | 'setStep'> & {
@@ -44,4 +48,4 @@ type PackageSourceParams = {
   ask: PypiRun['ask'];
 };
 
-export type { BuildPrepareRun, BuildStartRun, BuildState, CheckRun, PackageSourceParams, PlanRun, PypiRun, SearchRun, SourceAim, SourceHandlers, SourceHandlersRun, WheelRun };
+export type { BuildPrepareRun, BuildStartRun, BuildState, CheckRun, PackageSourceParams, PlanRun, PypiRun, SearchRun, SourceAim, SourceHandlers, SourceHandlersRun, ToolEndRun, ToolInstallRun, WheelRun };

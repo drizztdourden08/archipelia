@@ -1,5 +1,5 @@
 /* @layer electron-main @kind config */
-import type { SourceBuildJob } from '@archipelia/model';
+import type { SourceBuildJob, SourceToolElevation } from '@archipelia/model';
 
 const BUILD_LABEL: Record<SourceBuildJob, string> = {
   venv: 'Setting up the private build folder',
@@ -19,4 +19,15 @@ const BUILD_ALLOW = { env: ['PATH'] } as const;
 
 const MAX_BUILD_LINES = 4000;
 
-export { BUILD_ALLOW, BUILD_JOBS, BUILD_LABEL, BUILD_TIMEOUT_MS, MAX_BUILD_LINES };
+const TOOL_ELEVATIONS: readonly SourceToolElevation[] = ['none', 'system'];
+
+const TOOL_LABEL: Record<SourceToolElevation, string> = {
+  none: 'Installing the build tool',
+  system: 'Installing the build tool, the system asks for permission',
+};
+
+const TOOL_TIMEOUT_MS: Record<SourceToolElevation, number> = { none: 30 * 60 * 1000, system: 90 * 60 * 1000 };
+
+const TOOL_SUCCESS_CODES: readonly number[] = [0, 3010];
+
+export { BUILD_ALLOW, BUILD_JOBS, BUILD_LABEL, BUILD_TIMEOUT_MS, MAX_BUILD_LINES, TOOL_ELEVATIONS, TOOL_LABEL, TOOL_SUCCESS_CODES, TOOL_TIMEOUT_MS };

@@ -4,7 +4,7 @@ import type { CatalogView, EnrichRequest, GameEnrichment, InstallRequest, Packag
 import type {
   AdminLobby, CatalogEntry, EngineChoice, EngineEvent, EngineInstallResult, EngineOverview, EngineStatus, GamePreset,
   InstalledGame, LobbyServerEntry, PackageSource, ServerEntry, Session, SessionTemplate, SourceBuildPrepared, SourceBuildRequest, SourceBuildStart, SourceBuilt,
-  SourcePlan, SourcePypiInstall, SourceRef, SourceSuggestions, SourceWheelRequest, StartupDecision, SuggestRequest,
+  SourcePlan, SourcePypiInstall, SourceRef, SourceSuggestions, SourceToolAsk, SourceToolEnd, SourceToolPlan, SourceToolStart, SourceWheelRequest, StartupDecision, SuggestRequest,
 } from '@archipelia/model';
 import type { HostLogLine, ServerTestResult } from '@archipelia/hosts';
 import type { PresetInput } from '@archipelia/presets';
@@ -38,6 +38,9 @@ const APP_CHANNELS = defineChannels({
   sourcesBuildPrepare: invoke<(request: SourceBuildStart) => Promise<SourceBuildPrepared>>()('ap:sources:buildPrepare'),
   sourcesBuildStart: invoke<(request: SourceBuildRequest) => Promise<SourceBuilt>>()('ap:sources:buildStart'),
   sourcesBuildCancel: invoke<() => Promise<void>>()('ap:sources:buildCancel'),
+  sourcesToolPlan: invoke<(request: SourceToolAsk) => Promise<SourceToolPlan>>()('ap:sources:toolPlan'),
+  sourcesToolInstall: invoke<(request: SourceToolStart) => Promise<SourceToolEnd>>()('ap:sources:toolInstall'),
+  sourcesToolCancel: invoke<() => Promise<void>>()('ap:sources:toolCancel'),
   presetsList: invoke<() => Promise<GamePreset[]>>()('ap:presets:list'),
   presetsCreate: invoke<(preset: PresetInput) => Promise<GamePreset>>()('ap:presets:create'),
   presetsSave: invoke<(preset: GamePreset) => Promise<GamePreset>>()('ap:presets:save'),

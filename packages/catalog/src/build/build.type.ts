@@ -3,6 +3,7 @@ import type { EngineRuntime, SourceBuildJob, SourcePlan } from '@archipelia/mode
 import type { ZipEntry } from '@archipelia/model/zip';
 import type { BuildDirs, ResolvedPackage, SpawnWrap } from '@archipelia/engine';
 import type { Fetch } from '../install/fetch-file.type';
+import type { RustHomes } from '../tool/rust-homes.type';
 
 type Archive = { file: string; sha256: string; size: number };
 
@@ -16,7 +17,9 @@ type BuildRun = { status: 'done' | 'failed' | 'cancelled' | 'rejected'; code: nu
 
 type BuildRunner = (job: SourceBuildJob, buildId: string) => Promise<BuildRun>;
 
-type BuildScope = { readOnly: string[]; readWrite: string[]; network?: boolean };
+type BuildScope = { readOnly: string[]; readWrite: string[]; network?: boolean; path?: string[] };
+
+type BuildTools = { path: string[]; rust: RustHomes | undefined };
 
 type BuildSandbox = { confine: (scope: BuildScope) => SpawnWrap | undefined };
 
@@ -25,6 +28,7 @@ type BuildDeps = {
   engineDir: () => Promise<string>;
   run?: BuildRunner | undefined;
   sandbox?: (() => Promise<BuildSandbox>) | undefined;
+  toolsDir?: (() => Promise<string>) | undefined;
   log?: ((message: string) => void) | undefined;
 };
 
@@ -48,4 +52,4 @@ type BuildSession = {
   close: () => Promise<void>;
 };
 
-export type { ActiveBuild, Archive, ArchiveEntry, ArchiveLimits, ArchiveSite, BuildDeps, BuildPhase, BuildRun, BuildRunner, BuildSandbox, BuildScope, BuildSession };
+export type { ActiveBuild, Archive, ArchiveEntry, ArchiveLimits, ArchiveSite, BuildDeps, BuildPhase, BuildRun, BuildRunner, BuildSandbox, BuildScope, BuildSession, BuildTools };

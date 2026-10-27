@@ -26,7 +26,8 @@ const SourceBody = ({ module, step, buildLog, ...handlers }: PackageSourceDialog
     case 'build':
       return (
         <BuildStep module={module} candidate={step.candidate} plan={step.plan} stage={step.stage} buildLog={buildLog} onBuildCancel={handlers.onBuildCancel}
-          onBuildDownload={handlers.onBuildDownload} onBuildStart={handlers.onBuildStart} onOpenLink={handlers.onOpenLink} />
+          onBuildDownload={handlers.onBuildDownload} onBuildStart={handlers.onBuildStart} onOpenLink={handlers.onOpenLink} onToolCancel={handlers.onToolCancel}
+          onToolInstall={handlers.onToolInstall} />
       );
     case 'failed':
       return <ErrorCallout message={step.message} onRetry={handlers.onRetry} />;

@@ -1,6 +1,7 @@
 /* @layer core @kind types */
 import type { SourceCandidate, SourceOrigin } from '@archipelia/model';
 import type { BuildRunner, BuildSandbox } from '../build/build.type';
+import type { Probe, ToolDeps, ToolRunner } from '../tool/tool.type';
 import type { GithubRepo } from '../enrich/enrich.type';
 
 type RepoFacts = {
@@ -30,12 +31,15 @@ type WorldTexts = { linked?: string | undefined; home?: string | undefined; text
 
 type WorldInfo = Omit<WorldTexts, 'linked'>;
 
+type ToolsPort = { dir: () => Promise<string>; run?: ToolRunner | undefined; readHost?: ToolDeps['readHost'] | undefined; probe?: Probe | undefined };
+
 type SourceServiceDeps = {
   fetch?: typeof fetch;
   engineDir: () => Promise<string>;
   worldOf: (apworld: string) => Promise<WorldInfo>;
   run?: BuildRunner | undefined;
   sandbox?: (() => Promise<BuildSandbox>) | undefined;
+  tools?: ToolsPort | undefined;
   log?: ((message: string) => void) | undefined;
 };
 
@@ -60,5 +64,5 @@ type TreeFacts = { native: boolean; submodules: boolean; unsure: boolean };
 type Ranked = Pick<SourceCandidate, 'repo' | 'contains' | 'origins' | 'fork' | 'stars' | 'pushedAt'>;
 
 export type {
-  Attempt, CacheEntry, CommitFacts, Found, GithubClient, GithubClientDeps, PlanDeps, Ranked, RepoFacts, SetupFiles, SourceServiceDeps, SuggestDeps, TagFact, TreeFacts, Wanted, WorldContext, WorldInfo, WorldTexts,
+  Attempt, CacheEntry, CommitFacts, Found, GithubClient, GithubClientDeps, PlanDeps, Ranked, RepoFacts, SetupFiles, SourceServiceDeps, SuggestDeps, TagFact, ToolsPort, TreeFacts, Wanted, WorldContext, WorldInfo, WorldTexts,
 };

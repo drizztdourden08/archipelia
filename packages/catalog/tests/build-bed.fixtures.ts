@@ -4,7 +4,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterAll, afterEach, beforeAll, beforeEach, vi } from 'vitest';
 import type { EngineRuntime, SourceBuildJob } from '@archipelia/model';
-import type { BuildDeps, BuildRunner } from '../src/build/build.type';
+import type { BuildDeps, BuildRunner, BuildSandbox, BuildScope } from '../src/build/build.type';
 import { createBuilds } from '../src/build/create-builds';
 import { behaviour, engine, WHEEL_BYTES, ZIP } from './build-engine.fixtures';
 import { PLAN, SOURCE_URL, WHEEL } from './build.fixtures';
@@ -36,7 +36,7 @@ const registerBuildBed = () => {
   return { cached: () => readdir(join((behaviour.runtime as EngineRuntime).root, 'wheels')).catch(() => []) };
 };
 
-const bed = (sandbox?: BuildDeps['sandbox']) => {
+const bed = (sandbox?: BuildDeps['sandbox'], extra: Partial<BuildDeps> = {}) => {
   const calls: Call[] = [];
   const logs: string[] = [];
   const { net, seen } = routedFetch({ [SOURCE_URL]: () => new Response(behaviour.served) });
@@ -50,7 +50,7 @@ const bed = (sandbox?: BuildDeps['sandbox']) => {
     if (job === 'wheel' && behaviour.wheel) await writeFile(join(argAfter(spec.args, '-w'), WHEEL), behaviour.wheel);
     return behaviour.runs[job] ?? { status: 'done', code: 0, lines: [] };
   };
-  const builds = createBuilds({ fetch: net, engineDir: () => Promise.resolve('engine'), run, sandbox, log: (message) => logs.push(message) });
+  const builds = createBuilds({ fetch: net, engineDir: () => Promise.resolve('engine'), run, sandbox, ...extra, log: (message) => logs.push(message) });
   holder.builds = builds;
   const prepared = async () => {
     const made = await builds.prepare(PLAN);
@@ -64,4 +64,15 @@ const bed = (sandbox?: BuildDeps['sandbox']) => {
   return { builds, calls, logs, seen, prepared, requestOf, workOf };
 };
 
-export { bed, exists, registerBuildBed };
+const fakeSandbox = (): { sandbox: () => Promise<BuildSandbox>; scopes: BuildScope[] } => {
+  const scopes: BuildScope[] = [];
+  const sandbox: BuildSandbox = {
+    confine: (scope) => {
+      scopes.push(scope);
+      return ({ file, args, cwd, env }) => ({ file: '/usr/bin/bwrap', args: [scope.network ? '--share-net' : '--no-net', '--', file, ...args], cwd, env: { PATH: '/usr/bin', ...env } });
+    },
+  };
+  return { sandbox: () => Promise.resolve(sandbox), scopes };
+};
+
+export { bed, exists, fakeSandbox, registerBuildBed };

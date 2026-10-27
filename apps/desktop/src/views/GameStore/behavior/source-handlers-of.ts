@@ -9,10 +9,13 @@ import { sourceCheck } from './source-check';
 import { sourcePlan } from './source-plan';
 import { sourcePypi } from './source-pypi';
 import { sourceSearch } from './source-search';
+import { sourceToolInstall } from './source-tool-install';
 import { sourceWheel } from './source-wheel';
 import type { SourceHandlers, SourceHandlersRun } from './usePackageSource.type';
 
 const cancelBuild = () => { void appApi().sourcesBuildCancel(); };
+
+const cancelTool = () => { void appApi().sourcesToolCancel(); };
 
 const sourceHandlersOf = (run: SourceHandlersRun): SourceHandlers => {
   const { aim, step, results, ask, installWorld, setStep, setResults, close } = run;
@@ -41,6 +44,11 @@ const sourceHandlersOf = (run: SourceHandlersRun): SourceHandlers => {
       cancelBuild();
       if (build) setStep({ ...build, stage: { kind: 'confirm' } });
     },
+    onToolInstall: (made, tool) => {
+      const stage = build?.stage;
+      if (build && stage?.kind === 'missing') void sourceToolInstall({ aim, state: build, build: made, install: installWorld, setStep, close, missing: stage.missing, log: stage.log, tool });
+    },
+    onToolCancel: cancelTool,
     onOpenLink: openExternal,
     onClose: () => {
       if (build) cancelBuild();

@@ -1,5 +1,5 @@
 /* @layer renderer-app @kind config */
-import type { SourceBuildTool, SourceOrigin, SourceWarning } from '@archipelia/model';
+import type { SourceBuildTool, SourceOrigin, SourceToolBlock, SourceToolOs, SourceWarning } from '@archipelia/model';
 
 const SOURCE_TEXT = {
   title: (module: string) => `Get the package ${module}`,
@@ -155,6 +155,47 @@ const MISSING_TEXT: Record<SourceBuildTool, { title: string; body: string; link:
   },
 };
 
+const TOOL_TEXT = {
+  choose: 'How do you want to fix this?',
+  how: 'Show me how',
+  install: 'Install it for me',
+  howIntro: 'Run this in a terminal, then click Check again.',
+  howNone: 'Archipelia has no command for this system. Use the link above, then click Check again.',
+  installHeading: 'Archipelia will run this command',
+  size: (size: string) => `Size: ${size}`,
+  source: (source: string) => `From ${source}.`,
+  never: 'Archipelia never runs as an administrator. The installer asks for permission itself.',
+  restart: 'The computer may need a restart afterwards.',
+  action: 'Install',
+  uncancellable: 'Once the system installer has started, it cannot be stopped from here.',
+  installing: (what: string) => `Installing ${what}. Archipelia checks again when it ends.`,
+  distro: (name: string) => `Detected system: ${name}`,
+} as const;
+
+const TOOL_ELEVATION_TEXT: Record<SourceToolOs, string> = {
+  windows: 'Windows will ask for permission in its own window.',
+  linux: 'Your system will ask for your password in its own window.',
+  mac: 'Apple\'s installer opens in its own window and asks for permission.',
+  other: 'Your system will ask for permission in its own window.',
+};
+
+const TOOL_BLOCKED_TEXT: Record<SourceToolBlock, string> = {
+  immutable: 'This system keeps its programs read-only, so Archipelia cannot install this here. Use the manual way below, then click Check again.',
+  unsupported: 'Archipelia cannot install this on this system. Use the manual way below, then click Check again.',
+};
+
+const TOOL_NAME: Record<SourceBuildTool, string> = {
+  msvc: 'the Microsoft C++ Build Tools',
+  compiler: 'a C compiler',
+  xcode: 'the Xcode command line tools',
+  'python-headers': 'the Python headers',
+  headers: 'a system library',
+  rust: 'Rust',
+  cmake: 'CMake',
+};
+
 const BACKABLE_STEPS: ReadonlySet<string> = new Set(['trust', 'plan', 'build']);
 
-export { BACKABLE_STEPS, BUILD_TEXT, MISSING_TEXT, ORIGIN_LABEL, PLAN_TEXT, SOURCE_TEXT, WARNING_HELP, WARNING_LABEL };
+export {
+  BACKABLE_STEPS, BUILD_TEXT, MISSING_TEXT, ORIGIN_LABEL, PLAN_TEXT, SOURCE_TEXT, TOOL_BLOCKED_TEXT, TOOL_ELEVATION_TEXT, TOOL_NAME, TOOL_TEXT, WARNING_HELP, WARNING_LABEL,
+};

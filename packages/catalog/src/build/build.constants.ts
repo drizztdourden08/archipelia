@@ -26,6 +26,8 @@ const MAX_LOG_LINES = 200;
 
 const MAX_TOOLS = 200;
 
+const PATH_TOOLS: readonly string[] = ['cmake', 'ninja', 'meson'];
+
 const BUILD_ID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 
 const RESERVED_NAMES = new Set([
@@ -54,5 +56,5 @@ const HEADER_FILE = /fatal error: ([\w./+-]+\.h): No such file or directory/i;
 
 export {
   ARCHIVE_FILE, ARCHIVE_LIMITS, ARCHIVE_TIMEOUT_MS, BUILD_ID, BUILD_PREFIX, DEFAULT_REQUIRES, FAILURE_RULES, HEADER_FILE, MAX_ARCHIVE_BYTES, MAX_LOG_LINES, MAX_REQUIRES,
-  MAX_TOOLS, PYPROJECT, RESERVED_NAMES, STALE_BUILD_MS,
+  MAX_TOOLS, PATH_TOOLS, PYPROJECT, RESERVED_NAMES, STALE_BUILD_MS,
 };

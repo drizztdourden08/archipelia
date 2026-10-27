@@ -15,7 +15,9 @@ import { fakeLobbyRun } from '../lobbies/review/fake-lobby-run';
 import { REVIEW_FLAG } from '../lobbies/review/review.constants';
 import { createBuildLines } from '../builds/create-build-lines';
 import { createBuildRunner } from '../builds/create-build-runner';
+import { createToolRunner } from '../builds/create-tool-runner';
 import { defineBuildProcesses } from '../builds/define-build-processes';
+import { defineToolProcesses } from '../builds/define-tool-processes';
 
 const lanHost = () => lanAddresses().find((lan) => lan.family === 'IPv4')?.address ?? '127.0.0.1';
 
@@ -41,6 +43,7 @@ const createAppServices = async (ctx: MainContext) => {
       network: { automation, lanHost },
       environment: { version },
       build: createBuildRunner(ctx.processes, buildLines),
+      tool: createToolRunner(ctx.processes, buildLines),
       ...(review ? { lobbyRun: fakeLobbyRun } : {}),
     });
     return started;
@@ -48,6 +51,7 @@ const createAppServices = async (ctx: MainContext) => {
   if (!started) throw new Error('the embedded core did not start');
   const { core, listen } = started;
   defineBuildProcesses(ctx.processes, (job, raw) => core.catalog.sources.processSpec(job, raw), buildLines);
+  defineToolProcesses(ctx.processes, (raw) => core.catalog.sources.toolSpec(raw), buildLines);
   const lobbies = await createLobbyServices({
     core, listen, domain: ctx.storage.domain, secrets, canStoreSecrets, automation, lanHost, version, log: ctx.log,
     onLobby: (event) => ctx.emit(APP_CHANNELS.onLobbyEvent, event),
