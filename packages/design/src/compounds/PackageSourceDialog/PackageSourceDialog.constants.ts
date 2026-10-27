@@ -3,7 +3,6 @@ import type { SourceBuildTool, SourceOrigin, SourceToolBlock, SourceToolOs, Sour
 
 const SOURCE_TEXT = {
   title: (module: string) => `Get the package ${module}`,
-  warning: (module: string) => `This game needs a Python package called ${module}. It is not on the Python Package Index, where Archipelia normally gets packages. Archipelia searched GitHub for it. It does not know who made these projects or whether they are safe. Installing one runs its code on your computer, with your access. Pick one only if you trust it, ideally one the world's author points to.`,
   searching: (module: string) => `Looking for ${module} on GitHub.`,
   empty: (module: string) => `Archipelia found nothing for ${module} on GitHub. If the world's page says where to get it, paste that GitHub link here.`,
   limited: (time: string) => `GitHub asks Archipelia to wait. Try again at ${time}.`,
@@ -12,13 +11,11 @@ const SOURCE_TEXT = {
   pasteAction: 'Look it up',
   pasteFailed: 'Archipelia could not find that repository. Paste a link such as https://github.com/owner/repo.',
   use: 'Use this one',
+  picked: 'Selected',
   openRepo: 'Open on GitHub',
   contains: (module: string) => `Contains ${module}`,
   missingModule: (module: string) => `Does not contain ${module}`,
   checking: (repo: string) => `Checking ${repo}.`,
-  back: 'Back to the list',
-  close: 'Close',
-  retry: 'Try again',
   stars: (count: number) => (count === 1 ? '1 star' : `${count} stars`),
   updated: 'Updated',
   created: 'Created',
@@ -26,7 +23,6 @@ const SOURCE_TEXT = {
   trustBox: (repo: string) => `I trust ${repo}`,
   trustType: (repo: string) => `Type ${repo} to continue.`,
   trustWarned: 'This project has warnings. Read them before you go on.',
-  continue: 'Continue',
 } as const;
 
 const ORIGIN_LABEL: Record<SourceOrigin, string | undefined> = {
@@ -197,8 +193,6 @@ const TOOL_NAME: Record<SourceBuildTool, string> = {
   cmake: 'CMake',
 };
 
-const BACKABLE_STEPS: ReadonlySet<string> = new Set(['trust', 'plan', 'build']);
-
 export {
-  BACKABLE_STEPS, BUILD_TEXT, MISSING_TEXT, ORIGIN_LABEL, PLAN_TEXT, SOURCE_TEXT, TOOL_BLOCKED_TEXT, TOOL_ELEVATION_TEXT, TOOL_NAME, TOOL_TEXT, WARNING_HELP, WARNING_LABEL,
+  BUILD_TEXT, MISSING_TEXT, ORIGIN_LABEL, PLAN_TEXT, SOURCE_TEXT, TOOL_BLOCKED_TEXT, TOOL_ELEVATION_TEXT, TOOL_NAME, TOOL_TEXT, WARNING_HELP, WARNING_LABEL,
 };

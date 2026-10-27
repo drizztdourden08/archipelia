@@ -1,8 +1,8 @@
 /* @layer renderer-app @kind types */
-import type { PackageSourceDialogProps, PackageSourceStep } from '@archipelia/design';
+import type { PackageSourceDialogProps, PackageSourceStep, SourceSearch } from '@archipelia/design';
 import type { InstallRequest } from '@archipelia/catalog';
-import type { InstallFailure, SourceBuildMissing, SourceBuildPlan, SourceCandidate, SourceSuggestions, SourceToolEnd, SourceToolPlan } from '@archipelia/model';
-import type { AskConsent } from './useConsent.type';
+import type { InstallFailure, SourceBuildMissing, SourceBuildPlan, SourceCandidate, SourceToolEnd, SourceToolPlan } from '@archipelia/model';
+import type { UseConsent } from './useConsent.type';
 
 type SourceAim = { key: string; title: string; module: string; linked?: string | undefined; request?: InstallRequest | undefined };
 
@@ -10,42 +10,56 @@ type SetStep = (step: PackageSourceStep) => void;
 
 type PlanState = Extract<PackageSourceStep, { kind: 'plan' }>;
 
-type SearchRun = { aim: SourceAim; setStep: SetStep; setResults: (found: SourceSuggestions) => void; paste?: string; showing?: SourceSuggestions | null };
+type BuildState = Extract<PackageSourceStep, { kind: 'build' }>;
 
-type PlanRun = { aim: SourceAim; candidate: SourceCandidate; setStep: SetStep };
+type FinishState = { kind: 'idle' } | { kind: 'running' } | { kind: 'done' } | { kind: 'failed'; message?: string | undefined };
+
+type SetFinish = (finish: FinishState) => void;
 
 type InstallWorld = (request: InstallRequest, key: string) => Promise<boolean | undefined>;
 
-type CheckRun = { aim: SourceAim; state: PlanState; install: InstallWorld; setStep: SetStep; close: () => void };
+type Finishing = (sentence: string, work: () => Promise<boolean | undefined>) => Promise<boolean | undefined>;
 
-type PypiRun = { aim: SourceAim; state: PlanState; ask: AskConsent; setStep: SetStep };
+type SearchRun = { aim: SourceAim; search: SourceSearch; setSearch: (search: SourceSearch) => void; paste?: string };
 
-type WheelRun = { aim: SourceAim; state: PlanState; typed: string; install: InstallWorld; setStep: SetStep; close: () => void };
+type PlanRun = { aim: SourceAim; candidate: SourceCandidate; setStep: SetStep };
 
-type BuildState = Extract<PackageSourceStep, { kind: 'build' }>;
+type CheckRun = { aim: SourceAim; install: InstallWorld; finishing: Finishing };
 
-type BuildPrepareRun = { aim: SourceAim; state: BuildState; setStep: SetStep };
+type PypiRun = { aim: SourceAim; state: PlanState | BuildState; ask: UseConsent['ask']; install: InstallWorld; finishing: Finishing };
 
-type BuildStartRun = { aim: SourceAim; state: BuildState; build: SourceBuildPlan; install: InstallWorld; setStep: SetStep; close: () => void };
+type WheelRun = { aim: SourceAim; state: PlanState | BuildState; typed: string; install: InstallWorld; finishing: Finishing };
+
+type BuildPrepareRun = { aim: SourceAim; state: PlanState | BuildState; setStep: SetStep };
+
+type BuildStartRun = { aim: SourceAim; state: BuildState; build: SourceBuildPlan; install: InstallWorld; finishing: Finishing; setStep: SetStep };
 
 type ToolInstallRun = BuildStartRun & { missing: SourceBuildMissing; log: readonly string[]; tool: SourceToolPlan };
 
 type ToolEndRun = { run: ToolInstallRun; end: SourceToolEnd };
 
-type SourceHandlers = Omit<PackageSourceDialogProps, 'title' | 'module' | 'step'>;
+type SourceHandlers = Omit<PackageSourceDialogProps, 'title' | 'module' | 'search' | 'step' | 'finish' | 'consent' | 'buildLog'>;
 
-type SourceHandlersRun = Pick<PypiRun, 'aim' | 'ask' | 'setStep'> & {
+type SourceHandlersRun = {
+  aim: SourceAim;
   step: PackageSourceStep;
-  results: SourceSuggestions | null;
+  search: SourceSearch;
+  consent: UseConsent;
   installWorld: InstallWorld;
-  setResults: (found: SourceSuggestions) => void;
+  setStep: SetStep;
+  setSearch: (search: SourceSearch) => void;
+  setFinish: SetFinish;
   close: () => void;
 };
 
 type PackageSourceParams = {
   needOf: (key: string) => InstallFailure | undefined;
+  errorOf: (key: string) => string | null;
   installWorld: InstallWorld;
-  ask: PypiRun['ask'];
+  consent: UseConsent;
 };
 
-export type { BuildPrepareRun, BuildStartRun, BuildState, CheckRun, PackageSourceParams, PlanRun, PypiRun, SearchRun, SourceAim, SourceHandlers, SourceHandlersRun, ToolEndRun, ToolInstallRun, WheelRun };
+export type {
+  BuildPrepareRun, BuildStartRun, BuildState, CheckRun, FinishState, Finishing, InstallWorld, PackageSourceParams, PlanRun, PlanState, PypiRun, SearchRun, SetFinish, SetStep, SourceAim,
+  SourceHandlers, SourceHandlersRun, ToolEndRun, ToolInstallRun, WheelRun,
+};

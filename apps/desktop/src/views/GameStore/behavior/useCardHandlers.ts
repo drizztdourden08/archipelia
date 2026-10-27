@@ -6,7 +6,7 @@ import type { CardHandlersParams } from './useCardHandlers.type';
 import { usePackageSource } from './usePackageSource';
 
 const useCardHandlers = ({ store, setOpened }: CardHandlersParams) => {
-  const source = usePackageSource({ needOf: store.needOf, installWorld: store.installWorld, ask: store.consent.ask });
+  const source = usePackageSource({ needOf: store.needOf, errorOf: store.errorOf, installWorld: store.installWorld, consent: store.consent });
   const handlers = {
     isBusy: store.isBusy,
     errorOf: store.errorOf,
@@ -17,7 +17,7 @@ const useCardHandlers = ({ store, setOpened }: CardHandlersParams) => {
     openHome: openExternal,
     getPackage: (row: GameRow) => { setOpened(null); source.open(row); },
   };
-  return { handlers, sourceDialog: source.dialog };
+  return { handlers, sourceDialog: source.dialog, consentDialog: source.dialog ? null : store.consent.pending };
 };
 
 export { useCardHandlers };

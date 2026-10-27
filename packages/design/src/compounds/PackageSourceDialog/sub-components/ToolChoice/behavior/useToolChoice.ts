@@ -1,6 +1,6 @@
 /* @layer renderer-app @kind hook */
 import { useState } from 'react';
-import type { ToolWay } from '../../../PackageSourceDialog.type';
+import type { ToolWay } from './useToolChoice.type';
 
 const useToolChoice = () => {
   const [way, setWay] = useState<ToolWay>(null);

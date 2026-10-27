@@ -2,7 +2,7 @@
 import { Button, Flex, Icon, Link, Stack, Text } from '@drizztdourden08/tessera/primitives';
 import { CodeBlock } from '@drizztdourden08/tessera/composites';
 import { TOOL_ELEVATION_TEXT, TOOL_TEXT } from '../../PackageSourceDialog.constants';
-import type { ToolInstallProps } from '../../PackageSourceDialog.type';
+import type { ToolInstallProps } from './ToolInstall.type';
 import { ToolHow } from '../ToolHow';
 
 const ToolInstall = ({ build, tool, onToolInstall, onOpenLink }: ToolInstallProps) => {

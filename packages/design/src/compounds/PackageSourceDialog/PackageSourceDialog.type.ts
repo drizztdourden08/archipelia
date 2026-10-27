@@ -1,11 +1,13 @@
 /* @layer renderer-app @kind types */
+import type { WizardApi } from '@drizztdourden08/tessera/composites';
 import type { SourceBuildMissing, SourceBuildPlan, SourceCandidate, SourcePlan, SourceSuggestions, SourceToolPlan } from '@archipelia/model';
+import type { ConsentPackage, ConsentWheel } from '../PackageConsentDialog';
 
 type BuildStage =
-  | { kind: 'confirm' }
   | { kind: 'preparing' }
   | { kind: 'ready'; build: SourceBuildPlan }
   | { kind: 'building'; build: SourceBuildPlan }
+  | { kind: 'built'; build: SourceBuildPlan }
   | { kind: 'missing'; build: SourceBuildPlan; missing: SourceBuildMissing; log: readonly string[]; tool?: SourceToolPlan | undefined }
   | { kind: 'installing'; build: SourceBuildPlan; tool: SourceToolPlan }
   | { kind: 'paused'; build: SourceBuildPlan; message: string; log: readonly string[] }
@@ -13,30 +15,37 @@ type BuildStage =
 
 type BuildLogView = { lines: readonly string[]; label: string | undefined; progress: number };
 
+type SourceSearch = { suggestions: SourceSuggestions | null; looking: boolean; failed: string | undefined };
+
 type PackageSourceStep =
-  | { kind: 'searching' }
-  | { kind: 'results'; suggestions: SourceSuggestions; looking: boolean }
-  | { kind: 'trust'; candidate: SourceCandidate }
+  | { kind: 'idle' }
   | { kind: 'planning'; candidate: SourceCandidate }
-  | { kind: 'plan'; candidate: SourceCandidate; plan: SourcePlan; checking: boolean; stillMissing: boolean; installing: boolean }
-  | { kind: 'build'; candidate: SourceCandidate; plan: SourcePlan; stage: BuildStage }
+  | { kind: 'planFailed'; candidate: SourceCandidate; message: string }
+  | { kind: 'plan'; candidate: SourceCandidate; plan: SourcePlan }
+  | { kind: 'build'; candidate: SourceCandidate; plan: SourcePlan; stage: BuildStage };
+
+type SourceFinish =
+  | { kind: 'idle' }
+  | { kind: 'running' }
+  | { kind: 'done' }
+  | { kind: 'missing'; names: readonly string[] }
   | { kind: 'failed'; message: string };
+
+type SourceConsent = { packages: readonly ConsentPackage[]; wheels: readonly ConsentWheel[] };
 
 type PackageSourceHandlers = {
   onPaste: (text: string) => void;
-  onPick: (candidate: SourceCandidate) => void;
-  onTrust: () => void;
-  onBack: () => void;
-  onRetry: () => void;
+  onRetrySearch: () => void;
+  onPlan: (candidate: SourceCandidate) => void;
   onInstallFromPypi: () => void;
   onUseWheel: (typed: string) => void;
   onCheckAgain: () => void;
-  onBuild: () => void;
   onBuildDownload: () => void;
   onBuildStart: (build: SourceBuildPlan) => void;
   onBuildCancel: () => void;
   onToolInstall: (build: SourceBuildPlan, tool: SourceToolPlan) => void;
   onToolCancel: () => void;
+  onConsent: (accepted: boolean) => void;
   onOpenLink: (url: string) => void;
   onClose: () => void;
 };
@@ -44,80 +53,39 @@ type PackageSourceHandlers = {
 type PackageSourceDialogProps = PackageSourceHandlers & {
   title: string;
   module: string;
+  search: SourceSearch;
   step: PackageSourceStep;
+  finish: SourceFinish;
+  consent: SourceConsent | null;
   buildLog?: BuildLogView | undefined;
 };
 
-type CandidateListProps = Pick<PackageSourceHandlers, 'onPaste' | 'onPick' | 'onOpenLink'> & {
-  module: string;
-  suggestions: SourceSuggestions;
-  looking: boolean;
+type SourceRoute = 'wheel' | 'pypi' | 'source';
+
+type SourceHow = 'build' | 'myself';
+
+type SourceValues = {
+  pick: string;
+  trusted: boolean;
+  typed: string;
+  route: SourceRoute | '';
+  wheelTyped: string;
+  how: SourceHow | '';
+  tooled: boolean;
 };
 
-type CandidateCardProps = Pick<PackageSourceHandlers, 'onPick' | 'onOpenLink'> & {
-  module: string;
-  candidate: SourceCandidate;
+type SourceView = {
+  candidate: SourceCandidate | undefined;
+  plan: SourcePlan | undefined;
+  stage: BuildStage | undefined;
+  route: SourceRoute | '';
+  asking: boolean;
+  running: boolean;
 };
 
-type PasteFieldProps = Pick<PackageSourceHandlers, 'onPaste'> & { failed: boolean; looking: boolean };
-
-type TrustStepProps = Pick<PackageSourceHandlers, 'onTrust'> & { module: string; candidate: SourceCandidate };
-
-type PlanStepProps = Pick<PackageSourceHandlers, 'onInstallFromPypi' | 'onUseWheel' | 'onCheckAgain' | 'onBuild'> & {
-  module: string;
-  plan: SourcePlan;
-  checking: boolean;
-  stillMissing: boolean;
-  installing: boolean;
-};
-
-type WheelOfferProps = Pick<PackageSourceHandlers, 'onUseWheel'> & { plan: SourcePlan; installing: boolean };
-
-type ManualStepsProps = Pick<PackageSourceHandlers, 'onCheckAgain'> & {
-  module: string;
-  plan: SourcePlan;
-  checking: boolean;
-  stillMissing: boolean;
-};
-
-type BuildStepProps = Pick<PackageSourceHandlers, 'onBuildCancel' | 'onBuildDownload' | 'onBuildStart' | 'onOpenLink' | 'onToolCancel' | 'onToolInstall'> & {
-  module: string;
-  candidate: SourceCandidate;
-  plan: SourcePlan;
-  stage: BuildStage;
-  buildLog: BuildLogView | undefined;
-};
-
-type BuildLogProps = { lines: readonly string[]; label: string | undefined };
-
-type BuildMissingProps = Pick<PackageSourceHandlers, 'onBuildStart' | 'onOpenLink' | 'onToolInstall'> & {
-  build: SourceBuildPlan;
-  missing: SourceBuildMissing;
-  log: readonly string[];
-  tool: SourceToolPlan | undefined;
-};
-
-type ToolWay = 'how' | 'install' | null;
-
-type ToolChoiceProps = Pick<PackageSourceHandlers, 'onToolInstall' | 'onOpenLink'> & { build: SourceBuildPlan; tool: SourceToolPlan };
-
-type ToolHowProps = { how: string; blocked: SourceToolPlan['blocked'] };
-
-type ToolInstallProps = Pick<PackageSourceHandlers, 'onToolInstall' | 'onOpenLink'> & { build: SourceBuildPlan; tool: SourceToolPlan };
-
-type BuildInstallingProps = Pick<PackageSourceHandlers, 'onToolCancel'> & { tool: SourceToolPlan; buildLog: BuildLogView | undefined };
-
-type BuildPausedProps = Pick<PackageSourceHandlers, 'onBuildStart'> & { build: SourceBuildPlan; message: string; log: readonly string[] };
-
-type BuildConfirmProps = Pick<PackageSourceHandlers, 'onBuildDownload'> & { repo: string; short: string };
-
-type BuildRunningProps = { text: string; buildLog: BuildLogView | undefined; onCancel: (() => void) | undefined };
-
-type BuildFailedProps = Pick<PackageSourceHandlers, 'onBuildStart'> & { build: SourceBuildPlan | undefined; message: string; log: readonly string[] };
-
-type BuildReadyProps = Pick<PackageSourceHandlers, 'onBuildStart'> & { module: string; candidate: SourceCandidate; build: SourceBuildPlan };
+type StepBodyProps = { dialog: PackageSourceDialogProps; wizard: WizardApi<SourceValues>; view: SourceView };
 
 export type {
-  BuildConfirmProps, BuildFailedProps, BuildInstallingProps, BuildLogProps, BuildLogView, BuildMissingProps, BuildPausedProps, BuildRunningProps, BuildReadyProps, BuildStage, BuildStepProps, CandidateCardProps, CandidateListProps, ManualStepsProps,
-  PackageSourceDialogProps, PackageSourceStep, PasteFieldProps, PlanStepProps, ToolChoiceProps, ToolHowProps, ToolInstallProps, ToolWay, TrustStepProps, WheelOfferProps,
+  BuildLogView, BuildStage, PackageSourceDialogProps, PackageSourceHandlers, PackageSourceStep, SourceConsent, SourceFinish, SourceHow, SourceRoute, SourceSearch, SourceValues,
+  SourceView, StepBodyProps,
 };

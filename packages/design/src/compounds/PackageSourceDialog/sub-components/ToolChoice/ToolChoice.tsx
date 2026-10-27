@@ -1,9 +1,9 @@
 /* @layer renderer-app @kind component */
 import { Button, Flex, Icon, Stack, Text } from '@drizztdourden08/tessera/primitives';
 import { TOOL_TEXT } from '../../PackageSourceDialog.constants';
-import type { ToolChoiceProps } from '../../PackageSourceDialog.type';
 import { ToolHow } from '../ToolHow';
 import { ToolInstall } from '../ToolInstall';
+import type { ToolChoiceProps } from './ToolChoice.type';
 import { useToolChoice } from './behavior/useToolChoice';
 
 const ToolChoice = ({ build, tool, onToolInstall, onOpenLink }: ToolChoiceProps) => {

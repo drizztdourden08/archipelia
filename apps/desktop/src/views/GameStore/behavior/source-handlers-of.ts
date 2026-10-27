@@ -1,8 +1,8 @@
 /* @layer renderer-app @kind logic */
 import { openExternal } from '@drizztdourden08/brock-react';
 import { appApi } from '../../../ipc/app-api';
-import { SEARCHING } from './usePackageSource.constants';
-import { plannedStep } from './planned-step';
+import { cancelledStep } from './cancelled-step';
+import { finishingOf } from './finishing';
 import { sourceBuildPrepare } from './source-build-prepare';
 import { sourceBuildStart } from './source-build-start';
 import { sourceCheck } from './source-check';
@@ -11,6 +11,7 @@ import { sourcePypi } from './source-pypi';
 import { sourceSearch } from './source-search';
 import { sourceToolInstall } from './source-tool-install';
 import { sourceWheel } from './source-wheel';
+import { FINISH } from './usePackageSource.constants';
 import type { SourceHandlers, SourceHandlersRun } from './usePackageSource.type';
 
 const cancelBuild = () => { void appApi().sourcesBuildCancel(); };
@@ -18,40 +19,36 @@ const cancelBuild = () => { void appApi().sourcesBuildCancel(); };
 const cancelTool = () => { void appApi().sourcesToolCancel(); };
 
 const sourceHandlersOf = (run: SourceHandlersRun): SourceHandlers => {
-  const { aim, step, results, ask, installWorld, setStep, setResults, close } = run;
-  const plan = step.kind === 'plan' ? step : undefined;
+  const { aim, step, search, consent, installWorld, setStep, setSearch, setFinish, close } = run;
+  const planned = step.kind === 'plan' || step.kind === 'build' ? step : undefined;
   const build = step.kind === 'build' ? step : undefined;
-  const check = async () => { if (plan) await sourceCheck({ aim, state: plan, install: installWorld, setStep, close }); };
-  const back = () => {
-    if (build) {
-      cancelBuild();
-      setStep(plannedStep(build));
-    } else setStep(results ? { kind: 'results', suggestions: results, looking: false } : SEARCHING);
-  };
+  const common = { aim, install: installWorld, finishing: finishingOf(setFinish) };
   return {
-    onPaste: (paste) => void sourceSearch({ aim, paste, showing: results, setStep, setResults }),
-    onPick: (candidate) => setStep({ kind: 'trust', candidate }),
-    onTrust: () => { if (step.kind === 'trust') void sourcePlan({ aim, candidate: step.candidate, setStep }); },
-    onBack: back,
-    onRetry: () => void sourceSearch({ aim, setStep, setResults }),
-    onInstallFromPypi: () => { if (plan) void sourcePypi({ aim, state: plan, ask, setStep }).then((done) => (done ? check() : undefined)); },
-    onUseWheel: (typed) => { if (plan) void sourceWheel({ aim, state: plan, typed, install: installWorld, setStep, close }); },
-    onCheckAgain: () => void check(),
-    onBuild: () => { if (plan) setStep({ kind: 'build', candidate: plan.candidate, plan: plan.plan, stage: { kind: 'confirm' } }); },
-    onBuildDownload: () => { if (build) void sourceBuildPrepare({ aim, state: build, setStep }); },
-    onBuildStart: (made) => { if (build) void sourceBuildStart({ aim, state: build, build: made, install: installWorld, setStep, close }); },
+    onPaste: (paste) => void sourceSearch({ aim, paste, search, setSearch }),
+    onRetrySearch: () => void sourceSearch({ aim, search, setSearch }),
+    onPlan: (candidate) => {
+      setFinish(FINISH.idle);
+      void sourcePlan({ aim, candidate, setStep });
+    },
+    onInstallFromPypi: () => { if (planned) void sourcePypi({ ...common, state: planned, ask: consent.ask }); },
+    onUseWheel: (typed) => { if (planned) void sourceWheel({ ...common, state: planned, typed }); },
+    onCheckAgain: () => void sourceCheck(common),
+    onBuildDownload: () => { if (planned) void sourceBuildPrepare({ aim, state: planned, setStep }); },
+    onBuildStart: (made) => { if (build) void sourceBuildStart({ ...common, state: build, build: made, setStep }); },
     onBuildCancel: () => {
       cancelBuild();
-      if (build) setStep({ ...build, stage: { kind: 'confirm' } });
+      setStep(cancelledStep(step));
     },
     onToolInstall: (made, tool) => {
       const stage = build?.stage;
-      if (build && stage?.kind === 'missing') void sourceToolInstall({ aim, state: build, build: made, install: installWorld, setStep, close, missing: stage.missing, log: stage.log, tool });
+      if (build && stage?.kind === 'missing') void sourceToolInstall({ ...common, state: build, build: made, setStep, missing: stage.missing, log: stage.log, tool });
     },
     onToolCancel: cancelTool,
+    onConsent: (accepted) => (accepted ? consent.accept() : consent.cancel()),
     onOpenLink: openExternal,
     onClose: () => {
       if (build) cancelBuild();
+      consent.cancel();
       close();
     },
   };
