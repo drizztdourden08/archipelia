@@ -13,6 +13,7 @@ const DATA_DOMAINS: DataDomainDef[] = [
   { domain: DOMAIN.server, label: 'Server', dir: 'server', description: 'The lobby server settings and its admin token.', clearable: false, portable: false },
   { domain: DOMAIN.lobbyServers, label: 'Archipelia servers', dir: 'lobby-servers', description: 'The remote Archipelia servers whose lobbies this app manages. Their admin tokens stay in the vault.', portable: false },
   { domain: DOMAIN.joins, label: 'Joined sessions', dir: 'joins', description: 'The sessions this app joined as a player, with the token to come back and the files the host sent.', portable: false },
+  { domain: DOMAIN.tools, label: 'Build tools', dir: 'tools', description: 'The tools Archipelia installed to build packages, such as Rust, and the installers it downloaded.', portable: false },
 ];
 
 export { DATA_DOMAINS };
