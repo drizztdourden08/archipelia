@@ -12,6 +12,8 @@ const WINGET_ARGS = ['install', '--id', WINGET_ID, '-e', '--accept-package-agree
 
 const WINGET_PATH = ['Microsoft', 'WindowsApps', 'winget.exe'] as const;
 
+const VS_LICENSE = { name: 'Microsoft Visual Studio Build Tools licence', url: 'https://visualstudio.microsoft.com/license-terms/vs2022-ga-diagnosticbuildtools/' } as const;
+
 const VS_BOOTSTRAPPER_URL = 'https://aka.ms/vs/17/release/vs_BuildTools.exe';
 
 const VS_BOOTSTRAPPER_NAME = 'vs_BuildTools.exe';
@@ -28,9 +30,17 @@ const POWERSHELL_PATH = ['System32', 'WindowsPowerShell', 'v1.0', 'powershell.ex
 
 const SIGNATURE_VAR = 'ARCHIPELIA_CHECK';
 
-const SIGNATURE_SCRIPT = `$s = Get-AuthenticodeSignature -LiteralPath $env:${SIGNATURE_VAR}; if ($s.Status -eq 'Valid' -and $s.SignerCertificate.Subject -like '*O=Microsoft Corporation*') { 'valid' } else { 'invalid' }`;
+const SIGNATURE_BODY = "$s = Get-AuthenticodeSignature -LiteralPath $f; 'status=' + $s.Status; if ($s.SignerCertificate) { 'subject=' + $s.SignerCertificate.Subject; $c = New-Object System.Security.Cryptography.X509Certificates.X509Chain; [void]$c.Build($s.SignerCertificate); foreach ($e in $c.ChainElements) { 'chain=' + $e.Certificate.Subject } }";
 
-const SIGNATURE_ARGS = ['-NoProfile', '-NonInteractive', '-ExecutionPolicy', 'Bypass', '-Command', SIGNATURE_SCRIPT] as const;
+const FILE_SCRIPT = `$f = $env:${SIGNATURE_VAR}; ${SIGNATURE_BODY}`;
+
+const WINGET_SCRIPT = `$p = Get-AppxPackage -Name Microsoft.DesktopAppInstaller | Sort-Object Version -Descending | Select-Object -First 1; if (-not $p) { 'status=Missing'; exit }; $f = Join-Path $p.InstallLocation 'winget.exe'; ${SIGNATURE_BODY}`;
+
+const POWERSHELL_FLAGS = ['-NoProfile', '-NonInteractive', '-ExecutionPolicy', 'Bypass', '-Command'] as const;
+
+const SIGNER_ORG = 'Microsoft Corporation';
+
+const SIGNER_CA = /^Microsoft Code Signing PCA( \d{4})?$/;
 
 const RUSTUP_ROOT = 'https://static.rust-lang.org/rustup/dist';
 
@@ -126,6 +136,6 @@ const SOURCE_BUILD_TOOLS: readonly SourceBuildTool[] = ['msvc', 'compiler', 'xco
 
 export {
   CC_CANDIDATES, CHECKSUM_MAX_BYTES, CMAKE_PACKAGE, DOWNLOAD_TIMEOUT_MS, DRIVE_PATH, EXECUTABLE, MAX_COMMAND_CHARS, MSVC_BY_HAND, OS_OF, PROGRAM_FILES_X86, SHA256_PATTERN, IMMUTABLE_HOWS, IMMUTABLE_VARIANTS, INSTALLER_DIR, MANAGER_BY_ID, MAX_HOPS, OS_RELEASE_FILE, OSTREE_MARKER, PACKAGE_COMMANDS, PKEXEC, POWERSHELL_PATH, PROBE_TIMEOUT_MS,
-  RESTART_CODE, RUST_FOLDERS, RUST_UNIX_HOW, RUSTUP_ARGS, RUSTUP_HOSTS, RUSTUP_MAX_BYTES, RUSTUP_ROOT, RUSTUP_TRIPLES, SIGNATURE_ARGS, SIGNATURE_VAR, SOURCE_BUILD_TOOLS, TOOL_KEYS, VS_BOOTSTRAPPER_NAME,
-  VS_BOOTSTRAPPER_URL, VS_HOSTS, VS_MAX_BYTES, VS_SWITCHES, VSWHERE_ARGS, VSWHERE_PATH, WINGET_ARGS, WINGET_HOWS, WINGET_PATH, XCODE_SELECT,
+  RESTART_CODE, RUST_FOLDERS, RUST_UNIX_HOW, RUSTUP_ARGS, RUSTUP_HOSTS, RUSTUP_MAX_BYTES, RUSTUP_ROOT, RUSTUP_TRIPLES, FILE_SCRIPT, POWERSHELL_FLAGS, SIGNATURE_VAR, SIGNER_CA, SIGNER_ORG, WINGET_SCRIPT, SOURCE_BUILD_TOOLS, TOOL_KEYS, VS_BOOTSTRAPPER_NAME,
+  VS_BOOTSTRAPPER_URL, VS_HOSTS, VS_LICENSE, VS_MAX_BYTES, VS_SWITCHES, VSWHERE_ARGS, VSWHERE_PATH, WINGET_ARGS, WINGET_HOWS, WINGET_PATH, XCODE_SELECT,
 };

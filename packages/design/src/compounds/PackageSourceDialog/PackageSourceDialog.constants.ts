@@ -88,6 +88,8 @@ const BUILD_TEXT = {
   warning: (repo: string) =>
     `Building runs the code of ${repo} on your computer, with your access. Archipelia cannot check that code. Nothing is downloaded until you click Download the source.`,
   confined: 'The build runs in a sandbox. It can write only to its private build folder, and it has no network while it builds.',
+  confinedRust: 'The build runs in a sandbox. It can write only to its private build folder.',
+  rustNetwork: 'This Rust build can use the network while it builds, to get its crates.',
   unconfined: 'The build runs with your user rights and can read your files and use the network.',
   how: 'Archipelia downloads the source at the version shown, checks it, installs the build tools into a private folder and builds there. The tools come from the Python Package Index as ready-made files. Only this project is built from source.',
   download: 'Download the source',
@@ -166,6 +168,8 @@ const TOOL_TEXT = {
   source: (source: string) => `From ${source}.`,
   never: 'Archipelia never runs as an administrator. The installer asks for permission itself.',
   restart: 'The computer may need a restart afterwards.',
+  license: (name: string) => `Clicking Install accepts the ${name}.`,
+  licenseLink: 'Read the licence',
   action: 'Install',
   uncancellable: 'Once the system installer has started, it cannot be stopped from here.',
   installing: (what: string) => `Installing ${what}. Archipelia checks again when it ends.`,

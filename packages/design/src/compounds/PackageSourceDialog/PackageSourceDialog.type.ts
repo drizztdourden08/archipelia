@@ -99,11 +99,11 @@ type BuildMissingProps = Pick<PackageSourceHandlers, 'onBuildStart' | 'onOpenLin
 
 type ToolWay = 'how' | 'install' | null;
 
-type ToolChoiceProps = Pick<PackageSourceHandlers, 'onToolInstall'> & { build: SourceBuildPlan; tool: SourceToolPlan };
+type ToolChoiceProps = Pick<PackageSourceHandlers, 'onToolInstall' | 'onOpenLink'> & { build: SourceBuildPlan; tool: SourceToolPlan };
 
 type ToolHowProps = { how: string; blocked: SourceToolPlan['blocked'] };
 
-type ToolInstallProps = Pick<PackageSourceHandlers, 'onToolInstall'> & { build: SourceBuildPlan; tool: SourceToolPlan };
+type ToolInstallProps = Pick<PackageSourceHandlers, 'onToolInstall' | 'onOpenLink'> & { build: SourceBuildPlan; tool: SourceToolPlan };
 
 type BuildInstallingProps = Pick<PackageSourceHandlers, 'onToolCancel'> & { tool: SourceToolPlan; buildLog: BuildLogView | undefined };
 

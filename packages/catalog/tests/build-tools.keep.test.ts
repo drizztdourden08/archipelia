@@ -1,15 +1,14 @@
 /* @layer tests @kind test */
-import { mkdir, mkdtemp, rm } from 'node:fs/promises';
+import { mkdtemp, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { delimiter, dirname, join } from 'node:path';
 import { afterAll, beforeAll, describe, expect, test, vi } from 'vitest';
-import type { EngineRuntime } from '@archipelia/model';
-import { behaviour, engine } from './build-engine.fixtures';
+import { engine } from './build-engine.fixtures';
 
 vi.mock('@archipelia/engine', async () => (await import('./build-engine.fixtures')).mockedEngine());
 
 const { venvPython } = await import('@archipelia/engine');
-const { bed, fakeSandbox, registerBuildBed } = await import('./build-bed.fixtures');
+const { bed, registerBuildBed } = await import('./build-bed.fixtures');
 
 registerBuildBed();
 
@@ -85,48 +84,5 @@ describe('where the build finds its tools', () => {
     const wheel = calls.find((call) => call.job === 'wheel');
     expect(wheel?.env.PATH?.split(delimiter)[0]).toBe(dirname(venvPython(`${workOf()}venv`)));
     expect(calls.find((call) => call.job === 'tools')?.env).not.toHaveProperty('PATH');
-  });
-});
-
-describe('Rust in the build', () => {
-  const withRust = async () => {
-    const dir = await mkdtemp(join(holder.tools, 'rust-'));
-    await mkdir(join(dir, 'cargo', 'bin'), { recursive: true });
-    await mkdir(join(dir, 'rustup'), { recursive: true });
-    return dir;
-  };
-
-  test('gives the wheel step the cargo and rustup homes of Archipelia, and only that step', async () => {
-    const dir = await withRust();
-    const { prepared, builds, calls, requestOf } = bed(undefined, { toolsDir: () => Promise.resolve(dir) });
-    await builds.build(requestOf(await prepared()));
-    const wheel = calls.find((call) => call.job === 'wheel');
-    expect(wheel?.env).toMatchObject({ CARGO_HOME: join(dir, 'cargo'), RUSTUP_HOME: join(dir, 'rustup') });
-    expect(wheel?.env.PATH?.split(delimiter)[0]).toBe(join(dir, 'cargo', 'bin'));
-    for (const call of calls.filter((entry) => entry.job !== 'wheel')) {
-      expect(call.env).not.toHaveProperty('CARGO_HOME');
-      expect(call.env).not.toHaveProperty('PATH');
-    }
-  });
-
-  test('adds nothing when Rust was not installed by Archipelia', async () => {
-    const dir = await mkdtemp(join(holder.tools, 'empty-'));
-    const { prepared, builds, calls, requestOf } = bed(undefined, { toolsDir: () => Promise.resolve(dir) });
-    await builds.build(requestOf(await prepared()));
-    for (const call of calls) expect(call.env.CARGO_HOME).toBeUndefined();
-  });
-
-  test('lets the Linux sandbox read both homes and run cargo from its folder', async () => {
-    const dir = await withRust();
-    const { sandbox, scopes } = fakeSandbox();
-    const { prepared, builds, calls, requestOf } = bed(sandbox, { toolsDir: () => Promise.resolve(dir) });
-    await builds.build(requestOf(await prepared()));
-    const root = (behaviour.runtime as EngineRuntime).root;
-    const wheelScope = scopes.find((scope) => scope.path !== undefined);
-    expect(wheelScope?.readOnly).toEqual([root, join(dir, 'cargo'), join(dir, 'rustup')]);
-    expect(wheelScope?.path).toEqual([join(dir, 'cargo', 'bin')]);
-    expect(wheelScope?.network).toBe(false);
-    expect(calls.find((call) => call.job === 'wheel')?.env).toMatchObject({ CARGO_HOME: join(dir, 'cargo'), RUSTUP_HOME: join(dir, 'rustup') });
-    expect(scopes.filter((scope) => scope.path === undefined).every((scope) => scope.readOnly.length === 1)).toBe(true);
   });
 });

@@ -8,7 +8,7 @@ import { prepareBootstrapper } from '../src/tool/prepare-bootstrapper';
 import { prepareRustup } from '../src/tool/prepare-rustup';
 import { rustupUrlOf } from '../src/tool/rustup-url-of';
 import { wingetPathOf } from '../src/tool/winget-path-of';
-import { answer, registerToolBed } from './tool.fixtures';
+import { answer, registerToolBed, SIGNED_BY_MICROSOFT } from './tool.fixtures';
 
 type Route = () => Response;
 
@@ -136,7 +136,7 @@ describe('rustup-init', () => {
   test('is downloaded from its fixed address, checked against the checksum next to it and kept in the tools folder', async () => {
     const { net, seen } = netOf({ [URL]: ok(installer), [`${URL}.sha256`]: ok(`${sha256Of(installer)} *rustup-init.exe\n`) });
     const { deps, host } = bed.depsOf({ fetch: net });
-    const file = await prepareRustup(deps, host);
+    const { file } = await prepareRustup(deps, host);
     expect(seen.map((call) => call.url)).toEqual([URL, `${URL}.sha256`]);
     expect(file.startsWith(join(host.toolsDir, 'installers'))).toBe(true);
     expect(new Uint8Array(await readFile(file))).toEqual(installer);
@@ -161,12 +161,13 @@ describe('the Visual Studio installer', () => {
   const FIRST = 'https://aka.ms/vs/17/release/vs_BuildTools.exe';
   const LAST = 'https://download.visualstudio.microsoft.com/download/pr/vs_BuildTools.exe';
   const POWERSHELL = 'C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe';
+  const SIGNED = SIGNED_BY_MICROSOFT;
   const net = () => netOf({ [FIRST]: redirect(LAST), [LAST]: ok(bytesOf('vs bootstrapper')) });
 
   test('comes from aka.ms and is run only after Windows says Microsoft signed it', async () => {
     const routes = net();
-    const { deps, host, calls } = bed.depsOf({ fetch: routes.net, answers: { [POWERSHELL]: answer(true, 'valid\r\n') } });
-    const file = await prepareBootstrapper(deps, host);
+    const { deps, host, calls } = bed.depsOf({ fetch: routes.net, answers: { [POWERSHELL]: answer(true, `${SIGNED}\r\n`) } });
+    const { file } = await prepareBootstrapper(deps, host);
     expect(routes.seen.map((call) => call.url)).toEqual([FIRST, LAST]);
     expect(file.endsWith('vs_BuildTools.exe')).toBe(true);
     expect(calls).toHaveLength(1);
@@ -177,7 +178,8 @@ describe('the Visual Studio installer', () => {
   });
 
   test.each([
-    ['an invalid signature', answer(true, 'invalid')],
+    ['an invalid signature', answer(true, SIGNED.replace('status=Valid', 'status=HashMismatch'))],
+    ['another signer', answer(true, SIGNED.replaceAll('O=Microsoft Corporation', 'O=Evil Corporation'))],
     ['a check that fails', answer(false)],
     ['an empty answer', answer(true, '')],
   ])('is refused and removed after %s', async (_name, verdict) => {

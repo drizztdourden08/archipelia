@@ -10,7 +10,7 @@ import { PATH_TOOLS } from './build.constants';
 const exists = (path: string): Promise<boolean> => access(path).then(() => true, () => false);
 
 const buildToolsOf = async (deps: Pick<BuildDeps, 'toolsDir'>, build: ActiveBuild, job: SourceBuildJob): Promise<BuildTools> => {
-  if (job !== 'wheel') return { path: [], rust: undefined };
+  if (job !== 'wheel' && job !== 'crates') return { path: [], rust: undefined };
   const venvBin = build.pins.some((pin) => PATH_TOOLS.includes(pin.name.toLowerCase())) ? [dirname(venvPython(build.dirs.venv))] : [];
   const dir = await deps.toolsDir?.();
   const homes = dir === undefined ? undefined : rustHomesOf(dir);

@@ -11,7 +11,9 @@ type SourceToolElevation = 'none' | 'system';
 
 type SourceToolAfter = 'check' | 'dialog' | 'restart';
 
-type SourceToolInstall = { command: string; size: string; source: string; elevation: SourceToolElevation; restart: boolean };
+type SourceToolLicense = { name: string; url: string };
+
+type SourceToolInstall = { command: string; size: string; source: string; elevation: SourceToolElevation; restart: boolean; license?: SourceToolLicense | undefined };
 
 type SourceToolPlan = {
   tool: SourceBuildTool;
@@ -32,4 +34,4 @@ type SourceToolEnd =
   | { status: 'cancelled' }
   | { status: 'failed'; message: string; log: string[] };
 
-export type { SourceToolAfter, SourceToolAsk, SourceToolBlock, SourceToolElevation, SourceToolEnd, SourceToolFound, SourceToolInstall, SourceToolOs, SourceToolPlan, SourceToolStart };
+export type { SourceToolAfter, SourceToolAsk, SourceToolBlock, SourceToolElevation, SourceToolEnd, SourceToolFound, SourceToolInstall, SourceToolLicense, SourceToolOs, SourceToolPlan, SourceToolStart };

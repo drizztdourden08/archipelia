@@ -18,7 +18,7 @@ const BuildMissing = ({ build, missing, log, tool, onBuildStart, onOpenLink, onT
           <Link href={text.url} external navigate={onOpenLink}>{text.link}</Link>
         </Stack>
       </Callout>
-      {tool && offered && <ToolChoice build={build} tool={tool} onToolInstall={onToolInstall} />}
+      {tool && offered && <ToolChoice build={build} tool={tool} onToolInstall={onToolInstall} onOpenLink={onOpenLink} />}
       <Flex>
         <Button variant={offered ? 'secondary' : 'primary'} icon={<Icon name="refresh-cw" />} onClick={() => onBuildStart(build)}>{BUILD_TEXT.checkAgain}</Button>
       </Flex>

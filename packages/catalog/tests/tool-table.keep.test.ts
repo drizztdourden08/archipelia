@@ -27,7 +27,7 @@ describe('the Microsoft C++ Build Tools on Windows', () => {
       '--override', '--quiet --wait --norestart --add Microsoft.VisualStudio.Workload.VCTools --includeRecommended',
     ]);
     expect(found.shown).toBe(
-      'winget install --id Microsoft.VisualStudio.2022.BuildTools -e --accept-package-agreements --accept-source-agreements '
+      `${WINGET} install --id Microsoft.VisualStudio.2022.BuildTools -e --accept-package-agreements --accept-source-agreements `
       + '--override "--quiet --wait --norestart --add Microsoft.VisualStudio.Workload.VCTools --includeRecommended"',
     );
     expect(found.elevation).toBe('system');

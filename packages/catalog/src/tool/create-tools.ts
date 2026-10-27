@@ -16,7 +16,7 @@ const createTools = (deps: ToolDeps) => {
   let granted: SourceBuildTool | undefined;
   let installing = false;
 
-  const hostOf = async (): Promise<ToolHost> => deps.readHost(await deps.toolsDir());
+  const hostOf = async (): Promise<ToolHost> => deps.readHost(await deps.toolsDir(), deps.probe);
 
   const foundOf = (ask: SourceToolAsk, host: ToolHost): Promise<SourceToolFound> => {
     if (toolKeyOf(ask.tool, host.platform) === 'cmake') return Promise.resolve(deps.hasTool(ask.buildId, CMAKE_PACKAGE) ? 'found' : 'missing');

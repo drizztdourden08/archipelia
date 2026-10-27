@@ -11,6 +11,7 @@ const TOOL_TEXT = {
   tooLarge: 'The installer is larger than Archipelia takes.',
   hops: 'The installer address sent Archipelia in a circle, so it downloaded nothing.',
   unsigned: 'Archipelia could not confirm that Microsoft signed the installer, so it will not run it.',
+  swapped: 'The installer changed on disk after Archipelia checked it, so it will not run it.',
   checksum: 'The installer does not match the checksum its publisher shows, so Archipelia will not run it.',
   busy: 'Archipelia is already installing a build tool. Wait for it to finish.',
   notAsked: 'Archipelia installs a build tool only after you click Install for it.',

@@ -10,7 +10,7 @@ const bed = registerToolBed();
 
 const BUILD = '11111111-2222-3333-4444-555555555555';
 
-const WINGET_COMMAND = 'winget install --id Microsoft.VisualStudio.2022.BuildTools -e --accept-package-agreements --accept-source-agreements --override "--quiet --wait --norestart --add Microsoft.VisualStudio.Workload.VCTools --includeRecommended"';
+const WINGET_COMMAND = `${WINGET} install --id Microsoft.VisualStudio.2022.BuildTools -e --accept-package-agreements --accept-source-agreements --override "--quiet --wait --norestart --add Microsoft.VisualStudio.Workload.VCTools --includeRecommended"`;
 
 const VSWHERE = 'C:\\Program Files (x86)\\Microsoft Visual Studio\\Installer\\vswhere.exe';
 

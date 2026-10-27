@@ -13,10 +13,10 @@ const ID = '123e4567-e89b-42d3-a456-426614174000';
 const SPEC = { command: 'python', args: [], cwd: 'work', env: {} };
 
 describe('the processes of a build', () => {
-  test('declares the venv, the tools and the wheel step with a label and a time limit, and nothing else', () => {
+  test('declares the venv, the tools, the crates and the wheel step with a label and a time limit, and nothing else', () => {
     const { define, defined } = fakeProcesses();
     defineBuildProcesses({ define }, () => Promise.resolve(SPEC), createBuildLines());
-    expect([...defined.keys()]).toEqual([BUILD_JOB.venv, BUILD_JOB.tools, BUILD_JOB.wheel]);
+    expect([...defined.keys()]).toEqual([BUILD_JOB.venv, BUILD_JOB.tools, BUILD_JOB.crates, BUILD_JOB.wheel]);
     for (const stored of defined.values()) {
       expect(stored.label).toMatch(/\w/);
       expect(stored.timeoutMs).toBeGreaterThan(0);

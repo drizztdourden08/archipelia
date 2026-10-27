@@ -42,6 +42,7 @@ type ActiveBuild = {
   controller: AbortController;
   phase: BuildPhase;
   used: boolean;
+  rust: boolean;
   archive?: Archive;
   pins: ResolvedPackage[];
 };

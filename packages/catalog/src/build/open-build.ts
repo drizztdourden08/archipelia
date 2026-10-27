@@ -17,7 +17,7 @@ const openBuild = async (deps: BuildDeps, session: BuildSession, plan: SourcePla
   void sweepBuilds().catch(() => undefined);
   const dirs = buildDirsOf(await mkdtemp(join(tmpdir(), BUILD_PREFIX)));
   await Promise.all([mkdir(dirs.scratch), mkdir(dirs.out)]);
-  const build: ActiveBuild = { id: randomUUID(), plan, runtime, dirs, controller: new AbortController(), phase: 'preparing', used: false, pins: [] };
+  const build: ActiveBuild = { id: randomUUID(), plan, runtime, dirs, controller: new AbortController(), phase: 'preparing', used: false, rust: false, pins: [] };
   session.open(build);
   deps.log?.(`build: preparing ${plan.owner}/${plan.repo} at ${plan.pin.sha}`);
   return build;

@@ -13,7 +13,7 @@ vi.mock('../../src/ipc/app-api', () => ({ appApi: () => api }));
 const { toolEnded } = await import('../../src/views/GameStore/behavior/tool-ended');
 
 const BUILD: SourceBuildPlan = {
-  buildId: '123e4567-e89b-42d3-a456-426614174000', owner: 'Pseudoarc', repo: 'ctrando', module: 'ctrando', commit: 'a'.repeat(40), archiveSha256: 'b'.repeat(64), size: 10, confined: false,
+  buildId: '123e4567-e89b-42d3-a456-426614174000', owner: 'Pseudoarc', repo: 'ctrando', module: 'ctrando', commit: 'a'.repeat(40), archiveSha256: 'b'.repeat(64), size: 10, confined: false, rust: false,
   tools: [{ name: 'setuptools', version: '80.1.0', pin: 'setuptools==80.1.0' }],
 };
 

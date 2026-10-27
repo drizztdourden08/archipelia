@@ -9,8 +9,8 @@ const toolPlanOf = (tool: SourceBuildTool, host: ToolHost, found: SourceToolFoun
   const pick = recipeOf(tool, host);
   const base: SourceToolPlan = { tool, os: OS_OF[host.platform] ?? 'other', found, how: howOf(tool, host, pick), distro: host.distro?.name };
   if ('blocked' in pick) return { ...base, blocked: pick.blocked };
-  const { shown, size, source, elevation, restart } = pick.recipe;
-  return { ...base, install: { command: shown, size, source, elevation, restart } };
+  const { shown, size, source, elevation, restart, license } = pick.recipe;
+  return { ...base, install: { command: shown, size, source, elevation, restart, license } };
 };
 
 export { toolPlanOf };

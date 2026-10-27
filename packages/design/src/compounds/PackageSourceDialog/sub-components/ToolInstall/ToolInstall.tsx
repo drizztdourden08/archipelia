@@ -1,11 +1,11 @@
 /* @layer renderer-app @kind component */
-import { Button, Flex, Icon, Stack, Text } from '@drizztdourden08/tessera/primitives';
+import { Button, Flex, Icon, Link, Stack, Text } from '@drizztdourden08/tessera/primitives';
 import { CodeBlock } from '@drizztdourden08/tessera/composites';
 import { TOOL_ELEVATION_TEXT, TOOL_TEXT } from '../../PackageSourceDialog.constants';
 import type { ToolInstallProps } from '../../PackageSourceDialog.type';
 import { ToolHow } from '../ToolHow';
 
-const ToolInstall = ({ build, tool, onToolInstall }: ToolInstallProps) => {
+const ToolInstall = ({ build, tool, onToolInstall, onOpenLink }: ToolInstallProps) => {
   const { install } = tool;
   if (!install) return <ToolHow how={tool.how} blocked={tool.blocked} />;
   return (
@@ -21,6 +21,12 @@ const ToolInstall = ({ build, tool, onToolInstall }: ToolInstallProps) => {
         {install.elevation === 'system' && <Text variant="caption" tone="dim">{TOOL_TEXT.uncancellable}</Text>}
         {install.restart && <Text variant="caption" tone="dim">{TOOL_TEXT.restart}</Text>}
       </Stack>
+      {install.license && (
+        <Flex gap="sm" wrap>
+          <Text>{TOOL_TEXT.license(install.license.name)}</Text>
+          <Link href={install.license.url} external navigate={onOpenLink}>{TOOL_TEXT.licenseLink}</Link>
+        </Flex>
+      )}
       <Flex>
         <Button variant="primary" icon={<Icon name="download" />} onClick={() => onToolInstall(build, tool)}>{TOOL_TEXT.action}</Button>
       </Flex>

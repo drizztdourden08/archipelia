@@ -6,7 +6,7 @@ import { ToolHow } from '../ToolHow';
 import { ToolInstall } from '../ToolInstall';
 import { useToolChoice } from './behavior/useToolChoice';
 
-const ToolChoice = ({ build, tool, onToolInstall }: ToolChoiceProps) => {
+const ToolChoice = ({ build, tool, onToolInstall, onOpenLink }: ToolChoiceProps) => {
   const { way, setWay } = useToolChoice();
   return (
     <Stack gap="sm" as="section" aria-label={TOOL_TEXT.choose}>
@@ -16,7 +16,7 @@ const ToolChoice = ({ build, tool, onToolInstall }: ToolChoiceProps) => {
         <Button variant={way === 'install' ? 'primary' : 'secondary'} icon={<Icon name="download" />} onClick={() => setWay('install')}>{TOOL_TEXT.install}</Button>
       </Flex>
       {way === 'how' && <ToolHow how={tool.how} blocked={undefined} />}
-      {way === 'install' && <ToolInstall build={build} tool={tool} onToolInstall={onToolInstall} />}
+      {way === 'install' && <ToolInstall build={build} tool={tool} onToolInstall={onToolInstall} onOpenLink={onOpenLink} />}
     </Stack>
   );
 };

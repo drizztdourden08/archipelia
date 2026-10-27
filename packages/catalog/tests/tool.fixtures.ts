@@ -7,6 +7,14 @@ import type { BuildRun } from '../src/build/build.type';
 import { distroOf } from '../src/tool/distro-of';
 import type { Probe, ProbeResult, ToolDeps, ToolHost } from '../src/tool/tool.type';
 
+const SIGNED_BY_MICROSOFT = [
+  'status=Valid',
+  'subject=CN=Microsoft Corporation, O=Microsoft Corporation, L=Redmond, S=Washington, C=US',
+  'chain=CN=Microsoft Corporation, O=Microsoft Corporation, L=Redmond, S=Washington, C=US',
+  'chain=CN=Microsoft Code Signing PCA 2011, O=Microsoft Corporation, L=Redmond, S=Washington, C=US',
+  'chain=CN=Microsoft Root Certificate Authority 2010, DC=com, DC=microsoft',
+].join('\n');
+
 const WINGET = 'C:\\Users\\me\\AppData\\Local\\Microsoft\\WindowsApps\\winget.exe';
 
 const WINDOWS_ENV = { LOCALAPPDATA: 'C:\\Users\\me\\AppData\\Local', 'ProgramFiles(x86)': 'C:\\Program Files (x86)', SystemRoot: 'C:\\Windows', USERPROFILE: 'C:\\Users\\me' };
@@ -89,4 +97,4 @@ const registerToolBed = () => {
   return { depsOf, dir: () => holder.dir };
 };
 
-export { answer, done, hostOf, OS_RELEASE, probeOf, registerToolBed, WINGET };
+export { answer, done, hostOf, OS_RELEASE, probeOf, registerToolBed, SIGNED_BY_MICROSOFT, WINDOWS_ENV, WINGET };

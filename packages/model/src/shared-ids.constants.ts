@@ -15,7 +15,7 @@ const DOMAIN = {
 
 const ENGINE_JOB = 'archipelia-engine-setup';
 
-const BUILD_JOB = { venv: 'ap-build-venv', tools: 'ap-build-tools', wheel: 'ap-build-wheel' } as const;
+const BUILD_JOB = { venv: 'ap-build-venv', tools: 'ap-build-tools', crates: 'ap-build-crates', wheel: 'ap-build-wheel' } as const;
 
 const TOOL_JOB = { none: 'ap-tool-user', system: 'ap-tool-system' } as const;
 

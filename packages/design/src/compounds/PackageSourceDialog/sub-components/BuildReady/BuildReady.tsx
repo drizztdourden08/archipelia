@@ -8,7 +8,8 @@ const BuildReady = ({ module, candidate, build, onBuildStart }: BuildReadyProps)
   <Stack gap="md">
     <Text variant="label">{BUILD_TEXT.readyHeading(module)}</Text>
     <Callout tone="warning">{BUILD_TEXT.warning(candidate.id)}</Callout>
-    {build.confined ? <Text variant="caption" tone="dim">{BUILD_TEXT.confined}</Text> : <Callout tone="warning">{BUILD_TEXT.unconfined}</Callout>}
+    {build.rust && <Callout tone="warning">{BUILD_TEXT.rustNetwork}</Callout>}
+    {build.confined ? <Text variant="caption" tone="dim">{build.rust ? BUILD_TEXT.confinedRust : BUILD_TEXT.confined}</Text> : <Callout tone="warning">{BUILD_TEXT.unconfined}</Callout>}
     <Stack gap="xs">
       <Text>{BUILD_TEXT.source(candidate.id, build.commit.slice(0, 7))}</Text>
       <Text variant="caption" tone="dim">{BUILD_TEXT.size((build.size / MEGABYTE).toFixed(1))}</Text>

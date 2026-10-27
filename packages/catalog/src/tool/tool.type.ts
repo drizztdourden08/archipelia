@@ -1,5 +1,5 @@
 /* @layer core @kind types */
-import type { SourceBuildPlan, SourceBuildTool, SourceToolBlock, SourceToolElevation } from '@archipelia/model';
+import type { SourceBuildPlan, SourceBuildTool, SourceToolBlock, SourceToolElevation, SourceToolLicense } from '@archipelia/model';
 import type { Fetch } from '../install/fetch-file.type';
 import type { BuildRunner } from '../build/build.type';
 
@@ -26,6 +26,7 @@ type ToolRecipe = {
   source: string;
   elevation: SourceToolElevation;
   restart: boolean;
+  license?: SourceToolLicense | undefined;
 };
 
 type ToolPick = { recipe: ToolRecipe } | { blocked: SourceToolBlock };
@@ -41,7 +42,7 @@ type ToolRunner = (elevation: SourceToolElevation, tool: SourceBuildTool) => Ret
 type ToolDeps = {
   fetch: Fetch;
   toolsDir: () => Promise<string>;
-  readHost: (toolsDir: string) => Promise<ToolHost>;
+  readHost: (toolsDir: string, probe: Probe) => Promise<ToolHost>;
   probe: Probe;
   run?: ToolRunner | undefined;
   hasTool: (buildId: string, name: string) => boolean;

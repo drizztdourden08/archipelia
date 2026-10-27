@@ -11,7 +11,8 @@ import { openBuild } from './open-build';
 import { parseBuildRequires } from './parse-build-requires';
 import { readArchiveFile } from './read-archive-file';
 import { runStep } from './run-step';
-import { PYPROJECT } from './build.constants';
+import { CARGO_TOML, PYPROJECT } from './build.constants';
+import { rustProjectOf } from './rust-project-of';
 
 const prepareBuild = async (deps: BuildDeps, session: BuildSession, plan: SourcePlan): Promise<SourceBuildPrepared> => {
   const build = await openBuild(deps, session, plan);
@@ -29,6 +30,7 @@ const prepareBuild = async (deps: BuildDeps, session: BuildSession, plan: Source
     }
     build.pins = await resolvePackages({ ...runtime, python: venvPython(dirs.venv) }, requires, { signal: controller.signal });
     assertPinsHashed(build.pins);
+    build.rust = rustProjectOf(build.pins, await readArchiveFile(archive.file, CARGO_TOML));
     build.phase = 'ready';
     return { status: 'ready', plan: buildPlanOf(build, archive, await isConfined(deps, build)) };
   } catch (err) {
