@@ -16,11 +16,19 @@ const LIBRARY_STEPS: readonly TourStepDef[] = [
   {
     id: 'games',
     title: 'Games',
-    body: 'Games lists every Archipelago world you can play. A game must have its world installed before a session can use it. Press the install button on a card to add it.',
+    body: 'Games lists every Archipelago world you can play, by source: Built-in, Archipelia ready and Archipelago index. A game must have its world installed before a session can use it. Press the install button on a card to add it.',
     target: TOUR_PART.page,
     mascot: 'curious',
     open: TOUR_ROUTE.games,
     before: resetScreens(TOUR_SCOPE.games),
+  },
+  {
+    id: 'games-tabs',
+    title: 'Tabs',
+    body: 'The tabs narrow the list: all worlds, the ones you installed, built-in, Archipelia ready and Archipelago index worlds, and updates.',
+    target: TOUR_PART.tabs,
+    mascot: 'point',
+    open: TOUR_ROUTE.games,
   },
   {
     id: 'games-tools',

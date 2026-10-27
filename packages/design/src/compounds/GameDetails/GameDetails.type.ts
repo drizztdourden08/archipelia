@@ -14,6 +14,7 @@ type GameDetailsProps = {
   actions: GameCardAction[];
   markdown?: string;
   art?: string;
+  verified?: boolean;
   busy?: string;
   error?: string;
   need?: GameDetailsNeed;

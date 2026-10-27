@@ -13,9 +13,10 @@ import { meta as multiworldHostingServersArchipeliaTabMeta } from '../src/screen
 import { meta as multiworldHostingServersMachinesTabMeta } from '../src/screens/multiworld/hosting/servers/machines.tab';
 import { meta as multiworldHostingServersPageMetaMeta } from '../src/screens/multiworld/hosting/servers.page';
 import { meta as multiworldLibraryGamesAllTabMeta } from '../src/screens/multiworld/library/games/all.tab';
-import { meta as multiworldLibraryGamesCommunityTabMeta } from '../src/screens/multiworld/library/games/community.tab';
+import { meta as multiworldLibraryGamesArchipelagoIndexTabMeta } from '../src/screens/multiworld/library/games/archipelago-index.tab';
+import { meta as multiworldLibraryGamesArchipeliaReadyTabMeta } from '../src/screens/multiworld/library/games/archipelia-ready.tab';
+import { meta as multiworldLibraryGamesBuiltInTabMeta } from '../src/screens/multiworld/library/games/built-in.tab';
 import { meta as multiworldLibraryGamesInstalledTabMeta } from '../src/screens/multiworld/library/games/installed.tab';
-import { meta as multiworldLibraryGamesOfficialTabMeta } from '../src/screens/multiworld/library/games/official.tab';
 import { meta as multiworldLibraryGamesUpdatesTabMeta } from '../src/screens/multiworld/library/games/updates.tab';
 import { meta as multiworldLibraryGamesPageMetaMeta } from '../src/screens/multiworld/library/games.page';
 import { meta as multiworldLibraryPresetsPageMeta } from '../src/screens/multiworld/library/presets.page';
@@ -38,9 +39,10 @@ const screenTree = buildScreenTree(config, [
   { kind: 'tab', bucket: 'multiworld', group: 'hosting', page: 'servers', id: 'machines', component: lazyComponent(() => import('../src/screens/multiworld/hosting/servers/machines.tab')), meta: multiworldHostingServersMachinesTabMeta },
   { kind: 'page-meta', bucket: 'multiworld', group: 'hosting', id: 'servers', meta: multiworldHostingServersPageMetaMeta },
   { kind: 'tab', bucket: 'multiworld', group: 'library', page: 'games', id: 'all', component: lazyComponent(() => import('../src/screens/multiworld/library/games/all.tab')), meta: multiworldLibraryGamesAllTabMeta },
-  { kind: 'tab', bucket: 'multiworld', group: 'library', page: 'games', id: 'community', component: lazyComponent(() => import('../src/screens/multiworld/library/games/community.tab')), meta: multiworldLibraryGamesCommunityTabMeta },
+  { kind: 'tab', bucket: 'multiworld', group: 'library', page: 'games', id: 'archipelago-index', component: lazyComponent(() => import('../src/screens/multiworld/library/games/archipelago-index.tab')), meta: multiworldLibraryGamesArchipelagoIndexTabMeta },
+  { kind: 'tab', bucket: 'multiworld', group: 'library', page: 'games', id: 'archipelia-ready', component: lazyComponent(() => import('../src/screens/multiworld/library/games/archipelia-ready.tab')), meta: multiworldLibraryGamesArchipeliaReadyTabMeta },
+  { kind: 'tab', bucket: 'multiworld', group: 'library', page: 'games', id: 'built-in', component: lazyComponent(() => import('../src/screens/multiworld/library/games/built-in.tab')), meta: multiworldLibraryGamesBuiltInTabMeta },
   { kind: 'tab', bucket: 'multiworld', group: 'library', page: 'games', id: 'installed', component: lazyComponent(() => import('../src/screens/multiworld/library/games/installed.tab')), meta: multiworldLibraryGamesInstalledTabMeta },
-  { kind: 'tab', bucket: 'multiworld', group: 'library', page: 'games', id: 'official', component: lazyComponent(() => import('../src/screens/multiworld/library/games/official.tab')), meta: multiworldLibraryGamesOfficialTabMeta },
   { kind: 'tab', bucket: 'multiworld', group: 'library', page: 'games', id: 'updates', component: lazyComponent(() => import('../src/screens/multiworld/library/games/updates.tab')), meta: multiworldLibraryGamesUpdatesTabMeta },
   { kind: 'page-meta', bucket: 'multiworld', group: 'library', id: 'games', meta: multiworldLibraryGamesPageMetaMeta },
   { kind: 'page', bucket: 'multiworld', group: 'library', id: 'presets', component: lazyComponent(() => import('../src/screens/multiworld/library/presets.page')), meta: multiworldLibraryPresetsPageMeta },

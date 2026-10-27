@@ -17,21 +17,25 @@ const GAME_STATUS = defineStatuses({
 });
 
 const KIND_ICON: Record<GameCardKind, IconName> = {
-  official: 'package',
-  community: 'users',
-  'first-party': 'sparkles',
+  'built-in': 'package',
+  'archipelia-ready': 'sparkles',
+  'archipelago-index': 'globe',
   file: 'file',
 };
 
 const KIND_TONE: Record<GameCardKind, ItemCardMediaTone> = {
-  official: 'primary',
-  community: 'info',
-  'first-party': 'tertiary',
+  'built-in': 'primary',
+  'archipelia-ready': 'tertiary',
+  'archipelago-index': 'info',
   file: 'neutral',
 };
 
 const MAX_TAGS = 2;
 
+const VERIFIED_LABEL = 'Verified';
+
+const VERIFIED_HINT = 'Listed and checked by Archipelia';
+
 const MEDIA_SIZE = 32;
 
-export { GAME_STATUS, KIND_ICON, KIND_TONE, MAX_TAGS, MEDIA_SIZE };
+export { GAME_STATUS, KIND_ICON, KIND_TONE, MAX_TAGS, MEDIA_SIZE, VERIFIED_HINT, VERIFIED_LABEL };

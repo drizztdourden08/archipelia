@@ -2,6 +2,7 @@
 import { DialogShell, Markdown } from '@drizztdourden08/tessera/composites';
 import { Flex, Stack, Tag, Text } from '@drizztdourden08/tessera/primitives';
 import { GAME_STATUS } from '../GameCard/GameCard.constants';
+import { VerifiedTag } from '../GameCard';
 import { ErrorCallout } from '../ErrorCallout';
 import { LOADING_DESCRIPTION, NO_DESCRIPTION, README_HEADING_OFFSET } from './GameDetails.constants';
 import type { GameDetailsProps } from './GameDetails.type';
@@ -12,7 +13,7 @@ import { GameDetailsNotes } from './sub-components/GameDetailsNotes';
 import './GameDetails.css';
 
 const GameDetails = (props: GameDetailsProps) => {
-  const { title, kind, kindLabel, version, status, notes, tags, actions, markdown, art, busy, error, need, loading, onLink, onClose } = props;
+  const { title, kind, kindLabel, version, status, notes, tags, actions, markdown, art, verified, busy, error, need, loading, onLink, onClose } = props;
   return (
     <DialogShell open onClose={onClose} title={title} size="lg" actions={<GameDetailsActions actions={actions} busy={busy} />}>
       <Stack gap="md">
@@ -22,6 +23,7 @@ const GameDetails = (props: GameDetailsProps) => {
             <Text>{kindLabel}</Text>
             <Flex align="center" gap="sm" wrap>
               {version && <Text variant="caption" mono numeric>{version}</Text>}
+              {verified && <VerifiedTag />}
               {status && <Tag>{GAME_STATUS[status].label}</Tag>}
             </Flex>
           </Stack>

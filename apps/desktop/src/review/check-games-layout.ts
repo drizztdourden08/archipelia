@@ -37,7 +37,7 @@ const checkGamesLayout = async (tour: AppReviewTour): Promise<void> => {
   const search = layer ? await waitNamed(tour, SELECTOR.field, 'Search worlds', layer) : null;
   tour.check('games-search', search !== null, 'one search field covers every section of the Games page', 'the Games page has no search field');
   const sections = layer ? await tour.waitFor(() => (headerNamed(tour, layer, 'Installed') ? layer : null)) : null;
-  tour.check('games-sections', sections !== null && inOrder(tour, sections), 'the sections run Installed, Official, Community', 'the Games sections are missing or out of order');
+  tour.check('games-sections', sections !== null && inOrder(tour, sections), 'the sections run Installed, Built-in, Archipelia ready, Archipelago index', 'the Games sections are missing or out of order');
   const bar = layer ? tour.find(SELECTOR.statusBar, layer) : null;
   const add = bar ? await waitNamed(tour, SELECTOR.button, 'Add from file', bar) : null;
   tour.check('games-status-bar', bar !== null && add !== null, 'the status bar at the foot has the totals and Add from file in its own actions', 'the Games status bar or its Add from file action is missing');
