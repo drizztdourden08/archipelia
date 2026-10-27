@@ -56,6 +56,7 @@ const APP_CHANNELS = defineChannels({
   sessionsRunLobby: invoke<(tabId: string) => Promise<AdminLobby>>()('ap:sessions:runLobby'),
   liveList: invoke<() => Promise<LiveTab[]>>()('ap:live:list'),
   liveClose: invoke<(tabId: string, mode: LiveCloseMode) => Promise<{ closed: boolean }>>()('ap:live:close'),
+  sessionsRoomPassword: invoke<(id: string) => Promise<string | null>>()('ap:sessions:roomPassword'),
   sessionsStop: invoke<(id: string) => Promise<Session | undefined>>()('ap:sessions:stop'),
   sessionsCancel: invoke<(id: string) => Promise<void>>()('ap:sessions:cancel'),
   sessionsCommand: invoke<(id: string, cmd: string) => Promise<void>>()('ap:sessions:command'),

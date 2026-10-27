@@ -2,6 +2,8 @@
 import { defineReviewStep, widgets } from '@drizztdourden08/brock-react';
 import type { AppReviewTour } from '@drizztdourden08/brock-react';
 import type { Client } from 'archipelago.js';
+import { appApi } from '../ipc/app-api';
+import { useRunsStore } from '../stores/useRunsStore';
 import { REVIEW_PORT, REVIEW_SECOND, REVIEW_SESSION, RUN_TIMEOUT_MS, TAB_UI } from './review.constants';
 import { SELECTOR } from './review-dom.constants';
 import { checkWidgets } from './check-widgets';
@@ -36,9 +38,9 @@ const stopFromDashboard = async (tour: AppReviewTour) => {
   await tour.capture('stopped');
 };
 
-const checkStoppedWidgets = async (tour: AppReviewTour, joined: boolean) => {
+const checkStoppedWidgets = async (tour: AppReviewTour) => {
   widgets.reset();
-  await checkWidgets(tour, joined ? STOPPED_WIDGETS : STOPPED_WIDGETS.filter(([id]) => id !== 'hints'), 'stopped');
+  await checkWidgets(tour, STOPPED_WIDGETS, 'stopped');
   await tour.capture('stopped-run');
   await showSpoiler(tour);
   await checkWidgets(tour, SPOILER_WIDGET, 'stopped');
@@ -56,22 +58,16 @@ const closeTabs = async (tour: AppReviewTour) => {
   tour.check('idle-base', empty, 'with no tab open the base shows the idle state', 'the idle state did not come back after the last tab closed');
 };
 
-const checkPasswordPrompt = async (tour: AppReviewTour) => {
-  const frame = await tour.openWidget('players');
-  const asked = frame ? await waitText(tour, /This room has a password/, () => frame) : false;
-  tour.check('live-password', asked, 'a lobby run has a room password, so the players widget asks for it before it shows the room live', 'the players widget did not ask for the room password');
-};
-
 const checkLive = async (tour: AppReviewTour, client: Client | null) => {
+  tour.check('player-joins', client !== null, 'a player joins the room and checks locations', 'the review player could not join');
   widgets.reset();
-  if (!client) {
-    await checkPasswordPrompt(tour);
-    await checkWidgets(tour, LIVE_WIDGETS.filter(([id]) => id === 'console'), 'live');
-    return;
-  }
-  tour.check('player-joins', true, 'a player joins the room and checks locations', 'the review player could not join');
   await checkWidgets(tour, LIVE_WIDGETS, 'live');
   await checkLiveStatus(tour);
+};
+
+const roomPassword = async (): Promise<string | undefined> => {
+  const run = useRunsStore.getState().runs.find((entry) => entry.snapshot.name === REVIEW_SESSION && entry.status === 'hosting');
+  return run ? (await appApi().sessionsRoomPassword(run.id)) ?? undefined : undefined;
 };
 
 export default defineReviewStep({
@@ -83,13 +79,13 @@ export default defineReviewStep({
     const hosted = await hosting(tour);
     tour.check('run-hosts', hosted, 'the run hosts and its tab shows the room', `${REVIEW_SESSION} did not host`);
     if (!hosted) return;
-    const client: Client | null = await joinRoom(tour, REVIEW_PORT).catch(() => null);
+    const client: Client | null = await joinRoom(tour, REVIEW_PORT, await roomPassword()).catch(() => null);
     await checkLive(tour, client);
     await sendFromConsole(tour);
     await tour.capture('hosting');
     client?.socket.disconnect();
     await stopFromDashboard(tour);
-    await checkStoppedWidgets(tour, client !== null);
+    await checkStoppedWidgets(tour);
     await closeTabs(tour);
   },
 });

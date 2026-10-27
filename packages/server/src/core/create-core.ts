@@ -73,7 +73,7 @@ const createCore = (ports: CorePorts) => {
   const setLanRoom = (lobbyId: string, lan: boolean) => (lan ? lanRooms.add(lobbyId) : lanRooms.delete(lobbyId));
   return {
     adminToken, catalog, dispose, engine, installed, lobbies, presets, runJobs, runs, runtime, sandbox, servers, sessionFiles, sessions, setLanRoom, setLobbyNetworkMode,
-    lobbyPasswords: lobbyPasswords(secrets), templates, watchLobbies,
+    lobbyPasswords: lobbyPasswords(secrets), roomSecret: (ref: string) => secrets.get(ref), templates, watchLobbies,
   };
 };
 

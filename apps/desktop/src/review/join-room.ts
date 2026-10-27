@@ -3,9 +3,9 @@ import { Client, itemsHandlingFlags } from 'archipelago.js';
 import type { AppReviewTour } from '@drizztdourden08/brock-react';
 import { REVIEW_CHECKS, REVIEW_GAME, REVIEW_PLAYERS } from './review.constants';
 
-const joinRoom = async (tour: AppReviewTour, port: number): Promise<Client> => {
+const joinRoom = async (tour: AppReviewTour, port: number, password?: string): Promise<Client> => {
   const client = new Client({ timeout: 30000 });
-  await client.login(`ws://127.0.0.1:${port}`, REVIEW_PLAYERS[0], REVIEW_GAME.game, { items: itemsHandlingFlags.all, slotData: false });
+  await client.login(`ws://127.0.0.1:${port}`, REVIEW_PLAYERS[0], REVIEW_GAME.game, { items: itemsHandlingFlags.all, slotData: false, ...(password ? { password } : {}) });
   const targets = client.room.missingLocations.slice(0, REVIEW_CHECKS);
   client.check(...targets);
   await tour.waitFor(() => client.room.checkedLocations.length >= targets.length, 10000);
