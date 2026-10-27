@@ -8,6 +8,20 @@ export { buildApworldIndex } from './index-manifest/build-apworld-index';
 export { newestBuild } from './index-manifest/newest-build';
 export { parseApworldIndex } from './index-manifest/parse-apworld-index';
 export { serializeApworldIndex } from './index-manifest/serialize-apworld-index';
+export { buildReleaseManifest } from './release-manifest/build-release-manifest';
+export { checkReleaseManifest } from './release-manifest/check-release-manifest';
+export { indexOfRelease } from './release-manifest/index-of-release';
+export { parseReleaseManifest } from './release-manifest/parse-release-manifest';
+export { serializeReleaseManifest } from './release-manifest/serialize-release-manifest';
+export {
+  DESCRIPTION_NAME,
+  KIT_VERSION,
+  MANIFEST_NAME,
+  RELEASE_FORMAT,
+  THUMBNAIL_BASE_NAME,
+} from './release-manifest/release.constants';
+export { checkDescription } from './release-files/check-description';
+export { inspectThumbnail } from './release-files/inspect-thumbnail';
 export { buildArchipelagoJson } from './manifest/build-archipelago-json';
 export { APWORLD_FORMAT_VERSION } from './manifest/manifest.constants';
 export { parseArchipelagoJson } from './manifest/parse-archipelago-json';
@@ -30,6 +44,8 @@ export type {
   IndexBuildInput,
   IndexInput,
 } from './index-manifest/index.type';
+export type { ReleaseInput, ReleaseManifest, ReleaseWorld } from './release-manifest/release.type';
+export type { DescriptionCheck, ImageFormat, ImageHeader, ThumbnailCheck } from './release-files/release-files.type';
 export type { ArchipelagoManifest, ManifestInput } from './manifest/archipelago-manifest.type';
 export type { PlayerYamlInput } from './yaml/player-yaml.type';
 export type { OptionChoice, OptionRow, OptionSchema, OptionType } from './yaml/schema/option-schema.type';

@@ -2,7 +2,7 @@
 import type { ComponentUsage } from '@drizztdourden08/tessera';
 
 const usage = {
-  job: 'The games store: the worlds of the Games page in a tab each, All with its three sections Installed, Official and Community, then one tab per section and an Updates tab, with one search and filters over the tab, a refresh of the index and a status bar.',
+  job: 'The games store: the worlds of the Games page in a tab each, All with its sections Installed, Built-in, Archipelia ready and Archipelago index, then one tab per section and an Updates tab, with one search and filters over the tab, a refresh of the index and a status bar.',
   useWhen: [
     'The Games page.',
   ],
@@ -12,9 +12,10 @@ const usage = {
   ],
   rules: [
     'Put each installed game in search, pointing at the Games page.',
-    'Keep the dedicated tabs Installed, Official, Community and Updates beside All; each shows only its own worlds under its own heading and count.',
-    'On the All tab show the sections in this order: Installed, Official, Community, each under a heading with its own count. Hide a section the search or filters empty.',
-    'One search field and the filters the user adds (source, installed, version fit, stability, tags) cover every section of the tab at once.',
+    'Keep the dedicated tabs Installed, Built-in, Archipelia ready, Archipelago index and Updates beside All; each shows only its own worlds under its own heading and count.',
+    'On the All tab show the sections in this order: Installed, Built-in, Archipelia ready, Archipelago index, each under a heading with its own count. Hide a section the search or filters empty.',
+    'One search field and the filters the user adds (category, installed, version fit, stability, tags) cover every section of the tab at once.',
+    'Show a Verified tag, with the hint Listed and checked by Archipelia, on every world listed in the Archipelia registry, on its card and in its details dialog.',
     'Guard each install with its world as the key, through useKeyedGuard, so only its card shows it working, with its Add button loading.',
     'Guard Refresh index and Add from file with their own keys, so a card install leaves them on.',
     'Draw only the cards in view, in a virtual grid whose section headings carry the true count of the section; never cap a section.',
@@ -38,7 +39,7 @@ const usage = {
 
 const GameStoreSample = () => <GameStore tab="all" />;
 `,
-  propsHash: 'f4019f58fc894462',
+  propsHash: '62ca6a3e76ef8e42',
 } satisfies ComponentUsage;
 
 export { usage };

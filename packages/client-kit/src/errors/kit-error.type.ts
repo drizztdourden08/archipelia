@@ -10,6 +10,8 @@ type KitErrorCode =
   | 'invalid-package'
   | 'invalid-apworld'
   | 'invalid-index'
+  | 'invalid-release'
+  | 'invalid-release-file'
   | 'invalid-config'
   | 'unsupported-value';
 

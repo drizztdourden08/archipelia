@@ -6,4 +6,6 @@ const SKIPPED_SUFFIXES: readonly string[] = ['.pyc', '.pyo'];
 
 const TEXT_SUFFIXES: readonly string[] = ['.py', '.json', '.md', '.txt', '.yaml', '.yml', '.toml', '.cfg', '.ini', '.pyi'];
 
-export { SKIPPED_NAMES, SKIPPED_SUFFIXES, TEXT_SUFFIXES };
+const INDEX_SUFFIX = '.apworld.json';
+
+export { INDEX_SUFFIX, SKIPPED_NAMES, SKIPPED_SUFFIXES, TEXT_SUFFIXES };
