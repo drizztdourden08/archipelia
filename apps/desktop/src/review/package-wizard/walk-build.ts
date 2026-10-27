@@ -8,9 +8,9 @@ import { walkStart } from './walk-start';
 const walkBuild = async (walk: WizardWalk): Promise<void> => {
   await walkStart(walk, WIZARD_CHOICE.build);
   await showStep(walk, 'confirm', WIZARD_TEXT.confirm);
-  await press(walk, 'nav', /^Download the source$/);
+  await press(walk, 'nav', /^Download the source$/i);
   await showStep(walk, 'tools', WIZARD_TEXT.tools);
-  await press(walk, 'nav', /^Check and build$/);
+  await press(walk, 'nav', /^Check and build$/i);
   await showStep(walk, 'tool-missing', WIZARD_TEXT.toolMissing);
   await press(walk, 'step', WIZARD_BUTTON.installForMe);
   await showStep(walk, 'tool-install', WIZARD_TEXT.toolInstall);
