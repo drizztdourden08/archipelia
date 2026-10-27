@@ -1,6 +1,5 @@
 /* @layer renderer-app @kind logic */
 import { defineReviewSeed } from '@drizztdourden08/brock-react';
-import { useFocusStore } from '../stores/useFocusStore';
 import { useLibraryStore } from '../stores/useLibraryStore';
 import { useRunsStore } from '../stores/useRunsStore';
 import { finishedRun } from './finished-run';
@@ -16,6 +15,5 @@ export default defineReviewSeed({
     const run = await finishedRun(tour, template);
     tour.check('run-finished', run?.status === 'stopped', `the run ${run?.seed ?? ''} of ${template.name} is stopped with its files`, `the review run is ${run?.status ?? 'missing'}`);
     await Promise.all([useRunsStore.getState().load(), useLibraryStore.getState().loadPresets(), useLibraryStore.getState().loadTemplates()]);
-    if (run) useFocusStore.getState().focus(run.id);
   },
 });

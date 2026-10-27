@@ -7,6 +7,7 @@ type RunActionsProps = {
   busy: boolean;
   onOpenRun: (run: Session) => void;
   onOpenSession: (sessionId: string) => void;
+  onRunAgain: (run: Session) => void;
   onDelete: (run: Session) => void;
 };
 

@@ -14,7 +14,7 @@ const usage = {
   rules: [
     'Pass no templateId for a new session, or the id of the saved one to edit; the page loads it and says when it is gone.',
     'Hold configuration only: no player, no lobby, no address, no status and no Run.',
-    'The header actions are Save and Start session; Start session saves, opens the lobby whatever the session type, and goes to the lobby screen. It is off with the first setup problem as its reason.',
+    'The header actions are Save and Start session; Start session saves, opens the lobby whatever the session type, and goes to its tab in the main window. It is off with the first setup problem as its reason.',
     'Where (Local, LAN, Remote) sets where the room runs and who can reach it, on its own. Allow direct connections never changes Where, and Where never changes it.',
     'Choosing LAN opens nothing; Start session asks once before it opens a network port.',
     'Direct connections follow Where: this computer for Local, the network for LAN, the Archipelia server for Remote. archipelago.gg and SSH say inline why they do not take direct connections.',

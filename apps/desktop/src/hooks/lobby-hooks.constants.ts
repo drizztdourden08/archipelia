@@ -16,6 +16,8 @@ const SESSION_FAILED = {
   loading: 'Loading the session',
 } as const;
 
+const RUN_AGAIN_GONE = 'The saved session of this run is gone, so it cannot run again. New session builds one.';
+
 const UNSAVED_SESSION = 'A session has changes that are not saved.';
 
 const OPEN_LAN = {
@@ -25,4 +27,4 @@ const OPEN_LAN = {
   cancelLabel: 'Keep it private',
 } as const;
 
-export { LAN_FAILED, LOAD_FAILED, LOBBY_LOAD_FAILED, OPEN_LAN, OTHER_FAILURE, SESSION_FAILED, STATUS_FAILED, UNSAVED_SESSION };
+export { LAN_FAILED, LOAD_FAILED, LOBBY_LOAD_FAILED, OPEN_LAN, OTHER_FAILURE, RUN_AGAIN_GONE, SESSION_FAILED, STATUS_FAILED, UNSAVED_SESSION };

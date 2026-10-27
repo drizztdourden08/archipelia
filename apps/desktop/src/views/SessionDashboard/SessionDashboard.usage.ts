@@ -2,17 +2,15 @@
 import type { ComponentUsage } from '@drizztdourden08/tessera';
 
 const usage = {
-  job: 'The base screen: the room that is hosting with its status bar and summary, under the session widgets Brock docks around it, or the idle state when none is.',
+  job: 'The room of one run: its status bar with Stop, and its summary, shown inside the tab of a session once it has run.',
   useWhen: [
-    'The base layer under every hub, drawn by the session screen.',
+    'The room phase of a session tab, once the session has a run.',
   ],
   avoidWhen: [
     { case: 'Past runs of a session.', use: 'History' },
   ],
   rules: [
-    'Leave sessionId out to follow the focused session; an empty focus shows the newest hosting run.',
-    'When a profile starts with no run hosting and none focused, open the Multiworld home over it instead of leaving the idle state in front.',
-    'Load the runs when it opens; the runs boot task loads them first.',
+    'Pass the id of the run to show; the tab that holds it owns which run that is and loads the runs.',
     'Ask before stopping a room.',
     'Draw a summary tile that sums up a widget as an ActionTile that opens it, Players and Hints; keep a tile that only reads a value, Checks and Uptime, a StatTile.',
   ],
@@ -20,17 +18,16 @@ const usage = {
     'The status bar comes first, with the status as text.',
     'Errors are alerts.',
     'Each summary tile that opens a widget names its chevron after it, such as Show the Players widget.',
-    'The idle state names what to do next.',
   ],
   tree: {
     path: ['a full screen view', 'a page of the multiworld app', 'the room that is hosting'],
-    rule: 'The live room under every hub.',
+    rule: 'The room of one run, inside a session tab.',
   },
   example: `import { SessionDashboard } from '../SessionDashboard';
 
-const SessionDashboardSample = () => <SessionDashboard />;
+const SessionDashboardSample = () => <SessionDashboard sessionId="run-1" />;
 `,
-  propsHash: '57103017f1f0919e',
+  propsHash: '5f4da8e951b3a87c',
 } satisfies ComponentUsage;
 
 export { usage };

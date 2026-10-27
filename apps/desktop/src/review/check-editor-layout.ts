@@ -29,7 +29,7 @@ const checkEditorLayout = async (tour: AppReviewTour) => {
   const join = await tour.waitFor(() => sectionOf(root, 'how-players-join'));
   const world = sectionOf(root, 'generation');
   const players = root?.querySelector<HTMLElement>('[aria-label="Players"]') ?? null;
-  tour.check('editor-no-players', players === null, 'the setup page holds no players: they come in on the lobby screen', 'the setup page still shows a Players list');
+  tour.check('editor-no-players', players === null, 'the setup page holds no players: they come in on the session tab', 'the setup page still shows a Players list');
   if (!join || !world) {
     tour.check('editor-layout', false, '', 'the setup page misses How players join or the world settings');
     return;

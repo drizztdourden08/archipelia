@@ -33,6 +33,8 @@ const LIVE_DETAIL: Partial<Record<LiveRoomPhase, string>> = {
   password: 'Enter it to watch the room.',
 };
 
+const LOADING_RUN = 'Loading the run';
+
 const OUTPUT_DIR = 'output';
 
 const READ_FAILED = 'Could not read this file.';
@@ -44,5 +46,5 @@ const FAILURE = {
 } as const;
 
 export {
-  FAILURE, GENERATE_LOG, IDLE, KIND_RULES, LIVE_DETAIL, LOG_TAB_ITEMS, LOG_TABS, MAX_SENT, NO_LINES, OUTPUT_DIR, READ_FAILED, REPLY_WINDOW_MS, TICK_MS,
+  FAILURE, GENERATE_LOG, IDLE, KIND_RULES, LIVE_DETAIL, LOADING_RUN, LOG_TAB_ITEMS, LOG_TABS, MAX_SENT, NO_LINES, OUTPUT_DIR, READ_FAILED, REPLY_WINDOW_MS, TICK_MS,
 };

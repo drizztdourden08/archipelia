@@ -118,28 +118,24 @@ describe('a session without direct connections', () => {
   });
 
   test('runs under its lobby on this computer, and on no launch the app follows for a remote server', () => {
-    expect(launchOf(sessionOf({ lobby: { serverId: 'local', lobbyId: 'lb_1' } }), 5)).toEqual({ templateId: 'lobby-lb_1', startedAt: 5 });
-    expect(launchOf(sessionOf({ lobby: { serverId: 'srv_1', lobbyId: 'lb_1' } }), 5)).toBeNull();
-    expect(launchOf(sessionOf(), 5)).toBeNull();
+    expect(launchOf({ serverId: 'local', lobbyId: 'lb_1' }, 5)).toEqual({ templateId: 'lobby-lb_1', startedAt: 5 });
+    expect(launchOf({ serverId: 'srv_1', lobbyId: 'lb_1' }, 5)).toBeNull();
   });
 });
 
 describe('the main action of the lobby screen', () => {
-  const handlers = { run: () => undefined, start: () => undefined };
+  const run = () => undefined;
 
-  test('starts the session first, then runs once a player is ready', async () => {
+  test('waits for the lobby, then runs once a player is ready', async () => {
     rig = await startLobbyRig();
     const { lobby } = await started(rig, sessionOf({ players: [], direct: DIRECT }));
     const empty = sessionOf({ players: [], direct: DIRECT });
-    const live = { ...empty, lobby: { serverId: 'local', lobbyId: lobby.id } };
-    expect(runAction(empty, undefined, handlers)).toEqual({ label: 'Start session', onClick: handlers.start });
-    expect(runAction(live, undefined, handlers).reason).toBe('Loading the lobby');
-    expect(runAction(live, [lobby], handlers).reason).toContain('No player is ready yet');
-    expect(runAction({ ...live, direct: undefined }, [lobby], handlers).reason).toBe('Add at least one player.');
-    expect(runAction({ ...live, players: sessionOf().players }, [lobby], handlers).reason).toBeUndefined();
-    expect(runAction(live, [{ ...lobby, phase: 'hosting' }], handlers).reason).toContain('running');
-    expect(runAction(live, [{ ...lobby, phase: 'closed' }], handlers).label).toBe('Start session');
-    expect(runAction({ ...live, lobby: { serverId: 'local', lobbyId: 'gone' } }, [lobby], handlers).label).toBe('Start session');
+    expect(runAction(empty, undefined, run).reason).toBe('Loading the lobby');
+    expect(runAction(empty, lobby, run).reason).toContain('No player is ready yet');
+    expect(runAction({ ...empty, direct: undefined }, lobby, run).reason).toBe('Add at least one player.');
+    expect(runAction({ ...empty, players: sessionOf().players }, lobby, run).reason).toBeUndefined();
+    expect(runAction(empty, { ...lobby, phase: 'hosting' }, run).reason).toContain('running');
+    expect(runAction(empty, { ...lobby, phase: 'hosting' }, run).label).toBe('Run');
   });
 });
 

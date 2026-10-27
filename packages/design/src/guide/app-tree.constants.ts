@@ -10,6 +10,7 @@ const APP_TREE = [
         answers: {
           'the home banner': null,
           'the room that is hosting': null,
+          'the sessions that are open, as tabs': null,
           'the saved sessions': null,
           'a session being set up': null,
           'a session that started, with its lobby and players': null,

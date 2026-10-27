@@ -8,7 +8,7 @@ const RUN_TEXT = {
   start: 'Start session',
   addPlayer: 'Add at least one player.',
   loading: 'Loading the lobby',
-  running: 'The session is running. Its room shows below.',
+  running: 'The session is running. Its room shows in this tab.',
   nobodyReady: 'No player is ready yet. Add a player of your own, or approve a player who joined.',
 } as const;
 

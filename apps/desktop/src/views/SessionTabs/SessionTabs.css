@@ -1,0 +1,28 @@
+/* @layer renderer-app @kind style */
+.session-tabs {
+  position: relative;
+  isolation: isolate;
+  inline-size: 100%;
+  block-size: 100%;
+  min-block-size: 0;
+}
+
+.session-tabs__strip {
+  align-items: stretch;
+  min-inline-size: 0;
+}
+
+.session-tabs__tabs {
+  --document-tab-bg: var(--c-panel);
+  --document-tab-bg-selected: var(--c-surface);
+
+  flex: 1;
+  min-inline-size: 0;
+}
+
+.session-tabs__body {
+  flex: 1;
+  min-block-size: 0;
+  overflow-y: auto;
+  padding: var(--space-md);
+}

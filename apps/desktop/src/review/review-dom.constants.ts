@@ -15,6 +15,8 @@ const SELECTOR = {
   paletteInput: '.command-palette--open input.command-palette__input, .command-palette--open .command-palette__input input',
   paletteRow: '.command-palette--open .command-palette-row',
   dashboard: '.session-dashboard',
+  tabBody: '.session-tabs__body',
+  tabStrip: '.session-tabs__strip',
   optionRow: '.form-row',
   rowControl: '.form-row__control',
   rowReset: '.form-row__reset',

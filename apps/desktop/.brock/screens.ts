@@ -22,7 +22,6 @@ import { meta as multiworldLibraryPresetsPageMeta } from '../src/screens/multiwo
 import { meta as multiworldTopHistoryPageMeta } from '../src/screens/multiworld/top/history.page';
 import { meta as multiworldTopSessionsEditSubMeta } from '../src/screens/multiworld/top/sessions/edit.sub';
 import { meta as multiworldTopSessionsJoinSubMeta } from '../src/screens/multiworld/top/sessions/join.sub';
-import { meta as multiworldTopSessionsLobbySubMeta } from '../src/screens/multiworld/top/sessions/lobby.sub';
 import { meta as multiworldTopSessionsNewSubMeta } from '../src/screens/multiworld/top/sessions/new.sub';
 import { meta as multiworldTopSessionsPageMeta } from '../src/screens/multiworld/top/sessions.page';
 import { meta as sessionBaseMeta } from '../src/screens/session.base';
@@ -48,7 +47,6 @@ const screenTree = buildScreenTree(config, [
   { kind: 'page', bucket: 'multiworld', group: 'top', id: 'history', component: lazyComponent(() => import('../src/screens/multiworld/top/history.page')), meta: multiworldTopHistoryPageMeta },
   { kind: 'sub', bucket: 'multiworld', group: 'top', page: 'sessions', id: 'edit', component: lazyComponent(() => import('../src/screens/multiworld/top/sessions/edit.sub')), meta: multiworldTopSessionsEditSubMeta },
   { kind: 'sub', bucket: 'multiworld', group: 'top', page: 'sessions', id: 'join', component: lazyComponent(() => import('../src/screens/multiworld/top/sessions/join.sub')), meta: multiworldTopSessionsJoinSubMeta },
-  { kind: 'sub', bucket: 'multiworld', group: 'top', page: 'sessions', id: 'lobby', component: lazyComponent(() => import('../src/screens/multiworld/top/sessions/lobby.sub')), meta: multiworldTopSessionsLobbySubMeta },
   { kind: 'sub', bucket: 'multiworld', group: 'top', page: 'sessions', id: 'new', component: lazyComponent(() => import('../src/screens/multiworld/top/sessions/new.sub')), meta: multiworldTopSessionsNewSubMeta },
   { kind: 'page', bucket: 'multiworld', group: 'top', id: 'sessions', component: lazyComponent(() => import('../src/screens/multiworld/top/sessions.page')), meta: multiworldTopSessionsPageMeta },
   { kind: 'base', id: 'session', component: lazyComponent(() => import('../src/screens/session.base')), meta: sessionBaseMeta },

@@ -1,6 +1,7 @@
 /* @layer renderer-app @kind hook */
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ROUTE } from '../../../hooks/app-navigation.constants';
+import { openHistory } from '../../../hooks/open-history';
 import { openNewSession } from '../../../hooks/open-new-session';
 import { useAppNavigation } from '../../../hooks/useAppNavigation';
 import { useEngineStore } from '../../../stores/useEngineStore';
@@ -16,7 +17,7 @@ const useHome = () => {
   const { status, refresh } = useEngineStore();
   const { installed, presets, templates, loadInstalled, loadPresets, loadTemplates } = useLibraryStore();
   const { runs, loaded, load } = useRunsStore();
-  const { open, openSession } = useAppNavigation();
+  const { open, openRun } = useAppNavigation();
   const [now] = useState(() => Date.now());
 
   useEffect(() => {
@@ -26,6 +27,11 @@ const useHome = () => {
   const recent = useMemo(() => newestRuns(runs, RECENT_COUNT), [runs]);
   const last = recent[0] ?? null;
   const again = useRunAgain(last);
+
+  const openSession = useCallback((id: string) => {
+    const run = runs.find((entry) => entry.id === id);
+    if (run && !openRun(run)) openHistory(run.source?.sessionId);
+  }, [openRun, runs]);
 
   const act = useCallback((id: string) => {
     if (id === 'again') void again.runAgain();

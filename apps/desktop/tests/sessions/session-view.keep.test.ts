@@ -8,7 +8,6 @@ import { logCopyText, RUN_STATUS } from '@archipelia/design';
 import { serverRows } from '../../src/views/SessionDashboard/behavior/server-rows';
 import { textFileFor } from '../../src/views/SessionDashboard/behavior/text-file-for';
 import { textRows } from '../../src/views/SessionDashboard/behavior/text-rows';
-import { pickSession } from '../../src/views/SessionDashboard/behavior/pick-session';
 import { addressOf } from '../../src/views/SessionDashboard/behavior/address-of';
 import { canStop } from '../../src/views/SessionDashboard/behavior/can-stop';
 import { formatDuration } from '../../src/views/SessionDashboard/behavior/format-duration';
@@ -57,20 +56,6 @@ describe('session status', () => {
     expect(progressLabel(null)).toBeNull();
     expect(canStop('hosting')).toBe(true);
     expect(canStop('stopped')).toBe(false);
-  });
-});
-
-describe('pickSession', () => {
-  const runs = [run('old', 1, { status: 'hosting' }), run('new', 3, { status: 'hosting' }), run('last', 5)];
-
-  test('a given id wins, even when that run is stopped', () => {
-    expect(pickSession(runs, 'last')?.id).toBe('last');
-    expect(pickSession(runs, 'gone')).toBeNull();
-  });
-
-  test('without an id, the newest hosting run', () => {
-    expect(pickSession(runs, '')?.id).toBe('new');
-    expect(pickSession([run('x', 1)], '')).toBeNull();
   });
 });
 

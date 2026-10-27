@@ -1,15 +1,11 @@
 /* @layer renderer-app @kind hook */
-import { useCallback, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useNavigation } from '@drizztdourden08/brock-react';
-import { useFocusStore } from '../stores/useFocusStore';
+import { showRun } from '../live/show-run';
 
 const useAppNavigation = () => {
-  const { open, close } = useNavigation();
-  const focus = useFocusStore((state) => state.focus);
-
-  const openSession = useCallback((sessionId: string) => { focus(sessionId); close(); }, [focus, close]);
-
-  return useMemo(() => ({ open, openSession }), [open, openSession]);
+  const { open } = useNavigation();
+  return useMemo(() => ({ open, openRun: showRun }), [open]);
 };
 
 export { useAppNavigation };

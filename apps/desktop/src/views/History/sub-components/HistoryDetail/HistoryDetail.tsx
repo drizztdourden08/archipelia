@@ -21,7 +21,7 @@ const HistoryDetail = ({ run, templates, busy, actions }: HistoryDetailProps) =>
   return (
     <Stack gap="md">
       <ContentHeader title={`Run of ${DATE_FORMAT.format(run.createdAt)}`} compact strip={<Status tone={status.tone}>{status.label}</Status>} />
-      <RunActions run={run} sessionId={link.sessionId} busy={busy} onOpenRun={actions.openRun} onOpenSession={actions.openSession} onDelete={actions.deleteRun} />
+      <RunActions run={run} sessionId={link.sessionId} busy={busy} onOpenRun={actions.openRun} onOpenSession={actions.openSession} onRunAgain={actions.runAgain} onDelete={actions.deleteRun} />
       <SourceSection link={link} chip={runChip(run)} onOpen={actions.openSession} />
       <OverridesSection overrides={run.source?.overrides ?? []} />
       <PlayersSection rows={playerRows(run)} />

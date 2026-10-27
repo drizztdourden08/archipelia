@@ -1,23 +1,24 @@
 /* @layer renderer-app @kind logic */
 import { contexts, defineBootTask } from '@drizztdourden08/brock-react';
-import { SESSION_CONTEXT } from '../stores/focus-store.constants';
-import { sessionActive } from '../stores/session-active';
-import { useFocusStore } from '../stores/useFocusStore';
-import { useRunsStore } from '../stores/useRunsStore';
+import { SESSION_CONTEXT } from '../stores/session-context.constants';
+import { useLibraryStore } from '../stores/useLibraryStore';
+import { useLiveStore } from '../stores/useLiveStore';
 
 const publish = () => {
-  const focused = useFocusStore.getState().sessionId;
-  const active = sessionActive(focused, useRunsStore.getState().runs);
+  const { tabs, activeId } = useLiveStore.getState();
+  const tab = tabs.find((entry) => entry.tabId === activeId);
+  const label = tab ? useLibraryStore.getState().templates.find((template) => template.id === tab.sessionId)?.name : undefined;
   const current = contexts.get<string>(SESSION_CONTEXT);
-  if (current.active !== active || current.data !== focused) contexts.set(SESSION_CONTEXT, { active, data: focused });
+  const data = tab?.tabId;
+  if (current.active !== (tab !== undefined) || current.data !== data || current.label !== label) contexts.set(SESSION_CONTEXT, { active: tab !== undefined, data, label });
 };
 
 export default defineBootTask({
-  label: 'Following the focused session',
+  label: 'Following the active session tab',
   after: ['settings'],
   run: ({ report }) => {
-    useFocusStore.subscribe(publish);
-    useRunsStore.subscribe(publish);
+    useLiveStore.subscribe(publish);
+    useLibraryStore.subscribe(publish);
     publish();
     report(1);
   },
