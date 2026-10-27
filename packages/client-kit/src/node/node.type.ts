@@ -1,6 +1,8 @@
 /* @layer client-kit @kind types */
 import type { AssembledApworld, DataFile } from '../apworld/apworld.type';
 import type { ApworldIndex } from '../index-manifest/index.type';
+import type { KitIssue } from '../errors/kit-issue.type';
+import type { ReleaseManifest } from '../release-manifest/release.type';
 import type { ArchipelagoManifest, ManifestInput } from '../manifest/archipelago-manifest.type';
 
 type LineEndings = 'lf' | 'keep';
@@ -46,4 +48,33 @@ type SetFile = { archipelagoVersion: string; file: string; path: string; sha256:
 
 type SetResult = { index: ApworldIndex; indexPath: string; latestPath: string; files: SetFile[] };
 
-export type { ApworldBuild, ApworldFileInfo, BuildApworldOptions, BuildSetOptions, CollectOptions, LineEndings, SetBuildSpec, SetFile, SetResult };
+type ReleaseFilesOptions = {
+  dir: string;
+  module?: string;
+  direct: boolean;
+  kit?: string;
+  thumbnail?: string;
+  description?: string;
+};
+
+type ReleaseFilesResult = {
+  manifest: ReleaseManifest;
+  manifestPath: string;
+  thumbnailPath?: string;
+  descriptionPath?: string;
+  warnings: KitIssue[];
+};
+
+export type {
+  ApworldBuild,
+  ApworldFileInfo,
+  BuildApworldOptions,
+  BuildSetOptions,
+  CollectOptions,
+  LineEndings,
+  ReleaseFilesOptions,
+  ReleaseFilesResult,
+  SetBuildSpec,
+  SetFile,
+  SetResult,
+};

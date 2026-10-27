@@ -1,9 +1,10 @@
 /* @layer tests @kind test */
-import { readFile } from 'node:fs/promises';
+import { readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { afterEach, describe, expect, test } from 'vitest';
-import { parseApworldIndex } from '../src';
+import { parseApworldIndex, parseReleaseManifest } from '../src';
 import { runCli } from '../src/cli/run-cli';
+import { pngBytes } from './helpers/image-bytes';
 import { BUILD, workspace } from './helpers/cli-workspace';
 import { ROTP_GAME, ROTP_MODULE } from './helpers/rotp-world.constants';
 import { readFixture } from './helpers/read-fixture';
@@ -71,6 +72,40 @@ describe('the command line', () => {
     const bad = await run(dir, ['player-yaml', '--input', 'bad.json', '--schema', 'options.json']);
     expect(bad.code).toBe(1);
     expect(bad.err).toContain('death_link: expected true or false, got 3.');
+  });
+});
+
+describe('the release-files command', () => {
+  test('writes archipelia.json beside the index, copies the files and warns about HTML', async () => {
+    const dir = await workspace();
+    const config = { game: ROTP_GAME, worldVersion: '0.1.0', appVersion: '0.22.0', minimumAp: '0.6.4', worldDir: ROTP_MODULE, dataFolder: 'generated', outDir: 'release', builds: ['0.6.7', '0.6.8'] };
+    await writeFiles(dir, { 'kit.json': JSON.stringify(config), 'about.md': '<p>hi</p>' });
+    await writeFile(join(dir, 'art.png'), pngBytes(512, 512));
+    await run(dir, ['build-set', '--config', 'kit.json']);
+    const result = await run(dir, ['release-files', '--dir', 'release', '--direct', '--thumbnail', 'art.png', '--description', 'about.md']);
+    expect(result.code).toBe(0);
+    expect(result.err).toContain('warning: the description holds raw HTML');
+    const printed = JSON.parse(result.out) as { manifest: string; thumbnail: string; description: string; warnings: string[] };
+    expect(printed.warnings).toHaveLength(1);
+    expect(printed.thumbnail).toBe(join(dir, 'release', 'archipelia-thumbnail.png'));
+    const manifest = parseReleaseManifest(await readFile(printed.manifest, 'utf8'));
+    expect(manifest).toMatchObject({ format: 1, direct: true, module: ROTP_MODULE });
+    expect(manifest.builds).toHaveLength(2);
+    const plain = await run(dir, ['release-files', '--dir', 'release']);
+    expect(plain.code).toBe(0);
+    expect(parseReleaseManifest(await readFile(join(dir, 'release', 'archipelia.json'), 'utf8')).direct).toBe(false);
+  });
+
+  test('exits 1 with the problems when an image is refused, and 2 without a folder', async () => {
+    const dir = await workspace();
+    const config = { game: ROTP_GAME, worldVersion: '0.1.0', appVersion: '0.22.0', minimumAp: '0.6.4', worldDir: ROTP_MODULE, dataFolder: 'generated', outDir: 'release', builds: ['0.6.8'] };
+    await writeFiles(dir, { 'kit.json': JSON.stringify(config) });
+    await writeFile(join(dir, 'wide.png'), pngBytes(1280, 640));
+    await run(dir, ['build-set', '--config', 'kit.json']);
+    const refused = await run(dir, ['release-files', '--dir', 'release', '--thumbnail', 'wide.png']);
+    expect(refused.code).toBe(1);
+    expect(refused.err).toContain('must be square');
+    expect((await run(dir, ['release-files'])).code).toBe(2);
   });
 });
 

@@ -5,6 +5,7 @@ export { collectPackage } from './collect-package';
 export { readApworldFile } from './read-apworld-file';
 export { sha256Hex } from './sha256-hex';
 export { writeApworld } from './write-apworld';
+export { writeReleaseFiles } from './write-release-files';
 export type {
   ApworldBuild,
   ApworldFileInfo,
@@ -12,6 +13,8 @@ export type {
   BuildSetOptions,
   CollectOptions,
   LineEndings,
+  ReleaseFilesOptions,
+  ReleaseFilesResult,
   SetBuildSpec,
   SetFile,
   SetResult,
