@@ -17,6 +17,8 @@ export type * from './session.type';
 export type * from './world-carry.type';
 export { lobbyTemplateId } from './lobby-template-id';
 export { templateOf } from './template-of';
+export type * from './run-record';
+export { UNKNOWN_SOURCE_NAME, buildRun, runOf, runOverridesOf, runPlayersOf } from './run-record';
 export { runJobId } from './run-job-id';
 export { BUILD_JOB, DOMAIN, ENGINE_JOB, RUN_JOB_PREFIX, TOOL_JOB } from './shared-ids.constants';
 export type * from './install-failure';

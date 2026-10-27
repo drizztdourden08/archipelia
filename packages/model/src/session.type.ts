@@ -1,5 +1,5 @@
 /* @layer core @kind types */
-import type { LobbyAdmission } from './lobby.type';
+import type { LobbyAdmission, TrustLevel } from './lobby.type';
 import type { OptionValue } from './options.type';
 
 type ReleaseMode = 'disabled' | 'enabled' | 'auto' | 'auto-enabled' | 'goal';
@@ -21,6 +21,7 @@ type SessionPlayer = {
   name: string;
   game: string;
   source: PlayerSource;
+  direct?: boolean;
 };
 
 type GeneratorSettings = { spoiler: SpoilerLevel; race: boolean; progressionBalancing: boolean };
@@ -71,9 +72,23 @@ type SessionEngine = { id: string; ap: string; python: string };
 
 type SessionWorld = { game: string; sha256: string };
 
+type PlayerOrigin = 'saved' | 'added' | 'joined';
+
+type RunOverride = { field: string; label: string; from: string; to: string };
+
+type RunSourceMatch = 'recorded' | 'name' | 'unknown';
+
+type RunSource = { sessionId?: string; sessionName: string; overrides: RunOverride[]; match: RunSourceMatch };
+
+type RunMember = { displayName: string; client?: string; trust: TrustLevel };
+
+type RunPlayer = { slot: number; name: string; game: string; origin?: PlayerOrigin; member?: RunMember };
+
 type Session = {
   id: string;
   templateId?: string;
+  source?: RunSource;
+  players?: RunPlayer[];
   snapshot: SessionTemplate;
   status: SessionStatus;
   createdAt: number;
@@ -87,7 +102,10 @@ type Session = {
   error?: string;
 };
 
+type StoredRun = Omit<Session, 'snapshot'> & { snapshot: StoredTemplate };
+
 export type {
-  DirectConnection, Endpoint, GeneratorSettings, HostTarget, PlayerSource, ReleaseMode, RemainingMode, ServerSettings, Session,
-  SessionEngine, SessionLobby, SessionOutput, SessionPlayer, SessionStatus, SessionTemplate, SessionWorld, SpoilerLevel, StoredTemplate,
+  DirectConnection, Endpoint, GeneratorSettings, HostTarget, PlayerOrigin, PlayerSource, ReleaseMode, RemainingMode, RunMember, RunOverride, RunPlayer,
+  RunSource, RunSourceMatch, ServerSettings, Session, SessionEngine, SessionLobby, SessionOutput, SessionPlayer, SessionStatus, SessionTemplate,
+  SessionWorld, SpoilerLevel, StoredRun, StoredTemplate,
 };

@@ -94,7 +94,7 @@ describe('the players in the lobby', () => {
 describe('a session saved before the split', () => {
   test('keeps its players, which the lobby takes as its own players when it starts', () => {
     const stored = withPlayers([presetPlayer(1, 'Ana'), presetPlayer(2, 'Bo')]);
-    expect(templateOf(stored)).toEqual(stored);
+    expect(templateOf(stored)).toEqual({ ...stored, players: stored.players.map((player) => ({ ...player, direct: false })) });
   });
 
   test('moves the lobby out of a direct connection and keeps the admission settings', () => {
