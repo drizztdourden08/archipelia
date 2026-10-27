@@ -1,25 +1,13 @@
 /* @layer tests @kind test */
 import { describe, expect, test, vi } from 'vitest';
 import type { EngineRuntime } from '@archipelia/model';
-import type { BuildSandbox, BuildScope } from '../src/build/build.type';
 import { behaviour } from './build-engine.fixtures';
 
 vi.mock('@archipelia/engine', async () => (await import('./build-engine.fixtures')).mockedEngine());
 
-const { bed, registerBuildBed } = await import('./build-bed.fixtures');
+const { bed, fakeSandbox, registerBuildBed } = await import('./build-bed.fixtures');
 
 registerBuildBed();
-
-const fakeSandbox = (): { sandbox: () => Promise<BuildSandbox>; scopes: BuildScope[] } => {
-  const scopes: BuildScope[] = [];
-  const sandbox: BuildSandbox = {
-    confine: (scope) => {
-      scopes.push(scope);
-      return ({ file, args, cwd, env }) => ({ file: '/usr/bin/bwrap', args: [scope.network ? '--share-net' : '--no-net', '--', file, ...args], cwd, env: { PATH: '/usr/bin', ...env } });
-    },
-  };
-  return { sandbox: () => Promise.resolve(sandbox), scopes };
-};
 
 describe('the sandbox of a build', () => {
   test('runs the venv, tools and wheel steps through the sandbox, with the network for the tools only', async () => {

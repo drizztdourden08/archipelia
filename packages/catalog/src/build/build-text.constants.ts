@@ -12,11 +12,13 @@ const BUILD_TEXT = {
   oneWheel: 'The build did not make exactly one wheel, so Archipelia installs nothing.',
   noFit: 'The wheel that was built does not fit this engine, so Archipelia installs nothing.',
   tooLarge: 'The wheel that was built is larger than Archipelia takes.',
+  noRust: 'The Rust of Archipelia is not installed, so there are no crates to download.',
 } as const;
 
 const STEP_FAILED: Record<SourceBuildJob, string> = {
   venv: 'Archipelia could not set up a private build folder with the engine Python.',
   tools: 'Archipelia could not install the build tools into the private build folder.',
+  crates: 'Archipelia could not download the Rust crates of this project.',
   wheel: 'The build failed. The log says why.',
 };
 

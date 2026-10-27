@@ -24,8 +24,8 @@ describe('the commands of a build', () => {
     const spec = toolsSpec(dirs);
     expect(spec.command).toBe(venvPython(dirs.venv));
     expect(spec.args).toEqual([
-      '-X', 'utf8', '-I', '-m', 'pip', 'install', '--isolated', '--disable-pip-version-check', '--no-warn-script-location', '--no-input', '--no-cache-dir',
-      '--only-binary=:all:', '--no-deps', '--require-hashes', '-r', dirs.tools,
+      '-X', 'utf8', '-I', '-m', 'pip', 'install', '--isolated', '--disable-pip-version-check', '--no-input', '--no-cache-dir',
+      '--no-warn-script-location', '--only-binary=:all:', '--no-deps', '--require-hashes', '-r', dirs.tools,
     ]);
     expect(spec.cwd).toBe(dirs.work);
   });
@@ -34,10 +34,15 @@ describe('the commands of a build', () => {
     const spec = wheelSpec(dirs);
     expect(spec.command).toBe(venvPython(dirs.venv));
     expect(spec.args).toEqual([
-      '-X', 'utf8', '-I', '-m', 'pip', 'wheel', '--isolated', '--disable-pip-version-check', '--no-warn-script-location', '--no-input', '--no-cache-dir',
+      '-X', 'utf8', '-I', '-m', 'pip', 'wheel', '--isolated', '--disable-pip-version-check', '--no-input', '--no-cache-dir',
       '--no-deps', '--no-build-isolation', '--no-index', '-w', dirs.out, dirs.src,
     ]);
     expect(spec.cwd).toBe(dirs.work);
+  });
+
+  test('passes pip wheel only options that pip wheel has, so no install-only flag reaches it', () => {
+    expect(wheelSpec(dirs).args).not.toContain('--no-warn-script-location');
+    expect(toolsSpec(dirs).args).toContain('--no-warn-script-location');
   });
 
   test('the venv Python is in Scripts on Windows and in bin elsewhere', () => {

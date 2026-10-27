@@ -54,7 +54,7 @@ type PackageSource = {
   archiveSha256?: string | undefined;
 };
 
-type SourceBuildJob = 'venv' | 'tools' | 'wheel';
+type SourceBuildJob = 'venv' | 'tools' | 'crates' | 'wheel';
 
 type SourceBuildTool = 'msvc' | 'compiler' | 'xcode' | 'python-headers' | 'headers' | 'rust' | 'cmake';
 
@@ -73,6 +73,7 @@ type SourceBuildPlan = {
   archiveSha256: string;
   size: number;
   confined: boolean;
+  rust: boolean;
   tools: SourceBuildPin[];
 };
 

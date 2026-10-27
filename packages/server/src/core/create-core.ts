@@ -41,7 +41,10 @@ const createCore = (ports: CorePorts) => {
   });
   const { runtime, runtimeFor } = engine;
   const sandbox = coreSandbox(environment.platform ?? process.platform, log);
-  const catalog = createCatalogService({ games, cache, engineDir: engine.engineDir, build: ports.build, buildSandbox: sandbox, log: (message) => log(message) });
+  const toolFiles = domain(DOMAIN.tools);
+  const catalog = createCatalogService({
+    games, cache, engineDir: engine.engineDir, build: ports.build, buildSandbox: sandbox, tools: { dir: () => Promise.resolve(toolFiles.dir()), run: ports.tool }, log: (message) => log(message),
+  });
   const installed = () => listInstalled(games);
   const schemaOf = async (game: string): Promise<GameSchema | undefined> =>
     (await installed()).find((record) => record.game === game)?.schema;

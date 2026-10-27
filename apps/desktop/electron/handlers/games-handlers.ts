@@ -1,7 +1,7 @@
 /* @layer electron-main @kind logic */
 import type { HandlerGroup } from '@drizztdourden08/brock-electron/main';
 import { AppError } from '@drizztdourden08/brock-core/ipc';
-import { BUILD_JOB, installFailureOf } from '@archipelia/model';
+import { BUILD_JOB, installFailureOf, TOOL_JOB } from '@archipelia/model';
 import { APP_CHANNELS } from '../../src/ipc/contract.constants';
 
 const coded = (err: unknown): unknown => {
@@ -30,7 +30,13 @@ const gamesHandlers: HandlerGroup = {
     ctx.handle(APP_CHANNELS.sourcesBuildStart, (_event, request) => catalog.sources.buildStart(request));
     ctx.handle(APP_CHANNELS.sourcesBuildCancel, () => {
       catalog.sources.buildCancel();
-      for (const id of Object.values(BUILD_JOB)) ctx.jobs.cancel(id);
+      for (const id of [...Object.values(BUILD_JOB), ...Object.values(TOOL_JOB)]) ctx.jobs.cancel(id);
+      return Promise.resolve();
+    });
+    ctx.handle(APP_CHANNELS.sourcesToolPlan, (_event, request) => catalog.sources.toolPlan(request));
+    ctx.handle(APP_CHANNELS.sourcesToolInstall, (_event, request) => catalog.sources.toolInstall(request));
+    ctx.handle(APP_CHANNELS.sourcesToolCancel, () => {
+      for (const id of Object.values(TOOL_JOB)) ctx.jobs.cancel(id);
       return Promise.resolve();
     });
   },

@@ -19,6 +19,7 @@ const usage = {
     'Let Archipelia build it opens a step that says plainly that the code of the project will run on this computer, and downloads nothing until the user clicks Download the source.',
     'Show the commit, the size and the sha256 of the source and every build tool before the build button works, and keep Cancel on every step that runs.',
     'When a build fails, name the missing piece (compiler, headers, Rust, CMake) in plain words with a link to its install page and Check again; keep the log for the user to copy.',
+    'When a tool is missing, offer Show me how and Install it for me as two buttons with neither preselected. Install shows the size, the exact command and who asks for permission, and runs only after the Install click. Archipelia never runs as an administrator.',
     'Open every link with onOpenLink, never inside the app window.',
   ],
   a11y: [
@@ -49,12 +50,14 @@ const PackageSourceSample = ({ onClose }: { onClose: () => void }) => (
     onBuildDownload={() => undefined}
     onBuildStart={() => undefined}
     onBuildCancel={() => undefined}
+    onToolInstall={() => undefined}
+    onToolCancel={() => undefined}
     onOpenLink={() => undefined}
     onClose={onClose}
   />
 );
 `,
-  propsHash: 'ea9c8e0e8ad39cb2',
+  propsHash: 'eefee55f5b6c6373',
 } satisfies ComponentUsage;
 
 export { usage };

@@ -1,6 +1,6 @@
 /* @layer core @kind types */
 import type { StartJob } from '@drizztdourden08/brock-core/jobs';
-import type { BuildRunner } from '@archipelia/catalog';
+import type { BuildRunner, ToolRunner } from '@archipelia/catalog';
 import type { FetchLike } from '@archipelia/engine';
 import type { RoomVault } from './room-secrets/room-secrets.type';
 import type { DataFiles, EngineEvent, Lobby, Session, SessionTemplate } from '@archipelia/model';
@@ -47,6 +47,7 @@ type CorePorts = {
   lobbyRun?: CoreLobbyRun;
   canStoreSecrets?: () => boolean;
   build?: BuildRunner;
+  tool?: ToolRunner;
 };
 
 export type { CoreDomain, CoreDomains, CoreEnvironment, CoreEvent, CoreLobbyRun, CoreLobbyRunContext, CoreLogLevel, CoreNetwork, CorePorts };

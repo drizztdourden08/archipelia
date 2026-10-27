@@ -1,12 +1,14 @@
 /* @layer renderer-app @kind types */
-import type { SourceBuildMissing, SourceBuildPlan, SourceCandidate, SourcePlan, SourceSuggestions } from '@archipelia/model';
+import type { SourceBuildMissing, SourceBuildPlan, SourceCandidate, SourcePlan, SourceSuggestions, SourceToolPlan } from '@archipelia/model';
 
 type BuildStage =
   | { kind: 'confirm' }
   | { kind: 'preparing' }
   | { kind: 'ready'; build: SourceBuildPlan }
   | { kind: 'building'; build: SourceBuildPlan }
-  | { kind: 'missing'; build: SourceBuildPlan; missing: SourceBuildMissing; log: readonly string[] }
+  | { kind: 'missing'; build: SourceBuildPlan; missing: SourceBuildMissing; log: readonly string[]; tool?: SourceToolPlan | undefined }
+  | { kind: 'installing'; build: SourceBuildPlan; tool: SourceToolPlan }
+  | { kind: 'paused'; build: SourceBuildPlan; message: string; log: readonly string[] }
   | { kind: 'failed'; build: SourceBuildPlan | undefined; message: string; log: readonly string[] };
 
 type BuildLogView = { lines: readonly string[]; label: string | undefined; progress: number };
@@ -33,6 +35,8 @@ type PackageSourceHandlers = {
   onBuildDownload: () => void;
   onBuildStart: (build: SourceBuildPlan) => void;
   onBuildCancel: () => void;
+  onToolInstall: (build: SourceBuildPlan, tool: SourceToolPlan) => void;
+  onToolCancel: () => void;
   onOpenLink: (url: string) => void;
   onClose: () => void;
 };
@@ -76,7 +80,7 @@ type ManualStepsProps = Pick<PackageSourceHandlers, 'onCheckAgain'> & {
   stillMissing: boolean;
 };
 
-type BuildStepProps = Pick<PackageSourceHandlers, 'onBuildCancel' | 'onBuildDownload' | 'onBuildStart' | 'onOpenLink'> & {
+type BuildStepProps = Pick<PackageSourceHandlers, 'onBuildCancel' | 'onBuildDownload' | 'onBuildStart' | 'onOpenLink' | 'onToolCancel' | 'onToolInstall'> & {
   module: string;
   candidate: SourceCandidate;
   plan: SourcePlan;
@@ -86,21 +90,34 @@ type BuildStepProps = Pick<PackageSourceHandlers, 'onBuildCancel' | 'onBuildDown
 
 type BuildLogProps = { lines: readonly string[]; label: string | undefined };
 
-type BuildMissingProps = Pick<PackageSourceHandlers, 'onBuildStart' | 'onOpenLink'> & {
+type BuildMissingProps = Pick<PackageSourceHandlers, 'onBuildStart' | 'onOpenLink' | 'onToolInstall'> & {
   build: SourceBuildPlan;
   missing: SourceBuildMissing;
   log: readonly string[];
+  tool: SourceToolPlan | undefined;
 };
+
+type ToolWay = 'how' | 'install' | null;
+
+type ToolChoiceProps = Pick<PackageSourceHandlers, 'onToolInstall' | 'onOpenLink'> & { build: SourceBuildPlan; tool: SourceToolPlan };
+
+type ToolHowProps = { how: string; blocked: SourceToolPlan['blocked'] };
+
+type ToolInstallProps = Pick<PackageSourceHandlers, 'onToolInstall' | 'onOpenLink'> & { build: SourceBuildPlan; tool: SourceToolPlan };
+
+type BuildInstallingProps = Pick<PackageSourceHandlers, 'onToolCancel'> & { tool: SourceToolPlan; buildLog: BuildLogView | undefined };
+
+type BuildPausedProps = Pick<PackageSourceHandlers, 'onBuildStart'> & { build: SourceBuildPlan; message: string; log: readonly string[] };
 
 type BuildConfirmProps = Pick<PackageSourceHandlers, 'onBuildDownload'> & { repo: string; short: string };
 
-type BuildRunningProps = Pick<PackageSourceHandlers, 'onBuildCancel'> & { text: string; buildLog: BuildLogView | undefined };
+type BuildRunningProps = { text: string; buildLog: BuildLogView | undefined; onCancel: (() => void) | undefined };
 
 type BuildFailedProps = Pick<PackageSourceHandlers, 'onBuildStart'> & { build: SourceBuildPlan | undefined; message: string; log: readonly string[] };
 
 type BuildReadyProps = Pick<PackageSourceHandlers, 'onBuildStart'> & { module: string; candidate: SourceCandidate; build: SourceBuildPlan };
 
 export type {
-  BuildConfirmProps, BuildFailedProps, BuildLogProps, BuildLogView, BuildMissingProps, BuildRunningProps, BuildReadyProps, BuildStage, BuildStepProps, CandidateCardProps, CandidateListProps, ManualStepsProps,
-  PackageSourceDialogProps, PackageSourceStep, PasteFieldProps, PlanStepProps, TrustStepProps, WheelOfferProps,
+  BuildConfirmProps, BuildFailedProps, BuildInstallingProps, BuildLogProps, BuildLogView, BuildMissingProps, BuildPausedProps, BuildRunningProps, BuildReadyProps, BuildStage, BuildStepProps, CandidateCardProps, CandidateListProps, ManualStepsProps,
+  PackageSourceDialogProps, PackageSourceStep, PasteFieldProps, PlanStepProps, ToolChoiceProps, ToolHowProps, ToolInstallProps, ToolWay, TrustStepProps, WheelOfferProps,
 };

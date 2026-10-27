@@ -2,6 +2,7 @@
 import type { CatalogEntry, DataFiles } from '@archipelia/model';
 import type { TrustedRootLoad } from '@archipelia/trust';
 import type { BuildRunner, BuildSandbox } from '../build/build.type';
+import type { ToolsPort } from '../source/source.type';
 import type { PackageConsent } from '../install/package-consent.type';
 import type { FirstPartyRead } from '../first-party/first-party.type';
 import type { Catalog } from '../read-catalog.type';
@@ -21,6 +22,7 @@ type CatalogServiceDeps = {
   trustRoot?: () => Promise<TrustedRootLoad['root']>;
   build?: BuildRunner | undefined;
   buildSandbox?: (() => Promise<BuildSandbox>) | undefined;
+  tools?: ToolsPort | undefined;
   log?: ((message: string) => void) | undefined;
 };
 
