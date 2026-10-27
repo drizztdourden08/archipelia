@@ -53,7 +53,7 @@ const GameStore = ({ tab }: GameStoreProps) => {
         {store.shown === 0
           ? (
             <EmptyState icon={store.loading ? <Spinner /> : undefined} message={EMPTY_TEXT[store.empty]}
-              action={store.empty === 'installed' ? <Button variant="primary" onClick={store.openOfficial}>Open Official</Button> : undefined} />
+              action={store.empty === 'installed' ? <Button variant="primary" onClick={store.openBuiltIn}>Open Built-in</Button> : undefined} />
           )
           : (
             <VirtualGrid

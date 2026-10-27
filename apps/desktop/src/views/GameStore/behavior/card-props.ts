@@ -4,6 +4,7 @@ import type { GameCardAction, GameCardNote, GameCardProps, GameCardStatus } from
 import { KIND_LABEL, KIND_OF, NO_RELEASE } from '../GameStore.constants';
 import { busyOf } from './busy-of';
 import { failureOf } from './failure-of';
+import { isVerified } from './is-verified';
 import { needOf } from './need-of';
 import { removeKey } from './remove-key';
 import { requestOf } from './request-of';
@@ -72,6 +73,7 @@ const cardPropsOf = (row: GameRow, handlers: CardHandlers): GameCardProps => ({
   title: row.entry.displayName,
   kind: KIND_OF[row.entry.source],
   kindLabel: KIND_LABEL[row.entry.source],
+  verified: isVerified(row),
   version: versionOf(row),
   status: statusOf(row, handlers),
   notes: notesOf(row),

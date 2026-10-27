@@ -15,7 +15,7 @@ const GAMES_STEPS: readonly TourStepDef[] = [
   {
     id: 'games-tabs',
     title: 'Tabs',
-    body: 'The tabs narrow the list: all worlds, the ones you installed, official and community worlds, and updates.',
+    body: 'The tabs narrow the list: all worlds, the ones you installed, built-in, Archipelia ready and Archipelago index worlds, and updates.',
     target: TOUR_PART.tabs,
     mascot: 'point',
     open: ROUTE.games,

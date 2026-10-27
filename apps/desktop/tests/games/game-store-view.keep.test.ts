@@ -25,12 +25,12 @@ describe('games store view', () => {
   });
 
   test('the kind is an icon kind, never a word, and the version is the world version', () => {
-    const community: GameRow = { entry: { ...entry, source: 'index', versions: [{ version: '1.2.0', url: 'u' }] }, latest: { version: '1.2.0', url: 'u' }, state: 'available' };
-    expect(cardPropsOf(community, handlers([]))).toMatchObject({ kind: 'community', version: '1.2.0', status: undefined });
-    expect(cardPropsOf(row, handlers([]))).toMatchObject({ kind: 'official', version: undefined });
+    const indexed: GameRow = { entry: { ...entry, source: 'index', versions: [{ version: '1.2.0', url: 'u' }] }, latest: { version: '1.2.0', url: 'u' }, state: 'available' };
+    expect(cardPropsOf(indexed, handlers([]))).toMatchObject({ kind: 'archipelago-index', verified: false, version: '1.2.0', status: undefined });
+    expect(cardPropsOf(row, handlers([]))).toMatchObject({ kind: 'built-in', version: undefined });
   });
 
-  test('an official card shows a version only when the world has its own, never the engine version', () => {
+  test('a built-in card shows a version only when the world has its own, never the engine version', () => {
     const own: GameRow = { entry: { ...entry, versions: [{ version: '2.1.0', url: 'u' }] }, latest: { version: '2.1.0', url: 'u' }, state: 'available' };
     expect(cardPropsOf(own, handlers([])).version).toBe('2.1.0');
     const engineGame = { apworld: 'hk', game: 'HK', version: '0.6.7', source: 'official', installedAt: 0 } as GameRow['installed'];

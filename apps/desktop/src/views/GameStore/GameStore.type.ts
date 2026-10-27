@@ -15,9 +15,9 @@ type CardHandlers = {
 
 type GameRowState = 'installed' | 'update' | 'available';
 
-type GameTab = 'all' | 'installed' | 'official' | 'community' | 'updates';
+type GameTab = 'all' | 'installed' | 'built-in' | 'archipelia-ready' | 'archipelago-index' | 'updates';
 
-type GameSectionId = 'installed' | 'official' | 'community' | 'updates';
+type GameSectionId = 'installed' | 'built-in' | 'archipelia-ready' | 'archipelago-index' | 'updates';
 
 type GameStoreProps = { tab: GameTab };
 

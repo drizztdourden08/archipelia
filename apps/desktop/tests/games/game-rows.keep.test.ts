@@ -17,16 +17,16 @@ describe('game rows', () => {
     expect(compareVersions('1.2', '1.2.0')).toBe(0);
   });
 
-  test('an older installed version is an update, official worlds need no versions', () => {
+  test('an older installed version is an update, built-in worlds need no versions', () => {
     const rows = buildRows([entry('hk', 'official'), entry('soh', 'index', ['1.1.0', '1.2.1']), entry('none', 'index')], [installed('soh', '1.1.0')]);
     expect(rows.map((r) => [r.entry.apworld, r.state])).toEqual([['hk', 'available'], ['soh', 'update']]);
     expect(rows[1]?.latest?.version).toBe('1.2.1');
   });
 
-  test('sections come in the order installed, official, community', () => {
-    const rows = buildRows([entry('hk', 'official'), entry('soh', 'index', ['1.0.0']), entry('rotp', 'first-party', ['0.1.0']), entry('tim', 'official')], [installed('soh', '1.0.0')]);
+  test('sections come in the order installed, built-in, Archipelia ready, Archipelago index', () => {
+    const rows = buildRows([entry('hk', 'official'), entry('soh', 'index', ['1.0.0']), entry('rotp', 'first-party', ['0.1.0']), entry('tim', 'official'), entry('jak', 'index', ['2.0.0'])], [installed('soh', '1.0.0')]);
     expect(groupSections(rows).map((section) => [section.id, section.rows.map(apworldOf)])).toEqual([
-      ['installed', ['soh']], ['official', ['hk', 'tim']], ['community', ['rotp']],
+      ['installed', ['soh']], ['built-in', ['hk', 'tim']], ['archipelia-ready', ['rotp']], ['archipelago-index', ['jak']],
     ]);
   });
 
@@ -35,7 +35,9 @@ describe('game rows', () => {
     const names = (query: string, clauses: ReturnType<typeof createClause>[] = []) => filterRows(rows, query, clauses).map(apworldOf);
     expect(names('')).toEqual(['hk', 'rotp', 'soh']);
     expect(names('SO')).toEqual(['soh']);
-    expect(names('', [createClause('source', 'anyOf', ['Official', 'First-party'])])).toEqual(['hk', 'rotp']);
+    expect(names('verified')).toEqual(['rotp']);
+    expect(names('archipelago index')).toEqual(['soh']);
+    expect(names('', [createClause('source', 'anyOf', ['Built-in', 'Archipelia ready'])])).toEqual(['hk', 'rotp']);
     expect(names('', [createClause('state', 'anyOf', ['Installed'])])).toEqual(['soh']);
     expect(names('', [createClause('state', 'noneOf', ['Installed']), createClause('name', 'contains', 'r')])).toEqual(['rotp']);
   });

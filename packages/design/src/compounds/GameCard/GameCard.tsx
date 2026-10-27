@@ -6,9 +6,10 @@ import { GAME_STATUS, KIND_TONE, MAX_TAGS } from './GameCard.constants';
 import type { GameCardProps } from './GameCard.type';
 import { GameCardMedia } from './sub-components/GameCardMedia';
 import { GameCardNotes } from './sub-components/GameCardNotes';
+import { VerifiedTag } from './sub-components/VerifiedTag';
 import './GameCard.css';
 
-const GameCard = ({ title, kind, kindLabel, version, status, notes, tags, actions, art, onOpen }: GameCardProps) => {
+const GameCard = ({ title, kind, kindLabel, version, status, notes, tags, actions, art, verified, onOpen }: GameCardProps) => {
   const state = status ? GAME_STATUS[status] : undefined;
   return (
     <ItemCard
@@ -18,6 +19,7 @@ const GameCard = ({ title, kind, kindLabel, version, status, notes, tags, action
       mediaLabel={kindLabel}
       media={<GameCardMedia kind={kind} kindLabel={kindLabel} art={art} />}
       title={title}
+      eyebrow={verified ? <VerifiedTag /> : undefined}
       status={state && { label: state.label, tone: state.tone }}
       tags={tags.slice(0, MAX_TAGS).map((tag) => <Tag key={tag}>{tag}</Tag>)}
       details={[
