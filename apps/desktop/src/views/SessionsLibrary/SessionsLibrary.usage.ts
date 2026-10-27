@@ -2,7 +2,7 @@
 import type { ComponentUsage } from '@drizztdourden08/tessera';
 
 const usage = {
-  job: 'The Sessions page: the saved sessions and their runs side by side.',
+  job: 'The Sessions page: the saved sessions, each with its start, edit and history link.',
   useWhen: [
     'The Sessions page, the top level entry after Home.',
   ],
@@ -12,20 +12,20 @@ const usage = {
   rules: [
     'Put each session in search while the page is open, keyed by its id; picking it opens its Edit session sub-page.',
     'Open the builder as the New session or Edit session sub-page, never in place of the lists.',
-    'Open a run that is still generating or starting in its job dialog, and any other run on the dashboard; Show log opens the job dialog of any run.',
-    'Filter sessions and runs with the page header filter, read with usePageSearch; New session is the header primary button.',
-    'Deleting a run is a danger button and deleting a session is an item of its More actions menu; both ask through a danger confirm.',
-    'Show a spinner in each card while the lists load; when the load fails, show its sentence with Retry in place of the cards.',
+    'Send a session to History with the History of this session item of its More actions menu; the label counts its runs. The runs themselves live in History, not here.',
+    'Filter sessions with the page header filter, read with usePageSearch; New session is the header primary button.',
+    'Deleting a session is an item of its More actions menu and asks through a danger confirm.',
+    'Show a spinner in the card while the list loads; when the load fails, show its sentence with Retry in place of the card.',
     'Show a failed action as one plain sentence and keep its raw error in the app log.',
   ],
   a11y: [
     'The filter field is labelled with what it filters.',
-    'The two lists are titled cards.',
+    'The list is a titled card.',
     'An error is an alert.',
   ],
   tree: {
-    path: ['a full screen view', 'a page of the multiworld app', 'the saved sessions and their runs'],
-    rule: 'Every saved session and every run.',
+    path: ['a full screen view', 'a page of the multiworld app', 'the saved sessions'],
+    rule: 'Every saved session.',
   },
   example: `import { SessionsLibrary } from '../SessionsLibrary';
 

@@ -1,6 +1,8 @@
 /* @layer renderer-app @kind types */
 import type { StatusTone } from '@drizztdourden08/tessera/primitives';
 
+type RunStatusView = { label: string; tone: StatusTone };
+
 type SessionStatusBarProps = {
   status: string;
   statusTone: StatusTone;
@@ -17,4 +19,4 @@ type SessionStatusBarProps = {
   onStop: () => void;
 };
 
-export type { SessionStatusBarProps };
+export type { RunStatusView, SessionStatusBarProps };

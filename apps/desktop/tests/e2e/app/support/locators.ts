@@ -3,11 +3,12 @@ import type { Locator, Page } from 'playwright-core';
 
 type HubTitle = 'Multiworld';
 
-type MenuEntry = 'Home' | 'Sessions' | 'Games' | 'Presets' | 'Servers' | 'Storage' | 'Settings';
+type MenuEntry = 'Home' | 'Sessions' | 'History' | 'Games' | 'Presets' | 'Servers' | 'Storage' | 'Settings';
 
 const HUB_OF: Record<MenuEntry, HubTitle> = {
   Home: 'Multiworld',
   Sessions: 'Multiworld',
+  History: 'Multiworld',
   Games: 'Multiworld',
   Presets: 'Multiworld',
   Servers: 'Multiworld',
@@ -20,6 +21,7 @@ const LIBRARY_ENTRIES: readonly MenuEntry[] = ['Games', 'Presets'];
 const PAGE_OF: Record<MenuEntry, string> = {
   Home: 'Home',
   Sessions: 'Sessions',
+  History: 'History',
   Games: 'Games',
   Presets: 'Presets',
   Servers: 'Servers',
@@ -27,7 +29,7 @@ const PAGE_OF: Record<MenuEntry, string> = {
   Storage: 'Storage',
 };
 
-const OPENED_BY: Partial<Record<MenuEntry, MenuEntry>> = { Sessions: 'Home', Storage: 'Settings' };
+const OPENED_BY: Partial<Record<MenuEntry, MenuEntry>> = { Sessions: 'Home', History: 'Home', Storage: 'Settings' };
 
 const dialogOf = (page: Page, title: string) => page.getByRole('dialog', { name: title, exact: true });
 

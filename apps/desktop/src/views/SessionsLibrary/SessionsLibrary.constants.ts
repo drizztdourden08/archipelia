@@ -1,9 +1,5 @@
 /* @layer renderer-app @kind config */
-import type { SessionStatus, SpoilerLevel } from '@archipelia/model';
-
-const DATE_FORMAT = new Intl.DateTimeFormat(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-
-const LIVE: SessionStatus[] = ['generating', 'starting', 'hosting'];
+import type { SpoilerLevel } from '@archipelia/model';
 
 const SPOILER_LABEL: Record<SpoilerLevel, string> = { 0: 'no spoiler', 1: 'spoiler basic', 2: 'spoiler playthrough', 3: 'spoiler full' };
 
@@ -12,7 +8,6 @@ const FAILURE = {
   start: 'Could not start the session.',
   duplicate: 'Could not duplicate the session.',
   deleteSession: 'Could not delete the session.',
-  deleteRun: 'Could not delete the run.',
 } as const;
 
-export { DATE_FORMAT, FAILURE, LIVE, SPOILER_LABEL };
+export { FAILURE, SPOILER_LABEL };

@@ -3,6 +3,7 @@ const ROUTE = {
   sessions: 'multiworld/sessions',
   newSession: 'multiworld/sessions/new',
   joinSession: 'multiworld/sessions/join',
+  history: 'multiworld/history',
   games: 'multiworld/games',
   builtInGames: 'multiworld/games/built-in',
   presets: 'multiworld/presets',
