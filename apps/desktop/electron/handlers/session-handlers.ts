@@ -1,4 +1,5 @@
 /* @layer electron-main @kind logic */
+import { openFolder } from '@drizztdourden08/brock-electron/main';
 import type { HandlerGroup } from '@drizztdourden08/brock-electron/main';
 import { assertSafeName } from '@drizztdourden08/brock-core/storage';
 import { APP_CHANNELS } from '../../src/ipc/contract.constants';
@@ -25,6 +26,13 @@ const sessionHandlers: HandlerGroup = {
     ctx.handle(APP_CHANNELS.sessionsRemove, async (_event, id) => {
       await sessionFiles.remove(assertSafeName(id, 'session id'));
       await runs.remove(id);
+    });
+    ctx.handle(APP_CHANNELS.sessionsOpenOutput, async (_event, id) => {
+      const safe = assertSafeName(id, 'session id');
+      const session = await runs.get(safe);
+      if (!session?.output) throw new Error('this run has no output folder');
+      const opened = await openFolder(sessionFiles.path(`${safe}/output`));
+      if (!opened.success) throw new Error(opened.error);
     });
     ctx.handle(APP_CHANNELS.sessionsShowJob, async (_event, id) => {
       if (ctx.jobs.list().some((job) => job.id === runJobId(id) && job.state === 'running')) return;

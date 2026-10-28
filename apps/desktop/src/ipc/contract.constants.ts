@@ -63,6 +63,7 @@ const APP_CHANNELS = defineChannels({
   sessionsLog: invoke<(id: string) => Promise<HostLogLine[]>>()('ap:sessions:log'),
   sessionsRemove: invoke<(id: string) => Promise<void>>()('ap:sessions:remove'),
   sessionsShowJob: invoke<(id: string) => Promise<void>>()('ap:sessions:showJob'),
+  sessionsOpenOutput: invoke<(id: string) => Promise<void>>()('ap:sessions:openOutput'),
   serversList: invoke<() => Promise<ServerEntry[]>>()('ap:servers:list'),
   serversSave: invoke<(entry: ServerEntry) => Promise<ServerEntry>>()('ap:servers:save'),
   serversRemove: invoke<(id: string) => Promise<void>>()('ap:servers:remove'),

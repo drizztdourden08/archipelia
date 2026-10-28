@@ -7,6 +7,7 @@ type HistoryDetailActions = {
   deleteRun: (run: Session) => void;
   runAgain: (run: Session) => void;
   showLog: (run: Session) => void;
+  openFiles: (run: Session) => void;
 };
 
 type HistoryDetailProps = {
