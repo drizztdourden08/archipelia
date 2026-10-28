@@ -2,4 +2,6 @@
 
 const NOT_FOUND = 404;
 
-export { NOT_FOUND };
+const MAX_ASSET_BYTES = 1024 * 1024;
+
+export { MAX_ASSET_BYTES, NOT_FOUND };

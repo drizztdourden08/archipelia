@@ -2,7 +2,7 @@
 import type { CatalogEntry } from '@archipelia/model';
 import type { RegistryClient, RegistrySource } from '@archipelia/trust';
 
-type ReleaseManifest = { game: string; worldVersion: string; minimumAp: string; maximumAp?: string; sha256: string; appVersion: string };
+type ReleaseManifest = { game: string; worldVersion: string; minimumAp: string; maximumAp?: string; sha256: string; appVersion?: string; size?: number };
 
 type BuildRecord = { archipelagoVersion: string; file: string; sha256: string; size: number; bundle: string };
 
@@ -10,18 +10,35 @@ type BuildsManifest = {
   game: string;
   module: string;
   worldVersion: string;
-  appVersion: string;
+  appVersion?: string;
   minimumAp?: string;
   maximumAp?: string;
   builds: BuildRecord[];
 };
 
 type ReleaseState =
-  | { kind: 'found'; manifest: ReleaseManifest }
+  | { kind: 'found'; manifest: ReleaseManifest; names?: ReleaseNames }
   | { kind: 'builds'; manifest: BuildsManifest }
   | { kind: 'none' }
   | { kind: 'failed'; message: string };
 
+type ReleaseNames = { world: string; bundle: string };
+
+type StandardFile = { file: string; sha256: string; size: number; bundle?: string };
+
+type StandardBuild = StandardFile & { archipelagoVersion: string };
+
+type StandardManifest = {
+  game: string;
+  module: string;
+  worldVersion: string;
+  minimumAp: string;
+  maximumAp?: string;
+  appVersion?: string;
+  builds?: StandardBuild[];
+  world?: StandardFile;
+};
+
 type FirstPartyRead = { entries: CatalogEntry[]; clients: RegistryClient[]; problems: string[]; source: RegistrySource };
 
-export type { BuildRecord, BuildsManifest, FirstPartyRead, ReleaseManifest, ReleaseState };
+export type { BuildRecord, BuildsManifest, FirstPartyRead, ReleaseManifest, ReleaseState, StandardBuild, StandardFile, StandardManifest };

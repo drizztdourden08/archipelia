@@ -18,7 +18,7 @@ const createEnricher = (deps: EnrichDeps) => {
   const failed = new Map<string, number>();
 
   const build = async (apworld: string, plan: EnrichPlan, old: EnrichRecord | undefined): Promise<EnrichRecord> =>
-    (plan.repo ? fromGithub({ fetch: net, repo: plan.repo, stamp: plan.stamp, old, now: now() }) : fromEngine(await engineDir(), apworld, plan, now()));
+    (plan.repo ? fromGithub({ fetch: net, repo: plan.repo, release: plan.release, stamp: plan.stamp, old, now: now() }) : fromEngine(await engineDir(), apworld, plan, now()));
 
   const refresh = async (apworld: string, plan: EnrichPlan, old: EnrichRecord | undefined): Promise<GameEnrichment | undefined> => {
     try {
