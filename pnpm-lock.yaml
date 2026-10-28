@@ -120,14 +120,14 @@ importers:
         specifier: workspace:*
         version: link:tooling/engine-bundle
       '@drizztdourden08/brock-build':
-        specifier: ^0.115.1
-        version: 0.115.1(@types/node@24.19.0)(@vitejs/plugin-react@5.2.0(vite@7.3.6(@types/node@24.19.0)(jiti@2.7.0)(yaml@2.9.1)))(electron-builder@26.15.3(electron-builder-squirrel-windows@26.15.3(dmg-builder@26.15.3)))(electron-vite@5.0.0(vite@7.3.6(@types/node@24.19.0)(jiti@2.7.0)(yaml@2.9.1)))(electron@42.11.8)(eslint@10.11.0(jiti@2.7.0))(markdownlint-cli2@0.22.1)(playwright-core@1.63.0)(stylelint@17.15.0(typescript@6.0.3))(typescript@6.0.3)
+        specifier: ^0.115.3
+        version: 0.115.3(@types/node@24.19.0)(@vitejs/plugin-react@5.2.0(vite@7.3.6(@types/node@24.19.0)(jiti@2.7.0)(yaml@2.9.1)))(electron-builder@26.15.3(electron-builder-squirrel-windows@26.15.3(dmg-builder@26.15.3)))(electron-vite@5.0.0(vite@7.3.6(@types/node@24.19.0)(jiti@2.7.0)(yaml@2.9.1)))(electron@42.11.8)(eslint@10.11.0(jiti@2.7.0))(markdownlint-cli2@0.22.1)(playwright-core@1.63.0)(stylelint@17.15.0(typescript@6.0.3))(typescript@6.0.3)
       '@drizztdourden08/brock-lint-config':
-        specifier: ^0.115.1
-        version: 0.115.1(@types/node@24.19.0)(eslint@10.11.0(jiti@2.7.0))(markdownlint-cli2@0.22.1)(stylelint@17.15.0(typescript@6.0.3))(typescript@6.0.3)
+        specifier: ^0.115.3
+        version: 0.115.3(@types/node@24.19.0)(eslint@10.11.0(jiti@2.7.0))(markdownlint-cli2@0.22.1)(stylelint@17.15.0(typescript@6.0.3))(typescript@6.0.3)
       '@drizztdourden08/brock-thread':
-        specifier: ^0.115.1
-        version: 0.115.1(@types/node@24.19.0)(eslint@10.11.0(jiti@2.7.0))(stylelint@17.15.0(typescript@6.0.3))(typescript@6.0.3)
+        specifier: ^0.115.3
+        version: 0.115.3(@types/node@24.19.0)(eslint@10.11.0(jiti@2.7.0))(stylelint@17.15.0(typescript@6.0.3))(typescript@6.0.3)
       jscpd:
         specifier: 'catalog:'
         version: 4.3.0
@@ -171,20 +171,20 @@ importers:
         specifier: workspace:*
         version: link:../../packages/lobby-protocol
       '@drizztdourden08/brock-core':
-        specifier: ^0.115.1
-        version: 0.115.1
+        specifier: ^0.115.3
+        version: 0.115.3
       '@drizztdourden08/brock-electron':
-        specifier: ^0.115.1
-        version: 0.115.1(electron@42.11.8)
+        specifier: ^0.115.3
+        version: 0.115.3(electron@42.11.8)
       '@drizztdourden08/brock-react':
-        specifier: ^0.115.1
-        version: 0.115.1(@drizztdourden08/tessera@0.89.0(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(typescript@6.0.3))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(zustand@5.0.15(@types/react@19.3.0)(react@19.3.0))
+        specifier: ^0.115.3
+        version: 0.115.3(@drizztdourden08/tessera@0.89.0(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(typescript@6.0.3))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(zustand@5.0.15(@types/react@19.3.0)(react@19.3.0))
       '@drizztdourden08/brock-secrets':
-        specifier: ^0.115.1
-        version: 0.115.1(@drizztdourden08/tessera@0.89.0(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(typescript@6.0.3))(electron@42.11.8)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(zustand@5.0.15(@types/react@19.3.0)(react@19.3.0))
+        specifier: ^0.115.3
+        version: 0.115.3(@drizztdourden08/tessera@0.89.0(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(typescript@6.0.3))(electron@42.11.8)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(zustand@5.0.15(@types/react@19.3.0)(react@19.3.0))
       '@drizztdourden08/brock-updater':
-        specifier: ^0.115.1
-        version: 0.115.1(@drizztdourden08/tessera@0.89.0(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(typescript@6.0.3))(electron@42.11.8)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(zustand@5.0.15(@types/react@19.3.0)(react@19.3.0))
+        specifier: ^0.115.3
+        version: 0.115.3(@drizztdourden08/tessera@0.89.0(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(typescript@6.0.3))(electron@42.11.8)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(zustand@5.0.15(@types/react@19.3.0)(react@19.3.0))
       '@drizztdourden08/tessera':
         specifier: '>=0.87.0 <1'
         version: 0.89.0(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(typescript@6.0.3)
@@ -247,11 +247,11 @@ importers:
         specifier: workspace:*
         version: link:../../packages/trust
       '@drizztdourden08/brock-build':
-        specifier: ^0.115.1
-        version: 0.115.1(@types/node@24.19.0)(@vitejs/plugin-react@5.2.0(vite@7.3.6(@types/node@24.19.0)(jiti@2.7.0)(yaml@2.9.1)))(electron-builder@26.15.3(electron-builder-squirrel-windows@26.15.3(dmg-builder@26.15.3)))(electron-vite@5.0.0(vite@7.3.6(@types/node@24.19.0)(jiti@2.7.0)(yaml@2.9.1)))(electron@42.11.8)(eslint@10.11.0(jiti@2.7.0))(markdownlint-cli2@0.22.1)(playwright-core@1.63.0)(stylelint@17.15.0(typescript@6.0.3))(typescript@6.0.3)
+        specifier: ^0.115.3
+        version: 0.115.3(@types/node@24.19.0)(@vitejs/plugin-react@5.2.0(vite@7.3.6(@types/node@24.19.0)(jiti@2.7.0)(yaml@2.9.1)))(electron-builder@26.15.3(electron-builder-squirrel-windows@26.15.3(dmg-builder@26.15.3)))(electron-vite@5.0.0(vite@7.3.6(@types/node@24.19.0)(jiti@2.7.0)(yaml@2.9.1)))(electron@42.11.8)(eslint@10.11.0(jiti@2.7.0))(markdownlint-cli2@0.22.1)(playwright-core@1.63.0)(stylelint@17.15.0(typescript@6.0.3))(typescript@6.0.3)
       '@drizztdourden08/brock-lint-config':
-        specifier: ^0.115.1
-        version: 0.115.1(@types/node@24.19.0)(eslint@10.11.0(jiti@2.7.0))(markdownlint-cli2@0.22.1)(stylelint@17.15.0(typescript@6.0.3))(typescript@6.0.3)
+        specifier: ^0.115.3
+        version: 0.115.3(@types/node@24.19.0)(eslint@10.11.0(jiti@2.7.0))(markdownlint-cli2@0.22.1)(stylelint@17.15.0(typescript@6.0.3))(typescript@6.0.3)
       '@types/node':
         specifier: 'catalog:'
         version: 24.19.0
@@ -304,8 +304,8 @@ importers:
         specifier: workspace:*
         version: link:../trust
       '@drizztdourden08/brock-core':
-        specifier: ^0.115.1
-        version: 0.115.1
+        specifier: ^0.115.3
+        version: 0.115.3
       fflate:
         specifier: 'catalog:'
         version: 0.8.3
@@ -314,8 +314,8 @@ importers:
         version: 1.6.1
     devDependencies:
       '@drizztdourden08/brock-lint-config':
-        specifier: ^0.115.1
-        version: 0.115.1(@types/node@24.19.0)(eslint@10.11.0(jiti@2.7.0))(markdownlint-cli2@0.22.1)(stylelint@17.15.0(typescript@6.0.3))(typescript@6.0.3)
+        specifier: ^0.115.3
+        version: 0.115.3(@types/node@24.19.0)(eslint@10.11.0(jiti@2.7.0))(markdownlint-cli2@0.22.1)(stylelint@17.15.0(typescript@6.0.3))(typescript@6.0.3)
       '@types/node':
         specifier: 'catalog:'
         version: 24.19.0
@@ -336,8 +336,8 @@ importers:
         specifier: workspace:*
         version: link:../../tooling/package-build
       '@drizztdourden08/brock-lint-config':
-        specifier: ^0.115.1
-        version: 0.115.1(@types/node@24.19.0)(eslint@10.11.0(jiti@2.7.0))(markdownlint-cli2@0.22.1)(stylelint@17.15.0(typescript@6.0.3))(typescript@6.0.3)
+        specifier: ^0.115.3
+        version: 0.115.3(@types/node@24.19.0)(eslint@10.11.0(jiti@2.7.0))(markdownlint-cli2@0.22.1)(stylelint@17.15.0(typescript@6.0.3))(typescript@6.0.3)
       '@types/node':
         specifier: 'catalog:'
         version: 24.19.0
@@ -364,8 +364,8 @@ importers:
         version: 19.3.0
     devDependencies:
       '@drizztdourden08/brock-lint-config':
-        specifier: ^0.115.1
-        version: 0.115.1(@types/node@24.19.0)(eslint@10.11.0(jiti@2.7.0))(markdownlint-cli2@0.22.1)(stylelint@17.15.0(typescript@6.0.3))(typescript@6.0.3)
+        specifier: ^0.115.3
+        version: 0.115.3(@types/node@24.19.0)(eslint@10.11.0(jiti@2.7.0))(markdownlint-cli2@0.22.1)(stylelint@17.15.0(typescript@6.0.3))(typescript@6.0.3)
       '@types/react':
         specifier: 'catalog:'
         version: 19.3.0
@@ -391,12 +391,12 @@ importers:
         specifier: workspace:*
         version: link:../model
       '@drizztdourden08/brock-core':
-        specifier: ^0.115.1
-        version: 0.115.1
+        specifier: ^0.115.3
+        version: 0.115.3
     devDependencies:
       '@drizztdourden08/brock-lint-config':
-        specifier: ^0.115.1
-        version: 0.115.1(@types/node@24.19.0)(eslint@10.11.0(jiti@2.7.0))(markdownlint-cli2@0.22.1)(stylelint@17.15.0(typescript@6.0.3))(typescript@6.0.3)
+        specifier: ^0.115.3
+        version: 0.115.3(@types/node@24.19.0)(eslint@10.11.0(jiti@2.7.0))(markdownlint-cli2@0.22.1)(stylelint@17.15.0(typescript@6.0.3))(typescript@6.0.3)
       '@types/node':
         specifier: 'catalog:'
         version: 24.19.0
@@ -416,15 +416,15 @@ importers:
         specifier: workspace:*
         version: link:../model
       '@drizztdourden08/brock-core':
-        specifier: ^0.115.1
-        version: 0.115.1
+        specifier: ^0.115.3
+        version: 0.115.3
       ssh2:
         specifier: 'catalog:'
         version: 1.17.0
     devDependencies:
       '@drizztdourden08/brock-lint-config':
-        specifier: ^0.115.1
-        version: 0.115.1(@types/node@24.19.0)(eslint@10.11.0(jiti@2.7.0))(markdownlint-cli2@0.22.1)(stylelint@17.15.0(typescript@6.0.3))(typescript@6.0.3)
+        specifier: ^0.115.3
+        version: 0.115.3(@types/node@24.19.0)(eslint@10.11.0(jiti@2.7.0))(markdownlint-cli2@0.22.1)(stylelint@17.15.0(typescript@6.0.3))(typescript@6.0.3)
       '@types/node':
         specifier: 'catalog:'
         version: 24.19.0
@@ -444,8 +444,8 @@ importers:
         specifier: workspace:*
         version: link:../../tooling/package-build
       '@drizztdourden08/brock-lint-config':
-        specifier: ^0.115.1
-        version: 0.115.1(@types/node@24.19.0)(eslint@10.11.0(jiti@2.7.0))(markdownlint-cli2@0.22.1)(stylelint@17.15.0(typescript@6.0.3))(typescript@6.0.3)
+        specifier: ^0.115.3
+        version: 0.115.3(@types/node@24.19.0)(eslint@10.11.0(jiti@2.7.0))(markdownlint-cli2@0.22.1)(stylelint@17.15.0(typescript@6.0.3))(typescript@6.0.3)
       '@types/node':
         specifier: 'catalog:'
         version: 24.19.0
@@ -463,8 +463,8 @@ importers:
         version: 0.8.3
     devDependencies:
       '@drizztdourden08/brock-lint-config':
-        specifier: ^0.115.1
-        version: 0.115.1(@types/node@24.19.0)(eslint@10.11.0(jiti@2.7.0))(markdownlint-cli2@0.22.1)(stylelint@17.15.0(typescript@6.0.3))(typescript@6.0.3)
+        specifier: ^0.115.3
+        version: 0.115.3(@types/node@24.19.0)(eslint@10.11.0(jiti@2.7.0))(markdownlint-cli2@0.22.1)(stylelint@17.15.0(typescript@6.0.3))(typescript@6.0.3)
       '@types/node':
         specifier: 'catalog:'
         version: 24.19.0
@@ -481,12 +481,12 @@ importers:
         specifier: workspace:*
         version: link:../model
       '@drizztdourden08/brock-core':
-        specifier: ^0.115.1
-        version: 0.115.1
+        specifier: ^0.115.3
+        version: 0.115.3
     devDependencies:
       '@drizztdourden08/brock-lint-config':
-        specifier: ^0.115.1
-        version: 0.115.1(@types/node@24.19.0)(eslint@10.11.0(jiti@2.7.0))(markdownlint-cli2@0.22.1)(stylelint@17.15.0(typescript@6.0.3))(typescript@6.0.3)
+        specifier: ^0.115.3
+        version: 0.115.3(@types/node@24.19.0)(eslint@10.11.0(jiti@2.7.0))(markdownlint-cli2@0.22.1)(stylelint@17.15.0(typescript@6.0.3))(typescript@6.0.3)
       '@types/node':
         specifier: 'catalog:'
         version: 24.19.0
@@ -527,14 +527,14 @@ importers:
         specifier: workspace:*
         version: link:../lobby-protocol
       '@drizztdourden08/brock-core':
-        specifier: ^0.115.1
-        version: 0.115.1
+        specifier: ^0.115.3
+        version: 0.115.3
       '@drizztdourden08/brock-electron':
-        specifier: ^0.115.1
-        version: 0.115.1(electron@42.11.8)
+        specifier: ^0.115.3
+        version: 0.115.3(electron@42.11.8)
       '@drizztdourden08/brock-secrets':
-        specifier: ^0.115.1
-        version: 0.115.1(@drizztdourden08/tessera@0.89.0(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(typescript@6.0.3))(electron@42.11.8)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(zustand@5.0.15(@types/react@19.3.0)(react@19.3.0))
+        specifier: ^0.115.3
+        version: 0.115.3(@drizztdourden08/tessera@0.89.0(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(typescript@6.0.3))(electron@42.11.8)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(zustand@5.0.15(@types/react@19.3.0)(react@19.3.0))
       '@runonflux/nat-upnp':
         specifier: ^2.0.5
         version: 2.0.5
@@ -549,8 +549,8 @@ importers:
         version: 2.9.1
     devDependencies:
       '@drizztdourden08/brock-lint-config':
-        specifier: ^0.115.1
-        version: 0.115.1(@types/node@24.19.0)(eslint@10.11.0(jiti@2.7.0))(markdownlint-cli2@0.22.1)(stylelint@17.15.0(typescript@6.0.3))(typescript@6.0.3)
+        specifier: ^0.115.3
+        version: 0.115.3(@types/node@24.19.0)(eslint@10.11.0(jiti@2.7.0))(markdownlint-cli2@0.22.1)(stylelint@17.15.0(typescript@6.0.3))(typescript@6.0.3)
       '@types/multicast-dns':
         specifier: ^7.2.4
         version: 7.2.4
@@ -579,8 +579,8 @@ importers:
         specifier: workspace:*
         version: link:../presets
       '@drizztdourden08/brock-core':
-        specifier: ^0.115.1
-        version: 0.115.1
+        specifier: ^0.115.3
+        version: 0.115.3
       fflate:
         specifier: 'catalog:'
         version: 0.8.3
@@ -589,8 +589,8 @@ importers:
         version: 2.9.1
     devDependencies:
       '@drizztdourden08/brock-lint-config':
-        specifier: ^0.115.1
-        version: 0.115.1(@types/node@24.19.0)(eslint@10.11.0(jiti@2.7.0))(markdownlint-cli2@0.22.1)(stylelint@17.15.0(typescript@6.0.3))(typescript@6.0.3)
+        specifier: ^0.115.3
+        version: 0.115.3(@types/node@24.19.0)(eslint@10.11.0(jiti@2.7.0))(markdownlint-cli2@0.22.1)(stylelint@17.15.0(typescript@6.0.3))(typescript@6.0.3)
       '@types/node':
         specifier: 'catalog:'
         version: 24.19.0
@@ -626,8 +626,8 @@ importers:
         version: 0.8.3
     devDependencies:
       '@drizztdourden08/brock-lint-config':
-        specifier: ^0.115.1
-        version: 0.115.1(@types/node@24.19.0)(eslint@10.11.0(jiti@2.7.0))(markdownlint-cli2@0.22.1)(stylelint@17.15.0(typescript@6.0.3))(typescript@6.0.3)
+        specifier: ^0.115.3
+        version: 0.115.3(@types/node@24.19.0)(eslint@10.11.0(jiti@2.7.0))(markdownlint-cli2@0.22.1)(stylelint@17.15.0(typescript@6.0.3))(typescript@6.0.3)
       '@sigstore/mock':
         specifier: 'catalog:'
         version: 0.13.0
@@ -821,8 +821,8 @@ packages:
     peerDependencies:
       postcss-selector-parser: ^7.1.1
 
-  '@drizztdourden08/brock-build@0.115.1':
-    resolution: {integrity: sha512-q5NtPKB35W4OnqP92FMbbUG8rWLx8MNbZ14FHE6D4/HP8lnbODW1t/l1JuGqG2WMCVb8rzoVyEwZj3ExTdHp7w==, tarball: https://npm.pkg.github.com/download/@drizztdourden08/brock-build/0.115.1/f41cb8e9f62b242c72924551b46e4483ddd1183c}
+  '@drizztdourden08/brock-build@0.115.3':
+    resolution: {integrity: sha512-ZTXWQw30s2GbnqQIxMwaLLLPu9RdTbTXmSdmueiO28GrP8Pf4nU4IQ8bZLZn7Faot6Q6ftTCM/a2JU8eyjNhpg==, tarball: https://npm.pkg.github.com/download/@drizztdourden08/brock-build/0.115.3/4c84263b184dbe90bb5ba024983b7f231724c46e}
     engines: {node: '>=24'}
     hasBin: true
     peerDependencies:
@@ -832,26 +832,26 @@ packages:
       electron-vite: '>=5'
       playwright-core: '>=1.40'
 
-  '@drizztdourden08/brock-core@0.115.1':
-    resolution: {integrity: sha512-FLpyqvuQAyxEQ0DrUjqn81pF/+8n6h5aQan6YiHPPrSFSH2aGeQ4412IeEO0InELpgKYanH9CQTSz7g9q6hX9Q==, tarball: https://npm.pkg.github.com/download/@drizztdourden08/brock-core/0.115.1/c9c60b33d9d3a26597c7b82b741f8c70117f6c76}
+  '@drizztdourden08/brock-core@0.115.3':
+    resolution: {integrity: sha512-jz7n7aGX5Wg9JIsLvT8ytD44TDNWjdtiwYRqTqKLHr6Ng3+XgNJjUvhi8wbvoidKdIqWLuo6azpwxViE+Va/QA==, tarball: https://npm.pkg.github.com/download/@drizztdourden08/brock-core/0.115.3/7261d50f817ab7d5356b3cc12a56e6d6659c3be0}
     engines: {node: '>=24'}
 
-  '@drizztdourden08/brock-electron@0.115.1':
-    resolution: {integrity: sha512-Aj91f57aQOiOz5frHalvkeiHcT3/7hH6TADtr4WrFP0XE3wWKeDxwJWcSVW3qyydqlhy0zqhEh+xNivf/Qx0cA==, tarball: https://npm.pkg.github.com/download/@drizztdourden08/brock-electron/0.115.1/cb51d70d82010684450d5fd1e13a6d2b3392d07b}
+  '@drizztdourden08/brock-electron@0.115.3':
+    resolution: {integrity: sha512-avlkx6s04dNWYtgXQ7pYZEwQYclDY8k9YkVYYMlR2zwKis8+U0+Rv5ZDNZhpqp07b4E+6cvthk9PqZfeFkujmQ==, tarball: https://npm.pkg.github.com/download/@drizztdourden08/brock-electron/0.115.3/3c6fc036a2333aef11731a722937e23d0bbc5dae}
     engines: {node: '>=24'}
     peerDependencies:
       electron: '>=38'
 
-  '@drizztdourden08/brock-lint-config@0.115.1':
-    resolution: {integrity: sha512-zEX1A3S58WyvK8iISutIreabzohZt0dfk3WdnLtX+3oeykSuxF/9CmvLjmdkF9qrYXpOqdD9UBGO6jFICEZZWQ==, tarball: https://npm.pkg.github.com/download/@drizztdourden08/brock-lint-config/0.115.1/546a96e21b4098ebc88ad31ca389163ca9f3366c}
+  '@drizztdourden08/brock-lint-config@0.115.3':
+    resolution: {integrity: sha512-rNsu2+zEJfrdC76xHQmA5IiB1VI2dKJvLt7KRI6/BJVgfsQGCHPQeH6xrpZ/8lclSrsmUlv7we4kPLP+GWX7Qg==, tarball: https://npm.pkg.github.com/download/@drizztdourden08/brock-lint-config/0.115.3/bdaf7c07e831f51cc4e4c11309cec3fc5881d027}
     engines: {node: '>=24'}
     peerDependencies:
       eslint: ^10.0.0
       markdownlint-cli2: ^0.22.0
       stylelint: ^17.0.0
 
-  '@drizztdourden08/brock-react@0.115.1':
-    resolution: {integrity: sha512-xX/jeVQXJIP94oSMR9mLGx9+ZAVLln30acn5cO4ZuYqLbkpp0nSQD1VkLycVwrghDz42376tqatQrTfFfuWknQ==, tarball: https://npm.pkg.github.com/download/@drizztdourden08/brock-react/0.115.1/76e485e002567eca4611575e881102ae118edfab}
+  '@drizztdourden08/brock-react@0.115.3':
+    resolution: {integrity: sha512-z07ITxu9b0qlmE4pfLbohm1Y6xExJHErbsfEVkaep/t+M83Plkr4hMimKjrEq9ap2YXfGLd+AIBtyZ4xXUps7g==, tarball: https://npm.pkg.github.com/download/@drizztdourden08/brock-react/0.115.3/932f6a72bf62f5443a57c4cf13e1431228cd2cb6}
     engines: {node: '>=24'}
     peerDependencies:
       '@drizztdourden08/tessera': '>=0.87.0 <1'
@@ -859,21 +859,21 @@ packages:
       react-dom: ^19.0.0
       zustand: ^5.0.0
 
-  '@drizztdourden08/brock-secrets@0.115.1':
-    resolution: {integrity: sha512-iB2CmHd5Dxh923P4BmBmGIFO+6rM2J/aZ2NK3QAdr3T2nJThcBfD1cFMy8dmvvGarWEzqM9alJLxjzWufbHwxg==, tarball: https://npm.pkg.github.com/download/@drizztdourden08/brock-secrets/0.115.1/c800390c6a331f4b490ab8f2d1382e1de674c779}
+  '@drizztdourden08/brock-secrets@0.115.3':
+    resolution: {integrity: sha512-JbdkEsw9ZLrZHlCYvmfaxm2Fedm0EIhObqaJTZkQIrI3iOGMTSKvbDcJgYKO5cIeOPIAkZP/4rFUc1Rxza5yCA==, tarball: https://npm.pkg.github.com/download/@drizztdourden08/brock-secrets/0.115.3/6798e3822eba8473ecde04041029f1f59fa7a8cf}
     engines: {node: '>=24'}
     peerDependencies:
       electron: '>=38'
       react: ^19.0.0
       zustand: ^5.0.0
 
-  '@drizztdourden08/brock-thread@0.115.1':
-    resolution: {integrity: sha512-s5mfAojTiaZLv+ACWKNcWflF/UEzuAundbXHViBUStNTDCyRp/xiP+ruFTN37ZGapmR/638X3vRnzsejfm1AgQ==, tarball: https://npm.pkg.github.com/download/@drizztdourden08/brock-thread/0.115.1/44cc5f76228d6af9d47801af04f6a14a251fc5f1}
+  '@drizztdourden08/brock-thread@0.115.3':
+    resolution: {integrity: sha512-nwYt4ewC5sAXG9ujacWm8R3c5SqeHMY3YK7fwOWO/2XhoDLTVzGoQ00mYTKsE+pteZqqMAhATZ7akuIB5dTOEw==, tarball: https://npm.pkg.github.com/download/@drizztdourden08/brock-thread/0.115.3/22c46657c256b4f4723a5b52cf86d2e6f1c5246c}
     engines: {node: '>=24'}
     hasBin: true
 
-  '@drizztdourden08/brock-updater@0.115.1':
-    resolution: {integrity: sha512-gAkX9PPW3A7zMKD++kfRuhKP+1SslFdfxtp1GmkfELmkws4to9z5fr1PQLyzMOK5k7aCoUXezyY+YunUf445VQ==, tarball: https://npm.pkg.github.com/download/@drizztdourden08/brock-updater/0.115.1/31981e974c3d2abf99795b26225910092db03cc9}
+  '@drizztdourden08/brock-updater@0.115.3':
+    resolution: {integrity: sha512-hNLO+LsI0CGteI2ajWHjagAZRwexvpuY6kNUHeVW7gOcQoqPl9OrYkpfeaHMeeFp+sbzZeWmTNVPmkn04FzMGA==, tarball: https://npm.pkg.github.com/download/@drizztdourden08/brock-updater/0.115.3/e183e329a2304abfb7fafab9d9796434b04cc1de}
     engines: {node: '>=24'}
     peerDependencies:
       '@drizztdourden08/tessera': '*'
@@ -4758,11 +4758,11 @@ snapshots:
     dependencies:
       postcss-selector-parser: 7.1.6
 
-  '@drizztdourden08/brock-build@0.115.1(@types/node@24.19.0)(@vitejs/plugin-react@5.2.0(vite@7.3.6(@types/node@24.19.0)(jiti@2.7.0)(yaml@2.9.1)))(electron-builder@26.15.3(electron-builder-squirrel-windows@26.15.3(dmg-builder@26.15.3)))(electron-vite@5.0.0(vite@7.3.6(@types/node@24.19.0)(jiti@2.7.0)(yaml@2.9.1)))(electron@42.11.8)(eslint@10.11.0(jiti@2.7.0))(markdownlint-cli2@0.22.1)(playwright-core@1.63.0)(stylelint@17.15.0(typescript@6.0.3))(typescript@6.0.3)':
+  '@drizztdourden08/brock-build@0.115.3(@types/node@24.19.0)(@vitejs/plugin-react@5.2.0(vite@7.3.6(@types/node@24.19.0)(jiti@2.7.0)(yaml@2.9.1)))(electron-builder@26.15.3(electron-builder-squirrel-windows@26.15.3(dmg-builder@26.15.3)))(electron-vite@5.0.0(vite@7.3.6(@types/node@24.19.0)(jiti@2.7.0)(yaml@2.9.1)))(electron@42.11.8)(eslint@10.11.0(jiti@2.7.0))(markdownlint-cli2@0.22.1)(playwright-core@1.63.0)(stylelint@17.15.0(typescript@6.0.3))(typescript@6.0.3)':
     dependencies:
-      '@drizztdourden08/brock-core': 0.115.1
-      '@drizztdourden08/brock-lint-config': 0.115.1(@types/node@24.19.0)(eslint@10.11.0(jiti@2.7.0))(markdownlint-cli2@0.22.1)(stylelint@17.15.0(typescript@6.0.3))(typescript@6.0.3)
-      '@drizztdourden08/brock-thread': 0.115.1(@types/node@24.19.0)(eslint@10.11.0(jiti@2.7.0))(stylelint@17.15.0(typescript@6.0.3))(typescript@6.0.3)
+      '@drizztdourden08/brock-core': 0.115.3
+      '@drizztdourden08/brock-lint-config': 0.115.3(@types/node@24.19.0)(eslint@10.11.0(jiti@2.7.0))(markdownlint-cli2@0.22.1)(stylelint@17.15.0(typescript@6.0.3))(typescript@6.0.3)
+      '@drizztdourden08/brock-thread': 0.115.3(@types/node@24.19.0)(eslint@10.11.0(jiti@2.7.0))(stylelint@17.15.0(typescript@6.0.3))(typescript@6.0.3)
       '@drizztdourden08/standards': 0.11.0(@types/node@24.19.0)(eslint@10.11.0(jiti@2.7.0))(stylelint@17.15.0(typescript@6.0.3))(typescript@6.0.3)
       '@resvg/resvg-js': 2.6.2
       '@vitejs/plugin-react': 5.2.0(vite@7.3.6(@types/node@24.19.0)(jiti@2.7.0)(yaml@2.9.1))
@@ -4780,15 +4780,15 @@ snapshots:
       - supports-color
       - typescript
 
-  '@drizztdourden08/brock-core@0.115.1': {}
+  '@drizztdourden08/brock-core@0.115.3': {}
 
-  '@drizztdourden08/brock-electron@0.115.1(electron@42.11.8)':
+  '@drizztdourden08/brock-electron@0.115.3(electron@42.11.8)':
     dependencies:
-      '@drizztdourden08/brock-core': 0.115.1
+      '@drizztdourden08/brock-core': 0.115.3
       '@electron-toolkit/utils': 4.0.0(electron@42.11.8)
       electron: 42.11.8
 
-  '@drizztdourden08/brock-lint-config@0.115.1(@types/node@24.19.0)(eslint@10.11.0(jiti@2.7.0))(markdownlint-cli2@0.22.1)(stylelint@17.15.0(typescript@6.0.3))(typescript@6.0.3)':
+  '@drizztdourden08/brock-lint-config@0.115.3(@types/node@24.19.0)(eslint@10.11.0(jiti@2.7.0))(markdownlint-cli2@0.22.1)(stylelint@17.15.0(typescript@6.0.3))(typescript@6.0.3)':
     dependencies:
       '@drizztdourden08/standards': 0.11.0(@types/node@24.19.0)(eslint@10.11.0(jiti@2.7.0))(stylelint@17.15.0(typescript@6.0.3))(typescript@6.0.3)
       eslint: 10.11.0(jiti@2.7.0)
@@ -4799,19 +4799,19 @@ snapshots:
       - supports-color
       - typescript
 
-  '@drizztdourden08/brock-react@0.115.1(@drizztdourden08/tessera@0.89.0(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(typescript@6.0.3))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(zustand@5.0.15(@types/react@19.3.0)(react@19.3.0))':
+  '@drizztdourden08/brock-react@0.115.3(@drizztdourden08/tessera@0.89.0(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(typescript@6.0.3))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(zustand@5.0.15(@types/react@19.3.0)(react@19.3.0))':
     dependencies:
-      '@drizztdourden08/brock-core': 0.115.1
+      '@drizztdourden08/brock-core': 0.115.3
       '@drizztdourden08/tessera': 0.89.0(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(typescript@6.0.3)
       react: 19.3.0
       react-dom: 19.3.0(react@19.3.0)
       zustand: 5.0.15(@types/react@19.3.0)(react@19.3.0)
 
-  '@drizztdourden08/brock-secrets@0.115.1(@drizztdourden08/tessera@0.89.0(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(typescript@6.0.3))(electron@42.11.8)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(zustand@5.0.15(@types/react@19.3.0)(react@19.3.0))':
+  '@drizztdourden08/brock-secrets@0.115.3(@drizztdourden08/tessera@0.89.0(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(typescript@6.0.3))(electron@42.11.8)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(zustand@5.0.15(@types/react@19.3.0)(react@19.3.0))':
     dependencies:
-      '@drizztdourden08/brock-core': 0.115.1
-      '@drizztdourden08/brock-electron': 0.115.1(electron@42.11.8)
-      '@drizztdourden08/brock-react': 0.115.1(@drizztdourden08/tessera@0.89.0(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(typescript@6.0.3))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(zustand@5.0.15(@types/react@19.3.0)(react@19.3.0))
+      '@drizztdourden08/brock-core': 0.115.3
+      '@drizztdourden08/brock-electron': 0.115.3(electron@42.11.8)
+      '@drizztdourden08/brock-react': 0.115.3(@drizztdourden08/tessera@0.89.0(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(typescript@6.0.3))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(zustand@5.0.15(@types/react@19.3.0)(react@19.3.0))
       electron: 42.11.8
       react: 19.3.0
       zustand: 5.0.15(@types/react@19.3.0)(react@19.3.0)
@@ -4819,7 +4819,7 @@ snapshots:
       - '@drizztdourden08/tessera'
       - react-dom
 
-  '@drizztdourden08/brock-thread@0.115.1(@types/node@24.19.0)(eslint@10.11.0(jiti@2.7.0))(stylelint@17.15.0(typescript@6.0.3))(typescript@6.0.3)':
+  '@drizztdourden08/brock-thread@0.115.3(@types/node@24.19.0)(eslint@10.11.0(jiti@2.7.0))(stylelint@17.15.0(typescript@6.0.3))(typescript@6.0.3)':
     dependencies:
       '@drizztdourden08/standards': 0.11.0(@types/node@24.19.0)(eslint@10.11.0(jiti@2.7.0))(stylelint@17.15.0(typescript@6.0.3))(typescript@6.0.3)
     transitivePeerDependencies:
@@ -4829,11 +4829,11 @@ snapshots:
       - supports-color
       - typescript
 
-  '@drizztdourden08/brock-updater@0.115.1(@drizztdourden08/tessera@0.89.0(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(typescript@6.0.3))(electron@42.11.8)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(zustand@5.0.15(@types/react@19.3.0)(react@19.3.0))':
+  '@drizztdourden08/brock-updater@0.115.3(@drizztdourden08/tessera@0.89.0(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(typescript@6.0.3))(electron@42.11.8)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(zustand@5.0.15(@types/react@19.3.0)(react@19.3.0))':
     dependencies:
-      '@drizztdourden08/brock-core': 0.115.1
-      '@drizztdourden08/brock-electron': 0.115.1(electron@42.11.8)
-      '@drizztdourden08/brock-react': 0.115.1(@drizztdourden08/tessera@0.89.0(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(typescript@6.0.3))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(zustand@5.0.15(@types/react@19.3.0)(react@19.3.0))
+      '@drizztdourden08/brock-core': 0.115.3
+      '@drizztdourden08/brock-electron': 0.115.3(electron@42.11.8)
+      '@drizztdourden08/brock-react': 0.115.3(@drizztdourden08/tessera@0.89.0(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(typescript@6.0.3))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(zustand@5.0.15(@types/react@19.3.0)(react@19.3.0))
       '@drizztdourden08/tessera': 0.89.0(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(typescript@6.0.3)
       electron: 42.11.8
       react: 19.3.0
