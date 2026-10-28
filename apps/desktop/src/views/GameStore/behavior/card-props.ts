@@ -9,7 +9,9 @@ import { isVerified } from './is-verified';
 import { needOf } from './need-of';
 import { removeKey } from './remove-key';
 import { installAction } from './install-action';
+import { installedLabel } from './release-label';
 import { reviewNotes } from './review-notes';
+import { worldVersionOf } from './world-version-of';
 
 const statusOf = (row: GameRow, handlers: CardHandlers, pick?: VersionPick): GameCardStatus | undefined => {
   const { state, entry } = row;
@@ -21,11 +23,19 @@ const statusOf = (row: GameRow, handlers: CardHandlers, pick?: VersionPick): Gam
   return state === 'update' ? 'update' : undefined;
 };
 
-const versionOf = ({ installed, latest, entry, state }: GameRow) => {
+const latestLabel = ({ latest, entry }: GameRow): string | undefined => entry.firstParty?.appVersion ?? latest?.version ?? entry.firstParty?.worldVersion;
+
+const versionOf = (row: GameRow) => {
+  const { installed, latest, entry, state } = row;
   if (entry.source === 'official') return latest?.version;
-  if (installed && state === 'update' && latest) return `${installed.version} to ${latest.version}`;
-  if (installed) return installed.version;
-  return latest?.version ?? entry.firstParty?.worldVersion;
+  if (installed && state === 'update' && latest) return `${installedLabel(entry, installed)} to ${entry.firstParty?.appVersion ?? latest.version}`;
+  if (installed) return installedLabel(entry, installed);
+  return latestLabel(row);
+};
+
+const worldVersionNote = ({ entry }: GameRow): { worldVersion?: string } => {
+  const world = entry.firstParty?.appVersion ? worldVersionOf(entry) : undefined;
+  return world ? { worldVersion: world } : {};
 };
 
 const rangeNote = ({ entry }: GameRow): GameCardNote[] => {
@@ -68,6 +78,7 @@ const cardPropsOf = (row: GameRow, handlers: CardHandlers, pick?: VersionPick): 
   verified: isVerified(row),
   direct: joinsDirectly(row.entry),
   version: versionOf(row),
+  ...worldVersionNote(row),
   status: statusOf(row, handlers, pick),
   notes: notesOf(row, pick),
   tags: row.entry.tags,

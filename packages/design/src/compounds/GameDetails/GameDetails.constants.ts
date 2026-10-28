@@ -11,7 +11,7 @@ const ART_SIZE = 64;
 
 const VERSION_FIELD = 'game-details-version';
 
-const VERSION_TEXT = { label: 'Version', loading: 'Reading the versions', prerelease: 'Pre-release', none: 'No version to choose from' } as const;
+const VERSION_TEXT = { label: 'Version', loading: 'Reading the versions', prerelease: 'Pre-release', world: 'World version', none: 'No version to choose from' } as const;
 
 const BUTTON_VARIANT: Record<'primary' | 'danger' | 'default', ButtonVariant> = { primary: 'primary', danger: 'danger', default: 'secondary' };
 

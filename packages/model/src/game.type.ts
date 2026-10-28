@@ -21,6 +21,7 @@ type FirstPartyRelease = {
   minimumAp?: string;
   maximumAp?: string;
   worldVersion?: string;
+  appVersion?: string;
   builds?: FirstPartyBuild[];
 };
 

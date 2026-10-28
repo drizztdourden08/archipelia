@@ -1,17 +1,19 @@
 /* @layer renderer-app @kind component */
 import { Flex, Stack, Tag, Text } from '@drizztdourden08/tessera/primitives';
+import { VERSION_TEXT } from '../../GameDetails.constants';
 import { GAME_STATUS } from '../../../GameCard/GameCard.constants';
 import { DirectTag, VerifiedTag } from '../../../GameCard';
 import { GameDetailsMedia } from '../GameDetailsMedia';
 import type { GameDetailsHeadProps } from './GameDetailsHead.type';
 
-const GameDetailsHead = ({ kind, kindLabel, art, version, verified, direct, status }: GameDetailsHeadProps) => (
+const GameDetailsHead = ({ kind, kindLabel, art, version, worldVersion, verified, direct, status }: GameDetailsHeadProps) => (
   <Flex align="center" gap="md">
     <GameDetailsMedia kind={kind} kindLabel={kindLabel} art={art} />
     <Stack gap="xs">
       <Text>{kindLabel}</Text>
       <Flex align="center" gap="sm" wrap>
         {version && <Text variant="caption" mono numeric>{version}</Text>}
+        {worldVersion && <Text variant="caption" tone="dim">{`${VERSION_TEXT.world} ${worldVersion}`}</Text>}
         {verified && <VerifiedTag />}
         {direct && <DirectTag />}
         {status && <Tag>{GAME_STATUS[status].label}</Tag>}

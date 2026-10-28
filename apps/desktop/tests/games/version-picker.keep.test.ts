@@ -53,6 +53,12 @@ describe('the version picker of the details dialog', () => {
     expect(view?.options[1]?.note).toBe('Latest stable');
   });
 
+  test('with an appVersion each row keeps its world version as a secondary fact, otherwise it has none', () => {
+    const app = star({ firstParty: { repo: 'maker/star-quest', bundleUrl: 'https://x/bundle', appVersion: '1.2.0' } });
+    expect(versionPick(rowOf(app), LIST, undefined).view?.options.map((option) => option.worldVersion)).toEqual(['2.0.0-beta.1', '1.2.0', '1.1.0']);
+    expect(versionPick(rowOf(star()), LIST, undefined).view?.options.map((option) => option.worldVersion)).toEqual([undefined, undefined, undefined]);
+  });
+
   test('a blocked release cannot be picked', () => {
     expect(versionPick(rowOf(star()), LIST, 'v1.2.0').view?.value).toBe('v1.1.0');
   });

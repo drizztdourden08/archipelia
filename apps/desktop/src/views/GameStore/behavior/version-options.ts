@@ -14,6 +14,7 @@ const optionOf = (row: GameRow, list: VersionList, choice: VersionChoice): GameD
     value: choice.id,
     label: choice.label,
     ...(choice.prerelease ? { prerelease: true } : {}),
+    ...(row.entry.firstParty?.appVersion && choice.version ? { worldVersion: choice.version } : {}),
     ...(note ? { note } : {}),
     ...(choice.reason ? { reason: choice.reason } : {}),
   };

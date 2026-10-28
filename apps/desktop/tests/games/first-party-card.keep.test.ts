@@ -62,4 +62,27 @@ describe('first-party games in the store', () => {
     const verified = cardOf(firstParty(), [record({ trust: { state: 'verified', detail: 'Verified: signed by owner/repo' } })]);
     expect(verified.notes).toEqual([expect.objectContaining({ text: 'Verified: signed by owner/repo', warning: false })]);
   });
+
+  test('with an appVersion the card shows the release and the dialog keeps the world version', () => {
+    const entry = firstParty({ firstParty: { client: 'c', bundleUrl: 'b', worldVersion: '0.1.0', appVersion: '0.21.2' } });
+    expect(cardOf(entry)).toMatchObject({ version: '0.21.2', worldVersion: '0.1.0' });
+  });
+
+  test('with an appVersion and only a listed world version the world version is read from the version list', () => {
+    const entry = firstParty({ firstParty: { client: 'c', bundleUrl: 'b', appVersion: '0.21.2' } });
+    expect(cardOf(entry)).toMatchObject({ version: '0.21.2', worldVersion: '0.1.0' });
+  });
+
+  test('without an appVersion nothing changes and no world version is passed', () => {
+    const card = cardOf(firstParty());
+    expect(card.version).toBe('0.1.0');
+    expect(card).not.toHaveProperty('worldVersion');
+  });
+
+  test('an installed game with an appVersion shows the release it was installed from', () => {
+    const entry = firstParty({ firstParty: { client: 'c', bundleUrl: 'b', worldVersion: '0.1.0', appVersion: '0.21.2' } });
+    expect(cardOf(entry, [record({ release: { tag: 'v0.21.2', prerelease: false } })]).version).toBe('0.21.2');
+    expect(cardOf(entry, [record()]).version).toBe('0.21.2');
+    expect(cardOf(entry, [record({ version: '0.0.9' })]).version).toBe('0.0.9 to 0.21.2');
+  });
 });

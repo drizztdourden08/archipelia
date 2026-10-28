@@ -13,6 +13,7 @@ const usage = {
   rules: [
     'Show it only for the world the user opened, and close it with onClose; Escape and the close button call it too.',
     'Pass the same title, kind, version, status, notes, tags and actions as the card, so the card and the dialog never disagree.',
+    'Pass worldVersion when version is the release of the game and the world has its own version: it shows as World version beside it. A version option can carry its own worldVersion for its row.',
     'Pass markdown with the README of the world as Markdown, unchanged; the dialog draws it with headings, lists, links and code, and opens a link through onLink. Leave it out while the README is not read and set loading, so it reads Reading the description.',
     'Make the links of the Markdown absolute before you pass it; a relative link shows as plain text, and images show as their alt text.',
     'While a world is busy, pass busy with the sentence, such as Adding Timespinner..., and the actions give way to a spinner with that sentence.',
@@ -49,7 +50,7 @@ const GameDetailsSample = ({ onClose, onInstall }: { onClose: () => void; onInst
   />
 );
 `,
-  propsHash: 'b3b33cf94333bdb5',
+  propsHash: 'b97c2dd7325d992a',
 } satisfies ComponentUsage;
 
 export { usage };
