@@ -11,7 +11,7 @@ const seatOfPlayer = (player: SessionPlayer): LobbySeat => {
 };
 
 const joinedSeats = (members: readonly AdminLobbyMember[]): LobbySeat[] =>
-  members.filter((member) => member.admission === 'approved').flatMap((member) => member.slots.map((slot) => seatOfSlot(slot, member.displayName)));
+  members.filter((member) => member.kind === 'client' && member.admission === 'approved').flatMap((member) => member.slots.map((slot) => seatOfSlot(slot, member.displayName)));
 
 const lobbySeatsOf = (players: readonly SessionPlayer[], members: readonly AdminLobbyMember[]): LobbySeat[] => {
   const joined = joinedSeats(members);

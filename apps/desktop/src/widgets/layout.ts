@@ -2,11 +2,11 @@
 import { defineLayoutPreset } from '@drizztdourden08/brock-react';
 
 export default defineLayoutPreset({
-  revision: 2,
+  revision: 3,
   onRevision: 'apply',
   rows: [
-    [['network', 'room'], 'main', { column: ['players', 'hints'], sizes: [0.6, 0.4] }],
-    { cells: ['log', ['console', 'spoiler']], under: 'main' },
+    [{ column: ['network', 'room'], sizes: [0.6, 0.4] }, 'main', { column: ['players', 'hints'], sizes: [0.6, 0.4] }],
+    { cells: ['log', 'console', 'spoiler'], under: 'main' },
   ],
   sizes: [1, 0.3],
   widths: [[0.22, 0.56, 0.22]],
