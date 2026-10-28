@@ -60,8 +60,34 @@ const engineFolder = async (dir: string, worlds: Record<string, { game: string; 
   }
 };
 
+const pngBytes = (width: number, height: number, animated = false): Buffer => {
+  const head = Buffer.alloc(33);
+  Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]).copy(head);
+  head.writeUInt32BE(13, 8);
+  head.write('IHDR', 12, 'latin1');
+  head.writeUInt32BE(width, 16);
+  head.writeUInt32BE(height, 20);
+  return Buffer.concat([head, Buffer.from(animated ? 'acTL' : 'tEXt'), Buffer.alloc(40, 1)]);
+};
+
+const webpBytes = (kind: 'VP8X' | 'VP8L', width: number, height: number, animated = false): Buffer => {
+  const data = Buffer.alloc(40);
+  data.write('RIFF', 0, 'latin1');
+  data.write('WEBP', 8, 'latin1');
+  data.write(kind, 12, 'latin1');
+  if (kind === 'VP8X') {
+    data.writeUInt8(animated ? 2 : 0, 20);
+    data.writeUIntLE(width - 1, 24, 3);
+    data.writeUIntLE(height - 1, 27, 3);
+  } else {
+    data.writeUInt8(0x2f, 20);
+    data.writeUInt32LE((width - 1) + ((height - 1) * 2 ** 14), 21);
+  }
+  return data;
+};
+
 const textResponse = (body: string, headers: Record<string, string> = {}) => new Response(body, { status: 200, headers });
 
 const imageResponse = (size = 64, type = 'image/png') => new Response(Buffer.alloc(size, 7), { status: 200, headers: { 'content-type': type } });
 
-export { ALTTP_DOC, cacheFiles, engineFolder, imageResponse, textResponse };
+export { ALTTP_DOC, cacheFiles, engineFolder, imageResponse, pngBytes, textResponse, webpBytes };

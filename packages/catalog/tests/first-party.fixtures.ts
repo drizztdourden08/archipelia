@@ -11,6 +11,8 @@ const WORLD_URL = `${BASE}/relic_of_the_past.apworld`;
 
 const MANIFEST_URL = `${BASE}/relic_of_the_past.apworld.json`;
 
+const STANDARD_URL = `${BASE}/archipelia.json`;
+
 const BUNDLE_URL = `${BASE}/relic_of_the_past.apworld.sigstore.json`;
 
 const REGISTRY_URL = 'https://raw.githubusercontent.com/drizztdourden08/archipelia/main/registry/registry.json';
@@ -84,6 +86,18 @@ const buildsManifestOf = (builds: { ap: string; bytes: Uint8Array }[], patch: Re
   ...patch,
 });
 
+const standardOf = (bytes: Uint8Array, patch: Record<string, unknown> = {}) => ({
+  format: 1,
+  game: 'Relic of the Past',
+  module: 'relic_of_the_past',
+  worldVersion: '0.2.0',
+  minimumAp: '0.6.4',
+  direct: true,
+  kit: '0.2.0',
+  world: { file: 'relic_of_the_past.apworld', sha256: sha256Of(bytes), size: bytes.length },
+  ...patch,
+});
+
 const json = (body: unknown) => new Response(JSON.stringify(body), { status: 200 });
 
 const bytesResponse = (bytes: Uint8Array) => new Response(Buffer.from(bytes), { status: 200 });
@@ -91,7 +105,8 @@ const bytesResponse = (bytes: Uint8Array) => new Response(Buffer.from(bytes), { 
 const missing = () => new Response('', { status: 404 });
 
 const routed = (routes: Record<string, () => Response>): typeof fetch => (input) => {
-  const route = routes[String(input)];
+  const url = String(input);
+  const route = routes[url] ?? (url === STANDARD_URL ? missing : undefined);
   return route ? Promise.resolve(route()) : Promise.reject(new Error(`offline: ${String(input)}`));
 };
 
@@ -101,5 +116,5 @@ const communityEntry = (apworld: string, patch: Partial<CatalogEntry> = {}): Cat
 });
 
 export {
-  BUNDLE_URL, MANIFEST_URL, REGISTRY_URL, WORLD_URL, buildBundleUrl, buildUrl, buildsManifestOf, bytesResponse, communityEntry, json, manifestOf, missing, registryOf, routed, sha256Of, worldBytes,
+  BUNDLE_URL, MANIFEST_URL, REGISTRY_URL, STANDARD_URL, WORLD_URL, buildBundleUrl, buildUrl, buildsManifestOf, bytesResponse, communityEntry, json, manifestOf, missing, registryOf, routed, sha256Of, standardOf, worldBytes,
 };

@@ -10,9 +10,12 @@ const unavailableOf = (state: ReleaseState) => {
   return state.kind === 'failed' ? `The release could not be read: ${state.message}` : undefined;
 };
 
+const namesOf = ({ release }: RegistryGame, state: ReleaseState) =>
+  (state.kind === 'found' ? state.names : undefined) ?? { world: release.world, bundle: release.bundle };
+
 const releaseOf = (game: RegistryGame, state: ReleaseState): FirstPartyRelease => {
   const { release } = game;
-  const base = { client: game.client, bundleUrl: releaseUrl(release.repo, release.bundle) };
+  const base = { client: game.client, repo: release.repo, bundleUrl: releaseUrl(release.repo, namesOf(game, state).bundle) };
   if (state.kind === 'found') {
     const { minimumAp, maximumAp } = state.manifest;
     return { ...base, minimumAp, ...(maximumAp ? { maximumAp } : {}) };
@@ -45,7 +48,12 @@ const firstPartyEntry = (game: RegistryGame, state: ReleaseState): CatalogEntry 
     source: 'first-party',
     stability: 'unknown',
     versions: state.kind === 'found'
-      ? [{ version: state.manifest.worldVersion, url: releaseUrl(game.release.repo, game.release.world), sha256: state.manifest.sha256 }]
+      ? [{
+        version: state.manifest.worldVersion,
+        url: releaseUrl(game.release.repo, namesOf(game, state).world),
+        sha256: state.manifest.sha256,
+        ...(state.manifest.size === undefined ? {} : { size: state.manifest.size }),
+      }]
       : [],
     firstParty: releaseOf(game, state),
     ...(unavailable ? { unavailable } : {}),

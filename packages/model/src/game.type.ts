@@ -16,6 +16,7 @@ type FirstPartyBuild = { archipelagoVersion: string; url: string; bundleUrl: str
 
 type FirstPartyRelease = {
   client: string;
+  repo?: string;
   bundleUrl: string;
   minimumAp?: string;
   maximumAp?: string;
