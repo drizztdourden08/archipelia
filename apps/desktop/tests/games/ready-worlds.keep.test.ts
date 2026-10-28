@@ -7,7 +7,7 @@ const confirmAction = vi.hoisted(() => vi.fn());
 
 vi.mock('@drizztdourden08/brock-react', async (original) => ({ ...(await original<object>()), confirmAction }));
 
-const { handlers: fixtureHandlers } = await import('./game-handlers.fixtures');
+const { handlers: fixtureHandlers, rowFor: rowOf } = await import('./game-handlers.fixtures');
 const { buildRows } = await import('../../src/views/GameStore/behavior/build-rows');
 const { cardPropsOf } = await import('../../src/views/GameStore/behavior/card-props');
 const { filterRows } = await import('../../src/views/GameStore/behavior/filter-rows');
@@ -27,12 +27,6 @@ const listed = (apworld: string): CatalogEntry => ({
   apworld, game: apworld, displayName: apworld, tags: [], source: 'first-party', stability: 'unknown',
   versions: [{ version: '1.0.0', url: 'https://x/w.apworld' }], firstParty: { client: 'c', repo: 'o/r', bundleUrl: 'https://x/b' },
 });
-
-const rowOf = (entry: CatalogEntry, installed: InstalledGame[] = []) => {
-  const [row] = buildRows([entry], installed);
-  if (!row) throw new Error('no row');
-  return row;
-};
 
 const request: InstallRequest = { kind: 'index', apworld: 'star', version: '1.0.0' };
 

@@ -1,5 +1,6 @@
 /* @layer renderer-app @kind logic */
 import type { AppReviewTour } from '@drizztdourden08/brock-react';
+import { checkVersionPicker } from './check-version-picker';
 import { clickNamed } from './click-named';
 import { named } from './named';
 import { REVIEW_GAME } from './review.constants';
@@ -11,6 +12,7 @@ const checkGameDetails = async (tour: AppReviewTour, layer: HTMLElement | undefi
   const dialog = clicked ? await waitNamed(tour, SELECTOR.dialog, REVIEW_GAME.card) : null;
   tour.check('games-details-open', dialog !== null, 'the title of a card opens its details dialog', 'the title of a card did not open its details dialog');
   if (dialog === null) return;
+  checkVersionPicker(tour, dialog);
   await tour.capture('games-details');
   tour.press({ key: 'Escape' });
   const closed = await tour.waitFor(() => (named(tour, SELECTOR.dialog, REVIEW_GAME.card) ? null : true));

@@ -10,6 +10,7 @@ import { failureOf } from '../../behavior/failure-of';
 import { needOf } from '../../behavior/need-of';
 import { needProps } from '../../behavior/need-props';
 import { textOf } from '../../behavior/text-of';
+import { useVersionPick } from '../../behavior/useVersionPick';
 import { useEnrichStore } from '../../../../stores/useEnrichStore';
 import type { GameDetailsDialogProps } from './GameDetailsDialog.type';
 
@@ -19,15 +20,17 @@ const GameDetailsDialog = ({ row, handlers, onClose }: GameDetailsDialogProps) =
   const ask = useEnrichStore((state) => state.ask);
   useEffect(() => ask({ apworld, source }), [ask, apworld, source]);
 
+  const { view, pick, choose } = useVersionPick(row);
   const busy = busyOf(row, handlers);
   const need = needOf(row, handlers);
   const error = need ? undefined : failureOf(row, handlers);
   return (
     <GameDetails
-      {...cardPropsOf(row, handlers)}
+      {...cardPropsOf(row, handlers, pick)}
       {...artOf(found)}
       {...textOf(found)}
       {...needProps(need)}
+      {...(view ? { versions: { ...view, onChange: choose } } : {})}
       {...(busy ? { busy: busyText(busy, displayName) } : {})}
       {...(error ? { error } : {})}
       loading={found === undefined}

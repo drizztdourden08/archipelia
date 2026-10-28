@@ -31,3 +31,4 @@ export type { CatalogServiceDeps, CatalogView, InstallRequest } from './service/
 export type { PackageConsent } from './install/package-consent.type';
 export type { PackagePreview } from './install/package-preview.type';
 export type { EnrichRequest, GameEnrichment } from './enrich/enrich.type';
+export type { VersionChoice, VersionList, VersionsRequest } from './versions/versions.type';

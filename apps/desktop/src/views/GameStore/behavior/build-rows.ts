@@ -1,14 +1,19 @@
 /* @layer renderer-app @kind logic */
 import type { CatalogEntry, CatalogVersion, InstalledGame } from '@archipelia/model';
 import { compareVersions } from './compare-versions';
+import { coreOf } from './core-of';
 import type { GameRow, GameRowState } from '../GameStore.type';
 
 const latestOf = (entry: CatalogEntry) => [...entry.versions].sort((a, b) => compareVersions(b.version, a.version))[0];
 
+const isNewer = (latest: CatalogVersion, installed: InstalledGame): boolean =>
+  (installed.release?.prerelease
+    ? compareVersions(latest.version, coreOf(installed.version)) >= 0
+    : compareVersions(latest.version, installed.version) > 0);
+
 const stateOf = (entry: CatalogEntry, installed: InstalledGame | undefined, latest: CatalogVersion | undefined): GameRowState => {
   if (!installed) return 'available';
-  if (entry.source !== 'official' && latest && compareVersions(latest.version, installed.version) > 0) return 'update';
-  return 'installed';
+  return entry.source !== 'official' && latest && isNewer(latest, installed) ? 'update' : 'installed';
 };
 
 const buildRows = (entries: CatalogEntry[], installed: InstalledGame[]): GameRow[] => {

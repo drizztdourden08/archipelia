@@ -7,6 +7,7 @@ const SELECTOR = {
   button: 'button, [role="button"]',
   dialog: '[role="dialog"], [role="alertdialog"], dialog',
   field: 'input, textarea',
+  combobox: '[role="combobox"]',
   status: '[role="status"]',
   toggle: '[role="switch"]',
   radio: 'input[type="radio"], [role="radio"]',
