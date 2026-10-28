@@ -50,6 +50,21 @@ const EMPTY_TEXT: Record<EmptyKind, string> = {
   updates: 'Every installed game is up to date',
 };
 
+const NOT_REVIEWED = 'Not reviewed by Archipelia';
+
+const ALSO_IN_INDEX = 'Also in the Archipelago index';
+
+const DISCOVERED_LABEL = 'Archipelia ready world, found by its topic and not reviewed by Archipelia';
+
+const TRUST_ASK = {
+  title: (name: string) => `Add ${name}?`,
+  message: 'Archipelia has not reviewed this world. It runs Python code on your computer when a game is generated. Add it only if you trust the people who publish it.',
+  confirm: 'Add this world',
+  cancel: 'Cancel',
+} as const;
+
+const VERIFIED_CHOICE = { yes: 'Verified', no: 'Not verified' } as const;
+
 const NONE_INSTALLED = 'No game installed yet. Add one from the lists below.';
 
 const APWORLD = ['apworld'];
@@ -61,4 +76,4 @@ const FAILURE = {
   file: 'Could not add the game from that file.',
 } as const;
 
-export { APWORLD, EMPTY_TEXT, FAILURE, FIT_LABEL, KIND_LABEL, KIND_OF, MIXED_SECTIONS, NONE_INSTALLED, NO_RELEASE, SECTIONS, SECTION_OF_SOURCE, SEEN_DWELL_MS, SOURCE_LABEL, STATE_LABEL, TILE };
+export { ALSO_IN_INDEX, APWORLD, DISCOVERED_LABEL, EMPTY_TEXT, FAILURE, FIT_LABEL, KIND_LABEL, KIND_OF, MIXED_SECTIONS, NONE_INSTALLED, NOT_REVIEWED, NO_RELEASE, SECTIONS, SECTION_OF_SOURCE, SEEN_DWELL_MS, SOURCE_LABEL, STATE_LABEL, TILE, TRUST_ASK, VERIFIED_CHOICE };

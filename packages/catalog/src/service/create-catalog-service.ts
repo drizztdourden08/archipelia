@@ -4,8 +4,11 @@ import { readRuntime } from '@archipelia/engine';
 import { readCatalog } from '../read-catalog';
 import { trustRoot as trustRootOf } from '../first-party/trust-root';
 import { fitEntries } from '../first-party/fit-entries';
-import { mergeCatalog } from '../first-party/merge-catalog';
 import { readFirstParty } from '../first-party/read-first-party';
+import { createReady } from '../ready/create-ready';
+import { readInstalled } from '../install/read-installed';
+import { assembleLatest } from './assemble-latest';
+import { assertRepoAccepted } from './assert-repo-accepted';
 import { installFromFile } from '../install/install-from-file';
 import { installOfficial } from '../install/install-official';
 import type { PackagePreview } from '../install/package-preview.type';
@@ -24,23 +27,20 @@ import { createWorldInfo } from './create-world-info';
 import { withListedGuides } from '../official/with-listed-guides';
 import type { CatalogServiceDeps, CatalogView, InstallRequest, Latest } from './catalog-service.type';
 import { CACHE_DIR } from './catalog-service.constants';
+import { viewOf } from './view-of';
 
 const createCatalogService = ({ games: files, cache, engineDir, fetch: fetchFn, trustRoot, build, buildSandbox, tools, log }: CatalogServiceDeps) => {
   let latest: Latest | undefined;
   let pending: Promise<Latest> | undefined;
+  const readReady = createReady({ files: cache, ...(fetchFn ? { fetch: fetchFn } : {}) });
 
   const fetchOnce = (force: boolean) => {
     pending ??= Promise.all([
       readCatalog({ files: cache, cacheDir: CACHE_DIR }),
-      readFirstParty({ files: cache, ...(fetchFn ? { fetch: fetchFn } : {}) }, { force }),
+      readFirstParty({ files: cache, ...(fetchFn ? { fetch: fetchFn } : {}) }, { force })
+        .then(async (firstParty) => ({ firstParty, ready: await readReady(force, firstParty.registry) })),
     ])
-      .then(([catalog, firstParty]) => ({
-        ...catalog,
-        entries: mergeCatalog(catalog.entries, firstParty.entries),
-        problems: [...catalog.problems, ...firstParty.problems.map((message) => ({ path: 'registry', message }))],
-        firstParty,
-        fetchedAt: Date.now(),
-      }))
+      .then(([catalog, { firstParty, ready }]) => assembleLatest(catalog, firstParty, ready, Date.now()))
       .finally(() => { pending = undefined; });
     return pending;
   };
@@ -50,7 +50,7 @@ const createCatalogService = ({ games: files, cache, engineDir, fetch: fetchFn, 
   const read = async (refresh: boolean): Promise<CatalogView> => {
     if (!latest || refresh || pending || (latest.limited && latest.limited.limitedUntil <= Date.now())) latest = await fetchOnce(refresh);
     const entries = fitEntries(latest.entries.filter((e) => e.source !== 'official'), await activeAp());
-    return { apVersion: latest.apVersion, entries, problems: latest.problems.length, fetchedAt: latest.fetchedAt, ...(latest.limited ? { limited: latest.limited } : {}) };
+    return viewOf(latest, entries);
   };
 
   const official = async (): Promise<CatalogEntry[]> => withListedGuides(await officialEntries(await engineDir()), latest?.entries ?? []);
@@ -72,6 +72,7 @@ const createCatalogService = ({ games: files, cache, engineDir, fetch: fetchFn, 
       return withTempFile(request.fileName, request.bytes, (path) => installFromFile({ ...base, path, ...consent }));
     }
     const { entry, latest: current } = await indexEntry(request.apworld);
+    assertRepoAccepted(entry, request.acceptRepoId, entry.discovered ? await readInstalled(files, entry.apworld) : null);
     return installWorld({
       ...base, entry, version: request.version, trust: { clients: current.firstParty.clients, root },
       ...consent, ...(fetchFn ? { fetch: fetchFn } : {}),

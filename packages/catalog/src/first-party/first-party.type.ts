@@ -1,8 +1,8 @@
 /* @layer core @kind types */
 import type { CatalogEntry } from '@archipelia/model';
-import type { RegistryClient, RegistrySource } from '@archipelia/trust';
+import type { Registry, RegistryClient, RegistrySource } from '@archipelia/trust';
 
-type ReleaseManifest = { game: string; worldVersion: string; minimumAp: string; maximumAp?: string; sha256: string; appVersion?: string; size?: number };
+type ReleaseManifest = { game: string; module?: string; worldVersion: string; minimumAp: string; maximumAp?: string; sha256: string; appVersion?: string; size?: number };
 
 type BuildRecord = { archipelagoVersion: string; file: string; sha256: string; size: number; bundle: string };
 
@@ -39,6 +39,6 @@ type StandardManifest = {
   world?: StandardFile;
 };
 
-type FirstPartyRead = { entries: CatalogEntry[]; clients: RegistryClient[]; problems: string[]; source: RegistrySource };
+type FirstPartyRead = { entries: CatalogEntry[]; clients: RegistryClient[]; registry: Registry; problems: string[]; source: RegistrySource };
 
 export type { BuildRecord, BuildsManifest, FirstPartyRead, ReleaseManifest, ReleaseState, StandardBuild, StandardFile, StandardManifest };

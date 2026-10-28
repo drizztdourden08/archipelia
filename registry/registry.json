@@ -26,6 +26,7 @@
       "client": "relic-of-the-past",
       "release": {
         "repo": "drizztdourden08/relic-of-the-past",
+        "repoId": 1235000006,
         "world": "relic_of_the_past.apworld",
         "manifest": "relic_of_the_past.apworld.json",
         "kind": "builds",

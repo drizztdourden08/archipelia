@@ -15,7 +15,7 @@ type CatalogVersion = { version: string; url: string; sha256?: string; size?: nu
 type FirstPartyBuild = { archipelagoVersion: string; url: string; bundleUrl: string; sha256: string; size: number };
 
 type FirstPartyRelease = {
-  client: string;
+  client?: string;
   repo?: string;
   bundleUrl: string;
   minimumAp?: string;
@@ -25,6 +25,10 @@ type FirstPartyRelease = {
 };
 
 type WorldTrust = { state: 'verified' | 'unverified'; detail: string };
+
+type WorldOrigin = { repoId: number; repo: string };
+
+type DiscoveredWorld = WorldOrigin & { owner: string; stars: number; pushedAt: string; createdAt: string; direct: boolean; alsoInIndex?: boolean };
 
 type CatalogEntry = {
   apworld: string;
@@ -39,6 +43,7 @@ type CatalogEntry = {
   versions: CatalogVersion[];
   requires?: string[];
   firstParty?: FirstPartyRelease;
+  discovered?: DiscoveredWorld;
   unavailable?: string;
 };
 
@@ -57,6 +62,7 @@ type InstalledGame = {
   packages?: string[];
   sources?: PackageSource[];
   trust?: WorldTrust;
+  origin?: WorldOrigin;
 };
 
-export type { CatalogEntry, CatalogVersion, FirstPartyBuild, FirstPartyRelease, FuzzVerdict, GameSource, InstalledGame, Stability, WorldLayout, WorldTrust };
+export type { CatalogEntry, CatalogVersion, DiscoveredWorld, FirstPartyBuild, FirstPartyRelease, FuzzVerdict, GameSource, InstalledGame, Stability, WorldLayout, WorldOrigin, WorldTrust };

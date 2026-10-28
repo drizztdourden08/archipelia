@@ -29,7 +29,7 @@ const isUsable = (state: ReleaseState): boolean => state.kind === 'found' || sta
 
 const readReleaseState = async (game: RegistryGame, request: typeof fetch): Promise<ReleaseState> => {
   const { repo, manifest } = game.release;
-  const standard = await readState(releaseUrl(repo, STANDARD_MANIFEST), request, (value) => standardState(game, value));
+  const standard = await readState(releaseUrl(repo, STANDARD_MANIFEST), request, (value) => standardState(value, game));
   if (isUsable(standard)) return standard;
   const legacy = await readState(releaseUrl(repo, manifest), request, legacyState(game));
   return standard.kind === 'failed' && legacy.kind === 'none' ? standard : legacy;

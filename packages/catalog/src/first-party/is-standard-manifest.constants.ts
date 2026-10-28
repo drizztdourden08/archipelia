@@ -6,4 +6,6 @@ const BUNDLE_FILE = /^[A-Za-z0-9][A-Za-z0-9._-]*$/;
 
 const SHA256 = /^[0-9a-f]{64}$/i;
 
-export { APWORLD_FILE, BUNDLE_FILE, SHA256 };
+const MODULE_NAME = /^[a-z][a-z0-9_]*$/;
+
+export { APWORLD_FILE, BUNDLE_FILE, MODULE_NAME, SHA256 };
