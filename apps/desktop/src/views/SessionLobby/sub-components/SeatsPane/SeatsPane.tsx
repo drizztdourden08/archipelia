@@ -30,7 +30,7 @@ const SeatsPane = ({ screen }: SeatsPaneProps) => {
           <SectionHeader title={`${SEAT_TEXT.heading} · ${draft.players.length + connected}`} subtitle={SEAT_TEXT.hint} />
           <SeatGrid label={SEAT_TEXT.grid}>
             {seats.map((seat) => (
-              <OwnSeat key={seat.key} seat={seat} presets={presets} busy={screen.busy} actions={actions} />
+              <OwnSeat key={seat.key} seat={seat} selected={selected?.slot === seat.slot} presets={presets} busy={screen.busy} actions={actions} />
             ))}
             {direct && <LobbyMembers serverId={tab.serverId} lobbyId={tab.lobbyId} lead={joinedLead} />}
             <SeatCard state="add" label={SEAT_TEXT.add} disabled={screen.busy} onSelect={screen.addPlayer} />

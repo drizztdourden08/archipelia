@@ -7,10 +7,19 @@ import { SeatArt } from '../SeatArt';
 import { SeatMeta } from '../SeatMeta';
 import type { OwnSeatProps } from './OwnSeat.type';
 
-const OwnSeat = ({ seat, presets, busy, actions }: OwnSeatProps) => {
+const OwnSeat = ({ seat, selected, presets, busy, actions }: OwnSeatProps) => {
   const { player, slot, kind } = seat;
   const name = playerLabel(player);
-  if (kind === 'held') return <SeatCard state="empty" label={`${SEAT_TEXT.slot} ${slot} · ${name}`} hint={`${SEAT_TEXT.waitingFor} ${name} ${SEAT_TEXT.toConnect}`} />;
+  if (kind === 'held') {
+    return (
+      <SeatCard
+        state="held"
+        label={`${SEAT_TEXT.slot} ${slot} · ${name}`}
+        hint={`${SEAT_TEXT.waitingFor} ${name} ${SEAT_TEXT.toConnect}`}
+        actions={[{ id: 'edit', label: SEAT_TEXT.edit, nameSuffix: name, icon: 'pencil', disabled: busy, onSelect: () => actions.edit(slot) }]}
+      />
+    );
+  }
   return (
     <SeatCard
       state="filled"
@@ -18,6 +27,7 @@ const OwnSeat = ({ seat, presets, busy, actions }: OwnSeatProps) => {
       lead={<SeatArt game={player.game} slot={slot} />}
       meta={<SeatMeta kind={kind} player={player} presets={presets} />}
       onSelect={() => actions.edit(slot)}
+      selected={selected}
       actions={seatActionsOf(seat, name, busy, actions)}
     />
   );
