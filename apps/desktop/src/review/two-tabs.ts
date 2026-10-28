@@ -13,14 +13,13 @@ import { stripHas } from './strip-has';
 import { tabBody } from './tab-body';
 import { HOSTING_WIDGETS, LOBBY_WIDGETS } from './two-tabs.constants';
 import { waitText } from './wait-text';
-import { withHeartbeat } from './with-heartbeat';
 
 const hostSecond = async (tour: AppReviewTour) => {
   nav.open(ROUTE.sessions);
   await waitText(tour, REVIEW_SECOND, () => tour.find(SELECTOR.layer));
   await openSavedLobby(tour, REVIEW_SECOND);
   await clickNamed(tour, SELECTOR.button, 'Run', tabBody(tour));
-  const hosting = await withHeartbeat(tour, waitText(tour, /hosting/i, () => tour.find(SELECTOR.dashboard), RUN_TIMEOUT_MS), () => `waiting for ${REVIEW_SECOND} to host`);
+  const hosting = await waitText(tour, /hosting/i, () => tour.find(SELECTOR.dashboard), RUN_TIMEOUT_MS);
   tour.check('second-hosts', hosting, 'the second session runs and its tab shows the room', `${REVIEW_SECOND} did not host`);
   return hosting;
 };
