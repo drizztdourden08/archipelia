@@ -24,13 +24,13 @@
     "lint": "tsc --noEmit && eslint ."
   },
   "devDependencies": {
-    "@drizztdourden08/brock-lint-config": "^0.114.0",
+    "@drizztdourden08/brock-lint-config": "^0.115.1",
     "@types/node": "catalog:",
     "eslint": "catalog:",
     "typescript": "catalog:"
   },
   "dependencies": {
     "@archipelia/model": "workspace:*",
-    "@drizztdourden08/brock-core": "^0.114.0"
+    "@drizztdourden08/brock-core": "^0.115.1"
   }
 }
