@@ -7,7 +7,13 @@ import type { PackageConsent } from '../install/package-consent.type';
 import type { FirstPartyRead } from '../first-party/first-party.type';
 import type { Catalog } from '../read-catalog.type';
 
-type CatalogView = { apVersion: string; entries: CatalogEntry[]; problems: number; fetchedAt: number };
+type CatalogView = {
+  apVersion: string;
+  entries: CatalogEntry[];
+  problems: number;
+  fetchedAt: number;
+  limited?: Catalog['limited'];
+};
 
 type InstallRequest =
   | { kind: 'index'; apworld: string; version: string; acceptPackages?: PackageConsent; wheels?: string[] }

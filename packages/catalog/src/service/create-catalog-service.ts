@@ -48,9 +48,9 @@ const createCatalogService = ({ games: files, cache, engineDir, fetch: fetchFn, 
   const activeAp = async () => readRuntime(await engineDir()).then((runtime) => runtime.apVersion, () => undefined);
 
   const read = async (refresh: boolean): Promise<CatalogView> => {
-    if (!latest || refresh || pending) latest = await fetchOnce(refresh);
+    if (!latest || refresh || pending || (latest.limited && latest.limited.limitedUntil <= Date.now())) latest = await fetchOnce(refresh);
     const entries = fitEntries(latest.entries.filter((e) => e.source !== 'official'), await activeAp());
-    return { apVersion: latest.apVersion, entries, problems: latest.problems.length, fetchedAt: latest.fetchedAt };
+    return { apVersion: latest.apVersion, entries, problems: latest.problems.length, fetchedAt: latest.fetchedAt, ...(latest.limited ? { limited: latest.limited } : {}) };
   };
 
   const official = async (): Promise<CatalogEntry[]> => withListedGuides(await officialEntries(await engineDir()), latest?.entries ?? []);

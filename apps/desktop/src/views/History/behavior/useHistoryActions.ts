@@ -7,6 +7,7 @@ import { openSessionEditor } from '../../../hooks/open-session-editor';
 import { useAppNavigation } from '../../../hooks/useAppNavigation';
 import { useRunAgainOf } from '../../../hooks/useRunAgainOf';
 import { isWorking } from '../../../runs/is-working';
+import { openRunOutput } from '../../../runs/open-run-output';
 import { showRunJob } from '../../../runs/show-run-job';
 import { useRunsStore } from '../../../stores/useRunsStore';
 import { CLEAN_DAYS, FAILURE } from '../History.constants';
@@ -20,6 +21,8 @@ const useHistoryActions = ({ runs, guard }: HistoryActionsInput) => {
   const again = useRunAgainOf();
 
   const showLog = useCallback((run: Session) => { void showRunJob(run); }, []);
+
+  const openFiles = useCallback((run: Session) => { void openRunOutput(run); }, []);
 
   const openRun = useCallback((run: Session) => {
     if (isWorking(run) || !showRun(run)) void showRunJob(run);
@@ -47,7 +50,7 @@ const useHistoryActions = ({ runs, guard }: HistoryActionsInput) => {
     });
   }, [guard, removeRun, stale]);
 
-  return { clean, deleteRun, openRun, openSessionOf: openSessionEditor, runAgain, showLog, staleCount: stale.length };
+  return { clean, deleteRun, openFiles, openRun, openSessionOf: openSessionEditor, runAgain, showLog, staleCount: stale.length };
 };
 
 export { useHistoryActions };

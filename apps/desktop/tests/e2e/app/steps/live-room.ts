@@ -6,10 +6,11 @@ import { widgetWindows } from '@drizztdourden08/brock-build/testing';
 import { checkSome, joinAs } from '../../support/ap-player';
 import type { LaunchedApp } from '../support/launched-app.type';
 import { settledProof } from '../support/settled-proof';
-import { LOCAL_PORT, SOH, TIMESPINNER } from '../support/flow-constants';
+import { LOCAL_PORT, SOH, TEMPLATE, TIMESPINNER } from '../support/flow-constants';
 import { expectReadableDock } from '../support/dock-geometry';
 import { base, dialogOf, docked } from '../support/locators';
 import { proofText } from '../support/proof-text';
+import { roomPasswordOf } from '../support/room-password';
 import { popOutWidget } from '../support/widget-window';
 
 const CHECKS = 10;
@@ -59,9 +60,10 @@ const joinPlayers = async (launched: LaunchedApp, clients: Client[]) => {
   await playerItem(widgets, TIMESPINNER.game).getByText('offline').waitFor();
   await liveStatus(widgets, /^Live$/).first().waitFor();
   const url = `ws://127.0.0.1:${LOCAL_PORT}`;
-  const link = await joinAs({ url, slot: SOH.slot, game: SOH.game });
+  const password = await roomPasswordOf(launched, TEMPLATE);
+  const link = await joinAs({ url, slot: SOH.slot, game: SOH.game, password });
   clients.push(link);
-  const lunais = await joinAs({ url, slot: TIMESPINNER.slot, game: TIMESPINNER.game });
+  const lunais = await joinAs({ url, slot: TIMESPINNER.slot, game: TIMESPINNER.game, password });
   clients.push(lunais);
   expect(await checkSome(lunais, CHECKS)).toHaveLength(CHECKS);
   expect(await checkSome(link, CHECKS)).toHaveLength(CHECKS);

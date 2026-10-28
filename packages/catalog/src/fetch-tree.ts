@@ -1,11 +1,18 @@
 /* @layer core @kind logic */
 import { treeUrl } from './tree-url';
+import { GithubLimitError } from './source/github-limit-error';
+import { limitUntil } from './source/limit-until';
 import type { IndexSource } from './index-source.type';
 import type { TreeFile, TreeNode, TreeResponse } from './fetch-tree.type';
 import { INDEX_DIR, INDEX_FILE, ROOT_FILES } from './fetch-tree.constants';
 
 const getTree = async (url: string) => {
   const res = await fetch(url, { headers: { accept: 'application/vnd.github+json' } });
+  const limit = limitUntil(res, Date.now());
+  if (limit !== undefined) {
+    await res.body?.cancel();
+    throw new GithubLimitError(limit);
+  }
   if (!res.ok) throw new Error(`index tree: HTTP ${res.status}`);
   return (await res.json()) as TreeResponse;
 };

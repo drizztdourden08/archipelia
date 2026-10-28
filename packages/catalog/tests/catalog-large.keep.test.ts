@@ -1,24 +1,14 @@
 /* @layer tests @kind test */
 import { afterEach, describe, expect, test, vi } from 'vitest';
-import type { DataFiles } from '@archipelia/model';
 import { mergeCatalog } from '../src/first-party/merge-catalog';
 import { readCatalog } from '../src/read-catalog';
 import { communityEntry } from './first-party.fixtures';
-import { memoryFiles } from './memory-files.fixtures';
+import { textFiles } from './memory-files.fixtures';
 
 const COUNT = 2500;
 const NAMES = Array.from({ length: COUNT }, (_, i) => `game_${i}`);
 const sha = (path: string) => `sha-${path}`;
 const blob = (path: string) => ({ path, type: 'blob', sha: sha(path) });
-
-const files = (): DataFiles => {
-  const store = new Map<string, string>();
-  return {
-    ...memoryFiles([]),
-    readText: (rel) => Promise.resolve(store.get(rel) ?? null),
-    writeText: (rel, body) => { store.set(rel, body); return Promise.resolve(); },
-  };
-};
 
 const reply = (body: unknown) => Promise.resolve(new Response(JSON.stringify(body)));
 const text = (body: string) => Promise.resolve(new Response(body));
@@ -51,14 +41,14 @@ afterEach(() => vi.unstubAllGlobals());
 describe('a community index past 1000 entries', () => {
   test('reads every entry when the recursive tree is whole', async () => {
     fakeGithub(false);
-    const catalog = await readCatalog({ files: files(), cacheDir: 'c' });
+    const catalog = await readCatalog({ files: textFiles(), cacheDir: 'c' });
     expect(catalog.entries).toHaveLength(COUNT);
     expect(catalog.problems).toEqual([]);
   });
 
   test('walks the folders when GitHub truncates the recursive tree, so none are dropped', async () => {
     const urls = fakeGithub(true);
-    const catalog = await readCatalog({ files: files(), cacheDir: 'c' });
+    const catalog = await readCatalog({ files: textFiles(), cacheDir: 'c' });
     expect(catalog.entries).toHaveLength(COUNT);
     expect(new Set(catalog.entries.map((e) => e.apworld)).size).toBe(COUNT);
     expect(urls.some((url) => url.endsWith('/git/trees/sha-index-dir'))).toBe(true);

@@ -43,7 +43,7 @@ const History = () => {
           run={selected}
           templates={model.templates}
           busy={model.isBusy(selected.id)}
-          actions={{ openRun: model.openRun, openSession: model.openSessionOf, deleteRun: model.deleteRun, runAgain: model.runAgain, showLog: model.showLog }}
+          actions={{ openRun: model.openRun, openSession: model.openSessionOf, deleteRun: model.deleteRun, runAgain: model.runAgain, showLog: model.showLog, openFiles: model.openFiles }}
         />
       )}
       emptyDetail={<EmptyState message={TEXT.noRun} />}

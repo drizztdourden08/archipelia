@@ -3,7 +3,7 @@ import { openExternal, SearchAnchor } from '@drizztdourden08/brock-react';
 import { Box, Button, EmptyState, Icon, IconButton, Spinner, Tooltip } from '@drizztdourden08/tessera/primitives';
 import { FilterBar, VirtualGrid } from '@drizztdourden08/tessera/composites';
 import type { VirtualGridHandle } from '@drizztdourden08/tessera/composites';
-import { ErrorCallout, PackageConsentDialog, PackageSourceDialog } from '@archipelia/design';
+import { PackageConsentDialog, PackageSourceDialog } from '@archipelia/design';
 import { useMemo, useRef, useState } from 'react';
 import { TOUR_TARGET } from '../../hooks/tour-targets.constants';
 import { gameAnchor } from './behavior/game-anchor';
@@ -16,6 +16,7 @@ import { useRevealGame } from './behavior/useRevealGame';
 import { EMPTY_TEXT, TILE } from './GameStore.constants';
 import type { GameStoreProps } from './GameStore.type';
 import { GameDetailsDialog } from './sub-components/GameDetailsDialog';
+import { GameNotices } from './sub-components/GameNotices';
 import { GameRowCard } from './sub-components/GameRowCard';
 import { GameStatusBar } from './sub-components/GameStatusBar';
 import { SectionLabel } from './sub-components/SectionLabel';
@@ -48,7 +49,7 @@ const GameStore = ({ tab }: GameStoreProps) => {
           )}
         />
       </Box>
-      {store.error && <ErrorCallout message={store.error} onRetry={store.loadFailed ? store.retry : undefined} />}
+      <GameNotices limitText={store.limitText} error={store.error} onRetry={store.loadFailed ? store.retry : undefined} />
       <Box className="game-store__body" data-tour={TOUR_TARGET.gamesGrid}>
         {store.shown === 0
           ? (

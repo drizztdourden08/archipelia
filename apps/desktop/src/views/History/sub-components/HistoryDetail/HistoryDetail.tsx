@@ -28,7 +28,7 @@ const HistoryDetail = ({ run, templates, busy, actions }: HistoryDetailProps) =>
       <DetailSection title="Config">
         <FactsPanel groups={configFacts(run.snapshot)} layout="rows" label="Config" />
       </DetailSection>
-      <OutputSection run={run} onShowLog={actions.showLog} />
+      <OutputSection run={run} onShowLog={actions.showLog} onOpenFiles={actions.openFiles} />
     </Stack>
   );
 };
