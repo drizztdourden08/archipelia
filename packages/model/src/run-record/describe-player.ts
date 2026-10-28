@@ -11,6 +11,6 @@ const sourceText = (source: PlayerSource): string => {
 };
 
 const describePlayer = (player: SessionPlayer): string =>
-  `${player.game}, ${sourceText(player.source)}${player.direct ? ', direct seat' : ''}`;
+  `${player.game ?? 'their own game'}, ${player.source ? sourceText(player.source) : 'their own setup'}${player.direct ? ', direct seat' : ''}`;
 
 export { describePlayer };

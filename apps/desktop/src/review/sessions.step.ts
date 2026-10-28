@@ -2,7 +2,7 @@
 import { defineReviewStep, nav } from '@drizztdourden08/brock-react';
 import type { AppReviewTour } from '@drizztdourden08/brock-react';
 import { ROUTE } from '../hooks/app-navigation.constants';
-import { REVIEW_SESSION, GUARD_DIALOG } from './review.constants';
+import { REVIEW_SESSION, GUARD_DIALOG, LOBBY_UI } from './review.constants';
 import { SELECTOR } from './review-dom.constants';
 import { checkEditorLayout } from './check-editor-layout';
 import { clickNamed } from './click-named';
@@ -12,6 +12,17 @@ import { waitNamed } from './wait-named';
 import { waitText } from './wait-text';
 
 const layer = (tour: AppReviewTour) => tour.find(SELECTOR.layer);
+
+const checkDetail = async (tour: AppReviewTour) => {
+  const picked = await clickNamed(tour, SELECTOR.button, new RegExp(`^${REVIEW_SESSION}\b`), layer(tour) ?? undefined);
+  const shown = picked && await waitText(tour, /History of this session \(\d+ runs?\)/, () => layer(tour));
+  tour.check('sessions-detail', shown, 'picking a session shows its setup with a link to its history', 'picking a session did not show its setup');
+  const run = named(tour, SELECTOR.button, LOBBY_UI.run, layer(tour) ?? undefined);
+  tour.check('sessions-run', run !== null, 'the picked session offers Run', 'the picked session has no Run button');
+  const seat = named(tour, SELECTOR.toggle, /connect directly$/, layer(tour) ?? undefined);
+  tour.check('sessions-direct-switch', seat !== null, 'each saved player has a switch for direct connections', 'the saved players have no direct switch');
+  await tour.capture('detail');
+};
 
 const openDraft = async (tour: AppReviewTour) => {
   await tour.resetUi();
@@ -32,7 +43,7 @@ const discardDraft = async (tour: AppReviewTour, backButton: HTMLElement | null,
     tour.check('builder-guard-discard', closed === true, 'Discard after Escape closes the window, as Escape does', 'Discard after Escape left the window open');
     return;
   }
-  const back = await waitText(tour, /sessions · [0-9]/i, () => layer(tour));
+  const back = await waitText(tour, REVIEW_SESSION, () => layer(tour));
   tour.check('builder-guard-discard', back, 'Discard goes back to Sessions', 'Discard did not return to Sessions');
 };
 
@@ -58,6 +69,7 @@ export default defineReviewStep({
     const listed = await waitText(tour, REVIEW_SESSION, () => layer(tour));
     tour.check('sessions-listed', listed, `Sessions lists ${REVIEW_SESSION}`, `Sessions does not list ${REVIEW_SESSION}`);
     await tour.capture('list');
+    await checkDetail(tour);
     const picked = await pickInPalette(tour, REVIEW_SESSION);
     const editor = picked && await waitText(tour, 'Edit session', () => layer(tour));
     tour.check('session-search-entry', editor, 'the palette lists the session and picking it opens Edit session', 'the session search entry did not open its editor');

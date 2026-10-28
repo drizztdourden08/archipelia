@@ -1,6 +1,6 @@
 /* @layer tests @kind logic */
 import { optionDef } from '@archipelia/model';
-import type { GamePreset, InstalledGame, SessionPlayer, SessionTemplate } from '@archipelia/model';
+import type { GamePreset, HostedPlayer, InstalledGame, SessionTemplate } from '@archipelia/model';
 
 const option = (seed: Parameters<typeof optionDef>[0]) => optionDef({ visibility: ['simple'], ...seed });
 
@@ -19,7 +19,7 @@ const GAME: InstalledGame = {
 
 const PRESET: GamePreset = { id: 'p1', game: 'Demo', name: 'Open', values: { crystals: 5 }, updatedAt: 0 };
 
-const presetPlayer = (slot: number, name: string, presetId = 'p1', game = 'Demo'): SessionPlayer => ({
+const presetPlayer = (slot: number, name: string, presetId = 'p1', game = 'Demo'): HostedPlayer => ({
   slot, name, game, source: { kind: 'preset', presetId, overrides: {} },
 });
 

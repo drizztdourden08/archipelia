@@ -21,10 +21,14 @@ const readSource = (name: string, value: unknown): PlayerSource => {
 const readPlayer = (value: unknown, index: number): SessionPlayer => {
   const name = `players[${index}]`;
   const given = readRecord(name, value, PLAYER_KEYS);
-  const player = {
-    slot: readCount(`${name}.slot`, given.slot, PLAYERS_MAX), name: readText(`${name}.name`, given.name), game: readText(`${name}.game`, given.game), source: readSource(`${name}.source`, given.source),
-  };
-  return given.direct === undefined ? player : { ...player, direct: readFlag(`${name}.direct`, given.direct) };
+  const seat = { slot: readCount(`${name}.slot`, given.slot, PLAYERS_MAX), name: readText(`${name}.name`, given.name) };
+  const direct = given.direct === undefined ? undefined : readFlag(`${name}.direct`, given.direct);
+  if (given.game === undefined && given.source === undefined) {
+    if (direct !== true) throw new Error(LIVE_TEXT.badOverride(name));
+    return { ...seat, direct };
+  }
+  const player = { ...seat, game: readText(`${name}.game`, given.game), source: readSource(`${name}.source`, given.source) };
+  return direct === undefined ? player : { ...player, direct };
 };
 
 const readPlayers = (value: unknown): SessionPlayer[] => {

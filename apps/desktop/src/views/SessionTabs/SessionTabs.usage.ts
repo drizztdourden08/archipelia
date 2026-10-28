@@ -8,7 +8,7 @@ const usage = {
   ],
   avoidWhen: [
     { case: 'Past runs of a session.', use: 'History' },
-    { case: 'The saved sessions and their setup.', use: 'SessionsLibrary' },
+    { case: 'The saved sessions and their setup.', use: 'Sessions' },
   ],
   rules: [
     'Keep the tabs and the active tab in the live store, fed by main; the strip only draws them.',

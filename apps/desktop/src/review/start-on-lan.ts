@@ -26,10 +26,10 @@ const startOnLan = async (tour: AppReviewTour): Promise<AdminLobby | null> => {
   tour.check('hosting-lan-setup', quiet, 'choosing LAN on the setup page opens nothing and asks nothing', 'choosing LAN opened or asked from the setup page');
   await clickNamed(tour, SELECTOR.button, LOBBY_UI.start, layer(tour) ?? undefined);
   const ask = await waitNamed(tour, SELECTOR.dialog, HOST_UI.askTitle);
-  tour.check('hosting-lan-asks', ask !== null, 'Start session on a LAN session asks once, in plain words, before it opens a port', 'Start session on a LAN session did not ask');
+  tour.check('hosting-lan-asks', ask !== null, 'Save and run on a LAN session asks once, in plain words, before it opens a port', 'Save and run on a LAN session did not ask');
   if (ask) await clickNamed(tour, SELECTOR.button, HOST_UI.open, ask);
   const opened = await tour.waitFor(() => directLobby() ?? null, 15000);
-  tour.check('direct-on', opened?.phase === 'open', 'Start session opens the lobby of the session with no seed made', 'Start session opened no lobby');
+  tour.check('direct-on', opened?.phase === 'open', 'Save and run opens the lobby of the session with no seed made', 'Save and run opened no lobby');
   if (opened) await showsLan(tour);
   return opened;
 };

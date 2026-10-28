@@ -1,6 +1,7 @@
 /* @layer core @kind logic */
 import { rm } from 'node:fs/promises';
 import { generate } from '@archipelia/engine';
+import { hostedPlayers } from '@archipelia/model';
 import type { Session } from '@archipelia/model';
 import { removeSessionSettings, writeSessionSettings } from '@archipelia/hosts';
 import { readOutput } from '../output/read-output';
@@ -28,7 +29,7 @@ const runGenerator = (deps: ServiceDeps, session: Session, { runtime, settingsDi
 
 const generateIn = async (deps: ServiceDeps, session: Session, run: ProduceRun, base: string) => {
   const workDir = deps.files.path(base);
-  await writePlayers(session.snapshot.players, `${base}/players`, deps);
+  await writePlayers(hostedPlayers(session.snapshot.players), `${base}/players`, deps);
   const baked = bakesPassword(session.snapshot.host) ? await roomPasswordOf(deps, session) : undefined;
   if (baked) await writeSessionSettings(workDir, baked);
   const limit = timeLimit(run.signal, run.timeoutMs);

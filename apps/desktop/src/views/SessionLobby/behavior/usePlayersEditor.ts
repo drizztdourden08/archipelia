@@ -8,7 +8,8 @@ import { addPlayer } from './add-player';
 import { presetsFor } from './presets-for';
 import { removePlayer } from './remove-player';
 import { duplicatePlayer } from './duplicate-player';
-import { withGame } from './with-game';
+import { withDirect } from './with-direct';
+import { withPickedGame } from './with-picked-game';
 import { withYaml } from './with-yaml';
 import { withPreset } from './with-preset';
 import { parseSource } from './parse-source';
@@ -30,7 +31,9 @@ const usePlayersEditor = ({ setDraft, installed, presets, createPreset, guard }:
   const remove = useCallback((slot: number) => setPlayers((players) => removePlayer(players, slot)), [setPlayers]);
   const duplicate = useCallback((slot: number) => setPlayers((players) => duplicatePlayer(players, slot)), [setPlayers]);
   const rename = useCallback((slot: number, name: string) => change(slot, (player) => ({ ...player, name })), [change]);
-  const setGame = useCallback((slot: number, game: string) => change(slot, (player) => withGame(player, game, presets)), [change, presets]);
+  const setGame = useCallback((slot: number, game: string) => change(slot, (player) => withPickedGame(player, game, presets)), [change, presets]);
+  const setDirect = useCallback((slot: number, on: boolean) =>
+    change(slot, (player) => withDirect(player, on, installed, presets)), [change, installed, presets]);
 
   const importYaml = useCallback((slot: number) => guard(`yaml-${slot}`, async () => {
     const imported = await pickYaml();
@@ -47,7 +50,7 @@ const usePlayersEditor = ({ setDraft, installed, presets, createPreset, guard }:
     if (choice.kind === 'preset') change(slot, (player) => withPreset(player, choice.presetId));
     if (choice.kind === 'new-preset') void createDefault(slot, game);
     if (choice.kind === 'yaml') {
-      change(slot, (player) => (player.source.kind === 'yaml' ? player : withYaml(player, '', '', player.game)));
+      change(slot, (player) => (player.source?.kind === 'yaml' ? player : withYaml(player, '', '', player.game ?? '')));
       void importYaml(slot);
     }
   }, [change, createDefault, importYaml]);
@@ -57,7 +60,7 @@ const usePlayersEditor = ({ setDraft, installed, presets, createPreset, guard }:
   const resetOverride = useCallback((slot: number, key: string) => change(slot, (player) => withoutOverride(player, key)), [change]);
   const resetAll = useCallback((slot: number) => change(slot, withoutOverrides), [change]);
 
-  return { add, duplicate, importYaml, remove, rename, resetAll, resetOverride, setGame, setOverride, setSource };
+  return { add, duplicate, importYaml, remove, rename, resetAll, resetOverride, setDirect, setGame, setOverride, setSource };
 };
 
 export { usePlayersEditor };

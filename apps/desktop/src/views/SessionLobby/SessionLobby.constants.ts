@@ -5,6 +5,8 @@ const YAML_VALUE = 'yaml';
 
 const NEW_PRESET_VALUE = 'new-preset';
 
+const OWN_GAME = 'own-game';
+
 const PRESET_PREFIX = 'preset:';
 
 const YAML_EXTENSIONS = ['yaml', 'yml'];
@@ -14,6 +16,7 @@ const PLAYER_GRID_CLASS = 'session-lobby__players';
 const PLAYERS_TEXT = {
   manual: 'Your own players. Each picks an installed game, then one of its presets or an imported file.',
   direct: 'Your own players, then the players who joined. The list of your own can stay empty.',
+  saved: 'The players saved with this session. A direct player connects on their own and brings their own game, after you approve them.',
   noGame: 'No game installed yet. Add games in Games first.',
   none: 'No player of your own yet.',
   noneDirect: 'No player of your own. Players who join still play.',
@@ -39,5 +42,5 @@ const LOBBY_FAILURE = {
 } as const;
 
 export {
-  LOBBY_FAILURE, LOBBY_SCREEN, NAME_LIMIT, NEW_PRESET_VALUE, PLAYER_GRID_CLASS, PLAYERS_TEXT, PRESET_PREFIX, YAML_EXTENSIONS, YAML_VALUE,
+  LOBBY_FAILURE, LOBBY_SCREEN, NAME_LIMIT, NEW_PRESET_VALUE, OWN_GAME, PLAYER_GRID_CLASS, PLAYERS_TEXT, PRESET_PREFIX, YAML_EXTENSIONS, YAML_VALUE,
 };

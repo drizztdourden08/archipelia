@@ -10,7 +10,7 @@ const NEEDS_PLACE = 'Direct connections need Local, LAN or an Archipelia server 
 const PLACE_TEXT = {
   where: { title: 'Where', description: 'Where the room runs and who can reach it: this computer, your network, or a remote server.' },
   local: 'This computer only. The room and the lobby stay on this computer, and nothing is announced on your network.',
-  lan: 'This computer, open to your local network: any Archipelago client on it can reach the room. The lobby port opens and the session is announced on the network only with direct connections on. Start session asks once before it opens a network port.',
+  lan: 'This computer, open to your local network: any Archipelago client on it can reach the room. The lobby port opens and the session is announced on the network only with direct connections on. Run asks once before it opens a network port.',
   remote: 'A remote server: archipelago.gg, a machine over SSH, or an Archipelia server.',
   live: 'Close the lobby of this session first to change where it runs.',
   noArchipelia: 'Direct connections on a remote server need an Archipelia server, and none is saved yet. Add one on the Servers page.',

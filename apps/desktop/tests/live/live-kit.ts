@@ -1,7 +1,7 @@
 /* @layer tests @kind helper */
 import { afterEach, vi } from 'vitest';
 import { startLobbyRig } from '@archipelia/server/testing';
-import type { AdminLobby, InstalledGame, SessionPlayer, SessionTemplate } from '@archipelia/model';
+import type { AdminLobby, HostedPlayer, InstalledGame, SessionTemplate } from '@archipelia/model';
 import { createLiveService } from '../../electron/live/create-live-service';
 import { createLiveSessions } from '../../electron/live/create-live-sessions';
 import type { LiveServiceDeps } from '../../electron/live/live.type';
@@ -25,7 +25,7 @@ const GAME = {
   schema: { game: LTTP, worldVersion: '1.0.0', groups: [], presets: {}, options: [] },
 } satisfies InstalledGame;
 
-const playerOf = (slot: number, name: string): SessionPlayer =>
+const playerOf = (slot: number, name: string): HostedPlayer =>
   ({ slot, name, game: LTTP, source: { kind: 'yaml', fileName: `${name}.yaml`, yaml: `name: ${name}\ngame: ${LTTP}\n` } });
 
 const sessionOf = (patch: Partial<SessionTemplate> = {}): SessionTemplate => ({

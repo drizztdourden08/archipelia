@@ -4,7 +4,7 @@ import type { TemplateProblem } from '../SessionLobby.type';
 
 const problemSlot = ({ slot, field }: TemplateProblem, players: SessionPlayer[]): number | null => {
   const player = players.find((entry) => entry.slot === slot);
-  return field === 'option' || player?.source.kind === 'preset' ? slot : null;
+  return field === 'option' || player?.source?.kind === 'preset' ? slot : null;
 };
 
 export { problemSlot };

@@ -19,7 +19,7 @@ const enableDirect = async (tour: AppReviewTour) => {
   if (unlisted) tour.click(unlisted);
   await tour.settle();
   const quiet = !directLobby() && named(tour, SELECTOR.button, LOBBY_UI.open, layer(tour)) === null && named(tour, SELECTOR.button, LOBBY_UI.start, layer(tour)) !== null;
-  tour.check('direct-setup-only', quiet && unlisted !== null, 'Allow direct connections and its settings are configuration: nothing opens and the main action stays Start session', 'the switch opened a lobby, or the setup page offers more than Start session');
+  tour.check('direct-setup-only', quiet && unlisted !== null, 'Allow direct connections and its settings are configuration: nothing opens and the setup page offers Save and run', 'the switch opened a lobby, or the setup page does not offer Save and run');
   const local = named(tour, SELECTOR.segment, HOST_UI.local, layer(tour));
   tour.check('direct-keeps-where', local?.getAttribute('aria-checked') === 'true', 'turning on direct connections leaves Where on Local', 'turning on direct connections changed Where');
   await tour.capture('setup-direct');

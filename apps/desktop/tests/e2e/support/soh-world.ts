@@ -1,11 +1,11 @@
 /* @layer tests @kind helper */
 import { installWorld, readCatalog } from '@archipelia/catalog';
-import type { SessionPlayer } from '@archipelia/model';
+import type { HostedPlayer } from '@archipelia/model';
 import type { RigContext } from './multiworld-rig';
 
 const SOH = 'oot_soh';
 
-const sohPlayer = async ({ engineDir, games: files, cache, presets }: RigContext, slot: number, name: string): Promise<SessionPlayer> => {
+const sohPlayer = async ({ engineDir, games: files, cache, presets }: RigContext, slot: number, name: string): Promise<HostedPlayer> => {
   const catalog = await readCatalog({ files: cache, cacheDir: 'catalog' });
   const entry = catalog.entries.find((candidate) => candidate.apworld === SOH);
   const latest = entry?.versions.at(-1);

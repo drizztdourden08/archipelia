@@ -7,6 +7,7 @@ type PlayerActions = {
   duplicate: (slot: number) => void;
   importYaml: (slot: number) => void;
   remove: (slot: number) => void;
+  setDirect: (slot: number, on: boolean) => void;
   rename: (slot: number, name: string) => void;
   setGame: (slot: number, game: string) => void;
   setSource: (slot: number, value: string, game: string) => void;
@@ -19,6 +20,7 @@ type PlayersCardProps = {
   selectedSlot?: number;
   busy: boolean;
   direct: boolean;
+  seats: boolean;
   connected?: ReactNode;
   connectedCount: number;
   actions: PlayerActions;
