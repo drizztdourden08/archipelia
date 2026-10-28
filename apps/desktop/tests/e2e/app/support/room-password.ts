@@ -11,9 +11,8 @@ const roomPasswordOf = (launched: LaunchedApp, name: string): Promise<string> =>
       return Promise.resolve(Reflect.apply(fn, api, args));
     };
     const runs = await call('sessionsList');
-    const found = Array.isArray(runs)
-      ? runs.find((entry: unknown) => field(entry, 'status') === 'hosting' && field(field(entry, 'snapshot'), 'name') === runName)
-      : undefined;
+    const list: unknown[] = Array.isArray(runs) ? runs : [];
+    const found: unknown = list.find((entry) => field(entry, 'status') === 'hosting' && field(field(entry, 'snapshot'), 'name') === runName);
     const id = field(found, 'id');
     if (typeof id !== 'string') throw new Error(`no hosting run named ${runName}`);
     const password = await call('sessionsRoomPassword', id);
