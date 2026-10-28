@@ -3,6 +3,7 @@ import type { RendererBootTask } from '@drizztdourden08/brock-react';
 import engineEventsTask from '../src/boot/engine-events.task';
 import liveEventsTask from '../src/boot/live-events.task';
 import lobbyEventsTask from '../src/boot/lobby-events.task';
+import lobbyLogTask from '../src/boot/lobby-log.task';
 import runsTask from '../src/boot/runs.task';
 import searchActionsTask from '../src/boot/search-actions.task';
 import sessionContextTask from '../src/boot/session-context.task';
@@ -13,6 +14,7 @@ const rendererBootTasks: RendererBootTask[] = [
   { ...engineEventsTask, id: 'engine-events' },
   { ...liveEventsTask, id: 'live-events' },
   { ...lobbyEventsTask, id: 'lobby-events' },
+  { ...lobbyLogTask, id: 'lobby-log' },
   { ...runsTask, id: 'runs' },
   { ...searchActionsTask, id: 'search-actions' },
   { ...sessionContextTask, id: 'session-context' },

@@ -35,6 +35,16 @@ const NEEDS_WSS = 'Use wss:// to reach a computer outside your network, so nothi
 
 const PRIVATE_HOST = /^(10(\.\d{1,3}){3}|192\.168(\.\d{1,3}){2}|172\.(1[6-9]|2\d|3[01])(\.\d{1,3}){2}|169\.254(\.\d{1,3}){2}|[^.]+\.local|f[cd][0-9a-f]{2}:.*|fe80:.*)$/i;
 
+const CONNECTION_TEXT = {
+  local: 'The room runs on this computer. Only this computer can reach it.',
+  lan: 'The room runs on this computer, open to your network.',
+  gg: 'archipelago.gg hosts the room. Its address shows once the room runs.',
+  ssh: 'A machine over SSH hosts the room. Its address shows once the room runs.',
+  archipelia: 'An Archipelia server holds the lobby and runs the room.',
+  roomHere: 'Room on this computer',
+  roomLan: 'Room on your network',
+} as const;
+
 const SCHEME = /^[a-z]+:\/\//i;
 
 const PIN_SEPARATORS = /[\s:]/g;
@@ -47,4 +57,4 @@ const MAX_PORT = 65535;
 
 export {
   AUTHORITY, BRACKETS, LOOPBACK, LOOPBACK_HOST, MAX_PORT, NEEDS_WSS, NOT_A_JOIN_ADDRESS, PLAIN_REMOTE, PRIVATE_HOST, SCHEME, PIN_DIGEST, PIN_PAIR, PIN_SEPARATORS, WRITTEN_PORT,
-  CLOSED_DOOR, CONNECTED_ADMISSIONS, ROOM_PASSWORDS_IN_MEMORY, DEFAULT_SERVER_OPTIONS, INITIAL_NETWORK_MODE, LOBBY_REQUESTS, LOCAL_SERVER, NOT_AN_ADDRESS, SERVER_OPTIONS_FILE };
+  CLOSED_DOOR, CONNECTED_ADMISSIONS, CONNECTION_TEXT, ROOM_PASSWORDS_IN_MEMORY, DEFAULT_SERVER_OPTIONS, INITIAL_NETWORK_MODE, LOBBY_REQUESTS, LOCAL_SERVER, NOT_AN_ADDRESS, SERVER_OPTIONS_FILE };

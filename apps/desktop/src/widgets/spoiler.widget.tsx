@@ -5,7 +5,7 @@ import { useSessionView } from '../hooks/useSessionView';
 
 const meta: WidgetMeta = {
   label: 'Spoiler',
-  order: 6,
+  order: 7,
   icon: 'eye-off',
   popOut: true,
   padding: 'none',
@@ -13,8 +13,8 @@ const meta: WidgetMeta = {
   context: 'session',
   defaultVisibility: 'context-only',
   defaultOpen: false,
-  defaultSide: 'right',
-  defaultDockedSize: 420,
+  defaultSide: 'bottom',
+  defaultDockedSize: 300,
   defaultFloatingSize: { width: 560, height: 360 },
 };
 

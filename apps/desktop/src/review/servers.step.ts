@@ -47,14 +47,24 @@ const showProblems = async (tour: AppReviewTour) => {
   await tour.capture('validation');
 };
 
+const entryPattern = new RegExp(`^${REVIEW_SERVER.label} ${REVIEW_SERVER.host}`);
+
+const listedEntry = async (tour: AppReviewTour) => {
+  const stacked = named(tour, SELECTOR.button, SERVER_UI.back, layer(tour));
+  if (stacked && !named(tour, SELECTOR.button, entryPattern, layer(tour))) tour.click(stacked);
+  return waitNamed(tour, SELECTOR.button, entryPattern, layer(tour));
+};
+
 const saveServer = async (tour: AppReviewTour) => {
   const filled = SERVER_FIELDS.every(([label, value]) => fill(tour, label, value));
   tour.check('server-filled', filled, 'every server field takes its value, the key file in its path input', 'a server field was not found');
   await clickNamed(tour, SELECTOR.button, SERVER_UI.save, layer(tour));
-  const entry = await waitNamed(tour, SELECTOR.button, new RegExp(`^${REVIEW_SERVER.label} ${REVIEW_SERVER.host}`), layer(tour));
-  tour.check('server-saved', entry !== null, `${REVIEW_SERVER.label} is in the list once saved`, 'the saved server is not in the list');
   tour.check('server-save-bar', await saveBarReads(tour, SAVE_STATE.saved), 'the save bar reads Saved', 'the save bar did not read Saved');
   await tour.capture('saved');
+  const entry = await listedEntry(tour);
+  tour.check('server-saved', entry !== null, `${REVIEW_SERVER.label} is in the list once saved`, 'the saved server is not in the list');
+  if (entry && !named(tour, SELECTOR.field, 'Host', layer(tour))) tour.click(entry);
+  await waitNamed(tour, SELECTOR.field, 'Host', layer(tour));
 };
 
 const discardEdit = async (tour: AppReviewTour) => {

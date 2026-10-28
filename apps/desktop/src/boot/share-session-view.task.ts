@@ -7,7 +7,7 @@ export default defineBootTask({
   label: 'Sharing the session with widget windows',
   after: ['settings'],
   run: ({ report }) => {
-    shareWithWidgets(useSessionViewStore, { kind: SESSION_VIEW_SLICE, pick: ({ session, lines, loaded, failed, phase }) => ({ session, lines, loaded, failed, phase }) });
+    shareWithWidgets(useSessionViewStore, { kind: SESSION_VIEW_SLICE, pick: ({ session, lines, loaded, failed, phase, lobby, network }) => ({ session, lines, loaded, failed, phase, lobby, network }) });
     report(1);
   },
 });

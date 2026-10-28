@@ -63,9 +63,11 @@ type LobbyProbe = {
   games?: string[];
 };
 
+type EntryStatus = { tone: 'success' | 'danger' | 'neutral'; text: string };
+
 type HostPlayerSlot = { name: string; game: string; yaml: string; worldVersion: string; origin?: SlotOrigin };
 
 export type {
-  HostPlayerSlot, JoinAddress, LanEntry, LobbyEvent, LobbyProbe, LobbyRequest, LobbyReviewHost, LobbyReviewPlay, LobbyServerOptions, LobbyServerState,
+  EntryStatus, HostPlayerSlot, JoinAddress, LanEntry, LobbyEvent, LobbyProbe, LobbyRequest, LobbyReviewHost, LobbyReviewPlay, LobbyServerOptions, LobbyServerState,
   LobbyServerStatus, LobbyServerTest, LobbyServerView, PendingClose, ServerInfo, ServerPlace, ServerTarget, SessionReach,
 };

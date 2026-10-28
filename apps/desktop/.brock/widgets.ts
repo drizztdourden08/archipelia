@@ -3,6 +3,7 @@ import { lazyComponent, widgetsFromFiles } from '@drizztdourden08/brock-react';
 import { meta as consoleWidgetMeta } from '../src/widgets/console.widget';
 import { meta as hintsWidgetMeta } from '../src/widgets/hints.widget';
 import { meta as logWidgetMeta } from '../src/widgets/log.widget';
+import { meta as networkWidgetMeta } from '../src/widgets/network.widget';
 import { meta as playersWidgetMeta } from '../src/widgets/players.widget';
 import { meta as roomWidgetMeta } from '../src/widgets/room.widget';
 import { meta as spoilerWidgetMeta } from '../src/widgets/spoiler.widget';
@@ -12,6 +13,7 @@ const appWidgets = widgetsFromFiles([
   { id: 'console', component: lazyComponent(() => import('../src/widgets/console.widget')), meta: consoleWidgetMeta },
   { id: 'hints', component: lazyComponent(() => import('../src/widgets/hints.widget')), meta: hintsWidgetMeta },
   { id: 'log', component: lazyComponent(() => import('../src/widgets/log.widget')), meta: logWidgetMeta },
+  { id: 'network', component: lazyComponent(() => import('../src/widgets/network.widget')), meta: networkWidgetMeta },
   { id: 'players', component: lazyComponent(() => import('../src/widgets/players.widget')), meta: playersWidgetMeta },
   { id: 'room', component: lazyComponent(() => import('../src/widgets/room.widget')), meta: roomWidgetMeta },
   { id: 'spoiler', component: lazyComponent(() => import('../src/widgets/spoiler.widget')), meta: spoilerWidgetMeta },

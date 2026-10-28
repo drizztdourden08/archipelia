@@ -8,7 +8,7 @@ import { normalizePin } from '../../src/lobbies/normalize-pin';
 import { parseServerUrl } from '../../src/lobbies/parse-server-url';
 import { serverPlace } from '../../src/lobbies/server-place';
 import { draftProblems } from '../../src/views/ArchipeliaServers/behavior/draft-problems';
-import { entryStatus } from '../../src/views/ArchipeliaServers/behavior/entry-status';
+import { entryStatus } from '../../src/lobbies/entry-status';
 import { lanRows } from '../../src/views/ArchipeliaServers/behavior/lan-rows';
 import { networkRows } from '../../src/views/ArchipeliaServers/behavior/network-rows';
 import { newEntry } from '../../src/views/ArchipeliaServers/behavior/new-entry';

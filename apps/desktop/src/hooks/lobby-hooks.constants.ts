@@ -5,6 +5,8 @@ const STATUS_FAILED = 'Could not read the state of the lobby server.';
 
 const LOBBY_LOAD_FAILED = 'Could not load the lobby of this session.';
 
+const STATUS_POLL_MS = 5000;
+
 const LAN_FAILED = 'Could not look for servers on your network.';
 
 const OTHER_FAILURE = 'Something went wrong. Try again.';
@@ -27,4 +29,4 @@ const OPEN_LAN = {
   cancelLabel: 'Keep it private',
 } as const;
 
-export { LAN_FAILED, LOAD_FAILED, LOBBY_LOAD_FAILED, OPEN_LAN, OTHER_FAILURE, RUN_AGAIN_GONE, SESSION_FAILED, STATUS_FAILED, UNSAVED_SESSION };
+export { LAN_FAILED, LOAD_FAILED, LOBBY_LOAD_FAILED, OPEN_LAN, OTHER_FAILURE, RUN_AGAIN_GONE, SESSION_FAILED, STATUS_FAILED, STATUS_POLL_MS, UNSAVED_SESSION };

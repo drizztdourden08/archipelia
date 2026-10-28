@@ -1,24 +1,25 @@
 /* @layer renderer-app @kind component */
 import type { WidgetMeta } from '@drizztdourden08/brock-react';
-import { NoSession, PlayersWidget } from '../views/SessionDashboard';
+import { LobbyPlayers, NoSession, PlayersWidget } from '../views/SessionDashboard';
 import { useSessionView } from '../hooks/useSessionView';
 
 const meta: WidgetMeta = {
   label: 'Players',
-  order: 1,
+  order: 3,
   icon: 'users',
   popOut: true,
   context: 'session',
   defaultVisibility: 'context-only',
   defaultOpen: true,
-  defaultSide: 'top',
-  defaultDockedSize: 260,
+  defaultSide: 'right',
+  defaultDockedSize: 320,
   defaultFloatingSize: { width: 360, height: 300 },
 };
 
 const Players = () => {
-  const { session, lines } = useSessionView();
-  return session ? <PlayersWidget session={session} lines={lines} /> : <NoSession />;
+  const { session, lines, lobby } = useSessionView();
+  if (session) return <PlayersWidget session={session} lines={lines} />;
+  return lobby ? <LobbyPlayers lobby={lobby} /> : <NoSession />;
 };
 
 export default Players;

@@ -5,8 +5,8 @@ import { EmptyState, Icon, Status } from '@drizztdourden08/tessera/primitives';
 import type { LobbyServerEntry } from '@archipelia/model';
 import { ErrorCallout } from '@archipelia/design';
 import { LOCAL_SERVER } from '../../lobbies/lobbies.constants';
+import { entryStatus } from '../../lobbies/entry-status';
 import { LIST_WIDTH, NO_SERVER, REMOTE_EMPTY } from './ArchipeliaServers.constants';
-import { entryStatus } from './behavior/entry-status';
 import { useArchipeliaServers } from './behavior/useArchipeliaServers';
 import { LanList } from './sub-components/LanList';
 import { LocalServerPanel } from './sub-components/LocalServerPanel';
@@ -57,7 +57,7 @@ const ArchipeliaServers = () => {
   ];
 
   const detail = remote.selected === LOCAL_SERVER
-    ? <LocalServerPanel status={model.status} names={model.names} busy={model.applying} error={model.applyError} onApply={model.apply} onRefresh={() => void model.refresh()} />
+    ? <LocalServerPanel status={model.status} busy={model.applying} error={model.applyError} onApply={model.apply} onRefresh={() => void model.refresh()} />
     : picked && <RemoteServerPanel entry={picked} model={remote} test={remote.tests[picked.id]} />;
 
   return (
@@ -65,6 +65,7 @@ const ArchipeliaServers = () => {
       listContainers={containers}
       detail={detail}
       emptyDetail={<>{remote.error && <ErrorCallout message={remote.error} />}<EmptyState message={NO_SERVER} /></>}
+      onBack={() => remote.select('')}
       listLabel="Archipelia servers"
       detailLabel="server"
       listShowTitle={false}

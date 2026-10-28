@@ -11,12 +11,10 @@ type LanMatch = 'same' | 'different' | 'unknown';
 
 type LanRow = { id: string; name: string; address: string; ap: string; open: boolean; self: boolean; match: LanMatch };
 
-type EntryStatus = { tone: 'success' | 'danger' | 'neutral'; text: string };
-
-type LocalPanelProps = { status: LobbyServerStatus | null; names: Record<string, string>; busy: boolean; error: string | null; onApply: (patch: Partial<LobbyServerStatus['options']>) => void; onRefresh: () => void };
+type LocalPanelProps = { status: LobbyServerStatus | null; busy: boolean; error: string | null; onApply: (patch: Partial<LobbyServerStatus['options']>) => void; onRefresh: () => void };
 
 type RemotePanelProps = { entry: LobbyServerEntry; model: ReturnType<typeof useRemoteServers>; test: LobbyServerTest | undefined };
 
 type LanListProps = { servers: LanEntry[]; ap: string | undefined };
 
-export type { DraftProblem, EntryStatus, LanListProps, LanMatch, LanRow, LocalPanelProps, RemotePanelProps, ServerDraft };
+export type { DraftProblem, LanListProps, LanMatch, LanRow, LocalPanelProps, RemotePanelProps, ServerDraft };

@@ -3,15 +3,22 @@ import type { AppReviewTour } from '@drizztdourden08/brock-react';
 import { LOBBY_UI } from './review.constants';
 import { SELECTOR } from './review-dom.constants';
 import { clickNamed } from './click-named';
+import { nameOf } from './name-of';
 import { stripHas } from './strip-has';
+import { tabStrip } from './tab-strip';
 import { tabBody } from './tab-body';
 import { waitNamed } from './wait-named';
 import { waitText } from './wait-text';
+
+const showsTab = (tour: AppReviewTour, title: string) => tour.waitFor(() => (
+  tour.findAll(SELECTOR.tab, tabStrip(tour)).some((tab) => tab.getAttribute('aria-selected') === 'true' && nameOf(tab).includes(title)) ? true : null
+));
 
 const openSavedLobby = async (tour: AppReviewTour, title: string, capture?: string) => {
   const layer = () => tour.find(SELECTOR.layer);
   await clickNamed(tour, SELECTOR.button, new RegExp(`^${title}\\b`), layer() ?? undefined);
   await clickNamed(tour, SELECTOR.button, LOBBY_UI.run, layer() ?? undefined);
+  await showsTab(tour, title);
   const opened = await waitText(tour, /Players · 2/i, () => tabBody(tour) ?? null, 15000);
   tour.check('lobby-opens', opened, 'Run on a saved session opens its tab with the two players saved with it', 'Run did not open a tab with the saved players');
   const labelled = await stripHas(tour, title, 'Lobby');

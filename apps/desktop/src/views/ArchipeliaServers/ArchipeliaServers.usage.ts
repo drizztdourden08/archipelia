@@ -2,7 +2,7 @@
 import type { ComponentUsage } from '@drizztdourden08/tessera';
 
 const usage = {
-  job: "The Archipelia servers tab of the Servers page: this computer's lobby server with its network mode and reach, the remote servers you manage, and the servers found on your network.",
+  job: "The Archipelia servers tab of the Servers page: this computer's lobby server with its network mode and a one-line status that opens the Network widget, the remote servers you manage, and the servers found on your network.",
   useWhen: [
     'The Archipelia servers tab of the Servers page in the Hosting group.',
   ],
@@ -12,7 +12,8 @@ const usage = {
   ],
   rules: [
     'Show This computer first, then the saved remote servers, then the servers found on the network, in the list pane.',
-    'Change the network mode or the public address check at once; the server restarts its listener and the facts below follow.',
+    'Change the network mode or the public address check at once; the server restarts its listener and the one-line status follows.',
+    'Keep the reach facts, the room addresses and Stop in the Network widget; the page shows one line with the lobby address and the mode, and a button that opens the widget.',
     'Show the explanation of a shared connection as a warning when the server reports one; Archipelia has no relay.',
     'Say that the lobby is LAN-only until the server has TLS.',
     'Keep the admin token of a remote server in the vault; the saved entry holds only a reference.',

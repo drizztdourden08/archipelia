@@ -17,7 +17,7 @@ import { withRemote } from '../../src/views/SessionBuilder/behavior/with-remote'
 import { yourNetwork } from '../../src/views/SessionLobby/behavior/your-network';
 import { networkFacts } from '../../src/views/SessionLobby/behavior/network-facts';
 import { privateFacts } from '../../src/views/SessionLobby/behavior/private-facts';
-import { roomFacts } from '../../src/views/SessionLobby/behavior/room-facts';
+import { roomFacts } from '../../src/lobbies/room-facts';
 import { hostSlotOf } from '../../electron/sessions/host-slot-of';
 import { DEFAULT_SETTINGS } from '../../src/settings.constants';
 
