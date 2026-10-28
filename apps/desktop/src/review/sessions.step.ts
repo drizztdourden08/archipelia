@@ -2,7 +2,7 @@
 import { defineReviewStep, nav } from '@drizztdourden08/brock-react';
 import type { AppReviewTour } from '@drizztdourden08/brock-react';
 import { ROUTE } from '../hooks/app-navigation.constants';
-import { REVIEW_SESSION, GUARD_DIALOG, LOBBY_UI } from './review.constants';
+import { REVIEW_SESSION, GUARD_DIALOG } from './review.constants';
 import { SELECTOR } from './review-dom.constants';
 import { checkEditorLayout } from './check-editor-layout';
 import { clickNamed } from './click-named';
@@ -14,11 +14,11 @@ import { waitText } from './wait-text';
 const layer = (tour: AppReviewTour) => tour.find(SELECTOR.layer);
 
 const checkDetail = async (tour: AppReviewTour) => {
-  const picked = await clickNamed(tour, SELECTOR.button, new RegExp(`^${REVIEW_SESSION}\b`), layer(tour) ?? undefined);
+  const picked = await clickNamed(tour, SELECTOR.button, new RegExp(`^${REVIEW_SESSION}\\b`), layer(tour) ?? undefined);
   const shown = picked && await waitText(tour, /History of this session \(\d+ runs?\)/, () => layer(tour));
   tour.check('sessions-detail', shown, 'picking a session shows its setup with a link to its history', 'picking a session did not show its setup');
-  const run = named(tour, SELECTOR.button, LOBBY_UI.run, layer(tour) ?? undefined);
-  tour.check('sessions-run', run !== null, 'the picked session offers Run', 'the picked session has no Run button');
+  const run = named(tour, SELECTOR.button, /^(Run|Go to its tab)$/, layer(tour) ?? undefined);
+  tour.check('sessions-run', run !== null, 'the picked session offers Run, or Go to its tab when it is open', 'the picked session has no Run or Go to its tab button');
   const seat = named(tour, SELECTOR.toggle, /connect directly$/, layer(tour) ?? undefined);
   tour.check('sessions-direct-switch', seat !== null, 'each saved player has a switch for direct connections', 'the saved players have no direct switch');
   await tour.capture('detail');
