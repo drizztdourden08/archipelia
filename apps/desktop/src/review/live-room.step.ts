@@ -1,14 +1,12 @@
 /* @layer renderer-app @kind logic */
 import { defineReviewStep, widgets } from '@drizztdourden08/brock-react';
 import type { AppReviewTour } from '@drizztdourden08/brock-react';
-import type { Client } from 'archipelago.js';
-import { appApi } from '../ipc/app-api';
-import { useRunsStore } from '../stores/useRunsStore';
-import { REVIEW_PORT, REVIEW_SECOND, REVIEW_SESSION, RUN_TIMEOUT_MS, TAB_UI } from './review.constants';
+import { REVIEW_SECOND, REVIEW_SESSION, RUN_TIMEOUT_MS, TAB_UI } from './review.constants';
 import { SELECTOR } from './review-dom.constants';
 import { checkWidgets } from './check-widgets';
 import { clickNamed } from './click-named';
-import { joinRoom } from './join-room';
+import { joinAsAna } from './join-as-ana';
+import type { Joined } from './join-as-ana.type';
 import { checkLiveStatus } from './check-live-status';
 import { sendFromConsole } from './send-from-console';
 import { closeSessionTab } from './close-session-tab';
@@ -58,16 +56,11 @@ const closeTabs = async (tour: AppReviewTour) => {
   tour.check('idle-base', empty, 'with no tab open the base shows the idle state', 'the idle state did not come back after the last tab closed');
 };
 
-const checkLive = async (tour: AppReviewTour, client: Client | null) => {
-  tour.check('player-joins', client !== null, 'a player joins the room and checks locations', 'the review player could not join');
+const checkLive = async (tour: AppReviewTour, { client, failure }: Joined) => {
+  tour.check('player-joins', client !== null, 'a player joins the room and checks locations', `the review player could not join: ${failure}`);
   widgets.reset();
   await checkWidgets(tour, LIVE_WIDGETS, 'live');
   await checkLiveStatus(tour);
-};
-
-const roomPassword = async (): Promise<string | undefined> => {
-  const run = useRunsStore.getState().runs.find((entry) => entry.snapshot.name === REVIEW_SESSION && entry.status === 'hosting');
-  return run ? (await appApi().sessionsRoomPassword(run.id)) ?? undefined : undefined;
 };
 
 export default defineReviewStep({
@@ -79,11 +72,11 @@ export default defineReviewStep({
     const hosted = await hosting(tour);
     tour.check('run-hosts', hosted, 'the run hosts and its tab shows the room', `${REVIEW_SESSION} did not host`);
     if (!hosted) return;
-    const client: Client | null = await joinRoom(tour, REVIEW_PORT, await roomPassword()).catch(() => null);
-    await checkLive(tour, client);
+    const joined = await joinAsAna(tour);
+    await checkLive(tour, joined);
     await sendFromConsole(tour);
     await tour.capture('hosting');
-    client?.socket.disconnect();
+    joined.client?.socket.disconnect();
     await stopFromDashboard(tour);
     await checkStoppedWidgets(tour);
     await closeTabs(tour);

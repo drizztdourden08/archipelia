@@ -13,11 +13,9 @@ const statusOf = (templateId: string, startedAt: number) => {
   return run ? `the run is ${run.status}` : 'the run is starting';
 };
 
-const timeout = (ms: number) => new Promise<never>((_resolve, reject) => { setTimeout(() => reject(new Error(`no hosting room after ${ms / 1000} s`)), ms); });
-
 const hostReviewRun = async (tour: AppReviewTour, template: SessionTemplate): Promise<Session> => {
   const startedAt = Date.now() - 1000;
-  const run = await withHeartbeat(tour, Promise.race([appApi().sessionsRun(template), timeout(RUN_TIMEOUT_MS)]), () => statusOf(template.id, startedAt));
+  const run = await withHeartbeat(tour, appApi().sessionsRun(template), () => statusOf(template.id, startedAt), RUN_TIMEOUT_MS);
   tour.check('run-hosts', run.status === 'hosting', runSummary(run), runSummary(run));
   if (run.status !== 'hosting' || template.host.kind !== 'local') return run;
   const checked = await joinRoom(tour, template.host.port).then((client) => {

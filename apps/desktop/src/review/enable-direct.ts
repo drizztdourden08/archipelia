@@ -4,13 +4,14 @@ import { DIRECT_UI, HOST_UI, LOBBY_UI } from './review.constants';
 import { SELECTOR } from './review-dom.constants';
 import { clickNamed } from './click-named';
 import { directLobby } from './direct-lobby';
+import { isFree } from './is-free';
 import { named } from './named';
 
 const layer = (tour: AppReviewTour) => tour.find(SELECTOR.layer) ?? undefined;
 
 const readyToggle = (tour: AppReviewTour, name: RegExp) => {
   const found = named(tour, SELECTOR.toggle, name, layer(tour));
-  return found && !found.hasAttribute('disabled') && found.getAttribute('aria-disabled') !== 'true' ? found : null;
+  return isFree(found) ? found : null;
 };
 
 const enableDirect = async (tour: AppReviewTour) => {
