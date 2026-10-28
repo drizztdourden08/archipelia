@@ -2,15 +2,17 @@
 import type { CatalogEntry } from '@archipelia/model';
 import type { ReleaseState } from '../first-party/first-party.type';
 import { listedEntry } from '../first-party/listed-entry';
+import { cleanName } from './clean-name';
 import type { ReadyRepo } from './ready.type';
 
-const readyEntry = (repo: ReadyRepo, state: ReleaseState): CatalogEntry | undefined => {
+const readyEntry = (repo: ReadyRepo, state: ReleaseState, tag?: string): CatalogEntry | undefined => {
   if (state.kind !== 'found' && state.kind !== 'builds') return undefined;
-  const { game, module } = state.manifest;
-  if (!module) return undefined;
+  const { module } = state.manifest;
+  const game = cleanName(state.manifest.game);
+  if (!module || game === '') return undefined;
   const entry = listedEntry({
     module, game, displayName: game, home: `https://github.com/${repo.fullName}`, tags: [], repo: repo.fullName, world: '', bundle: '',
-  }, state);
+  }, state, tag);
   return {
     ...entry,
     discovered: {

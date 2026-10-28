@@ -13,7 +13,7 @@ import { hashFile } from './hash-file';
 import { readApworld } from './read-apworld';
 import { commitInstall } from './commit-install';
 
-const installWorld = async ({ engineDir, files, entry, version, fetch: request = fetch, trust, packages, wheels }: InstallWorldParams): Promise<InstalledGame> => {
+const installWorld = async ({ engineDir, files, entry, version, fetch: request = fetch, trust, packages, wheels, release }: InstallWorldParams): Promise<InstalledGame> => {
   if (entry.unavailable) throw new Error(`${entry.displayName}: ${entry.unavailable}`);
   const runtime = await readRuntime(engineDir);
   const { target, bundleUrl } = chooseRelease(entry, version, runtime.apVersion);
@@ -32,6 +32,7 @@ const installWorld = async ({ engineDir, files, entry, version, fetch: request =
       ...originOf(entry),
       ...(packages ? { packages } : {}),
       ...(wheels ? { wheels } : {}),
+      ...(release ? { release } : {}),
     });
   } finally {
     await download.dispose();

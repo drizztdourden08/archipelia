@@ -105,6 +105,27 @@ describe('Archipelia ready worlds and the registry', () => {
 
 });
 
+describe('names read from a topic repository', () => {
+  test('a repository whose game name only looks like a listed game is hidden and reported', async () => {
+    const view = await serviceWith({
+      [SEARCH_URL]: searchOf([{ id: 8, repo: 'thief/renamed', stars: 900 }]),
+      ...manifestRoute('thief/renamed', readyManifest('R\u0435lic of the Past', 'other_module')),
+    }).read(false);
+    expect(find(view.entries, 'other_module')).toEqual([]);
+    expect(view.problems).toBe(1);
+  });
+
+  test('the name shown is clean, and a name with nothing readable is not shown', async () => {
+    const view = await serviceWith({
+      [SEARCH_URL]: searchOf([{ id: 9, repo: 'maker/star-quest' }, { id: 10, repo: 'maker/blank' }]),
+      ...manifestRoute('maker/star-quest', readyManifest('Star\u202E Quest\u200B', 'star_quest')),
+      ...manifestRoute('maker/blank', readyManifest('\u200B\u202E', 'blank')),
+    }).read(false);
+    expect(find(view.entries, 'star_quest')[0]).toMatchObject({ game: 'Star Quest', displayName: 'Star Quest' });
+    expect(find(view.entries, 'blank')).toEqual([]);
+  });
+});
+
 describe('Archipelia ready worlds and the Archipelago index', () => {
   test('a repo that is the home of the index entry becomes one card that keeps the index guide', async () => {
     const view = await serviceWith({

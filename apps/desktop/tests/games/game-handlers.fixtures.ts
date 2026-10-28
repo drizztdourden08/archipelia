@@ -1,5 +1,6 @@
 /* @layer tests @kind fixture */
 import type { CatalogEntry, InstalledGame, InstallFailure } from '@archipelia/model';
+import { buildRows } from '../../src/views/GameStore/behavior/build-rows';
 import type { GameRow } from '../../src/views/GameStore/GameStore.type';
 
 const noop = () => {};
@@ -22,4 +23,10 @@ const worldEntry = (apworld: string, source: CatalogEntry['source'], versions: s
 const worldInstalled = (apworld: string, version: string): InstalledGame =>
   ({ apworld, game: apworld.toUpperCase(), version, source: 'index', installedAt: 0 } as InstalledGame);
 
-export { entry, handlers, installedGame, row, worldEntry, worldInstalled };
+const rowFor = (world: CatalogEntry, installed: InstalledGame[] = []): GameRow => {
+  const [built] = buildRows([world], installed);
+  if (!built) throw new Error('no row');
+  return built;
+};
+
+export { entry, handlers, installedGame, row, rowFor, worldEntry, worldInstalled };

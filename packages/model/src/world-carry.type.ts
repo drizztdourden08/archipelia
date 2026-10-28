@@ -3,7 +3,7 @@ import type { InstalledGame } from './game.type';
 
 type CarryProblem = { apworld: string; game: string; reason: string };
 
-type CarryResult = { copied: string[]; reinstalled: string[]; problems: CarryProblem[]; at: number };
+type CarryResult = { copied: string[]; reinstalled: string[]; problems: CarryProblem[]; at: number; notes?: string[] };
 
 type RecordGuard = {
   records: InstalledGame[];

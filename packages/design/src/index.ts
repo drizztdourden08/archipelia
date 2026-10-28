@@ -6,7 +6,7 @@ export { ErrorCallout } from './compounds/ErrorCallout';
 export { GameCard, VERIFIED_LABEL } from './compounds/GameCard';
 export type { GameCardAction, GameCardKind, GameCardNote, GameCardProps, GameCardStatus } from './compounds/GameCard';
 export { GameDetails } from './compounds/GameDetails';
-export type { GameDetailsProps } from './compounds/GameDetails';
+export type { GameDetailsPicker, GameDetailsProps, GameDetailsVersion } from './compounds/GameDetails';
 export { HintRow } from './compounds/HintRow';
 export { PackageConsentDialog } from './compounds/PackageConsentDialog';
 export type { ConsentPackage, ConsentWheel, PackageConsentDialogProps } from './compounds/PackageConsentDialog';

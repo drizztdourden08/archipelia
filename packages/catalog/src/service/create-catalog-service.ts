@@ -28,6 +28,7 @@ import { withListedGuides } from '../official/with-listed-guides';
 import type { CatalogServiceDeps, CatalogView, InstallRequest, Latest } from './catalog-service.type';
 import { CACHE_DIR } from './catalog-service.constants';
 import { viewOf } from './view-of';
+import { createReleasePort } from './create-release-port';
 
 const createCatalogService = ({ games: files, cache, engineDir, fetch: fetchFn, trustRoot, build, buildSandbox, tools, log }: CatalogServiceDeps) => {
   let latest: Latest | undefined;
@@ -64,6 +65,8 @@ const createCatalogService = ({ games: files, cache, engineDir, fetch: fetchFn, 
     return { entry, latest };
   };
 
+  const { chosen, versions } = createReleasePort({ cache, activeAp, indexEntry, ...(fetchFn ? { fetch: fetchFn } : {}) });
+
   const install = async (request: InstallRequest): Promise<InstalledGame> => {
     const base = { engineDir: await engineDir(), files };
     if (request.kind === 'official') return installOfficial({ ...base, apworld: request.apworld });
@@ -74,7 +77,7 @@ const createCatalogService = ({ games: files, cache, engineDir, fetch: fetchFn, 
     const { entry, latest: current } = await indexEntry(request.apworld);
     assertRepoAccepted(entry, request.acceptRepoId, entry.discovered ? await readInstalled(files, entry.apworld) : null);
     return installWorld({
-      ...base, entry, version: request.version, trust: { clients: current.firstParty.clients, root },
+      ...base, ...(await chosen(request, entry, current)), trust: { clients: current.firstParty.clients, root },
       ...consent, ...(fetchFn ? { fetch: fetchFn } : {}),
     });
   };
@@ -82,9 +85,10 @@ const createCatalogService = ({ games: files, cache, engineDir, fetch: fetchFn, 
   const packages = async (request: InstallRequest): Promise<PackagePreview> => {
     if (request.kind === 'official') return { sha256: '', packages: [] };
     if (request.kind === 'file') return withTempFile(request.fileName, request.bytes, async (path) => previewFilePackages(await engineDir(), path, wheelIdsOf(request.wheels)));
-    const { entry } = await indexEntry(request.apworld);
+    const { entry: listed, latest: current } = await indexEntry(request.apworld);
+    const { entry, version } = await chosen(request, listed, current);
     return previewWorldPackages({
-      engineDir: await engineDir(), entry, version: request.version, wheels: wheelIdsOf(request.wheels), ...(fetchFn ? { fetch: fetchFn } : {}),
+      engineDir: await engineDir(), entry, version, wheels: wheelIdsOf(request.wheels), ...(fetchFn ? { fetch: fetchFn } : {}),
     });
   };
 
@@ -96,7 +100,7 @@ const createCatalogService = ({ games: files, cache, engineDir, fetch: fetchFn, 
 
   const sources = createSourceService({ engineDir, worldOf: createWorldInfo(indexEntry, enrich), run: build, sandbox: buildSandbox, tools, log, ...(fetchFn ? { fetch: fetchFn } : {}) });
 
-  return { enrich, install, official, packages, read, remove, sources };
+  return { enrich, install, official, packages, read, remove, sources, versions };
 };
 
 export { createCatalogService };

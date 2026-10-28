@@ -70,6 +70,14 @@ describe('installing a first-party release', () => {
     expect(committed().trust?.detail).toContain('Not verified yet');
   });
 
+  test('records the release a chosen version came from', async () => {
+    await installWorld({
+      engineDir: '', files, entry: entryOf(), version: '0.1.0', fetch: createWorldFetch(bytes, { [BUNDLE_URL]: missing }), trust: trustWith(),
+      release: { tag: 'v0.1.0-rc1', prerelease: true },
+    });
+    expect((commit.mock.calls[0]?.[0] as { release?: unknown }).release).toEqual({ tag: 'v0.1.0-rc1', prerelease: true });
+  });
+
   test('a tampered asset is refused with the reason and nothing is installed', async () => {
     verify.mockReturnValue({ ok: false, code: 'trust-failed', reason: 'digest-mismatch', detail: 'the bundle attests a different file' });
     await expect(install({}, { [BUNDLE_URL]: () => json({ mediaType: 'bundle' }) })).rejects.toThrow(/Relic of the Past is refused: the bundle attests a different file/);

@@ -17,6 +17,7 @@ const gamesHandlers: HandlerGroup = {
     ctx.handle(APP_CHANNELS.catalogRead, (_event, refresh) => catalog.read(refresh));
     ctx.handle(APP_CHANNELS.catalogOfficial, () => catalog.official());
     ctx.handle(APP_CHANNELS.catalogEnrich, (_event, request) => catalog.enrich(request));
+    ctx.handle(APP_CHANNELS.catalogVersions, (_event, request) => catalog.versions(request));
     ctx.handle(APP_CHANNELS.gamesList, () => installed());
     ctx.handle(APP_CHANNELS.gamesInstall, (_event, request) => wired(catalog.install(request)));
     ctx.handle(APP_CHANNELS.gamesPackages, (_event, request) => wired(catalog.packages(request)));

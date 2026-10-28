@@ -13,9 +13,9 @@ const unavailableOf = (state: ReleaseState) => {
 const namesOf = (listing: Listing, state: ReleaseState) =>
   (state.kind === 'found' ? state.names : undefined) ?? { world: listing.world, bundle: listing.bundle };
 
-const releaseOf = (listing: Listing, state: ReleaseState): FirstPartyRelease => {
+const releaseOf = (listing: Listing, state: ReleaseState, tag?: string): FirstPartyRelease => {
   const { repo, client } = listing;
-  const base = { ...(client ? { client } : {}), repo, bundleUrl: releaseUrl(repo, namesOf(listing, state).bundle) };
+  const base = { ...(client ? { client } : {}), repo, bundleUrl: releaseUrl(repo, namesOf(listing, state).bundle, tag) };
   if (state.kind === 'found') {
     const { minimumAp, maximumAp } = state.manifest;
     return { ...base, minimumAp, ...(maximumAp ? { maximumAp } : {}) };
@@ -29,15 +29,15 @@ const releaseOf = (listing: Listing, state: ReleaseState): FirstPartyRelease => 
     ...(maximumAp ? { maximumAp } : {}),
     builds: builds.map((build) => ({
       archipelagoVersion: build.archipelagoVersion,
-      url: releaseUrl(repo, build.file),
-      bundleUrl: releaseUrl(repo, build.bundle),
+      url: releaseUrl(repo, build.file, tag),
+      bundleUrl: releaseUrl(repo, build.bundle, tag),
       sha256: build.sha256,
       size: build.size,
     })),
   };
 };
 
-const listedEntry = (listing: Listing, state: ReleaseState): CatalogEntry => {
+const listedEntry = (listing: Listing, state: ReleaseState, tag?: string): CatalogEntry => {
   const unavailable = unavailableOf(state);
   return {
     apworld: listing.module,
@@ -50,12 +50,12 @@ const listedEntry = (listing: Listing, state: ReleaseState): CatalogEntry => {
     versions: state.kind === 'found'
       ? [{
         version: state.manifest.worldVersion,
-        url: releaseUrl(listing.repo, namesOf(listing, state).world),
+        url: releaseUrl(listing.repo, namesOf(listing, state).world, tag),
         sha256: state.manifest.sha256,
         ...(state.manifest.size === undefined ? {} : { size: state.manifest.size }),
       }]
       : [],
-    firstParty: releaseOf(listing, state),
+    firstParty: releaseOf(listing, state, tag),
     ...(unavailable ? { unavailable } : {}),
   };
 };

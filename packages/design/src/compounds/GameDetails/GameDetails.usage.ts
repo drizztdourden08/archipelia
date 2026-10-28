@@ -19,6 +19,7 @@ const usage = {
     'Pass verified for a world listed and checked by Archipelia, so the kind line shows the Verified tag with its hint, as the card does.',
     'Pass error with the reason the last action failed, in the words the main process gave; it shows in the dialog next to the world.',
     'Pass need when the world needs a Python package that Archipelia cannot install: the message says which, and href is the page of the package when it is known. The status of the card then reads Needs a package Archipelia cannot install, and the dialog shows the message as a warning, not as an error.',
+    'Pass versions when the world has more than one version to choose from: options in the order to show, value for the one picked and onChange to pick another. An option with a reason stays in the list but cannot be picked, and the reason shows beside it; prerelease adds the Pre-release tag. Pass loading while the options are read.',
     'Pass onLink so a link of the README and the package page open in the browser of the user.',
   ],
   a11y: [
@@ -47,7 +48,7 @@ const GameDetailsSample = ({ onClose, onInstall }: { onClose: () => void; onInst
   />
 );
 `,
-  propsHash: '643e22ac49df1120',
+  propsHash: '775c34b0bcebd3cb',
 } satisfies ComponentUsage;
 
 export { usage };

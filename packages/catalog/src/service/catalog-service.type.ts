@@ -20,7 +20,7 @@ type CatalogView = {
 };
 
 type InstallRequest =
-  | { kind: 'index'; apworld: string; version: string; acceptPackages?: PackageConsent; acceptRepoId?: number; wheels?: string[] }
+  | { kind: 'index'; apworld: string; version: string; tag?: string; acceptPackages?: PackageConsent; acceptRepoId?: number; wheels?: string[] }
   | { kind: 'official'; apworld: string }
   | { kind: 'file'; fileName: string; bytes: Uint8Array; acceptPackages?: PackageConsent; wheels?: string[] };
 

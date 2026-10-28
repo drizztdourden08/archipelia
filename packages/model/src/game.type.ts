@@ -28,6 +28,8 @@ type WorldTrust = { state: 'verified' | 'unverified'; detail: string };
 
 type WorldOrigin = { repoId: number; repo: string };
 
+type InstalledRelease = { tag: string; prerelease: boolean };
+
 type DiscoveredWorld = WorldOrigin & { owner: string; stars: number; pushedAt: string; createdAt: string; direct: boolean; alsoInIndex?: boolean };
 
 type CatalogEntry = {
@@ -63,6 +65,7 @@ type InstalledGame = {
   sources?: PackageSource[];
   trust?: WorldTrust;
   origin?: WorldOrigin;
+  release?: InstalledRelease;
 };
 
-export type { CatalogEntry, CatalogVersion, DiscoveredWorld, FirstPartyBuild, FirstPartyRelease, FuzzVerdict, GameSource, InstalledGame, Stability, WorldLayout, WorldOrigin, WorldTrust };
+export type { CatalogEntry, CatalogVersion, DiscoveredWorld, FirstPartyBuild, FirstPartyRelease, FuzzVerdict, GameSource, InstalledGame, InstalledRelease, Stability, WorldLayout, WorldOrigin, WorldTrust };

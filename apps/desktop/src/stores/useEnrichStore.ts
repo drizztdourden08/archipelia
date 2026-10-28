@@ -1,21 +1,8 @@
 /* @layer renderer-app @kind hook */
-import { createSessionStore } from '@drizztdourden08/brock-react';
+import type { GameEnrichment } from '@archipelia/catalog';
 import { appApi } from '../ipc/app-api';
-import { enrichKey } from './enrich-key';
-import type { EnrichState } from './enrich-store.type';
+import { createAskStore } from './create-ask-store';
 
-const useEnrichStore = createSessionStore<EnrichState>((set, get) => ({
-  asked: {},
-  found: {},
-  ask: (request) => {
-    const key = enrichKey(request);
-    if (get().asked[key]) return;
-    set((state) => ({ asked: { ...state.asked, [key]: true } }));
-    void appApi().catalogEnrich(request).then(
-      (found) => { if (found) set((state) => ({ found: { ...state.found, [key]: found } })); },
-      () => undefined,
-    );
-  },
-}));
+const useEnrichStore = createAskStore<GameEnrichment>({ load: (request) => appApi().catalogEnrich(request) });
 
 export { useEnrichStore };

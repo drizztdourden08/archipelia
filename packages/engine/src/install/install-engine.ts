@@ -46,6 +46,7 @@ const carryFirst = async ({ deps, job, progress }: InstallRun, { from, target }:
   progress.guard = await deps.guardRecords();
   const pass = await deps.carry({ from, to: target, since: 0 });
   await progress.guard.note(pass);
+  pass.notes?.forEach((line) => job.log(line));
   pass.problems.forEach((problem) => job.log(`${problem.game} did not carry over: ${problem.reason}`, 'warn'));
   return pass;
 };

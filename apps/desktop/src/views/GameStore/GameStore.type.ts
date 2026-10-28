@@ -13,6 +13,8 @@ type CardHandlers = {
   getPackage: (row: GameRow) => void;
 };
 
+type VersionPick = { request: InstallRequest; same: boolean; update: boolean };
+
 type GameRowState = 'installed' | 'update' | 'available';
 
 type GameTab = 'all' | 'installed' | 'built-in' | 'archipelia-ready' | 'archipelago-index' | 'updates';
@@ -31,4 +33,4 @@ type GameRecord = { name: string; source: string; state: string; fit: string; ve
 
 type GameSummary = { worlds: number; installed: number; updates: number; noRelease: number; shown: number; apVersion?: string };
 
-export type { CardHandlers, EmptyKind, GameRecord, GameRow, GameRowState, GameSectionId, GameSectionRows, GameStoreProps, GameSummary, GameTab };
+export type { CardHandlers, EmptyKind, GameRecord, GameRow, GameRowState, GameSectionId, GameSectionRows, GameStoreProps, GameSummary, GameTab, VersionPick };

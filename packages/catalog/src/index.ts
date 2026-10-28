@@ -14,7 +14,7 @@ export { installOfficial } from './install/install-official';
 export type { InstallOfficialParams } from './install/install-official.type';
 export { installWorld } from './install/install-world';
 export { reinstallFirstParty } from './install/reinstall-first-party';
-export type { ReinstallFirstPartyParams } from './install/reinstall-first-party.type';
+export type { Reinstalled, ReinstallFirstPartyParams } from './install/reinstall-first-party.type';
 export type { InstallWorldParams } from './install/install-world.type';
 export { removeWorld } from './install/remove-world';
 export type { RemoveWorldParams } from './install/remove-world.type';
@@ -31,3 +31,4 @@ export type { CatalogServiceDeps, CatalogView, InstallRequest } from './service/
 export type { PackageConsent } from './install/package-consent.type';
 export type { PackagePreview } from './install/package-preview.type';
 export type { EnrichRequest, GameEnrichment } from './enrich/enrich.type';
+export type { VersionChoice, VersionList, VersionsRequest } from './versions/versions.type';
