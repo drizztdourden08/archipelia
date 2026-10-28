@@ -67,6 +67,10 @@ const VERSION_NOTE = { latest: 'Latest stable', installed: 'Installed' } as cons
 
 const VERIFIED_CHOICE = { yes: 'Verified', no: 'Not verified' } as const;
 
+const DIRECT_CHOICE = { yes: 'Joins directly', no: 'Does not join directly' } as const;
+
+const UNLISTED_DIRECT = 'Joins as an unlisted client: the host must allow unlisted clients';
+
 const NONE_INSTALLED = 'No game installed yet. Add one from the lists below.';
 
 const APWORLD = ['apworld'];
@@ -78,4 +82,4 @@ const FAILURE = {
   file: 'Could not add the game from that file.',
 } as const;
 
-export { ALSO_IN_INDEX, APWORLD, DISCOVERED_LABEL, EMPTY_TEXT, FAILURE, FIT_LABEL, KIND_LABEL, KIND_OF, MIXED_SECTIONS, NONE_INSTALLED, NOT_REVIEWED, NO_RELEASE, SECTIONS, SECTION_OF_SOURCE, SEEN_DWELL_MS, SOURCE_LABEL, STATE_LABEL, TILE, TRUST_ASK, VERIFIED_CHOICE, VERSION_NOTE };
+export { ALSO_IN_INDEX, APWORLD, DIRECT_CHOICE, DISCOVERED_LABEL, EMPTY_TEXT, FAILURE, FIT_LABEL, KIND_LABEL, KIND_OF, MIXED_SECTIONS, NONE_INSTALLED, NOT_REVIEWED, NO_RELEASE, SECTIONS, SECTION_OF_SOURCE, SEEN_DWELL_MS, SOURCE_LABEL, STATE_LABEL, TILE, TRUST_ASK, UNLISTED_DIRECT, VERIFIED_CHOICE, VERSION_NOTE };

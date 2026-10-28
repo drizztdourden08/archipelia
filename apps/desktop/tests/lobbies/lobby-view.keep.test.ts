@@ -26,7 +26,7 @@ describe('what the session lets the host do with a connected player', () => {
 describe('the How players join section of the setup page', () => {
   const noop = () => undefined;
   const rowsOf = (draft: SessionTemplate, place: SessionPlace = 'local', live = false) => joinRows({
-    draft, live, place, placeOptions: [], remoteOptions: [], remoteValue: 'gg', busy: false, password: null,
+    draft, directWorlds: [], worlds: null, live, place, placeOptions: [], remoteOptions: [], remoteValue: 'gg', busy: false, password: null,
     onPlace: noop, onRemote: noop, onPort: noop, onAllow: noop, onOptions: noop,
   });
   const local = newTemplate('t1');

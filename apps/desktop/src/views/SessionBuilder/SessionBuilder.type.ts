@@ -20,8 +20,12 @@ type PlaceContext = { lobbyServers: readonly LobbyServerEntry[]; servers: readon
 
 type PlaceDeps = { draft: SessionTemplate; servers: readonly ServerEntry[]; hosting: HostingDefaults; live: boolean; setDraft: Dispatch<SetStateAction<SessionTemplate>> };
 
+type DirectWorld = { game: string; listed: boolean };
+
 type JoinRowsInput = {
   draft: SessionTemplate;
+  directWorlds: readonly DirectWorld[];
+  worlds: ReactNode;
   live: boolean;
   place: SessionPlace;
   placeOptions: readonly SettingsOption[];
@@ -70,6 +74,6 @@ type BuilderActionsInput = {
 };
 
 export type {
-  BuilderActionsInput, BuilderButton, ButtonReasons, ButtonsInput, HostingDefaults, JoinRowsInput, PlaceContext, PlaceDeps, PlaceView, RemoteView, SessionBuilderProps, SessionPlace,
+  BuilderActionsInput, BuilderButton, ButtonReasons, ButtonsInput, DirectWorld, HostingDefaults, JoinRowsInput, PlaceContext, PlaceDeps, PlaceView, RemoteView, SessionBuilderProps, SessionPlace,
   SessionRunDeps, UnsavedChanges,
 };

@@ -23,6 +23,7 @@ const usage = {
     'Pass onOpen to open GameDetails: the title of the card becomes the button and the card shows it can be opened. Never put the description or a hover hint on the card.',
     'Pass art as a small picture of the world, a data address, and it fills the media tile with the kind icon as a badge; leave it out and the tile shows the kind icon alone.',
     'Pass verified for a world listed and checked by Archipelia: a Verified tag shows on the card with the hint Listed and checked by Archipelia.',
+    'Pass direct for a world whose own client joins a session by the lobby protocol: a Joins directly tag shows next to Verified with the hint Players join a session from inside the game.',
     'Pass at most two tags; they show on a line of their own under the detail line.',
   ],
   a11y: [
@@ -52,7 +53,7 @@ const GameCardSample = ({ onInstall }: { onInstall: () => void }) => (
   />
 );
 `,
-  propsHash: '7e0313b9eaab40e1',
+  propsHash: '3012cae622383e66',
 } satisfies ComponentUsage;
 
 export { usage };

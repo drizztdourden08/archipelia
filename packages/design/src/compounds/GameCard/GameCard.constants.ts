@@ -36,6 +36,10 @@ const VERIFIED_LABEL = 'Verified';
 
 const VERIFIED_HINT = 'Listed and checked by Archipelia';
 
+const DIRECT_LABEL = 'Joins directly';
+
+const DIRECT_HINT = 'Players join a session from inside the game';
+
 const MEDIA_SIZE = 32;
 
-export { GAME_STATUS, KIND_ICON, KIND_TONE, MAX_TAGS, MEDIA_SIZE, VERIFIED_HINT, VERIFIED_LABEL };
+export { DIRECT_HINT, DIRECT_LABEL, GAME_STATUS, KIND_ICON, KIND_TONE, MAX_TAGS, MEDIA_SIZE, VERIFIED_HINT, VERIFIED_LABEL };

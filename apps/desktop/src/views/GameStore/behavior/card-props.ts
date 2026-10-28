@@ -1,6 +1,7 @@
 /* @layer renderer-app @kind logic */
 import type { CardHandlers, GameRow, VersionPick } from '../GameStore.type';
 import type { GameCardAction, GameCardNote, GameCardProps, GameCardStatus } from '@archipelia/design';
+import { joinsDirectly } from '@archipelia/model';
 import { DISCOVERED_LABEL, KIND_LABEL, KIND_OF, NO_RELEASE } from '../GameStore.constants';
 import { busyOf } from './busy-of';
 import { failureOf } from './failure-of';
@@ -65,6 +66,7 @@ const cardPropsOf = (row: GameRow, handlers: CardHandlers, pick?: VersionPick): 
   kind: KIND_OF[row.entry.source],
   kindLabel: row.entry.discovered ? DISCOVERED_LABEL : KIND_LABEL[row.entry.source],
   verified: isVerified(row),
+  direct: joinsDirectly(row.entry),
   version: versionOf(row),
   status: statusOf(row, handlers, pick),
   notes: notesOf(row, pick),
