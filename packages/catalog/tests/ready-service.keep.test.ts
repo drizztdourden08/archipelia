@@ -196,4 +196,10 @@ describe('adding a world found by its topic', () => {
     await serviceWith(routes, files).install({ kind: 'index', apworld: 'star_quest', version: '1.0.0' });
     expect(installWorld).toHaveBeenCalledOnce();
   });
+
+  test('a repository that moved to another owner asks again', async () => {
+    const files = memoryFiles([{ apworld: 'star_quest', origin: { repoId: 7, repo: 'someone-else/star-quest' } } as never]);
+    await expect(serviceWith(routes, files).install({ kind: 'index', apworld: 'star_quest', version: '1.0.0' })).rejects.toThrow(/has not reviewed/);
+    expect(installWorld).not.toHaveBeenCalled();
+  });
 });

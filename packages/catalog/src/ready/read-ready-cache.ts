@@ -1,18 +1,16 @@
 /* @layer core @kind logic */
 import { isRecord } from '@archipelia/model';
 import type { DataFiles } from '@archipelia/model';
-import { SEARCH_CACHE_FILE } from './ready.constants';
+import { FULL_NAME, SEARCH_CACHE_FILE } from './ready.constants';
 import type { ReadyCache, ReadyRepo } from './ready.type';
 
-const isRepo = (value: unknown): value is ReadyRepo =>
-  isRecord(value)
-  && typeof value.id === 'number'
-  && typeof value.fullName === 'string'
-  && typeof value.owner === 'string'
-  && typeof value.stars === 'number'
-  && typeof value.pushedAt === 'string'
-  && typeof value.createdAt === 'string'
-  && typeof value.direct === 'boolean';
+const hasIdentity = (value: Record<string, unknown>): boolean =>
+  typeof value.id === 'number' && Number.isSafeInteger(value.id) && value.id > 0 && typeof value.fullName === 'string' && FULL_NAME.test(value.fullName);
+
+const hasFacts = (value: Record<string, unknown>): boolean =>
+  typeof value.owner === 'string' && typeof value.stars === 'number' && typeof value.pushedAt === 'string' && typeof value.createdAt === 'string' && typeof value.direct === 'boolean';
+
+const isRepo = (value: unknown): value is ReadyRepo => isRecord(value) && hasIdentity(value) && hasFacts(value);
 
 const readReadyCache = async (files: DataFiles): Promise<ReadyCache | null> => {
   const stored = await files.readJson<unknown>(SEARCH_CACHE_FILE, null).catch(() => null);
