@@ -20,7 +20,7 @@ type EnrichRecord = {
   readmeUrl?: string;
 };
 
-type EnrichEntry = { game: string; file?: string; home?: string; release?: GithubRepo };
+type EnrichEntry = { game: string; file?: string; home?: string; release?: GithubRepo; releaseVersion?: string };
 
 type EnrichDeps = {
   cache: DataFiles;

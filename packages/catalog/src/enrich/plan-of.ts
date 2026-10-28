@@ -8,7 +8,7 @@ const planOf = async ({ entryOf, engineDir }: Pick<EnrichDeps, 'entryOf' | 'engi
   if (!entry) return undefined;
   if (request.source === 'official') return { entry, stamp: `engine:${basename(await engineDir())}` };
   const { release } = entry;
-  if (release) return { entry, repo: parseGithubHome(entry.home) ?? release, release, stamp: `release:${release.owner}/${release.repo}` };
+  if (release) return { entry, repo: parseGithubHome(entry.home) ?? release, release, stamp: `release:${release.owner}/${release.repo}@${entry.releaseVersion ?? ''}` };
   const repo = parseGithubHome(entry.home);
   return repo ? { entry, repo, stamp: `home:${repo.owner}/${repo.repo}` } : undefined;
 };

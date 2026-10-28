@@ -7,6 +7,13 @@ import { parseGithubHome } from './parse-github-home';
 const releaseRepoOf = ({ source, firstParty }: CatalogEntry) =>
   (source === 'first-party' && firstParty?.repo ? parseGithubHome(`https://github.com/${firstParty.repo}`) : undefined);
 
+const releaseVersionOf = ({ versions, firstParty }: CatalogEntry): string | undefined => versions[0]?.version ?? firstParty?.worldVersion;
+
+const releaseFields = (entry: CatalogEntry) => {
+  const releaseVersion = releaseVersionOf(entry);
+  return releaseVersion ? { releaseVersion } : {};
+};
+
 const createEnrichEntry = (engineDir: () => Promise<string>, entries: () => CatalogEntry[]) =>
   async ({ apworld, source }: EnrichRequest): Promise<EnrichEntry | undefined> => {
     if (source === 'official') {
@@ -15,7 +22,7 @@ const createEnrichEntry = (engineDir: () => Promise<string>, entries: () => Cata
     }
     const entry = entries().find((candidate) => candidate.apworld === apworld && candidate.source === source);
     const release = entry && releaseRepoOf(entry);
-    return entry && { game: entry.game, ...(entry.home ? { home: entry.home } : {}), ...(release ? { release } : {}) };
+    return entry && { game: entry.game, ...(entry.home ? { home: entry.home } : {}), ...(release ? { release, ...releaseFields(entry) } : {}) };
   };
 
 export { createEnrichEntry };

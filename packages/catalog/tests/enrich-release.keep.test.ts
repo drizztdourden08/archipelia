@@ -26,15 +26,21 @@ const served = (routes: Record<string, Route>) => {
   return { net, seen };
 };
 
-const asked = (routes: Record<string, Route>, source: 'first-party' | 'index' = 'first-party') => {
-  const { net, seen } = served({ [README_URL]: () => textResponse('# Readme\n\nThe README text of the repository.'), [SOCIAL_URL]: social, ...routes });
-  const enricher = createEnricher({
+const enricherOf = (net: typeof fetch, listed: boolean, version: () => string | undefined = () => undefined) =>
+  createEnricher({
     cache: cacheFiles(),
     engineDir: () => Promise.resolve('engine'),
     fetch: net,
-    entryOf: () => Promise.resolve({ game: 'Timespinner', home: `https://github.com/${REPO}`, ...(source === 'first-party' ? { release: { owner: 'someone', repo: 'ts-world' } } : {}) }),
+    entryOf: () => {
+      const releaseVersion = version();
+      const release = listed ? { release: { owner: 'someone', repo: 'ts-world' }, ...(releaseVersion ? { releaseVersion } : {}) } : {};
+      return Promise.resolve({ game: 'Timespinner', home: `https://github.com/${REPO}`, ...release });
+    },
   });
-  return { seen, found: enricher.enrich({ apworld: 'ts_world', source }) };
+
+const asked = (routes: Record<string, Route>, source: 'first-party' | 'index' = 'first-party') => {
+  const { net, seen } = served({ [README_URL]: () => textResponse('# Readme\n\nThe README text of the repository.'), [SOCIAL_URL]: social, ...routes });
+  return { seen, found: enricherOf(net, source === 'first-party').enrich({ apworld: 'ts_world', source }) };
 };
 
 const bytesOf = (bytes: Uint8Array, headers: Record<string, string> = {}) => new Response(Buffer.from(bytes), { status: 200, headers });
@@ -103,6 +109,20 @@ ${'word '.repeat(20_000)}`);
     const result = await found;
     expect(seen.some((url) => url.includes('/releases/'))).toBe(false);
     expect(result?.markdown).toContain('README text');
+  });
+});
+
+describe('the cache of a listed world', () => {
+  test('a new release refreshes the art at once, the same release keeps the cache', async () => {
+    let png = pngBytes(640, 320);
+    let version = '1.0.0';
+    const { net } = served({ [PNG_URL]: () => bytesOf(png), [TEXT_URL]: () => textResponse(DESCRIPTION) });
+    const enricher = enricherOf(net, true, () => version);
+    const first = await enricher.enrich({ apworld: 'ts_world', source: 'first-party' });
+    png = pngBytes(800, 400);
+    expect((await enricher.enrich({ apworld: 'ts_world', source: 'first-party' }))?.art).toBe(first?.art);
+    version = '1.1.0';
+    expect((await enricher.enrich({ apworld: 'ts_world', source: 'first-party' }))?.art).toBe(`data:image/png;base64,${png.toString('base64')}`);
   });
 });
 
