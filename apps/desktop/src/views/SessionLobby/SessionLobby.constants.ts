@@ -35,6 +35,7 @@ const SEAT_TEXT = {
   ownGame: 'Their own game',
   noPreset: 'no preset',
   fromFile: 'from file',
+  edit: 'Edit',
   keep: 'Keep in session',
   duplicate: 'Duplicate',
   remove: 'Remove',

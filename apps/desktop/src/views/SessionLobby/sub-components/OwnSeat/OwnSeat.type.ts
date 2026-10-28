@@ -4,6 +4,7 @@ import type { OwnSeat, SeatActions } from '../../SessionLobby.type';
 
 type OwnSeatProps = {
   seat: OwnSeat;
+  selected: boolean;
   presets: GamePreset[];
   busy: boolean;
   actions: SeatActions;
