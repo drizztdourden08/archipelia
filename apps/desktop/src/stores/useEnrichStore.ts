@@ -1,8 +1,8 @@
 /* @layer renderer-app @kind hook */
 import { createSessionStore } from '@drizztdourden08/brock-react';
-import { appApi } from '../../../ipc/app-api';
+import { appApi } from '../ipc/app-api';
 import { enrichKey } from './enrich-key';
-import type { EnrichState } from './useEnrichStore.type';
+import type { EnrichState } from './enrich-store.type';
 
 const useEnrichStore = createSessionStore<EnrichState>((set, get) => ({
   asked: {},

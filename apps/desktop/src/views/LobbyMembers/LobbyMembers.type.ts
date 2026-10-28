@@ -1,8 +1,11 @@
 /* @layer renderer-app @kind types */
+import type { ReactNode } from 'react';
 import type { AdminLobby, AdminLobbyMember, AdminWorld, SlotUpload } from '@archipelia/model';
 import type { useLobbyMembers } from './behavior/useLobbyMembers';
 
-type LobbyMembersProps = { serverId: string; lobbyId: string };
+type SeatLead = (game: string | undefined) => ReactNode;
+
+type LobbyMembersProps = { serverId: string; lobbyId: string; lead?: SeatLead };
 
 type MemberActions = { approve: boolean; refuse: boolean; remove: boolean };
 
@@ -12,4 +15,4 @@ type ConsentRequest = { lobby: AdminLobby; member: AdminLobbyMember; slot: SlotU
 
 type LobbyMembersModel = ReturnType<typeof useLobbyMembers>;
 
-export type { ConsentRequest, LobbyMembersModel, LobbyMembersProps, MemberActions, TrustTag };
+export type { ConsentRequest, LobbyMembersModel, LobbyMembersProps, MemberActions, SeatLead, TrustTag };

@@ -4,11 +4,13 @@ import type { TrustTag } from './LobbyMembers.type';
 
 const MEMBER_EDITABLE_PHASES: readonly LobbyPhase[] = ['open', 'locked', 'failed'];
 
-const HEADING = 'Joined through direct connections';
-
-const CONNECTED_TAG = { text: 'Connected', title: 'This player connected with its own client.' } as const;
-
-const EMPTY = 'Nobody has connected yet. Give players the address and the session code under How players join.';
+const MEMBER_TEXT = {
+  pending: 'Waiting for your approval',
+  approve: 'Approve',
+  refuse: 'Refuse',
+  remove: 'Remove',
+  review: 'Review the world of',
+} as const;
 
 const FAILURE = {
   approve: 'Could not approve the player.',
@@ -22,4 +24,4 @@ const TRUST_TAGS: Record<TrustLevel, TrustTag> = {
   unlisted: { text: 'Unlisted', color: 'warning', title: 'The client is not in the registry. Each of its worlds needs your consent.' },
 };
 
-export { CONNECTED_TAG, EMPTY, FAILURE, HEADING, MEMBER_EDITABLE_PHASES, TRUST_TAGS };
+export { FAILURE, MEMBER_EDITABLE_PHASES, MEMBER_TEXT, TRUST_TAGS };
