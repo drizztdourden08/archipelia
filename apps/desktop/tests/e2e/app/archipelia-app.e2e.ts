@@ -2,7 +2,7 @@
 import { afterAll, beforeAll, describe, expect, test } from 'vitest';
 import type { Client } from 'archipelago.js';
 import { addBothWorlds, removeBothWorlds } from './steps/games';
-import { createProfile, setLocalPort } from './steps/first-boot';
+import { bootWithDefaultProfile, setLocalPort } from './steps/first-boot';
 import { checkHistory, exportData } from './steps/library-data';
 import { playLiveRoom, stopFromDashboard } from './steps/live-room';
 import { buildPresets } from './steps/presets';
@@ -31,7 +31,7 @@ describe('Archipelia app, headless, every screen end to end', () => {
     expect(notes, 'teardown notes').toEqual([]);
   });
 
-  test('1. first boot: create a profile, Home opens with the engine ready and the setup checklist, the base screen is idle behind it', () => createProfile(app()));
+  test('1. first boot: the Default profile skips the profiles dialog, Home opens with the engine ready and the setup checklist, the base screen is idle behind it', () => bootWithDefaultProfile(app()));
 
   test('2. settings: the local port persists after reopening', () => setLocalPort(app()));
 

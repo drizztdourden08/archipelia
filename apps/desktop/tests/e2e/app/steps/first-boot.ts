@@ -2,20 +2,16 @@
 import { expect } from 'vitest';
 import type { LaunchedApp } from '../support/launched-app.type';
 import { settledProof } from '../support/settled-proof';
-import { LOCAL_PORT, PROFILE } from '../support/flow-constants';
+import { LOCAL_PORT } from '../support/flow-constants';
 import { base, closeHub, dialogOf, hub, nestedButtons, openScreen, openSection } from '../support/locators';
 
 const SETUP_STEPS: [string, string][] = [['Engine', 'Done'], ['Games', 'To do'], ['Preset', 'To do'], ['Session', 'To do']];
 
-const createProfile = async (launched: LaunchedApp) => {
+const bootWithDefaultProfile = async (launched: LaunchedApp) => {
   const { page } = launched;
-  const profiles = dialogOf(page, 'Profiles');
-  await profiles.getByText('Create a profile to get started').waitFor();
-  await settledProof(launched, '01-profiles-first-boot');
-  await profiles.getByRole('textbox', { name: 'Profile name' }).fill(PROFILE);
-  await profiles.getByRole('button', { name: 'Create' }).click();
   const home = hub(page, 'Multiworld');
   await home.getByRole('heading', { name: 'Add your first game', level: 2, exact: true }).waitFor();
+  expect(await dialogOf(page, 'Profiles').count(), 'the Default profile skips the profiles dialog').toBe(0);
   expect(await home.locator('.hero__actions .btn--primary').count(), 'one primary action on Home').toBe(1);
   await expect.poll(() => home.getByText(/Engine AP 0\.6\.7 ready/).count()).toBe(1);
   const steps = home.getByRole('list', { name: 'Setup steps', exact: true }).getByRole('listitem');
@@ -52,4 +48,4 @@ const setLocalPort = async (launched: LaunchedApp) => {
   await closeHub(launched.page, 'Multiworld');
 };
 
-export { createProfile, setLocalPort };
+export { bootWithDefaultProfile, setLocalPort };
