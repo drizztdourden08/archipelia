@@ -7,7 +7,7 @@ import { named } from './named';
 import { waitText } from './wait-text';
 import { widgetShows } from './widget-shows';
 
-const layer = (tour: AppReviewTour) => tour.find(SELECTOR.layer) ?? undefined;
+const layer = (tour: AppReviewTour) => tour.find(SELECTOR.layer);
 
 export default defineReviewStep({
   run: async (tour) => {
@@ -20,7 +20,7 @@ export default defineReviewStep({
     tour.check('server-reach', reach, 'the Network widget shows the reach of the lobby server on this computer', 'the reach of the lobby server is not shown');
     const lanOnly = await widgetShows(tour, 'network', /LAN-only until the server has TLS/);
     tour.check('server-lan-only', lanOnly, 'the widget says the lobby is LAN-only until TLS', 'the widget does not say the lobby is LAN-only');
-    const stacked = named(tour, SELECTOR.button, SERVER_UI.back, layer(tour));
+    const stacked = named(tour, SELECTOR.button, SERVER_UI.back, layer(tour) ?? undefined);
     if (stacked) tour.click(stacked);
     const network = await waitText(tour, /servers on your network/i, () => layer(tour));
     tour.check('server-lan-list', network, 'the page has a Servers on your network section', 'the Servers on your network section is missing');
