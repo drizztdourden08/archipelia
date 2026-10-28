@@ -2,20 +2,11 @@
 import type { AppReviewTour } from '@drizztdourden08/brock-react';
 import type { Session, SessionTemplate } from '@archipelia/model';
 import { appApi } from '../ipc/app-api';
-import { useRunsStore } from '../stores/useRunsStore';
 import { joinRoom } from './join-room';
-import { RUN_TIMEOUT_MS } from './review.constants';
 import { runSummary } from './run-summary';
-import { withHeartbeat } from './with-heartbeat';
-
-const statusOf = (templateId: string, startedAt: number) => {
-  const run = useRunsStore.getState().runs.find((entry) => entry.templateId === templateId && entry.createdAt >= startedAt);
-  return run ? `the run is ${run.status}` : 'the run is starting';
-};
 
 const hostReviewRun = async (tour: AppReviewTour, template: SessionTemplate): Promise<Session> => {
-  const startedAt = Date.now() - 1000;
-  const run = await withHeartbeat(tour, appApi().sessionsRun(template), () => statusOf(template.id, startedAt), RUN_TIMEOUT_MS);
+  const run = await appApi().sessionsRun(template);
   tour.check('run-hosts', run.status === 'hosting', runSummary(run), runSummary(run));
   if (run.status !== 'hosting' || template.host.kind !== 'local') return run;
   const checked = await joinRoom(tour, template.host.port).then((client) => {

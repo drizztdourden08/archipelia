@@ -4,12 +4,11 @@ import type { SessionTemplate } from '@archipelia/model';
 import { appApi } from '../ipc/app-api';
 import { REVIEW_GAME, REVIEW_PRESET, REVIEW_SESSION } from './review.constants';
 import { reviewTemplate } from './review-template';
-import { withHeartbeat } from './with-heartbeat';
 
 const seedLibrary = async (tour: AppReviewTour): Promise<SessionTemplate> => {
   const api = appApi();
   const installed = (await api.gamesList()).find((game) => game.apworld === REVIEW_GAME.apworld)
-    ?? await withHeartbeat(tour, api.gamesInstall({ kind: 'official', apworld: REVIEW_GAME.apworld }), () => `${REVIEW_GAME.game} is still installing`);
+    ?? await api.gamesInstall({ kind: 'official', apworld: REVIEW_GAME.apworld });
   tour.check('game-installed', installed.game === REVIEW_GAME.game, `${installed.game} ${installed.version} is installed`, `${REVIEW_GAME.apworld} installed as ${installed.game}`);
   const preset = (await api.presetsList()).find((entry) => entry.name === REVIEW_PRESET && entry.game === installed.game)
     ?? await api.presetsCreate({ game: installed.game, name: REVIEW_PRESET });

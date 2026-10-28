@@ -5,9 +5,11 @@ import { useRunsStore } from '../stores/useRunsStore';
 import { clearTabs } from './clear-tabs';
 import { finishedRun } from './finished-run';
 import { readyEngine } from './ready-engine';
+import { SEED_TIMEOUT_MS } from './review.constants';
 import { seedLibrary } from './seed-library';
 
 export default defineReviewSeed({
+  timeoutMs: SEED_TIMEOUT_MS,
   run: async (tour) => {
     await clearTabs();
     const engine = await readyEngine(tour);

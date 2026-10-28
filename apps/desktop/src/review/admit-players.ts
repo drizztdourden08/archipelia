@@ -11,7 +11,6 @@ import { directLobby } from './direct-lobby';
 import { nameOf } from './name-of';
 import { named } from './named';
 import { waitNamed } from './wait-named';
-import { withHeartbeat } from './with-heartbeat';
 
 const layer = (tour: AppReviewTour) => tour.find(SELECTOR.tabBody) ?? undefined;
 
@@ -55,9 +54,9 @@ const admitJoiner = async (tour: AppReviewTour, lobbyId: string) => {
 const admitPlayers = async (tour: AppReviewTour, lobby: AdminLobby) => {
   const stop = appApi().onLobbyReviewHost((host) => { void answerHost(tour)(host); });
   const play = appApi().lobbyReviewPlay({ code: formatLobbyCode(lobby.code) ?? lobby.code, name: REVIEW_DIRECT, ap: lobby.engine.ap }).finally(stop);
-  const result = await withHeartbeat(tour, play, () => 'the fake client is still joining the session');
+  const result = await play;
   tour.check('fake-client', result.ok, 'a fake client joined the session, was approved and its world allowed in the session tab', result.failure ?? 'the fake client failed');
-  await withHeartbeat(tour, admitJoiner(tour, lobby.id), () => 'the Archipelia player is still being admitted');
+  await admitJoiner(tour, lobby.id);
   await tour.capture('direct-players');
 };
 

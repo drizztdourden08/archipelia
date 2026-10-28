@@ -5,7 +5,7 @@ import { formatLobbyCode } from '@drizztdourden08/archipelia-lobby-protocol';
 import type { AdminLobby } from '@archipelia/model';
 import { openSessionEditor } from '../hooks/open-session-editor';
 import { appApi } from '../ipc/app-api';
-import { DIRECT_UI, REVIEW_DIRECT, TAB_UI } from './review.constants';
+import { DIRECT_UI, LAN_STEP_TIMEOUT_MS, REVIEW_DIRECT, TAB_UI } from './review.constants';
 import { SELECTOR } from './review-dom.constants';
 import { admitPlayers } from './admit-players';
 import { checkWhere } from './check-where';
@@ -43,6 +43,7 @@ const closeAfterRun = async (tour: AppReviewTour, lobbyId: string) => {
 };
 
 export default defineReviewStep({
+  timeoutMs: LAN_STEP_TIMEOUT_MS,
   run: async (tour) => {
     const status = await appApi().lobbyServerStatus();
     tour.check('lobby-server', status.state === 'listening', 'the embedded lobby server listens', `the lobby server is ${status.state}: ${status.error ?? ''}`);

@@ -15,16 +15,11 @@ import { showSpoiler } from './show-spoiler';
 import { twoTabs } from './two-tabs';
 import { waitNamed } from './wait-named';
 import { waitText } from './wait-text';
-import { withHeartbeat } from './with-heartbeat';
 import { LIVE_WIDGETS, SPOILER_WIDGET, STOPPED_WIDGETS } from './widget-content.constants';
 
 const dashboard = (tour: AppReviewTour) => tour.find(SELECTOR.dashboard);
 
-const hosting = (tour: AppReviewTour) => withHeartbeat(
-  tour,
-  waitText(tour, /hosting/i, () => (tour.find(SELECTOR.layer) ? null : dashboard(tour)), RUN_TIMEOUT_MS),
-  () => `waiting for ${REVIEW_SESSION} to host`,
-);
+const hosting = (tour: AppReviewTour) => waitText(tour, /hosting/i, () => (tour.find(SELECTOR.layer) ? null : dashboard(tour)), RUN_TIMEOUT_MS);
 
 const stopFromDashboard = async (tour: AppReviewTour) => {
   await clickNamed(tour, SELECTOR.button, 'Stop', dashboard(tour) ?? undefined);
