@@ -9,15 +9,13 @@ import { DirectCell } from '../DirectCell';
 import { GameCell } from '../GameCell';
 import { PlayerOverridesCell } from '../PlayerOverridesCell';
 import { PlayerSourceCell } from '../PlayerSourceCell';
-import { JoinedTag } from '../JoinedTag';
 import { playerLabel } from '../../behavior/player-label';
 import { emptyPlayers } from '../../behavior/empty-players';
-import { NAME_LIMIT, PLAYER_GRID_CLASS } from '../../SessionLobby.constants';
-import { subtitleOf } from '../../behavior/subtitle-of';
+import { NAME_LIMIT, PLAYERS_TEXT } from '../../SessionLobby.constants';
 
 const slotKey = (player: SessionPlayer) => String(player.slot);
 
-const PlayersCard = ({ players, installed, presets, selectedSlot, busy, direct, seats, connected, connectedCount, actions, onEdit }: PlayersCardProps) => {
+const PlayersCard = ({ players, installed, presets, selectedSlot, busy, direct, actions, onEdit }: PlayersCardProps) => {
   const columns = useMemo((): RowGridColumn<SessionPlayer>[] => [
     {
       id: 'name', label: 'Name', min: 120, max: 220,
@@ -35,9 +33,8 @@ const PlayersCard = ({ players, installed, presets, selectedSlot, busy, direct, 
       id: 'overrides', label: 'Overrides', min: 160, max: 220, fold: true,
       cell: (player) => <PlayerOverridesCell player={player} selected={player.slot === selectedSlot} onEdit={onEdit} />,
     },
-    ...(seats ? [{ id: 'direct', label: 'Direct', min: 90, max: 110, cell: (player: SessionPlayer) => <DirectCell player={player} onChange={actions.setDirect} /> }] : []),
-    ...(direct && !seats ? [{ id: 'joined', label: 'Joined', min: 120, max: 160, fold: true, cell: () => <JoinedTag /> }] : []),
-  ], [actions, busy, direct, installed, onEdit, presets, seats, selectedSlot]);
+    { id: 'direct', label: 'Direct', min: 90, max: 110, cell: (player) => <DirectCell player={player} onChange={actions.setDirect} /> },
+  ], [actions, busy, installed, onEdit, presets, selectedSlot]);
   const remove = useCallback((key: string) => actions.remove(Number(key)), [actions]);
   const rowMenu = useCallback((player: SessionPlayer): MenuItem[] => [
     { id: 'duplicate', label: 'Duplicate', icon: 'copy', onSelect: () => actions.duplicate(player.slot) },
@@ -46,10 +43,9 @@ const PlayersCard = ({ players, installed, presets, selectedSlot, busy, direct, 
   return (
     <Card>
       <Stack gap="sm">
-        <SectionHeader title={`Players · ${players.length + connectedCount}`} subtitle={subtitleOf(direct, seats)} />
+        <SectionHeader title={`Players · ${players.length}`} subtitle={PLAYERS_TEXT.saved} />
         <RowGrid
           label="Players"
-          className={PLAYER_GRID_CLASS}
           rows={players}
           columns={columns}
           rowKey={slotKey}
@@ -61,7 +57,6 @@ const PlayersCard = ({ players, installed, presets, selectedSlot, busy, direct, 
           rowMenu={rowMenu}
           empty={emptyPlayers(installed.length > 0, direct)}
         />
-        {connected}
       </Stack>
     </Card>
   );

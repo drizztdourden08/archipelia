@@ -10,13 +10,6 @@ const LOBBY_PHASES = defineStatuses({
   failed: { label: 'Failed', tone: 'danger' },
 });
 
-const MEMBER_ADMISSIONS = defineStatuses({
-  pending: { label: 'Waiting for you', tone: 'warning' },
-  approved: { label: 'Approved', tone: 'success' },
-  refused: { label: 'Refused', tone: 'danger' },
-  removed: { label: 'Removed', tone: 'neutral' },
-});
-
 const SLOT_STATES = defineStatuses({
   uploading: { label: 'Sending files', tone: 'info', pulse: true },
   checking: { label: 'Checking', tone: 'info', pulse: true },
@@ -31,4 +24,4 @@ const SERVER_STATES = defineStatuses({
   failed: { label: 'Not running', tone: 'danger' },
 });
 
-export { LOBBY_PHASES, MEMBER_ADMISSIONS, SERVER_STATES, SLOT_STATES };
+export { LOBBY_PHASES, SERVER_STATES, SLOT_STATES };

@@ -1,0 +1,4 @@
+/* @layer renderer-app @kind style */
+.lobby-members__error {
+  grid-column: 1 / -1;
+}

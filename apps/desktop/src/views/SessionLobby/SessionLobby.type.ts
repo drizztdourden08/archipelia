@@ -1,5 +1,5 @@
 /* @layer renderer-app @kind types */
-import type { GamePreset, InstalledGame, OptionDef, OptionValue, SessionTemplate } from '@archipelia/model';
+import type { GamePreset, InstalledGame, OptionDef, OptionValue, SessionPlayer, SessionTemplate } from '@archipelia/model';
 import type { Dispatch, SetStateAction } from 'react';
 import type { PresetInput } from '@archipelia/presets';
 import type { LiveTab } from '../../live/live.type';
@@ -30,9 +30,18 @@ type LobbyActionDeps = {
   tab: LiveTab;
   saved: SessionTemplate;
   draft: SessionTemplate;
+  saveTemplate: (template: SessionTemplate) => Promise<SessionTemplate>;
   guard: (key: string, work: () => Promise<unknown>) => Promise<unknown>;
   attemptRun: () => boolean;
 };
+
+type SeatKind = 'saved' | 'added' | 'held';
+
+type OwnSeat = { key: string; slot: number; player: SessionPlayer; kind: SeatKind };
+
+type SeatActions = { edit: (slot: number) => void; remove: (slot: number) => void; duplicate: (slot: number) => void; keep: (slot: number) => void };
+
+type SeatEditing = { slot: number; overrides: boolean };
 
 type RunAction = { label: string; reason?: string; onClick: () => void };
 
@@ -43,5 +52,6 @@ type ProblemField = 'name' | 'game' | 'source' | 'option';
 type TemplateProblem = { message: string; field: ProblemField; slot: number; optionKey?: string; optionLabel?: string };
 
 export type {
-  EditorDeps, ImportedYaml, LibraryView, LobbyActionDeps, LobbyScreenProps, OverrideRow, Overrides, ProblemField, RowFilter, RunAction, SessionLobbyProps, SourceChoice, TemplateProblem,
+  EditorDeps, ImportedYaml, LibraryView, LobbyActionDeps, LobbyScreenProps, OverrideRow, Overrides, OwnSeat, ProblemField, RowFilter, RunAction, SeatActions, SeatEditing, SeatKind, SessionLobbyProps, SourceChoice,
+  TemplateProblem,
 };

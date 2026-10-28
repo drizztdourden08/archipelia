@@ -16,7 +16,7 @@ const SESSIONS_STEPS: readonly TourStepDef[] = [
   {
     id: 'sessions-list',
     title: 'Your sessions',
-    body: 'Pick a session to see its setup. The filter narrows the list, and the menu of a row duplicates or deletes it. Run opens the session as a tab in the main window, where the lobby takes players and you press Run again to make the seed and host the room.',
+    body: 'Pick a session to see its setup. The filter narrows the list, and the menu of a row duplicates or deletes it. Run opens the session as a tab in the main window, where the lobby shows a seat card for each player. Players who join wait on a card for your approval, and you press Run again to make the seed and host the room.',
     target: { tour: TOUR_TARGET.sessionsList },
     mascot: 'curious',
     open: ROUTE.sessions,
