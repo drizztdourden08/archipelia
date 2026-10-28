@@ -18,10 +18,19 @@ const memoryFiles = (records: InstalledGame[]): DataFiles => {
   };
 };
 
+const textFiles = (): DataFiles => {
+  const store = new Map<string, string>();
+  return {
+    ...memoryFiles([]),
+    readText: (rel) => Promise.resolve(store.get(rel) ?? null),
+    writeText: (rel, body) => { store.set(rel, body); return Promise.resolve(); },
+  };
+};
+
 const recordOf = (apworld: string, patch: Partial<InstalledGame> = {}): InstalledGame => ({
   apworld, game: apworld.toUpperCase(), version: '0.6.7', source: 'official', installedAt: 100,
   schema: { game: apworld, worldVersion: '1', groups: [], options: [], presets: {} }, sha256: '', verified: false,
   layout: 'apworld', path: `worlds/${apworld}.apworld`, requires: [], ...patch,
 });
 
-export { memoryFiles, recordOf };
+export { memoryFiles, recordOf, textFiles };

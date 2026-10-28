@@ -19,7 +19,8 @@ import { useInstalledEntries } from './useInstalledEntries';
 import { useInstallActions } from './useInstallActions';
 import { emptyKind } from './empty-kind';
 import { removeKey } from './remove-key';
-import { NO_FILTERS } from './useGameStore.constants';
+import { limitNotice } from './limit-notice';
+import { NO_FILTERS, RETRY_SLACK_MS } from './useGameStore.constants';
 
 const useGameStore = (tab: GameTab) => {
   const { catalog, official, installed, loadGames, removeGame } = useLibraryStore();
@@ -32,6 +33,13 @@ const useGameStore = (tab: GameTab) => {
   const load = useCallback((fresh: boolean) => guard('load', failWith(FAILURE.load, () => loadGames(fresh))), [guard, loadGames]);
   useEffect(() => { void load(false).finally(() => setOpened(true)); }, [load]);
   const loading = !opened || isBusy('load');
+  const limited = catalog?.limited;
+  useEffect(() => {
+    if (!limited) return undefined;
+    const timer = setTimeout(() => { void load(false); }, Math.max(limited.limitedUntil - Date.now(), 0) + RETRY_SLACK_MS);
+    return () => clearTimeout(timer);
+  }, [limited, load]);
+  const limitText = limitNotice(limited, Date.now());
 
   useInstalledEntries(installed);
 
@@ -60,7 +68,7 @@ const useGameStore = (tab: GameTab) => {
   const error = errorOf('load') ?? errorOf('file');
 
   return {
-    addFromFile, consent, empty, error, errorOf, filtered, filters, installWorld, isBusy, loadFailed, loading, needOf, openBuiltIn, query, refresh, remove, retry, rows, sections, setFilters, setQuery, shown, summary,
+    addFromFile, consent, empty, error, errorOf, filtered, filters, installWorld, isBusy, limitText, loadFailed, loading, needOf, openBuiltIn, query, refresh, remove, retry, rows, sections, setFilters, setQuery, shown, summary,
   };
 };
 

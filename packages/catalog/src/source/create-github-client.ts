@@ -4,17 +4,9 @@ import type { GithubRepo } from '../enrich/enrich.type';
 import { MAX_README_BYTES, RAW_HOST } from '../enrich/enrich.constants';
 import { readCapped } from '../enrich/read-capped';
 import { GithubLimitError } from './github-limit-error';
-import { API_HEADERS, BLOCK_MS, CACHE_MS, GITHUB_API } from './source.constants';
+import { limitOf } from './limit-of';
+import { API_HEADERS, CACHE_MS, GITHUB_API } from './source.constants';
 import type { CacheEntry, GithubClient, GithubClientDeps } from './source.type';
-
-const limitOf = (res: Response, now: number): number | undefined => {
-  const slowed = res.status === 429 || (res.status === 403 && (res.headers.get('x-ratelimit-remaining') === '0' || res.headers.has('retry-after')));
-  if (!slowed) return undefined;
-  const reset = Number(res.headers.get('x-ratelimit-reset')) * 1000;
-  const wait = Number(res.headers.get('retry-after')) * 1000;
-  if (reset > now) return reset;
-  return now + (wait > 0 ? wait : BLOCK_MS);
-};
 
 const cached = <T,>(store: Map<string, CacheEntry<T>>, key: string, now: number, load: () => Promise<T>): Promise<T> => {
   const hit = store.get(key);

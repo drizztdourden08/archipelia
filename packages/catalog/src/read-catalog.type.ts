@@ -7,6 +7,12 @@ type CatalogOptions = CacheTarget & { source?: IndexSource; concurrency?: number
 
 type CatalogProblem = { path: string; message: string };
 
-type Catalog = { apVersion: string; entries: CatalogEntry[]; problems: CatalogProblem[]; downloaded: number };
+type Catalog = {
+  apVersion: string;
+  entries: CatalogEntry[];
+  problems: CatalogProblem[];
+  downloaded: number;
+  limited?: { listedAt: number; limitedUntil: number };
+};
 
 export type { Catalog, CatalogOptions, CatalogProblem };

@@ -4,7 +4,7 @@ import type { CatalogEntry } from '@archipelia/model';
 import type { TreeFile } from './fetch-tree.type';
 import { DEFAULT_INDEX } from './index-source.constants';
 import type { Catalog, CatalogOptions, CatalogProblem } from './read-catalog.type';
-import { fetchIndexTree } from './fetch-tree';
+import { listIndexFiles } from './list-index-files';
 import { readThroughCache } from './file-cache';
 import { isLockToml } from './is-lock-toml';
 import { isRootToml } from './is-root-toml';
@@ -19,7 +19,7 @@ const findFile = (files: TreeFile[], path: string) => {
 };
 
 const readCatalog = async ({ files: store, cacheDir, source = DEFAULT_INDEX, concurrency = 16 }: CatalogOptions): Promise<Catalog> => {
-  const files = await fetchIndexTree(source);
+  const { files, limited } = await listIndexFiles(source, { files: store, cacheDir });
   const read = (file: TreeFile) => readThroughCache(source, { files: store, cacheDir }, file);
   const [root, lock] = await Promise.all([read(findFile(files, 'index.toml')), read(findFile(files, 'index.lock'))]);
   const rootToml = parseToml(root.text, isRootToml, 'index.toml');
@@ -41,6 +41,7 @@ const readCatalog = async ({ files: store, cacheDir, source = DEFAULT_INDEX, con
     entries: entries.filter((e): e is CatalogEntry => e !== undefined),
     problems,
     downloaded,
+    ...(limited ? { limited } : {}),
   };
 };
 
