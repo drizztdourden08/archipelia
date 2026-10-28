@@ -12,11 +12,11 @@ import { GameDetailsVersions } from './sub-components/GameDetailsVersions';
 import './GameDetails.css';
 
 const GameDetails = (props: GameDetailsProps) => {
-  const { title, kind, kindLabel, version, status, notes, tags, actions, markdown, art, verified, direct, busy, error, need, versions, loading, onLink, onClose } = props;
+  const { title, kind, kindLabel, version, worldVersion, status, notes, tags, actions, markdown, art, verified, direct, busy, error, need, versions, loading, onLink, onClose } = props;
   return (
     <DialogShell open onClose={onClose} title={title} size="lg" actions={<GameDetailsActions actions={actions} busy={busy} />}>
       <Stack gap="md">
-        <GameDetailsHead kind={kind} kindLabel={kindLabel} art={art} version={version} verified={verified} direct={direct} status={status} />
+        <GameDetailsHead kind={kind} kindLabel={kindLabel} art={art} version={version} worldVersion={worldVersion} verified={verified} direct={direct} status={status} />
         {error && <ErrorCallout message={error} />}
         {need && <GameDetailsNeed message={need.message} href={need.href} onLink={onLink} />}
         {versions && <GameDetailsVersions {...versions} />}

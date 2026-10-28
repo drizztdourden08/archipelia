@@ -22,6 +22,22 @@ describe('the standard archipelia.json of a listed world', () => {
     expect(found.entries[0]?.unavailable).toBeUndefined();
   });
 
+  test('an appVersion is carried to the entry next to the world version, for a world and for builds', async () => {
+    const bytes = worldBytes();
+    const single = await read({ [STANDARD_URL]: () => json(standardOf(bytes, { appVersion: '0.21.2' })) });
+    expect(single.entries[0]?.versions[0]?.version).toBe('0.2.0');
+    expect(single.entries[0]?.firstParty?.appVersion).toBe('0.21.2');
+    const manifest = buildsManifestOf([{ ap: '0.6.5', bytes }]);
+    const builds = manifest.builds.map((build) => ({ ...build, bundle: undefined }));
+    const built = await read({ [STANDARD_URL]: () => json({ ...standardOf(bytes), ...manifest, appVersion: '0.21.2', world: undefined, format: 1, builds }) }, 'builds');
+    expect(built.entries[0]?.firstParty).toMatchObject({ worldVersion: manifest.worldVersion, appVersion: '0.21.2' });
+  });
+
+  test('a standard manifest without an appVersion leaves it out of the entry', async () => {
+    const found = await read({ [STANDARD_URL]: () => json(standardOf(worldBytes())) });
+    expect(found.entries[0]?.firstParty).not.toHaveProperty('appVersion');
+  });
+
   test('the world file and its own bundle name decide the download urls', async () => {
     const bytes = worldBytes();
     const world = { ...standardOf(bytes).world, file: 'rotp_v2.apworld', bundle: 'rotp_v2.sig.json' };

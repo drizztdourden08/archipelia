@@ -3,7 +3,7 @@ import type { GameCardAction, GameCardKind, GameCardNote, GameCardStatus } from 
 
 type GameDetailsNeed = { message: string; href?: string };
 
-type GameDetailsVersion = { value: string; label: string; prerelease?: boolean; note?: string; reason?: string };
+type GameDetailsVersion = { value: string; label: string; prerelease?: boolean; worldVersion?: string; note?: string; reason?: string };
 
 type GameDetailsPicker = {
   options: GameDetailsVersion[];
@@ -18,6 +18,7 @@ type GameDetailsProps = {
   kind: GameCardKind;
   kindLabel: string;
   version?: string;
+  worldVersion?: string;
   status?: GameCardStatus;
   notes: GameCardNote[];
   tags: string[];

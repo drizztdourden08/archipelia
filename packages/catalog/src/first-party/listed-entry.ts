@@ -17,14 +17,15 @@ const releaseOf = (listing: Listing, state: ReleaseState, tag?: string): FirstPa
   const { repo, client } = listing;
   const base = { ...(client ? { client } : {}), repo, bundleUrl: releaseUrl(repo, namesOf(listing, state).bundle, tag) };
   if (state.kind === 'found') {
-    const { minimumAp, maximumAp } = state.manifest;
-    return { ...base, minimumAp, ...(maximumAp ? { maximumAp } : {}) };
+    const { minimumAp, maximumAp, appVersion } = state.manifest;
+    return { ...base, minimumAp, ...(maximumAp ? { maximumAp } : {}), ...(appVersion ? { appVersion } : {}) };
   }
   if (state.kind !== 'builds') return base;
-  const { minimumAp, maximumAp, worldVersion, builds } = state.manifest;
+  const { minimumAp, maximumAp, worldVersion, appVersion, builds } = state.manifest;
   return {
     ...base,
     worldVersion,
+    ...(appVersion ? { appVersion } : {}),
     ...(minimumAp ? { minimumAp } : {}),
     ...(maximumAp ? { maximumAp } : {}),
     builds: builds.map((build) => ({

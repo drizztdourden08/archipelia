@@ -24,6 +24,7 @@ type GameCardProps = {
   kind: GameCardKind;
   kindLabel: string;
   version?: string;
+  worldVersion?: string;
   status?: GameCardStatus;
   notes: GameCardNote[];
   tags: string[];

@@ -6,6 +6,7 @@ type GameDetailsHeadProps = {
   kindLabel: string;
   art?: string | undefined;
   version?: string | undefined;
+  worldVersion?: string | undefined;
   verified?: boolean | undefined;
   direct?: boolean | undefined;
   status?: GameCardStatus | undefined;
