@@ -1,5 +1,5 @@
 /* @layer renderer-app @kind logic */
-import { defineReviewStep, nav } from '@drizztdourden08/brock-react';
+import { defineReviewStep, nav, widgets } from '@drizztdourden08/brock-react';
 import type { AppReviewTour } from '@drizztdourden08/brock-react';
 import { appApi } from '../ipc/app-api';
 import { REVIEW_SERVER, SAVE_STATE, SERVER_FIELDS, SERVER_PROBLEMS, SERVER_UI, SERVER_UNTOUCHED } from './review.constants';
@@ -78,6 +78,7 @@ const removeServer = async (tour: AppReviewTour) => {
 
 export default defineReviewStep({
   run: async (tour) => {
+    widgets.close('network');
     nav.open('multiworld/servers/machines');
     const opened = await waitText(tour, /servers · [0-9]/i, () => layer(tour) ?? null);
     tour.check('servers-open', opened, 'the Servers page lists the saved servers', 'the Servers page did not open');

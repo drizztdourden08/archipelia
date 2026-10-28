@@ -1,5 +1,5 @@
 /* @layer renderer-app @kind config */
-const NETWORK_CONTENT = /Lobby server on this computer[\s\S]*Network mode[\s\S]*This session/;
+const NETWORK_CONTENT = /Lobby server on this computer[\s\S]*Network mode[\s\S]*This session/i;
 
 const LOBBY_WIDGETS: [string, RegExp][] = [
   ['network', NETWORK_CONTENT],

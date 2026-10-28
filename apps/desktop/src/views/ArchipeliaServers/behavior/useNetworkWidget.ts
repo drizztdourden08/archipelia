@@ -29,7 +29,7 @@ const useNetworkWidget = ({ status: shared, names }: NetworkView) => {
   return {
     status,
     facts: status ? reachFacts(status, names) : [],
-    open: status !== null && status.options.mode !== 'off' && !status.automation,
+    open: status !== null && status.options.mode !== 'off',
     busy: isBusy('stop'),
     error: errorOf('stop'),
     stop,
