@@ -180,10 +180,23 @@ describe('adding a chosen release', () => {
     expect(installWorld).not.toHaveBeenCalled();
   });
 
-  test('without a tag the install is the newest stable, as the card does', async () => {
+  test('without a tag the install is the newest stable, as the card does, and records its tag', async () => {
     await serviceWith().install(accept);
     const call = installWorld.mock.calls[0]?.[0] as { entry: { versions: { url: string }[] }; release?: unknown };
     expect(call.entry.versions[0]?.url).toBe(`https://github.com/${REPO}/releases/latest/download/star_quest.apworld`);
-    expect(call.release).toBeUndefined();
+    expect(call.release).toEqual({ tag: 'v1.2.0', prerelease: false });
+  });
+
+  test('the default install still goes ahead when the releases list cannot be read', async () => {
+    await serviceWith({ [releasesUrl(REPO)]: () => new Response('', { status: 500 }) }).install(accept);
+    expect(installWorld).toHaveBeenCalledOnce();
+    expect((installWorld.mock.calls[0]?.[0] as { release?: unknown }).release).toBeUndefined();
+  });
+
+  test('a tag that is not one of the repository releases never reaches a URL', async () => {
+    for (const tag of ['../../evil/repo/releases/download/v1', 'v1.1.0/../v9', 'v1.1.0?x=1', 'V1.1.0', '']) {
+      await expect(serviceWith().install({ ...accept, tag })).rejects.toThrow();
+    }
+    expect(installWorld).not.toHaveBeenCalled();
   });
 });

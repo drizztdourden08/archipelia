@@ -13,11 +13,11 @@ const pinRelease = async ({ request, readReleases }: ReleaseListDeps, { entry, r
   const release = (await readReleases(repo)).releases.find((candidate) => candidate.tag === tag);
   if (!release) throw new Error(`${tag} is not a release of ${repo}`);
   const game = registryGameOf(registry, entry);
-  const tagged = entryAtTag({ entry, game, state: await readTagState(request, repo, game, tag), tag });
+  const tagged = entryAtTag({ entry, game, state: await readTagState(request, repo, game, release.tag), tag: release.tag });
   const fitted = fitEntries([tagged], ap)[0] ?? tagged;
   const version = releaseVersion(fitted);
   if (fitted.unavailable || !version) throw new Error(`${entry.displayName} ${tag}: ${fitted.unavailable ?? 'it names no version'}`);
-  return { entry: fitted, version, release: { tag, prerelease: release.prerelease } };
+  return { entry: fitted, version, release: { tag: release.tag, prerelease: release.prerelease } };
 };
 
 export { pinRelease };

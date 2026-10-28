@@ -27,6 +27,15 @@ type PinnedParams = VersionsParams & { tag: string };
 
 type Pinned = { entry: CatalogEntry; version: string; release: InstalledRelease };
 
+type RepinParams = VersionsParams & { before: InstalledRelease };
+
+type RepinWays = {
+  list: (params: VersionsParams) => Promise<VersionList>;
+  pin: (params: PinnedParams) => Promise<Pinned>;
+};
+
+type Repin = { pinned?: Pinned; note?: string };
+
 type ManifestAsset = { id: number; name: string; standard: boolean };
 
 type ManifestWant = { release: ReleaseSummary; asset: ManifestAsset };
@@ -44,6 +53,6 @@ type ReadManifestsParams = { files: DataFiles; request: typeof fetch; repo: stri
 type TagEntryParams = { entry: CatalogEntry; game: RegistryGame | undefined; state: ReleaseState; tag: string };
 
 export type {
-  Checked, FetchedReleases, ManifestAsset, ManifestReads, ManifestRecord, ManifestStore, ManifestWant, ReadManifestsParams, Pinned, PinnedParams, ReleaseAsset, ReleasesRead, ReleaseSummary, StoredReleases,
+  Checked, FetchedReleases, ManifestAsset, ManifestReads, ManifestRecord, ManifestStore, ManifestWant, ReadManifestsParams, Repin, RepinParams, RepinWays, Pinned, PinnedParams, ReleaseAsset, ReleasesRead, ReleaseSummary, StoredReleases,
   TagEntryParams, VersionChoice, VersionList, VersionsDeps, VersionsParams, VersionsRequest,
 };

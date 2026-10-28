@@ -14,7 +14,7 @@ export { installOfficial } from './install/install-official';
 export type { InstallOfficialParams } from './install/install-official.type';
 export { installWorld } from './install/install-world';
 export { reinstallFirstParty } from './install/reinstall-first-party';
-export type { ReinstallFirstPartyParams } from './install/reinstall-first-party.type';
+export type { Reinstalled, ReinstallFirstPartyParams } from './install/reinstall-first-party.type';
 export type { InstallWorldParams } from './install/install-world.type';
 export { removeWorld } from './install/remove-world';
 export type { RemoveWorldParams } from './install/remove-world.type';

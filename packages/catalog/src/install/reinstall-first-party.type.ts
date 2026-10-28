@@ -1,5 +1,5 @@
 /* @layer core @kind types */
-import type { DataFiles } from '@archipelia/model';
+import type { DataFiles, InstalledGame } from '@archipelia/model';
 import type { TrustDeps } from '../first-party/vet-release.type';
 
 type ReinstallFirstPartyParams = {
@@ -11,4 +11,6 @@ type ReinstallFirstPartyParams = {
   trustRoot?: TrustDeps['root'];
 };
 
-export type { ReinstallFirstPartyParams };
+type Reinstalled = { game: InstalledGame; note?: string };
+
+export type { Reinstalled, ReinstallFirstPartyParams };

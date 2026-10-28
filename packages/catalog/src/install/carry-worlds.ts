@@ -15,7 +15,10 @@ const carryWorlds = async ({ from, to, files, reinstall, reinstallFirstParty, si
   for (const record of records.filter((entry) => entry.source === 'official' || entry.source === 'first-party')) {
     if (result.reinstalled.includes(record.apworld)) continue;
     await again(record).then(
-      () => { result.reinstalled.push(record.apworld); },
+      (done) => {
+        result.reinstalled.push(record.apworld);
+        if (done && typeof done === 'object' && 'note' in done && typeof done.note === 'string') result.notes = [...(result.notes ?? []), done.note];
+      },
       (err: unknown) => { result.problems.push(fail(record, err)); },
     );
   }
