@@ -332,6 +332,8 @@ Archipelia lists a world from a public GitHub repository that follows this conve
 
 A world needs `archipelia.json` to appear. The thumbnail and the description are optional: without them the app falls back to the repository's social image and its README.
 
+How the app finds you: it searches GitHub for the topic, at most 500 repositories, newest update first, and keeps the list for six hours, so a new world can take that long to show. Each world needs a module name and a game name that no other world uses; when two repositories claim one name, the one with more stars stays and the other is hidden. A person asked to add a world that Archipelia has not reviewed sees your repository and your name first. In the registry pull request, give `repoId` (the number from `gh api repos/<owner>/<repo> --jq .id`) beside `repo`, so a renamed or recreated repository cannot take your place.
+
 ### The release workflow
 
 This GitHub Actions workflow builds one apworld per Archipelago version, writes the release files, attests the apworlds and `archipelia.json`, and uploads everything to the release. Put the `build-set` config (see "Command line") in `kit.json` and your art and text where the paths below say. Drop `--direct` if the client does not join lobbies.

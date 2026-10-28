@@ -50,6 +50,16 @@ describe('registry/registry.json', () => {
     expect(findClient(floorRegistry(), 'relic-of-the-past')?.trust.repo).toBe('drizztdourden08/relic-of-the-past');
   });
 
+  test('lists the repo id of the Relic of the Past release', () => {
+    const parsed = parseRegistry(registryFile);
+    if (!parsed.ok) throw new Error('the registry does not parse');
+    expect(parsed.registry.games[0]?.release.repoId).toBe(1235000006);
+  });
+
+  test('the schema accepts a blocked list with a reason', () => {
+    expect(validate({ ...registryFile, blocked: [{ repoId: 5, reason: 'spam' }, { repoId: 6 }] })).toBe(true);
+  });
+
   test('validates against registry.schema.json', () => {
     expect(validate(registryFile)).toBe(true);
   });
@@ -61,6 +71,8 @@ describe('registry/registry.json', () => {
     ['a game with a bad module name', edited((draft) => { Object.assign(draft.games[0] ?? {}, { module: 'Bad-Name' }); })],
     ['a release kind the schema does not name', edited((draft) => { Object.assign(draft.games[0]?.release as Record<string, unknown>, { kind: 'other' }); })],
     ['another format number', { ...registryFile, format: 2 }],
+    ['a repo id that is not a whole number', edited((draft) => { Object.assign(draft.games[0]?.release as Record<string, unknown>, { repoId: 1.5 }); })],
+    ['a blocked entry with no repo id', { ...registryFile, blocked: [{ reason: 'spam' }] }],
   ])('the schema rejects %s', (_name, value) => {
     expect(validate(value)).toBe(false);
   });

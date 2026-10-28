@@ -1,5 +1,5 @@
 /* @layer core @kind types */
-import type { DataFiles, EngineRuntime, GameSource, WorldLayout, WorldTrust } from '@archipelia/model';
+import type { DataFiles, EngineRuntime, GameSource, WorldLayout, WorldOrigin, WorldTrust } from '@archipelia/model';
 import type { ApworldInfo } from './read-apworld.type';
 import type { HashDecision } from './hash-decision.type';
 import type { PackageConsent } from './package-consent.type';
@@ -17,6 +17,7 @@ type InstallJob = {
   hash: HashDecision;
   requires: string[];
   trust?: WorldTrust;
+  origin?: WorldOrigin;
   packages?: PackageConsent;
   wheels?: string[];
 };

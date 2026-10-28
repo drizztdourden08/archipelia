@@ -1,5 +1,6 @@
 /* @layer renderer-app @kind logic */
-import { FIT_LABEL, NO_RELEASE, SOURCE_LABEL, STATE_LABEL } from '../GameStore.constants';
+import { FIT_LABEL, NO_RELEASE, SOURCE_LABEL, STATE_LABEL, VERIFIED_CHOICE } from '../GameStore.constants';
+import { isVerified } from './is-verified';
 import type { GameRecord, GameRow } from '../GameStore.type';
 
 const fitOf = ({ entry }: GameRow) => {
@@ -12,6 +13,7 @@ const recordOf = (row: GameRow): GameRecord => ({
   source: SOURCE_LABEL[row.entry.source],
   state: STATE_LABEL[row.state],
   fit: fitOf(row),
+  verified: isVerified(row) ? VERIFIED_CHOICE.yes : VERIFIED_CHOICE.no,
   stability: row.entry.stability,
   tags: row.entry.tags,
 });

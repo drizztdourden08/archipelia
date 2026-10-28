@@ -1,8 +1,10 @@
 /* @layer core @kind logic */
 import type { InstalledGame } from '@archipelia/model';
 import { readRuntime } from '@archipelia/engine';
+import { assertDiscoveredWorld } from '../first-party/assert-discovered-world';
 import { chooseRelease } from '../first-party/choose-release';
-import { vetRelease } from '../first-party/vet-release';
+import { originOf } from '../first-party/origin-of';
+import { vetEntry } from '../first-party/vet-entry';
 import type { InstallWorldParams } from './install-world.type';
 import { checkSize } from './check-size';
 import { downloadWorld } from './download-world';
@@ -21,11 +23,13 @@ const installWorld = async ({ engineDir, files, entry, version, fetch: request =
     await checkSize(download.file, target.size, what);
     const hash = hashDecision(target.sha256, await hashFile(download.file), what);
     const info = await readApworld(download.file);
-    const vetted = await vetRelease({ entry, bytes: info.bytes, bundleUrl, trust, fetch: request });
+    assertDiscoveredWorld(entry, info);
+    const vetted = await vetEntry({ entry, bytes: info.bytes, bundleUrl, trust, fetch: request });
     return await commitInstall({
       runtime, files, file: download.file, info, apworld: entry.apworld, game: entry.game, version,
       source: entry.firstParty ? 'first-party' : 'index', layout: 'apworld', hash, requires: entry.requires ?? [],
       ...(vetted ? { trust: vetted } : {}),
+      ...originOf(entry),
       ...(packages ? { packages } : {}),
       ...(wheels ? { wheels } : {}),
     });

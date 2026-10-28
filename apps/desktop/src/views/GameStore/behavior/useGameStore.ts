@@ -20,6 +20,7 @@ import { useInstallActions } from './useInstallActions';
 import { emptyKind } from './empty-kind';
 import { removeKey } from './remove-key';
 import { limitNotice } from './limit-notice';
+import { readyNotice } from './ready-notice';
 import { NO_FILTERS, RETRY_SLACK_MS } from './useGameStore.constants';
 
 const useGameStore = (tab: GameTab) => {
@@ -40,6 +41,7 @@ const useGameStore = (tab: GameTab) => {
     return () => clearTimeout(timer);
   }, [limited, load]);
   const limitText = limitNotice(limited, Date.now());
+  const readyText = readyNotice(catalog?.ready);
 
   useInstalledEntries(installed);
 
@@ -68,7 +70,7 @@ const useGameStore = (tab: GameTab) => {
   const error = errorOf('load') ?? errorOf('file');
 
   return {
-    addFromFile, consent, empty, error, errorOf, filtered, filters, installWorld, isBusy, limitText, loadFailed, loading, needOf, openBuiltIn, query, refresh, remove, retry, rows, sections, setFilters, setQuery, shown, summary,
+    addFromFile, consent, empty, error, errorOf, filtered, filters, installWorld, isBusy, limitText, loadFailed, readyText, loading, needOf, openBuiltIn, query, refresh, remove, retry, rows, sections, setFilters, setQuery, shown, summary,
   };
 };
 

@@ -1,13 +1,14 @@
 /* @layer renderer-app @kind logic */
 import type { CardHandlers, GameRow } from '../GameStore.type';
 import type { GameCardAction, GameCardNote, GameCardProps, GameCardStatus } from '@archipelia/design';
-import { KIND_LABEL, KIND_OF, NO_RELEASE } from '../GameStore.constants';
+import { DISCOVERED_LABEL, KIND_LABEL, KIND_OF, NO_RELEASE } from '../GameStore.constants';
 import { busyOf } from './busy-of';
 import { failureOf } from './failure-of';
 import { isVerified } from './is-verified';
 import { needOf } from './need-of';
 import { removeKey } from './remove-key';
 import { requestOf } from './request-of';
+import { reviewNotes } from './review-notes';
 
 const statusOf = (row: GameRow, handlers: CardHandlers): GameCardStatus | undefined => {
   const { state, entry } = row;
@@ -44,7 +45,7 @@ const trustNote = ({ installed }: GameRow): GameCardNote[] => {
 const checksumNote = ({ entry, latest }: GameRow): GameCardNote[] =>
   (latest && !latest.sha256 && entry.source === 'index' ? [{ icon: 'triangle-alert', text: 'No published checksum', warning: true }] : []);
 
-const notesOf = (row: GameRow) => [...reasonNote(row), ...trustNote(row), ...checksumNote(row), ...rangeNote(row)];
+const notesOf = (row: GameRow) => [...reasonNote(row), ...reviewNotes(row), ...trustNote(row), ...checksumNote(row), ...rangeNote(row)];
 
 const installLabel = ({ state }: GameRow, installing: boolean) => {
   if (state === 'update') return installing ? 'Updating...' : 'Update';
@@ -72,7 +73,7 @@ const actionsOf = (row: GameRow, handlers: CardHandlers): GameCardAction[] => {
 const cardPropsOf = (row: GameRow, handlers: CardHandlers): GameCardProps => ({
   title: row.entry.displayName,
   kind: KIND_OF[row.entry.source],
-  kindLabel: KIND_LABEL[row.entry.source],
+  kindLabel: row.entry.discovered ? DISCOVERED_LABEL : KIND_LABEL[row.entry.source],
   verified: isVerified(row),
   version: versionOf(row),
   status: statusOf(row, handlers),

@@ -5,7 +5,7 @@ export type { LoadRegistryDeps, LoadRegistryOptions, RegistryLoad, RegistrySourc
 export { parseRegistry } from './registry/parse-registry';
 export type { RegistryParse } from './registry/parse-registry.type';
 export { REGISTRY_URL } from './registry/registry.constants';
-export type { ClientStatus, ClientTrust, GithubAttestationTrust, Registry, RegistryClient, RegistryGame, RegistryRelease, ReleaseKind } from './registry/registry.type';
+export type { ClientStatus, ClientTrust, GithubAttestationTrust, Registry, RegistryBlocked, RegistryClient, RegistryGame, RegistryRelease, ReleaseKind } from './registry/registry.type';
 export { loadTrustedRoot } from './verify/load-trusted-root';
 export type { FetchTrustedRoot, LoadTrustedRootDeps, LoadTrustedRootOptions, TrustedRootLoad, TrustedRootSource } from './verify/trusted-root.type';
 export { verifyProof } from './verify/verify-proof';

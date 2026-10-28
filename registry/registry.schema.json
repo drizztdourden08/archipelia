@@ -9,12 +9,23 @@
     "$schema": { "type": "string" },
     "format": { "const": 1 },
     "clients": { "type": "array", "items": { "$ref": "#/$defs/client" } },
-    "games": { "type": "array", "items": { "$ref": "#/$defs/game" } }
+    "games": { "type": "array", "items": { "$ref": "#/$defs/game" } },
+    "blocked": { "type": "array", "items": { "$ref": "#/$defs/blocked" } }
   },
   "$defs": {
     "text": { "type": "string", "minLength": 1 },
     "textList": { "type": "array", "items": { "$ref": "#/$defs/text" } },
     "repo": { "type": "string", "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$" },
+    "repoId": { "type": "integer", "minimum": 1 },
+    "blocked": {
+      "type": "object",
+      "required": ["repoId"],
+      "additionalProperties": false,
+      "properties": {
+        "repoId": { "$ref": "#/$defs/repoId" },
+        "reason": { "$ref": "#/$defs/text" }
+      }
+    },
     "client": {
       "type": "object",
       "required": ["id", "name", "homepage", "games", "status", "trust"],
@@ -57,6 +68,7 @@
           "additionalProperties": false,
           "properties": {
             "repo": { "$ref": "#/$defs/repo" },
+            "repoId": { "$ref": "#/$defs/repoId" },
             "world": { "$ref": "#/$defs/text" },
             "manifest": { "$ref": "#/$defs/text" },
             "bundle": { "$ref": "#/$defs/text" },

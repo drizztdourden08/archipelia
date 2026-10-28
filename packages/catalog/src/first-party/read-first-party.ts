@@ -16,6 +16,7 @@ const readFirstParty = async (deps: LoadRegistryDeps, options: LoadRegistryOptio
   return {
     entries: load.registry.games.map((game, i) => firstPartyEntry(game, states[i] ?? { kind: 'none' })),
     clients: load.registry.clients,
+    registry: load.registry,
     problems: [...load.problems, ...load.registry.games.flatMap((game, i) => failed(states[i] ?? { kind: 'none' }, game.game))],
     source: load.source,
   };

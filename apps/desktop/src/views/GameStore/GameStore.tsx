@@ -49,7 +49,7 @@ const GameStore = ({ tab }: GameStoreProps) => {
           )}
         />
       </Box>
-      <GameNotices limitText={store.limitText} error={store.error} onRetry={store.loadFailed ? store.retry : undefined} />
+      <GameNotices limitText={store.limitText} readyText={store.readyText} error={store.error} onRetry={store.loadFailed ? store.retry : undefined} />
       <Box className="game-store__body" data-tour={TOUR_TARGET.gamesGrid}>
         {store.shown === 0
           ? (

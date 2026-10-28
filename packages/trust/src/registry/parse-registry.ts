@@ -1,11 +1,12 @@
 /* @layer core @kind logic */
 import { isRecord } from '@archipelia/model';
+import { parseBlocked } from './parse-blocked';
 import { parseClient } from './parse-client';
 import { parseGame } from './parse-game';
 import { REGISTRY_FORMAT } from './registry.constants';
 import type { RegistryParse } from './parse-registry.type';
 import type { Parsed } from './parsed.type';
-import type { RegistryClient, RegistryGame } from './registry.type';
+import type { RegistryBlocked, RegistryClient, RegistryGame } from './registry.type';
 
 const collect = <T,>(items: unknown[], parse: (item: unknown) => Parsed<T>, problems: string[]) =>
   items.flatMap((item) => {
@@ -35,7 +36,9 @@ const parseRegistry = (value: unknown): RegistryParse => {
     problems.push(`game ${game.game} names the unknown client ${game.client}`);
     return false;
   });
-  return { ok: true, registry: { format: REGISTRY_FORMAT, clients, games }, problems };
+  if (value.blocked !== undefined && !Array.isArray(value.blocked)) problems.push('registry blocked is not a list');
+  const blocked: RegistryBlocked[] = Array.isArray(value.blocked) ? collect(value.blocked, parseBlocked, problems) : [];
+  return { ok: true, registry: { format: REGISTRY_FORMAT, clients, games, blocked }, problems };
 };
 
 export { parseRegistry };

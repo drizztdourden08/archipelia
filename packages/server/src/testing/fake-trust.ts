@@ -6,6 +6,7 @@ import { SIGNER } from './testing.constants';
 const registryOf = (status: 'active' | 'revoked'): Registry => ({
   format: 1,
   games: [],
+  blocked: [],
   clients: [{
     id: 'relic-of-the-past', name: 'Relic of the Past', homepage: 'https://github.com/drizztdourden08/relic-of-the-past', games: ['Relic of the Past'], status,
     trust: { method: 'github-attestation', repo: 'drizztdourden08/relic-of-the-past', workflow: '.github/workflows/release.yml', refs: ['refs/heads/main'], issuer: 'https://token.actions.githubusercontent.com' },

@@ -23,7 +23,7 @@ type RegistryClient = {
 
 type ReleaseKind = 'builds';
 
-type RegistryRelease = { repo: string; world: string; manifest: string; bundle: string; kind?: ReleaseKind };
+type RegistryRelease = { repo: string; repoId?: number; world: string; manifest: string; bundle: string; kind?: ReleaseKind };
 
 type RegistryGame = {
   game: string;
@@ -35,6 +35,8 @@ type RegistryGame = {
   release: RegistryRelease;
 };
 
-type Registry = { format: 1; clients: RegistryClient[]; games: RegistryGame[] };
+type RegistryBlocked = { repoId: number; reason?: string };
 
-export type { ClientStatus, ClientTrust, GithubAttestationTrust, Registry, RegistryClient, RegistryGame, RegistryRelease, ReleaseKind };
+type Registry = { format: 1; clients: RegistryClient[]; games: RegistryGame[]; blocked: RegistryBlocked[] };
+
+export type { ClientStatus, ClientTrust, GithubAttestationTrust, Registry, RegistryBlocked, RegistryClient, RegistryGame, RegistryRelease, ReleaseKind };

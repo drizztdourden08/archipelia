@@ -27,7 +27,7 @@ type GameSectionRows = { id: GameSectionId; rows: GameRow[] };
 
 type EmptyKind = 'loading' | 'search' | 'none' | 'installed' | 'updates';
 
-type GameRecord = { name: string; source: string; state: string; fit: string; stability: string; tags: string[] };
+type GameRecord = { name: string; source: string; state: string; fit: string; verified: string; stability: string; tags: string[] };
 
 type GameSummary = { worlds: number; installed: number; updates: number; noRelease: number; shown: number; apVersion?: string };
 

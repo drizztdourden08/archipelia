@@ -1,12 +1,6 @@
 /* @layer core @kind logic */
 import type { CatalogEntry } from '@archipelia/model';
-
-const withCommunityGuides = (entry: CatalogEntry, community: CatalogEntry | undefined): CatalogEntry => ({
-  ...entry,
-  setupGuide: entry.setupGuide ?? community?.setupGuide,
-  tracker: entry.tracker ?? community?.tracker,
-  tags: entry.tags.length > 0 ? entry.tags : (community?.tags ?? []),
-});
+import { withCommunityGuides } from './with-community-guides';
 
 const mergeCatalog = (community: CatalogEntry[], firstParty: CatalogEntry[]): CatalogEntry[] => {
   const official = new Set(community.filter((entry) => entry.source === 'official').map((entry) => entry.apworld));

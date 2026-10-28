@@ -104,9 +104,18 @@ const bytesResponse = (bytes: Uint8Array) => new Response(Buffer.from(bytes), { 
 
 const missing = () => new Response('', { status: 404 });
 
+const SEARCH_BASE = 'https://api.github.com/search/repositories?';
+
+const noSearch = () => json({ total_count: 0, items: [] });
+
+const defaultRoute = (url: string): (() => Response) | undefined => {
+  if (url === STANDARD_URL) return missing;
+  return url.startsWith(SEARCH_BASE) ? noSearch : undefined;
+};
+
 const routed = (routes: Record<string, () => Response>): typeof fetch => (input) => {
   const url = String(input);
-  const route = routes[url] ?? (url === STANDARD_URL ? missing : undefined);
+  const route = routes[url] ?? defaultRoute(url);
   return route ? Promise.resolve(route()) : Promise.reject(new Error(`offline: ${String(input)}`));
 };
 

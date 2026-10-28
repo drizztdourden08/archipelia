@@ -46,7 +46,7 @@ const install = (patch: Partial<CatalogEntry>, routes: Parameters<typeof createW
     engineDir: '', files, entry: entryOf(patch), version: '0.1.0', fetch: createWorldFetch(bytes, routes), trust: trustWith(status),
   });
 
-const committed = () => (commit.mock.calls[0]?.[0] ?? {}) as { source?: string; trust?: { state: string; detail: string }; hash?: { verified: boolean } };
+const committed = () => (commit.mock.calls[0]?.[0] ?? {}) as { source?: string; trust?: { state: string; detail: string }; hash?: { verified: boolean }; origin?: unknown };
 
 beforeEach(() => {
   apVersion.value = '0.6.7';
@@ -167,6 +167,37 @@ describe('installing a per-version build', () => {
     apVersion.value = '0.6.7';
     verify.mockReturnValue({ ok: false, code: 'trust-failed', reason: 'digest-mismatch', detail: 'the bundle attests a different file' });
     await expect(installBuild(buildsEntry(), { [buildBundleUrl('0.6.7')]: () => json({ mediaType: 'bundle' }) })).rejects.toThrow(/is refused: the bundle attests a different file/);
+    expect(commit).not.toHaveBeenCalled();
+  });
+});
+
+const topicOf = (patch: Partial<CatalogEntry> = {}) => entryOf({
+  firstParty: { repo: 'maker/star-quest', bundleUrl: BUNDLE_URL },
+  discovered: { repoId: 7, repo: 'maker/star-quest', owner: 'maker', stars: 3, pushedAt: '', createdAt: '', direct: false },
+  ...patch,
+});
+
+const installTopic = (patch: Partial<CatalogEntry> = {}) =>
+  installWorld({ engineDir: '', files, entry: topicOf(patch), version: '0.1.0', fetch: createWorldFetch(bytes, {}) });
+
+describe('installing a world found by its topic', () => {
+  test('is recorded as not reviewed, with the repository it came from, and no signature is asked for', async () => {
+    await installTopic();
+    expect(verify).not.toHaveBeenCalled();
+    expect(committed()).toMatchObject({
+      source: 'first-party',
+      trust: { state: 'unverified', detail: 'Not reviewed: maker/star-quest' },
+      origin: { repoId: 7, repo: 'maker/star-quest' },
+    });
+  });
+
+  test('is refused when the apworld holds another world than the release lists', async () => {
+    await expect(installTopic({ apworld: 'other_world' })).rejects.toThrow(/holds the world relic_of_the_past, the release lists other_world/);
+    expect(commit).not.toHaveBeenCalled();
+  });
+
+  test('is refused when the apworld names another game than the release lists', async () => {
+    await expect(installTopic({ game: 'Another Game' })).rejects.toThrow(/names the game Relic of the Past, the release lists Another Game/);
     expect(commit).not.toHaveBeenCalled();
   });
 });

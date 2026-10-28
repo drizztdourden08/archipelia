@@ -3,7 +3,7 @@ import { isRecord } from '@archipelia/model';
 import { STANDARD_FORMAT } from './first-party.constants';
 import type { StandardBuild, StandardFile, StandardManifest } from './first-party.type';
 import { isOptionalText } from './is-optional-text';
-import { APWORLD_FILE, BUNDLE_FILE, SHA256 } from './is-standard-manifest.constants';
+import { APWORLD_FILE, BUNDLE_FILE, MODULE_NAME, SHA256 } from './is-standard-manifest.constants';
 
 const text = (value: unknown): value is string => typeof value === 'string' && value.length > 0;
 
@@ -28,7 +28,7 @@ const isStandardManifest = (value: unknown): value is StandardManifest =>
   isRecord(value)
   && value.format === STANDARD_FORMAT
   && text(value.game)
-  && text(value.module)
+  && matches(MODULE_NAME, value.module)
   && text(value.worldVersion)
   && text(value.minimumAp)
   && isOptionalText(value.maximumAp)
