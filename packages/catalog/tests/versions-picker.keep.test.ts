@@ -180,11 +180,19 @@ describe('adding a chosen release', () => {
     expect(installWorld).not.toHaveBeenCalled();
   });
 
-  test('without a tag the install is the newest stable, as the card does, and records its tag', async () => {
+  test('without a tag the install downloads the newest stable by its tag and records that tag', async () => {
+    const fits = { ...manifestRoute(REPO, readyManifest('Star Quest', 'star_quest', { worldVersion: '1.1.0' })), [releasesUrl(REPO)]: () => json(releasesBody(STAR.slice(3))) };
+    await serviceWith(fits).install(accept);
+    const call = installWorld.mock.calls[0]?.[0] as { entry: { versions: { url: string }[] }; release?: unknown };
+    expect(call.entry.versions[0]?.url).toBe(downloadUrl(REPO, 'v1.1.0', 'star_quest.apworld'));
+    expect(call.release).toEqual({ tag: 'v1.1.0', prerelease: false });
+  });
+
+  test('without a tag, a newest stable that is not what the card shows is not recorded', async () => {
     await serviceWith().install(accept);
     const call = installWorld.mock.calls[0]?.[0] as { entry: { versions: { url: string }[] }; release?: unknown };
     expect(call.entry.versions[0]?.url).toBe(`https://github.com/${REPO}/releases/latest/download/star_quest.apworld`);
-    expect(call.release).toEqual({ tag: 'v1.2.0', prerelease: false });
+    expect(call.release).toBeUndefined();
   });
 
   test('the default install still goes ahead when the releases list cannot be read', async () => {

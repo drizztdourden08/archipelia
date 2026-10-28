@@ -16,5 +16,8 @@ describe('names from a topic repository', () => {
     expect(sameName('Relic of the Past', 'Relic\u200B of the Past')).toBe(true);
     expect(sameName('Relic of the Past', '\uFF32elic of the Past')).toBe(true);
     expect(sameName('Relic of the Past', 'Relic of the Pasture')).toBe(false);
+    expect(sameName('Timespinner', '\u0422imespinner')).toBe(true);
+    expect(sameName('Name Quest', '\u039Dame Quest')).toBe(true);
+    expect(sameName('Kirby', '\u041Airby')).toBe(true);
   });
 });

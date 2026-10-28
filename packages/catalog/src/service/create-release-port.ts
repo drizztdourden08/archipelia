@@ -9,11 +9,9 @@ const createReleasePort = ({ cache, fetch: request, activeAp, indexEntry }: Rele
   const releases = createVersions({ files: cache, ...(request ? { fetch: request } : {}) });
 
   const chosen = async (wanted: Extract<InstallRequest, { kind: 'index' }>, entry: CatalogEntry, current: Latest) => {
-    if (wanted.tag === undefined) {
-      const release = await releases.latest(entry);
-      return { entry, version: wanted.version, ...(release ? { release } : {}) };
-    }
-    return releases.pin({ entry, registry: current.firstParty.registry, ap: await activeAp(), tag: wanted.tag });
+    const params = { entry, registry: current.firstParty.registry, ap: await activeAp() };
+    if (wanted.tag !== undefined) return releases.pin({ ...params, tag: wanted.tag });
+    return (await releases.current(params)) ?? { entry, version: wanted.version };
   };
 
   const versions = async (wanted: VersionsRequest): Promise<VersionList> => {

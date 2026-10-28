@@ -8,8 +8,7 @@ const reinstallChoice = async (versions: ReturnType<typeof createVersions>, { en
     const { pinned, note } = await versions.repin({ entry, registry, ap, before: before.release });
     if (pinned) return { ...pinned, ...(note ? { note } : {}) };
   }
-  const release = await versions.latest(entry);
-  return { entry, version: releaseVersion(entry) ?? '', ...(release ? { release } : {}) };
+  return (await versions.current({ entry, registry, ap })) ?? { entry, version: releaseVersion(entry) ?? '' };
 };
 
 export { reinstallChoice };

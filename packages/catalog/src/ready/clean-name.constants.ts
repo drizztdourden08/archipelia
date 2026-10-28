@@ -15,4 +15,11 @@ const LOOK_ALIKES: ReadonlyMap<string, string> = new Map([
   ['\u0131', 'i'], ['\u0269', 'i'], ['\u1D00', 'a'], ['\u1D0F', 'o'], ['\u1D1C', 'u'],
 ]);
 
-export { COMBINING_MARKS, HIDDEN_CHARACTERS, LOOK_ALIKES, MAX_NAME_LENGTH, SPACE_RUNS };
+const CAPITAL_LOOK_ALIKES: ReadonlyMap<string, string> = new Map([
+  ['\u0410', 'A'], ['\u0412', 'B'], ['\u0415', 'E'], ['\u041A', 'K'], ['\u041C', 'M'], ['\u041D', 'H'], ['\u041E', 'O'], ['\u0420', 'P'], ['\u0421', 'C'],
+  ['\u0422', 'T'], ['\u0425', 'X'], ['\u0423', 'Y'], ['\u0406', 'I'], ['\u0408', 'J'], ['\u0405', 'S'],
+  ['\u0391', 'A'], ['\u0392', 'B'], ['\u0395', 'E'], ['\u0396', 'Z'], ['\u0397', 'H'], ['\u0399', 'I'], ['\u039A', 'K'], ['\u039C', 'M'], ['\u039D', 'N'],
+  ['\u039F', 'O'], ['\u03A1', 'P'], ['\u03A4', 'T'], ['\u03A5', 'Y'], ['\u03A7', 'X'],
+]);
+
+export { CAPITAL_LOOK_ALIKES, COMBINING_MARKS, HIDDEN_CHARACTERS, LOOK_ALIKES, MAX_NAME_LENGTH, SPACE_RUNS };
