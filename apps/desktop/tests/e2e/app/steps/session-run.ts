@@ -4,7 +4,7 @@ import type { Locator, Page } from 'playwright-core';
 import type { LaunchedApp } from '../support/launched-app.type';
 import { settledProof } from '../support/settled-proof';
 import { LOCAL_PORT, SOH, TEMPLATE, TIMESPINNER } from '../support/flow-constants';
-import { base, docked, openScreen, pickOption, playerRowOf } from '../support/locators';
+import { base, docked, openScreen, pickOption, seatEditorOf, seatsOf } from '../support/locators';
 
 const RUN_TIMEOUT = 300000;
 
@@ -16,14 +16,14 @@ const PLAYERS: PlayerPlan[] = [
 ];
 
 const fillPlayer = async (page: Page, builder: Locator, { slot, name, game, preset }: PlayerPlan) => {
-  await builder.getByRole('button', { name: 'Add player' }).click();
-  const row = playerRowOf(builder, slot);
-  await row.getByRole('textbox', { name: 'Name', exact: true }).fill(name);
-  await pickOption(page, row.getByRole('combobox', { name: 'Game', exact: true }), game);
-  await row.getByRole('combobox', { name: 'Preset', exact: true }).filter({ hasText: preset }).waitFor();
-  for (const action of [`Edit overrides of ${name}`, `More for ${name}`, `Remove ${name}`]) {
-    await row.getByRole('button', { name: action, exact: true }).waitFor();
-  }
+  await builder.getByRole('button', { name: 'Add player', exact: true }).click();
+  const editor = seatEditorOf(builder, slot);
+  await editor.getByRole('textbox', { name: 'Name', exact: true }).fill(name);
+  await pickOption(page, editor.getByRole('combobox', { name: 'Game', exact: true }), game);
+  await editor.getByRole('combobox', { name: 'Preset', exact: true }).filter({ hasText: preset }).waitFor();
+  const seats = seatsOf(builder);
+  await seats.getByRole('button', { name, exact: true }).waitFor();
+  await seats.getByRole('button', { name: `Remove ${name}`, exact: true }).waitFor();
 };
 
 const buildSession = async (launched: LaunchedApp) => {

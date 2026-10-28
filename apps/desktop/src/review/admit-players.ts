@@ -6,6 +6,7 @@ import { appApi } from '../ipc/app-api';
 import type { LobbyReviewHost } from '../lobbies/lobbies.type';
 import { REVIEW_DIRECT, REVIEW_JOINER, REVIEW_PLAYER } from './review.constants';
 import { SELECTOR } from './review-dom.constants';
+import { checkSeatGrid } from './check-seat-grid';
 import { clickNamed } from './click-named';
 import { directLobby } from './direct-lobby';
 import { nameOf } from './name-of';
@@ -44,6 +45,7 @@ const worldAsked = (tour: AppReviewTour) => tour.findAll(SELECTOR.button, layer(
 
 const admitJoiner = async (tour: AppReviewTour, lobbyId: string) => {
   const approve = await tour.waitFor(() => enabled(tour, `Approve ${REVIEW_JOINER}`), 15000);
+  checkSeatGrid(tour, REVIEW_JOINER);
   if (approve) tour.click(approve);
   const consent = await tour.waitFor(() => slotReady(lobbyId, REVIEW_JOINER) ?? (worldAsked(tour) ? true : null), 15000);
   if (consent && !slotReady(lobbyId, REVIEW_JOINER)) await allowWorld(tour, REVIEW_JOINER);

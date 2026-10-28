@@ -16,8 +16,6 @@ const PlayersEditor = ({ draft, setDraft, installed, presets, createPreset, guar
       selected={draft.players.find((player) => player.slot === slot)}
       busy={busy}
       direct={draft.direct !== undefined}
-      seats
-      connectedCount={0}
       actions={actions}
       onEdit={toggle}
     />

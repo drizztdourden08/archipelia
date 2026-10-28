@@ -5,12 +5,12 @@ import { artOf } from '../../behavior/art-of';
 import { busyOf } from '../../behavior/busy-of';
 import { busyText } from '../../behavior/busy-text';
 import { cardPropsOf } from '../../behavior/card-props';
-import { enrichKey } from '../../behavior/enrich-key';
+import { enrichKey } from '../../../../stores/enrich-key';
 import { failureOf } from '../../behavior/failure-of';
 import { needOf } from '../../behavior/need-of';
 import { needProps } from '../../behavior/need-props';
 import { textOf } from '../../behavior/text-of';
-import { useEnrichStore } from '../../behavior/useEnrichStore';
+import { useEnrichStore } from '../../../../stores/useEnrichStore';
 import type { GameDetailsDialogProps } from './GameDetailsDialog.type';
 
 const GameDetailsDialog = ({ row, handlers, onClose }: GameDetailsDialogProps) => {

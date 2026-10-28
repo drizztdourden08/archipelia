@@ -5,7 +5,7 @@ import { OverridesPanel } from '../OverridesPanel';
 import { PlayersCard } from '../PlayersCard';
 import type { PlayersPanelProps } from './PlayersPanel.type';
 
-const PlayersPanel = ({ players, installed, presets, selected, busy, direct, seats, connected, connectedCount, actions, onEdit }: PlayersPanelProps) => {
+const PlayersPanel = ({ players, installed, presets, selected, busy, direct, actions, onEdit }: PlayersPanelProps) => {
   const { game, preset } = sourcesOf(selected, installed, presets);
   return (
     <Stack gap="md">
@@ -16,9 +16,6 @@ const PlayersPanel = ({ players, installed, presets, selected, busy, direct, sea
         selectedSlot={selected?.slot}
         busy={busy}
         direct={direct}
-        seats={seats}
-        connected={connected}
-        connectedCount={connectedCount}
         actions={actions}
         onEdit={onEdit}
       />

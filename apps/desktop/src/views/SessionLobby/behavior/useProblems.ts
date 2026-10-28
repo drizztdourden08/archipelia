@@ -1,13 +1,12 @@
 /* @layer renderer-app @kind hook */
 import { useCallback, useMemo, useRef, useState } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
 import type { SessionTemplate } from '@archipelia/model';
 import type { LibraryView, TemplateProblem } from '../SessionLobby.type';
 import { validatePlayers } from './validate-players';
 import { focusProblem } from './focus-problem';
 import { problemSlot } from './problem-slot';
 
-const useProblems = (draft: SessionTemplate, library: LibraryView, select: Dispatch<SetStateAction<number | null>>) => {
+const useProblems = (draft: SessionTemplate, library: LibraryView, select: (slot: number, overrides: boolean) => void) => {
   const { installed, presets } = library;
   const problems = useMemo(() => validatePlayers(draft, { installed, presets }), [draft, installed, presets]);
   const [runAttempted, setRunAttempted] = useState(false);
@@ -20,7 +19,7 @@ const useProblems = (draft: SessionTemplate, library: LibraryView, select: Dispa
 
   const showProblem = useCallback((problem: TemplateProblem) => {
     const slot = problemSlot(problem, draft.players);
-    if (slot !== null) select(slot);
+    if (slot !== null) select(slot, problem.field === 'option');
     requestAnimationFrame(() => focusProblem(rootRef.current, problem));
   }, [draft.players, select]);
 

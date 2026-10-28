@@ -6,8 +6,9 @@ import { useRunLauncher } from '../../../hooks/useRunLauncher';
 import { useSessionStart } from '../../../hooks/useSessionStart';
 import { useTabDraftStore } from '../../../stores/useTabDraftStore';
 import type { LobbyActionDeps } from '../SessionLobby.type';
+import { nextSlot } from './next-slot';
 
-const useLobbyActions = ({ tab, saved, draft, guard, attemptRun }: LobbyActionDeps) => {
+const useLobbyActions = ({ tab, saved, draft, saveTemplate, guard, attemptRun }: LobbyActionDeps) => {
   const startSession = useSessionStart();
   const launcher = useRunLauncher();
   const { tabId } = tab;
@@ -21,7 +22,12 @@ const useLobbyActions = ({ tab, saved, draft, guard, attemptRun }: LobbyActionDe
 
   const close = useCallback(() => guard('close', () => closeTab(tabId)), [guard, tabId]);
 
-  return { close, run };
+  const keep = useCallback((slot: number) => guard('keep', async () => {
+    const player = draft.players.find((entry) => entry.slot === slot);
+    if (player) await saveTemplate({ ...saved, players: [...saved.players, { ...structuredClone(player), slot: nextSlot(saved.players) }] });
+  }), [draft.players, guard, saveTemplate, saved]);
+
+  return { close, keep, run };
 };
 
 export { useLobbyActions };

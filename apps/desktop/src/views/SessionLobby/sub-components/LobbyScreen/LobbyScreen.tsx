@@ -7,8 +7,8 @@ import type { LobbyScreenProps } from '../../SessionLobby.type';
 import { useLobbyNotices } from '../../behavior/useLobbyNotices';
 import { useLobbyScreen } from '../../behavior/useLobbyScreen';
 import { LobbyHeader } from '../LobbyHeader';
-import { PlayersPane } from '../PlayersPane';
 import { ProblemList } from '../ProblemList';
+import { SeatsPane } from '../SeatsPane';
 
 const LobbyScreen = (props: LobbyScreenProps) => {
   const screen = useLobbyScreen(props);
@@ -33,7 +33,7 @@ const LobbyScreen = (props: LobbyScreenProps) => {
         {notices.map((notice) => <Callout key={notice} tone="warning">{notice}</Callout>)}
         {screen.lobby?.failure && <Callout tone="danger">{`The last run failed: ${screen.lobby.failure.message}`}</Callout>}
         <ProblemList problems={screen.problems} attempted={screen.runAttempted} onShow={screen.showProblem} />
-        <PlayersPane screen={screen} />
+        <SeatsPane screen={screen} />
       </Stack>
     </Box>
   );

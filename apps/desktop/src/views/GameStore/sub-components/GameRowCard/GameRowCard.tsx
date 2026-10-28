@@ -3,9 +3,9 @@ import { Box, useInView } from '@drizztdourden08/tessera/primitives';
 import { GameCard } from '@archipelia/design';
 import { useEffect, useRef } from 'react';
 import { cardPropsOf } from '../../behavior/card-props';
-import { enrichKey } from '../../behavior/enrich-key';
+import { enrichKey } from '../../../../stores/enrich-key';
 import { artOf } from '../../behavior/art-of';
-import { useEnrichStore } from '../../behavior/useEnrichStore';
+import { useEnrichStore } from '../../../../stores/useEnrichStore';
 import { SEEN_DWELL_MS } from '../../GameStore.constants';
 import type { GameRowCardProps } from './GameRowCard.type';
 
