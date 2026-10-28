@@ -7,6 +7,9 @@ vi.mock('../src/read-catalog', () => ({ readCatalog }));
 vi.mock('../src/first-party/read-first-party', () => ({
   readFirstParty: () => Promise.resolve({ entries: [], clients: [], problems: [], source: 'floor' }),
 }));
+vi.mock('../src/ready/create-ready', () => ({
+  createReady: () => () => Promise.resolve({ search: { repos: [], total: 0, fetched: 0, fetchedAt: 0, problems: [] }, candidates: [] }),
+}));
 
 const { createCatalogService } = await import('../src/service/create-catalog-service');
 
