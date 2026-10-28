@@ -1,17 +1,23 @@
 /* @layer tests @kind helper */
 import type { LaunchedApp } from './launched-app.type';
 
-type RunsApi = {
-  sessionsList: () => Promise<{ id: string; status: string; snapshot: { name: string } }[]>;
-  sessionsRoomPassword: (id: string) => Promise<string | null>;
-};
-
 const roomPasswordOf = (launched: LaunchedApp, name: string): Promise<string> =>
   launched.page.evaluate(async (runName) => {
-    const api = (window as unknown as { api: RunsApi }).api;
-    const run = (await api.sessionsList()).find((entry) => entry.snapshot.name === runName && entry.status === 'hosting');
-    if (!run) throw new Error(`no hosting run named ${runName}`);
-    return (await api.sessionsRoomPassword(run.id)) ?? '';
+    const api: unknown = Reflect.get(window, 'api');
+    const field = (value: unknown, key: string): unknown => (typeof value === 'object' && value !== null ? Reflect.get(value, key) : undefined);
+    const call = (method: string, ...args: string[]): Promise<unknown> => {
+      const fn = field(api, method);
+      if (typeof fn !== 'function') throw new Error(`window.api has no ${method}`);
+      return Promise.resolve(Reflect.apply(fn, api, args));
+    };
+    const runs = await call('sessionsList');
+    const found = Array.isArray(runs)
+      ? runs.find((entry: unknown) => field(entry, 'status') === 'hosting' && field(field(entry, 'snapshot'), 'name') === runName)
+      : undefined;
+    const id = field(found, 'id');
+    if (typeof id !== 'string') throw new Error(`no hosting run named ${runName}`);
+    const password = await call('sessionsRoomPassword', id);
+    return typeof password === 'string' ? password : '';
   }, name);
 
 export { roomPasswordOf };

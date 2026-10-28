@@ -1,7 +1,6 @@
 /* @layer renderer-app @kind logic */
 import type { CatalogView } from '@archipelia/catalog';
-
-const MINUTE_MS = 60_000;
+import { MINUTE_MS } from './limit-notice.constants';
 
 const timeOf = (at: number) => new Date(at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
