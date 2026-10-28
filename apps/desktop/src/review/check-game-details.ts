@@ -1,5 +1,6 @@
 /* @layer renderer-app @kind logic */
 import type { AppReviewTour } from '@drizztdourden08/brock-react';
+import { DIRECT_LABEL } from '@archipelia/design';
 import { checkVersionPicker } from './check-version-picker';
 import { clickNamed } from './click-named';
 import { named } from './named';
@@ -13,6 +14,7 @@ const checkGameDetails = async (tour: AppReviewTour, layer: HTMLElement | undefi
   tour.check('games-details-open', dialog !== null, 'the title of a card opens its details dialog', 'the title of a card did not open its details dialog');
   if (dialog === null) return;
   checkVersionPicker(tour, dialog);
+  tour.check('games-details-built-in-not-direct', !dialog.textContent.includes(DIRECT_LABEL), 'the details dialog of a built-in world does not say it joins directly', 'the details dialog of a built-in world says it joins directly');
   await tour.capture('games-details');
   tour.press({ key: 'Escape' });
   const closed = await tour.waitFor(() => (named(tour, SELECTOR.dialog, REVIEW_GAME.card) ? null : true));

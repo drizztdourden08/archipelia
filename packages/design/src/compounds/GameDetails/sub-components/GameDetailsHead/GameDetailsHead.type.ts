@@ -7,6 +7,7 @@ type GameDetailsHeadProps = {
   art?: string | undefined;
   version?: string | undefined;
   verified?: boolean | undefined;
+  direct?: boolean | undefined;
   status?: GameCardStatus | undefined;
 };
 

@@ -20,6 +20,7 @@ export { ADMISSIONS, RELEASE_MODES, REMAINING_MODES, SPOILER_LEVELS } from './se
 export { templateOf } from './template-of';
 export { hostedPlayers } from './hosted-players';
 export { isHosted } from './is-hosted';
+export { joinsDirectly } from './joins-directly';
 export type * from './run-record';
 export { UNKNOWN_SOURCE_NAME, buildRun, runOf, runOverridesOf, runPlayersOf } from './run-record';
 export { runJobId } from './run-job-id';

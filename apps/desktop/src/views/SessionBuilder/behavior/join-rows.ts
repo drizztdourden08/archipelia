@@ -30,12 +30,20 @@ const allowRow = ({ draft, live, busy, onAllow }: JoinRowsInput): SettingsSectio
   };
 };
 
+const worldsRows = ({ directWorlds, worlds, draft }: JoinRowsInput): SettingsSectionRow[] => {
+  if (directWorlds.length === 0) return [];
+  const blocked = !draft.direct?.allowUnlisted && directWorlds.some((world) => !world.listed);
+  const { title, description, hint, unlisted } = DIRECT_TEXT.worlds;
+  return [{ id: 'worlds', title, description, hint: blocked ? unlisted : hint, content: worlds }];
+};
+
 const directRows = (input: JoinRowsInput): SettingsSectionRow[] => {
   const { direct } = input.draft;
   const { busy, onOptions } = input;
   if (!direct) return [allowRow(input)];
   return [
     allowRow(input),
+    ...worldsRows(input),
     { id: 'approval', ...DIRECT_TEXT.approval, disabled: busy, input: { kind: 'toggle', value: direct.admission === 'host-approval', onChange: (on) => onOptions({ admission: on ? 'host-approval' : 'open' }) } },
     { id: 'unlisted', ...DIRECT_TEXT.unlisted, disabled: busy, input: { kind: 'toggle', value: direct.allowUnlisted, onChange: (allowUnlisted) => onOptions({ allowUnlisted }) } },
   ];

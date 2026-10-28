@@ -25,6 +25,7 @@ type GameDetailsProps = {
   markdown?: string;
   art?: string;
   verified?: boolean;
+  direct?: boolean;
   busy?: string;
   error?: string;
   need?: GameDetailsNeed;

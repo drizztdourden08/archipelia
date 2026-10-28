@@ -30,6 +30,7 @@ type GameCardProps = {
   actions: GameCardAction[];
   art?: string;
   verified?: boolean;
+  direct?: boolean;
   onOpen?: () => void;
 };
 
