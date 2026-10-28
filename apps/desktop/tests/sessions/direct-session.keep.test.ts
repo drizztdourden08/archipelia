@@ -1,6 +1,6 @@
 /* @layer tests @kind test */
 import { afterEach, describe, expect, test, vi } from 'vitest';
-import type { AdminLobby, SessionTemplate } from '@archipelia/model';
+import type { AdminLobby, HostedPlayer, SessionTemplate } from '@archipelia/model';
 import type { Bindings, HostLine } from '@drizztdourden08/archipelia-lobby-protocol/testing';
 import { connectWebSocket, createFakeClient, createScenarioKit, loadScenario } from '@drizztdourden08/archipelia-lobby-protocol/testing';
 import { startLobbyRig } from '@archipelia/server/testing';
@@ -42,7 +42,7 @@ const sessionOf = (patch: Partial<SessionTemplate> = {}): SessionTemplate => ({
 const lobbyDeps = (on: Rig) => ({
   act: actOn(on),
   list: listOn(on),
-  slotOf: (player: SessionTemplate['players'][number]) =>
+  slotOf: (player: HostedPlayer) =>
     Promise.resolve({ name: player.name, game: player.game, yaml: player.source.kind === 'yaml' ? player.source.yaml : '', worldVersion: '1.0.0' }),
 });
 

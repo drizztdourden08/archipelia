@@ -7,7 +7,7 @@ const SESSIONS_STEPS: readonly TourStepDef[] = [
   {
     id: 'sessions',
     title: 'Sessions',
-    body: 'A session is a saved setup: who plays, which games and presets, and where the room runs. This page lists your sessions. Their runs are kept in History. To play in a room that someone else hosts, use Join a session.',
+    body: 'A session is a saved setup: where the room runs, how players join and which players are saved with it. The list is on the left and the setup of the picked session is on the right. Their runs are kept in History. To play in a room that someone else hosts, use Join a session.',
     target: TOUR_PART.page,
     mascot: 'point',
     open: ROUTE.sessions,
@@ -16,7 +16,7 @@ const SESSIONS_STEPS: readonly TourStepDef[] = [
   {
     id: 'sessions-list',
     title: 'Your sessions',
-    body: 'Start on a session opens it as a tab in the main window. The tab starts in the lobby: you add the players there and press Run, which makes the seed and hosts the room. Edit changes the setup.',
+    body: 'Pick a session to see its setup. The filter narrows the list, and the menu of a row duplicates or deletes it. Run opens the session as a tab in the main window, where the lobby takes players and you press Run again to make the seed and host the room.',
     target: { tour: TOUR_TARGET.sessionsList },
     mascot: 'curious',
     open: ROUTE.sessions,
@@ -33,9 +33,17 @@ const SESSIONS_STEPS: readonly TourStepDef[] = [
   {
     id: 'sessions-builder',
     title: 'The session setup',
-    body: 'The setup page holds the session itself: its name, where the room runs, direct connection and the server options. Save keeps it. Start session opens its tab.',
+    body: 'The setup holds the session itself: its name, where the room runs, direct connection and the server options. Save keeps it and Run opens its tab. With unsaved changes, Run once uses them for one run and leaves the saved session as it is.',
     target: { tour: TOUR_TARGET.builderBar },
     mascot: 'idea',
+    open: ROUTE.newSession,
+  },
+  {
+    id: 'sessions-players',
+    title: 'Saved players',
+    body: 'The players saved with the session. Direct lets a player connect on their own and bring their own game, after you approve them. Such a player can stay without a game. A game set here is the fallback used if they have not joined when you run.',
+    target: { tour: TOUR_TARGET.sessionsPlayers },
+    mascot: 'curious',
     open: ROUTE.newSession,
   },
   {
@@ -50,7 +58,7 @@ const SESSIONS_STEPS: readonly TourStepDef[] = [
   {
     id: 'history',
     title: 'History',
-    body: 'Every run is kept here with the session it came from, the changes it ran with, who played and its seed and files. Pick a run to see them. The menu of a session has a link to the runs of that session.',
+    body: 'Every run is kept here with the session it came from, the changes it ran with, who played and its seed and files. Pick a run to see them. The setup of a session has a link to the runs of that session.',
     target: { tour: TOUR_TARGET.historyList },
     mascot: 'curious',
     open: ROUTE.history,

@@ -34,7 +34,7 @@ const OverridesPanel = ({ player, game, preset, onValue, onReset, onResetAll, on
       <Stack gap="sm">
         <SectionHeader
           title={`Overrides · player ${slot}`}
-          subtitle={`${player.name || 'unnamed'} · ${player.game || 'no game'} · ${preset?.name ?? 'no preset'}`}
+          subtitle={`${player.name || 'unnamed'} · ${(player.game ?? '') || 'no game'} · ${preset?.name ?? 'no preset'}`}
           action={actions}
         />
         <FilterBar

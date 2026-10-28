@@ -9,18 +9,20 @@ import { runChip } from '../../src/views/History/behavior/run-chip';
 import { statusOf } from '../../src/views/History/behavior/run-status';
 import { NO_FILTER } from '../../src/stores/history-filter-store.constants';
 import { hostLabel } from '@archipelia/model';
-import { matchesTemplate } from '../../src/views/SessionsLibrary/behavior/matches-template';
-import { templateMeta } from '../../src/views/SessionsLibrary/behavior/template-meta';
+import { playersLabel } from '../../src/views/Sessions/behavior/players-label';
+import { whereLabel } from '../../src/views/Sessions/behavior/where-label';
+import { runStatsOf } from '../../src/runs/run-stats-of';
 import { presetPlayer } from './session-fixtures';
 
 const TEMPLATE = { ...newTemplate('t1'), name: 'Friday night', players: [presetPlayer(1, 'Johnny'), presetPlayer(2, 'Marie')] };
 
 describe('session summary', () => {
-  test('meta lists players, host and spoiler', () => {
-    expect(templateMeta(TEMPLATE)).toBe('Johnny · Marie · local :38281 · spoiler full');
+  test('the row says where the session runs and how many players it has', () => {
+    expect(whereLabel(TEMPLATE, [])).toBe('Local');
+    expect(whereLabel({ ...TEMPLATE, lan: true }, [])).toBe('LAN');
     expect(hostLabel({ kind: 'archipelago-gg' })).toBe('archipelago.gg');
-    expect(matchesTemplate(TEMPLATE, 'marie')).toBe(true);
-    expect(matchesTemplate(TEMPLATE, 'sam')).toBe(false);
+    expect(playersLabel(2)).toBe('2 players');
+    expect(playersLabel(1)).toBe('1 player');
   });
 });
 
@@ -28,6 +30,11 @@ describe('run summary', () => {
   const session = (patch: Partial<Session>): Session => ({ id: 's1', status: 'hosting', createdAt: 0, snapshot: TEMPLATE, ...patch });
   const source = (match: 'recorded' | 'name' | 'unknown', changes: number) =>
     ({ sessionId: 't1', sessionName: 'Friday night', match, overrides: Array.from({ length: changes }, (_, n) => ({ field: `f${n}`, label: 'x', from: 'a', to: 'b' })) });
+
+  test('the runs of a session are counted with the date of the last one', () => {
+    const runs = [session({ id: 'a', createdAt: 10, source: source('recorded', 0) }), session({ id: 'b', createdAt: 30, source: source('recorded', 1) }), session({ id: 'c', createdAt: 20 })];
+    expect(runStatsOf(runs)).toEqual({ t1: { count: 2, last: 30 } });
+  });
 
   test('status tones follow the run state', () => {
     expect(statusOf(session({}))).toEqual({ label: 'Hosting', tone: 'success' });

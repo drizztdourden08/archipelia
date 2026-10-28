@@ -1,5 +1,6 @@
 /* @layer renderer-app @kind logic */
-import type { SessionPlayer, SessionTemplate } from '@archipelia/model';
+import { hostedPlayers } from '@archipelia/model';
+import type { HostedPlayer, SessionPlayer, SessionTemplate } from '@archipelia/model';
 import { checkValues, resolveValues } from '@archipelia/presets';
 import { NAME_LIMIT } from '../SessionLobby.constants';
 import type { LibraryView, ProblemField, TemplateProblem } from '../SessionLobby.type';
@@ -21,7 +22,7 @@ const nameProblems = (players: SessionPlayer[]): TemplateProblem[] => {
   });
 };
 
-const presetProblems = (player: SessionPlayer, { installed, presets }: LibraryView): TemplateProblem[] => {
+const presetProblems = (player: HostedPlayer, { installed, presets }: LibraryView): TemplateProblem[] => {
   if (player.source.kind !== 'preset') return [];
   const game = installed.find((entry) => entry.game === player.game);
   if (!game) return [playerProblem(player, 'game', player.game ? `${labelOf(player)}: ${player.game} is not installed` : `${labelOf(player)}: pick a game`)];
@@ -35,7 +36,7 @@ const presetProblems = (player: SessionPlayer, { installed, presets }: LibraryVi
   });
 };
 
-const yamlProblems = (player: SessionPlayer, { installed }: LibraryView): TemplateProblem[] => {
+const yamlProblems = (player: HostedPlayer, { installed }: LibraryView): TemplateProblem[] => {
   if (player.source.kind !== 'yaml') return [];
   if (!player.source.yaml.trim()) return [playerProblem(player, 'source', `${labelOf(player)}: import a player file`)];
   return installed.some((entry) => entry.game === player.game) ? [] : [playerProblem(player, 'source', `${labelOf(player)}: ${player.game || 'the game'} is not installed`)];
@@ -43,7 +44,7 @@ const yamlProblems = (player: SessionPlayer, { installed }: LibraryView): Templa
 
 const validatePlayers = ({ players }: SessionTemplate, library: LibraryView): TemplateProblem[] => [
   ...nameProblems(players),
-  ...players.flatMap((player) => [...presetProblems(player, library), ...yamlProblems(player, library)]),
+  ...hostedPlayers(players).flatMap((player) => [...presetProblems(player, library), ...yamlProblems(player, library)]),
 ];
 
 export { validatePlayers };

@@ -16,13 +16,23 @@ type PlayerSource =
   | { kind: 'preset'; presetId: string; overrides: Record<string, OptionValue> }
   | { kind: 'yaml'; fileName: string; yaml: string };
 
-type SessionPlayer = {
+type HostedPlayer = {
   slot: number;
   name: string;
   game: string;
   source: PlayerSource;
   direct?: boolean;
 };
+
+type HeldPlayer = {
+  slot: number;
+  name: string;
+  direct: true;
+  game?: string;
+  source?: PlayerSource;
+};
+
+type SessionPlayer = HostedPlayer | HeldPlayer;
 
 type GeneratorSettings = { spoiler: SpoilerLevel; race: boolean; progressionBalancing: boolean };
 
@@ -105,7 +115,7 @@ type Session = {
 type StoredRun = Omit<Session, 'snapshot'> & { snapshot: StoredTemplate };
 
 export type {
-  DirectConnection, Endpoint, GeneratorSettings, HostTarget, PlayerOrigin, PlayerSource, ReleaseMode, RemainingMode, RunMember, RunOverride, RunPlayer,
+  DirectConnection, Endpoint, GeneratorSettings, HeldPlayer, HostTarget, HostedPlayer, PlayerOrigin, PlayerSource, ReleaseMode, RemainingMode, RunMember, RunOverride, RunPlayer,
   RunSource, RunSourceMatch, ServerSettings, Session, SessionEngine, SessionLobby, SessionOutput, SessionPlayer, SessionStatus, SessionTemplate,
   SessionWorld, SpoilerLevel, StoredRun, StoredTemplate,
 };

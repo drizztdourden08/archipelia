@@ -7,7 +7,7 @@ const usage = {
     'The History page, the top level entry after Sessions.',
   ],
   avoidWhen: [
-    { case: 'The saved sessions to edit or start.', use: 'SessionsLibrary' },
+    { case: 'The saved sessions to edit or start.', use: 'Sessions' },
     { case: 'One run that is live, with its room and widgets.', use: 'SessionDashboard' },
   ],
   rules: [

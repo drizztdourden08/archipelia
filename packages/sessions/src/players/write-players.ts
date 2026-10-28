@@ -1,10 +1,10 @@
 /* @layer core @kind logic */
-import type { SessionPlayer } from '@archipelia/model';
+import type { HostedPlayer } from '@archipelia/model';
 import type { PlayerDeps } from './write-players.type';
 import { renderPlayer } from './render-player';
 import { playerFileName } from './player-file-name';
 
-const writePlayers = async (players: SessionPlayer[], playersDir: string, deps: PlayerDeps) => {
+const writePlayers = async (players: HostedPlayer[], playersDir: string, deps: PlayerDeps) => {
   const names = new Set<string>();
   for (const player of players) {
     if (names.has(player.name)) throw new Error(`two players are named ${player.name}`);

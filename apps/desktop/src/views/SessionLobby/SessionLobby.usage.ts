@@ -8,7 +8,7 @@ const usage = {
   ],
   avoidWhen: [
     { case: 'The name, Where, direct connections, the room password and the world settings.', use: 'SessionBuilder' },
-    { case: 'The list of sessions and runs.', use: 'SessionsLibrary' },
+    { case: 'The list of sessions and runs.', use: 'Sessions' },
   ],
   rules: [
     'Pass the live tab; the screen loads the saved session of that tab and says when it is gone, with a way to close the tab.',

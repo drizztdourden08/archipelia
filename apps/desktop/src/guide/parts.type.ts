@@ -18,7 +18,7 @@ declare module '@drizztdourden08/tessera' {
         | 'SessionBuilder'
         | 'SessionDashboard'
         | 'SessionLobby'
-        | 'SessionsLibrary'
+        | 'Sessions'
         | 'SessionTabs';
     };
   }

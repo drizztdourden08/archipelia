@@ -1,12 +1,14 @@
 /* @layer renderer-app @kind types */
-import type { DirectConnection, LobbyServerEntry, ServerEntry, ServerSettings, SessionTemplate } from '@archipelia/model';
+import type { DirectConnection, GamePreset, InstalledGame, LobbyServerEntry, ServerEntry, ServerSettings, SessionTemplate } from '@archipelia/model';
 import type { Dispatch, ReactNode, SetStateAction } from 'react';
 import type { SettingsOption } from '@drizztdourden08/tessera/composites';
+import type { LiveTab } from '../../live/live.type';
 import type { AppSettings } from '../../settings.type';
+import type { useSessionRuns } from './behavior/useSessionRuns';
 
 type HostingDefaults = { defaultHost: AppSettings['hostingDefaultHost']; localPort: number; ggBaseUrl: string; server: ServerSettings };
 
-type SessionBuilderProps = { templateId?: string };
+type SessionBuilderProps = { templateId?: string; onDirty?: (dirty: boolean) => void };
 
 type SessionPlace = 'local' | 'lan' | 'remote';
 
@@ -34,6 +36,40 @@ type JoinRowsInput = {
   onOptions: (patch: Partial<DirectConnection>) => void;
 };
 
-type StartAction = { label: string; reason?: string; onClick: () => void };
+type BuilderButton = 'tab' | 'run' | 'once' | 'save-run' | 'save' | 'discard';
 
-export type { HostingDefaults, JoinRowsInput, PlaceContext, PlaceDeps, PlaceView, RemoteView, SessionBuilderProps, SessionPlace, StartAction };
+type ButtonsInput = { stored: boolean; dirty: boolean; hasTab: boolean };
+
+type ButtonReasons = { setup?: string; once?: string };
+
+type UnsavedChanges = { count: number; runnable: boolean };
+
+type Guard = (key: string, work: () => Promise<unknown>) => Promise<unknown>;
+
+type SessionRunDeps = {
+  draft: SessionTemplate;
+  dirty: boolean;
+  commit: (template: SessionTemplate) => Promise<SessionTemplate>;
+  keep: (template: SessionTemplate) => Promise<SessionTemplate>;
+  discard: () => void;
+  guard: Guard;
+  tab?: LiveTab;
+};
+
+type BuilderActionsInput = {
+  draft: SessionTemplate;
+  base: SessionTemplate;
+  dirty: boolean;
+  pending: boolean;
+  stored: boolean;
+  tab?: LiveTab;
+  library: { installed: InstalledGame[]; presets: GamePreset[] };
+  runs: ReturnType<typeof useSessionRuns>;
+  onSave: () => void;
+  onDiscard: () => void;
+};
+
+export type {
+  BuilderActionsInput, BuilderButton, ButtonReasons, ButtonsInput, HostingDefaults, JoinRowsInput, PlaceContext, PlaceDeps, PlaceView, RemoteView, SessionBuilderProps, SessionPlace,
+  SessionRunDeps, UnsavedChanges,
+};

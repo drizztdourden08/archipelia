@@ -1,7 +1,7 @@
 /* @layer core @kind logic */
 import type { SessionPlayer, SessionTemplate, StoredTemplate } from './session.type';
 
-const savedPlayerOf = (player: SessionPlayer): SessionPlayer => ({ ...player, direct: player.direct ?? false });
+const savedPlayerOf = (player: SessionPlayer): SessionPlayer => (player.direct === true ? player : { ...player, direct: false });
 
 const templateOf = (stored: StoredTemplate): SessionTemplate => {
   const { direct, players, ...rest } = stored;

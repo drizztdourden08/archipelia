@@ -8,7 +8,7 @@ import { playerLabel } from '../../behavior/player-label';
 const PlayerOverridesCell = ({ player, selected, onEdit }: PlayerOverridesCellProps) => {
   const { slot, source } = player;
   const edit = useCallback(() => onEdit(slot), [onEdit, slot]);
-  const changed = source.kind === 'preset' && Object.keys(source.overrides).length > 0;
+  const changed = source?.kind === 'preset' && Object.keys(source.overrides).length > 0;
   return (
     <Inline gap="xs" wrap>
       <Status tone={changed ? 'warning' : 'neutral'}>{overridesLabel(player)}</Status>
@@ -16,7 +16,7 @@ const PlayerOverridesCell = ({ player, selected, onEdit }: PlayerOverridesCellPr
         size="sm"
         variant={selected ? 'secondary' : 'ghost'}
         aria-pressed={selected}
-        disabled={source.kind !== 'preset'}
+        disabled={source?.kind !== 'preset'}
         aria-label={`Edit overrides of ${playerLabel(player)}`}
         onClick={edit}
       >

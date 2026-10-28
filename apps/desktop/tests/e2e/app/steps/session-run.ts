@@ -33,7 +33,7 @@ const buildSession = async (launched: LaunchedApp) => {
   await sessions.getByRole('button', { name: 'New session' }).click();
   await sessions.getByRole('textbox', { name: 'Session name' }).waitFor();
   await settledProof(launched, '18-sessions-new');
-  expect(await sessions.getByRole('region', { name: 'Players', exact: true }).count()).toBe(0);
+  expect(await sessions.getByRole('region', { name: 'Players', exact: true }).count(), 'the setup page lists the saved players').toBe(1);
   expect(await sessions.getByRole('spinbutton', { name: 'Local port', exact: true }).inputValue()).toBe(String(LOCAL_PORT));
   const where = sessions.getByRole('radiogroup', { name: 'Where', exact: true });
   expect(await where.getByRole('radio', { name: 'Local', exact: true }).getAttribute('aria-checked')).toBe('true');
@@ -45,7 +45,7 @@ const buildSession = async (launched: LaunchedApp) => {
   await sessions.getByRole('button', { name: 'Save', exact: true }).click();
   await sessions.getByText('Saved', { exact: true }).waitFor();
   await settledProof(launched, '19-sessions-saved');
-  await sessions.getByRole('button', { name: 'Start session', exact: true }).click();
+  await sessions.getByRole('button', { name: 'Run', exact: true }).click();
   const tab = page.locator('.session-tabs__body');
   await tab.getByRole('region', { name: 'Players', exact: true }).waitFor();
   await page.getByRole('tablist', { name: 'Open sessions' }).getByRole('tab', { name: new RegExp(TEMPLATE) }).waitFor();

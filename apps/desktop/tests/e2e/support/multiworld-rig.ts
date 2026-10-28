@@ -4,7 +4,7 @@ import { afterAll, beforeAll, describe, expect, test } from 'vitest';
 import { listInstalled, removeWorld } from '@archipelia/catalog';
 import { readRuntime } from '@archipelia/engine';
 import { createLocalHost } from '@archipelia/hosts';
-import type { DataFiles, Session, SessionPlayer } from '@archipelia/model';
+import type { DataFiles, HostedPlayer, Session } from '@archipelia/model';
 import { createPresetStore } from '@archipelia/presets';
 import type { PresetStore } from '@archipelia/presets';
 import { createRunStore, createSessionService } from '@archipelia/sessions';
@@ -16,8 +16,8 @@ import { required } from './required';
 import { dataFilesAt, tempDataRoot } from './temp-file-store';
 
 type RigContext = { engineDir: string; games: DataFiles; cache: DataFiles; presets: PresetStore };
-type Multiworld = { title: string; port: number; setup: (ctx: RigContext) => Promise<SessionPlayer[]> };
-type RigState = { root: string; engineDir: string; session?: Session; service?: SessionService; players: SessionPlayer[]; clients: Client[]; log: string[] };
+type Multiworld = { title: string; port: number; setup: (ctx: RigContext) => Promise<HostedPlayer[]> };
+type RigState = { root: string; engineDir: string; session?: Session; service?: SessionService; players: HostedPlayer[]; clients: Client[]; log: string[] };
 
 const serverOptions = { hintCost: 10, releaseMode: 'auto', collectMode: 'auto', remainingMode: 'goal', autoShutdownMinutes: 0 } as const;
 

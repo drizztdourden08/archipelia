@@ -10,9 +10,10 @@ import { waitText } from './wait-text';
 
 const openSavedLobby = async (tour: AppReviewTour, title: string, capture?: string) => {
   const layer = () => tour.find(SELECTOR.layer);
-  await clickNamed(tour, SELECTOR.button, `Start ${title}`, layer() ?? undefined);
+  await clickNamed(tour, SELECTOR.button, new RegExp(`^${title}\\b`), layer() ?? undefined);
+  await clickNamed(tour, SELECTOR.button, LOBBY_UI.run, layer() ?? undefined);
   const opened = await waitText(tour, /Players · 2/i, () => tabBody(tour) ?? null, 15000);
-  tour.check('lobby-opens', opened, 'Start on a saved session opens its tab with the two players saved with it', 'Start did not open a tab with the saved players');
+  tour.check('lobby-opens', opened, 'Run on a saved session opens its tab with the two players saved with it', 'Run did not open a tab with the saved players');
   const labelled = await stripHas(tour, title, 'Lobby');
   tour.check('lobby-tab', labelled, 'the tab is named after the session and its status says Lobby', 'the tab does not say it is in the lobby phase');
   const run = await waitNamed(tour, SELECTOR.button, LOBBY_UI.run, tabBody(tour));

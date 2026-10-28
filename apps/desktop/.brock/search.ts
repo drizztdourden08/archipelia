@@ -24,7 +24,7 @@ const searchIndex = buildSearchIndex(config, [
   {"kind":"sub","id":"edit","bucket":"multiworld","group":"top","page":"sessions","title":"Edit session","icon":"pencil","path":":id/edit"},
   {"kind":"sub","id":"join","bucket":"multiworld","group":"top","page":"sessions","title":"Join a session","icon":"log-in","path":"join","keywords":["join","lobby","session","code","play","servers","on","your","network","a"]},
   {"kind":"sub","id":"new","bucket":"multiworld","group":"top","page":"sessions","title":"New session","icon":"plus","path":"new","keywords":["builder","players","create","session"]},
-  {"kind":"page","id":"sessions","bucket":"multiworld","group":"top","title":"Sessions","icon":"layers","keywords":["saved","sessions","new","session","builder","direct","connection","lobby","host","approval","join","a"]},
+  {"kind":"page","id":"sessions","bucket":"multiworld","group":"top","title":"Sessions","icon":"layers","keywords":["saved","sessions","new","session","builder","players","direct","connection","lobby","host","approval","join","a","run","once"]},
   {"kind":"base","id":"session","title":"Session","icon":"radio"},
 ]);
 

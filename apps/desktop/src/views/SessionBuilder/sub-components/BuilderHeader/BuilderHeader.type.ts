@@ -1,13 +1,12 @@
 /* @layer renderer-app @kind types */
-import type { StartAction } from '../../SessionBuilder.type';
+import type { ReactNode } from 'react';
 
 type BuilderHeaderProps = {
   name: string;
   saved: boolean;
-  busy: boolean;
-  action: StartAction;
+  changes: string | null;
   onName: (name: string) => void;
-  onSave: () => void;
+  children?: ReactNode;
 };
 
 export type { BuilderHeaderProps };

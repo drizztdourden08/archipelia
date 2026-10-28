@@ -2,7 +2,7 @@
 import type { RunOverride, SessionPlayer } from '../session.type';
 import { describePlayer } from './describe-player';
 
-const bodyOf = ({ source }: SessionPlayer): string => (source.kind === 'yaml' ? source.yaml : '');
+const bodyOf = ({ source }: SessionPlayer): string => (source?.kind === 'yaml' ? source.yaml : '');
 
 const sameSetup = (a: SessionPlayer, b: SessionPlayer): boolean => describePlayer(a) === describePlayer(b) && bodyOf(a) === bodyOf(b);
 

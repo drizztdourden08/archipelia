@@ -39,7 +39,7 @@ const REVIEW_PLAYER = 'Zelda';
 const DIRECT_UI = { allow: /^Allow direct connection/, unlisted: /^Allow unlisted clients/, section: /how players join/i } as const;
 
 const LOBBY_UI = {
-  start: 'Start session', run: 'Run', close: 'Close lobby', closeTitle: 'Close the lobby?', open: 'Open lobby',
+  start: 'Save and run', run: 'Run', close: 'Close lobby', closeTitle: 'Close the lobby?', open: 'Open lobby',
 } as const;
 
 const TAB_UI = { stopAndClose: 'Stop the room and close' } as const;
