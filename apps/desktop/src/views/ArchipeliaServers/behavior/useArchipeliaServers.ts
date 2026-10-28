@@ -1,5 +1,5 @@
 /* @layer renderer-app @kind hook */
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useKeyedGuard } from '@drizztdourden08/brock-react';
 import { failWith } from '../../../hooks/fail-with';
 import { useLocalServerStatus } from '../../../hooks/useLocalServerStatus';
@@ -24,14 +24,12 @@ const useArchipeliaServers = () => {
   useEffect(() => { void loadEngine().catch(() => undefined); }, [loadEngine]);
   useEffect(() => { void reload(); }, [local, reload]);
 
-  const names = useMemo(() => Object.fromEntries((local ?? []).map((lobby) => [lobby.id, lobby.name])), [local]);
-
   const apply = useCallback((patch: Partial<LobbyServerOptions>) => {
     if (!status) return;
     void guard('apply', failWith(FAILURE.apply, async () => { setStatus(await appApi().lobbyServerApply({ ...status.options, ...patch })); }));
   }, [guard, setStatus, status]);
 
-  return { remote, status, lan, ap, names, apply, refresh: reload, applying: isBusy('apply'), applyError: errorOf('apply') };
+  return { remote, status, lan, ap, apply, refresh: reload, applying: isBusy('apply'), applyError: errorOf('apply') };
 };
 
 export { useArchipeliaServers };

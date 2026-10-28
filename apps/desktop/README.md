@@ -38,7 +38,7 @@ tooling/engine-bundle          builds the engine: a standalone Python with the p
 packages/server                the core: engine, catalog, sessions, hosts and runs built from ports
 electron/services/             the desktop ports (storage, jobs, events, secrets) handed to the core
 electron/gg/                   main-side archipelago.gg rooms
-src/widgets/                   the session widgets: players, hints, room, log, console, spoiler
+src/widgets/                   the widgets: network, room, players, hints, log, console, spoiler
 src/session-widgets/           the session widget layout and the widget window check
 src/search-actions/            the actions the search palette offers
 src/rooms/                     the hosting room and the stop confirmation

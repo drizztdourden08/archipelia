@@ -2,14 +2,14 @@
 import { useCallback, useMemo, useRef } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
 import type { SessionTemplate } from '@archipelia/model';
-import { applyOverrides } from '../live/apply-overrides';
+import { draftOf } from '../live/draft-of';
 import type { LiveTab } from '../live/live.type';
 import { useTabDraftStore } from '../stores/useTabDraftStore';
 
 const useTabDraft = (tab: LiveTab, saved: SessionTemplate) => {
   const edited = useTabDraftStore((state) => state.players[tab.tabId]);
   const setPlayers = useTabDraftStore((state) => state.setPlayers);
-  const draft = useMemo(() => applyOverrides(saved, edited ? { ...tab.overrides, players: edited } : tab.overrides), [edited, saved, tab.overrides]);
+  const draft = useMemo(() => draftOf(tab, saved, edited), [edited, saved, tab]);
   const latest = useRef(draft);
   latest.current = draft;
   const { tabId } = tab;

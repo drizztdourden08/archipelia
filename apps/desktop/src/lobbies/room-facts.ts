@@ -1,12 +1,11 @@
 /* @layer renderer-app @kind logic */
 import type { FactsPanelFact } from '@drizztdourden08/tessera/composites';
 import type { SessionTemplate } from '@archipelia/model';
-import { LOOPBACK } from '../../../lobbies/lobbies.constants';
-import type { LobbyServerStatus } from '../../../lobbies/lobbies.type';
-import { sessionReach } from '../../../lobbies/session-reach';
-import { CONNECTION_TEXT } from './lobby-view.constants';
+import { CONNECTION_TEXT, LOOPBACK } from './lobbies.constants';
+import type { LobbyServerStatus } from './lobbies.type';
+import { sessionReach } from './session-reach';
 
-const roomFacts = (template: SessionTemplate, status: LobbyServerStatus | null): FactsPanelFact[] => {
+const roomFacts = (template: Pick<SessionTemplate, 'host' | 'lan' | 'lobby'>, status: LobbyServerStatus | null): FactsPanelFact[] => {
   const { host } = template;
   if (!status || host.kind !== 'local' || sessionReach(template) !== 'lan') return [];
   return [

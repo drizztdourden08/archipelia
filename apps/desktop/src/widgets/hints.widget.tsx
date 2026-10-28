@@ -5,14 +5,14 @@ import { useSessionView } from '../hooks/useSessionView';
 
 const meta: WidgetMeta = {
   label: 'Hints',
-  order: 2,
+  order: 4,
   icon: 'compass',
   popOut: true,
   context: 'session',
   defaultVisibility: 'context-only',
   defaultOpen: true,
-  defaultSide: 'top',
-  defaultDockedSize: 260,
+  defaultSide: 'right',
+  defaultDockedSize: 320,
   defaultFloatingSize: { width: 380, height: 300 },
 };
 

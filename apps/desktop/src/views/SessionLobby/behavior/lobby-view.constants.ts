@@ -17,18 +17,6 @@ const LOBBY_TEXT = {
   closing: 'An earlier lobby of this session is not closed yet, because its server did not answer. Archipelia keeps trying until it closes.',
 } as const;
 
-const CONNECTION_TEXT = {
-  heading: 'Connection',
-  local: 'The room runs on this computer. Only this computer can reach it.',
-  lan: 'The room runs on this computer, open to your network.',
-  gg: 'archipelago.gg hosts the room. Its address shows once the room runs.',
-  ssh: 'A machine over SSH hosts the room. Its address shows once the room runs.',
-  archipelia: 'An Archipelia server holds the lobby and runs the room.',
-  room: 'Room',
-  roomHere: 'Room on this computer',
-  roomLan: 'Room on your network',
-} as const;
-
 const NETWORK_TEXT = {
   privateNow: 'Only this computer can reach the lobby server. Nothing is announced and no network port is open.',
   automated: 'This launch is automated, so the server stays on this computer and nothing is announced on the network.',
@@ -39,4 +27,4 @@ const NETWORK_TEXT = {
   stillOpen: 'This computer is still open to your network. Stop closes it.',
 } as const;
 
-export { CONNECTION_TEXT, LOBBY_TEXT, NETWORK_TEXT, RESULT_PHASES, SERVER_DOWN, SERVER_STARTING, TLS_TEXT };
+export { LOBBY_TEXT, NETWORK_TEXT, RESULT_PHASES, SERVER_DOWN, SERVER_STARTING, TLS_TEXT };

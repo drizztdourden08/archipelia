@@ -8,6 +8,7 @@ import { clickNamed } from './click-named';
 import { directLobby } from './direct-lobby';
 import { named } from './named';
 import { waitNamed } from './wait-named';
+import { widgetShows } from './widget-shows';
 
 const layer = (tour: AppReviewTour) => tour.find(SELECTOR.layer);
 
@@ -16,6 +17,8 @@ const modeNow = async () => (await appApi().lobbyServerStatus()).options.mode;
 const showsLan = async (tour: AppReviewTour) => {
   const mode = await modeNow();
   tour.check('hosting-lan-mode', mode === 'lan', 'the answer switches the network mode to LAN', `the network mode is ${mode}`);
+  const both = await widgetShows(tour, 'network', /Room on your network\s*\S+:\d+[\s\S]*Room on this computer\s*127\.0\.0\.1:\d+/);
+  tour.check('hosting-both-addresses', both, 'the Network widget shows the room address on the network and on this computer', 'the Network widget does not show the room addresses');
   await tour.capture('lobby-hosting-lan');
 };
 

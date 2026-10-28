@@ -5,7 +5,7 @@ import type { SessionViewState } from './session-view-store.type';
 
 const useSessionViewStore = createSessionStore<SessionViewState>((set) => ({
   ...EMPTY_SESSION_VIEW,
-  show: ({ session, lines, loaded, failed, phase }) => set({ session, lines, loaded, failed, phase }),
+  show: (view) => set(view),
 }));
 
 export { useSessionViewStore };

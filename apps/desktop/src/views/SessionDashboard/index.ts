@@ -2,6 +2,8 @@
 export { SessionDashboard } from './SessionDashboard';
 export { ConsoleWidget } from './sub-components/ConsoleWidget';
 export { HintsWidget } from './sub-components/HintsWidget';
+export { LobbyLog } from './sub-components/LobbyLog';
+export { LobbyPlayers } from './sub-components/LobbyPlayers';
 export { LogWidget } from './sub-components/LogWidget';
 export { NoSession } from './sub-components/NoSession';
 export { PlayersWidget } from './sub-components/PlayersWidget';

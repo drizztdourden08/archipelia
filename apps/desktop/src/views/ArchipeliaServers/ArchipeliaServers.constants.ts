@@ -43,6 +43,17 @@ const REACH_TEXT = {
   notAdvertisedAutomated: 'No, this launch is automated.',
 } as const;
 
+const NETWORK_WIDGET_ID = 'network';
+
+const NETWORK_WIDGET_TEXT = {
+  server: 'Lobby server on this computer',
+  open: 'This computer is open to your network. Stop closes it.',
+  stop: 'Stop',
+  reach: 'Reach',
+  session: 'This session',
+  summary: 'Open the Network widget',
+} as const;
+
 const LAN_TEXT = {
   empty: 'No server found on your network. Servers announce themselves when their mode is LAN only or LAN and internet.',
   same: 'Same version as your engine',
@@ -77,4 +88,4 @@ const PROBLEM = {
   pin: 'The pin is 64 hexadecimal digits, with or without colons.',
 } as const;
 
-export { EMPTY_DRAFT, FAILURE, FORM_TEXT, LAN_TEXT, LIST_WIDTH, MATCH_LABEL, MODE_OPTIONS, MODE_VALUES, NETWORK_TEXT, NO_PIN, NO_SERVER, PROBLEM, REACH_TEXT, REMOTE_EMPTY };
+export { EMPTY_DRAFT, FAILURE, FORM_TEXT, LAN_TEXT, LIST_WIDTH, MATCH_LABEL, MODE_OPTIONS, MODE_VALUES, NETWORK_TEXT, NETWORK_WIDGET_ID, NETWORK_WIDGET_TEXT, NO_PIN, NO_SERVER, PROBLEM, REACH_TEXT, REMOTE_EMPTY };

@@ -5,14 +5,14 @@ import { useSessionView } from '../hooks/useSessionView';
 
 const meta: WidgetMeta = {
   label: 'Room',
-  order: 3,
+  order: 2,
   icon: 'house',
   popOut: true,
   context: 'session',
   defaultVisibility: 'context-only',
   defaultOpen: true,
-  defaultSide: 'top',
-  defaultDockedSize: 260,
+  defaultSide: 'left',
+  defaultDockedSize: 320,
   defaultFloatingSize: { width: 340, height: 300 },
 };
 
