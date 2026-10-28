@@ -7,13 +7,17 @@ import { runJobId } from '@archipelia/model';
 const sessionHandlers: HandlerGroup = {
   id: 'archipelia-sessions',
   register: (ctx) => {
-    const { live, runJobs, runs, sessionFiles, sessions } = ctx.services;
+    const { live, roomSecret, runJobs, runs, sessionFiles, sessions } = ctx.services;
     ctx.handle(APP_CHANNELS.sessionsList, () => runs.newest());
     ctx.handle(APP_CHANNELS.sessionsRun, (_event, template) => sessions.run(template));
     ctx.handle(APP_CHANNELS.sessionsStart, (_event, sessionId, overrides) => live.start(sessionId, overrides));
     ctx.handle(APP_CHANNELS.sessionsRunLobby, (_event, tabId) => live.run(tabId));
     ctx.handle(APP_CHANNELS.liveList, () => live.list());
     ctx.handle(APP_CHANNELS.liveClose, (_event, tabId, mode) => live.close(tabId, mode));
+    ctx.handle(APP_CHANNELS.sessionsRoomPassword, async (_event, id) => {
+      const ref = (await runs.get(assertSafeName(id, 'session id')))?.snapshot.server.passwordRef;
+      return ref ? (await roomSecret(ref)) ?? null : null;
+    });
     ctx.handle(APP_CHANNELS.sessionsStop, (_event, id) => sessions.stop(id));
     ctx.handle(APP_CHANNELS.sessionsCancel, (_event, id) => sessions.cancel(id));
     ctx.handle(APP_CHANNELS.sessionsCommand, (_event, id, cmd) => sessions.command(id, cmd));

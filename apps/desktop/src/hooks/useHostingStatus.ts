@@ -9,9 +9,9 @@ const newestHosting = (runs: readonly Session[]): Session | undefined =>
 
 const useHostingStatus = (): TitleBarItemSpec | null => {
   const room = useRunsStore((state) => newestHosting(state.runs));
-  const { openSession } = useAppNavigation();
+  const { openRun } = useAppNavigation();
   if (!room) return null;
-  return { kind: 'status', label: 'Show the hosting room', icon: 'radio', status: `Hosting: ${room.snapshot.name}`, tone: 'success', onSelect: () => openSession(room.id) };
+  return { kind: 'status', label: 'Show the hosting room', icon: 'radio', status: `Hosting: ${room.snapshot.name}`, tone: 'success', onSelect: () => openRun(room) };
 };
 
 export { useHostingStatus };

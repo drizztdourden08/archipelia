@@ -4,7 +4,7 @@ import type { ComponentUsage } from '@drizztdourden08/tessera';
 const usage = {
   job: 'The players who connected to a session that takes direct connections: their client facts, Host approval, and the consent for unlisted worlds.',
   useWhen: [
-    'Inside the Players card of the session lobby screen, under the players the host added, while Allow direct connections is on.',
+    'Inside the Players card of the lobby phase of a session tab, under the players the host added, while Allow direct connections is on.',
   ],
   avoidWhen: [
     { case: 'The players the host adds by hand, and the results of the room.', use: 'SessionLobby' },

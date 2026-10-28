@@ -5,6 +5,7 @@ type HistoryDetailActions = {
   openRun: (run: Session) => void;
   openSession: (sessionId: string) => void;
   deleteRun: (run: Session) => void;
+  runAgain: (run: Session) => void;
   showLog: (run: Session) => void;
 };
 

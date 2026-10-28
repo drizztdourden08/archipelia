@@ -16,7 +16,7 @@ const SESSIONS_STEPS: readonly TourStepDef[] = [
   {
     id: 'sessions-list',
     title: 'Your sessions',
-    body: 'Start on a session opens its lobby. The lobby is where you add the players and press Run, which makes the seed and hosts the room. Edit changes the setup.',
+    body: 'Start on a session opens it as a tab in the main window. The tab starts in the lobby: you add the players there and press Run, which makes the seed and hosts the room. Edit changes the setup.',
     target: { tour: TOUR_TARGET.sessionsList },
     mascot: 'curious',
     open: ROUTE.sessions,
@@ -33,7 +33,7 @@ const SESSIONS_STEPS: readonly TourStepDef[] = [
   {
     id: 'sessions-builder',
     title: 'The session setup',
-    body: 'The setup page holds the session itself: its name, where the room runs, direct connection and the server options. Save keeps it. Start session opens its lobby.',
+    body: 'The setup page holds the session itself: its name, where the room runs, direct connection and the server options. Save keeps it. Start session opens its tab.',
     target: { tour: TOUR_TARGET.builderBar },
     mascot: 'idea',
     open: ROUTE.newSession,

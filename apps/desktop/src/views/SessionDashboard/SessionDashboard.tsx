@@ -1,29 +1,24 @@
 /* @layer renderer-app @kind component */
-import { Stack } from '@drizztdourden08/tessera/primitives';
+import { EmptyState, Spinner, Stack } from '@drizztdourden08/tessera/primitives';
 import type { SessionDashboardProps } from './SessionDashboard.type';
 import { useSessionDashboard } from './behavior/useSessionDashboard';
 import { useLiveRoom } from './behavior/useLiveRoom';
-import { useStartOnHome } from './behavior/useStartOnHome';
 import { canStop } from './behavior/can-stop';
 import { hostLabel } from '@archipelia/model';
 import { progressLabel } from './behavior/progress-label';
 import { ErrorCallout, RUN_STATUS, SessionStatusBar } from '@archipelia/design';
-import { IdleBase } from './sub-components/IdleBase';
 import { SessionSummary } from './sub-components/SessionSummary';
-import { useFocusStore } from '../../stores/useFocusStore';
 import { useLoggedFailure } from '../../hooks/useLoggedFailure';
-import { FAILURE } from './SessionDashboard.constants';
+import { FAILURE, LOADING_RUN } from './SessionDashboard.constants';
 import './SessionDashboard.css';
 
 const SessionDashboard = ({ sessionId }: SessionDashboardProps) => {
-  const focused = useFocusStore((state) => state.sessionId);
-  const board = useSessionDashboard(sessionId ?? focused);
+  const board = useSessionDashboard(sessionId);
   const live = useLiveRoom(board.session, board.lines);
-  useStartOnHome(sessionId === undefined, board.loaded, board.session !== null);
   const runFailure = useLoggedFailure(board.session?.error, FAILURE.run);
 
   const { session } = board;
-  if (!session) return <IdleBase loaded={board.loaded} failed={board.failed} />;
+  if (!session) return <EmptyState icon={<Spinner />} message={LOADING_RUN} />;
 
   const status = RUN_STATUS[session.status];
   return (

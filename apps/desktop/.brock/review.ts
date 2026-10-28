@@ -4,7 +4,6 @@ import type { AppReview } from '@drizztdourden08/brock-react';
 const appReview: AppReview = {
   seed: () => import('../src/review/seed'),
   steps: [
-    { id: 'dashboard', load: () => import('../src/review/dashboard.step') },
     { id: 'direct-session', load: () => import('../src/review/direct-session.step') },
     { id: 'engine', load: () => import('../src/review/engine.step') },
     { id: 'engine-startup', load: () => import('../src/review/engine-startup.step') },

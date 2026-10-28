@@ -3,7 +3,7 @@ import { runOverridesOf } from '@archipelia/model';
 import type { SessionTemplate } from '@archipelia/model';
 import type { SessionOverrides } from '../../src/live/live.type';
 import type { SyncPlan } from '../sessions/sessions.type';
-import { applyOverrides } from './overrides/apply-overrides';
+import { applyOverrides } from '../../src/live/apply-overrides';
 
 const planOf = (saved: SessionTemplate, overrides: SessionOverrides) => {
   const template = applyOverrides(saved, overrides);

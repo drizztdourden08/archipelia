@@ -40,7 +40,8 @@ const TRUST_LABEL = { verified: 'Verified', unlisted: 'Unlisted' } as const;
 const SPOILER_LABEL: Record<SpoilerLevel, string> = { 0: 'None', 1: 'Basic', 2: 'Playthrough', 3: 'Full' };
 
 const TEXT = {
-  runAgainSoon: 'Coming with session tabs',
+  runAgainGone: 'Session deleted, so there is nothing to run again.',
+  runAgainLive: 'This run is live. Go to its tab.',
   sessionDeleted: 'Session deleted',
   byName: 'Source matched by name',
   noRun: 'Pick a run to see where it came from, who played and what it made.',
@@ -53,6 +54,7 @@ const TEXT = {
 const FAILURE = {
   load: 'Could not load your runs.',
   deleteRun: 'Could not delete the run.',
+  runAgain: 'Could not run this again. The app log has the cause.',
   clean: 'Could not remove the old runs.',
 } as const;
 

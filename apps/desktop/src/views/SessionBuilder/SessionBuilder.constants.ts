@@ -17,7 +17,7 @@ const BUILDER_COLUMN_MIN = 420;
 
 const SETUP_TEXT = {
   start: 'Start session',
-  live: 'This session is running its lobby. Start session shows it. Where and direct connections change once you close the lobby.',
+  live: 'This session has an open tab. Start session shows it. Where and direct connections change once you close its lobby.',
   noName: 'The session needs a name.',
   noServer: 'Pick a server to host on.',
   directPlace: 'Direct connections need Local, LAN or an Archipelia server under Where.',

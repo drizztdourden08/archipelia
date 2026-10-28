@@ -39,6 +39,4 @@ const NETWORK_TEXT = {
   stillOpen: 'This computer is still open to your network. Stop closes it.',
 } as const;
 
-const MODE_FAILURE = 'Could not change where this computer hosts.';
-
-export { CONNECTION_TEXT, LOBBY_TEXT, MODE_FAILURE, NETWORK_TEXT, RESULT_PHASES, SERVER_DOWN, SERVER_STARTING, TLS_TEXT };
+export { CONNECTION_TEXT, LOBBY_TEXT, NETWORK_TEXT, RESULT_PHASES, SERVER_DOWN, SERVER_STARTING, TLS_TEXT };

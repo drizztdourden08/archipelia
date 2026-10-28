@@ -1,24 +1,24 @@
 /* @layer renderer-app @kind logic */
-import { defineReviewStep, nav, widgets } from '@drizztdourden08/brock-react';
+import { defineReviewStep, widgets } from '@drizztdourden08/brock-react';
 import type { AppReviewTour } from '@drizztdourden08/brock-react';
 import type { Client } from 'archipelago.js';
-import { ROUTE } from '../hooks/app-navigation.constants';
 import { appApi } from '../ipc/app-api';
-import { useFocusStore } from '../stores/useFocusStore';
-import { useLibraryStore } from '../stores/useLibraryStore';
 import { useRunsStore } from '../stores/useRunsStore';
-import { REVIEW_PORT, REVIEW_SESSION, RUN_TIMEOUT_MS } from './review.constants';
+import { REVIEW_PORT, REVIEW_SECOND, REVIEW_SESSION, RUN_TIMEOUT_MS, TAB_UI } from './review.constants';
 import { SELECTOR } from './review-dom.constants';
 import { checkWidgets } from './check-widgets';
 import { clickNamed } from './click-named';
 import { joinRoom } from './join-room';
 import { checkLiveStatus } from './check-live-status';
-import { openSavedLobby } from './open-saved-lobby';
 import { sendFromConsole } from './send-from-console';
+import { closeSessionTab } from './close-session-tab';
+import { tabBody } from './tab-body';
+import { showSpoiler } from './show-spoiler';
+import { twoTabs } from './two-tabs';
 import { waitNamed } from './wait-named';
 import { waitText } from './wait-text';
 import { withHeartbeat } from './with-heartbeat';
-import { LIVE_WIDGETS } from './widget-content.constants';
+import { LIVE_WIDGETS, SPOILER_WIDGET, STOPPED_WIDGETS } from './widget-content.constants';
 
 const dashboard = (tour: AppReviewTour) => tour.find(SELECTOR.dashboard);
 
@@ -28,47 +28,64 @@ const hosting = (tour: AppReviewTour) => withHeartbeat(
   () => `waiting for ${REVIEW_SESSION} to host`,
 );
 
-const startFromSessions = async (tour: AppReviewTour) => {
-  nav.open(ROUTE.sessions);
-  await waitText(tour, REVIEW_SESSION, () => tour.find(SELECTOR.layer));
-  await openSavedLobby(tour);
-  const template = useLibraryStore.getState().templates.find((entry) => entry.name === REVIEW_SESSION);
-  nav.close();
-  if (template) void appApi().sessionsRun(template).then((run) => useFocusStore.getState().focus(run.id), () => undefined);
-};
-
 const stopFromDashboard = async (tour: AppReviewTour) => {
   await clickNamed(tour, SELECTOR.button, 'Stop', dashboard(tour) ?? undefined);
   const confirm = await waitNamed(tour, SELECTOR.dialog, 'Stop the room');
   tour.check('stop-asks', confirm !== null, 'Stop asks before it stops the room', 'Stop did not ask first');
   if (confirm) await clickNamed(tour, SELECTOR.button, 'Stop', confirm);
   const stopped = await waitText(tour, /stopped/i, () => dashboard(tour), 30000);
-  tour.check('stop-stops', stopped, 'the dashboard shows the room stopped', 'the room did not stop');
+  tour.check('stop-stays', stopped && (await waitText(tour, /The room is stopped/, () => tabBody(tour) ?? null)), 'Stop leaves the tab open with the room stopped and its results', 'the tab did not stay with the stopped room');
   await tour.capture('stopped');
 };
 
-const forgetLiveRun = async (seeded: string) => {
-  const live = useFocusStore.getState().sessionId;
-  if (live && live !== seeded) await useRunsStore.getState().remove(live);
-  useFocusStore.getState().focus(seeded);
+const checkStoppedWidgets = async (tour: AppReviewTour) => {
+  widgets.reset();
+  await checkWidgets(tour, STOPPED_WIDGETS, 'stopped');
+  await tour.capture('stopped-run');
+  await showSpoiler(tour);
+  await checkWidgets(tour, SPOILER_WIDGET, 'stopped');
+  await tour.capture('spoiler');
+  widgets.reset();
+};
+
+const closeTabs = async (tour: AppReviewTour) => {
+  await closeSessionTab(tour, REVIEW_SESSION);
+  const gone = await tour.waitFor(() => (tour.find(SELECTOR.tabStrip)?.innerText.includes(REVIEW_SESSION) ? null : true));
+  tour.check('close-stopped', gone === true, 'closing a stopped tab needs no question', 'the stopped tab did not close');
+  const ask = await closeSessionTab(tour, REVIEW_SECOND, TAB_UI.stopAndClose);
+  tour.check('close-hosting-asks', ask !== null, 'closing a hosting tab asks Stop the room and close', 'closing a hosting tab did not ask');
+  const empty = await waitText(tour, /No session is open/, () => tour.find('.idle-base'));
+  tour.check('idle-base', empty, 'with no tab open the base shows the idle state', 'the idle state did not come back after the last tab closed');
+};
+
+const checkLive = async (tour: AppReviewTour, client: Client | null) => {
+  tour.check('player-joins', client !== null, 'a player joins the room and checks locations', 'the review player could not join');
+  widgets.reset();
+  await checkWidgets(tour, LIVE_WIDGETS, 'live');
+  await checkLiveStatus(tour);
+};
+
+const roomPassword = async (): Promise<string | undefined> => {
+  const run = useRunsStore.getState().runs.find((entry) => entry.snapshot.name === REVIEW_SESSION && entry.status === 'hosting');
+  return run ? (await appApi().sessionsRoomPassword(run.id)) ?? undefined : undefined;
 };
 
 export default defineReviewStep({
   run: async (tour) => {
-    const seeded = useFocusStore.getState().sessionId;
-    await startFromSessions(tour);
+    await tour.resetUi();
+    const ready = await twoTabs(tour);
+    if (!ready) return;
+    await clickNamed(tour, SELECTOR.button, 'Run', tabBody(tour));
     const hosted = await hosting(tour);
-    tour.check('run-hosts', hosted, 'the run hosts and the dashboard shows it', `${REVIEW_SESSION} did not host`);
+    tour.check('run-hosts', hosted, 'the run hosts and its tab shows the room', `${REVIEW_SESSION} did not host`);
     if (!hosted) return;
-    const client: Client | null = await joinRoom(tour, REVIEW_PORT).catch(() => null);
-    tour.check('player-joins', client !== null, 'a player joins the room and checks locations', 'the review player could not join');
-    widgets.reset();
-    await checkWidgets(tour, LIVE_WIDGETS, 'live');
-    await checkLiveStatus(tour);
+    const client: Client | null = await joinRoom(tour, REVIEW_PORT, await roomPassword()).catch(() => null);
+    await checkLive(tour, client);
     await sendFromConsole(tour);
     await tour.capture('hosting');
     client?.socket.disconnect();
     await stopFromDashboard(tour);
-    await forgetLiveRun(seeded);
+    await checkStoppedWidgets(tour);
+    await closeTabs(tour);
   },
 });

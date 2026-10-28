@@ -5,10 +5,11 @@ import { ErrorCallout } from '@archipelia/design';
 import { useSessionView } from '../../../../hooks/useSessionView';
 import { reloadRuns } from '../../../../runs/reload-runs';
 import { RUNS_FAILED } from '../../../../runs/runs.constants';
-import { LOADING_TEXT, NO_SESSION_TEXT } from './NoSession.constants';
+import { IN_LOBBY_TEXT, LOADING_TEXT, NO_SESSION_TEXT } from './NoSession.constants';
 
 const NoSession = () => {
-  const { loaded, failed } = useSessionView();
+  const { loaded, failed, phase } = useSessionView();
+  if (phase === 'lobby' || phase === 'failed') return <EmptyState message={IN_LOBBY_TEXT} />;
   if (loaded) return <EmptyState message={NO_SESSION_TEXT} />;
   if (failed) return <ErrorCallout message={RUNS_FAILED} onRetry={widgetWindowId() === null ? reloadRuns : undefined} />;
   return <EmptyState icon={<Spinner />} message={LOADING_TEXT} />;

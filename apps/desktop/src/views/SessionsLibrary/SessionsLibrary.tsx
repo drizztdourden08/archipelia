@@ -14,7 +14,7 @@ const SessionsLibrary = () => {
   return (
     <Stack>
       <Flex justify="between" align="center" gap="sm" wrap>
-        <Text variant="caption">A session is a saved setup. Start opens its lobby, where you add players and run it. Each run makes a seed and a room, kept in History with its files.</Text>
+        <Text variant="caption">A session is a saved setup. Start opens it as a tab in the main window, where you add players and run it. Each run makes a seed and a room, kept in History with its files.</Text>
         <Button size="sm" variant="secondary" icon={<Icon name="log-in" />} data-tour={TOUR_TARGET.sessionsJoin} onClick={() => nav.open(ROUTE.joinSession)}>Join a session</Button>
       </Flex>
       {hub.loadError && <ErrorCallout message={hub.loadError} onRetry={hub.reload} />}

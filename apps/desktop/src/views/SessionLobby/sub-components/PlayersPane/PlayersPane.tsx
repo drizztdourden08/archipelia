@@ -8,11 +8,10 @@ import { PlayersCard } from '../PlayersCard';
 import type { PlayersPaneProps } from './PlayersPane.type';
 
 const PlayersPane = ({ screen }: PlayersPaneProps) => {
-  const { draft, selected, players, toggleSelected } = screen;
+  const { draft, selected, players, tab, toggleSelected } = screen;
   const { game, preset } = sourcesOf(selected, screen.installed, screen.presets);
-  const connected = useConnectedCount(draft);
-  const { lobby } = draft;
-  const joined = draft.direct && lobby?.lobbyId ? <LobbyMembers serverId={lobby.serverId} lobbyId={lobby.lobbyId} /> : undefined;
+  const connected = useConnectedCount(tab);
+  const joined = draft.direct ? <LobbyMembers serverId={tab.serverId} lobbyId={tab.lobbyId} /> : undefined;
   return (
     <Stack gap="md">
       <PlayersCard

@@ -5,6 +5,7 @@ import type { Session } from '@archipelia/model';
 import { failWith } from '../../../hooks/fail-with';
 import { openSessionEditor } from '../../../hooks/open-session-editor';
 import { useAppNavigation } from '../../../hooks/useAppNavigation';
+import { useRunAgainOf } from '../../../hooks/useRunAgainOf';
 import { isWorking } from '../../../runs/is-working';
 import { showRunJob } from '../../../runs/show-run-job';
 import { useRunsStore } from '../../../stores/useRunsStore';
@@ -15,14 +16,18 @@ import type { HistoryActionsInput } from './history-actions.type';
 
 const useHistoryActions = ({ runs, guard }: HistoryActionsInput) => {
   const removeRun = useRunsStore((state) => state.remove);
-  const { openSession } = useAppNavigation();
+  const { openRun: showRun } = useAppNavigation();
+  const again = useRunAgainOf();
 
   const showLog = useCallback((run: Session) => { void showRunJob(run); }, []);
 
   const openRun = useCallback((run: Session) => {
-    if (isWorking(run)) void showRunJob(run);
-    else openSession(run.id);
-  }, [openSession]);
+    if (isWorking(run) || !showRun(run)) void showRunJob(run);
+  }, [showRun]);
+
+  const runAgain = useCallback((run: Session) => {
+    void guard(run.id, failWith(FAILURE.runAgain, () => again(run)));
+  }, [again, guard]);
 
   const deleteRun = useCallback((run: Session) => {
     const what = `this run of ${run.snapshot.name}`;
@@ -42,7 +47,7 @@ const useHistoryActions = ({ runs, guard }: HistoryActionsInput) => {
     });
   }, [guard, removeRun, stale]);
 
-  return { clean, deleteRun, openRun, openSessionOf: openSessionEditor, showLog, staleCount: stale.length };
+  return { clean, deleteRun, openRun, openSessionOf: openSessionEditor, runAgain, showLog, staleCount: stale.length };
 };
 
 export { useHistoryActions };

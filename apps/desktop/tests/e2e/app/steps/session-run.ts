@@ -4,7 +4,7 @@ import type { Locator, Page } from 'playwright-core';
 import type { LaunchedApp } from '../support/launched-app.type';
 import { settledProof } from '../support/settled-proof';
 import { LOCAL_PORT, SOH, TEMPLATE, TIMESPINNER } from '../support/flow-constants';
-import { base, closeHub, docked, openScreen, pickOption, playerRowOf } from '../support/locators';
+import { base, docked, openScreen, pickOption, playerRowOf } from '../support/locators';
 
 const RUN_TIMEOUT = 300000;
 
@@ -46,21 +46,22 @@ const buildSession = async (launched: LaunchedApp) => {
   await sessions.getByText('Saved', { exact: true }).waitFor();
   await settledProof(launched, '19-sessions-saved');
   await sessions.getByRole('button', { name: 'Start session', exact: true }).click();
-  await sessions.getByRole('region', { name: 'Players', exact: true }).waitFor();
-  for (const player of PLAYERS) await fillPlayer(page, sessions, player);
+  const tab = page.locator('.session-tabs__body');
+  await tab.getByRole('region', { name: 'Players', exact: true }).waitFor();
+  await page.getByRole('tablist', { name: 'Open sessions' }).getByRole('tab', { name: new RegExp(TEMPLATE) }).waitFor();
+  for (const player of PLAYERS) await fillPlayer(page, tab, player);
   await settledProof(launched, '20-lobby-two-players');
-  return sessions;
+  return tab;
 };
 
-const runSession = async (launched: LaunchedApp, sessions: Locator) => {
+const runSession = async (launched: LaunchedApp, tab: Locator) => {
   const { page } = launched;
-  await sessions.getByRole('button', { name: 'Run', exact: true }).click();
+  await tab.getByRole('button', { name: 'Run', exact: true }).click();
   const progress = page.getByRole('dialog', { name: `Running ${TEMPLATE}` });
   await progress.getByRole('progressbar', { name: `Running ${TEMPLATE}`, exact: true }).waitFor();
   await settledProof(launched, '21-run-progress');
-  await sessions.locator('.session-dashboard').getByText(/^hosting$/i).first().waitFor({ timeout: RUN_TIMEOUT });
-  await settledProof(launched, '22-lobby-hosting');
-  await closeHub(page, 'Multiworld');
+  await tab.locator('.session-dashboard').getByText(/^hosting$/i).first().waitFor({ timeout: RUN_TIMEOUT });
+  await settledProof(launched, '22-tab-hosting');
   const dashboard = base(page);
   await dashboard.getByText(/^hosting$/i).first().waitFor({ timeout: RUN_TIMEOUT });
   await dashboard.getByText(new RegExp(`^[\\w.-]+:${LOCAL_PORT}$`)).first().waitFor();

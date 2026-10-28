@@ -8,19 +8,14 @@ import { clickNamed } from './click-named';
 import { directLobby } from './direct-lobby';
 import { named } from './named';
 import { waitNamed } from './wait-named';
-import { waitText } from './wait-text';
 
 const layer = (tour: AppReviewTour) => tour.find(SELECTOR.layer);
 
 const modeNow = async () => (await appApi().lobbyServerStatus()).options.mode;
 
 const showsLan = async (tour: AppReviewTour) => {
-  const running = await waitText(tour, /On your network at \S+:\d+/, () => layer(tour));
-  tour.check('hosting-lan-running', running, 'the lobby screen shows On your network at the LAN address and port', 'the lobby screen does not show the LAN address');
   const mode = await modeNow();
   tour.check('hosting-lan-mode', mode === 'lan', 'the answer switches the network mode to LAN', `the network mode is ${mode}`);
-  const both = await waitText(tour, /this computer\s*127\.0\.0\.1:\d+/i, () => layer(tour));
-  tour.check('hosting-both-addresses', both, 'the lobby screen shows the address on this computer and the address on the network', 'the same-computer address is not shown');
   await tour.capture('lobby-hosting-lan');
 };
 

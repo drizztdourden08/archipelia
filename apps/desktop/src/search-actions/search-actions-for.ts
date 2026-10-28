@@ -4,16 +4,11 @@ import { nav } from '@drizztdourden08/brock-react';
 import type { SearchAction } from '@drizztdourden08/brock-react';
 import type { Session } from '@archipelia/model';
 import { ROUTE } from '../hooks/app-navigation.constants';
-import { useFocusStore } from '../stores/useFocusStore';
+import { showRun } from '../live/show-run';
 import { ACTION_GROUP, NO_ROOM } from './search-actions.constants';
 import { addGameFromFile } from './add-game-from-file';
 import { refreshGames } from './refresh-games';
 import { stopRoom } from './stop-room';
-
-const showRoom = (room: Session): void => {
-  useFocusStore.getState().focus(room.id);
-  nav.close();
-};
 
 const searchActionsFor = (room: Session | undefined, filePicker: FilePickerPort): SearchAction[] => [
   {
@@ -47,7 +42,7 @@ const searchActionsFor = (room: Session | undefined, filePicker: FilePickerPort)
     description: room ? `Open the dashboard of ${room.snapshot.name}.` : NO_ROOM,
     keywords: ['dashboard', 'hosting', 'server'],
     disabled: !room,
-    run: () => { if (room) showRoom(room); },
+    run: () => { if (room) showRun(room); },
   },
   {
     id: 'archipelia:stop-room',

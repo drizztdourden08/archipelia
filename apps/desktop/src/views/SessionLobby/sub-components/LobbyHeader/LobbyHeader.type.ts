@@ -1,15 +1,15 @@
 /* @layer renderer-app @kind types */
-import type { LobbyPhase } from '@archipelia/model';
+import type { AdminLobby, RunOverride } from '@archipelia/model';
 import type { RunAction } from '../../SessionLobby.type';
 
 type LobbyHeaderProps = {
   name: string;
-  phase?: LobbyPhase;
+  lobby?: AdminLobby;
+  serverId: string;
   direct: boolean;
-  saved: boolean;
+  changes: readonly RunOverride[];
   busy: boolean;
   action: RunAction;
-  onSave: () => void;
   onEdit: () => void;
   onClose: () => void;
 };

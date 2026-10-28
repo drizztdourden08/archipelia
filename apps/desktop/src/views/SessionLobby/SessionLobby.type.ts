@@ -2,10 +2,11 @@
 import type { GamePreset, InstalledGame, OptionDef, OptionValue, SessionTemplate } from '@archipelia/model';
 import type { Dispatch, SetStateAction } from 'react';
 import type { PresetInput } from '@archipelia/presets';
+import type { LiveTab } from '../../live/live.type';
 
-type SessionLobbyProps = { templateId: string };
+type SessionLobbyProps = { tab: LiveTab };
 
-type LobbyScreenProps = { initial: SessionTemplate };
+type LobbyScreenProps = { tab: LiveTab; saved: SessionTemplate };
 
 type LibraryView = { installed: InstalledGame[]; presets: GamePreset[] };
 
@@ -26,16 +27,14 @@ type EditorDeps = {
 };
 
 type LobbyActionDeps = {
+  tab: LiveTab;
+  saved: SessionTemplate;
   draft: SessionTemplate;
-  keep: (template: SessionTemplate) => Promise<SessionTemplate>;
-  dirty: boolean;
   guard: (key: string, work: () => Promise<unknown>) => Promise<unknown>;
   attemptRun: () => boolean;
 };
 
 type RunAction = { label: string; reason?: string; onClick: () => void };
-
-type RunHandlers = { run: () => void; start: () => void };
 
 type ImportedYaml = { fileName: string; yaml: string; game: string };
 
@@ -44,5 +43,5 @@ type ProblemField = 'name' | 'game' | 'source' | 'option';
 type TemplateProblem = { message: string; field: ProblemField; slot: number; optionKey?: string; optionLabel?: string };
 
 export type {
-  EditorDeps, ImportedYaml, LibraryView, LobbyActionDeps, LobbyScreenProps, OverrideRow, Overrides, ProblemField, RowFilter, RunAction, RunHandlers, SessionLobbyProps, SourceChoice, TemplateProblem,
+  EditorDeps, ImportedYaml, LibraryView, LobbyActionDeps, LobbyScreenProps, OverrideRow, Overrides, ProblemField, RowFilter, RunAction, SessionLobbyProps, SourceChoice, TemplateProblem,
 };

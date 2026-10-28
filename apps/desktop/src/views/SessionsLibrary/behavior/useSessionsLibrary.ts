@@ -7,8 +7,8 @@ import { appApi } from '../../../ipc/app-api';
 import { failWith } from '../../../hooks/fail-with';
 import { openHistory } from '../../../hooks/open-history';
 import { openSessionEditor } from '../../../hooks/open-session-editor';
-import { openSessionLobby } from '../../../hooks/open-session-lobby';
 import { useSessionStart } from '../../../hooks/useSessionStart';
+import { showTab } from '../../../live/show-tab';
 import { useLibraryStore } from '../../../stores/useLibraryStore';
 import { useRunsStore } from '../../../stores/useRunsStore';
 import { duplicateTemplate, passwordNameOf } from '../../SessionBuilder';
@@ -40,8 +40,8 @@ const useSessionsLibrary = () => {
   const start = useCallback((id: string) => {
     const template = byId(id);
     if (template) void guard(id, failWith(FAILURE.start, async () => {
-      const started = await startSession(template, saveTemplate);
-      if (started) openSessionLobby(started.id);
+      const started = await startSession({ template, keep: saveTemplate });
+      if (started) showTab(started.tabId);
     }));
   }, [byId, guard, saveTemplate, startSession]);
 
