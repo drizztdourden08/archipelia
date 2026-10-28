@@ -2,6 +2,7 @@
 import type { AppReviewTour } from '@drizztdourden08/brock-react';
 import type { AdminLobby } from '@archipelia/model';
 import { appApi } from '../ipc/app-api';
+import { useServerStatusStore } from '../stores/useServerStatusStore';
 import { HOST_UI, LOBBY_UI } from './review.constants';
 import { SELECTOR } from './review-dom.constants';
 import { clickNamed } from './click-named';
@@ -19,6 +20,12 @@ const showsLan = async (tour: AppReviewTour) => {
   await tour.capture('lobby-hosting-lan');
 };
 
+const consentState = async () => {
+  const main = (await appApi().lobbyServerStatus()).options.lanConsent === true;
+  const screen = useServerStatusStore.getState().status?.options.lanConsent === true;
+  return `LAN consent is ${main ? 'recorded' : 'not recorded'} in main and ${screen ? 'recorded' : 'not recorded'} on the screen`;
+};
+
 const startOnLan = async (tour: AppReviewTour): Promise<AdminLobby | null> => {
   await clickNamed(tour, SELECTOR.segment, HOST_UI.lan, layer(tour) ?? undefined);
   await tour.settle();
@@ -26,7 +33,7 @@ const startOnLan = async (tour: AppReviewTour): Promise<AdminLobby | null> => {
   tour.check('hosting-lan-setup', quiet, 'choosing LAN on the setup page opens nothing and asks nothing', 'choosing LAN opened or asked from the setup page');
   await clickNamed(tour, SELECTOR.button, LOBBY_UI.start, layer(tour) ?? undefined);
   const ask = await waitNamed(tour, SELECTOR.dialog, HOST_UI.askTitle);
-  tour.check('hosting-lan-asks', ask !== null, 'Save and run on a LAN session asks once, in plain words, before it opens a port', 'Save and run on a LAN session did not ask');
+  tour.check('hosting-lan-asks', ask !== null, 'Save and run on a LAN session asks once, in plain words, before it opens a port', `Save and run on a LAN session did not ask: ${await consentState()}`);
   if (ask) await clickNamed(tour, SELECTOR.button, HOST_UI.open, ask);
   const opened = await tour.waitFor(() => directLobby() ?? null, 15000);
   tour.check('direct-on', opened?.phase === 'open', 'Save and run opens the lobby of the session with no seed made', 'Save and run opened no lobby');
