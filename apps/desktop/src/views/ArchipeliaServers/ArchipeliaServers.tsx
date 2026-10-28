@@ -65,6 +65,7 @@ const ArchipeliaServers = () => {
       listContainers={containers}
       detail={detail}
       emptyDetail={<>{remote.error && <ErrorCallout message={remote.error} />}<EmptyState message={NO_SERVER} /></>}
+      onBack={() => remote.select('')}
       listLabel="Archipelia servers"
       detailLabel="server"
       listShowTitle={false}

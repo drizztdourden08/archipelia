@@ -21,7 +21,7 @@ const SERVER_PROBLEMS = ['Give the server a label.', 'Enter the host name or add
 
 const SERVER_UNTOUCHED = 'Enter the host name or address.';
 
-const SERVER_UI = { add: 'Add server', name: 'Server label', create: 'Add', save: 'Save', discard: 'Discard', remove: 'Remove', host: 'Host' } as const;
+const SERVER_UI = { add: 'Add server', name: 'Server label', create: 'Add', save: 'Save', discard: 'Discard', remove: 'Remove', host: 'Host', back: 'Back' } as const;
 
 const SAVE_STATE = { dirty: /^Unsaved changes/, saved: /^Saved/, clean: /^No changes/ } as const;
 
