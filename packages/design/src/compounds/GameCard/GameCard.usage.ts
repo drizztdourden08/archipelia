@@ -24,6 +24,7 @@ const usage = {
     'Pass art as a small picture of the world, a data address, and it fills the media tile with the kind icon as a badge; leave it out and the tile shows the kind icon alone.',
     'Pass verified for a world listed and checked by Archipelia: a Verified tag shows on the card with the hint Listed and checked by Archipelia.',
     'Pass direct for a world whose own client joins a session by the lobby protocol: a Joins directly tag shows next to Verified with the hint Players join a session from inside the game.',
+    'Pass prerelease for a world whose shown release is a pre-release: a Pre-release tag shows next to the others.',
     'Pass at most two tags; they show on a line of their own under the detail line.',
   ],
   a11y: [
@@ -53,7 +54,7 @@ const GameCardSample = ({ onInstall }: { onInstall: () => void }) => (
   />
 );
 `,
-  propsHash: 'ea2244b4fb93f99f',
+  propsHash: 'e89f3dd6a63dc4ae',
 } satisfies ComponentUsage;
 
 export { usage };

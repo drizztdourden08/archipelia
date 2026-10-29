@@ -1,5 +1,6 @@
 /* @layer core @kind types */
 import type { DataFiles } from '@archipelia/model';
+import type { ReleasesRead } from '../versions/versions.type';
 
 type ReadyRepo = {
   id: number;
@@ -28,6 +29,6 @@ type ReadyFound = { kind: 'found'; repos: ReadyRepo[]; total: number; fetched: n
 
 type ReadyResult = ReadyFound | { kind: 'same' };
 
-type ReadySearchDeps = { files: DataFiles; fetch?: typeof fetch; now?: () => number };
+type ReadySearchDeps = { files: DataFiles; fetch?: typeof fetch; now?: () => number; readReleases?: (repo: string) => Promise<ReleasesRead> };
 
 export type { ReadyCache, ReadyPage, ReadyRepo, ReadyResult, ReadySearch, ReadySearchDeps };

@@ -20,7 +20,7 @@ type EnrichRecord = {
   readmeUrl?: string;
 };
 
-type EnrichEntry = { game: string; file?: string; home?: string; release?: GithubRepo; releaseVersion?: string };
+type EnrichEntry = { game: string; file?: string; home?: string; release?: GithubRepo; releaseVersion?: string; releaseTag?: string };
 
 type EnrichDeps = {
   cache: DataFiles;
@@ -30,9 +30,9 @@ type EnrichDeps = {
   now?: () => number;
 };
 
-type EnrichPlan = { entry: EnrichEntry; stamp: string; repo?: GithubRepo; release?: GithubRepo };
+type EnrichPlan = { entry: EnrichEntry; stamp: string; repo?: GithubRepo; release?: GithubRepo; tag?: string };
 
-type GithubParams = { fetch: typeof fetch; repo: GithubRepo; release?: GithubRepo | undefined; stamp: string; old: EnrichRecord | undefined; now: number };
+type GithubParams = { fetch: typeof fetch; repo: GithubRepo; release?: GithubRepo | undefined; tag?: string | undefined; stamp: string; old: EnrichRecord | undefined; now: number };
 
 type ImageInfo = { type: 'image/png' | 'image/webp'; width: number; height: number; animated: boolean };
 
@@ -41,6 +41,8 @@ type ImageSize = Pick<ImageInfo, 'width' | 'height'>;
 type ReleaseFiles = { markdown?: string; art?: string };
 
 type GithubRepo = { owner: string; repo: string };
+
+type ReleaseTarget = GithubRepo & { tag?: string };
 
 type ReadmeRead =
   | { kind: 'text'; text: string; etag?: string; url: string }
@@ -52,5 +54,5 @@ type ReadmeParams = { fetch: typeof fetch; repo: GithubRepo; etag?: string | und
 type DocsParams = { engineDir: string; apworld: string; game: string; file?: string };
 
 export type {
-  DocsParams, EnrichDeps, EnrichEntry, EnrichPlan, EnrichRecord, EnrichRequest, GameEnrichment, GithubParams, GithubRepo, ImageInfo, ImageSize, ReadmeParams, ReadmeRead, ReleaseFiles,
+  DocsParams, EnrichDeps, EnrichEntry, EnrichPlan, EnrichRecord, EnrichRequest, GameEnrichment, GithubParams, GithubRepo, ImageInfo, ImageSize, ReadmeParams, ReadmeRead, ReleaseFiles, ReleaseTarget,
 };
