@@ -54,7 +54,20 @@ const LOBBY_UI = {
 
 const TAB_UI = { stopAndClose: 'Stop the room and close' } as const;
 
-const SEAT_UI = { card: '.seat-card', pending: 'attention', add: 'Add player', refuse: 'Refuse' } as const;
+const SEAT_UI = {
+  card: '.lobby-seat', pending: 'attention', held: 'held', filled: 'filled', add: 'Add player', refuse: 'Refuse', keep: 'Keep in session', ready: 'Ready', done: 'Done',
+} as const;
+
+const LOBBY_STAGE = {
+  session: 'Review lobby',
+  held: 'Alice',
+  portOffset: 3,
+  hintCost: 5,
+  count: /\d+ players?/,
+  config: /Hint cost\s*5%[\s\S]*Release\s*Auto[\s\S]*Joining\s*Direct, with approval/,
+  widgets: ['network', 'room', 'players', 'hints', 'log', 'console', 'spoiler'],
+  sizes: [{ name: 'wide', width: 1920, height: 1080 }, { name: 'hd', width: 1280, height: 720 }],
+} as const;
 
 const REVIEW_SECOND = 'Review second session';
 
@@ -72,6 +85,6 @@ const STORAGE_FOLDERS = ['Sessions', 'Presets', 'Installed games'];
 const GUARD_DIALOG = 'Unsaved changes';
 
 export {
-  DIRECT_RUN_MS, DIRECT_UI, GUARD_DIALOG, HOST_UI, JOIN_UI, LAN_STEP_TIMEOUT_MS, LISTEN_POLL_MS, LISTEN_WAIT_MS, LOBBY_UI, MS_PER_SECOND, REVIEW_CHECKS, REVIEW_DIRECT, REVIEW_GAME, REVIEW_JOINER, REVIEW_PLAYER, REVIEW_PLAYERS, REVIEW_PORT, REVIEW_PRESET, REVIEW_SECOND, REVIEW_SERVER, REVIEW_SESSION, RUN_TIMEOUT_MS, SAVE_STATE, SEAT_UI, SEED_TIMEOUT_MS, SERVER_ANSWER_MS, SERVER_FIELDS, SERVER_PROBLEMS,
+  DIRECT_RUN_MS, DIRECT_UI, GUARD_DIALOG, HOST_UI, JOIN_UI, LAN_STEP_TIMEOUT_MS, LOBBY_STAGE, LISTEN_POLL_MS, LISTEN_WAIT_MS, LOBBY_UI, MS_PER_SECOND, REVIEW_CHECKS, REVIEW_DIRECT, REVIEW_GAME, REVIEW_JOINER, REVIEW_PLAYER, REVIEW_PLAYERS, REVIEW_PORT, REVIEW_PRESET, REVIEW_SECOND, REVIEW_SERVER, REVIEW_SESSION, RUN_TIMEOUT_MS, SAVE_STATE, SEAT_UI, SEED_TIMEOUT_MS, SERVER_ANSWER_MS, SERVER_FIELDS, SERVER_PROBLEMS,
   SERVER_UI, SERVER_UNTOUCHED, STORAGE_FOLDERS, TAB_UI,
 };

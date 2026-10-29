@@ -15,7 +15,7 @@ const LobbyMembers = (props: LobbyMembersProps) => {
   return (
     <>
       {model.actionError && <Box className="lobby-members__error"><ErrorCallout message={model.actionError} /></Box>}
-      {clients.map((member) => <MemberSeat key={member.id} lobby={lobby} member={member} model={model} lead={props.lead} />)}
+      {clients.map((member) => <MemberSeat key={member.id} lobby={lobby} member={member} model={model} />)}
     </>
   );
 };

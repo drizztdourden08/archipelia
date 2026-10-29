@@ -1,4 +1,6 @@
 /* @layer renderer-app @kind config */
+import type { LobbySeatStatus } from '@archipelia/design';
+
 const NAME_LIMIT = 16;
 
 const YAML_VALUE = 'yaml';
@@ -21,20 +23,21 @@ const PLAYERS_TEXT = {
 } as const;
 
 const SEAT_TEXT = {
-  heading: 'Players',
-  hint: 'Pick a seat to change its player. A player who connects directly takes a seat once you approve them.',
   grid: 'Seats',
   add: 'Add player',
   saved: 'Saved',
-  savedTitle: 'This player is saved with the session.',
   added: 'Added here',
-  addedTitle: 'You added this player for this run only.',
   slot: 'Slot',
   waitingFor: 'Waiting for',
   toConnect: 'to connect',
   ownGame: 'Their own game',
-  noPreset: 'no preset',
-  fromFile: 'from file',
+  preset: 'Preset',
+  noPreset: 'No preset',
+  fromFile: 'From file',
+  ready: 'Ready',
+  readyTitle: 'This player has a game and a preset and is ready to run.',
+  needsFix: 'Needs a fix',
+  needsFixTitle: 'Run lists what this player is missing.',
   edit: 'Edit',
   keep: 'Keep in session',
   duplicate: 'Duplicate',
@@ -45,16 +48,41 @@ const SEAT_TEXT = {
   overridesLabel: 'Overrides',
   done: 'Done',
   editTitle: 'Edit player',
+  player: 'player',
+  players: 'players',
 } as const;
+
+const SEAT_STATUS = {
+  ready: { label: SEAT_TEXT.ready, tone: 'success', title: SEAT_TEXT.readyTitle },
+  needsFix: { label: SEAT_TEXT.needsFix, tone: 'warning', title: SEAT_TEXT.needsFixTitle },
+} as const satisfies Record<string, LobbySeatStatus>;
 
 const LOBBY_SCREEN = {
   loading: 'Loading the lobby',
-  where: 'Where',
+  lobby: 'Lobby',
+  lan: 'LAN',
   code: 'Session code',
-  codeCopy: 'session code',
-  edit: 'Edit setup',
+  codeCopy: 'Copy session code',
   close: 'Close lobby',
   closeTab: 'Close tab',
+  config: 'Config',
+  configEdit: 'Edit',
+  failed: 'The last run failed:',
+} as const;
+
+const CONFIG_TEXT = {
+  hintCost: 'Hint cost',
+  release: 'Release',
+  race: 'Race',
+  password: 'Password',
+  joining: 'Joining',
+  on: 'On',
+  off: 'Off',
+  set: 'Set',
+  none: 'None',
+  hostOnly: 'Host only',
+  withApproval: 'Direct, with approval',
+  open: 'Direct, open',
 } as const;
 
 const LOBBY_FAILURE = {
@@ -66,5 +94,5 @@ const LOBBY_FAILURE = {
 } as const;
 
 export {
-  LOBBY_FAILURE, LOBBY_SCREEN, NAME_LIMIT, NEW_PRESET_VALUE, OWN_GAME, PLAYERS_TEXT, PRESET_PREFIX, SEAT_EDITOR_CLASS, SEAT_TEXT, YAML_EXTENSIONS, YAML_VALUE,
+  CONFIG_TEXT, LOBBY_FAILURE, LOBBY_SCREEN, NAME_LIMIT, NEW_PRESET_VALUE, OWN_GAME, PLAYERS_TEXT, PRESET_PREFIX, SEAT_EDITOR_CLASS, SEAT_STATUS, SEAT_TEXT, YAML_EXTENSIONS, YAML_VALUE,
 };

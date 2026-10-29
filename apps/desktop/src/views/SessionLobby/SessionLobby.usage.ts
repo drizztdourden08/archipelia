@@ -2,7 +2,7 @@
 import type { ComponentUsage } from '@drizztdourden08/tessera';
 
 const usage = {
-  job: 'The lobby phase of a session tab: a stage header with the phase, Where, the changes from the saved session and the session code, a grid of seat cards with the players of the host, the held seats and the players who joined, an Add player tile, and Run.',
+  job: 'The lobby phase of a session tab as a framed LobbyStage: the name with the phase, the place, the player count and the changes from saved, Close lobby and Run, the session code, a grid of roomy seats for the players of the host, the held seats and the players who joined, an Add player tile, and the config line with Edit.',
   useWhen: [
     'Inside the tab of a session that has not run yet.',
   ],
@@ -14,8 +14,9 @@ const usage = {
     'Pass the live tab; the screen loads the saved session of that tab and says when it is gone, with a way to close the tab.',
     'Players added or changed here belong to this run only: they become overrides of the tab, sent when Run starts, and the saved session stays as it was.',
     'Show how many changes differ from the saved session as a chip, with the list in its tooltip.',
-    'Draw the seats in a SeatGrid: a filled seat per player of the host with the art of its game in lead, a quiet seat for a direct player who has not joined, and the Add player tile last.',
-    'Tag each seat Saved or Added here; an added seat offers Keep in session, which writes the player into the saved session, and Remove.',
+    'Draw the seats in a LobbySeatGrid inside a LobbyStage: a filled seat per player of the host with the art or initials of its game, its slot, game, origin and preset, a dashed held seat for a direct player who has not joined, and the Add player tile last.',
+    'Say Saved or Added here in the meta of each seat, mark it Ready or Needs a fix, and keep Edit, Duplicate and Remove as small tools in its corner; an added seat offers Keep in session, which writes the player into the saved session.',
+    'End the stage with the config line: hint cost, release, race, password and how players join, with Edit opening the setup of the session.',
     'Show the players who joined as seats from LobbyMembers after the seats of the host while direct connections are on; a waiting player is an attention seat with Approve and Refuse.',
     'Open a seat on pick in an editor under the grid with the name, the game, the preset and the overrides of the player.',
     'Run is off with a plain reason until at least one player is ready, own or joined and approved; a Run with player problems shows the list and runs nothing.',
