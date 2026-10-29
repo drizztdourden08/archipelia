@@ -1,6 +1,7 @@
 /* @layer renderer-app @kind component */
 import { Disclosure, NumberInput, Stack, Text } from '@drizztdourden08/tessera/primitives';
-import { PORT_PROBLEM, PORT_RANGE, SERVER_TEXT, ServerOptionsForm, inPortRange } from '@archipelia/design';
+import { PORT_RANGE, SERVER_TEXT, ServerOptionsForm } from '@archipelia/design';
+import { inPortRange, PORT_PROBLEM } from '@archipelia/model';
 import { EDITOR_TEXT } from '../../SessionBuilder.constants';
 import { SetupRow } from '../SetupRow';
 import type { RoomSettingsProps } from './RoomSettings.type';

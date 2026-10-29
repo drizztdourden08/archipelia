@@ -1,9 +1,9 @@
-/* @layer renderer-app @kind logic */
+/* @layer core @kind logic */
 import { hostedPlayers } from '@archipelia/model';
 import type { HostedPlayer, SessionPlayer, SessionTemplate } from '@archipelia/model';
 import { checkValues, resolveValues } from '@archipelia/presets';
-import { NAME_LIMIT } from '../SessionLobby.constants';
-import type { LibraryView, ProblemField, TemplateProblem } from '../SessionLobby.type';
+import { NAME_LIMIT } from './validation.constants';
+import type { LibraryView, ProblemField, TemplateProblem } from './validate-players.type';
 
 const labelOf = (player: SessionPlayer) => player.name.trim() || `Player ${player.slot}`;
 

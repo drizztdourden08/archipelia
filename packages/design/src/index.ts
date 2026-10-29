@@ -23,7 +23,7 @@ export type { CoercedValues } from './compounds/OptionControl';
 export { OptionFieldRow } from './compounds/OptionFieldRow';
 export { PlayerStatusRow } from './compounds/PlayerStatusRow';
 export {
-  HINT_COST_RANGE, HOST_OPTIONS, PORT_PROBLEM, PORT_RANGE, RELEASE_OPTIONS, REMAINING_OPTIONS, SERVER_TEXT, SHUTDOWN_RANGE, ServerOptionsForm, inPortRange,
+  HINT_COST_RANGE, HOST_OPTIONS, PORT_RANGE, RELEASE_OPTIONS, REMAINING_OPTIONS, SERVER_TEXT, SHUTDOWN_RANGE, ServerOptionsForm,
   percentText,
 } from './compounds/ServerOptionsForm';
 export { RUN_STATUS, SessionStatusBar } from './compounds/SessionStatusBar';

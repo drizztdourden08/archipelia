@@ -1,6 +1,6 @@
 /* @layer renderer-app @kind component */
 import { Button, ButtonRow } from '@drizztdourden08/tessera/primitives';
-import { FINAL_STATES, LIVE_STATES } from '../../../../joins/joins.constants';
+import { FINAL_STATES, LIVE_STATES } from '../../../../joins/join-states.constants';
 import type { JoinCardProps } from '../../JoinSession.type';
 
 const JoinButtons = ({ join, busy, onLeave, onResume, onDismiss }: JoinCardProps) => {

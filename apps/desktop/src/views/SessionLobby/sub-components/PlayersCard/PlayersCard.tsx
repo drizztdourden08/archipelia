@@ -11,7 +11,8 @@ import { PlayerOverridesCell } from '../PlayerOverridesCell';
 import { PlayerSourceCell } from '../PlayerSourceCell';
 import { playerLabel } from '../../behavior/player-label';
 import { emptyPlayers } from '../../behavior/empty-players';
-import { NAME_LIMIT, PLAYERS_TEXT } from '../../SessionLobby.constants';
+import { NAME_LIMIT } from '@archipelia/sessions/validation';
+import { PLAYERS_TEXT } from '../../SessionLobby.constants';
 
 const slotKey = (player: SessionPlayer) => String(player.slot);
 

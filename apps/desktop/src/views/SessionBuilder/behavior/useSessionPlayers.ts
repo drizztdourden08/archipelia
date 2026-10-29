@@ -1,6 +1,6 @@
 /* @layer renderer-app @kind hook */
 import { useCallback, useMemo, useState } from 'react';
-import { validatePlayers } from '../../SessionLobby';
+import { validatePlayers } from '@archipelia/sessions/validation';
 import { nextSlot } from '../../SessionLobby/behavior/next-slot';
 import { usePlayersEditor } from '../../SessionLobby/behavior/usePlayersEditor';
 import type { SessionPlayersDeps } from '../SessionBuilder.type';

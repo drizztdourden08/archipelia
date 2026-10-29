@@ -1,6 +1,5 @@
 /* @layer renderer-app @kind config */
 import { defineStatuses } from '@drizztdourden08/tessera/primitives';
-import type { JoinState } from './joins.type';
 
 const JOIN_STATES = defineStatuses({
   connecting: { label: 'Connecting', tone: 'info', pulse: true },
@@ -13,8 +12,4 @@ const JOIN_STATES = defineStatuses({
   ended: { label: 'Ended', tone: 'neutral' },
 });
 
-const FINAL_STATES: readonly JoinState[] = ['refused', 'ended'];
-
-const LIVE_STATES: readonly JoinState[] = ['connecting', 'pending', 'approved', 'started'];
-
-export { FINAL_STATES, JOIN_STATES, LIVE_STATES };
+export { JOIN_STATES };

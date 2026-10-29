@@ -9,8 +9,6 @@ type SessionLobbyProps = { tab: LiveTab };
 
 type LobbyScreenProps = { tab: LiveTab; saved: SessionTemplate };
 
-type LibraryView = { installed: InstalledGame[]; presets: GamePreset[] };
-
 type Overrides = Record<string, OptionValue>;
 
 type OverrideRow = { def: OptionDef; presetValue: OptionValue; value: OptionValue; overridden: boolean; problem?: string };
@@ -52,11 +50,6 @@ type RunAction = { label: string; reason?: string; onClick: () => void };
 
 type ImportedYaml = { fileName: string; yaml: string; game: string };
 
-type ProblemField = 'name' | 'game' | 'source' | 'option';
-
-type TemplateProblem = { message: string; field: ProblemField; slot: number; optionKey?: string; optionLabel?: string };
-
 export type {
-  EditorDeps, ImportedYaml, LibraryView, LobbyActionDeps, LobbyScreenModel, LobbyScreenProps, OverrideRow, Overrides, OwnSeat, ProblemField, RowFilter, RunAction, SeatContext, SeatEditing, SessionLobbyProps, SourceChoice,
-  TemplateProblem,
+  EditorDeps, ImportedYaml, LobbyActionDeps, LobbyScreenModel, LobbyScreenProps, OverrideRow, Overrides, OwnSeat, RowFilter, RunAction, SeatContext, SeatEditing, SessionLobbyProps, SourceChoice,
 };

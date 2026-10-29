@@ -1,8 +1,7 @@
 /* @layer renderer-app @kind logic */
 import { secretsApi } from '@drizztdourden08/brock-secrets/renderer';
 import { appApi } from '../../../ipc/app-api';
-import { passwordSecret } from './password-secret';
-import { passphraseSecret } from './passphrase-secret';
+import { passphraseSecret, passwordSecret } from '@archipelia/model';
 
 const removeServer = async (id: string): Promise<void> => {
   await appApi().serversRemove(id);

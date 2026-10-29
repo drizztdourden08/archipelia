@@ -12,6 +12,7 @@
     ".": "./src/index.ts",
     "./live-room": "./src/live-room/index.ts",
     "./players": "./src/players/index.ts",
+    "./validation": "./src/validation/index.ts",
     "./package.json": "./package.json"
   },
   "files": [

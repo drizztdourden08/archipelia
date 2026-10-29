@@ -1,8 +1,7 @@
 /* @layer electron-main @kind logic */
 import type { ServerEntry } from '@archipelia/model';
 import { newId } from '@drizztdourden08/brock-core/storage';
-import { passphraseSecret } from '../../src/views/ServerManager/behavior/passphrase-secret';
-import { passwordSecret } from '../../src/views/ServerManager/behavior/password-secret';
+import { passphraseSecret, passwordSecret } from '@archipelia/model';
 
 const canonicalServerRefs = (entry: ServerEntry): ServerEntry => {
   const id = entry.id || newId();

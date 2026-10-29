@@ -17,10 +17,6 @@ const DEFAULT_GG_SITE = 'https://archipelago.gg';
 const SETUP_TEXT = {
   live: 'This session has an open tab. Go to its tab shows it. Where and direct connections change once you close its lobby.',
   onceBlocked: 'The name, Where and the password change only with Save and run.',
-  noName: 'The session needs a name.',
-  noServer: 'Pick a server to host on.',
-  directPlace: 'Direct connections need Local, LAN or an Archipelia server under Where.',
-  directSeat: 'A player is set to connect directly. Turn on Allow direct connections, or switch that player off.',
 } as const;
 
 const EDITOR_TEXT = {

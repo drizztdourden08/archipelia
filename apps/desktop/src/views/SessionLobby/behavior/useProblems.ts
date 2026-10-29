@@ -1,8 +1,8 @@
 /* @layer renderer-app @kind hook */
 import { useCallback, useMemo, useRef, useState } from 'react';
 import type { SessionTemplate } from '@archipelia/model';
-import type { LibraryView, TemplateProblem } from '../SessionLobby.type';
-import { validatePlayers } from './validate-players';
+import { validatePlayers } from '@archipelia/sessions/validation';
+import type { LibraryView, TemplateProblem } from '@archipelia/sessions/validation';
 import { focusProblem } from './focus-problem';
 import { problemSlot } from './problem-slot';
 

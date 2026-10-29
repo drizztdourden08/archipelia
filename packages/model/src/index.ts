@@ -28,3 +28,6 @@ export { BUILD_JOB, DOMAIN, ENGINE_JOB, RUN_JOB_PREFIX, TOOL_JOB } from './share
 export type * from './install-failure';
 export type * from './package-source';
 export { INSTALL_FAILURE_CODE, installFailureFrom, installFailureOf } from './install-failure';
+export { PORT_BOUNDS, PORT_PROBLEM } from './port-range.constants';
+export { inPortRange } from './in-port-range';
+export { passphraseSecret, passwordSecret } from './server-secrets';

@@ -1,5 +1,5 @@
 /* @layer renderer-app @kind config */
-import { inPortRange, PORT_PROBLEM } from '@archipelia/design';
+import { inPortRange, PORT_PROBLEM } from '@archipelia/model';
 import type { DraftRule, SecretInputs } from './ServerManager.type';
 import { validPort } from './behavior/valid-port';
 

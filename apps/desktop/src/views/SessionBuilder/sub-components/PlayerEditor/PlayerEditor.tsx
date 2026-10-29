@@ -7,7 +7,7 @@ import { GameCell } from '../../../SessionLobby/sub-components/GameCell';
 import { OverridesPanel } from '../../../SessionLobby/sub-components/OverridesPanel';
 import { PlayerOverridesCell } from '../../../SessionLobby/sub-components/PlayerOverridesCell';
 import { PlayerSourceCell } from '../../../SessionLobby/sub-components/PlayerSourceCell';
-import { NAME_LIMIT } from '../../../SessionLobby/SessionLobby.constants';
+import { NAME_LIMIT } from '@archipelia/sessions/validation';
 import { PLAYER_TEXT } from '../../SessionBuilder.constants';
 import type { PlayerEditorProps } from './PlayerEditor.type';
 import './PlayerEditor.css';

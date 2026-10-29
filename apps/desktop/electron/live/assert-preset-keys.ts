@@ -1,7 +1,7 @@
 /* @layer electron-main @kind logic */
 import type { SessionOverrides } from '../../src/live/live.type';
 import { LIVE_TEXT } from './live.constants';
-import type { LibraryView } from './live.type';
+import type { LibraryView } from '@archipelia/sessions/validation';
 
 const assertPresetKeys = ({ players = [] }: SessionOverrides, { installed }: LibraryView): void => {
   for (const { name, game = '', source } of players) {
