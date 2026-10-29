@@ -9,6 +9,7 @@ type GameDetailsHeadProps = {
   worldVersion?: string | undefined;
   verified?: boolean | undefined;
   direct?: boolean | undefined;
+  prerelease?: boolean | undefined;
   status?: GameCardStatus | undefined;
 };
 

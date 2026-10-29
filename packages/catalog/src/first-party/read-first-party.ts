@@ -1,23 +1,31 @@
 /* @layer core @kind logic */
 import { loadRegistry } from '@archipelia/trust';
-import type { LoadRegistryDeps, LoadRegistryOptions } from '@archipelia/trust';
+import type { LoadRegistryOptions } from '@archipelia/trust';
 import { mapPool } from '../pool';
+import { createReleaseReader } from '../versions/create-release-reader';
 import { firstPartyEntry } from './first-party-entry';
 import { MANIFEST_CONCURRENCY } from './first-party.constants';
-import type { FirstPartyRead, ReleaseState } from './first-party.type';
-import { readReleaseState } from './read-release-state';
+import type { FirstPartyDeps, FirstPartyRead } from './first-party.type';
+import { NONE } from './read-first-party.constants';
+import type { GameState } from './read-game-state.type';
+import { readGameState } from './read-game-state';
+import { withPrerelease } from './with-prerelease';
 
-const failed = (state: ReleaseState, game: string) => (state.kind === 'failed' ? [`${game}: ${state.message}`] : []);
+const failed = ({ state }: GameState, game: string) => (state.kind === 'failed' ? [`${game}: ${state.message}`] : []);
 
-const readFirstParty = async (deps: LoadRegistryDeps, options: LoadRegistryOptions = {}): Promise<FirstPartyRead> => {
+const readFirstParty = async (deps: FirstPartyDeps, options: LoadRegistryOptions = {}): Promise<FirstPartyRead> => {
   const load = await loadRegistry(deps, options);
   const request = deps.fetch ?? fetch;
-  const states = await mapPool(load.registry.games, MANIFEST_CONCURRENCY, (game) => readReleaseState(game, request));
+  const readReleases = deps.readReleases ?? createReleaseReader(deps);
+  const states = await mapPool(load.registry.games, MANIFEST_CONCURRENCY, (game) => readGameState(game, request, readReleases));
   return {
-    entries: load.registry.games.map((game, i) => firstPartyEntry(game, states[i] ?? { kind: 'none' })),
+    entries: load.registry.games.map((game, i) => {
+      const { state, prerelease } = states[i] ?? NONE;
+      return withPrerelease(firstPartyEntry(game, state, prerelease), prerelease);
+    }),
     clients: load.registry.clients,
     registry: load.registry,
-    problems: [...load.problems, ...load.registry.games.flatMap((game, i) => failed(states[i] ?? { kind: 'none' }, game.game))],
+    problems: [...load.problems, ...load.registry.games.flatMap((game, i) => failed(states[i] ?? NONE, game.game))],
     source: load.source,
   };
 };

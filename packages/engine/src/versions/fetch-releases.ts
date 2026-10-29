@@ -1,5 +1,5 @@
 /* @layer core @kind logic */
-import { GITHUB_JSON, MAX_RELEASE_PAGES, RELEASES_URL } from './feed-sources.constants';
+import { FEED_TIMEOUT_MS, GITHUB_JSON, MAX_RELEASE_PAGES, RELEASES_URL } from './feed-sources.constants';
 import type { FetchLike } from './fetch-like.type';
 import type { ReleasesOutcome } from './fetch-releases.type';
 import { nextLink } from './next-link';
@@ -13,7 +13,7 @@ const fetchReleases = async (fetchUrl: FetchLike, etag?: string): Promise<Releas
   for (let page = 0; url && page < MAX_RELEASE_PAGES; page += 1) {
     const headers: Record<string, string> = { accept: GITHUB_JSON };
     if (page === 0 && etag) headers['if-none-match'] = etag;
-    const res = await fetchUrl(url, { headers });
+    const res = await fetchUrl(url, { headers, signal: AbortSignal.timeout(FEED_TIMEOUT_MS) });
     if (page === 0 && res.status === 304) return { kind: 'not-modified' };
     requireOk(res, 'Archipelago releases');
     if (page === 0) newEtag = res.headers.get('etag') ?? undefined;

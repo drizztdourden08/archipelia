@@ -8,7 +8,7 @@ import { repinRelease } from './repin-release';
 import type { Pinned, PinnedParams, Repin, RepinParams, VersionList, VersionsDeps, VersionsParams } from './versions.type';
 
 const createVersions = (deps: VersionsDeps) => {
-  const releases = { files: deps.files, request: deps.fetch ?? fetch, readReleases: createReleaseReader(deps) };
+  const releases = { files: deps.files, request: deps.fetch ?? fetch, readReleases: deps.readReleases ?? createReleaseReader(deps) };
 
   const list = (params: VersionsParams): Promise<VersionList> =>
     (params.entry.firstParty?.repo ? listReleaseVersions(releases, params) : Promise.resolve(listIndexVersions(params)));

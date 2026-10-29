@@ -7,11 +7,11 @@ const SEARCH_URL = `https://api.github.com/search/repositories?q=${encodeURIComp
 
 const manifestUrl = (repo: string) => `https://github.com/${repo}/releases/latest/download/archipelia.json`;
 
-type Topic = { id: number; repo: string; stars?: number; createdAt?: string; topics?: string[] };
+type Topic = { id: number; repo: string; stars?: number; createdAt?: string; pushedAt?: string; topics?: string[] };
 
-const itemOf = ({ id, repo, stars = 0, createdAt = '2026-01-01T00:00:00Z', topics = ['archipelia-world'] }: Topic) => ({
+const itemOf = ({ id, repo, stars = 0, createdAt = '2026-01-01T00:00:00Z', pushedAt = '2026-10-01T00:00:00Z', topics = ['archipelia-world'] }: Topic) => ({
   id, full_name: repo, owner: { login: repo.split('/')[0] }, topics, fork: false, archived: false, disabled: false,
-  stargazers_count: stars, pushed_at: '2026-10-01T00:00:00Z', created_at: createdAt,
+  stargazers_count: stars, pushed_at: pushedAt, created_at: createdAt,
 });
 
 const searchOf = (topics: Topic[], total = topics.length) => () => json({ total_count: total, items: topics.map(itemOf) });

@@ -5,10 +5,8 @@ import { releaseUrl } from '../first-party/release-url';
 import { entryOfRead } from './entry-of-read';
 import { isCurrent } from './is-current';
 import type { ManifestEntry, ManifestParams, ManifestRead } from './manifest-cache.type';
+import { readOf } from './read-of';
 import type { ReadyRepo } from './ready.type';
-import { stateOfManifest } from './state-of-manifest';
-
-const readOf = (entry: ManifestEntry): ManifestRead => ({ entry, state: stateOfManifest(entry.manifest) });
 
 const failedRead = (same: ManifestEntry | undefined, error: unknown): ManifestRead =>
   (same ? readOf(same) : { state: { kind: 'failed', message: error instanceof Error ? error.message : String(error) } });

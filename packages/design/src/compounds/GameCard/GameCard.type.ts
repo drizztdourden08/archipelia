@@ -32,6 +32,7 @@ type GameCardProps = {
   art?: string;
   verified?: boolean;
   direct?: boolean;
+  prerelease?: boolean;
   onOpen?: () => void;
 };
 

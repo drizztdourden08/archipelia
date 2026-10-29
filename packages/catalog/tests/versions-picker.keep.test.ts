@@ -149,7 +149,7 @@ describe('the versions of a listed world and of an index world', () => {
     const list = await serviceWith({}, memoryFiles([]), seen).versions({ apworld: 'alpha', source: 'index' });
     expect(list).toMatchObject({ by: 'version', defaultId: '1.10.0', latestId: '1.10.0' });
     expect(list.choices.map((choice) => choice.id)).toEqual(['1.10.0', '1.2.0', '1.0.0']);
-    expect(seen.filter((call) => call.url.startsWith('https://api.github.com/repos'))).toEqual([]);
+    expect(seen.filter((call) => call.url.startsWith('https://api.github.com/repos') && !call.url.includes(ROTP))).toEqual([]);
   });
 
   test('a built-in world has no versions to pick', async () => {

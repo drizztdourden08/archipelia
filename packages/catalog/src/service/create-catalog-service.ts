@@ -29,16 +29,18 @@ import type { CatalogServiceDeps, CatalogView, InstallRequest, Latest } from './
 import { CACHE_DIR } from './catalog-service.constants';
 import { viewOf } from './view-of';
 import { createReleasePort } from './create-release-port';
+import { createReleaseReader } from '../versions/create-release-reader';
 
 const createCatalogService = ({ games: files, cache, engineDir, fetch: fetchFn, trustRoot, build, buildSandbox, tools, log }: CatalogServiceDeps) => {
   let latest: Latest | undefined;
   let pending: Promise<Latest> | undefined;
-  const readReady = createReady({ files: cache, ...(fetchFn ? { fetch: fetchFn } : {}) });
+  const readReleases = createReleaseReader({ files: cache, ...(fetchFn ? { fetch: fetchFn } : {}) });
+  const readReady = createReady({ files: cache, readReleases, ...(fetchFn ? { fetch: fetchFn } : {}) });
 
   const fetchOnce = (force: boolean) => {
     pending ??= Promise.all([
       readCatalog({ files: cache, cacheDir: CACHE_DIR }),
-      readFirstParty({ files: cache, ...(fetchFn ? { fetch: fetchFn } : {}) }, { force })
+      readFirstParty({ files: cache, readReleases, ...(fetchFn ? { fetch: fetchFn } : {}) }, { force })
         .then(async (firstParty) => ({ firstParty, ready: await readReady(force, firstParty.registry) })),
     ])
       .then(([catalog, { firstParty, ready }]) => assembleLatest(catalog, firstParty, ready, Date.now()))
@@ -65,7 +67,7 @@ const createCatalogService = ({ games: files, cache, engineDir, fetch: fetchFn, 
     return { entry, latest };
   };
 
-  const { chosen, versions } = createReleasePort({ cache, activeAp, indexEntry, ...(fetchFn ? { fetch: fetchFn } : {}) });
+  const { chosen, versions } = createReleasePort({ cache, readReleases, activeAp, indexEntry, ...(fetchFn ? { fetch: fetchFn } : {}) });
 
   const install = async (request: InstallRequest): Promise<InstalledGame> => {
     const base = { engineDir: await engineDir(), files };

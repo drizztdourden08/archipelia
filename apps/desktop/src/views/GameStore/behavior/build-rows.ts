@@ -6,14 +6,16 @@ import type { GameRow, GameRowState } from '../GameStore.type';
 
 const latestOf = (entry: CatalogEntry) => [...entry.versions].sort((a, b) => compareVersions(b.version, a.version))[0];
 
-const isNewer = (latest: CatalogVersion, installed: InstalledGame): boolean =>
-  (installed.release?.prerelease
+const isNewer = (latest: CatalogVersion, installed: InstalledGame, prerelease: boolean): boolean => {
+  if (prerelease) return latest.version !== installed.version && compareVersions(latest.version, coreOf(installed.version)) >= 0;
+  return installed.release?.prerelease
     ? compareVersions(latest.version, coreOf(installed.version)) >= 0
-    : compareVersions(latest.version, installed.version) > 0);
+    : compareVersions(latest.version, installed.version) > 0;
+};
 
 const stateOf = (entry: CatalogEntry, installed: InstalledGame | undefined, latest: CatalogVersion | undefined): GameRowState => {
   if (!installed) return 'available';
-  return entry.source !== 'official' && latest && isNewer(latest, installed) ? 'update' : 'installed';
+  return entry.source !== 'official' && latest && isNewer(latest, installed, entry.firstParty?.prerelease === true) ? 'update' : 'installed';
 };
 
 const buildRows = (entries: CatalogEntry[], installed: InstalledGame[]): GameRow[] => {
