@@ -13,9 +13,9 @@ const listIndexFiles = async (source: IndexSource, target: CacheTarget): Promise
     await writeTreeCache(source, target, { at: Date.now(), files });
     return { files };
   } catch (err) {
-    if (!(err instanceof GithubLimitError)) throw err;
     const stored = await readTreeCache(source, target);
     if (!stored) throw err;
+    if (!(err instanceof GithubLimitError)) return { files: stored.files };
     return { files: stored.files, limited: { listedAt: stored.at, limitedUntil: err.resetAt } };
   }
 };

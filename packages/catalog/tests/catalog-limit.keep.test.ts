@@ -48,6 +48,28 @@ describe('GitHub limiting the index listing', () => {
     await expect(readCatalog({ files: textFiles(), cacheDir: 'c', source: SOURCE })).rejects.toBeInstanceOf(GithubLimitError);
   });
 
+  test('a network failure or a timeout falls back to the stored listing', async () => {
+    const files = textFiles();
+    github(whole);
+    await readCatalog({ files, cacheDir: 'c', source: SOURCE });
+    github(() => { throw new DOMException('The operation was aborted due to timeout', 'TimeoutError'); });
+    const stored = await readCatalog({ files, cacheDir: 'c', source: SOURCE });
+    expect(stored.entries).toHaveLength(1);
+    expect(stored.limited).toBeUndefined();
+  });
+
+  test('every index request carries a time limit', async () => {
+    const signals: unknown[] = [];
+    vi.stubGlobal('fetch', (input: string, init?: RequestInit) => {
+      signals.push(init?.signal);
+      if (input.includes('/git/trees/')) return Promise.resolve(whole());
+      return Promise.resolve(new Response(input.endsWith('index.toml') ? 'archipelago_version = "0.6.7"\n' : ''));
+    });
+    await readCatalog({ files: textFiles(), cacheDir: 'c', source: SOURCE }).catch(() => undefined);
+    expect(signals.length).toBeGreaterThan(1);
+    expect(signals.every((signal) => signal instanceof AbortSignal)).toBe(true);
+  });
+
   test('another HTTP failure stays a plain error', async () => {
     github(() => new Response('{}', { status: 500 }));
     await expect(fetchIndexTree(SOURCE)).rejects.toThrow('index tree: HTTP 500');
