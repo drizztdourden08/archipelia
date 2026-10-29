@@ -7,9 +7,10 @@ import { Readable } from 'node:stream';
 import type { ReadableStream } from 'node:stream/web';
 import { createWriteStream } from 'node:fs';
 import type { DownloadedWorld, Fetch } from './fetch-file.type';
+import { WORLD_TIMEOUT_MS } from './download-world.constants';
 
 const downloadWorld = async (url: string, request: Fetch = fetch): Promise<DownloadedWorld> => {
-  const res = await request(url, { redirect: 'follow' });
+  const res = await request(url, { redirect: 'follow', signal: AbortSignal.timeout(WORLD_TIMEOUT_MS) });
   if (!res.ok || !res.body) throw new Error(`${url}: HTTP ${res.status}`);
   const dir = await mkdtemp(join(tmpdir(), 'archipelia-world-'));
   const dispose = () => rm(dir, { recursive: true, force: true });

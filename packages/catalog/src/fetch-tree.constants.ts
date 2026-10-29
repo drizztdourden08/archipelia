@@ -6,4 +6,6 @@ const ROOT_FILES = new Set(['index.toml', 'index.lock']);
 
 const INDEX_DIR = 'index';
 
-export { INDEX_DIR, INDEX_FILE, ROOT_FILES };
+const INDEX_TIMEOUT_MS = 15_000;
+
+export { INDEX_DIR, INDEX_FILE, INDEX_TIMEOUT_MS, ROOT_FILES };
