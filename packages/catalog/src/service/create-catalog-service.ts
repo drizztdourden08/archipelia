@@ -34,8 +34,8 @@ import { createReleaseReader } from '../versions/create-release-reader';
 const createCatalogService = ({ games: files, cache, engineDir, fetch: fetchFn, trustRoot, build, buildSandbox, tools, log }: CatalogServiceDeps) => {
   let latest: Latest | undefined;
   let pending: Promise<Latest> | undefined;
-  const readReady = createReady({ files: cache, ...(fetchFn ? { fetch: fetchFn } : {}) });
   const readReleases = createReleaseReader({ files: cache, ...(fetchFn ? { fetch: fetchFn } : {}) });
+  const readReady = createReady({ files: cache, readReleases, ...(fetchFn ? { fetch: fetchFn } : {}) });
 
   const fetchOnce = (force: boolean) => {
     pending ??= Promise.all([

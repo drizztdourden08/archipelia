@@ -9,6 +9,7 @@ const isEntry = (value: unknown): value is ManifestEntry =>
   && typeof value.repo === 'string'
   && typeof value.fetchedAt === 'number'
   && (value.etag === undefined || typeof value.etag === 'string')
+  && (value.tag === undefined || typeof value.tag === 'string')
   && (value.manifest === null || isRecord(value.manifest));
 
 const readManifestCache = async (files: DataFiles): Promise<ManifestCache> => {

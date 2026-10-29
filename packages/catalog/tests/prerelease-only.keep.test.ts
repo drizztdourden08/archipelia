@@ -2,6 +2,7 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 import { MANIFEST_URL, REGISTRY_URL, STANDARD_URL, communityEntry, json, missing, registryOf, routed, standardOf, worldBytes } from './first-party.fixtures';
 import { memoryFiles } from './memory-files.fixtures';
+import { SEARCH_URL, manifestUrl, noManifest, readyManifest, searchOf } from './ready.fixtures';
 import { downloadUrl, recording, releasesBody, releasesUrl } from './versions.fixtures';
 import type { ReleaseSpec, Seen } from './versions.fixtures';
 
@@ -106,5 +107,45 @@ describe('a world with a stable release', () => {
     expect(await service.versions(key)).toMatchObject({ defaultId: 'v0.21.1', latestId: 'v0.21.1' });
     await service.install({ kind: 'index', apworld: 'relic_of_the_past', version: '' });
     expect((installWorld.mock.calls[0]?.[0] as { release: unknown }).release).toEqual({ tag: 'v0.21.1', prerelease: false });
+  });
+});
+
+describe('a world found by its topic', () => {
+  const TOPIC = 'maker/star-quest';
+
+  const topicService = (releases: ReleaseSpec[], hasLatest: boolean) =>
+    createCatalogService({
+      games: memoryFiles([]),
+      cache: memoryFiles([]),
+      engineDir: () => Promise.resolve('engine'),
+      fetch: routed({
+        [REGISTRY_URL]: () => json(registryOf()),
+        [MANIFEST_URL]: missing,
+        [SEARCH_URL]: searchOf([{ id: 7, repo: TOPIC }]),
+        [releasesUrl(TOPIC)]: () => json(releasesBody(releases)),
+        ...(hasLatest ? { [manifestUrl(TOPIC)]: () => json(readyManifest('Star Quest', 'star_quest')) } : noManifest(TOPIC)),
+        [downloadUrl(TOPIC, 'v2.0.0-rc1', 'archipelia.json')]: () => json(readyManifest('Star Quest', 'star_quest', { worldVersion: '2.0.0-rc1' })),
+      }),
+    });
+
+  const starQuest = async (service: ReturnType<typeof topicService>) => (await service.read(false)).entries.find((entry) => entry.apworld === 'star_quest');
+
+  const RC = [{ tag: 'v2.0.0-rc1', prerelease: true, assets: ['archipelia.json', 'star_quest.apworld'] }];
+
+  test('with only pre-releases it resolves from the newest one by tag and carries the Pre-release mark', async () => {
+    const entry = await starQuest(topicService(RC, false));
+    expect(entry?.discovered).toMatchObject({ repoId: 7, repo: TOPIC });
+    expect(entry?.firstParty).toMatchObject({ prerelease: true, tag: 'v2.0.0-rc1' });
+    expect(entry?.versions[0]).toMatchObject({ version: '2.0.0-rc1', url: downloadUrl(TOPIC, 'v2.0.0-rc1', 'star_quest.apworld') });
+  });
+
+  test('with a stable release it keeps latest and no mark', async () => {
+    const entry = await starQuest(topicService([{ tag: 'v1.0.0', assets: ['archipelia.json'] }, ...RC], true));
+    expect(entry?.firstParty?.prerelease).toBeUndefined();
+    expect(entry?.versions[0]?.url).toBe(`https://github.com/${TOPIC}/releases/latest/download/star_quest.apworld`);
+  });
+
+  test('with no release at all it is not shown', async () => {
+    expect(await starQuest(topicService([], false))).toBeUndefined();
   });
 });
