@@ -23,7 +23,7 @@ import { waitText } from './wait-text';
 
 const showsTab = (tour: AppReviewTour) => {
   nav.close();
-  return waitText(tour, /Players · \d/i, () => tabBody(tour) ?? null, 15000);
+  return waitText(tour, /\d+ players?/, () => tabBody(tour) ?? null, 15000);
 };
 
 const showsLobby = async (tour: AppReviewTour, lobby: AdminLobby) => {

@@ -1,0 +1,50 @@
+/* @layer renderer-app @kind style */
+.lobby-seat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--size-256)), 1fr));
+  gap: var(--space-md);
+  align-items: stretch;
+}
+
+.lobby-seat-grid__add {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-block-size: var(--size-128);
+  padding: var(--space-md);
+  border: var(--border-width-thick) dashed var(--c-primary);
+  border-radius: var(--radius-xl);
+  background: transparent;
+  color: var(--c-primary-text);
+  font-weight: var(--weight-semi);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--ease-standard), border-color var(--duration-fast) var(--ease-standard);
+}
+
+.lobby-seat-grid__add:hover:not(:disabled) {
+  border-color: var(--c-primary-bright);
+  background: var(--c-primary-soft);
+}
+
+.lobby-seat-grid__add:focus-visible {
+  outline: var(--border-width-thick) solid var(--c-focus);
+  outline-offset: var(--border-width-thin);
+}
+
+.lobby-seat-grid__add:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.lobby-seat-grid__plus {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--size-32);
+  block-size: var(--size-32);
+  border-radius: var(--radius-round);
+  background: var(--c-primary-soft);
+}

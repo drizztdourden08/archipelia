@@ -19,7 +19,7 @@ const openSavedLobby = async (tour: AppReviewTour, title: string, capture?: stri
   await clickNamed(tour, SELECTOR.button, new RegExp(`^${title}\\b`), layer() ?? undefined);
   await clickNamed(tour, SELECTOR.button, LOBBY_UI.run, layer() ?? undefined);
   await showsTab(tour, title);
-  const opened = await waitText(tour, /Players · 2/i, () => tabBody(tour) ?? null, 15000);
+  const opened = await waitText(tour, /2 players/, () => tabBody(tour) ?? null, 15000);
   tour.check('lobby-opens', opened, 'Run on a saved session opens its tab with the two players saved with it', 'Run did not open a tab with the saved players');
   const labelled = await stripHas(tour, title, 'Lobby');
   tour.check('lobby-tab', labelled, 'the tab is named after the session and its status says Lobby', 'the tab does not say it is in the lobby phase');
