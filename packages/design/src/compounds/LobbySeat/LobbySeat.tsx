@@ -9,9 +9,9 @@ import { SeatName } from './sub-components/SeatName';
 import './LobbySeat.css';
 
 const LobbySeat = ({ state, name, game, art, meta = NONE, status, reason, actions = NONE, tools = NONE, selected, onOpen }: LobbySeatProps) => (
-  <Box as="article" className="lobby-seat" data-state={state} data-selected={selected || undefined} aria-label={name}>
+  <Box as="article" className="lobby-seat" data-state={state} data-selected={selected ? true : undefined} aria-label={name}>
     <Flex className="lobby-seat__who" gap="sm" align="start">
-      {state !== 'held' && <SeatAvatar key={art ?? ''} label={game || name} art={art} />}
+      {state !== 'held' && <SeatAvatar key={art ?? ''} label={game ?? name} art={art} />}
       <Stack className="lobby-seat__text" gap="2xs">
         <SeatName name={name} meta={meta} onOpen={onOpen} />
       </Stack>
