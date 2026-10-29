@@ -12,8 +12,8 @@ const utf8 = (bytes: Uint8Array): string | undefined => {
   }
 };
 
-const fetchReleaseDescription = async (fetchFn: typeof fetch, repo: GithubRepo): Promise<string | undefined> => {
-  const bytes = await fetchReleaseFile(fetchFn, repo, RELEASE_DESCRIPTION_NAME, MAX_RELEASE_DESCRIPTION_BYTES);
+const fetchReleaseDescription = async (fetchFn: typeof fetch, repo: GithubRepo, tag?: string): Promise<string | undefined> => {
+  const bytes = await fetchReleaseFile(fetchFn, repo, RELEASE_DESCRIPTION_NAME, MAX_RELEASE_DESCRIPTION_BYTES, tag);
   const text = bytes && utf8(bytes);
   return text ? markdownOf(text, repo) : undefined;
 };

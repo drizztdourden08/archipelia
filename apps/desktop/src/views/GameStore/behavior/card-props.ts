@@ -5,6 +5,7 @@ import { joinsDirectly } from '@archipelia/model';
 import { DISCOVERED_LABEL, KIND_LABEL, KIND_OF, NO_RELEASE } from '../GameStore.constants';
 import { busyOf } from './busy-of';
 import { failureOf } from './failure-of';
+import { isPrerelease } from './is-prerelease';
 import { isVerified } from './is-verified';
 import { needOf } from './need-of';
 import { removeKey } from './remove-key';
@@ -77,6 +78,7 @@ const cardPropsOf = (row: GameRow, handlers: CardHandlers, pick?: VersionPick): 
   kindLabel: row.entry.discovered ? DISCOVERED_LABEL : KIND_LABEL[row.entry.source],
   verified: isVerified(row),
   direct: joinsDirectly(row.entry),
+  ...(isPrerelease(row) ? { prerelease: true } : {}),
   version: versionOf(row),
   ...worldVersionNote(row),
   status: statusOf(row, handlers, pick),

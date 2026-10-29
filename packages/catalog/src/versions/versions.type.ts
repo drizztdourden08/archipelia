@@ -19,7 +19,7 @@ type VersionChoice = { id: string; label: string; prerelease: boolean; published
 
 type VersionList = { by: 'tag' | 'version'; choices: VersionChoice[]; defaultId?: string; latestId?: string; problem?: string };
 
-type VersionsDeps = { files: DataFiles; fetch?: typeof fetch; now?: () => number };
+type VersionsDeps = { files: DataFiles; fetch?: typeof fetch; now?: () => number; readReleases?: (repo: string) => Promise<ReleasesRead> };
 
 type VersionsParams = { entry: CatalogEntry; registry: Registry; ap: string | undefined };
 

@@ -7,9 +7,9 @@ import { sniffImage } from './sniff-image';
 const fits = ({ width, height, animated }: ImageInfo): boolean =>
   !animated && width > 0 && height > 0 && width <= MAX_RELEASE_ART_WIDTH && height <= MAX_RELEASE_ART_HEIGHT;
 
-const fetchReleaseArt = async (fetchFn: typeof fetch, repo: GithubRepo): Promise<string | undefined> => {
+const fetchReleaseArt = async (fetchFn: typeof fetch, repo: GithubRepo, tag?: string): Promise<string | undefined> => {
   for (const name of RELEASE_ART_NAMES) {
-    const bytes = await fetchReleaseFile(fetchFn, repo, name, MAX_RELEASE_ART_BYTES);
+    const bytes = await fetchReleaseFile(fetchFn, repo, name, MAX_RELEASE_ART_BYTES, tag);
     const image = bytes && sniffImage(bytes);
     if (bytes && image && fits(image)) return `data:${image.type};base64,${Buffer.from(bytes).toString('base64')}`;
   }

@@ -1,5 +1,6 @@
 /* @layer core @kind logic */
 import type { CatalogEntry } from '@archipelia/model';
+import { defaultRelease } from '../first-party/default-release';
 import { releaseVersion } from '../first-party/release-version';
 import { GithubLimitError } from '../source/github-limit-error';
 import type { Checked, ReleaseSummary, VersionChoice, VersionList } from './versions.type';
@@ -14,10 +15,12 @@ const choiceOf = (release: ReleaseSummary, check: Checked | undefined, version: 
 });
 
 const choicesOf = (entry: CatalogEntry, releases: ReleaseSummary[], checks: Checked[], limitedUntil: number | undefined): VersionList => {
-  const stable = releases.findIndex((release) => !release.prerelease);
-  const choices = releases.map((release, at) => choiceOf(release, checks[at], checks[at]?.version ?? (at === stable ? releaseVersion(entry) : undefined)));
-  const open = choices.find((choice) => !choice.prerelease && !choice.reason);
-  const latest = choices[stable];
+  const target = defaultRelease(releases);
+  const onlyPrereleases = target?.prerelease === true;
+  const at = target ? releases.indexOf(target) : -1;
+  const choices = releases.map((release, index) => choiceOf(release, checks[index], checks[index]?.version ?? (index === at ? releaseVersion(entry) : undefined)));
+  const open = choices.find((choice) => (onlyPrereleases || !choice.prerelease) && !choice.reason);
+  const latest = choices[at];
   return {
     by: 'tag',
     choices,

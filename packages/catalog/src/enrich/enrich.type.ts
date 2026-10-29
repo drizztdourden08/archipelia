@@ -20,7 +20,7 @@ type EnrichRecord = {
   readmeUrl?: string;
 };
 
-type EnrichEntry = { game: string; file?: string; home?: string; release?: GithubRepo; releaseVersion?: string };
+type EnrichEntry = { game: string; file?: string; home?: string; release?: GithubRepo; releaseVersion?: string; releaseTag?: string };
 
 type EnrichDeps = {
   cache: DataFiles;
@@ -30,9 +30,9 @@ type EnrichDeps = {
   now?: () => number;
 };
 
-type EnrichPlan = { entry: EnrichEntry; stamp: string; repo?: GithubRepo; release?: GithubRepo };
+type EnrichPlan = { entry: EnrichEntry; stamp: string; repo?: GithubRepo; release?: GithubRepo; tag?: string };
 
-type GithubParams = { fetch: typeof fetch; repo: GithubRepo; release?: GithubRepo | undefined; stamp: string; old: EnrichRecord | undefined; now: number };
+type GithubParams = { fetch: typeof fetch; repo: GithubRepo; release?: GithubRepo | undefined; tag?: string | undefined; stamp: string; old: EnrichRecord | undefined; now: number };
 
 type ImageInfo = { type: 'image/png' | 'image/webp'; width: number; height: number; animated: boolean };
 

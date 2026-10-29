@@ -27,6 +27,7 @@ type GameDetailsProps = {
   art?: string;
   verified?: boolean;
   direct?: boolean;
+  prerelease?: boolean;
   busy?: string;
   error?: string;
   need?: GameDetailsNeed;
