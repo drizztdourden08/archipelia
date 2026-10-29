@@ -53,7 +53,7 @@ export default defineReviewStep({
     if (!lan || !solo) return;
     await tour.openWidget('network');
     nav.open(ROUTE.sessions);
-    await waitText(tour, solo.name, () => layer(tour) ?? null);
+    await waitText(tour, SESSIONS_UI.heading, () => layer(tour) ?? null);
     await openTab(tour, solo);
     const stacked = await checkSessionsLayout(tour, solo.name);
     await editSession(tour, lan.name);

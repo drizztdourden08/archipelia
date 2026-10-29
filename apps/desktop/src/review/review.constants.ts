@@ -77,7 +77,7 @@ const REVIEW_LAYOUT = {
 } as const;
 
 const SESSIONS_UI = {
-  list: 'Saved sessions', back: 'All sessions', tabOpen: 'Tab open', unsaved: /\d+ unsaved changes?/, once: 'Run once with these changes', discard: 'Discard',
+  heading: /History of this session/, list: 'Saved sessions', back: 'All sessions', tabOpen: 'Tab open', unsaved: /\d+ unsaved changes?/, once: 'Run once with these changes', discard: 'Discard',
   tab: 'Go to its tab', run: 'Run',
 } as const;
 
