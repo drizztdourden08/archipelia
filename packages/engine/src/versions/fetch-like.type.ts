@@ -8,6 +8,6 @@ type FetchedResponse = {
   text: () => Promise<string>;
 };
 
-type FetchLike = (url: string, init?: { headers?: Record<string, string> }) => Promise<FetchedResponse>;
+type FetchLike = (url: string, init?: { headers?: Record<string, string>; signal?: AbortSignal }) => Promise<FetchedResponse>;
 
 export type { FetchLike, FetchedResponse };
