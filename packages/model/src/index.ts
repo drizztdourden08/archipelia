@@ -30,4 +30,5 @@ export type * from './package-source';
 export { INSTALL_FAILURE_CODE, installFailureFrom, installFailureOf } from './install-failure';
 export { PORT_BOUNDS, PORT_PROBLEM } from './port-range.constants';
 export { inPortRange } from './in-port-range';
-export { passphraseSecret, passwordSecret } from './server-secrets';
+export { passphraseSecret } from './passphrase-secret';
+export { passwordSecret } from './password-secret';
