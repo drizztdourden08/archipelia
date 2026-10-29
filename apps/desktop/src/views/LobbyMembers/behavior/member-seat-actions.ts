@@ -11,7 +11,7 @@ const memberSeatActions = (lobby: AdminLobby, member: AdminLobbyMember, model: L
   const disabled = model.isBusy();
   const name = member.displayName;
   const worlds = pendingWorlds(lobby, member).map((request): LobbySeatAction => ({
-    id: `world-${request.slot.name}`, label: MEMBER_TEXT.review, nameSuffix: request.slot.name, icon: 'shield-alert', primary: true, disabled, onSelect: () => model.review(request),
+    id: `world-${request.slot.name}`, label: MEMBER_TEXT.review, nameSuffix: request.slot.name, icon: 'circle-alert', primary: true, disabled, onSelect: () => model.review(request),
   }));
   return [
     ...(can.approve ? [{ id: 'approve', label: MEMBER_TEXT.approve, nameSuffix: name, icon: 'check' as const, primary: true, disabled, onSelect: () => void model.approve(member.id) }] : []),

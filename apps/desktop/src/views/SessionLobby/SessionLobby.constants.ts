@@ -1,7 +1,10 @@
 /* @layer renderer-app @kind config */
 import type { LobbySeatStatus } from '@archipelia/design';
+import type { TagUrgencyColor } from '@drizztdourden08/tessera/primitives';
 
 const NAME_LIMIT = 16;
+
+const PHASE_URGENT: readonly TagUrgencyColor[] = ['success', 'warning', 'danger', 'info'];
 
 const YAML_VALUE = 'yaml';
 
@@ -94,5 +97,5 @@ const LOBBY_FAILURE = {
 } as const;
 
 export {
-  CONFIG_TEXT, LOBBY_FAILURE, LOBBY_SCREEN, NAME_LIMIT, NEW_PRESET_VALUE, OWN_GAME, PLAYERS_TEXT, PRESET_PREFIX, SEAT_EDITOR_CLASS, SEAT_STATUS, SEAT_TEXT, YAML_EXTENSIONS, YAML_VALUE,
+  CONFIG_TEXT, LOBBY_FAILURE, LOBBY_SCREEN, NAME_LIMIT, NEW_PRESET_VALUE, OWN_GAME, PHASE_URGENT, PLAYERS_TEXT, PRESET_PREFIX, SEAT_EDITOR_CLASS, SEAT_STATUS, SEAT_TEXT, YAML_EXTENSIONS, YAML_VALUE,
 };

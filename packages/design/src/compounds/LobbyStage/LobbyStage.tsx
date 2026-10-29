@@ -8,10 +8,10 @@ import './LobbyStage.css';
 const LobbyStage = ({ title, chips, actions, code, note, config, children }: LobbyStageProps) => (
   <Box as="section" className="lobby-stage" aria-label={title}>
     <Stack as="header" className="lobby-stage__head" gap="sm">
-      <Flex className="lobby-stage__line" gap="sm" align="center" wrap>
+      <Flex className="lobby-stage__line" gap="sm" align="center">
         <Title level={2} className="lobby-stage__title">{title}</Title>
         <Flex className="lobby-stage__chips" gap="xs" align="center" wrap>{chips}</Flex>
-        <Flex className="lobby-stage__actions" gap="sm" align="center" wrap>{actions}</Flex>
+        <Flex className="lobby-stage__actions" gap="sm" align="center">{actions}</Flex>
       </Flex>
       <Flex className="lobby-stage__line" gap="sm" align="center" wrap>
         {code && <StageCode {...code} />}

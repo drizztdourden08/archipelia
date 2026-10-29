@@ -12,7 +12,7 @@ const ChangesChip = ({ changes }: ChangesChipProps) => {
   );
   return (
     <Tooltip content={lines} focusable>
-      <Tag variant="urgency" color="warning" pill icon="git-compare">{changesLabel(changes.length)}</Tag>
+      <Tag variant="urgency" color="warning" pill icon="history">{changesLabel(changes.length)}</Tag>
     </Tooltip>
   );
 };

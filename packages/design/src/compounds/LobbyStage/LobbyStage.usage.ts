@@ -16,7 +16,7 @@ const usage = {
     'Put a short reason that keeps Run off in note.',
     'Put the notices, the seats and the seat editor in the body, in that order.',
     'Pass config with the facts of the setup, such as Hint cost 5 or Release Auto, and the Edit action that opens the setup.',
-    'Inside a column flex parent the stage grows to its height, so the space under the seats belongs to the frame.',
+    'The stage hugs its content with a minimum height, so the config line follows the seats; the header keeps the name, the chips and the actions on one row, and only the chips wrap.',
   ],
   a11y: [
     'The stage is a region named by title, and the title is a level 2 heading.',

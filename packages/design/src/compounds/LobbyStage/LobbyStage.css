@@ -2,8 +2,9 @@
 .lobby-stage {
   display: flex;
   flex-direction: column;
-  flex: 1 0 auto;
+  flex: none;
   box-sizing: border-box;
+  min-block-size: var(--size-320);
   overflow: hidden;
   border: var(--border-width-thin) solid var(--c-border);
   border-radius: var(--radius-xl);
@@ -27,15 +28,23 @@
   font-size: var(--text-xl);
   font-weight: var(--weight-semi);
   line-height: var(--leading-tight);
+  flex: 0 1 auto;
+  min-inline-size: 0;
+  overflow: hidden;
   letter-spacing: var(--tracking-normal);
+  text-overflow: ellipsis;
   text-transform: none;
+  white-space: nowrap;
 }
 
 .lobby-stage__chips {
+  flex: 1 1 0;
   min-inline-size: 0;
 }
 
 .lobby-stage__actions {
+  flex: none;
+  flex-wrap: nowrap;
   margin-inline-start: auto;
 }
 
