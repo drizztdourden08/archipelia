@@ -11,7 +11,8 @@ const usage = {
     { case: 'The lobby, the room, the addresses and the status of a session that is open.', use: 'SessionLobby' },
   ],
   rules: [
-    'List each saved session with its name, where it runs, its player count and the date of its last run; the list has its own filter.',
+    'List each saved session as one row of the app: an icon for where it runs, its name, a Tab open chip when it has a tab, an Unsaved chip on the picked one while it holds edits, and one line with where it runs, its player count and the date of its last run; the list has its own filter.',
+    'When the page is too narrow for both, show the list or the setup, never a folded strip: picking a session shows its setup, and All sessions goes back to the list.',
     'Show the setup of the picked session on the right with SessionBuilder: the form, the Players section and the Run actions.',
     'Put each session in search while the page is open, keyed by its id; picking it opens its Edit session sub-page.',
     'Open New session as a sub-page from the header primary button, and Join a session from the list header.',

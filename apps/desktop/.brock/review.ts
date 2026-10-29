@@ -14,6 +14,7 @@ const appReview: AppReview = {
     { id: 'presets', load: () => import('../src/review/presets.step') },
     { id: 'servers', load: () => import('../src/review/servers.step') },
     { id: 'sessions', load: () => import('../src/review/sessions.step') },
+    { id: 'sessions-layout', load: () => import('../src/review/sessions-layout.step') },
     { id: 'storage', load: () => import('../src/review/storage.step') },
     { id: 'teardown', load: () => import('../src/review/teardown.step') },
   ],

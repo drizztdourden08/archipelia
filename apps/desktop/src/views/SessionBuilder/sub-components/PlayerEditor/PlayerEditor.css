@@ -1,0 +1,7 @@
+/* @layer renderer-app @kind style */
+.player-editor {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--size-192), 1fr));
+  gap: var(--space-sm) var(--space-md);
+  align-items: start;
+}

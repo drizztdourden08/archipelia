@@ -5,7 +5,7 @@ import { historyLabel } from '../../behavior/history-label';
 import type { HistoryLinkProps } from './HistoryLink.type';
 
 const HistoryLink = ({ sessionId, runs }: HistoryLinkProps) => (
-  <Button size="sm" variant="ghost" icon={<Icon name="history" />} onClick={() => openHistory(sessionId)}>{historyLabel(runs)}</Button>
+  <Button size="sm" variant="ghost" icon={<Icon name="history" />} iconEnd={<Icon name="chevron-right" />} onClick={() => openHistory(sessionId)}>{historyLabel(runs)}</Button>
 );
 
 export { HistoryLink };
