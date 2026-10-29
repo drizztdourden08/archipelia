@@ -1,0 +1,27 @@
+/* @layer renderer-app @kind style */
+.session-players__add {
+  margin-inline-start: auto;
+}
+
+.session-players__columns {
+  display: grid;
+  grid-template-columns: var(--size-24) minmax(0, 1fr) var(--size-96) var(--size-32);
+  gap: var(--space-sm);
+  padding-block-end: var(--space-2xs);
+  border-block-end: var(--border-width-thin) solid var(--c-hairline);
+}
+
+.session-players__direct {
+  grid-column: 3;
+  text-align: center;
+}
+
+.session-players__rows {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.session-players__empty {
+  padding-block: var(--space-sm);
+}

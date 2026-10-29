@@ -1,0 +1,4 @@
+/* @layer renderer-app @kind style */
+.room-settings__body {
+  padding-block: var(--space-sm) var(--space-xs);
+}

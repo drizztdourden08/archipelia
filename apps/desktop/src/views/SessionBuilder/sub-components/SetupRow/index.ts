@@ -1,2 +1,2 @@
 /* @layer renderer-app @kind barrel */
-export { JoinCard } from './JoinCard';
+export { SetupRow } from './SetupRow';

@@ -48,7 +48,7 @@ const useSessionBuilder = (initial: SessionTemplate) => {
   const live = lobby !== undefined && lobby.phase !== 'closed';
   return {
     ...data, ...useSetupEdits(setDraft), actions, busy, clearPassword, dirty, draft, error, guard, hosting, live, password: room.password, runCount, saved, setDraft,
-    setPassword, stored,
+    setPassword, stored, tab,
   };
 };
 

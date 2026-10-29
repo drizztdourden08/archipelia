@@ -1,13 +1,11 @@
 /* @layer tests @kind test */
 import { describe, expect, test } from 'vitest';
 import { mergeLobby } from '../../src/stores/merge-lobby';
-import type { SessionTemplate } from '@archipelia/model';
 import { joinFacts } from '../../src/views/SessionLobby/behavior/join-facts';
-import { joinRows } from '../../src/views/SessionBuilder/behavior/join-rows';
+import { directState } from '../../src/views/SessionBuilder/behavior/direct-state';
 import { newTemplate } from '../../src/views/SessionBuilder/behavior/new-template';
 import { resultsFacts } from '../../src/views/SessionLobby/behavior/results-facts';
 import { serverNotice } from '../../src/views/SessionLobby/behavior/server-notice';
-import type { SessionPlace } from '../../src/views/SessionBuilder/SessionBuilder.type';
 import { consentOptions } from '../../src/views/LobbyMembers/behavior/consent-options';
 import { memberActions } from '../../src/views/LobbyMembers/behavior/member-actions';
 import { pendingWorlds } from '../../src/views/LobbyMembers/behavior/pending-worlds';
@@ -23,35 +21,26 @@ describe('what the session lets the host do with a connected player', () => {
   });
 });
 
-describe('the How players join section of the setup page', () => {
-  const noop = () => undefined;
-  const rowsOf = (draft: SessionTemplate, place: SessionPlace = 'local', live = false) => joinRows({
-    draft, directWorlds: [], worlds: null, live, place, placeOptions: [], remoteOptions: [], remoteValue: 'gg', busy: false, password: null,
-    onPlace: noop, onRemote: noop, onPort: noop, onAllow: noop, onOptions: noop,
-  });
+describe('the How players join rows of the setup page', () => {
   const local = newTemplate('t1');
 
-  test('holds only configuration: Where, the port or the server, the switch and the room password', () => {
-    expect(rowsOf(local).map((row) => row.id)).toEqual(['where', 'port', 'allow', 'password']);
-    expect(rowsOf({ ...local, host: { kind: 'archipelago-gg' } }, 'remote').map((row) => row.id)).toEqual(['where', 'server', 'allow', 'password']);
-  });
-
-  test('offers Host approval on and unlisted clients off once direct connections are on, with nothing running', () => {
-    const rows = rowsOf({ ...local, direct: { admission: 'host-approval', allowUnlisted: false } });
-    expect(rows.map((row) => row.id)).toEqual(['where', 'port', 'allow', 'approval', 'unlisted', 'password']);
-    expect(rows.map((row) => ('input' in row && row.input?.kind === 'toggle' ? row.input.value : null))).toEqual([null, null, true, true, false, null]);
+  test('keeps Host approval and unlisted clients off until direct connections are on', () => {
+    expect(directState(local, false, false)).toMatchObject({ on: false, approval: false, unlisted: false, allowOff: false, optionsOff: true });
+    const on = directState({ ...local, direct: { admission: 'host-approval', allowUnlisted: false } }, false, false);
+    expect(on).toMatchObject({ on: true, approval: true, unlisted: false, optionsOff: false });
   });
 
   test('says who can join from Where, explains a remote host it cannot use, and locks the switch while the lobby is open', () => {
-    const allowOf = (draft: SessionTemplate, place: SessionPlace = 'local', live = false) => rowsOf(draft, place, live).find((row) => row.id === 'allow');
-    expect(allowOf(local)).toMatchObject({ hint: expect.stringContaining('this computer') as string, lock: null });
-    expect(allowOf({ ...local, lan: true }, 'lan')).toMatchObject({ hint: expect.stringContaining('your network') as string });
+    expect(directState(local, false, false).hint).toContain('this computer');
+    expect(directState({ ...local, lan: true }, false, false).hint).toContain('your network');
     const gg = { ...local, host: { kind: 'archipelago-gg' as const } };
-    expect(allowOf(gg, 'remote')).toMatchObject({ disabled: true });
-    expect(allowOf({ ...gg, direct: { admission: 'open', allowUnlisted: false } }, 'remote')).toMatchObject({ disabled: false, problem: expect.stringContaining('do not work') as string });
-    expect(allowOf(local, 'local', true)?.lock).toContain('Close the lobby');
+    expect(directState(gg, false, false)).toMatchObject({ allowOff: true, problem: undefined });
+    expect(directState({ ...gg, direct: { admission: 'open', allowUnlisted: false } }, false, false)).toMatchObject({ allowOff: false, problem: expect.stringContaining('do not work') as string });
+    expect(directState(local, true, false)).toMatchObject({ allowOff: true, optionsOff: true, hint: expect.stringContaining('Close the lobby') as string });
   });
+});
 
+describe('the session tab facts', () => {
   test('shows the session code with a copy button, the server address and the Archipelago version', () => {
     const facts = joinFacts(lobby(), '127.0.0.1:38290');
     expect(facts.map((fact) => fact.label)).toEqual(['Session code', 'Server address', 'Archipelago version']);
