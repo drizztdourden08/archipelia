@@ -13,9 +13,9 @@ const docsOf = async ({ fetch: net, repo }: GithubParams, same: EnrichRecord | u
 };
 
 const fromGithub = async (params: GithubParams): Promise<EnrichRecord> => {
-  const { fetch: net, repo, release, stamp, old, now } = params;
+  const { fetch: net, repo, release, tag, stamp, old, now } = params;
   const same = old?.stamp === stamp ? old : undefined;
-  const files = release ? await readReleaseFiles(net, release) : {};
+  const files = release ? await readReleaseFiles(net, release, tag) : {};
   const docs = await docsOf(params, same, files);
   const art = files.art ?? same?.art ?? await fetchArt(net, repo).catch(() => undefined);
   return { ...docs, version: RECORD_VERSION, stamp, fetchedAt: now, ...(art ? { art } : {}) };

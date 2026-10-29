@@ -11,7 +11,8 @@ const releaseVersionOf = ({ versions, firstParty }: CatalogEntry): string | unde
 
 const releaseFields = (entry: CatalogEntry) => {
   const releaseVersion = releaseVersionOf(entry);
-  return releaseVersion ? { releaseVersion } : {};
+  const releaseTag = entry.firstParty?.prerelease ? entry.firstParty.tag : undefined;
+  return { ...(releaseVersion ? { releaseVersion } : {}), ...(releaseTag ? { releaseTag } : {}) };
 };
 
 const createEnrichEntry = (engineDir: () => Promise<string>, entries: () => CatalogEntry[]) =>

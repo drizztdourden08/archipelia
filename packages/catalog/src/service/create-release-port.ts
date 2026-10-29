@@ -5,8 +5,8 @@ import type { VersionList, VersionsRequest } from '../versions/versions.type';
 import type { InstallRequest, Latest } from './catalog-service.type';
 import type { ReleasePortDeps } from './create-release-port.type';
 
-const createReleasePort = ({ cache, fetch: request, activeAp, indexEntry }: ReleasePortDeps) => {
-  const releases = createVersions({ files: cache, ...(request ? { fetch: request } : {}) });
+const createReleasePort = ({ cache, fetch: request, readReleases, activeAp, indexEntry }: ReleasePortDeps) => {
+  const releases = createVersions({ files: cache, readReleases, ...(request ? { fetch: request } : {}) });
 
   const chosen = async (wanted: Extract<InstallRequest, { kind: 'index' }>, entry: CatalogEntry, current: Latest) => {
     const params = { entry, registry: current.firstParty.registry, ap: await activeAp() };
