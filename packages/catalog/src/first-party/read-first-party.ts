@@ -6,11 +6,10 @@ import { createReleaseReader } from '../versions/create-release-reader';
 import { firstPartyEntry } from './first-party-entry';
 import { MANIFEST_CONCURRENCY } from './first-party.constants';
 import type { FirstPartyDeps, FirstPartyRead } from './first-party.type';
+import { NONE } from './read-first-party.constants';
 import type { GameState } from './read-game-state.type';
 import { readGameState } from './read-game-state';
 import { withPrerelease } from './with-prerelease';
-
-const NONE: GameState = { state: { kind: 'none' } };
 
 const failed = ({ state }: GameState, game: string) => (state.kind === 'failed' ? [`${game}: ${state.message}`] : []);
 

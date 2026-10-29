@@ -42,6 +42,8 @@ type ReleaseFiles = { markdown?: string; art?: string };
 
 type GithubRepo = { owner: string; repo: string };
 
+type ReleaseTarget = GithubRepo & { tag?: string };
+
 type ReadmeRead =
   | { kind: 'text'; text: string; etag?: string; url: string }
   | { kind: 'same' }
@@ -52,5 +54,5 @@ type ReadmeParams = { fetch: typeof fetch; repo: GithubRepo; etag?: string | und
 type DocsParams = { engineDir: string; apworld: string; game: string; file?: string };
 
 export type {
-  DocsParams, EnrichDeps, EnrichEntry, EnrichPlan, EnrichRecord, EnrichRequest, GameEnrichment, GithubParams, GithubRepo, ImageInfo, ImageSize, ReadmeParams, ReadmeRead, ReleaseFiles,
+  DocsParams, EnrichDeps, EnrichEntry, EnrichPlan, EnrichRecord, EnrichRequest, GameEnrichment, GithubParams, GithubRepo, ImageInfo, ImageSize, ReadmeParams, ReadmeRead, ReleaseFiles, ReleaseTarget,
 };

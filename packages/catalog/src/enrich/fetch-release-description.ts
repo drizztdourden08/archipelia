@@ -1,5 +1,5 @@
 /* @layer core @kind logic */
-import type { GithubRepo } from './enrich.type';
+import type { ReleaseTarget } from './enrich.type';
 import { MAX_RELEASE_DESCRIPTION_BYTES, RELEASE_DESCRIPTION_NAME } from './enrich.constants';
 import { fetchReleaseFile } from './fetch-release-file';
 import { markdownOf } from './markdown-of';
@@ -12,8 +12,8 @@ const utf8 = (bytes: Uint8Array): string | undefined => {
   }
 };
 
-const fetchReleaseDescription = async (fetchFn: typeof fetch, repo: GithubRepo, tag?: string): Promise<string | undefined> => {
-  const bytes = await fetchReleaseFile(fetchFn, repo, RELEASE_DESCRIPTION_NAME, MAX_RELEASE_DESCRIPTION_BYTES, tag);
+const fetchReleaseDescription = async (fetchFn: typeof fetch, repo: ReleaseTarget): Promise<string | undefined> => {
+  const bytes = await fetchReleaseFile(fetchFn, repo, RELEASE_DESCRIPTION_NAME, MAX_RELEASE_DESCRIPTION_BYTES);
   const text = bytes && utf8(bytes);
   return text ? markdownOf(text, repo) : undefined;
 };

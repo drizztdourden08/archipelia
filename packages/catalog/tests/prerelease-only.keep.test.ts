@@ -5,12 +5,13 @@ import { memoryFiles } from './memory-files.fixtures';
 import { downloadUrl, recording, releasesBody, releasesUrl } from './versions.fixtures';
 import type { ReleaseSpec, Seen } from './versions.fixtures';
 
-const stubs = vi.hoisted(() => ({ readCatalog: vi.fn(), installWorld: vi.fn() }));
-const { readCatalog, installWorld } = stubs;
+const ENGINE_AP = '0.6.7';
+const installWorld = vi.hoisted(() => vi.fn());
+const readCatalog = vi.hoisted(() => vi.fn());
 
-vi.mock('@archipelia/engine', async (original) => ({ ...(await original<object>()), readRuntime: () => Promise.resolve({ apVersion: '0.6.7' }) }));
-vi.mock('../src/install/install-world', () => ({ installWorld: stubs.installWorld }));
-vi.mock('../src/read-catalog', () => ({ readCatalog: stubs.readCatalog }));
+vi.mock('@archipelia/engine', async (original) => ({ ...(await original<object>()), readRuntime: () => Promise.resolve({ apVersion: ENGINE_AP }) }));
+vi.mock('../src/install/install-world', () => ({ installWorld }));
+vi.mock('../src/read-catalog', () => ({ readCatalog }));
 
 const { createCatalogService } = await import('../src/service/create-catalog-service');
 
@@ -51,7 +52,7 @@ const key = { apworld: 'relic_of_the_past', source: 'first-party' as const };
 beforeEach(() => {
   installWorld.mockReset();
   installWorld.mockResolvedValue({ apworld: 'relic_of_the_past' });
-  readCatalog.mockResolvedValue({ apVersion: '0.6.7', entries: [communityEntry('alpha')], problems: [], downloaded: 0 });
+  readCatalog.mockResolvedValue({ apVersion: ENGINE_AP, entries: [communityEntry('alpha')], problems: [], downloaded: 0 });
 });
 
 describe('a world with no stable release', () => {
