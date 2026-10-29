@@ -4,12 +4,15 @@ import type { DataFiles } from '@archipelia/model';
 import type { ManifestCache, ManifestEntry } from './manifest-cache.type';
 import { MANIFEST_CACHE_FILE } from './ready.constants';
 
+const isOptional = (value: unknown, type: 'string' | 'boolean'): boolean => value === undefined || typeof value === type;
+
 const isEntry = (value: unknown): value is ManifestEntry =>
   isRecord(value)
   && typeof value.repo === 'string'
   && typeof value.fetchedAt === 'number'
-  && (value.etag === undefined || typeof value.etag === 'string')
-  && (value.tag === undefined || typeof value.tag === 'string')
+  && isOptional(value.etag, 'string')
+  && isOptional(value.tag, 'string')
+  && isOptional(value.checked, 'boolean')
   && (value.manifest === null || isRecord(value.manifest));
 
 const readManifestCache = async (files: DataFiles): Promise<ManifestCache> => {

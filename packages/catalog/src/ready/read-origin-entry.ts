@@ -21,7 +21,7 @@ const readOriginEntry = async (
   const listed = (await readReadyCache(cache))?.repos.find((repo) => repo.id === origin.repoId && sameName(repo.fullName, origin.repo));
   if (!listed) return undefined;
   const latest = await readReleaseAsset(releaseUrl(listed.fullName, STANDARD_MANIFEST), request, MAX_MANIFEST_BYTES);
-  const found = isRecord(latest) ? undefined : await readPrereleaseManifest(readReleases, request, listed.fullName);
+  const found = isRecord(latest) ? undefined : await readPrereleaseManifest(readReleases, request, listed.fullName).catch(() => undefined);
   const entry = readyEntry(listed, stateOfManifest(isRecord(latest) ? latest : (found?.manifest ?? null)), found?.tag);
   return entry && withPrerelease(entry, found?.tag);
 };

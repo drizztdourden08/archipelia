@@ -148,4 +148,31 @@ describe('a world found by its topic', () => {
   test('with no release at all it is not shown', async () => {
     expect(await starQuest(topicService([], false))).toBeUndefined();
   });
+
+  test('only the five most recently updated repos without a latest manifest are resolved per refresh, the rest on the next one', async () => {
+    const repos = Array.from({ length: 7 }, (_, i) => ({ id: i + 1, repo: `maker/world-${i}`, pushedAt: `2026-10-0${i + 1}T00:00:00Z` }));
+    const rc = [{ tag: 'v1.0.0-rc1', prerelease: true, assets: ['archipelia.json'] }];
+    const seen: Seen[] = [];
+    const service = createCatalogService({
+      games: memoryFiles([]),
+      cache: memoryFiles([]),
+      engineDir: () => Promise.resolve('engine'),
+      fetch: recording(routed({
+        [REGISTRY_URL]: () => json(registryOf()),
+        [MANIFEST_URL]: missing,
+        [SEARCH_URL]: searchOf(repos),
+        ...Object.fromEntries(repos.flatMap(({ repo }, i) => [
+          ...Object.entries(noManifest(repo)),
+          [releasesUrl(repo), () => json(releasesBody(rc))],
+          [downloadUrl(repo, 'v1.0.0-rc1', 'archipelia.json'), () => json(readyManifest(`World ${i}`, `world_${i}`, { worldVersion: '1.0.0-rc1' }))],
+        ])),
+      }), seen),
+    });
+    const shown = async (force: boolean) => (await service.read(force)).entries.filter((entry) => entry.discovered).map((entry) => entry.apworld).sort();
+    const calls = () => seen.filter((call) => call.url.includes('/repos/maker/world-')).length;
+    expect(await shown(false)).toEqual(['world_2', 'world_3', 'world_4', 'world_5', 'world_6']);
+    expect(calls()).toBe(5);
+    expect(await shown(true)).toHaveLength(7);
+    expect(calls()).toBe(7);
+  });
 });
