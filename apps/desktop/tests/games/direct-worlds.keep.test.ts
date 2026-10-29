@@ -1,15 +1,14 @@
 /* @layer tests @kind test */
 import { describe, expect, test } from 'vitest';
 import { joinsDirectly } from '@archipelia/model';
-import type { CatalogEntry, InstalledGame, SessionTemplate } from '@archipelia/model';
+import type { CatalogEntry, InstalledGame } from '@archipelia/model';
 import { handlers as fixtureHandlers, rowFor } from './game-handlers.fixtures';
 import { buildRows } from '../../src/views/GameStore/behavior/build-rows';
 import { cardPropsOf } from '../../src/views/GameStore/behavior/card-props';
 import { filterRows } from '../../src/views/GameStore/behavior/filter-rows';
-import { joinRows } from '../../src/views/SessionBuilder/behavior/join-rows';
 import { directWorldsOf } from '../../src/views/SessionBuilder/behavior/direct-worlds';
 import { mayJoinDirectly } from '../../src/views/SessionBuilder/behavior/may-join-directly';
-import { newTemplate } from '../../src/views/SessionBuilder/behavior/new-template';
+import { worldsWarning } from '../../src/views/SessionBuilder/behavior/worlds-warning';
 import { presetPlayer } from '../sessions/session-fixtures';
 
 const handlers = fixtureHandlers([]);
@@ -74,19 +73,10 @@ describe('the setup page and worlds that join directly', () => {
     expect(mayJoinDirectly([presetPlayer(3, 'Cy', 'p1', 'PLAIN')], installed)).toBe(false);
   });
 
-  const noop = () => undefined;
-  const rowsOf = (draft: SessionTemplate) => joinRows({
-    draft, directWorlds: directWorldsOf(players, installed, entries), worlds: null, live: false, place: 'local', placeOptions: [], remoteOptions: [], remoteValue: 'gg',
-    busy: false, password: null, onPlace: noop, onRemote: noop, onPort: noop, onAllow: noop, onOptions: noop,
-  });
-
-  test('shows the row only with direct connections on, and hints at Allow unlisted clients while it is off', () => {
-    const base = newTemplate('t1');
-    expect(rowsOf(base).map((row) => row.id)).not.toContain('worlds');
-    const off = rowsOf({ ...base, direct: { admission: 'host-approval', allowUnlisted: false } });
-    expect(off.map((row) => row.id)).toEqual(['where', 'port', 'allow', 'worlds', 'approval', 'unlisted', 'password']);
-    expect(off.find((row) => row.id === 'worlds')).toMatchObject({ hint: expect.stringContaining('Allow unlisted clients') as string });
-    const on = rowsOf({ ...base, direct: { admission: 'host-approval', allowUnlisted: true } });
-    expect(on.find((row) => row.id === 'worlds')).toMatchObject({ hint: 'Those players join from the game itself.' });
+  test('warns that a world outside the registry needs Allow unlisted clients, and only while it is off', () => {
+    const worlds = directWorldsOf(players, installed, entries);
+    expect(worldsWarning(worlds, false)).toContain('Allow unlisted clients');
+    expect(worldsWarning(worlds, true)).toBeNull();
+    expect(worldsWarning([{ game: 'RELIC', listed: true }], false)).toBeNull();
   });
 });

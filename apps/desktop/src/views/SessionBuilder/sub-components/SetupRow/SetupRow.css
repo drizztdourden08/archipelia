@@ -1,0 +1,27 @@
+/* @layer renderer-app @kind style */
+.setup-row {
+  display: grid;
+  grid-template-columns: var(--size-96) minmax(0, 1fr);
+  gap: var(--space-sm) var(--space-md);
+  align-items: baseline;
+  padding-block: var(--space-xs);
+}
+
+.setup-row__label {
+  padding-block-start: var(--space-xs);
+}
+
+.setup-row__body {
+  min-inline-size: 0;
+}
+
+@container builder-form (width < 448px) {
+  .setup-row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-xs);
+  }
+
+  .setup-row__label {
+    padding-block-start: 0;
+  }
+}
