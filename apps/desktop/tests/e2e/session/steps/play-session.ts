@@ -23,12 +23,11 @@ const hostSession = async (launched: LaunchedApp, tab: Locator) => runSession(la
 
 const startRotpB = async (launched: LaunchedApp, env: SessionEnv, dirs: SessionDirs): Promise<RotpInstance> => {
   const target = await roomTargetOf(launched, TEMPLATE, ROTP_B.slot);
-  return startRotp({ name: ROTP_B.slot, env, args: (eventLog) => apConnectArgs(env, dirs.profileB, eventLog, target), profileDir: dirs.profileB, outDir: dirs.logs });
+  const instance = (eventLog: string) => ({ env, profileDir: dirs.profileB, eventLog, profileName: ROTP_B.slot });
+  return startRotp({ name: ROTP_B.slot, bin: env.binB, args: (eventLog) => apConnectArgs(instance(eventLog), target), profileDir: dirs.profileB, outDir: dirs.logs });
 };
 
-const waitForChests = async (instances: RotpInstance[]) => {
-  await Promise.all(instances.map((instance) => waitForChestItem(instance, TIMEOUT.chest)));
-};
+const waitForChest = (instance: RotpInstance) => waitForChestItem(instance, TIMEOUT.chest);
 
 const chestResultOf = async (widgets: Locator, slot: string): Promise<ChestItem> => {
   const line = widgets.getByText(chestLineOf(slot)).first();
@@ -96,4 +95,4 @@ const checkConsole = async (launched: LaunchedApp) => {
   await settledProof(launched, '64-session-console');
 };
 
-export { checkConsole, checkResults, checkRoom, checkSpoiler, hostSession, sendHints, startRotpB, waitForChests };
+export { checkConsole, checkResults, checkRoom, checkSpoiler, hostSession, sendHints, startRotpB, waitForChest };

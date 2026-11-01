@@ -4,7 +4,6 @@ import type { ChildProcess } from 'node:child_process';
 import { createWriteStream } from 'node:fs';
 import { mkdir, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import type { SessionEnv } from './session-env';
 
 const POLL_MS = 500;
 const STOP_GRACE_MS = 10000;
@@ -17,11 +16,11 @@ type RotpInstance = {
   exited: () => boolean;
 };
 
-type RotpStart = { name: string; env: SessionEnv; args: (eventLog: string) => string[]; profileDir: string; outDir: string };
+type RotpStart = { name: string; bin: string; args: (eventLog: string) => string[]; profileDir: string; outDir: string };
 
 const pause = (ms: number) => new Promise<void>((resolve) => { setTimeout(resolve, ms); });
 
-const startRotp = async ({ name, env, args, profileDir, outDir }: RotpStart): Promise<RotpInstance> => {
+const startRotp = async ({ name, bin, args, profileDir, outDir }: RotpStart): Promise<RotpInstance> => {
   await mkdir(profileDir, { recursive: true });
   await mkdir(outDir, { recursive: true });
   const sink = createWriteStream(join(outDir, `${name}.log`));
@@ -33,7 +32,7 @@ const startRotp = async ({ name, env, args, profileDir, outDir }: RotpStart): Pr
   const childEnv = { ...process.env };
   delete childEnv.ELECTRON_RUN_AS_NODE;
   const eventLog = join(outDir, `${name}.events.jsonl`);
-  const child = spawn(env.bin, args(eventLog), { windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'], env: childEnv });
+  const child = spawn(bin, args(eventLog), { windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'], env: childEnv });
   const state = { exited: false };
   child.stdout?.on('data', keep);
   child.stderr?.on('data', keep);
@@ -58,17 +57,10 @@ const eventsOf = async (path: string): Promise<Record<string, unknown>[]> => {
   }
 };
 
-// One JSON object per line. The event name is under "event" (or "type"); its fields sit beside it or under "data".
-const nameOf = (entry: Record<string, unknown>) => entry.event ?? entry.type;
-
-const fieldOf = (entry: Record<string, unknown>, key: string): unknown => {
-  const data = entry.data;
-  return key in entry ? entry[key] : typeof data === 'object' && data !== null ? Reflect.get(data, key) : undefined;
-};
-
+// One JSON object per line with the event name under "t": connected, item-received {id, name, from, self}, location-checked.
 const ownItemSeen = (events: Record<string, unknown>[]) => {
-  const connected = events.findIndex((entry) => nameOf(entry) === 'connected');
-  return connected >= 0 && events.slice(connected + 1).some((entry) => nameOf(entry) === 'item-received' && fieldOf(entry, 'self') === true);
+  const connected = events.findIndex((entry) => entry.t === 'connected');
+  return connected >= 0 && events.slice(connected + 1).some((entry) => entry.t === 'item-received' && entry.self === true);
 };
 
 const waitForChestItem = async (instance: RotpInstance, timeoutMs: number, until = Date.now() + timeoutMs): Promise<void> => {

@@ -6,27 +6,28 @@ type LobbyTarget = { host: string; port: number; code: string };
 
 type RoomTarget = { host: string; port: number; slot: string; password: string };
 
-// TODO(rotp lead): confirm the flag that gives an instance its own profile; --user-data is the Brock convention.
-const common = (env: SessionEnv, profileDir: string, eventLog: string): string[] => [
+type InstanceArgs = { env: SessionEnv; profileDir: string; eventLog: string; profileName: string };
+
+const common = ({ env, profileDir, eventLog, profileName }: InstanceArgs): string[] => [
   '--no-focus',
   '--muted',
   `--user-data=${profileDir}`,
-  '--rom', env.rom,
-  '--auto-state', AUTO_STATE,
-  '--input-script', CHEST_INPUT,
+  `--rom=${env.rom}`,
+  `--profile-name=${profileName}`,
+  `--auto-state=${AUTO_STATE}`,
+  `--input-script=${CHEST_INPUT}`,
   `--event-log=${eventLog}`,
 ];
 
-const lobbyJoinArgs = (env: SessionEnv, profileDir: string, eventLog: string, yaml: string, target: LobbyTarget): string[] => [
-  ...common(env, profileDir, eventLog),
-  env.yamlFlag, yaml,
+const lobbyJoinArgs = (instance: InstanceArgs, target: LobbyTarget): string[] => [
+  ...common(instance),
   `--lobby-join=${target.host}:${target.port}:${target.code}`,
 ];
 
-const apConnectArgs = (env: SessionEnv, profileDir: string, eventLog: string, target: RoomTarget): string[] => [
-  ...common(env, profileDir, eventLog),
+const apConnectArgs = (instance: InstanceArgs, target: RoomTarget): string[] => [
+  ...common(instance),
   `--ap-connect=${[target.host, target.port, target.slot, ...(target.password ? [target.password] : [])].join(':')}`,
 ];
 
 export { apConnectArgs, lobbyJoinArgs };
-export type { LobbyTarget, RoomTarget };
+export type { InstanceArgs, LobbyTarget, RoomTarget };
