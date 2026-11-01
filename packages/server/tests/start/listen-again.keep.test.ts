@@ -24,7 +24,7 @@ const started = () => {
   return startCore(host, createNodeRest(host, { automation: true }));
 };
 
-describe('the listener of the core', () => {
+describe('K1 the listener of the core', { tags: ['standard'] }, () => {
   test('hands out the running listener, and opens a new one once it was stopped', async () => {
     const server = started();
     const first = await server.listen({ port: 0, mode: 'off' });

@@ -61,7 +61,7 @@ afterEach(async () => {
   await rm(work, { recursive: true, force: true });
 });
 
-describe.runIf(process.platform === 'linux' && existsSync(PYTHON) && (runner.mode === 'bwrap' || process.env.CI !== undefined))('a real bubblewrap sandbox on Linux (needs bubblewrap, which CI installs)', () => {
+describe.runIf(process.platform === 'linux' && existsSync(PYTHON) && (runner.mode === 'bwrap' || process.env.CI !== undefined))('K4 a real bubblewrap sandbox on Linux (needs bubblewrap, which CI installs)', { tags: ['e2e'] }, () => {
   test('a world cannot read or write outside its overlay and run folder, nor open a socket', async () => {
     const overlay = join(work, 'overlay');
     const run = join(work, 'run');
@@ -81,5 +81,5 @@ describe.runIf(process.platform === 'linux' && existsSync(PYTHON) && (runner.mod
     });
     expect(existsSync(join(work, 'escape.txt'))).toBe(false);
     expect(await readFile(join(run, 'ok.txt'), 'utf8')).toBe('ok');
-  }, 30000);
+  });
 });

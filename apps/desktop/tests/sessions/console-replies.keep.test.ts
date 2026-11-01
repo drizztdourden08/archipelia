@@ -13,7 +13,7 @@ const line = (offset: number, text: string): HostLogLine => ({ at: AT + offset, 
 
 const messages = (rows: { kind: string; message: string }[]) => rows.map((row) => `${row.kind}:${row.message}`);
 
-describe('consoleRows', () => {
+describe('K1 consoleRows', { tags: ['critical'] }, () => {
   test('shows nothing before the first command', () => {
     expect(consoleRows([], [line(0, 'Hosting game at 0.0.0.0:38281')])).toEqual([]);
   });
@@ -44,7 +44,7 @@ describe('consoleRows', () => {
   });
 });
 
-describe('liveDetail', () => {
+describe('K1 liveDetail', { tags: ['critical'] }, () => {
   test('explains the idle and password phases and gives the reason otherwise', () => {
     expect(liveDetail('idle', null)).toBe('Live data shows while the room is hosting.');
     expect(liveDetail('password', 'Wrong password')).toBe('Enter it to watch the room.');

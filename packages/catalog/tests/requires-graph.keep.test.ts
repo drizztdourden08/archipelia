@@ -11,26 +11,26 @@ const INDEX = [
 ];
 
 describe('installOrder', () => {
-  test('a world without requirements installs alone', () => {
+  test('K1 a world without requirements installs alone', { tags: ['critical'] }, () => {
     expect(installOrder(INDEX, 'sm')).toEqual(['sm']);
   });
 
-  test('requirements come first, each once', () => {
+  test('K1 requirements come first, each once', { tags: ['critical'] }, () => {
     expect(installOrder(INDEX, 'combo')).toEqual(['sm', 'alttp', 'smz3', 'combo']);
   });
 
-  test('an unknown world is refused', () => {
+  test('K1 an unknown world is refused', { tags: ['critical'] }, () => {
     expect(() => installOrder(INDEX, 'nope')).toThrow(/not an official world/);
   });
 
-  test('a cycle is refused', () => {
+  test('K1 a cycle is refused', { tags: ['critical'] }, () => {
     const cyclic = [{ apworld: 'a', requires: ['b'] }, { apworld: 'b', requires: ['a'] }];
     expect(() => installOrder(cyclic, 'a')).toThrow(/a -> b -> a/);
   });
 });
 
 describe('dependentsOf', () => {
-  test('lists the installed worlds that need one', () => {
+  test('K1 lists the installed worlds that need one', { tags: ['critical'] }, () => {
     expect(dependentsOf(INDEX, 'alttp')).toEqual(['smz3', 'combo']);
     expect(dependentsOf(INDEX, 'combo')).toEqual([]);
   });

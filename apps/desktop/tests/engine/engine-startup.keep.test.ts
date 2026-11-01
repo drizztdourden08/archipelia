@@ -11,7 +11,7 @@ const quiet = (status: EngineStatus): Partial<EngineStartupDeps> => ({
   startup: vi.fn(() => Promise.resolve<StartupDecision>({ kind: 'none' })),
 });
 
-describe('running the first run prompt', () => {
+describe('S2 running the first run prompt', { tags: ['standard'] }, () => {
   test('installs the release picked in the select', async () => {
     const { ctx, choices } = ctxOf(true, { choice: '0.6.2' });
     const { deps, calls } = depsOf();
@@ -55,7 +55,7 @@ describe('running the first run prompt', () => {
   });
 });
 
-describe('running the upgrade offer prompt', () => {
+describe('S2 running the upgrade offer prompt', { tags: ['standard'] }, () => {
   test('the offer is marked shown before the answer and installs on Upgrade', async () => {
     const { ctx, actions } = ctxOf(true, { action: true });
     const { deps, calls } = depsOf(withOffer());
@@ -88,7 +88,7 @@ describe('running the upgrade offer prompt', () => {
   });
 });
 
-describe('running the prompt with the check at start off', () => {
+describe('S2 running the prompt with the check at start off', { tags: ['standard'] }, () => {
   test('a ready engine never asks main or shows a dialog', async () => {
     const { ctx, choices, actions } = ctxOf(false, { action: true });
     const { deps, calls } = depsOf(withOffer());

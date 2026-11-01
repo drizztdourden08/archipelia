@@ -11,12 +11,12 @@ const firstParty = (apworld: string, patch: Partial<CatalogEntry> = {}): Catalog
 });
 
 describe('mergeCatalog', () => {
-  test('keeps the community entries and adds the first-party ones', () => {
+  test('K1 keeps the community entries and adds the first-party ones', { tags: ['critical'] }, () => {
     const merged = mergeCatalog([communityEntry('alpha')], [firstParty('beta')]);
     expect(merged.map((entry) => [entry.apworld, entry.source])).toEqual([['alpha', 'index'], ['beta', 'first-party']]);
   });
 
-  test('on a module collision the first-party entry wins and carries its own versions', () => {
+  test('K1 on a module collision the first-party entry wins and carries its own versions', { tags: ['critical'] }, () => {
     const community = communityEntry('relic_of_the_past', { setupGuide: 'https://guide', tracker: 'https://tracker' });
     const merged = mergeCatalog([communityEntry('alpha'), community], [firstParty('relic_of_the_past')]);
     const winner = merged.filter((entry) => entry.apworld === 'relic_of_the_past');
@@ -26,13 +26,13 @@ describe('mergeCatalog', () => {
     expect(winner[0]).toMatchObject({ setupGuide: 'https://guide', tracker: 'https://tracker' });
   });
 
-  test('a first-party entry with no release still replaces the community one', () => {
+  test('K1 a first-party entry with no release still replaces the community one', { tags: ['critical'] }, () => {
     const merged = mergeCatalog([communityEntry('relic_of_the_past')], [firstParty('relic_of_the_past', { versions: [], unavailable: 'No release yet' })]);
     expect(merged).toHaveLength(1);
     expect(merged[0]).toMatchObject({ source: 'first-party', versions: [], unavailable: 'No release yet' });
   });
 
-  test('a world that ships with the engine is never replaced', () => {
+  test('K1 a world that ships with the engine is never replaced', { tags: ['critical'] }, () => {
     const official = communityEntry('relic_of_the_past', { source: 'official', versions: [] });
     const merged = mergeCatalog([official], [firstParty('relic_of_the_past')]);
     expect(merged.map((entry) => entry.source)).toEqual(['official']);

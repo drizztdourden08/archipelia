@@ -3,7 +3,7 @@ import { describe, expect, test } from 'vitest';
 import { templateOf } from '../src';
 import { beforeTheSplit, withLegacyDirect } from './old-records';
 
-describe('a saved session read from disk', () => {
+describe('K3 a saved session read from disk', { tags: ['critical'] }, () => {
   test('keeps its players and marks each one as hosted by the host setup', () => {
     const read = templateOf(beforeTheSplit());
     expect(read.players.map((player) => [player.name, player.direct])).toEqual([['Drizzt', false], ['Alice', false]]);

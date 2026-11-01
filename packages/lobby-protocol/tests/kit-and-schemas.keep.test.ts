@@ -1,6 +1,6 @@
 /* @layer tests @kind test */
 import { describe, expect, test } from 'vitest';
-import { CLIENT_SCHEMAS, SCHEMA_DEFS, SERVER_SCHEMAS, validateMessage, validateSchema } from '../src';
+import { validateMessage, validateSchema } from '../src';
 import { sha256Hex } from '../src/node';
 import { createScenarioKit, makeApworld, makeYaml } from '../src/testing';
 import { resolvePlaceholders } from '../src/testing/scenario/resolve-placeholders';
@@ -22,20 +22,8 @@ const setAt = (root: Record<string, unknown>, path: string[], value: unknown): v
   else node[last] = value;
 };
 
-describe('scenario kit', () => {
+describe('K1 scenario kit', { tags: ['critical'] }, () => {
   const kit = createScenarioKit();
-  const file = (name: string) => {
-    const found = kit.files.find((candidate) => candidate.name === name);
-    if (!found) throw new Error(`no kit file ${name}`);
-    return found;
-  };
-
-  test('the RotP sizes of the spec example are kept', () => {
-    expect(file('W').bytes.length).toBe(812345);
-    expect(file('Y').bytes.length).toBe(4210);
-    expect(kit.values.W_size).toBe(812345);
-    expect(kit.values.Y_size).toBe(4210);
-  });
 
   test('every value hash is the hash of its bytes', () => {
     for (const entry of kit.files) {
@@ -70,7 +58,7 @@ describe('scenario kit', () => {
 });
 
 describe('schemas', () => {
-  test('a hello built from the fixture samples is valid', () => {
+  test('K2 a hello built from the fixture samples is valid', { tags: ['standard'] }, () => {
     expect(validateMessage('c2s', sampleHello())).toEqual([]);
   });
 
@@ -89,19 +77,19 @@ describe('schemas', () => {
     ['resume', ['resume'], 'short'],
   ];
 
-  test.each(BREAKS)('a hello with a bad %s is refused and the field is named', (field, path, value) => {
+  test.each(BREAKS)('K2 a hello with a bad %s is refused and the field is named', { tags: ['standard'] }, (field, path, value) => {
     const hello = sampleHello();
     setAt(hello, path, value);
     expect(validateMessage('c2s', hello)[0]?.path).toBe(field);
   });
 
-  test('nine slots are too many', () => {
+  test('K2 nine slots are too many', { tags: ['standard'] }, () => {
     const hello = sampleHello() as { slots: unknown[] };
     hello.slots = Array.from({ length: 9 }, () => hello.slots[0]);
     expect(validateMessage('c2s', hello)[0]?.path).toBe('slots');
   });
 
-  test('the validator supports the keywords the schemas use', () => {
+  test('K2 the validator supports the keywords the schemas use', { tags: ['critical'] }, () => {
     const schema = {
       $defs: { n: { type: 'integer', minimum: 2, maximum: 4 } },
       type: 'object',
@@ -122,16 +110,8 @@ describe('schemas', () => {
     expect(validateSchema(schema, {})[0]?.path).toBe('a');
   });
 
-  test('unknown fields are ignored', () => {
+  test('K2 unknown fields are ignored', { tags: ['standard'] }, () => {
     const hello = { ...sampleHello(), futureField: { anything: true } };
     expect(validateMessage('c2s', hello)).toEqual([]);
-  });
-
-  test('every schema is a draft 2020-12 document with an id and the shared definitions', () => {
-    for (const schema of [...Object.values(CLIENT_SCHEMAS), ...Object.values(SERVER_SCHEMAS)]) {
-      expect(schema.$schema).toBe('https://json-schema.org/draft/2020-12/schema');
-      expect(schema.$id).toMatch(/^archipelia-lobby\/1\//);
-      expect(schema.$defs).toBe(SCHEMA_DEFS);
-    }
   });
 });

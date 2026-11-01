@@ -27,7 +27,7 @@ afterEach(async () => {
   await Promise.all(running.splice(0).map((fixture) => fixture.stop()));
 });
 
-describe('the embedded lobby server', () => {
+describe('S2 the embedded lobby server', { tags: ['standard'] }, () => {
   test('listens, restarts with a new mode and keeps the mode for the next start', async () => {
     const fixture = await serve();
     const server = serverOf(fixture);
@@ -85,7 +85,7 @@ describe('the embedded lobby server', () => {
   });
 });
 
-describe('the embedded lobby server without a keyring', () => {
+describe('S3 the embedded lobby server without a keyring', { tags: ['standard'] }, () => {
   test('says the room passwords live in memory when the vault cannot encrypt', async () => {
     const fixture = await serve();
     const server = serverOf(fixture, fixture.started.listen, () => false);

@@ -31,7 +31,7 @@ const roomInfo = async (port: number) => {
 
 const hostingSeen = (lines: string[]) => lines.some((line) => line.includes('Hosting game at'));
 
-describe('room passwords never travel on a command line', () => {
+describe('E2 room passwords never travel on a command line', { tags: ['e2e'] }, () => {
   const state: { dir: string; engineDir: string; runtime?: EngineRuntime } = { dir: '', engineDir: '' };
 
   beforeAll(async () => {

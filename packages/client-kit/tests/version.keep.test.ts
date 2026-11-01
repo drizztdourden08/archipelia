@@ -3,7 +3,7 @@ import { describe, expect, test } from 'vitest';
 import { checkWorldFit, compareApVersions, parseApVersion } from '../src';
 import { ROTP_RANGE } from './helpers/rotp-world.constants';
 
-describe('Archipelago versions', () => {
+describe('K1 Archipelago versions', { tags: ['critical'] }, () => {
   test('parse and compare by number, not by text', () => {
     expect(parseApVersion('0.6.8')).toEqual([0, 6, 8]);
     expect(parseApVersion('0.6')).toBeNull();
@@ -15,7 +15,7 @@ describe('Archipelago versions', () => {
   });
 });
 
-describe('a world fits an exact Archipelago version', () => {
+describe('K1 a world fits an exact Archipelago version', { tags: ['critical'] }, () => {
   test('a world with only a minimum is open ended', () => {
     expect(checkWorldFit(ROTP_RANGE, '0.6.4')).toEqual({ fits: true });
     expect(checkWorldFit(ROTP_RANGE, '0.6.8')).toEqual({ fits: true });

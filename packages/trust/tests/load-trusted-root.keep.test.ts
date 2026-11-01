@@ -14,7 +14,7 @@ const root = TrustedRoot.fromJSON({
   timestampAuthorities: [],
 });
 
-describe('loadTrustedRoot', () => {
+describe('K4 loadTrustedRoot', { tags: ['critical'] }, () => {
   test('fetches through TUF into the sigstore cache folder and keeps a copy', async () => {
     const files = memoryFiles();
     const fetchRoot = vi.fn(() => Promise.resolve(root));

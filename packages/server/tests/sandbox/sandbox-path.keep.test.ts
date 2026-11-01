@@ -7,7 +7,7 @@ const setup = { bwrap: '/usr/bin/bwrap', features: BASIC_FEATURES };
 
 const command = { file: '/srv/work/venv/bin/python', args: ['-m', 'pip', 'wheel'], cwd: '/srv/work', env: { CC: 'gcc', GH_TOKEN: 'secret' } };
 
-describe('the tools of a sandboxed build', () => {
+describe('K4 the tools of a sandboxed build', { tags: ['critical'] }, () => {
   test('puts the folders it names first on the PATH of the sandbox', () => {
     const { env } = bwrapCommand(setup, { readOnly: ['/srv/engine'], readWrite: ['/srv/work'], path: ['/srv/work/venv/bin', '/srv/tools/cargo/bin'] }, command);
     expect(env.PATH).toBe('/srv/work/venv/bin:/srv/tools/cargo/bin:/usr/local/bin:/usr/bin:/bin');

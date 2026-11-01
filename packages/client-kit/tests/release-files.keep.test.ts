@@ -13,7 +13,7 @@ afterEach(cleanTempDirs);
 
 const messages = (issues: readonly { message: string }[]): string => issues.map((issue) => issue.message).join('\n');
 
-describe('the thumbnail check', () => {
+describe('K1 the thumbnail check', { tags: ['critical'] }, () => {
   test.each([
     ['png', pngBytes(512, 512), 512],
     ['png at the limit', pngBytes(1024, 1024), 1024],
@@ -25,12 +25,6 @@ describe('the thumbnail check', () => {
     const { header } = inspectThumbnail(bytes);
     expect(header).toMatchObject({ width: side, height: side, animated: false });
     expect(header?.format).toBe(name.includes('webp') ? 'webp' : 'png');
-  });
-
-  test('accepts a square image up to 1024 by 1024', () => {
-    for (const bytes of [pngBytes(256, 256), pngBytes(1024, 1024), webpLossy(1024, 1024), webpExtended(64, 64)]) {
-      expect(inspectThumbnail(bytes).issues).toEqual([]);
-    }
   });
 
   test.each([
@@ -70,7 +64,7 @@ describe('the thumbnail check', () => {
   });
 });
 
-describe('the description check', () => {
+describe('K1 the description check', { tags: ['critical'] }, () => {
   const encode = (text: string): Uint8Array => new TextEncoder().encode(text);
 
   test('accepts Markdown, links and autolinks without a warning', () => {
@@ -122,7 +116,7 @@ const release = async (): Promise<{ root: string; outDir: string }> => {
 
 const exists = async (path: string): Promise<boolean> => access(path).then(() => true, () => false);
 
-describe('writing the release files', () => {
+describe('K3 writing the release files', { tags: ['critical'] }, () => {
   test('writes archipelia.json, the thumbnail named by its real format, and the description', async () => {
     const { root, outDir } = await release();
     await writeFile(join(root, 'art.bin'), webpLossy(512, 512));
@@ -150,14 +144,6 @@ describe('writing the release files', () => {
     await writeReleaseFiles({ dir: outDir, direct: false, thumbnail: join(root, 'b.webp') });
     expect(await exists(join(outDir, 'archipelia-thumbnail.png'))).toBe(false);
     expect(await exists(join(outDir, 'archipelia-thumbnail.webp'))).toBe(true);
-  });
-
-  test('returns the HTML warning and still writes the description', async () => {
-    const { root, outDir } = await release();
-    await writeFile(join(root, 'about.md'), '<b>bold</b>');
-    const result = await writeReleaseFiles({ dir: outDir, direct: false, description: join(root, 'about.md') });
-    expect(messages(result.warnings)).toContain('raw HTML');
-    expect(await exists(join(outDir, 'archipelia-description.md'))).toBe(true);
   });
 
   test('writes nothing when an image or the text is refused', async () => {

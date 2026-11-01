@@ -16,7 +16,7 @@ const { createCatalogService } = await import('../src/service/create-catalog-ser
 const files = {} as DataFiles;
 
 describe('catalog service reads', () => {
-  test('reads that overlap share one fetch, so the cache is written once', async () => {
+  test('S3 reads that overlap share one fetch, so the cache is written once', { tags: ['standard'] }, async () => {
     let finish: (value: unknown) => void = () => undefined;
     readCatalog.mockImplementation(() => new Promise((resolve) => { finish = resolve; }));
     const service = createCatalogService({ games: files, cache: files, engineDir: () => Promise.resolve('') });

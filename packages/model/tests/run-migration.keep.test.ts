@@ -5,7 +5,7 @@ import { oldRun, template, withLegacyDirect } from './old-records';
 
 const SAVED = [template(), template({ id: 'friday', name: 'Friday race' })];
 
-describe('a run read from disk', () => {
+describe('K3 a run read from disk', { tags: ['critical'] }, () => {
   test('takes its source from the saved session it recorded', () => {
     const run = runOf(oldRun(), SAVED);
     expect(run.source).toEqual({ sessionId: 'sunday', sessionName: 'Sunday run', overrides: [], match: 'recorded' });

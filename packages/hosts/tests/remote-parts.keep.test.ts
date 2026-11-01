@@ -14,7 +14,7 @@ const KEY_SHA = 'SHA256:ungWv48Bz+pBQUDeXa4iI7ADYaOWF3qctBD/YfIAFa0';
 const answerOf = (verify: (key: Buffer, answer: (valid: boolean) => void) => void, key: Buffer) =>
   new Promise<boolean>((resolve) => verify(key, resolve));
 
-describe('host key pinning', () => {
+describe('K4 host key pinning', { tags: ['critical'] }, () => {
   test('the fingerprint matches the OpenSSH SHA256 form', () => {
     expect(fingerprintSha256(KEY)).toBe(KEY_SHA);
     expect(normalizeFingerprint('ungWv48Bz+pBQUDeXa4iI7ADYaOWF3qctBD/YfIAFa0=')).toBe(KEY_SHA);
@@ -38,7 +38,7 @@ describe('host key pinning', () => {
   });
 });
 
-describe('remote parts', () => {
+describe('K1 remote parts', { tags: ['critical'] }, () => {
   test('shellQuote leaves plain words and single-quotes the rest', () => {
     expect(shellQuote('/srv/ap/MultiServer.py')).toBe('/srv/ap/MultiServer.py');
     expect(shellQuote("it's")).toBe(`'it'"'"'s'`);

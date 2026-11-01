@@ -22,7 +22,7 @@ const lines = (...rows: string[]) => rows.join('\n');
 
 const installed = (): InstalledGame[] => [{ apworld: 'quest', game: GAME, schema } as InstalledGame];
 
-describe('the text of an option value', () => {
+describe('K1 the text of an option value', { tags: ['critical'] }, () => {
   test('reads toggles, choices, named numbers, lists and weights in plain words', () => {
     expect(optionText(true)).toBe('On');
     expect(optionText(false)).toBe('Off');
@@ -37,7 +37,7 @@ describe('the text of an option value', () => {
   });
 });
 
-describe('the options of a player file', () => {
+describe('K1 the options of a player file', { tags: ['critical'] }, () => {
   test('groups the options like the world and puts the ones it does not know last', () => {
     const { groups, problem } = optionsOfYaml(yamlOf(lines('  hearts: 5', '  shuffle: false', '  goal: all', '  extra_thing: 4')), GAME, schema);
     expect(problem).toBeUndefined();
@@ -59,7 +59,7 @@ describe('the options of a player file', () => {
   });
 });
 
-describe('the slots a host reads', () => {
+describe('K1 the slots a host reads', { tags: ['critical'] }, () => {
   test('keep the raw file and flag a world that is not installed, and a slot with no file yet', () => {
     const [known, other, missing] = memberSlotOptions(
       { memberId: 'm_1', slots: [{ name: 'Zelda', game: GAME, yaml: yamlOf('  hearts: 5') }, { name: 'Link', game: 'Relic', yaml: lines('name: Link', 'game: Relic', 'Relic:', '  speed: fast', '') }, { name: 'Ganon', game: GAME, yaml: null }] },

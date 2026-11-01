@@ -20,7 +20,7 @@ afterAll(() => rm(dir, { recursive: true, force: true }));
 const build = { plan: { owner: 'o', repo: 'r' }, pins: [] } as never as ActiveBuild;
 
 describe('the archive a build accepts', () => {
-  test('is read once, and the bytes that were checked are the bytes that are unpacked', async () => {
+  test('K4 is read once, and the bytes that were checked are the bytes that are unpacked', { tags: ['critical'] }, async () => {
     const file = join(dir, 'source.zip');
     const checked = archiveOf(PROJECT_FILES);
     await writeFile(file, checked);
@@ -36,7 +36,7 @@ describe('the archive a build accepts', () => {
     await expect(readAcceptedArchive(build, archive, request)).rejects.toThrow('changed on disk');
   });
 
-  test('is refused when the file is gone', async () => {
+  test('K4 is refused when the file is gone', { tags: ['critical'] }, async () => {
     const sha256 = 'c'.repeat(64);
     const missing = { file: join(dir, 'gone.zip'), sha256, size: 1 };
     await expect(readAcceptedArchive(build, missing, { buildId: 'x', archiveSha256: sha256, tools: [] })).rejects.toThrow('changed on disk');

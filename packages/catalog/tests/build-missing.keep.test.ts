@@ -28,26 +28,26 @@ describe('what a failed build says is missing', () => {
     ['CMake in a shell', '/bin/sh: cmake: command not found', 'cmake'],
     ['CMake that cannot start', "FileNotFoundError: [Errno 2] No such file or directory: 'cmake'", 'cmake'],
     ['CMake on Windows', "'cmake' is not recognized as an internal or external command", 'cmake'],
-  ])('%s', (_label, line, tool) => {
+  ])('K1 %s', { tags: ['critical'] }, (_label, line, tool) => {
     expect(classifyBuildFailure(log(line))).toEqual({ tool });
   });
 
-  test('names the header file when a system library header is missing', () => {
+  test('K1 names the header file when a system library header is missing', { tags: ['critical'] }, () => {
     expect(classifyBuildFailure(log('src/ffi_glue.c:3:10: fatal error: ffi.h: No such file or directory'))).toEqual({ tool: 'headers', detail: 'ffi.h' });
     expect(classifyBuildFailure(log('fatal error: openssl/ssl.h: No such file or directory'))).toEqual({ tool: 'headers', detail: 'openssl/ssl.h' });
   });
 
-  test('prefers the Python headers over the compiler that reports them', () => {
+  test('K1 prefers the Python headers over the compiler that reports them', { tags: ['critical'] }, () => {
     expect(classifyBuildFailure(log('fatal error: Python.h: No such file or directory', 'compilation terminated.', "error: command '/usr/bin/gcc' failed with exit code 1"))).toEqual({ tool: 'python-headers' });
   });
 
-  test('does not call a compile error a missing compiler', () => {
+  test('K1 does not call a compile error a missing compiler', { tags: ['critical'] }, () => {
     expect(classifyBuildFailure(log("error: command '/usr/bin/gcc' failed with exit code 1"))).toBeUndefined();
     expect(classifyBuildFailure(log("error: command 'gcc' failed with exit status 1"))).toBeUndefined();
     expect(classifyBuildFailure(log("error: command 'cl.exe' failed with exit code 2"))).toBeUndefined();
   });
 
-  test('says nothing for a failure it does not know', () => {
+  test('K1 says nothing for a failure it does not know', { tags: ['critical'] }, () => {
     expect(classifyBuildFailure(log("ModuleNotFoundError: No module named 'numpy'"))).toBeUndefined();
     expect(classifyBuildFailure(log('error: subprocess-exited-with-error'))).toBeUndefined();
     expect(classifyBuildFailure([])).toBeUndefined();

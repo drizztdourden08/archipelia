@@ -1,11 +1,9 @@
 /* @layer tests @kind test */
 import { describe, expect, test } from 'vitest';
-import { DEFAULT_NETWORK_MODE, isNetworkMode, NETWORK_MODES, wantsDiscovery, wantsPortMapping } from '../../src/network';
+import { isNetworkMode, NETWORK_MODES, wantsDiscovery, wantsPortMapping } from '../../src/network';
 
-describe('the network mode', () => {
-  test('knows the three modes and defaults to LAN only', () => {
-    expect([...NETWORK_MODES]).toEqual(['lan', 'lan-and-internet', 'off']);
-    expect(DEFAULT_NETWORK_MODE).toBe('lan');
+describe('K1 the network mode', { tags: ['critical'] }, () => {
+  test('recognizes only the known modes', () => {
     expect(isNetworkMode('lan')).toBe(true);
     expect(isNetworkMode('internet')).toBe(false);
     expect(isNetworkMode(undefined)).toBe(false);

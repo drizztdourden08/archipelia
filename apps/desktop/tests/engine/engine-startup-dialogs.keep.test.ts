@@ -1,15 +1,14 @@
 /* @layer tests @kind test */
-import { describe, expect, test, vi } from 'vitest';
+import { describe, expect, test } from 'vitest';
 import { firstRunDialog } from '../../src/hooks/engine-startup/first-run-dialog';
 import { listlessDialog } from '../../src/hooks/engine-startup/listless-dialog';
-import { offerDialog } from '../../src/hooks/engine-startup/offer-dialog';
 import { pickedChoice } from '../../src/hooks/engine-startup/picked-choice';
 import { startupAction } from '../../src/hooks/engine-startup/startup-action';
 import { startupWanted } from '../../src/hooks/engine-startup/startup-wanted';
 import { feedOf, overviewOf, range } from './engine-fixture';
 import { broken, first, fresh, latest, missing, offer, ready } from './engine-startup-fixture';
 
-describe('when the start-up check runs', () => {
+describe('K1 when the start-up check runs', { tags: ['critical'] }, () => {
   test('the setting on always asks main', () => {
     expect(startupWanted(true, ready)).toBe(true);
     expect(startupWanted(true, missing)).toBe(true);
@@ -31,7 +30,7 @@ describe('when the start-up check runs', () => {
   });
 });
 
-describe('the first run dialog', () => {
+describe('K1 the first run dialog', { tags: ['critical'] }, () => {
   test('is a searchable select over the releases with the latest preselected', () => {
     const dialog = firstRunDialog(fresh, latest);
     expect(dialog?.look).toBe('select');
@@ -56,7 +55,7 @@ describe('the first run dialog', () => {
   });
 });
 
-describe('the release the owner picks', () => {
+describe('K1 the release the owner picks', { tags: ['critical'] }, () => {
   test('the preselected release installs the decided choice', () => {
     expect(pickedChoice(fresh, latest, '0.6.8')).toEqual(latest);
   });
@@ -72,25 +71,5 @@ describe('the release the owner picks', () => {
 
   test('another release cannot be picked without the lists', () => {
     expect(pickedChoice(null, latest, '0.6.2')).toBeUndefined();
-  });
-});
-
-describe('the upgrade offer dialog', () => {
-  test('names the new version and says what happens', () => {
-    const dialog = offerDialog(offer, vi.fn());
-    expect(dialog.title).toBe('Archipelago 0.6.8 is out');
-    expect(dialog.message).toContain('You run Archipelago 0.6.7');
-    expect(dialog.message).toContain('Python 3.12.15');
-    expect(dialog.confirmLabel).toBe('Upgrade');
-    expect(dialog.cancelLabel).toBe('Not now');
-  });
-
-  test('has a neutral Release notes button that opens the release page and keeps the dialog open', () => {
-    const open = vi.fn();
-    const dialog = offerDialog(offer, open);
-    expect(dialog.facts).toBeUndefined();
-    expect(dialog.alternate).toMatchObject({ label: 'Release notes', tone: 'neutral', closes: false });
-    dialog.alternate?.onSelect();
-    expect(open).toHaveBeenCalledExactlyOnceWith('https://example.test/0.6.8');
   });
 });

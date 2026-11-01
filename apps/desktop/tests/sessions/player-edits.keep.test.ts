@@ -12,7 +12,7 @@ import { sourceOptionsOf } from '../../src/views/SessionLobby/behavior/source-op
 import { sourceValueOf } from '../../src/views/SessionLobby/behavior/source-value-of';
 import { GAME, PRESET, presetPlayer } from './session-fixtures';
 
-describe('player edits', () => {
+describe('K1 player edits', { tags: ['critical'] }, () => {
   test('an override equal to the preset value is dropped', () => {
     const changed = withOverride(presetPlayer(1, 'A'), 'crystals', 3, 5);
     expect(changed.source).toMatchObject({ overrides: { crystals: 3 } });
@@ -33,7 +33,7 @@ describe('player edits', () => {
   });
 });
 
-describe('source options', () => {
+describe('K1 source options', { tags: ['critical'] }, () => {
   test('presets of the game, then imported file; a default preset is offered when none exists', () => {
     expect(sourceOptionsOf('Demo', [PRESET]).map((o) => o.value)).toEqual(['preset:p1', 'yaml']);
     expect(sourceOptionsOf('Other', [PRESET]).map((o) => o.value)).toEqual(['new-preset', 'yaml']);
@@ -48,7 +48,7 @@ describe('source options', () => {
   });
 });
 
-describe('override rows', () => {
+describe('K1 override rows', { tags: ['critical'] }, () => {
   test('rows show the preset value, the resolved value and inline problems', () => {
     const rows = overrideRows(GAME.schema, PRESET, { crystals: 9 });
     const crystals = rows.find((row) => row.def.key === 'crystals');

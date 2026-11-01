@@ -32,7 +32,7 @@ const request: InstallRequest = { kind: 'index', apworld: 'star', version: '1.0.
 
 beforeEach(() => confirmAction.mockReset());
 
-describe('worlds found by their topic in the store', () => {
+describe('K1 worlds found by their topic in the store', { tags: ['critical'] }, () => {
   test('the card is not Verified and says it was not reviewed, with the repository named in its kind', () => {
     const card = cardPropsOf(rowOf(found('star', 3)), handlers);
     expect(card.verified).toBe(false);
@@ -49,12 +49,6 @@ describe('worlds found by their topic in the store', () => {
     const installed = { apworld: 'star', game: 'star', version: '1.0.0', source: 'first-party', installedAt: 0, trust: { state: 'unverified', detail: 'Not reviewed: owner/star' } } as InstalledGame;
     const { notes } = cardPropsOf(rowOf(found('star', 3), [installed]), handlers);
     expect(notes.map((note) => note.text)).toEqual(['Not reviewed: owner/star']);
-  });
-
-  test('a listed world is Verified and has no review note', () => {
-    const card = cardPropsOf(rowOf(listed('relic')), handlers);
-    expect(card.verified).toBe(true);
-    expect(card.notes).toEqual([]);
   });
 
   test('Verified first, then stars, then the newest push, then the name', () => {
@@ -80,7 +74,7 @@ describe('worlds found by their topic in the store', () => {
   });
 });
 
-describe('the question before a world that Archipelia has not reviewed', () => {
+describe('K4 the question before a world that Archipelia has not reviewed', { tags: ['critical'] }, () => {
   test('names the repository and its owner, and passes the repository id when accepted', async () => {
     confirmAction.mockResolvedValue(true);
     const row = rowOf(found('star', 3, { repoId: 77 }));

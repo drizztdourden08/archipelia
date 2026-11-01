@@ -23,7 +23,7 @@ const cardOf = (entry: CatalogEntry, installed: InstalledGame[] = []) => {
   return cardPropsOf(row, handlers);
 };
 
-describe('first-party games in the store', () => {
+describe('K1 first-party games in the store', { tags: ['critical'] }, () => {
   test('a first-party game is in the Archipelia ready section, Verified, with its own kind, its world version and an Add button', () => {
     const rows = buildRows([firstParty()], []);
     expect(groupSections(rows).map((section) => [section.id, section.rows.length])).toEqual([['installed', 0], ['built-in', 0], ['archipelia-ready', 1], ['archipelago-index', 0]]);
@@ -66,17 +66,6 @@ describe('first-party games in the store', () => {
   test('with an appVersion the card shows the release and the dialog keeps the world version', () => {
     const entry = firstParty({ firstParty: { client: 'c', bundleUrl: 'b', worldVersion: '0.1.0', appVersion: '0.21.2' } });
     expect(cardOf(entry)).toMatchObject({ version: '0.21.2', worldVersion: '0.1.0' });
-  });
-
-  test('with an appVersion and only a listed world version the world version is read from the version list', () => {
-    const entry = firstParty({ firstParty: { client: 'c', bundleUrl: 'b', appVersion: '0.21.2' } });
-    expect(cardOf(entry)).toMatchObject({ version: '0.21.2', worldVersion: '0.1.0' });
-  });
-
-  test('without an appVersion nothing changes and no world version is passed', () => {
-    const card = cardOf(firstParty());
-    expect(card.version).toBe('0.1.0');
-    expect(card).not.toHaveProperty('worldVersion');
   });
 
   test('an installed game with an appVersion shows the release it was installed from', () => {

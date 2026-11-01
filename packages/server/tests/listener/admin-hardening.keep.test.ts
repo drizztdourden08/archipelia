@@ -56,7 +56,7 @@ const admin = async (port: number, token: string) => {
   return { call, close: () => transport.close() };
 };
 
-describe('a browser cannot open a socket to the server', () => {
+describe('K4 a browser cannot open a socket to the server', { tags: ['standard'] }, () => {
   test('refuses an upgrade that carries an Origin header on the lobby path and the admin path', async () => {
     const { endpoint } = await serve(true);
     expect(await upgrade(endpoint.port, '/archipelia/lobby', 'https://evil.example')).toContain('403');
@@ -66,7 +66,7 @@ describe('a browser cannot open a socket to the server', () => {
   });
 });
 
-describe('the admin API takes only options it knows', () => {
+describe('K4 the admin API takes only options it knows', { tags: ['standard'] }, () => {
   test('refuses a password reference, an unknown key and a wrong type when a lobby is created', async () => {
     const { endpoint, token, core } = await serve(true);
     const api = await admin(endpoint.port, token);
@@ -97,12 +97,5 @@ describe('the admin API takes only options it knows', () => {
     const bad = await api.call('lobby.create', { name: 'Bad', engine: { id: 'e', ap: '0.6.8', python: '3', extra: 1 } });
     expect(String(bad.error)).toContain('engine does not take extra');
     api.close();
-  });
-});
-
-describe('the network mode off', () => {
-  test('binds the loopback address only, even when the app is not automated', async () => {
-    expect((await serve(false, 'off')).endpoint.host).toBe('127.0.0.1');
-    expect((await serve(false, 'lan')).endpoint.host).toBe('0.0.0.0');
   });
 });

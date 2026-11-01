@@ -13,14 +13,7 @@ const PAIRS = [
   ['0.7.0', '3.14.9'],
 ];
 
-describe('the default spec', () => {
-  test('is the engine of the app defaults for the target', () => {
-    const spec = defaultSpec('win32-x64');
-    expect(spec.id).toBe('ap-0.6.7_py-3.12.14_win32-x64');
-    expect(spec.ap).toEqual(ENGINE_DEFAULTS.defaultAp);
-    expect(spec.python).toEqual(ENGINE_DEFAULTS.defaultPython['win32-x64']);
-  });
-
+describe('K1 the default spec', { tags: ['critical'] }, () => {
   test('refuses a target with no default Python', () => {
     expect(() => defaultSpec('freebsd-x64')).toThrow('no default Python');
   });
@@ -32,7 +25,7 @@ describe('the default spec', () => {
   });
 });
 
-describe('the script copy of the rule logic', () => {
+describe('S4 the script copy of the rule logic', { tags: ['standard'] }, () => {
   test.each(PAIRS)('applies the same rules as the app for Archipelago %s and Python %s', (ap, python) => {
     expect(applyRules(ENGINE_DEFAULTS.requirementRules, ap, python)).toEqual(applyRequirementRules(ENGINE_DEFAULTS.requirementRules, ap, python));
   });

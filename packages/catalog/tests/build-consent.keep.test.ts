@@ -25,7 +25,7 @@ const storeBuilt = async (bytes = wheelBytes({ requires: ['numpy==2.5.1'] }), la
 const approve = (...sources: object[]) => consentOf({ sources });
 
 describe('a wheel built from source goes through the same install as a ready-made one', () => {
-  test('asks first, and says it was built from the repo at the commit', async () => {
+  test('K4 asks first, and says it was built from the repo at the commit', { tags: ['critical'] }, async () => {
     const { sha256 } = await storeBuilt();
     await expect(commitInstall(await world.jobOf('', { wheels: [sha256] }))).rejects.toThrow(
       `${GAME} needs the Python packages ctrando 1.2.0 (built from Pseudoarc/ctrando at ${COMMIT.slice(0, 7)}), foo==1.0, dep-one==2.1.3. Nothing is installed into the engine until you accept.`,
@@ -33,7 +33,7 @@ describe('a wheel built from source goes through the same install as a ready-mad
     expect([engine.installWheel, engine.installPackages].map((fn) => fn.mock.calls.length)).toEqual([0, 0]);
   });
 
-  test('sends every Requires-Dist line of the built wheel through the Python Package Index resolve, which refuses a bad line', async () => {
+  test('K4 sends every Requires-Dist line of the built wheel through the Python Package Index resolve, which refuses a bad line', { tags: ['critical'] }, async () => {
     const { sha256, source } = await storeBuilt();
     await commitInstall(await world.jobOf('foo>=1\n', { wheels: [sha256], packages: approve(source) }));
     expect(engine.resolvePackages).toHaveBeenCalledWith(world.bed.runtime, ['foo>=1', 'numpy==2.5.1']);
@@ -42,7 +42,7 @@ describe('a wheel built from source goes through the same install as a ready-mad
     await expect(commitInstall(job)).rejects.toThrow('lists a requirement Archipelia will not install');
   });
 
-  test('installs the built wheel by its hash with the hardened install, then records where it came from', async () => {
+  test('S2 installs the built wheel by its hash with the hardened install, then records where it came from', { tags: ['standard'] }, async () => {
     const { sha256, file, source } = await storeBuilt();
     const record = await commitInstall(await world.jobOf('', { wheels: [sha256], packages: approve(source) }));
     expect(engine.installWheel).toHaveBeenCalledWith(world.bed.runtime, { file, sha256 });
@@ -52,7 +52,7 @@ describe('a wheel built from source goes through the same install as a ready-mad
     expect(record.packages).toEqual(['foo==1.0', 'dep-one==2.1.3']);
   });
 
-  test('a consent for another commit, another source archive, a release instead of a build, or another wheel is refused', async () => {
+  test('K4 a consent for another commit, another source archive, a release instead of a build, or another wheel is refused', { tags: ['critical'] }, async () => {
     const { sha256 } = await storeBuilt();
     const others = [
       { commit: 'c'.repeat(40) }, { tag: 'c'.repeat(40) }, { archiveSha256: 'd'.repeat(64) }, { built: false },
@@ -65,14 +65,14 @@ describe('a wheel built from source goes through the same install as a ready-mad
   });
 
   test.each([{ commit: 'not-a-commit' }, { archiveSha256: 'short' }, { commit: undefined }])(
-    'a stored wheel whose record claims it was built with %j is not read',
+    'K3 a stored wheel whose record claims it was built with %j is not read', { tags: ['critical'] },
     async (patch) => {
       const broken = await storeBuilt(wheelBytes({ version: '3.0.0' }), { ...patch, asset: 'ctrando-3.0.0-cp312-cp312-win_amd64.whl' });
       await expect(loadWheel(world.bed.runtime, broken.sha256)).rejects.toThrow('no longer there');
     },
   );
 
-  test('a stored wheel with a full record is read with its commit and source checksum', async () => {
+  test('K3 a stored wheel with a full record is read with its commit and source checksum', { tags: ['critical'] }, async () => {
     const { sha256 } = await storeBuilt();
     expect((await loadWheel(world.bed.runtime, sha256)).source).toMatchObject({ built: true, commit: COMMIT, archiveSha256: ARCHIVE });
   });

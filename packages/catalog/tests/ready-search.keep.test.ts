@@ -18,7 +18,7 @@ const urlOf = (input: unknown) => String(input);
 const call = (fetchFn: ReturnType<typeof vi.fn>, at: number) => fetchFn.mock.calls[at] as [unknown, { headers: Record<string, string> }];
 
 describe('the Archipelia ready search paging', () => {
-  test('asks for the topic once, follows the next link and drops forks, archived, disabled and untagged repos', async () => {
+  test('K1 asks for the topic once, follows the next link and drops forks, archived, disabled and untagged repos', { tags: ['critical'] }, async () => {
     const fetchFn = vi.fn()
       .mockResolvedValueOnce(page([item(1), item(2, { fork: true }), item(3, { archived: true })], 5, { link: `<${API}?q=x&page=2>; rel="next", <${API}?q=x&page=3>; rel="last"`, etag: '"one"' }))
       .mockResolvedValueOnce(page([item(4, { disabled: true }), item(5, { topics: ['other'] }), item(6, { topics: ['archipelia-world', 'archipelia-direct'] })], 5));
@@ -36,7 +36,7 @@ describe('the Archipelia ready search paging', () => {
     expect(urlOf(call(fetchFn, 1)[0])).toBe(`${API}?q=x&page=2`);
   });
 
-  test('stops at five pages and reports the total that was cut', async () => {
+  test('K1 stops at five pages and reports the total that was cut', { tags: ['critical'] }, async () => {
     const fetchFn = vi.fn((input: unknown) => {
       const at = Number(/page=(\d+)/.exec(urlOf(input))?.[1] ?? 1);
       return Promise.resolve(page([item(at * 10)], 900, { link: `<${API}?q=x&page=${at + 1}>; rel="next"` }));
@@ -46,7 +46,7 @@ describe('the Archipelia ready search paging', () => {
     expect(got).toMatchObject({ total: 900, fetched: 5 });
   });
 
-  test('never follows a next link that leaves the search endpoint', async () => {
+  test('K4 never follows a next link that leaves the search endpoint', { tags: ['critical'] }, async () => {
     const fetchFn = vi.fn().mockResolvedValue(page([item(1)], 1, { link: '<https://evil.example/search?page=2>; rel="next"' }));
     await createReadySearch({ files: memoryFiles([]), fetch: fetchFn, now: () => 1000 })(false);
     expect(fetchFn).toHaveBeenCalledOnce();
@@ -55,7 +55,7 @@ describe('the Archipelia ready search paging', () => {
 });
 
 describe('the Archipelia ready search cache', () => {
-  test('uses the saved list for six hours, and a forced refresh no more than once a minute', async () => {
+  test('S2 uses the saved list for six hours, and a forced refresh no more than once a minute', { tags: ['standard'] }, async () => {
     let clock = 1000;
     const fetchFn = vi.fn().mockImplementation(() => Promise.resolve(page([item(1)], 1, { etag: '"one"' })));
     const files = memoryFiles([]);
@@ -73,7 +73,7 @@ describe('the Archipelia ready search cache', () => {
     expect(fetchFn).toHaveBeenCalledTimes(2);
   });
 
-  test('a new session reads the saved list from disk with no request', async () => {
+  test('K3 a new session reads the saved list from disk with no request', { tags: ['critical'] }, async () => {
     const files = memoryFiles([]);
     await createReadySearch({ files, fetch: vi.fn().mockResolvedValue(page([item(1)], 1)), now: () => 1000 })(false);
     const fetchFn = vi.fn();
@@ -82,7 +82,7 @@ describe('the Archipelia ready search cache', () => {
     expect(fetchFn).not.toHaveBeenCalled();
   });
 
-  test('a 304 on the first page keeps the saved list and the time moves forward', async () => {
+  test('S2 a 304 on the first page keeps the saved list and the time moves forward', { tags: ['standard'] }, async () => {
     let clock = 1000;
     const files = memoryFiles([]);
     const fetchFn = vi.fn()
@@ -100,7 +100,7 @@ describe('the Archipelia ready search cache', () => {
 });
 
 describe('the Archipelia ready search when GitHub says no', () => {
-  test('a rate limit keeps the saved list, reports when to try again and sends nothing until then', async () => {
+  test('S3 a rate limit keeps the saved list, reports when to try again and sends nothing until then', { tags: ['standard'] }, async () => {
     let clock = 1000;
     const files = memoryFiles([]);
     const reset = Math.floor((clock + 30 * 60 * 60 * 1000) / 1000);
@@ -119,7 +119,7 @@ describe('the Archipelia ready search when GitHub says no', () => {
     expect(fetchFn).toHaveBeenCalledTimes(2);
   });
 
-  test('with no saved list a failed search shows one problem and no worlds', async () => {
+  test('S3 with no saved list a failed search shows one problem and no worlds', { tags: ['standard'] }, async () => {
     const got = await createReadySearch({ files: memoryFiles([]), fetch: vi.fn().mockRejectedValue(new Error('offline')), now: () => 1000 })(false);
     expect(got.repos).toEqual([]);
     expect(got.problems).toEqual(['Archipelia ready search: offline']);

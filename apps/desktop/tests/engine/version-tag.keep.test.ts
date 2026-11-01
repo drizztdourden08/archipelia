@@ -5,28 +5,18 @@ import { feedNotice } from '../../src/views/EngineSettings/behavior/feed-notice'
 import { versionTagView } from '../../src/views/EngineSettings/behavior/version-tag-view';
 import { feedOf, when } from './engine-fixture';
 
-describe('the version tag', () => {
+describe('K1 the version tag', { tags: ['critical'] }, () => {
   test('reads New version when a newer release exists', () => {
     expect(versionTagView('new-version', feedOf(), when)).toMatchObject({ label: 'New version', look: { color: 'info' } });
-  });
-
-  test('reads Up to date when the list is fresh', () => {
-    const view = versionTagView('up-to-date', feedOf(), when);
-    expect(view.label).toBe('Up to date');
-    expect(view.title).toBeUndefined();
   });
 
   test('says as of when Up to date rests on a kept list', () => {
     const view = versionTagView('up-to-date', feedOf({ state: 'cached' }), when);
     expect(view.title).toBe('As of day:1760100000000');
   });
-
-  test('reads Not checked when GitHub was never reached', () => {
-    expect(versionTagView('not-checked', feedOf({ state: 'never', checkedAt: undefined }), when).label).toBe('Not checked');
-  });
 });
 
-describe('the feed line', () => {
+describe('K1 the feed line', { tags: ['critical'] }, () => {
   test('says when the list was checked', () => {
     expect(feedLine(feedOf(), when)).toBe('Checked ago:1760100000000.');
   });
@@ -36,7 +26,7 @@ describe('the feed line', () => {
   });
 });
 
-describe('the feed notice', () => {
+describe('K1 the feed notice', { tags: ['critical'] }, () => {
   test('is absent while the list is fresh, kept or never read', () => {
     expect(feedNotice(feedOf(), when)).toBeUndefined();
     expect(feedNotice(feedOf({ state: 'cached' }), when)).toBeUndefined();

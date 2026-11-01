@@ -9,7 +9,7 @@ const CAROL = preset(3, 'Carol', 'Celeste');
 
 const used = (patch: Parameters<typeof template>[0]) => template(patch);
 
-describe('the overrides of a run', () => {
+describe('K1 the overrides of a run', { tags: ['critical'] }, () => {
   test('are empty when the run used the saved values', () => {
     expect(runOverridesOf(SAVED, template())).toEqual([]);
   });
@@ -58,7 +58,7 @@ describe('the overrides of a run', () => {
   });
 });
 
-describe('the players of a run', () => {
+describe('K1 the players of a run', { tags: ['critical'] }, () => {
   const saved = template({ players: [...SAVED.players, { ...preset(3, 'Bob', 'Celeste'), direct: true }] });
   const client = { slot: 3, name: 'Bob', game: 'Celeste', member: { displayName: "Bob's PC", client: 'Archipelia 1.0', trust: 'verified' as const } };
 
@@ -79,7 +79,7 @@ describe('the players of a run', () => {
   });
 });
 
-describe('a run built from a saved session', () => {
+describe('K1 a run built from a saved session', { tags: ['critical'] }, () => {
   test('records the source, the overrides, the config that ran and the players', () => {
     const config = used({ server: { ...SAVED.server, hintCost: 5 } });
     const players = runPlayersOf({ saved: SAVED, hosted: config.players });

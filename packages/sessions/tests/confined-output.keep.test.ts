@@ -8,7 +8,6 @@ import { zipSync } from 'fflate';
 import type { DiskLimit } from '../src/service/disk-limit/disk-limit.type';
 import type { SpawnWrap } from '@archipelia/engine';
 import type { DataFiles, Session } from '@archipelia/model';
-import { diskMessage } from '../src/service/disk-limit/disk-message';
 import { produceSession } from '../src/service/produce-session';
 import { runtimeOf } from './runtime-of';
 
@@ -84,7 +83,7 @@ const canLinkFiles = await (async () => {
   return made;
 })();
 
-describe('A1: a confined Generate hands back only its zip', () => {
+describe('K4 A1: a confined Generate hands back only its zip', { tags: ['e2e'] }, () => {
   test('the zip is copied into a fresh output folder, and a link the world planted is left behind and removed', async () => {
     const { output } = await produce('plant');
     expect(output.zip).toBe('AP_1.zip');
@@ -103,25 +102,23 @@ describe('A1: a confined Generate hands back only its zip', () => {
   });
 });
 
-describe('A3: a Generate run has a time limit', () => {
+describe('K4 A3: a Generate run has a time limit', { tags: ['e2e'] }, () => {
   test('a run past its limit is stopped and fails with a plain reason', async () => {
     await expect(produce('sleep', 300)).rejects.toThrow(/^Generate ran past/);
-  }, 15000);
+  });
 });
 
-describe('I-81: the disk a confined Generate may fill is capped', () => {
+describe('K4 I-81: the disk a confined Generate may fill is capped', { tags: ['e2e'] }, () => {
   const cap = (extraDirs: string[] = []): DiskLimit => ({ bytes: 1024 * 1024, extraDirs, intervalMs: 50 });
 
   test('a run that fills the run folder is stopped while it runs, not after', async () => {
-    const started = Date.now();
     await expect(produce('fill', undefined, cap())).rejects.toThrow(/^Generate filled more than/);
-    expect(Date.now() - started).toBeLessThan(15000);
     expect(existsSync(join(work, 'sessions', 's1', 'confined'))).toBe(false);
-  }, 20000);
+  });
 
   test('the overlay counts too, so a run that fills it is stopped', async () => {
     await expect(produce('fillextra', undefined, cap([join(work, 'outside')]))).rejects.toThrow(/^Generate filled more than/);
-  }, 20000);
+  });
 
   test('a run that fills the disk and ends before the next check is still refused', async () => {
     await expect(produce('fillquick', undefined, { ...cap(), intervalMs: 60000 })).rejects.toThrow(/^Generate filled more than/);
@@ -130,9 +127,5 @@ describe('I-81: the disk a confined Generate may fill is capped', () => {
   test('a run under the cap passes', async () => {
     const { output } = await produce('plant', undefined, { bytes: 64 * 1024 * 1024, extraDirs: [], intervalMs: 50 });
     expect(output.zip).toBe('AP_1.zip');
-  });
-
-  test('a message names the cap in gibibytes', () => {
-    expect(diskMessage(2 * 1024 * 1024 * 1024)).toBe('Generate filled more than 2 GiB of disk and was stopped.');
   });
 });

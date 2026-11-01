@@ -16,7 +16,7 @@ const collect = (socket: PassThrough) => {
   return frames;
 };
 
-describe('a transport in client mode', () => {
+describe('K2 a transport in client mode', { tags: ['critical'] }, () => {
   test('masks every frame it writes, the pong and the close included', () => {
     const socket = new PassThrough();
     const frames = collect(socket);

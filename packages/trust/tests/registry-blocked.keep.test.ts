@@ -15,7 +15,7 @@ const game = (patch: Record<string, unknown> = {}) => ({
 
 const file = (patch: Record<string, unknown> = {}) => ({ format: 1, clients: [client], games: [game()], ...patch });
 
-describe('the registry repo id and blocked list', () => {
+describe('K4 the registry repo id and blocked list', { tags: ['critical'] }, () => {
   test('a registry that has neither still reads, with an empty blocked list', () => {
     const parsed = parseRegistry(file());
     expect(parsed).toMatchObject({ ok: true, problems: [] });

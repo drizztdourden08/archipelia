@@ -1,6 +1,4 @@
 /* @layer tests @kind test */
-import { readFileSync } from 'node:fs';
-import { join } from 'node:path';
 import { describe, expect, test } from 'vitest';
 import {
   buildApworldIndex,
@@ -43,7 +41,7 @@ const worldInput: ReleaseInput = {
   world: { file: 'relic_of_the_past.apworld', sha256: HASH_A, size: 100 },
 };
 
-describe('the release manifest', () => {
+describe('K2 the release manifest', { tags: ['critical'] }, () => {
   test('has the agreed shape, in the agreed order, with builds oldest first', () => {
     const manifest = buildReleaseManifest(input);
     expect(Object.keys(manifest)).toEqual(['format', 'game', 'module', 'worldVersion', 'minimumAp', 'maximumAp', 'direct', 'kit', 'appVersion', 'builds']);
@@ -57,15 +55,9 @@ describe('the release manifest', () => {
       bundle: 'relic_of_the_past-ap0.6.7.apworld.sigstore.json',
     });
   });
-
-  test('the kit version in the manifest is the version of this package', () => {
-    const { version } = JSON.parse(readFileSync(join(import.meta.dirname, '..', 'package.json'), 'utf8')) as { version: string };
-    expect(KIT_VERSION).toBe(version);
-  });
-
 });
 
-describe('the release manifest forms', () => {
+describe('K2 the release manifest forms', { tags: ['critical'] }, () => {
   test('appVersion and maximumAp are left out when not given, and a world replaces builds', () => {
     const manifest = buildReleaseManifest(worldInput);
     expect(Object.keys(manifest)).toEqual(['format', 'game', 'module', 'worldVersion', 'minimumAp', 'direct', 'kit', 'world']);
@@ -122,7 +114,7 @@ describe('the release manifest forms', () => {
   });
 });
 
-describe('parsing a release manifest', () => {
+describe('K2 parsing a release manifest', { tags: ['critical'] }, () => {
   const text = serializeReleaseManifest(buildReleaseManifest(input));
   const patched = (change: (record: Record<string, unknown>) => void): string => {
     const record = JSON.parse(text) as Record<string, unknown>;

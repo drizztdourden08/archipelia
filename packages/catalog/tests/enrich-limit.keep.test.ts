@@ -7,6 +7,10 @@ import { cacheFiles, imageResponse, textResponse } from './enrich.fixtures';
 
 const WORLDS = Array.from({ length: 12 }, (_, index) => `world_${index}`);
 
+const tick = async () => {
+  for (let turn = 0; turn < 50; turn += 1) await Promise.resolve();
+};
+
 const slowFetch = () => {
   const state = { active: 0, peak: 0, urls: [] as string[] };
   const fetchFn: typeof fetch = async (input) => {
@@ -14,7 +18,7 @@ const slowFetch = () => {
     state.urls.push(url);
     state.active += 1;
     state.peak = Math.max(state.peak, state.active);
-    await new Promise((resolve) => { setTimeout(resolve, 5); });
+    await tick();
     state.active -= 1;
     return url.includes('opengraph') ? imageResponse() : textResponse('# Title\n\nA description that is long enough to count here.\n');
   };
@@ -27,20 +31,20 @@ const enricherOn = (fetchFn: typeof fetch) => createEnricher({
 });
 
 describe('the limit on fetching', () => {
-  test('a limiter runs at most the given number of tasks at once', async () => {
+  test('K1 a limiter runs at most the given number of tasks at once', { tags: ['critical'] }, async () => {
     const limit = createLimiter(2);
     const state = { active: 0, peak: 0 };
     const task = async () => {
       state.active += 1;
       state.peak = Math.max(state.peak, state.active);
-      await new Promise((resolve) => { setTimeout(resolve, 2); });
+      await tick();
       state.active -= 1;
     };
     await Promise.all(Array.from({ length: 8 }, () => limit(task)));
     expect(state.peak).toBe(2);
   });
 
-  test('eight visible cards of twelve fetch at most three at a time, and only those cards are fetched', async () => {
+  test('S2 eight visible cards of twelve fetch at most three at a time, and only those cards are fetched', { tags: ['standard'] }, async () => {
     const net = slowFetch();
     const enricher = enricherOn(net.fetchFn);
     const found = await Promise.all(WORLDS.slice(0, 8).map((apworld) => enricher.enrich({ apworld, source: 'index' })));
@@ -51,14 +55,14 @@ describe('the limit on fetching', () => {
     expect(new Set(net.state.urls.filter((url) => url.includes('raw.')).map((url) => url.split('/')[4])).size).toBe(8);
   });
 
-  test('asking twice for the same world while it loads fetches once', async () => {
+  test('S3 asking twice for the same world while it loads fetches once', { tags: ['standard'] }, async () => {
     const net = slowFetch();
     const enricher = enricherOn(net.fetchFn);
     await Promise.all([enricher.enrich({ apworld: 'one', source: 'index' }), enricher.enrich({ apworld: 'one', source: 'index' })]);
     expect(net.state.urls.filter((url) => url.includes('raw.')).length).toBe(1);
   });
 
-  test('a world name that could leave the cache folder is refused', async () => {
+  test('K4 a world name that could leave the cache folder is refused', { tags: ['critical'] }, async () => {
     const enricher = createEnricher({ cache: cacheFiles(), engineDir: () => Promise.resolve('engine'), entryOf: () => Promise.reject(new Error('never asked')) });
     expect(await enricher.enrich({ apworld: '../evil', source: 'index' })).toBeUndefined();
   });

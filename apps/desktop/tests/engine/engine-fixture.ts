@@ -38,4 +38,4 @@ const overviewOf = (patch: Partial<EngineOverview> = {}): EngineOverview => {
 
 const when = (at: number, form: string): string => `${form}:${at}`;
 
-export { engine, feedOf, overviewOf, range, release, when };
+export { engine, feedOf, overviewOf, range, when };

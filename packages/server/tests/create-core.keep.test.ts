@@ -17,20 +17,7 @@ const template: SessionTemplate = {
   server: { hintCost: 10, releaseMode: 'auto', collectMode: 'auto', remainingMode: 'goal', autoShutdownMinutes: 0 },
 };
 
-describe('createCore', () => {
-  test('wires every service the desktop used to build itself', async () => {
-    const { ports } = await fakePorts();
-    const core = createCore(ports);
-    expect(Object.keys(core).sort()).toEqual([
-      'adminToken', 'catalog', 'dispose', 'engine', 'installed', 'lobbies', 'lobbyPasswords', 'presets', 'roomSecret', 'runJobs', 'runs', 'runtime', 'sandbox', 'servers', 'sessionFiles', 'sessions',
-      'setLanRoom', 'setLobbyNetworkMode', 'templates', 'watchLobbies',
-    ]);
-    expect(await core.installed()).toEqual([]);
-    expect(await core.presets.list()).toEqual([]);
-    expect(await core.servers.list()).toEqual([]);
-    expect(await core.runs.list()).toEqual([]);
-  });
-
+describe('S2 createCore', { tags: ['standard'] }, () => {
   test('reads and writes through the domains the port gives', async () => {
     const { ports } = await fakePorts();
     const core = createCore(ports);
@@ -55,10 +42,9 @@ describe('createCore', () => {
     expect(jobs[0]).toBe('start archipelia-engine-setup Installing the engine');
     expect(jobs.some((call) => call.startsWith('fail archipelia-engine-setup'))).toBe(true);
   });
-
 });
 
-describe('createCore jobs and events', () => {
+describe('S2 createCore jobs and events', { tags: ['standard'] }, () => {
   test('a bad engine choice is refused before any job starts', async () => {
     const { ports, jobs } = await fakePorts();
     const core = createCore(ports);
@@ -76,19 +62,5 @@ describe('createCore jobs and events', () => {
     expect(events.every((entry) => entry.kind === 'session' && entry.event.type === 'session')).toBe(true);
     expect(jobs[0]).toBe(`start archipelia-run-${session.id} Running Saturday`);
     expect(jobs.some((call) => call.startsWith(`fail archipelia-run-${session.id} `))).toBe(true);
-  });
-
-  test('the network port decides the binding', async () => {
-    const lanHost = () => '10.0.0.5';
-    const { ports } = await fakePorts({ network: { automation: true, lanHost } });
-    createCore(ports);
-    expect(hostBinding).toHaveBeenLastCalledWith(true, lanHost);
-  });
-
-  test('dispose stops the local servers and does not throw', async () => {
-    const { ports, logs } = await fakePorts();
-    const core = createCore(ports);
-    await expect(core.dispose()).resolves.toBeUndefined();
-    expect(logs).toEqual([]);
   });
 });

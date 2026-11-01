@@ -19,7 +19,7 @@ const fakeSmoke = () => {
 
 const inputOf = (carried: string[] = [], signal = new AbortController().signal) => ({ runtime: runtimeOf('new'), carried, signal, log: () => undefined });
 
-describe('the smoke check', () => {
+describe('K1 the smoke check', { tags: ['critical'] }, () => {
   test('reads the options, makes a seed and hosts it, then cleans up', async () => {
     const { deps, remove } = fakeSmoke();
     const outcome = await runSmoke(deps, inputOf(['Alpha', 'Broken']));

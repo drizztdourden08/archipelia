@@ -11,7 +11,7 @@ import { readMdnsRecords } from '../../src/network/ports/read-mdns-records';
 
 const NONCE = new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
 
-describe('the NAT-PMP wire format', () => {
+describe('K1 the NAT-PMP wire format', { tags: ['critical'] }, () => {
   test('builds the exact NAT-PMP TCP mapping request', () => {
     expect([...buildNatpmpMapRequest('tcp', 38290, 38290, 3600)]).toEqual([0, 2, 0, 0, 0x95, 0x92, 0x95, 0x92, 0, 0, 0x0e, 0x10]);
     expect(buildNatpmpMapRequest('udp', 1, 2, 0)[1]).toBe(1);
@@ -27,10 +27,9 @@ describe('the NAT-PMP wire format', () => {
     expect(readNatpmpMapping(new Uint8Array([1, 130, 0, 0, 0, 0, 0, 0]), 'tcp', 38290)).toBeNull();
     expect(readNatpmpMapping(new Uint8Array([0, 130, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), 'tcp', 38290)).toEqual({ ok: false, code: 2 });
   });
-
 });
 
-describe('the PCP wire format', () => {
+describe('K1 the PCP wire format', { tags: ['critical'] }, () => {
   test('builds the exact PCP MAP request', () => {
     const request = buildPcpMapRequest({ clientAddress: '192.168.1.20', nonce: NONCE, protocol: 'tcp', internalPort: 38290, externalPort: 38290, lifetime: 3600 });
     expect(request).toHaveLength(60);
@@ -58,10 +57,9 @@ describe('the PCP wire format', () => {
     expect(readPcpMapping(new Uint8Array([0, 129, 0, 1, 0, 0, 0, 0]), NONCE, 'tcp', 38290)).toEqual({ ok: false, code: 1 });
     expect(readPcpMapping(new Uint8Array([9, 9, 9]), NONCE, 'tcp', 38290)).toBeNull();
   });
-
 });
 
-describe('addresses and records', () => {
+describe('K1 addresses and records', { tags: ['critical'] }, () => {
   test('computes broadcast targets and gateway candidates from the interfaces', () => {
     const lan = [{ address: '192.168.1.20', netmask: '255.255.255.0' }, { address: '10.0.4.9', netmask: '255.255.0.0' }];
     expect(broadcastTargets(lan)).toEqual(['192.168.1.255', '10.0.255.255', '255.255.255.255']);

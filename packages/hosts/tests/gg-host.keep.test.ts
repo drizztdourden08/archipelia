@@ -2,7 +2,7 @@
 import { mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { afterEach, beforeEach, describe, expect, test } from 'vitest';
+import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 import type { ServerSettings } from '@archipelia/model';
 import { createGgHost } from '../src';
 import type { SessionHost } from '../src';
@@ -26,6 +26,15 @@ afterEach(() => rm(dir, { recursive: true, force: true }));
 const hostFor = (site: ReturnType<typeof createFakeGgSite>) =>
   createGgHost({ ownerId: site.owner, baseUrl: site.base, pollMs: 5, stopTimeoutMs: 500, passwordTimeoutMs: 500, fetch: site.fetch });
 
+const countingHost = (site: ReturnType<typeof createFakeGgSite>, onLogRead: () => void) =>
+  createGgHost({
+    ownerId: site.owner, baseUrl: site.base, pollMs: 5, stopTimeoutMs: 500, passwordTimeoutMs: 500,
+    fetch: (input, init) => {
+      if (String(input).includes('/log/')) onLogRead();
+      return site.fetch(input, init);
+    },
+  });
+
 const start = (host: SessionHost, password?: string) => host.start({ sessionId: 's1', sessionDir: dir, seedFile, server, password });
 
 const logText = (host: SessionHost) => {
@@ -34,9 +43,7 @@ const logText = (host: SessionHost) => {
   return lines;
 };
 
-const pause = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
-describe('archipelago.gg host', () => {
+describe('S2 archipelago.gg host', { tags: ['standard'] }, () => {
   test('uploads the seed, opens a room and returns its port', async () => {
     const site = createFakeGgSite();
     const endpoint = await start(hostFor(site));
@@ -82,12 +89,15 @@ describe('archipelago.gg host', () => {
 
   test('the log is read by byte offset and split on complete lines only', async () => {
     const site = createFakeGgSite();
-    const host = hostFor(site);
+    let logReads = 0;
+    const host = countingHost(site, () => { logReads += 1; });
     await start(host);
     site.appendLog('[t]: half a li');
-    await pause(30);
+    const seen = logReads;
+    await vi.waitFor(() => expect(logReads).toBeGreaterThanOrEqual(seen + 2));
+    expect(logText(host).some((line) => line.includes('half'))).toBe(false);
     site.appendLog('ne with é\n[t]: next\n');
-    await pause(30);
+    await vi.waitFor(() => expect(logText(host)).toContain('[t]: next'));
     await host.stop();
     const lines = logText(host);
     expect(lines.filter((line) => line.includes('half'))).toEqual(['[t]: half a line with é']);

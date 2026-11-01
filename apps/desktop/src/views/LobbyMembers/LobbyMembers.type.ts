@@ -28,5 +28,5 @@ type MemberOptionsState =
   | { status: 'ready'; slots: SlotOptions[] };
 
 export type {
-  ConsentRequest, LobbyMembersModel, LobbyMembersProps, MemberActions, MemberOptionsState, MemberOptionsTarget, OptionGroup, OptionRow, OptionsOfYaml, SlotOptions, TrustTag,
+  ConsentRequest, LobbyMembersModel, LobbyMembersProps, MemberActions, MemberOptionsState, MemberOptionsTarget, OptionGroup, OptionsOfYaml, SlotOptions, TrustTag,
 };

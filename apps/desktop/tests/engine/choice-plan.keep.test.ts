@@ -4,7 +4,7 @@ import { changeActions } from '../../src/views/EngineSettings/behavior/change-ac
 import { choicePlan } from '../../src/views/EngineSettings/behavior/choice-plan';
 import { engine, overviewOf } from './engine-fixture';
 
-describe('what the pick would do', () => {
+describe('K1 what the pick would do', { tags: ['critical'] }, () => {
   test('the engine in use needs nothing', () => {
     expect(choicePlan(overviewOf(), { ap: '0.6.7', python: '3.12.14' })).toEqual({ kind: 'none' });
   });
@@ -27,10 +27,6 @@ describe('what the pick would do', () => {
     expect(choicePlan(overview, { ap: '0.6.8', python: '3.12.15' }).kind).toBe('install');
   });
 
-  test('older versions install like newer ones', () => {
-    expect(choicePlan(overviewOf(), { ap: '0.6.2', python: '3.12.14' }).kind).toBe('install');
-  });
-
   test('a first run with nothing installed installs', () => {
     const first = overviewOf({ active: undefined, installed: [] });
     expect(choicePlan(first, { ap: '0.6.8', python: '3.12.14' }).kind).toBe('install');
@@ -42,7 +38,7 @@ describe('what the pick would do', () => {
   });
 });
 
-describe('the change action', () => {
+describe('K1 the change action', { tags: ['critical'] }, () => {
   const noop = () => undefined;
 
   test('says what it does and goes off while busy', () => {

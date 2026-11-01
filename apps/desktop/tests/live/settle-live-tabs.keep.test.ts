@@ -41,7 +41,7 @@ const settleWith = async (templates: SessionTemplate[], lobbies: () => Promise<A
 const tabOf = (sessionId: string, lobbyId: string): LiveTab =>
   ({ tabId: `tab-${lobbyId}`, sessionId, serverId: 'local', lobbyId, overrides: {}, changes: [], lan: false, direct: false, openedAt: 1 });
 
-describe('the lobby a saved session used to hold', () => {
+describe('K3 the lobby a saved session used to hold', { tags: ['critical'] }, () => {
   test('moves to a live tab when the lobby is still open, and the saved session loses it', async () => {
     const { store, kept } = await settleWith([legacy('t1', 'lb_1')], () => Promise.resolve([lobby({ id: 'lb_1', phase: 'hosting', sessionId: 'run-9' })]));
     expect(await store.list()).toMatchObject([{ sessionId: 't1', serverId: 'local', lobbyId: 'lb_1', runId: 'run-9', lan: true, direct: true, overrides: {}, changes: [] }]);
@@ -67,7 +67,7 @@ describe('the lobby a saved session used to hold', () => {
   });
 });
 
-describe('the live tabs at the next launch', () => {
+describe('K3 the live tabs at the next launch', { tags: ['critical'] }, () => {
   test('keeps the tabs whose lobby is alive and drops the others', async () => {
     const { store } = await settleWith([sessionOf()], () => Promise.resolve([lobby({ id: 'lb_1' }), lobby({ id: 'lb_2', phase: 'closed' })]), [tabOf('a', 'lb_1'), tabOf('b', 'lb_2'), tabOf('c', 'lb_3')]);
     expect((await store.list()).map((tab) => tab.lobbyId)).toEqual(['lb_1']);

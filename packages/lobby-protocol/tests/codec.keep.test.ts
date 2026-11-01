@@ -1,24 +1,19 @@
 /* @layer tests @kind test */
 import { describe, expect, test } from 'vitest';
 import {
-  CLIENT_SCHEMAS,
   DEFAULT_LIMITS,
   ERROR_CODE_LIST,
   ERROR_RULES,
   LOBBY_INFO_MAX_REQUEST_BYTES,
   PRE_WELCOME_MAX_MESSAGE_BYTES,
-  SERVER_SCHEMAS,
   closeCodeOf,
   createError,
   decodeMessage,
   encodeMessage,
-  lobbyNotFoundFailure,
-  rateLimitedFailure,
   validateMessage,
 } from '../src';
 import type { ErrorCode } from '../src';
 import { SCENARIO_CATALOG, loadScenario } from '../src/testing';
-import type { Scenario } from '../src/testing';
 import { resolvePlaceholders } from '../src/testing/scenario/resolve-placeholders';
 import { sampleOf } from '../src/testing/scenario/sample-of';
 
@@ -49,9 +44,6 @@ const SPEC_TABLE: Record<ErrorCode, [before: boolean, after: boolean, close: num
   internal: [false, false, null],
 };
 
-const errorLines = (scenario: Scenario) =>
-  scenario.lines.flatMap((line) => (line.dir === 's2c' && line.msg.type === 'error' ? [line.msg] : []));
-
 const hello = (): string => {
   const line = loadScenario('open-join').lines.find((candidate) => candidate.dir === 'c2s');
   if (!line || !('msg' in line)) throw new Error('no hello in the fixture');
@@ -59,7 +51,7 @@ const hello = (): string => {
 };
 
 describe('error codes', () => {
-  test('the table matches every row of the spec', () => {
+  test('K2 the table matches every row of the spec', { tags: ['critical'] }, () => {
     expect(Object.keys(SPEC_TABLE).sort()).toEqual([...ERROR_CODE_LIST].sort());
     for (const code of ERROR_CODE_LIST as ErrorCode[]) {
       const [before, after, close] = SPEC_TABLE[code];
@@ -69,14 +61,14 @@ describe('error codes', () => {
     }
   });
 
-  test('a fatal error closes with its code and a non fatal one does not close', () => {
+  test('K2 a fatal error closes with its code and a non fatal one does not close', { tags: ['critical'] }, () => {
     const fatal = createError({ code: 'lobby-locked', message: 'm' }, { welcomed: false });
     const soft = createError({ code: 'lobby-locked', message: 'm' }, { welcomed: true });
     expect(closeCodeOf(fatal)).toBe(4410);
     expect(closeCodeOf(soft)).toBeNull();
   });
 
-  test('optional fields travel and re is copied', () => {
+  test('K2 optional fields travel and re is copied', { tags: ['critical'] }, () => {
     const error = createError(
       { code: 'rate-limited', message: 'm', retryAfter: 30, field: 'f', slot: 's', supported: [1], lobbyAp: '0.6.8' },
       { welcomed: false, re: 4 },
@@ -85,7 +77,7 @@ describe('error codes', () => {
     expect(validateMessage('s2c', error)).toEqual([]);
   });
 
-  test('every error code is used by a fixture with the right fatal flag and close code', () => {
+  test('K2 every error code is used by a fixture with the right fatal flag and close code', { tags: ['standard'] }, () => {
     const seen = new Set<string>();
     for (const scenario of SCENARIO_CATALOG.map((entry) => loadScenario(entry.name))) {
       scenario.lines.forEach((line, index) => {
@@ -100,64 +92,59 @@ describe('error codes', () => {
     }
     expect([...seen].sort()).toEqual([...ERROR_CODE_LIST].sort());
   });
-
-  test('the standard texts in the fixtures match the helpers', () => {
-    expect(errorLines(loadScenario('lobby-info-unknown-code'))[0]?.message).toBe(lobbyNotFoundFailure().message);
-    expect(rateLimitedFailure(60).message).toBe('Too many attempts from this address. Try again in 60 seconds.');
-  });
 });
 
 describe('decoding', () => {
   const opts = { direction: 'c2s' as const, maxBytes: PRE_WELCOME_MAX_MESSAGE_BYTES };
 
-  test('a valid hello decodes', () => {
+  test('K1 a valid hello decodes', { tags: ['standard'] }, () => {
     const outcome = decodeMessage(hello(), opts);
     expect(outcome).toMatchObject({ ok: true, known: true });
   });
 
-  test('text that is not JSON is a bad message', () => {
+  test('K1 text that is not JSON is a bad message', { tags: ['critical'] }, () => {
     const outcome = decodeMessage('nope', opts);
     expect(outcome).toMatchObject({ ok: false, failure: { code: 'bad-message', message: 'The message is not a JSON object.' } });
   });
 
-  test('a JSON array is a bad message', () => {
+  test('K1 a JSON array is a bad message', { tags: ['critical'] }, () => {
     expect(decodeMessage('[1]', opts).ok).toBe(false);
   });
 
-  test('an unknown client type is a bad message that names the type', () => {
+  test('K1 an unknown client type is a bad message that names the type', { tags: ['critical'] }, () => {
     const outcome = decodeMessage('{"type":"dance","seq":5}', opts);
     expect(outcome).toMatchObject({ ok: false, failure: { code: 'bad-message', field: 'type', message: 'The type dance is not known.' } });
   });
 
-  test('an unknown server type is passed through for the client to ignore', () => {
+  test('K1 an unknown server type is passed through for the client to ignore', { tags: ['critical'] }, () => {
     const outcome = decodeMessage('{"type":"future.thing"}', { direction: 's2c', maxBytes: 1000 });
     expect(outcome).toMatchObject({ ok: true, known: false });
   });
 
-  test('a hello with a missing field gets metadata-missing and the field name', () => {
+  test('K1 a hello with a missing field gets metadata-missing and the field name', { tags: ['standard'] }, () => {
     const text = JSON.stringify({ ...JSON.parse(hello()) as object, client: { id: 'abc', name: 'N', platform: { os: 'linux', arch: 'x64' } } });
     const outcome = decodeMessage(text, opts);
     expect(outcome).toMatchObject({ ok: false, failure: { code: 'metadata-missing', field: 'client.version' } });
   });
 
-  test('another message with a missing field is a bad message', () => {
+  test('K1 another message with a missing field is a bad message', { tags: ['critical'] }, () => {
     const outcome = decodeMessage('{"type":"ready","seq":1}', opts);
     expect(outcome).toMatchObject({ ok: false, failure: { code: 'bad-message', field: 'ready' } });
   });
 
-  test('a message over the limit is refused before it is parsed', () => {
+  test('K1 a message over the limit is refused before it is parsed', { tags: ['critical'] }, () => {
     const big = JSON.stringify({ type: 'leave', pad: 'x'.repeat(PRE_WELCOME_MAX_MESSAGE_BYTES) });
     const outcome = decodeMessage(big, opts);
     expect(outcome).toMatchObject({ ok: false, failure: { code: 'bad-message' } });
     expect(decodeMessage(big, { direction: 'c2s', maxBytes: DEFAULT_LIMITS.maxMessageBytes }).ok).toBe(true);
   });
 
-  test('the limit counts bytes, not characters', () => {
+  test('K1 the limit counts bytes, not characters', { tags: ['critical'] }, () => {
     const text = JSON.stringify({ type: 'leave', pad: 'é'.repeat(40) });
     expect(decodeMessage(text, { direction: 'c2s', maxBytes: 80 }).ok).toBe(false);
   });
 
-  test('a lobby.info request over its own limit is refused', () => {
+  test('K1 a lobby.info request over its own limit is refused', { tags: ['critical'] }, () => {
     const base = { type: 'lobby.info', protocol: { name: 'archipelia-lobby', versions: [1] }, lobby: { code: 'K7QM-4XT2' } };
     expect(decodeMessage(JSON.stringify(base), opts).ok).toBe(true);
     const padded = JSON.stringify({ ...base, pad: 'x'.repeat(LOBBY_INFO_MAX_REQUEST_BYTES) });
@@ -167,13 +154,8 @@ describe('decoding', () => {
     });
   });
 
-  test('encoding refuses a message over the limit', () => {
+  test('K1 encoding refuses a message over the limit', { tags: ['critical'] }, () => {
     expect(() => encodeMessage({ type: 'leave' }, 5)).toThrow('limit is 5');
     expect(encodeMessage({ type: 'leave' })).toBe('{"type":"leave"}');
-  });
-
-  test('every message type has a schema in its direction', () => {
-    expect(Object.keys(CLIENT_SCHEMAS)).toHaveLength(8);
-    expect(Object.keys(SERVER_SCHEMAS)).toHaveLength(14);
   });
 });

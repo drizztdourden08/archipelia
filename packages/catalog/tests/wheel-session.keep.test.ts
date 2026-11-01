@@ -16,7 +16,7 @@ const planWith = (wheel: boolean): SourcePlan => ({
 } as SourcePlan);
 
 describe('which ready-made build may be downloaded', () => {
-  test('only the one a plan offered for that repo, whatever the case of the names', () => {
+  test('K4 only the one a plan offered for that repo, whatever the case of the names', { tags: ['critical'] }, () => {
     const offers = createOfferedWheels();
     expect(() => offers.assertOffered(ASK)).toThrow('Open the project from the list again');
     offers.offer(planWith(true));
@@ -26,14 +26,14 @@ describe('which ready-made build may be downloaded', () => {
     expect(() => offers.assertOffered({ ...ASK, repo: 'other' })).toThrow('offered');
   });
 
-  test('a later plan with no build withdraws the offer', () => {
+  test('K4 a later plan with no build withdraws the offer', { tags: ['critical'] }, () => {
     const offers = createOfferedWheels();
     offers.offer(planWith(true));
     offers.offer(planWith(false));
     expect(() => offers.assertOffered(ASK)).toThrow('offered');
   });
 
-  test('the source service refuses a download for a project nobody opened, before it touches the network', () => {
+  test('K4 the source service refuses a download for a project nobody opened, before it touches the network', { tags: ['critical'] }, () => {
     const calls: string[] = [];
     const net = ((input: string | URL | Request) => { calls.push(String(input)); return Promise.reject(new Error('offline')); }) as typeof fetch;
     const service = createSourceService({ fetch: net, engineDir: () => Promise.resolve('engine'), worldOf: () => Promise.resolve({ texts: [] }) });
@@ -57,7 +57,7 @@ describe('the size of the wheel cache', () => {
     return { id: name, apVersion: '0.6.8', apCommit: '', pythonVersion: '3.12', root, python: 'python', generate: '', multiServer: '', schemaScript: '' };
   };
 
-  test('drops the oldest wheels first until the cache fits, and never the one just stored', async () => {
+  test('S2 drops the oldest wheels first until the cache fits, and never the one just stored', { tags: ['standard'] }, async () => {
     const runtime = await runtimeIn('prune');
     const label = { repo: 'Pseudoarc/ctrando', tag: 'v1', asset: WHEEL, verified: true };
     const found = [];
@@ -74,7 +74,7 @@ describe('the size of the wheel cache', () => {
     expect(left).not.toContain(newest?.sha256);
   });
 
-  test('keeps everything while it fits, and removes part files older than an hour', async () => {
+  test('S2 keeps everything while it fits, and removes part files older than an hour', { tags: ['standard'] }, async () => {
     const runtime = await runtimeIn('keep');
     const cached = await cacheWheel(runtime, wheelBytes(), { repo: 'Pseudoarc/ctrando', tag: 'v1', asset: WHEEL, verified: true });
     const stale = join(runtime.root, 'wheels', 'old.part');
@@ -82,7 +82,8 @@ describe('the size of the wheel cache', () => {
     await writeFile(stale, 'x');
     await writeFile(fresh, 'x');
     await utimes(stale, new Date(2026, 0, 1), new Date(2026, 0, 1));
-    await pruneWheels(runtime, cached.sha256, undefined, Date.now());
+    await utimes(fresh, new Date(2026, 0, 1, 12), new Date(2026, 0, 1, 12));
+    await pruneWheels(runtime, cached.sha256, undefined, new Date(2026, 0, 1, 12, 10).getTime());
     expect((await readdir(join(runtime.root, 'wheels'))).sort()).toEqual([cached.sha256, 'new.part'].sort());
   });
 });

@@ -16,7 +16,7 @@ afterEach(async () => {
   await rm(dir, { recursive: true, force: true });
 });
 
-describe('the server settings', () => {
+describe('K2 the server settings', { tags: ['critical'] }, () => {
   test('default to the lobby port, LAN mode, the lookup on and a self-signed certificate', () => {
     expect(pickConfig({}, {})).toMatchObject({ port: 38290, network: 'lan', publicLookup: true, tls: { selfSigned: true } });
   });

@@ -19,7 +19,7 @@ const engine = (ap: string, python: string, state: InstalledEngine['state'] = 'r
 
 afterEach(cleanTempRoots);
 
-describe('engine state', () => {
+describe('K3 engine state', { tags: ['critical'] }, () => {
   test('an empty folder reads as no engine', async () => {
     expect(await readEngineState(await tempRoot())).toEqual({ version: 1, installed: [] });
   });
@@ -62,7 +62,7 @@ const twoEnginesNewestActive = async (): Promise<string> => {
   return root;
 };
 
-describe('engine state, forgetting and offers', () => {
+describe('K3 engine state, forgetting and offers', { tags: ['critical'] }, () => {
   test('a forgotten last good engine is cleared and the active one stays', async () => {
     const root = await twoEnginesNewestActive();
     const state = await forgetEngine(root, 'ap-0.6.7_py-3.12.14_win32-x64');
