@@ -73,4 +73,4 @@ const runSession = async (launched: LaunchedApp, tab: Locator) => {
 
 const buildAndRun = async (launched: LaunchedApp) => runSession(launched, await buildSession(launched));
 
-export { buildAndRun };
+export { buildAndRun, runSession };

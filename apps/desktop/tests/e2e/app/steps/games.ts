@@ -72,4 +72,4 @@ const removeBothWorlds = async (launched: LaunchedApp) => {
   await closeHub(launched.page, 'Multiworld');
 };
 
-export { addBothWorlds, removeBothWorlds };
+export { addBothWorlds, addWorld, openGames, openTab, removeBothWorlds, search };

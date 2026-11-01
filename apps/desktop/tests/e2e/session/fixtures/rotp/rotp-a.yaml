@@ -1,0 +1,9 @@
+# RotP-A: joins the Archipelia lobby live over the LAN. Its options differ from RotP-B on purpose.
+# TODO(rotp lead): confirm these option names and values are valid for Relic of the Past.
+name: RotP-A
+description: Archipelia end-to-end session test, RotP-A, live join
+game: Relic of the Past
+Relic of the Past:
+  death_link: false
+  shop_shuffle: random
+  dungeon_count: 3

@@ -1,0 +1,8 @@
+# RotP-B: a normal Archipelago player. Archipelia imports this file into slot 2 of the session.
+# TODO(rotp lead): confirm these option names and values are valid for Relic of the Past.
+name: RotP-B
+description: Archipelia end-to-end session test, RotP-B, normal player
+game: Relic of the Past
+Relic of the Past:
+  death_link: true
+  dungeon_count: 5
