@@ -46,7 +46,7 @@ const depsWith = (extra: Record<string, unknown>) => {
   return { deps: deps as never, events, hostFor, stored };
 };
 
-describe('hostSession engine choice', () => {
+describe('S2 hostSession engine choice', { tags: ['standard'] }, () => {
   test('a local session is hosted on its own engine when installed', async () => {
     const own = runtimeOf('ap-0.6.6', '0.6.6');
     const { deps, hostFor, events } = depsWith({ runtimeFor: () => Promise.resolve(own) });
@@ -86,7 +86,7 @@ describe('hostSession engine choice', () => {
   });
 });
 
-describe('session service', () => {
+describe('S2 session service', { tags: ['standard'] }, () => {
   test('a new session records the engine that generates it', async () => {
     generate.mockResolvedValue({ ok: true, lines: [], zip: 'AP.zip' });
     const { deps, stored } = depsWith({});

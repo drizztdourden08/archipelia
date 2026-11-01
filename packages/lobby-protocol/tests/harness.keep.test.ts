@@ -11,7 +11,7 @@ const READY = '{"type":"ready","seq":1,"ready":true}';
 const pairUp = (serverScenario: Scenario, clientScenario: Scenario, ignore: string[] = []) =>
   runScenario(serverScenario, { clientScenario, ignore, timeoutMs: 100 });
 
-describe('the fakes fail on a script break', () => {
+describe('K1 the fakes fail on a script break', { tags: ['standard'] }, () => {
   test('the server fails on a message of the wrong type', async () => {
     const expected = withLines('a', `{"dir":"c2s","msg":${INFO}}`);
     const sent = withLines('b', `{"dir":"c2s","msg":${READY}}`);
@@ -52,10 +52,9 @@ describe('the fakes fail on a script break', () => {
     const run = await pairUp(server, client);
     expect(run.client.failure).toContain('4404');
   });
-
 });
 
-describe('the fakes handle ignore lists and host lines', () => {
+describe('K1 the fakes handle ignore lists and host lines', { tags: ['standard'] }, () => {
   test('the client skips message types on its ignore list', async () => {
     const state = '{"type":"slots.ok","re":1,"need":[]}';
     const progress = '{"type":"lobby.progress","phase":"generating","step":"generate","fraction":0.5}';
@@ -84,7 +83,7 @@ describe('the fakes handle ignore lists and host lines', () => {
   });
 });
 
-describe('message matching', () => {
+describe('K1 message matching', { tags: ['critical'] }, () => {
   test('placeholders bind once and then must repeat', () => {
     const bindings = {};
     expect(matchMessage({ a: '$x', b: '$x' }, { a: 1, b: 1 }, bindings)).toBeNull();
@@ -116,7 +115,7 @@ describe('message matching', () => {
   });
 });
 
-describe('fixture parsing', () => {
+describe('K1 fixture parsing', { tags: ['critical'] }, () => {
   test('repeat blocks expand into plain lines', () => {
     const lines = parseFixture('{"dir":"repeat","times":3,"lines":[{"dir":"connect"},{"dir":"close","code":4404}]}');
     expect(lines).toHaveLength(6);

@@ -57,7 +57,7 @@ const hostHook = (server: ConformanceServer, lobby: Lobby, name: string) => asyn
   }
 };
 
-describe('the real lobby server against the fake client', () => {
+describe('K2 the real lobby server against the fake client', { tags: ['e2e'] }, () => {
   test.each(SCENARIO_CATALOG.map((entry) => entry.name))('%s', async (name) => {
     const entry = SCENARIO_CATALOG.find((candidate) => candidate.name === name);
     if (!entry) throw new Error(`no catalog entry for ${name}`);
@@ -73,5 +73,5 @@ describe('the real lobby server against the fake client', () => {
     const result = await client.play();
     expect(result.failure).toBeUndefined();
     expect(result.ok).toBe(true);
-  }, 30000);
+  });
 });

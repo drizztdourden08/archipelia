@@ -19,7 +19,7 @@ const playOverSocket = async (name: string) => {
   }
 };
 
-describe('real WebSocket transport', () => {
+describe('K2 real WebSocket transport', { tags: ['e2e'] }, () => {
   test.each(['approval-join', 'upload-resume', 'version-mismatch', 'wrong-code-rate-limit', 'bad-message-binary'])(
     '%s plays over ws://',
     async (name) => {
@@ -39,7 +39,7 @@ describe('real WebSocket transport', () => {
   });
 });
 
-describe('frames', () => {
+describe('K1 frames', { tags: ['critical'] }, () => {
   const masked = (payload: Buffer, opcode = 1): Buffer => {
     const mask = Buffer.from([1, 2, 3, 4]);
     const body = Buffer.from(payload.map((byte, index) => byte ^ (mask[index % 4] ?? 0)));
@@ -67,7 +67,7 @@ describe('frames', () => {
   });
 });
 
-describe('memory transport', () => {
+describe('K2 memory transport', { tags: ['critical'] }, () => {
   test('messages arrive in order and then the close with its code', async () => {
     const [left, right] = createMemoryPair();
     const seen: TransportEvent[] = [];

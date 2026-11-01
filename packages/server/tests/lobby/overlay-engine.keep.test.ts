@@ -35,7 +35,7 @@ afterAll(async () => {
   await rm(work, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 });
 });
 
-describe.runIf(ENGINE !== '' && existsSync(join(ENGINE, 'engine.json')))('a lobby world overlay on a real engine', () => {
+describe.runIf(ENGINE !== '' && existsSync(join(ENGINE, 'engine.json')))('E2 a lobby world overlay on a real engine', { tags: ['e2e'] }, () => {
   test('Generate finds the world in custom_worlds of the overlay, and MultiServer imports it while it hosts', async () => {
     const engine = runtimeAt(ENGINE);
     const overlay = await buildOverlay({ lobbyId: 'probe', dir: join(work, 'overlay'), runtime: engine, worlds: [{ module: 'overlay_probe', sha256: 'probe', bytes: probeWorld() }] });
@@ -58,5 +58,5 @@ describe.runIf(ENGINE !== '' && existsSync(join(ENGINE, 'engine.json')))('a lobb
     expect(endpoint.port).toBeGreaterThan(0);
     expect(await readFile(join(work, 'markers', 'MultiServer.py.loaded'), 'utf8')).toContain(join('overlay', 'ap', 'custom_worlds'));
     expect(existsSync(join(ENGINE, 'ap', 'custom_worlds', 'overlay_probe.apworld'))).toBe(false);
-  }, 240000);
+  });
 });

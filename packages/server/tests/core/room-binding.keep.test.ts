@@ -4,7 +4,7 @@ import { roomBinding } from '../../src/core/room-binding';
 
 const network = (automation: boolean) => ({ automation, lanHost: () => '192.168.1.20' });
 
-describe('where the room of a lobby binds', () => {
+describe('K1 where the room of a lobby binds', { tags: ['critical'] }, () => {
   test('a private lobby server hosts its room on the loopback only, and advertises it', () => {
     const binding = roomBinding('off', network(false));
     expect(binding.bindHost).toBe('127.0.0.1');

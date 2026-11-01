@@ -10,11 +10,11 @@ const LOG = [
   'Notice (all): Link (Team #1) has left the game. Client(0.6.7), [\'Tracker\', \'NoText\'].',
 ];
 
-test('only game clients count as online; a tracker joining or leaving changes nothing', () => {
+test('K1 only game clients count as online; a tracker joining or leaving changes nothing', { tags: ['critical'] }, () => {
   expect(onlineFromLog(LOG)).toEqual({ Link: true, Lunais: false });
 });
 
-test('presence overrides the stored status except a goal', () => {
+test('K1 presence overrides the stored status except a goal', { tags: ['critical'] }, () => {
   expect(withPresence('connected', false)).toBe('offline');
   expect(withPresence('unknown', true)).toBe('connected');
   expect(withPresence('playing', true)).toBe('playing');
@@ -22,7 +22,7 @@ test('presence overrides the stored status except a goal', () => {
   expect(withPresence('ready', undefined)).toBe('ready');
 });
 
-test('a slot only our tracker joined reads offline with a server log and unknown without one', () => {
+test('K1 a slot only our tracker joined reads offline with a server log and unknown without one', { tags: ['critical'] }, () => {
   const trackerOnly = [LOG[0] ?? ''];
   expect(presenceOf(trackerOnly, ['Link', 'Lunais'])).toEqual({ Link: false, Lunais: false });
   expect(presenceOf([], ['Link'])).toEqual({});

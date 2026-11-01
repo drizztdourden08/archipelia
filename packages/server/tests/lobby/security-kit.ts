@@ -60,8 +60,6 @@ const holdFiles = async (store: ReturnType<typeof createLobbyStore>, lobbyId: st
   for (const name of names) await store.writeFile(lobbyId, fileOf(name).sha256, fileOf(name).bytes);
 };
 
-const tick = (ms = 30) => new Promise((resolve) => setTimeout(resolve, ms));
-
 const admin = { token: () => Promise.resolve('t'), watch: () => () => undefined, engines: () => Promise.resolve([]) };
 
-export { admin, engine, fileOf, helloOf, holdFiles, linkOf, startService, tick };
+export { admin, engine, fileOf, helloOf, holdFiles, linkOf, startService };

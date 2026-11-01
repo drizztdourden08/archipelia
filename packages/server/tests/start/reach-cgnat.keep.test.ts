@@ -18,7 +18,7 @@ const reachOn = async (externalIp: string, secure: boolean) => {
   });
 };
 
-describe('the reach of a server behind carrier-grade NAT', () => {
+describe('K1 the reach of a server behind carrier-grade NAT', { tags: ['critical'] }, () => {
   test('carries the plain explanation when the router address is shared', async () => {
     const reach = await reachOn('100.72.3.4', true);
     const { cgnat, lobbyPort } = reach.status();

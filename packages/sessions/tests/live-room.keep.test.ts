@@ -40,7 +40,7 @@ const session = (patch: Partial<Session>): Session => ({
   ...patch,
 });
 
-describe('client status', () => {
+describe('K2 client status', { tags: ['critical'] }, () => {
   test('data storage keys follow the protocol names', () => {
     expect(statusKey(0, 3)).toBe('_read_client_status_0_3');
     expect(hintsKey(1, 2)).toBe('_read_hints_1_2');
@@ -56,7 +56,7 @@ describe('client status', () => {
   });
 });
 
-describe('hint rows', () => {
+describe('K1 hint rows', { tags: ['critical'] }, () => {
   test('the item is named in the receiver game, the location in the finder game', () => {
     const [row] = hintRows([[hint({})]], LOOKUP);
     expect(row).toMatchObject({
@@ -87,7 +87,7 @@ describe('hint rows', () => {
   });
 });
 
-describe('checks from the server log', () => {
+describe('K1 checks from the server log', { tags: ['critical'] }, () => {
   const LINES = [
     '[12:01:04] (Team #1) Johnny sent Hookshot to Marie (Kokiri Forest)',
     '(Team #1) Johnny sent Bow to Johnny (Eastern Palace)',
@@ -102,7 +102,7 @@ describe('checks from the server log', () => {
   });
 });
 
-describe('player rows', () => {
+describe('K1 player rows', { tags: ['critical'] }, () => {
   test('the watched slot gets exact numbers, the others the log count', () => {
     const players = [{ team: 0, slot: 1, name: 'Johnny', game: 'ALttP' }, { team: 0, slot: 2, name: 'Marie', game: 'OoT' }];
     const rows = playerRows({
@@ -122,7 +122,7 @@ describe('player rows', () => {
   });
 });
 
-describe('room target', () => {
+describe('K1 room target', { tags: ['critical'] }, () => {
   test('a local room is watched over ws on localhost with the first slot', () => {
     const target = watchTarget(session({}));
     expect(target).toEqual({ sessionId: 's1', urls: ['ws://localhost:38281'], slotName: 'Johnny' });
