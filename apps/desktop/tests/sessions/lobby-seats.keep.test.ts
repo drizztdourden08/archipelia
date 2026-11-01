@@ -74,24 +74,27 @@ describe('the seats of the players who joined', () => {
   const model = (calls: string[]): LobbyMembersModel => ({
     lobby: lobby(), actionError: null, isBusy: () => false,
     review: () => calls.push('review'), remove: () => calls.push('remove'),
+    viewing: null, viewOptions: () => calls.push('options'), closeOptions: () => calls.push('close'),
     approve: () => { calls.push('approve'); return Promise.resolve(undefined); }, refuse: () => { calls.push('refuse'); return Promise.resolve(undefined); },
   });
 
   test('puts Approve and Refuse on the card of a player who waits', () => {
     const calls: string[] = [];
     const actions = memberSeatActions(lobby(), member(), model(calls));
-    expect(actions.map((action) => [action.id, action.primary === true, action.nameSuffix])).toEqual([['approve', true, 'Zelda'], ['refuse', false, 'Zelda']]);
+    expect(actions.map((action) => [action.id, action.primary === true, action.nameSuffix])).toEqual([['approve', true, 'Zelda'], ['options', false, 'Zelda'], ['refuse', false, 'Zelda']]);
     for (const action of actions) action.onSelect();
-    expect(calls).toEqual(['approve', 'refuse']);
+    expect(calls).toEqual(['approve', 'options', 'refuse']);
+    expect(actions[1]).toMatchObject({ label: 'View options', nameSuffix: 'Zelda' });
   });
 
   test('puts Remove on an approved player and the review of a world that waits for consent', () => {
     const waiting = lobby({ members: [member({ admission: 'approved', slots: [slot({ state: 'waiting-consent', worldSha256: 'w1' })] })], worlds: [world()] });
     const [first] = waiting.members;
     const actions = memberSeatActions(waiting, first ?? member(), model([]));
-    expect(actions.map((action) => action.id)).toEqual(['world-Zelda', 'remove']);
+    expect(actions.map((action) => action.id)).toEqual(['world-Zelda', 'options', 'remove']);
     expect(actions[0]).toMatchObject({ label: 'Review the world of', nameSuffix: 'Zelda', primary: true });
-    expect(memberSeatActions(lobby({ phase: 'hosting' }), member(), model([]))).toEqual([]);
+    expect(memberSeatActions(lobby({ phase: 'hosting' }), member(), model([])).map((action) => action.id)).toEqual(['options']);
+    expect(memberSeatActions(lobby(), member({ slots: [] }), model([]))).toEqual([]);
   });
 
   test('puts the games and Joined on one line, the client and its trust on the next, and the first slot that is not ready in the status', () => {

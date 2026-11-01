@@ -120,7 +120,11 @@ type AdminWorld = Omit<WorldUpload, 'proof'> & { proofSent: boolean; runsUnconfi
 
 type AdminLobby = Omit<Lobby, 'members' | 'worlds'> & { members: AdminLobbyMember[]; worlds: AdminWorld[] };
 
+type MemberYamlSlot = { name: string; game: string; yaml: string | null };
+
+type MemberYaml = { memberId: string; slots: MemberYamlSlot[] };
+
 export type {
   AdminLobby, AdminLobbyMember, AdminWorld, ClientMeta, Lobby, LobbyAdmission, LobbyFailure, LobbyLimits, LobbyMember, LobbySource, LobbyOptions, LobbyPhase, LobbyRoom, LobbyRoomFile,
-  MemberAdmission, SlotOrigin, SlotState, SlotUpload, TrustLevel, UploadTrust, WorldUpload,
+  MemberAdmission, MemberYaml, MemberYamlSlot, SlotOrigin, SlotState, SlotUpload, TrustLevel, UploadTrust, WorldUpload,
 };

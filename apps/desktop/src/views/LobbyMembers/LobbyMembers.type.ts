@@ -12,4 +12,21 @@ type ConsentRequest = { lobby: AdminLobby; member: AdminLobbyMember; slot: SlotU
 
 type LobbyMembersModel = ReturnType<typeof useLobbyMembers>;
 
-export type { ConsentRequest, LobbyMembersModel, LobbyMembersProps, MemberActions, TrustTag };
+type OptionRow = { key: string; label: string; value: string };
+
+type OptionGroup = { name: string; rows: OptionRow[] };
+
+type OptionsOfYaml = { groups: OptionGroup[]; problem?: string };
+
+type SlotOptions = OptionsOfYaml & { name: string; game: string; yaml: string | null; known: boolean };
+
+type MemberOptionsTarget = { serverId: string; lobbyId: string; memberId: string; rev: number };
+
+type MemberOptionsState =
+  | { status: 'loading' }
+  | { status: 'failed'; problem: string }
+  | { status: 'ready'; slots: SlotOptions[] };
+
+export type {
+  ConsentRequest, LobbyMembersModel, LobbyMembersProps, MemberActions, MemberOptionsState, MemberOptionsTarget, OptionGroup, OptionRow, OptionsOfYaml, SlotOptions, TrustTag,
+};

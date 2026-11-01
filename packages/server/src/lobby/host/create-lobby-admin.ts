@@ -9,6 +9,7 @@ import { closeLobby } from './close-lobby';
 import { consentWorld } from './consent-world';
 import { createLobby } from './create-lobby';
 import { lockLobby } from './lock-lobby';
+import { memberYaml } from './member-yaml';
 import { unlockLobby } from './unlock-lobby';
 import { sweepLobbies } from './sweep-lobbies';
 import { updateLobby } from './update-lobby';
@@ -40,6 +41,7 @@ const createLobbyAdmin = (ctx: LobbyContext) => {
     refuse: (lobbyId: string, memberId: string, reason?: string) => dismiss(lobbyId, memberId, 'refused', reason),
     remove: (lobbyId: string, memberId: string, reason?: string) => dismiss(lobbyId, memberId, 'removed', reason),
     consent: (lobbyId: string, sha256: string, allowed: boolean) => consentWorld(ctx, lobbyId, sha256, allowed),
+    yaml: (lobbyId: string, memberId: string) => memberYaml(ctx, lobbyId, memberId),
     addHost: (lobbyId: string, input: HostMemberInput) => addHostMember(ctx, lobbyId, input),
     sweep: () => sweepLobbies(ctx),
   };

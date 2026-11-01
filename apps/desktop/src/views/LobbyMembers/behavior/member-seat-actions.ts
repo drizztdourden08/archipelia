@@ -13,9 +13,11 @@ const memberSeatActions = (lobby: AdminLobby, member: AdminLobbyMember, model: L
   const worlds = pendingWorlds(lobby, member).map((request): LobbySeatAction => ({
     id: `world-${request.slot.name}`, label: MEMBER_TEXT.review, nameSuffix: request.slot.name, icon: 'circle-alert', primary: true, disabled, onSelect: () => model.review(request),
   }));
+  const options: LobbySeatAction[] = member.slots.length === 0 ? [] : [{ id: 'options', label: MEMBER_TEXT.options, nameSuffix: name, onSelect: () => model.viewOptions(member) }];
   return [
     ...(can.approve ? [{ id: 'approve', label: MEMBER_TEXT.approve, nameSuffix: name, icon: 'check' as const, primary: true, disabled, onSelect: () => void model.approve(member.id) }] : []),
     ...worlds,
+    ...options,
     ...(can.refuse ? [{ id: 'refuse', label: MEMBER_TEXT.refuse, nameSuffix: name, disabled, onSelect: () => void model.refuse(member.id) }] : []),
     ...(can.remove ? [{ id: 'remove', label: MEMBER_TEXT.remove, nameSuffix: name, disabled, onSelect: () => model.remove(member) }] : []),
   ];

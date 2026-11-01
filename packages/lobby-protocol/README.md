@@ -536,7 +536,7 @@ Not needed by game clients. The desktop app uses it to manage a server.
 
 - Path `/archipelia/admin` on the same port, same framing. The first message is `{ "type": "admin.hello", "token": "<admin token>", "protocol": {...} }`.
 - Plain `ws://` admin is refused unless the peer is loopback. Remote admin needs `wss://`, and the desktop pins the SHA-256 of the server certificate when it adds the server.
-- Requests: `server.info`, `engine.list`, `engine.install`, `engine.switch`, `lobby.create`, `lobby.update`, `lobby.lock`, `lobby.start`, `lobby.close`, `member.approve`, `member.refuse`, `member.remove`, `world.consent`, `room.command`, `room.stop`, `log.follow`.
+- Requests: `server.info`, `engine.list`, `engine.install`, `engine.switch`, `lobby.create`, `lobby.update`, `lobby.lock`, `lobby.start`, `lobby.close`, `member.approve`, `member.refuse`, `member.remove`, `member.yaml`, `world.consent`, `room.command`, `room.stop`, `log.follow`.
 - Events: `lobby.state` with full detail (hashes, proof result, client metadata), `job.update`, `log.line`.
 
 ## Conformance

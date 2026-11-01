@@ -3,7 +3,7 @@ import { defineChannels, event, invoke } from '@drizztdourden08/brock-core';
 import type { CatalogView, EnrichRequest, GameEnrichment, InstallRequest, PackagePreview, VersionList, VersionsRequest } from '@archipelia/catalog';
 import type {
   AdminLobby, CatalogEntry, EngineChoice, EngineEvent, EngineInstallResult, EngineOverview, EngineStatus, GamePreset,
-  InstalledGame, LobbyServerEntry, PackageSource, ServerEntry, Session, SessionTemplate, SourceBuildPrepared, SourceBuildRequest, SourceBuildStart, SourceBuilt,
+  InstalledGame, LobbyServerEntry, MemberYaml, PackageSource, ServerEntry, Session, SessionTemplate, SourceBuildPrepared, SourceBuildRequest, SourceBuildStart, SourceBuilt,
   SourcePlan, SourcePypiInstall, SourceRef, SourceSuggestions, SourceToolAsk, SourceToolEnd, SourceToolPlan, SourceToolStart, SourceWheelRequest, StartupDecision, SuggestRequest,
 } from '@archipelia/model';
 import type { HostLogLine, ServerTestResult } from '@archipelia/hosts';
@@ -76,6 +76,7 @@ const APP_CHANNELS = defineChannels({
   lobbyServerView: invoke<(serverId: string) => Promise<LobbyServerView>>()('ap:lobby:serverView'),
   lobbyList: invoke<(serverId: string) => Promise<AdminLobby[]>>()('ap:lobby:list'),
   lobbyAct: invoke<(serverId: string, request: LobbyRequest) => Promise<AdminLobby>>()('ap:lobby:act'),
+  lobbyYaml: invoke<(serverId: string, lobbyId: string, memberId: string) => Promise<MemberYaml>>()('ap:lobby:yaml'),
   lobbyServersList: invoke<() => Promise<LobbyServerEntry[]>>()('ap:lobby:servers'),
   lobbyServersSave: invoke<(entry: LobbyServerEntry) => Promise<LobbyServerEntry>>()('ap:lobby:serversSave'),
   lobbyServersRemove: invoke<(id: string) => Promise<void>>()('ap:lobby:serversRemove'),
