@@ -3,7 +3,6 @@ type ChestItem = { item: string; receiver: string };
 
 const escaped = (text: string) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
-// The room prints "A sent ITEM to B (LOCATION)" or, when the item stays in the same world, "A found their ITEM (LOCATION)".
 const chestLineOf = (slot: string): RegExp => new RegExp(`${escaped(slot)} (sent .+ to \\S+|found their .+)`);
 
 const itemOf = (slot: string, text: string): ChestItem => {

@@ -23,8 +23,8 @@ const hostSession = async (launched: LaunchedApp, tab: Locator) => runSession(la
 
 const startRotpB = async (launched: LaunchedApp, env: SessionEnv, dirs: SessionDirs): Promise<RotpInstance> => {
   const target = await roomTargetOf(launched, TEMPLATE, ROTP_B.slot);
-  const instance = (eventLog: string) => ({ env, profileDir: dirs.profileB, eventLog, profileName: ROTP_B.slot });
-  return startRotp({ name: ROTP_B.slot, bin: env.binB, args: (eventLog) => apConnectArgs(instance(eventLog), target), profileDir: dirs.profileB, outDir: dirs.logs });
+  const instance = (eventLog: string) => ({ instance: env.instanceB, eventLog, profileName: ROTP_B.slot });
+  return startRotp({ name: ROTP_B.slot, command: env.cli, args: (eventLog) => apConnectArgs(instance(eventLog), target), outDir: dirs.logs });
 };
 
 const waitForChest = (instance: RotpInstance) => waitForChestItem(instance, TIMEOUT.chest);

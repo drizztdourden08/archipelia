@@ -82,4 +82,4 @@ const buildLanSession = async (launched: LaunchedApp) => {
   return tab;
 };
 
-export { buildLanSession, tabBody };
+export { buildLanSession };

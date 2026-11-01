@@ -16,12 +16,11 @@ type RotpInstance = {
   exited: () => boolean;
 };
 
-type RotpStart = { name: string; bin: string; args: (eventLog: string) => string[]; profileDir: string; outDir: string };
+type RotpStart = { name: string; command: string; args: (eventLog: string) => string[]; outDir: string };
 
 const pause = (ms: number) => new Promise<void>((resolve) => { setTimeout(resolve, ms); });
 
-const startRotp = async ({ name, bin, args, profileDir, outDir }: RotpStart): Promise<RotpInstance> => {
-  await mkdir(profileDir, { recursive: true });
+const startRotp = async ({ name, command, args, outDir }: RotpStart): Promise<RotpInstance> => {
   await mkdir(outDir, { recursive: true });
   const sink = createWriteStream(join(outDir, `${name}.log`));
   const chunks: string[] = [];
@@ -32,10 +31,10 @@ const startRotp = async ({ name, bin, args, profileDir, outDir }: RotpStart): Pr
   const childEnv = { ...process.env };
   delete childEnv.ELECTRON_RUN_AS_NODE;
   const eventLog = join(outDir, `${name}.events.jsonl`);
-  const child = spawn(bin, args(eventLog), { windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'], env: childEnv });
+  const child = spawn(command, args(eventLog), { windowsHide: true, shell: process.platform === 'win32', stdio: ['ignore', 'pipe', 'pipe'], env: childEnv });
   const state = { exited: false };
-  child.stdout?.on('data', keep);
-  child.stderr?.on('data', keep);
+  child.stdout.on('data', keep);
+  child.stderr.on('data', keep);
   child.on('error', (error) => { chunks.push(`spawn error: ${error.message}\n`); state.exited = true; });
   child.on('exit', (code) => { chunks.push(`exited with code ${String(code)}\n`); state.exited = true; sink.end(); });
   return { name, child, eventLog, output: () => chunks.join(''), exited: () => state.exited };
@@ -57,7 +56,6 @@ const eventsOf = async (path: string): Promise<Record<string, unknown>[]> => {
   }
 };
 
-// One JSON object per line with the event name under "t": connected, item-received {id, name, from, self}, location-checked.
 const ownItemSeen = (events: Record<string, unknown>[]) => {
   const connected = events.findIndex((entry) => entry.t === 'connected');
   return connected >= 0 && events.slice(connected + 1).some((entry) => entry.t === 'item-received' && entry.self === true);

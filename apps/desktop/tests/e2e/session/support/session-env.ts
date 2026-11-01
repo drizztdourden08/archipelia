@@ -1,23 +1,28 @@
 /* @layer tests @kind helper */
 type SessionEnv = {
-  binA: string;
-  binB: string;
-  rom: string;
+  cli: string;
+  instanceA: string;
+  instanceB: string;
 };
+
+const ENV_NAMES = {
+  cli: 'ROTP_CLI',
+  instanceA: 'ROTP_INSTANCE_A',
+  instanceB: 'ROTP_INSTANCE_B',
+} as const;
+
+const DEFAULT_CLI = 'rotp';
 
 const need = (name: string): string => {
   const value = process.env[name];
-  if (!value) throw new Error(`set ${name} to run the session test`);
+  if (!value) throw new Error(`set ${name} to run the session test (a RotP worktree made with: rotp worktree create <name> --rom <file>)`);
   return value;
 };
 
-const binOf = (own: string, shared: string): string => process.env[own] ?? need(shared);
-
-// RotP-A and RotP-B each run their own RotP checkout or binary: ROTP_BIN_A and ROTP_BIN_B, or ROTP_BIN for both.
 const sessionEnv = (): SessionEnv => ({
-  binA: binOf('ROTP_BIN_A', 'ROTP_BIN'),
-  binB: binOf('ROTP_BIN_B', 'ROTP_BIN'),
-  rom: need('ROTP_ROM'),
+  cli: process.env[ENV_NAMES.cli] ?? DEFAULT_CLI,
+  instanceA: need(ENV_NAMES.instanceA),
+  instanceB: need(ENV_NAMES.instanceB),
 });
 
 export { sessionEnv };

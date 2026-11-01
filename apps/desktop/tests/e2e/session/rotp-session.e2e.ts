@@ -1,6 +1,4 @@
 /* @layer tests @kind test */
-import { mkdtemp } from 'node:fs/promises';
-import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterAll, beforeAll, describe, expect, test } from 'vitest';
 import { bootWithDefaultProfile, setLocalPort } from '../app/steps/first-boot';
@@ -19,11 +17,6 @@ import type { RotpInstance } from './support/rotp-instance';
 import { E2E_TEST_TIMEOUT_MS, ROTP_A, ROTP_B, SESSION_PROOF_DIR } from './support/session-constants';
 import { sessionEnv } from './support/session-env';
 
-// This spec needs the built app, an engine, the network, a RotP build and a ROM, so it never runs by default.
-// Needs: E2E_SESSION=1, ROTP_ROM (the ROM), and ROTP_BIN or one ROTP_BIN_A and ROTP_BIN_B per instance (each its own RotP checkout or binary).
-// RotP-A joins through the lobby with a profile made from the form defaults; RotP-B's YAML is the generator input of slot 2 and RotP-B connects with --ap-connect.
-// Every test fits the e2e cap of 120 s, so the long waits (install, join, chests) are split across ordered tests.
-// Each RotP instance writes its events with --event-log; the chest is done on item-received with self true after connected.
 describe.skipIf(process.env.E2E_SESSION !== '1')('Archipelia session with a live RotP join and a normal RotP player, headless', { tags: ['e2e'], timeout: E2E_TEST_TIMEOUT_MS }, () => {
   const state: { launched?: LaunchedApp; dirs?: SessionDirs; env?: ReturnType<typeof sessionEnv>; rotp: RotpInstance[] } = { rotp: [] };
   const app = () => {
@@ -47,8 +40,7 @@ describe.skipIf(process.env.E2E_SESSION !== '1')('Archipelia session with a live
 
   beforeAll(async () => {
     state.env = sessionEnv();
-    const root = await mkdtemp(join(tmpdir(), 'archipelia-session-'));
-    state.dirs = { profileA: join(root, 'rotp-a'), profileB: join(root, 'rotp-b'), logs: join(SESSION_PROOF_DIR, 'rotp') };
+    state.dirs = { logs: join(SESSION_PROOF_DIR, 'rotp') };
     expect(await engineLeftovers(), 'the shared engine must start clean').toEqual([]);
     state.launched = await launchApp(SESSION_PROOF_DIR);
   }, E2E_TEST_TIMEOUT_MS);
@@ -65,13 +57,13 @@ describe.skipIf(process.env.E2E_SESSION !== '1')('Archipelia session with a live
     await setLocalPort(app());
   });
 
-  test('2. games: start the Baldur's Gate 3 install from the Archipelago index', () => startBaldurInstall(app()));
+  test("2. games: start the Baldur's Gate 3 install from the Archipelago index", () => startBaldurInstall(app()));
 
-  test('3. games: Baldur's Gate 3 finishes installing', () => waitBaldurInstalled(app()));
+  test("3. games: Baldur's Gate 3 finishes installing", () => waitBaldurInstalled(app()));
 
   test('4. games: Relic of the Past, verified, from Archipelia ready', () => addRelic(app()));
 
-  test('5. session: LAN with direct connections, slot 1 Baldur's Gate 3 saved, slot 2 RotP-B from its own YAML', async () => {
+  test("5. session: LAN with direct connections, slot 1 Baldur's Gate 3 saved, slot 2 RotP-B from its own YAML", async () => {
     await buildLanSession(app());
   });
 

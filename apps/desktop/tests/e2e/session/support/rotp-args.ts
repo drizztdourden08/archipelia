@@ -1,20 +1,21 @@
 /* @layer tests @kind helper */
 import { AUTO_STATE, CHEST_INPUT } from './session-constants';
-import type { SessionEnv } from './session-env';
 
 type LobbyTarget = { host: string; port: number; code: string };
 
 type RoomTarget = { host: string; port: number; slot: string; password: string };
 
-type InstanceArgs = { env: SessionEnv; profileDir: string; eventLog: string; profileName: string };
+type InstanceArgs = { instance: string; eventLog: string; profileName: string };
 
-const common = ({ env, profileDir, eventLog, profileName }: InstanceArgs): string[] => [
+const common = ({ instance, eventLog, profileName }: InstanceArgs): string[] => [
+  'worktree',
+  'launch',
+  instance,
+  AUTO_STATE,
   '--no-focus',
   '--muted',
-  `--user-data=${profileDir}`,
-  `--rom=${env.rom}`,
+  `--instance=${instance}`,
   `--profile-name=${profileName}`,
-  `--auto-state=${AUTO_STATE}`,
   `--input-script=${CHEST_INPUT}`,
   `--event-log=${eventLog}`,
 ];
@@ -30,4 +31,4 @@ const apConnectArgs = (instance: InstanceArgs, target: RoomTarget): string[] => 
 ];
 
 export { apConnectArgs, lobbyJoinArgs };
-export type { InstanceArgs, LobbyTarget, RoomTarget };
+export type { LobbyTarget, RoomTarget };

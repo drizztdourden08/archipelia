@@ -19,8 +19,8 @@ const EDITABLE_ROLES = ['textbox', 'combobox', 'switch', 'slider', 'spinbutton',
 
 const startRotpA = async (launched: LaunchedApp, env: SessionEnv, dirs: SessionDirs): Promise<RotpInstance> => {
   const target = await lobbyTargetOf(launched, TEMPLATE);
-  const instance = (eventLog: string) => ({ env, profileDir: dirs.profileA, eventLog, profileName: ROTP_A.slot });
-  return startRotp({ name: ROTP_A.slot, bin: env.binA, args: (eventLog) => lobbyJoinArgs(instance(eventLog), target), profileDir: dirs.profileA, outDir: dirs.logs });
+  const instance = (eventLog: string) => ({ instance: env.instanceA, eventLog, profileName: ROTP_A.slot });
+  return startRotp({ name: ROTP_A.slot, command: env.cli, args: (eventLog) => lobbyJoinArgs(instance(eventLog), target), outDir: dirs.logs });
 };
 
 const waitForJoinRequest = async (launched: LaunchedApp, tab: Locator): Promise<Locator> => {

@@ -1,7 +1,7 @@
 # RotP-B: a normal Archipelago player. Archipelia imports this file into slot 2 of the session as generator input.
 # After generation RotP-B connects with --ap-connect, so these options reach the game through the server slot data.
 # The option names are the keys listed under "Scripted input and Archipelago flags" in the RotP testing guide.
-# RotP-A takes no YAML: it joins through the lobby with a profile created from the form defaults.
+# RotP-A has no YAML here: its options are the ones its lobby join submits.
 name: RotP-B
 description: Archipelia end-to-end session test, RotP-B, normal player
 game: Relic of the Past

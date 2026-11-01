@@ -38,7 +38,7 @@ const lobbyTargetOf = async (launched: LaunchedApp, name: string): Promise<Lobby
 
 const roomTargetOf = async (launched: LaunchedApp, name: string, slot: string): Promise<RoomTarget> => {
   const runs = await apiCall(launched, 'sessionsList');
-  const hosting = Array.isArray(runs) ? runs.find((entry) => field(entry, 'status') === 'hosting' && field(field(entry, 'snapshot'), 'name') === name) : undefined;
+  const hosting: unknown = Array.isArray(runs) ? runs.find((entry) => field(entry, 'status') === 'hosting' && field(field(entry, 'snapshot'), 'name') === name) : undefined;
   const endpoint = field(hosting, 'endpoint');
   const port = field(endpoint, 'port');
   const host = field(endpoint, 'host');
