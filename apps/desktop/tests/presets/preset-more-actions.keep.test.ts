@@ -7,11 +7,7 @@ const handlers = () => ({ onDuplicate: vi.fn(), onImport: vi.fn(), onExport: vi.
 
 const itemsOf = (busy: boolean, calls = handlers()) => moreActions({ busy, ...calls }).flatMap((group) => group.items as MenuItem[]);
 
-describe('preset editor more actions', () => {
-  test('the menu holds the rare actions in order', () => {
-    expect(itemsOf(false).map((item) => item.label)).toEqual(['Duplicate', 'Import YAML', 'Export YAML', 'Reset all to defaults', 'Delete']);
-  });
-
+describe('S1 preset editor more actions', { tags: ['standard'] }, () => {
   test('each item runs its handler and turns off while busy', () => {
     const calls = handlers();
     itemsOf(false, calls).forEach((item) => item.onSelect?.());

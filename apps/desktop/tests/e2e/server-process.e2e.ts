@@ -31,7 +31,7 @@ const config = (port: number, auto: boolean) =>
 
 const adminToken = async () => (await readFile(join(dataDir, 'Data', 'server', 'admin-token'), 'utf8')).trim();
 
-describe('the built headless server process', () => {
+describe('E2 the built headless server process', { tags: ['e2e'] }, () => {
   test('starts on a temp data folder and completes the open-join scenario without an engine', async () => {
     expect(existsSync(join(import.meta.dirname, '..', '..', 'dist', 'server', 'main.mjs'))).toBe(true);
     const port = await freePort();
@@ -52,5 +52,5 @@ describe('the built headless server process', () => {
     const result = await playOpenJoin(port, dataDir, await adminToken());
     expect(result.failure).toBeUndefined();
     expect(result.ok).toBe(true);
-  }, ENGINE_WAIT_MS + 120000);
+  });
 });

@@ -32,7 +32,7 @@ const index = (apworld: string): CatalogEntry => ({
 
 const world = (apworld: string): InstalledGame => ({ apworld, game: apworld.toUpperCase(), version: '1.0.0', source: 'first-party', installedAt: 0 }) as InstalledGame;
 
-describe('worlds that join directly', () => {
+describe('K1 worlds that join directly', { tags: ['critical'] }, () => {
   test('a registry world with a client and a topic world marked direct join directly; the rest do not', () => {
     expect(joinsDirectly(listed('relic'))).toBe(true);
     expect(joinsDirectly(found('star', true))).toBe(true);
@@ -59,7 +59,7 @@ describe('worlds that join directly', () => {
   });
 });
 
-describe('the setup page and worlds that join directly', () => {
+describe('K1 the setup page and worlds that join directly', { tags: ['critical'] }, () => {
   const players = [presetPlayer(1, 'Ana', 'p1', 'RELIC'), presetPlayer(2, 'Bo', 'p1', 'STAR'), presetPlayer(3, 'Cy', 'p1', 'PLAIN')];
   const entries = [listed('relic'), found('star', true), index('plain')];
   const installed = [world('relic'), world('star'), { ...world('plain'), source: 'index' } as InstalledGame];

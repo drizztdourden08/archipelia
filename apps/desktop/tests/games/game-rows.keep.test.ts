@@ -11,7 +11,7 @@ import { groupSections } from '../../src/views/GameStore/behavior/group-sections
 
 const apworldOf = (row: { entry: CatalogEntry }) => row.entry.apworld;
 
-describe('game rows', () => {
+describe('K1 game rows', { tags: ['critical'] }, () => {
   test('versions compare numerically', () => {
     expect(compareVersions('1.10.0', '1.9.2')).toBeGreaterThan(0);
     expect(compareVersions('1.2', '1.2.0')).toBe(0);

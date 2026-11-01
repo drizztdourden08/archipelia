@@ -7,7 +7,7 @@ const { kitOn, cleanups, stopRig } = liveSuite();
 
 const DIRECT = { admission: 'host-approval', allowUnlisted: true } as const;
 
-describe('run by tab id', () => {
+describe('S2 run by tab id', { tags: ['standard'] }, () => {
   test('builds the run from the saved session and the tab overrides, and the run record carries the source and the origin of each player', async () => {
     const { live, rig: on, saved } = await kitOn();
     const { tab } = await live.start('t1', { server: { hintCost: 5 }, players: [playerOf(1, 'Ana'), playerOf(2, 'Bob')] });
@@ -42,7 +42,7 @@ describe('run by tab id', () => {
   });
 });
 
-describe('the four security fixes, asserted in main from the id', () => {
+describe('K4 the four security fixes, asserted in main from the id', { tags: ['standard'] }, () => {
   test('LAN consent is asserted before the lobby opens and before it runs', async () => {
     const withoutConsent = await kitOn({ saved: [sessionOf({ lan: true })], consent: false });
     await expect(withoutConsent.live.start('t1')).rejects.toThrow('not open to your network');
@@ -95,10 +95,10 @@ describe('the four security fixes, asserted in main from the id', () => {
     expect(closed.tab.direct).toBe(false);
     expect(closed.lobby.phase).toBe('locked');
     expect(closed.lobby.members.find((member) => member.id === joinedId)?.admission).toBe('removed');
-  }, 30000);
+  });
 });
 
-describe('turning direct on and off on a live tab', () => {
+describe('K4 turning direct on and off on a live tab', { tags: ['standard'] }, () => {
   const LAN_DIRECT = { lan: true, direct: DIRECT };
 
   test('goes quiet on the network once no open tab is both LAN and direct, and only then', async () => {
@@ -149,7 +149,7 @@ describe('turning direct on and off on a live tab', () => {
   });
 });
 
-describe('the preset settings in the players override', () => {
+describe('K4 the preset settings in the players override', { tags: ['standard'] }, () => {
   const preset = (overrides: Record<string, unknown>, game = 'Demo') =>
     ({ players: [{ slot: 1, name: 'Dee', game, source: { kind: 'preset', presetId: 'p1', overrides } }] });
 
@@ -163,7 +163,7 @@ describe('the preset settings in the players override', () => {
   });
 });
 
-describe('two runs of one tab that arrive together', () => {
+describe('S3 two runs of one tab that arrive together', { tags: ['standard'] }, () => {
   test('share one run, never a second start of the lobby', async () => {
     const { live, rig: on } = await kitOn();
     const { tab } = await live.start('t1');
@@ -173,7 +173,7 @@ describe('two runs of one tab that arrive together', () => {
   });
 });
 
-describe('close by tab id', () => {
+describe('S2 close by tab id', { tags: ['standard'] }, () => {
   test('closes the lobby through the pending closes and drops the tab', async () => {
     const { live, closed } = await kitOn();
     const { tab } = await live.start('t1');

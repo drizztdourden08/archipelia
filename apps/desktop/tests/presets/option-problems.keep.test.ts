@@ -11,7 +11,7 @@ const def = (key: string) => {
   return found;
 };
 
-describe('problemItems', () => {
+describe('K1 problemItems', { tags: ['critical'] }, () => {
   test('each refused option says what it needs and what it holds, and names its own row', () => {
     const items = problemItems(DEMO, [{ key: 'goal', expected: 'one of the listed choices' }], { goal: 'moon' }, []);
     expect(items).toEqual([{ id: 'goal', field: 'goal', message: 'Goal: expected one of the listed choices, found "moon".' }]);
@@ -29,7 +29,7 @@ describe('problemItems', () => {
   });
 });
 
-describe('jumpFilter', () => {
+describe('K1 jumpFilter', { tags: ['critical'] }, () => {
   test('keeps a view that already shows the option', () => {
     const view = { tab: ALL_TAB, query: 'goal', showAdvanced: false };
     expect(jumpFilter(def('goal'), view)).toEqual(view);

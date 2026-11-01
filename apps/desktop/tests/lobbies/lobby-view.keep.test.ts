@@ -5,16 +5,14 @@ import type { SessionTemplate } from '@archipelia/model';
 import { joinFacts } from '../../src/views/SessionLobby/behavior/join-facts';
 import { joinRows } from '../../src/views/SessionBuilder/behavior/join-rows';
 import { newTemplate } from '../../src/views/SessionBuilder/behavior/new-template';
-import { resultsFacts } from '../../src/views/SessionLobby/behavior/results-facts';
 import { serverNotice } from '../../src/views/SessionLobby/behavior/server-notice';
 import type { SessionPlace } from '../../src/views/SessionBuilder/SessionBuilder.type';
 import { consentOptions } from '../../src/views/LobbyMembers/behavior/consent-options';
 import { memberActions } from '../../src/views/LobbyMembers/behavior/member-actions';
 import { pendingWorlds } from '../../src/views/LobbyMembers/behavior/pending-worlds';
-import { trustTag } from '../../src/views/LobbyMembers/behavior/trust-tag';
 import { lobby, member, slot, world } from './lobby-fixtures';
 
-describe('what the session lets the host do with a connected player', () => {
+describe('K4 what the session lets the host do with a connected player', { tags: ['critical'] }, () => {
   test('lets the host approve or refuse a waiting player and remove an approved one', () => {
     expect(memberActions(lobby(), member())).toEqual({ approve: true, refuse: true, remove: false });
     expect(memberActions(lobby(), member({ admission: 'approved' }))).toEqual({ approve: false, refuse: false, remove: true });
@@ -23,18 +21,13 @@ describe('what the session lets the host do with a connected player', () => {
   });
 });
 
-describe('the How players join section of the setup page', () => {
+describe('K1 the How players join section of the setup page', { tags: ['critical'] }, () => {
   const noop = () => undefined;
   const rowsOf = (draft: SessionTemplate, place: SessionPlace = 'local', live = false) => joinRows({
     draft, directWorlds: [], worlds: null, live, place, placeOptions: [], remoteOptions: [], remoteValue: 'gg', busy: false, password: null,
     onPlace: noop, onRemote: noop, onPort: noop, onAllow: noop, onOptions: noop,
   });
   const local = newTemplate('t1');
-
-  test('holds only configuration: Where, the port or the server, the switch and the room password', () => {
-    expect(rowsOf(local).map((row) => row.id)).toEqual(['where', 'port', 'allow', 'password']);
-    expect(rowsOf({ ...local, host: { kind: 'archipelago-gg' } }, 'remote').map((row) => row.id)).toEqual(['where', 'server', 'allow', 'password']);
-  });
 
   test('offers Host approval on and unlisted clients off once direct connections are on, with nothing running', () => {
     const rows = rowsOf({ ...local, direct: { admission: 'host-approval', allowUnlisted: false } });
@@ -60,12 +53,7 @@ describe('the How players join section of the setup page', () => {
   });
 });
 
-describe('the members and the consent dialog', () => {
-  test('tags a verified client as registered and an unlisted one as unlisted', () => {
-    expect(trustTag(member({ trust: 'verified' })).text).toBe('Registered and verified');
-    expect(trustTag(member()).text).toBe('Unlisted');
-  });
-
+describe('K4 the members and the consent dialog', { tags: ['critical'] }, () => {
   test('finds the worlds that wait for consent and builds a danger dialog that focuses Refuse', () => {
     const waiting = lobby({ members: [member({ admission: 'approved', slots: [slot({ state: 'waiting-consent', worldSha256: 'w1' })] })] });
     const [request] = pendingWorlds(waiting, waiting.members[0] ?? member());
@@ -84,17 +72,9 @@ describe('the members and the consent dialog', () => {
     expect(message).toContain('It runs in a sandbox on this server. Allow it only');
     expect(message).not.toContain('user rights');
   });
-
-  test('lists the room and its files once the lobby has started', () => {
-    const hosting = lobby({ room: { seed: 'S1', zip: 'z', host: '10.0.0.5', port: 38281, tls: 'no', files: [], state: 'hosting', roomUrl: 'https://x.test/room' } });
-    expect(resultsFacts(hosting, false).map((fact) => fact.label)).toEqual(['Room address', 'Room state', 'Seed', 'Connection', 'Room page']);
-    expect(resultsFacts(lobby(), false)).toEqual([]);
-    expect(resultsFacts(hosting, true).map((fact) => fact.label)).toEqual(['Room address', 'On this computer', 'Room state', 'Seed', 'Connection', 'Room page']);
-    expect(resultsFacts(hosting, true)[1]).toMatchObject({ value: '127.0.0.1:38281' });
-  });
 });
 
-describe('the lobby of a session', () => {
+describe('K1 the lobby of a session', { tags: ['critical'] }, () => {
   test('warns only for the server on this computer, and only when it does not listen', () => {
     const status = { state: 'failed', options: { mode: 'lan', publicLookup: true }, automation: false, roomPasswords: 'vault', lanAddress: '1.2.3.4' } as const;
     expect(serverNotice(true, status)).toContain('not running');

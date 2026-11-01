@@ -8,7 +8,9 @@ const { sessionsList } = vi.hoisted(() => ({ sessionsList: vi.fn() }));
 
 vi.mock('../../src/ipc/app-api', () => ({ appApi: () => ({ sessionsList }) }));
 
-const settle = () => new Promise((resolve) => setTimeout(resolve, 0));
+const settle = async () => {
+  for (let turn = 0; turn < 20; turn += 1) await Promise.resolve();
+};
 
 let stop = () => {};
 
@@ -21,7 +23,7 @@ beforeEach(() => {
 
 afterEach(() => stop());
 
-test('a new profile resets the runs and they load again as an empty list', async () => {
+test('K3 a new profile resets the runs and they load again as an empty list', { tags: ['critical'] }, async () => {
   await useRunsStore.getState().load();
   expect(useRunsStore.getState().loaded).toBe(true);
   resetAllSessionStores();
@@ -30,7 +32,7 @@ test('a new profile resets the runs and they load again as an empty list', async
   expect(useRunsStore.getState()).toMatchObject({ loaded: true, failed: false, runs: [] });
 });
 
-test('a failed load stays failed and is not retried in a loop', async () => {
+test('K3 a failed load stays failed and is not retried in a loop', { tags: ['critical'] }, async () => {
   sessionsList.mockRejectedValue(new Error('disk gone'));
   await expect(useRunsStore.getState().load()).rejects.toThrow('disk gone');
   await settle();
@@ -38,7 +40,7 @@ test('a failed load stays failed and is not retried in a loop', async () => {
   expect(sessionsList).toHaveBeenCalledTimes(1);
 });
 
-test('a reset after a failure clears it and loads again', async () => {
+test('K3 a reset after a failure clears it and loads again', { tags: ['critical'] }, async () => {
   sessionsList.mockRejectedValueOnce(new Error('disk gone'));
   await expect(useRunsStore.getState().load()).rejects.toThrow('disk gone');
   resetAllSessionStores();

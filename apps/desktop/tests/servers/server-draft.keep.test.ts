@@ -18,7 +18,7 @@ const messages = (entry: ServerEntry) => draftProblems(entry, NO_INPUTS).map((pr
 
 const filled = () => ({ ...newServerEntry(), id: 'abc', host: 'vps.example.net', auth: { kind: 'ssh-key' as const, username: 'me', keyPath: '/k' } });
 
-describe('server drafts', () => {
+describe('K1 server drafts', { tags: ['critical'] }, () => {
   test('a new entry lists what is missing', () => {
     expect(draftProblems(newServerEntry(), NO_INPUTS)).toEqual([
       { field: 'host', message: 'Enter the host name or address.' },
