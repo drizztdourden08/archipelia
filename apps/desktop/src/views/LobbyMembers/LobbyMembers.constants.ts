@@ -13,6 +13,27 @@ const MEMBER_TEXT = {
   refuse: 'Refuse',
   remove: 'Remove',
   review: 'Review the world of',
+  options: 'View options',
+} as const;
+
+const OPTION_TEXT = {
+  title: (name: string) => `${name}'s options`,
+  close: 'Close',
+  readOnly: 'You can read these options. You cannot change them.',
+  loading: 'Loading the options.',
+  failed: 'Could not load the options of this player.',
+  notSent: 'This player has not sent the file yet.',
+  unreadable: 'The file of this player could not be read as YAML.',
+  noOptions: (game: string) => `The file sets no options for ${game}.`,
+  slot: (name: string, game: string) => `${name}, ${game}`,
+  notInstalled: 'This game is not installed here, so the options show under the names in the file.',
+  raw: 'Player file (YAML)',
+  plainGroup: 'Options',
+  otherGroup: 'Other options',
+  notSet: 'Not set',
+  none: 'None',
+  on: 'On',
+  off: 'Off',
 } as const;
 
 const SEAT_TONES: readonly LobbySeatTone[] = ['success', 'warning', 'danger', 'info'];
@@ -29,4 +50,4 @@ const TRUST_TAGS: Record<TrustLevel, TrustTag> = {
   unlisted: { text: 'Unlisted', color: 'warning', title: 'The client is not in the registry. Each of its worlds needs your consent.' },
 };
 
-export { FAILURE, MEMBER_EDITABLE_PHASES, MEMBER_TEXT, SEAT_TONES, TRUST_TAGS };
+export { FAILURE, MEMBER_EDITABLE_PHASES, MEMBER_TEXT, OPTION_TEXT, SEAT_TONES, TRUST_TAGS };

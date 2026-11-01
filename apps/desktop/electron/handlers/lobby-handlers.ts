@@ -14,6 +14,7 @@ const lobbyHandlers: HandlerGroup = {
     ctx.handle(APP_CHANNELS.lobbyServerView, async (_event, serverId) => (await admins.opsFor(serverId)).view());
     ctx.handle(APP_CHANNELS.lobbyList, async (_event, serverId) => (await admins.opsFor(serverId)).list());
     ctx.handle(APP_CHANNELS.lobbyAct, async (_event, serverId, request) => (await admins.opsFor(serverId)).act(request));
+    ctx.handle(APP_CHANNELS.lobbyYaml, async (_event, serverId, lobbyId, memberId) => (await admins.opsFor(serverId)).yaml(lobbyId, memberId));
     ctx.handle(APP_CHANNELS.lobbyServersList, () => lobbyServers.list());
     ctx.handle(APP_CHANNELS.lobbyServersSave, async (_event, entry) => {
       const saved = await saveLobbyServerEntry(lobbyServers, entry);
