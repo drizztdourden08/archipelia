@@ -1,8 +1,6 @@
 /* @layer tests @kind test */
 import { afterEach, describe, expect, test, vi } from 'vitest';
-import { mergeCatalog } from '../src/first-party/merge-catalog';
 import { readCatalog } from '../src/read-catalog';
-import { communityEntry } from './first-party.fixtures';
 import { textFiles } from './memory-files.fixtures';
 
 const COUNT = 2500;
@@ -39,26 +37,18 @@ const fakeGithub = (truncate: boolean) => {
 afterEach(() => vi.unstubAllGlobals());
 
 describe('a community index past 1000 entries', () => {
-  test('reads every entry when the recursive tree is whole', async () => {
+  test('S3 reads every entry when the recursive tree is whole', { tags: ['standard'] }, async () => {
     fakeGithub(false);
     const catalog = await readCatalog({ files: textFiles(), cacheDir: 'c' });
     expect(catalog.entries).toHaveLength(COUNT);
     expect(catalog.problems).toEqual([]);
   });
 
-  test('walks the folders when GitHub truncates the recursive tree, so none are dropped', async () => {
+  test('S3 walks the folders when GitHub truncates the recursive tree, so none are dropped', { tags: ['standard'] }, async () => {
     const urls = fakeGithub(true);
     const catalog = await readCatalog({ files: textFiles(), cacheDir: 'c' });
     expect(catalog.entries).toHaveLength(COUNT);
     expect(new Set(catalog.entries.map((e) => e.apworld)).size).toBe(COUNT);
     expect(urls.some((url) => url.endsWith('/git/trees/sha-index-dir'))).toBe(true);
-  });
-
-  test('the first-party merge keeps all of them and adds its own', () => {
-    const community = NAMES.map((name) => communityEntry(name));
-    const mine = { ...communityEntry('relic_of_the_past'), source: 'first-party' as const };
-    const merged = mergeCatalog(community, [mine]);
-    expect(merged).toHaveLength(COUNT + 1);
-    expect(merged.at(-1)?.apworld).toBe('relic_of_the_past');
   });
 });

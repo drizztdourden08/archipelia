@@ -10,7 +10,7 @@ const { bed, fakeSandbox, registerBuildBed } = await import('./build-bed.fixture
 registerBuildBed();
 
 describe('the sandbox of a build', () => {
-  test('runs the venv, tools and wheel steps through the sandbox, with the network for the tools only', async () => {
+  test('K4 runs the venv, tools and wheel steps through the sandbox, with the network for the tools only', { tags: ['critical'] }, async () => {
     const { sandbox, scopes } = fakeSandbox();
     const { calls, prepared, requestOf, builds } = bed(sandbox);
     expect((await builds.build(requestOf(await prepared()))).status).toBe('built');
@@ -21,7 +21,7 @@ describe('the sandbox of a build', () => {
     expect(scopes.filter((scope) => scope.network)).toHaveLength(1);
   });
 
-  test('lets the build write to its own folder only and read the engine folder', async () => {
+  test('K4 lets the build write to its own folder only and read the engine folder', { tags: ['critical'] }, async () => {
     const { sandbox, scopes } = fakeSandbox();
     const { calls, prepared, builds, workOf } = bed(sandbox);
     await prepared();
@@ -35,7 +35,7 @@ describe('the sandbox of a build', () => {
     await builds.dispose();
   });
 
-  test('keeps PATH to what the sandbox gives and never lets a token of the user through', async () => {
+  test('K4 keeps PATH to what the sandbox gives and never lets a token of the user through', { tags: ['critical'] }, async () => {
     vi.stubEnv('GH_TOKEN', 'ghp_secret');
     const { sandbox } = fakeSandbox();
     const { calls, prepared, requestOf, builds } = bed(sandbox);
@@ -46,14 +46,14 @@ describe('the sandbox of a build', () => {
     }
   });
 
-  test('tells the consent that the build is confined', async () => {
+  test('K2 tells the consent that the build is confined', { tags: ['critical'] }, async () => {
     const { sandbox } = fakeSandbox();
     const confined = bed(sandbox);
     expect((await confined.prepared()).confined).toBe(true);
     await confined.builds.dispose();
   });
 
-  test('tells the consent that the build is not confined where the system has no sandbox', async () => {
+  test('K2 tells the consent that the build is not confined where the system has no sandbox', { tags: ['critical'] }, async () => {
     const open = bed(() => Promise.resolve({ confine: () => undefined }));
     expect((await open.prepared()).confined).toBe(false);
     await open.builds.dispose();
@@ -62,7 +62,7 @@ describe('the sandbox of a build', () => {
     await absent.builds.dispose();
   });
 
-  test('runs the steps as they are, with no wrapper, where the system has no sandbox', async () => {
+  test('S3 runs the steps as they are, with no wrapper, where the system has no sandbox', { tags: ['standard'] }, async () => {
     const { calls, prepared, requestOf, builds } = bed(() => Promise.resolve({ confine: () => undefined }));
     await builds.build(requestOf(await prepared()));
     expect(calls.map((call) => call.args[0])).toEqual(['-X', '-X', '-X']);

@@ -35,7 +35,7 @@ const serveRust = (lock: boolean) => {
 const CARGO = process.platform === 'win32' ? 'cargo.exe' : 'cargo';
 
 describe('Rust in the build', () => {
-  test('gives the wheel step the shared rustup home and its own cargo home, and only that step', async () => {
+  test('K4 gives the wheel step the shared rustup home and its own cargo home, and only that step', { tags: ['critical'] }, async () => {
     const dir = await withRust();
     const { prepared, builds, calls, requestOf, workOf } = bed(undefined, { toolsDir: () => Promise.resolve(dir) });
     await builds.build(requestOf(await prepared()));
@@ -48,7 +48,7 @@ describe('Rust in the build', () => {
     }
   });
 
-  test('adds nothing, and downloads no crates, when Rust was not installed by Archipelia', async () => {
+  test('S3 adds nothing, and downloads no crates, when Rust was not installed by Archipelia', { tags: ['standard'] }, async () => {
     serveRust(true);
     const dir = await mkdtemp(join(holder.tools, 'empty-'));
     const { prepared, builds, calls, requestOf } = bed(undefined, { toolsDir: () => Promise.resolve(dir) });
@@ -59,7 +59,7 @@ describe('Rust in the build', () => {
 });
 
 describe('the crates of a Rust project', () => {
-  test('are downloaded with cargo fetch --locked between the tools and the wheel, into the cargo home of the build', async () => {
+  test('S2 are downloaded with cargo fetch --locked between the tools and the wheel, into the cargo home of the build', { tags: ['standard'] }, async () => {
     serveRust(true);
     const dir = await withRust();
     const { prepared, builds, calls, requestOf, workOf } = bed(undefined, { toolsDir: () => Promise.resolve(dir) });
@@ -71,7 +71,7 @@ describe('the crates of a Rust project', () => {
     expect(crates?.env).toMatchObject({ CARGO_HOME: join(workOf(), 'cargo-home'), RUSTUP_HOME: join(dir, 'rustup') });
   });
 
-  test('are fetched and built with the network in the sandbox, and the shared folders are never writable', async () => {
+  test('K4 are fetched and built with the network in the sandbox, and the shared folders are never writable', { tags: ['critical'] }, async () => {
     serveRust(true);
     const dir = await withRust();
     const { sandbox, scopes } = fakeSandbox();
@@ -89,7 +89,7 @@ describe('the crates of a Rust project', () => {
     expect(calls.find((call) => call.job === 'wheel')?.env).toMatchObject({ CARGO_HOME: join(workOf(), 'cargo-home') });
   });
 
-  test('stop the build with a plain message when they cannot be downloaded', async () => {
+  test('S3 stop the build with a plain message when they cannot be downloaded', { tags: ['standard'] }, async () => {
     serveRust(true);
     behaviour.runs = { crates: { status: 'failed', code: 101, lines: ['error: failed to download'] } };
     const dir = await withRust();
@@ -99,7 +99,7 @@ describe('the crates of a Rust project', () => {
     expect(calls.map((call) => call.job)).toEqual(['venv', 'tools', 'crates']);
   });
 
-  test('are not downloaded ahead without a Cargo.lock, and the wheel step still has the network', async () => {
+  test('S3 are not downloaded ahead without a Cargo.lock, and the wheel step still has the network', { tags: ['standard'] }, async () => {
     serveRust(false);
     const dir = await withRust();
     const { sandbox, scopes } = fakeSandbox();
@@ -113,24 +113,24 @@ describe('the crates of a Rust project', () => {
 describe('which builds are Rust builds', () => {
   const MATURIN = { name: 'maturin', version: '1.7.0', pin: 'maturin==1.7.0', sha256: 'd'.repeat(64), url: 'https://pypi.org/project/maturin/1.7.0/', direct: true };
 
-  test('a plain Python project is not', async () => {
+  test('K1 a plain Python project is not', { tags: ['critical'] }, async () => {
     const { prepared } = bed();
     expect((await prepared()).rust).toBe(false);
   });
 
-  test('a project with a Cargo.toml is', async () => {
+  test('K1 a project with a Cargo.toml is', { tags: ['critical'] }, async () => {
     serveRust(false);
     const { prepared } = bed();
     expect((await prepared()).rust).toBe(true);
   });
 
-  test.each(['maturin', 'setuptools-rust', 'setuptools_rust'])('a project that needs %s is', async (name) => {
+  test.each(['maturin', 'setuptools-rust', 'setuptools_rust'])('K1 a project that needs %s is', { tags: ['critical'] }, async (name) => {
     engine.resolvePackages.mockResolvedValueOnce([...TOOLS, { ...MATURIN, name, pin: `${name}==1.0.0` }]);
     const { prepared } = bed();
     expect((await prepared()).rust).toBe(true);
   });
 
-  test('only a Rust build gets the network for its wheel step, and no other step gets it but the tools', async () => {
+  test('K4 only a Rust build gets the network for its wheel step, and no other step gets it but the tools', { tags: ['critical'] }, async () => {
     const netOf = (calls: { job: string; args: string[] }[]) => calls.map((call) => [call.job, call.args[0]]);
     const first = bed(fakeSandbox().sandbox);
     await first.builds.build(first.requestOf(await first.prepared()));

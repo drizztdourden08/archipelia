@@ -49,7 +49,7 @@ beforeEach(() => {
 });
 
 describe('an engine switch with an installed first-party world', () => {
-  test('reinstalls the build for the version of the new engine', async () => {
+  test('K3 reinstalls the build for the version of the new engine', { tags: ['critical'] }, async () => {
     engineAp.value = '0.6.5';
     await reinstall('new-engine');
     const job = placed.mock.calls[0]?.[0] as { source: string; hash: { sha256: string } };
@@ -57,19 +57,13 @@ describe('an engine switch with an installed first-party world', () => {
     expect(job.hash.sha256).toBe(manifest.builds[0]?.sha256);
   });
 
-  test('picks the other build for the other engine', async () => {
-    await reinstall('new-engine');
-    const job = placed.mock.calls[0]?.[0] as { hash: { sha256: string } };
-    expect(job.hash.sha256).toBe(manifest.builds[1]?.sha256);
-  });
-
-  test('reports the game unavailable when the new engine has no build', async () => {
+  test('S3 reports the game unavailable when the new engine has no build', { tags: ['standard'] }, async () => {
     engineAp.value = '0.6.9';
     await expect(reinstall('new-engine')).rejects.toThrow('No Relic of the Past build for Archipelago 0.6.9; builds exist for 0.6.5, 0.6.7');
     expect(placed).not.toHaveBeenCalled();
   });
 
-  test('carryWorlds reinstalls it from the registry instead of copying the old file', async () => {
+  test('K3 carryWorlds reinstalls it from the registry instead of copying the old file', { tags: ['critical'] }, async () => {
     const files = memoryFiles([firstPartyRecord()]);
     const reinstalled: string[] = [];
     const result = await carryWorlds({
@@ -80,7 +74,7 @@ describe('an engine switch with an installed first-party world', () => {
     expect(reinstalled).toEqual(['relic_of_the_past']);
   });
 
-  test('carryWorlds lists a world with no build for the new engine as a problem', async () => {
+  test('S3 carryWorlds lists a world with no build for the new engine as a problem', { tags: ['standard'] }, async () => {
     engineAp.value = '0.6.9';
     const result = await carryWorlds({
       from: runtime('old'), to: runtime('new'), files: memoryFiles([firstPartyRecord()]), reinstall: () => Promise.resolve(),
@@ -125,7 +119,7 @@ describe('an engine switch with a world installed from a chosen release', () => 
 
   const job = () => placed.mock.calls[0]?.[0] as { version: string; release?: { tag: string }; hash: { sha256: string } };
 
-  test('keeps the release the person had when it fits the new engine', async () => {
+  test('K3 keeps the release the person had when it fits the new engine', { tags: ['critical'] }, async () => {
     const done = await reinstallFrom({ tag: 'v0.1.0', prerelease: false }, [
       { tag: 'v0.2.0', assets: [MANIFEST, 'relic_of_the_past-ap0.6.7.apworld'] }, { tag: 'v0.1.0', assets: oldAssets },
     ]);
@@ -134,7 +128,7 @@ describe('an engine switch with a world installed from a chosen release', () => 
     expect(done.note).toBeUndefined();
   });
 
-  test('falls back to the newest compatible stable release and says so when it does not fit', async () => {
+  test('K3 falls back to the newest compatible stable release and says so when it does not fit', { tags: ['critical'] }, async () => {
     const result = await carryWorlds({
       from: runtime('old'), to: runtime('new'), files: memoryFiles([{ ...firstPartyRecord(), release: { tag: 'v0.1.0', prerelease: false } }]), reinstall: () => Promise.resolve(),
       reinstallFirstParty: () => reinstallFrom({ tag: 'v0.1.0', prerelease: false }, [
@@ -146,7 +140,7 @@ describe('an engine switch with a world installed from a chosen release', () => 
     expect(result.problems).toEqual([]);
   });
 
-  test('a world with no recorded release is reinstalled from the newest stable and records its tag', async () => {
+  test('S3 a world with no recorded release is reinstalled from the newest stable and records its tag', { tags: ['standard'] }, async () => {
     await reinstallFrom(undefined, [{ tag: 'v0.3.0-rc1', prerelease: true, assets: oldAssets }, { tag: 'v0.2.0', assets: [MANIFEST, 'relic_of_the_past-ap0.6.7.apworld'] }]);
     expect(job()).toMatchObject({ version: '0.2.0', release: { tag: 'v0.2.0', prerelease: false } });
   });

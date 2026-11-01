@@ -10,7 +10,7 @@ const read = (routes: Parameters<typeof routed>[0], kind?: 'builds') =>
   readFirstParty({ files: memoryFiles([]), fetch: routed({ [REGISTRY_URL]: () => json(registryOf('active', kind)), ...routes }) });
 
 describe('the standard archipelia.json of a listed world', () => {
-  test('a single apworld is read from the world form and its signature defaults to the file name', async () => {
+  test('K2 a single apworld is read from the world form and its signature defaults to the file name', { tags: ['critical'] }, async () => {
     const bytes = worldBytes();
     const found = await read({ [STANDARD_URL]: () => json(standardOf(bytes, { maximumAp: '0.7.0' })) });
     expect(found.problems).toEqual([]);
@@ -22,7 +22,7 @@ describe('the standard archipelia.json of a listed world', () => {
     expect(found.entries[0]?.unavailable).toBeUndefined();
   });
 
-  test('an appVersion is carried to the entry next to the world version, for a world and for builds', async () => {
+  test('K2 an appVersion is carried to the entry next to the world version, for a world and for builds', { tags: ['critical'] }, async () => {
     const bytes = worldBytes();
     const single = await read({ [STANDARD_URL]: () => json(standardOf(bytes, { appVersion: '0.21.2' })) });
     expect(single.entries[0]?.versions[0]?.version).toBe('0.2.0');
@@ -33,12 +33,12 @@ describe('the standard archipelia.json of a listed world', () => {
     expect(built.entries[0]?.firstParty).toMatchObject({ worldVersion: manifest.worldVersion, appVersion: '0.21.2' });
   });
 
-  test('a standard manifest without an appVersion leaves it out of the entry', async () => {
+  test('K2 a standard manifest without an appVersion leaves it out of the entry', { tags: ['critical'] }, async () => {
     const found = await read({ [STANDARD_URL]: () => json(standardOf(worldBytes())) });
     expect(found.entries[0]?.firstParty).not.toHaveProperty('appVersion');
   });
 
-  test('the world file and its own bundle name decide the download urls', async () => {
+  test('K2 the world file and its own bundle name decide the download urls', { tags: ['critical'] }, async () => {
     const bytes = worldBytes();
     const world = { ...standardOf(bytes).world, file: 'rotp_v2.apworld', bundle: 'rotp_v2.sig.json' };
     const found = await read({ [STANDARD_URL]: () => json(standardOf(bytes, { world })) });
@@ -46,7 +46,7 @@ describe('the standard archipelia.json of a listed world', () => {
     expect(found.entries[0]?.firstParty?.bundleUrl).toContain('/rotp_v2.sig.json');
   });
 
-  test('builds are listed with a default signature name and no app version needed', async () => {
+  test('K2 builds are listed with a default signature name and no app version needed', { tags: ['critical'] }, async () => {
     const [a, b] = [worldBytes('ap665'), worldBytes('ap667')];
     const manifest = buildsManifestOf([{ ap: '0.6.5', bytes: a }, { ap: '0.6.7', bytes: b }]);
     const builds = manifest.builds.map((build) => ({ ...build, bundle: undefined }));
@@ -66,19 +66,19 @@ describe('the standard archipelia.json of a listed world', () => {
 });
 
 describe('the standard archipelia.json of a listed world, refused and fallbacks', () => {
-  test('it wins over the old manifest name, which is only a fallback', async () => {
+  test('K1 it wins over the old manifest name, which is only a fallback', { tags: ['critical'] }, async () => {
     const bytes = worldBytes();
     const found = await read({ [STANDARD_URL]: () => json(standardOf(bytes)), [MANIFEST_URL]: () => json(manifestOf(bytes)) });
     expect(found.entries[0]?.versions[0]?.version).toBe('0.2.0');
   });
 
-  test('without it the old manifest name still works', async () => {
+  test('K1 without it the old manifest name still works', { tags: ['critical'] }, async () => {
     const found = await read({ [MANIFEST_URL]: () => json(manifestOf(worldBytes())) });
     expect(found.entries[0]?.versions[0]?.version).toBe('0.1.0');
     expect(found.problems).toEqual([]);
   });
 
-  test('an invalid file falls back to a good old manifest, and is reported when there is none', async () => {
+  test('S3 an invalid file falls back to a good old manifest, and is reported when there is none', { tags: ['standard'] }, async () => {
     const broken = () => json({ format: 1, game: 'Relic of the Past' });
     const fallback = await read({ [STANDARD_URL]: broken, [MANIFEST_URL]: () => json(manifestOf(worldBytes())) });
     expect(fallback.entries[0]?.versions[0]?.version).toBe('0.1.0');
@@ -87,7 +87,7 @@ describe('the standard archipelia.json of a listed world, refused and fallbacks'
     expect(alone.problems[0]).toContain('archipelia.json');
   });
 
-  test('a file that names another module or game than the registry is refused', async () => {
+  test('K4 a file that names another module or game than the registry is refused', { tags: ['critical'] }, async () => {
     const bytes = worldBytes();
     const other = await read({ [STANDARD_URL]: () => json(standardOf(bytes, { module: 'someone_else' })), [MANIFEST_URL]: missing });
     expect(other.entries[0]?.versions).toEqual([]);
@@ -96,7 +96,7 @@ describe('the standard archipelia.json of a listed world, refused and fallbacks'
     expect(game.entries[0]?.unavailable).toContain('could not be read');
   });
 
-  test('a path in a file name, a short hash or both forms at once are refused', async () => {
+  test('K4 a path in a file name, a short hash or both forms at once are refused', { tags: ['critical'] }, async () => {
     const bytes = worldBytes();
     const world = standardOf(bytes).world;
     const bad = [{ world: { ...world, file: '../x.apworld' } }, { world: { ...world, sha256: 'abc' } }, { builds: [], world }];
@@ -106,7 +106,7 @@ describe('the standard archipelia.json of a listed world, refused and fallbacks'
     }
   });
 
-  test('a file over 64 KB is refused', async () => {
+  test('S3 a file over 64 KB is refused', { tags: ['standard'] }, async () => {
     const huge = standardOf(worldBytes(), { note: 'x'.repeat(70 * 1024) });
     const found = await read({ [STANDARD_URL]: () => json(huge), [MANIFEST_URL]: missing });
     expect(found.problems[0]).toContain('larger than');

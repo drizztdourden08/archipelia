@@ -16,7 +16,7 @@ const registered = registerBuildBed();
 const sha256Of = (bytes: Uint8Array) => createHash('sha256').update(bytes).digest('hex');
 
 describe('building', () => {
-  test('installs the pinned tools, then builds with pip wheel without isolation, dependencies or index, from the unpacked source', async () => {
+  test('K4 installs the pinned tools, then builds with pip wheel without isolation, dependencies or index, from the unpacked source', { tags: ['critical'] }, async () => {
     const { calls, prepared, requestOf, builds } = bed();
     const done = await builds.build(requestOf(await prepared()));
     expect(done.status).toBe('built');
@@ -30,7 +30,7 @@ describe('building', () => {
     expect(wheel?.args.at(-1)).toMatch(/src$/);
   });
 
-  test('runs only the engine Python or the Python of the venv, with no shell, and an environment without the tokens of the user', async () => {
+  test('K4 runs only the engine Python or the Python of the venv, with no shell, and an environment without the tokens of the user', { tags: ['critical'] }, async () => {
     vi.stubEnv('GH_TOKEN', 'ghp_secret');
     vi.stubEnv('AWS_SECRET_ACCESS_KEY', 'secret');
     vi.stubEnv('CC', 'mycc');
@@ -47,7 +47,7 @@ describe('building', () => {
     }
   });
 
-  test('records the source: repo, commit, hash of the archive, hash of the wheel and that it was built', async () => {
+  test('K2 records the source: repo, commit, hash of the archive, hash of the wheel and that it was built', { tags: ['critical'] }, async () => {
     const { prepared, requestOf, builds, logs } = bed();
     const done = await builds.build(requestOf(await prepared()));
     expect(done).toEqual({
@@ -61,7 +61,7 @@ describe('building', () => {
     expect(logs.join('\n')).toContain(`wheel sha256 ${sha256Of(WHEEL_BYTES)}`);
   });
 
-  test('removes the temporary folder when it is built', async () => {
+  test('S3 removes the temporary folder when it is built', { tags: ['standard'] }, async () => {
     const { prepared, requestOf, builds, workOf } = bed();
     const plan = await prepared();
     expect(await exists(workOf())).toBe(true);
@@ -69,7 +69,7 @@ describe('building', () => {
     expect(await exists(workOf())).toBe(false);
   });
 
-  test('removes the temporary folder when the build makes no wheel, and says so', async () => {
+  test('S3 removes the temporary folder when the build makes no wheel, and says so', { tags: ['standard'] }, async () => {
     behaviour.wheel = undefined;
     const { prepared, requestOf, builds, workOf } = bed();
     const failed = await builds.build(requestOf(await prepared()));
@@ -86,7 +86,7 @@ describe('the wheel that was built', () => {
     ['does not fit the engine', () => { behaviour.tags = ['cp313-cp313-win_amd64']; }, 'does not fit this engine'],
   ];
 
-  test.each(refused)('is refused when it %s, and nothing is cached', async (_label, arrange, message) => {
+  test.each(refused)('K4 is refused when it %s, and nothing is cached', { tags: ['critical'] }, async (_label, arrange, message) => {
     arrange();
     const { prepared, requestOf, builds } = bed();
     const failed = await builds.build(requestOf(await prepared()));

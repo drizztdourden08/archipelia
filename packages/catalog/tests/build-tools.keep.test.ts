@@ -23,7 +23,7 @@ beforeAll(async () => {
 afterAll(() => rm(holder.tools, { recursive: true, force: true }));
 
 describe('adding CMake to a build', () => {
-  test('resolves the newest binary wheel with the Python of the private folder, and adds its hashed pin to the plan', async () => {
+  test('S2 resolves the newest binary wheel with the Python of the private folder, and adds its hashed pin to the plan', { tags: ['standard'] }, async () => {
     const { prepared, builds } = bed();
     const plan = await prepared();
     engine.resolvePackages.mockResolvedValueOnce([CMAKE]);
@@ -35,7 +35,7 @@ describe('adding CMake to a build', () => {
     expect(builds.hasTool(plan.buildId, 'cmake')).toBe(true);
   });
 
-  test('installs it with the other build tools, by hash, once the user builds the new plan', async () => {
+  test('S2 installs it with the other build tools, by hash, once the user builds the new plan', { tags: ['standard'] }, async () => {
     const { prepared, builds, calls, requestOf } = bed();
     const plan = await prepared();
     engine.resolvePackages.mockResolvedValueOnce([CMAKE]);
@@ -44,7 +44,7 @@ describe('adding CMake to a build', () => {
     expect(calls.find((call) => call.job === 'tools')?.toolsFile).toContain(`cmake==3.31.6 --hash=sha256:${'c'.repeat(64)}`);
   });
 
-  test('does not run the build with a plan the user saw before CMake was added', async () => {
+  test('K4 does not run the build with a plan the user saw before CMake was added', { tags: ['critical'] }, async () => {
     const { prepared, builds, calls, requestOf } = bed();
     const plan = await prepared();
     engine.resolvePackages.mockResolvedValueOnce([CMAKE]);
@@ -54,7 +54,7 @@ describe('adding CMake to a build', () => {
     expect(calls.filter((call) => call.job === 'tools')).toEqual([]);
   });
 
-  test('is done once, and only for the build that is ready', async () => {
+  test('S3 is done once, and only for the build that is ready', { tags: ['standard'] }, async () => {
     const { prepared, builds } = bed();
     const plan = await prepared();
     engine.resolvePackages.mockResolvedValueOnce([CMAKE]);
@@ -66,7 +66,7 @@ describe('adding CMake to a build', () => {
     expect(builds.hasTool('00000000-0000-0000-0000-000000000000', 'cmake')).toBe(false);
   });
 
-  test('refuses a wheel without a checksum', async () => {
+  test('K4 refuses a wheel without a checksum', { tags: ['critical'] }, async () => {
     const { prepared, builds } = bed();
     const plan = await prepared();
     engine.resolvePackages.mockResolvedValueOnce([{ ...CMAKE, sha256: undefined }]);
@@ -76,7 +76,7 @@ describe('adding CMake to a build', () => {
 });
 
 describe('where the build finds its tools', () => {
-  test('puts the folder of the private venv first on the path once CMake is installed there', async () => {
+  test('K4 puts the folder of the private venv first on the path once CMake is installed there', { tags: ['critical'] }, async () => {
     const { prepared, builds, calls, requestOf, workOf } = bed();
     const plan = await prepared();
     engine.resolvePackages.mockResolvedValueOnce([CMAKE]);

@@ -17,17 +17,17 @@ const clientOf = (routes: Parameters<typeof routedFetch>[0]) => {
 };
 
 describe('checking that a repo holds the module', () => {
-  test('a project name that matches, in any case, is enough', async () => {
+  test('K1 a project name that matches, in any case, is enough', { tags: ['critical'] }, async () => {
     const { client } = clientOf({ [`${RAW}/Pseudoarc/ctrando/HEAD/pyproject.toml`]: text('[project]\nname = "CTRando"') });
     expect(await moduleInRepo(client, REPO, 'ctrando')).toBe(true);
   });
 
-  test('a package folder with the module name is enough', async () => {
+  test('K1 a package folder with the module name is enough', { tags: ['critical'] }, async () => {
     const { client } = clientOf({ [`${RAW}/Pseudoarc/ctrando/HEAD/src/ctrando/__init__.py`]: text('') });
     expect(await moduleInRepo(client, REPO, 'ctrando')).toBe(true);
   });
 
-  test('a repo with another name and no such folder does not contain it', async () => {
+  test('K1 a repo with another name and no such folder does not contain it', { tags: ['critical'] }, async () => {
     const { client, seen } = clientOf({ [`${RAW}/Pseudoarc/ctrando/HEAD/pyproject.toml`]: text('[project]\nname = "other"') });
     expect(await moduleInRepo(client, REPO, 'ctrando')).toBe(false);
     expect(seen.every((url) => url.startsWith(RAW))).toBe(true);
@@ -38,17 +38,17 @@ describe('the Python Package Index under another name', () => {
   const repo = { owner: 'Pseudoarc', repo: 'ctrando' };
   const info = (urls: Record<string, string>) => json({ info: { name: 'CTRando', version: '1.2.0', project_urls: urls, home_page: null } });
 
-  test('a project that points back to the repo is offered as linked', async () => {
+  test('K1 a project that points back to the repo is offered as linked', { tags: ['critical'] }, async () => {
     const { net } = routedFetch({ [`${PYPI}/CTRando/json`]: info({ Source: 'https://github.com/pseudoarc/ctrando/' }) });
     expect(await pypiOffer('CTRando', repo, net)).toEqual({ name: 'CTRando', version: '1.2.0', linked: true });
   });
 
-  test('a project of the same name that points elsewhere is not linked', async () => {
+  test('K1 a project of the same name that points elsewhere is not linked', { tags: ['critical'] }, async () => {
     const { net } = routedFetch({ [`${PYPI}/CTRando/json`]: info({ Source: 'https://github.com/someone/else' }) });
     expect(await pypiOffer('CTRando', repo, net)).toMatchObject({ linked: false });
   });
 
-  test('a name PyPI does not have, or a network failure, offers nothing', async () => {
+  test('K1 a name PyPI does not have, or a network failure, offers nothing', { tags: ['critical'] }, async () => {
     const { net } = routedFetch({});
     expect(await pypiOffer('CTRando', repo, net)).toBeUndefined();
     expect(await pypiOffer('CTRando', repo, () => Promise.reject(new Error('offline')))).toBeUndefined();
@@ -66,7 +66,7 @@ describe('suggesting repos for a missing module', () => {
   });
   const world = worldContextOf({ home: 'https://github.com/author/ctrdi', texts: ['Needs https://github.com/Pseudoarc/ctrando to run.'] });
 
-  test('the repo the world links is found once, with both origins, and nothing without the module is shown', async () => {
+  test('S2 the repo the world links is found once, with both origins, and nothing without the module is shown', { tags: ['standard'] }, async () => {
     const { client } = clientOf(routes());
     const found = await suggestSources({ client, now: () => NOW }, { module: 'ctrando', world });
     expect(found.candidates.map((entry) => entry.id)).toEqual(['Pseudoarc/ctrando']);
@@ -74,7 +74,7 @@ describe('suggesting repos for a missing module', () => {
     expect(found.limitedUntil).toBeUndefined();
   });
 
-  test('a pasted repo is shown even when it does not hold the module, and a bad paste is reported', async () => {
+  test('S3 a pasted repo is shown even when it does not hold the module, and a bad paste is reported', { tags: ['standard'] }, async () => {
     const { client } = clientOf({ [`${API}/repos/some/thing`]: json(repoJson('some', 'thing')) });
     const pasted = await suggestSources({ client, now: () => NOW }, { module: 'ctrando', world: { links: [] }, paste: 'some/thing' });
     expect(pasted.candidates).toMatchObject([{ id: 'some/thing', contains: false, origins: ['pasted'] }]);
@@ -82,14 +82,14 @@ describe('suggesting repos for a missing module', () => {
     expect(bad.pasteFailed).toBe(true);
   });
 
-  test('the repo the world requirement names is kept, greyed, when the check cannot see the module', async () => {
+  test('S3 the repo the world requirement names is kept, greyed, when the check cannot see the module', { tags: ['standard'] }, async () => {
     const { client } = clientOf({ [`${API}/repos/Pseudoarc/ctrando`]: json(repoJson('Pseudoarc', 'ctrando')) });
     const named = worldContextOf({ linked: 'https://github.com/Pseudoarc/ctrando', texts: [] });
     const found = await suggestSources({ client, now: () => NOW }, { module: 'ctrando', world: named });
     expect(found.candidates).toMatchObject([{ id: 'Pseudoarc/ctrando', contains: false }]);
   });
 
-  test('a rate limit keeps what was found and says when to try again', async () => {
+  test('S3 a rate limit keeps what was found and says when to try again', { tags: ['standard'] }, async () => {
     const reset = Math.floor(NOW / 1000) + 600;
     const limited = () => new Response('{}', { status: 403, headers: { 'x-ratelimit-remaining': '0', 'x-ratelimit-reset': String(reset) } });
     const { client } = clientOf({ ...routes(), [`${API}/search/repositories`]: limited, [`${API}/users/author/repos`]: limited });
@@ -98,7 +98,7 @@ describe('suggesting repos for a missing module', () => {
     expect(found.candidates.map((entry) => entry.id)).toEqual(['Pseudoarc/ctrando']);
   });
 
-  test('once limited, the client does not call GitHub again until the reset', async () => {
+  test('S3 once limited, the client does not call GitHub again until the reset', { tags: ['standard'] }, async () => {
     const reset = Math.floor(NOW / 1000) + 600;
     const limited = vi.fn(() => new Response('{}', { status: 429, headers: { 'x-ratelimit-reset': String(reset) } }));
     const { client } = clientOf({ [`${API}/search/repositories`]: limited });
@@ -107,7 +107,7 @@ describe('suggesting repos for a missing module', () => {
     expect(limited).toHaveBeenCalledTimes(1);
   });
 
-  test('an answer is cached, so the same call is not repeated within the hour', async () => {
+  test('K1 an answer is cached, so the same call is not repeated within the hour', { tags: ['critical'] }, async () => {
     const { client, seen } = clientOf({ [`${API}/repos/Pseudoarc/ctrando`]: json(repoJson('Pseudoarc', 'ctrando')) });
     await client.api('/repos/Pseudoarc/ctrando');
     await client.api('/repos/Pseudoarc/ctrando');

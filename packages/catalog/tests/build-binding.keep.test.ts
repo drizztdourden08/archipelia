@@ -13,7 +13,7 @@ registerBuildBed();
 const NONE = '00000000-0000-4000-8000-000000000000';
 
 describe('what the consent is bound to', () => {
-  test('a consent for another archive checksum is refused, nothing is unpacked and no tool is installed', async () => {
+  test('K4 a consent for another archive checksum is refused, nothing is unpacked and no tool is installed', { tags: ['critical'] }, async () => {
     const { prepared, requestOf, builds, calls } = bed();
     const refused = await builds.build(requestOf(await prepared(), { archiveSha256: 'f'.repeat(64) }));
     expect(refused).toMatchObject({ status: 'failed' });
@@ -23,14 +23,14 @@ describe('what the consent is bound to', () => {
 
   const otherTools = [['setuptools==99.0.0', 'wheel==0.45.1'], ['setuptools==80.1.0'], [], ['setuptools==80.1.0', 'wheel==0.45.1', 'evil==1.0']];
 
-  test.each(otherTools.map((tools) => [tools]))('a consent for the build tools %j is refused', async (tools) => {
+  test.each(otherTools.map((tools) => [tools]))('K4 a consent for the build tools %j is refused', { tags: ['critical'] }, async (tools) => {
     const { prepared, requestOf, builds, calls } = bed();
     const refused = await builds.build(requestOf(await prepared(), { tools }));
     expect(JSON.stringify(refused)).toContain('changed since you reviewed');
     expect(calls.map((call) => call.job)).toEqual(['venv']);
   });
 
-  test('a source archive that changed on disk after it was shown is refused before it is unpacked', async () => {
+  test('K4 a source archive that changed on disk after it was shown is refused before it is unpacked', { tags: ['critical'] }, async () => {
     const { prepared, requestOf, builds, calls, workOf } = bed();
     const plan = await prepared();
     await writeFile(join(workOf(), 'source.zip'), archiveOf({ ...PROJECT_FILES, 'setup.py': 'import os\nos.system("evil")\n' }));
@@ -39,7 +39,7 @@ describe('what the consent is bound to', () => {
     expect(calls.map((call) => call.job)).toEqual(['venv']);
   });
 
-  test('a build id that was not prepared, or was already used, starts nothing', async () => {
+  test('K4 a build id that was not prepared, or was already used, starts nothing', { tags: ['critical'] }, async () => {
     const { prepared, requestOf, builds, calls } = bed();
     await expect(builds.build({ buildId: NONE, archiveSha256: 'a'.repeat(64), tools: [] })).rejects.toThrow('no build to continue');
     const plan = await prepared();
@@ -48,7 +48,7 @@ describe('what the consent is bound to', () => {
     expect(calls.map((call) => call.job)).toEqual(['venv', 'tools', 'wheel']);
   });
 
-  test('a process step starts only for the build and the phase it belongs to', async () => {
+  test('K4 a process step starts only for the build and the phase it belongs to', { tags: ['critical'] }, async () => {
     const { prepared, builds } = bed();
     const plan = await prepared();
     await expect(builds.specOf('wheel', { buildId: plan.buildId })).rejects.toThrow('no build to continue');

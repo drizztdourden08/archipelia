@@ -11,7 +11,7 @@ const NIX_TOOLS = '/home/me/tools';
 const VSWHERE = 'C:\\Program Files (x86)\\Microsoft Visual Studio\\Installer\\vswhere.exe';
 
 describe('finding a build tool on Windows', () => {
-  test('asks vswhere, by its absolute path under Program Files (x86), for the C++ tools', async () => {
+  test('K4 asks vswhere, by its absolute path under Program Files (x86), for the C++ tools', { tags: ['critical'] }, async () => {
     const { probe, calls } = probeOf({ [VSWHERE]: answer(true, 'C:\\BuildTools\r\n') });
     expect(await detectTool('msvc', hostOf(TOOLS), probe)).toBe('found');
     expect(calls).toEqual([{
@@ -21,20 +21,20 @@ describe('finding a build tool on Windows', () => {
     }]);
   });
 
-  test('says missing when vswhere prints nothing, fails or is not installed', async () => {
+  test('K1 says missing when vswhere prints nothing, fails or is not installed', { tags: ['critical'] }, async () => {
     expect(await detectTool('msvc', hostOf(TOOLS), probeOf({ [VSWHERE]: answer(true, '  \r\n') }).probe)).toBe('missing');
     expect(await detectTool('msvc', hostOf(TOOLS), probeOf({ [VSWHERE]: answer(false) }).probe)).toBe('missing');
     expect(await detectTool('msvc', hostOf(TOOLS), probeOf().probe)).toBe('missing');
   });
 
-  test('uses the Program Files (x86) of the machine when it has one', async () => {
+  test('K1 uses the Program Files (x86) of the machine when it has one', { tags: ['critical'] }, async () => {
     const env = { 'ProgramFiles(x86)': 'D:\\Programs (x86)' };
     const { probe, calls } = probeOf();
     await detectTool('msvc', hostOf(TOOLS, { env }), probe);
     expect(calls[0]?.file).toBe('D:\\Programs (x86)\\Microsoft Visual Studio\\Installer\\vswhere.exe');
   });
 
-  test('a missing generic compiler on Windows is the C++ Build Tools', async () => {
+  test('K1 a missing generic compiler on Windows is the C++ Build Tools', { tags: ['critical'] }, async () => {
     const { probe, calls } = probeOf({ [VSWHERE]: answer(true, 'C:\\BuildTools') });
     expect(await detectTool('compiler', hostOf(TOOLS), probe)).toBe('found');
     expect(calls).toHaveLength(1);
@@ -44,11 +44,11 @@ describe('finding a build tool on Windows', () => {
 describe('finding a build tool on Linux', () => {
   const linux = hostOf(NIX_TOOLS, { platform: 'linux', release: 'ubuntu' });
 
-  test.each(['/usr/bin/cc', '/usr/bin/gcc', '/usr/bin/clang'])('finds a C compiler at %s', async (file) => {
+  test.each(['/usr/bin/cc', '/usr/bin/gcc', '/usr/bin/clang'])('K1 finds a C compiler at %s', { tags: ['critical'] }, async (file) => {
     expect(await detectTool('compiler', linux, probeOf({ [file]: answer(true, 'cc 13') }).probe)).toBe('found');
   });
 
-  test('says missing when no compiler answers', async () => {
+  test('K1 says missing when no compiler answers', { tags: ['critical'] }, async () => {
     const { probe, calls } = probeOf();
     expect(await detectTool('compiler', linux, probe)).toBe('missing');
     expect(calls.map((call) => call.file)).toEqual(['/usr/bin/cc', '/usr/bin/gcc', '/usr/bin/clang']);
@@ -59,33 +59,33 @@ describe('finding a build tool on Linux', () => {
 describe('finding a build tool on macOS', () => {
   const mac = hostOf(TOOLS, { platform: 'darwin', arch: 'arm64' });
 
-  test('asks xcode-select -p', async () => {
+  test('K1 asks xcode-select -p', { tags: ['critical'] }, async () => {
     const { probe, calls } = probeOf({ '/usr/bin/xcode-select': answer(true, '/Library/Developer/CommandLineTools') });
     expect(await detectTool('xcode', mac, probe)).toBe('found');
     expect(calls).toEqual([{ file: '/usr/bin/xcode-select', args: ['-p'], env: undefined }]);
   });
 
-  test('treats a missing C compiler as the Xcode command line tools', async () => {
+  test('K1 treats a missing C compiler as the Xcode command line tools', { tags: ['critical'] }, async () => {
     expect(await detectTool('compiler', mac, probeOf().probe)).toBe('missing');
   });
 });
 
 describe('finding Rust', () => {
-  test('looks only in the cargo folder of Archipelia, the one a confined build can see', async () => {
+  test('K1 looks only in the cargo folder of Archipelia, the one a confined build can see', { tags: ['critical'] }, async () => {
     const { probe, calls } = probeOf();
     expect(await detectTool('rust', hostOf(NIX_TOOLS, { platform: 'linux', release: 'ubuntu' }), probe)).toBe('missing');
     expect(calls.map((call) => call.file)).toEqual([posix.join(NIX_TOOLS, 'cargo', 'bin', 'cargo')]);
     expect(calls.every((call) => call.args.join(' ') === '--version')).toBe(true);
   });
 
-  test('finds the cargo that Archipelia installed', async () => {
+  test('K1 finds the cargo that Archipelia installed', { tags: ['critical'] }, async () => {
     const own = win32.join(TOOLS, 'cargo', 'bin', 'cargo.exe');
     expect(await detectTool('rust', hostOf(TOOLS), probeOf({ [own]: answer(true, 'cargo 1.90') }).probe)).toBe('found');
   });
 });
 
 describe('what has no probe', () => {
-  test('CMake and the headers are not looked for on the system', async () => {
+  test('K1 CMake and the headers are not looked for on the system', { tags: ['critical'] }, async () => {
     const { probe, calls } = probeOf();
     expect(await detectTool('cmake', hostOf(TOOLS), probe)).toBe('unknown');
     expect(await detectTool('headers', hostOf(TOOLS), probe)).toBe('unknown');

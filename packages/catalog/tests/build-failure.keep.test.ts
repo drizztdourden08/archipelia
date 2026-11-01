@@ -14,7 +14,7 @@ registerBuildBed();
 const MSVC = ['running build_ext', 'error: Microsoft Visual C++ 14.0 or greater is required.', 'ERROR: Failed building wheel for ctrando'];
 
 describe('a build that fails', () => {
-  test('names the missing tool, keeps the log without paths and lets Check again make a new venv and build without downloading again', async () => {
+  test('S3 names the missing tool, keeps the log without paths and lets Check again make a new venv and build without downloading again', { tags: ['standard'] }, async () => {
     behaviour.runs.wheel = { status: 'failed', code: 1, lines: [...MSVC, 'copying C:\\Users\\someone\\AppData\\Local\\Temp\\x.c'] };
     const { prepared, requestOf, builds, calls, seen } = bed();
     const plan = await prepared();
@@ -27,7 +27,7 @@ describe('a build that fails', () => {
     expect(calls.map((call) => call.job)).toEqual(['venv', 'tools', 'wheel', 'venv', 'tools', 'wheel']);
   });
 
-  test('says the build failed with its log when nothing known is missing, and offers to try again', async () => {
+  test('S3 says the build failed with its log when nothing known is missing, and offers to try again', { tags: ['standard'] }, async () => {
     behaviour.runs.wheel = { status: 'failed', code: 1, lines: ['SyntaxError: invalid syntax'] };
     const { prepared, requestOf, builds } = bed();
     const failed = await builds.build(requestOf(await prepared()));
@@ -35,7 +35,7 @@ describe('a build that fails', () => {
     await builds.dispose();
   });
 
-  test('ends as cancelled and leaves no folder behind when it is cancelled', async () => {
+  test('S3 ends as cancelled and leaves no folder behind when it is cancelled', { tags: ['standard'] }, async () => {
     behaviour.runs.wheel = { status: 'cancelled', code: null, lines: [] };
     const { prepared, requestOf, builds, workOf } = bed();
     const plan = await prepared();
@@ -43,14 +43,14 @@ describe('a build that fails', () => {
     expect(await exists(workOf())).toBe(false);
   });
 
-  test('ends the build with a failure and a plain message when a step is rejected', async () => {
+  test('S3 ends the build with a failure and a plain message when a step is rejected', { tags: ['standard'] }, async () => {
     behaviour.runs.tools = { status: 'rejected', code: null, lines: [], error: 'No such process job.' };
     const { prepared, requestOf, builds } = bed();
     expect(await builds.build(requestOf(await prepared()))).toMatchObject({ status: 'failed', message: 'Archipelia could not install the build tools into the private build folder.' });
     await builds.dispose();
   });
 
-  test('works in the desktop app only: without a runner it fails with a plain message', async () => {
+  test('S3 works in the desktop app only: without a runner it fails with a plain message', { tags: ['standard'] }, async () => {
     const { net } = routedFetch({ [SOURCE_URL]: () => new Response(ZIP) });
     const builds = createBuilds({ fetch: net, engineDir: () => Promise.resolve('engine') });
     expect(await builds.prepare(PLAN)).toMatchObject({ status: 'failed', message: 'Building from source works in the desktop app only.' });

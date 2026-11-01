@@ -19,7 +19,7 @@ afterEach(() => rm(dir, { recursive: true, force: true }));
 const DOCS = { 'en_A Link to the Past.md': ALTTP_DOC, 'setup_en.md': '# Setup\n\nInstall the thing.', 'fr_A Link to the Past.md': '# Fr' };
 
 describe('pickDocName', () => {
-  test('takes the English page of the game and never a setup guide', () => {
+  test('K1 takes the English page of the game and never a setup guide', { tags: ['critical'] }, () => {
     expect(pickDocName(['setup_en.md', 'en_Other.md', 'en_A Link to the Past.md'], 'A Link to the Past')).toBe('en_A Link to the Past.md');
     expect(pickDocName(['setup_en.md', 'fr_Game.md'], 'Game')).toBeUndefined();
     expect(pickDocName(['en_Renamed.md'], 'Game')).toBe('en_Renamed.md');
@@ -27,18 +27,18 @@ describe('pickDocName', () => {
 });
 
 describe('an official world', () => {
-  test('reads its docs out of the official folder with no network', async () => {
+  test('K1 reads its docs out of the official folder with no network', { tags: ['critical'] }, async () => {
     await engineFolder(dir, { alttp: { game: 'A Link to the Past', docs: DOCS } });
     const text = await readWorldDocs({ engineDir: dir, apworld: 'alttp', game: 'A Link to the Past', file: 'alttp.apworld' });
     expect(text).toContain('Where is the options page?');
   });
 
-  test('reads the docs of a world already placed as a folder', async () => {
+  test('K1 reads the docs of a world already placed as a folder', { tags: ['critical'] }, async () => {
     await engineFolder(dir, { alttp: { game: 'A Link to the Past', docs: DOCS } }, 'folder');
     expect(await readWorldDocs({ engineDir: dir, apworld: 'alttp', game: 'A Link to the Past' })).toContain('What does randomization do');
   });
 
-  test('the docs are kept as markdown, headings and all', async () => {
+  test('S2 the docs are kept as markdown, headings and all', { tags: ['standard'] }, async () => {
     await engineFolder(dir, { alttp: { game: 'A Link to the Past', docs: DOCS } });
     const noNetwork: typeof fetch = () => Promise.reject(new Error('no network for an official world'));
     const enricher = createEnricher({
@@ -52,7 +52,7 @@ describe('an official world', () => {
     expect(found?.art).toBeUndefined();
   });
 
-  test('a world with no docs has no description', async () => {
+  test('S3 a world with no docs has no description', { tags: ['standard'] }, async () => {
     await engineFolder(dir, { bare: { game: 'Bare', docs: {} } });
     const enricher = createEnricher({
       cache: cacheFiles(), engineDir: () => Promise.resolve(dir), entryOf: () => Promise.resolve({ game: 'Bare', file: 'bare.apworld' }),

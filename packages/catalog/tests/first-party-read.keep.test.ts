@@ -7,7 +7,7 @@ import { memoryFiles } from './memory-files.fixtures';
 const HOUR = 3_600_000;
 
 describe('readFirstParty', () => {
-  test('turns the registry game and its release manifest into a first-party entry', async () => {
+  test('K2 turns the registry game and its release manifest into a first-party entry', { tags: ['critical'] }, async () => {
     const bytes = worldBytes();
     const fetchFn = routed({ [REGISTRY_URL]: () => json(registryOf()), [MANIFEST_URL]: () => json(manifestOf(bytes, { maximumAp: '0.7.0' })) });
     const read = await readFirstParty({ files: memoryFiles([]), fetch: fetchFn });
@@ -27,7 +27,7 @@ describe('readFirstParty', () => {
 });
 
 describe('readFirstParty manifests and fallbacks', () => {
-  test('lists every build and leaves the version to the engine', async () => {
+  test('K2 lists every build and leaves the version to the engine', { tags: ['critical'] }, async () => {
     const [a, b] = [worldBytes('ap665'), worldBytes('ap667')];
     const manifest = buildsManifestOf([{ ap: '0.6.5', bytes: a }, { ap: '0.6.7', bytes: b }]);
     const fetchFn = routed({ [REGISTRY_URL]: () => json(registryOf('active', 'builds')), [MANIFEST_URL]: () => json(manifest) });
@@ -46,27 +46,27 @@ describe('readFirstParty manifests and fallbacks', () => {
     });
   });
 
-  test('a single manifest in a builds index is reported', async () => {
+  test('S3 a single manifest in a builds index is reported', { tags: ['standard'] }, async () => {
     const fetchFn = routed({ [REGISTRY_URL]: () => json(registryOf('active', 'builds')), [MANIFEST_URL]: () => json(manifestOf(worldBytes())) });
     const read = await readFirstParty({ files: memoryFiles([]), fetch: fetchFn });
     expect(read.entries[0]?.unavailable).toContain('could not be read');
   });
 
-  test('a release with no manifest yet is listed as No release yet, not as a problem', async () => {
+  test('S3 a release with no manifest yet is listed as No release yet, not as a problem', { tags: ['standard'] }, async () => {
     const fetchFn = routed({ [REGISTRY_URL]: () => json(registryOf()), [MANIFEST_URL]: missing });
     const read = await readFirstParty({ files: memoryFiles([]), fetch: fetchFn });
     expect(read.entries[0]).toMatchObject({ source: 'first-party', versions: [], unavailable: 'No release yet' });
     expect(read.problems).toEqual([]);
   });
 
-  test('a manifest that cannot be read is reported and the entry says so', async () => {
+  test('S3 a manifest that cannot be read is reported and the entry says so', { tags: ['standard'] }, async () => {
     const fetchFn = routed({ [REGISTRY_URL]: () => json(registryOf()), [MANIFEST_URL]: () => json({ game: 'x' }) });
     const read = await readFirstParty({ files: memoryFiles([]), fetch: fetchFn });
     expect(read.entries[0]?.unavailable).toContain('could not be read');
     expect(read.problems).toHaveLength(1);
   });
 
-  test('offline, it keeps listing the game from the cached registry', async () => {
+  test('S3 offline, it keeps listing the game from the cached registry', { tags: ['standard'] }, async () => {
     const files = memoryFiles([]);
     const online = routed({ [REGISTRY_URL]: () => json(registryOf()), [MANIFEST_URL]: () => json(manifestOf(worldBytes())) });
     await readFirstParty({ files, fetch: online, now: () => 1000 });
@@ -77,7 +77,7 @@ describe('readFirstParty manifests and fallbacks', () => {
     expect(read.problems.length).toBeGreaterThan(0);
   });
 
-  test('with no cache and no network it falls back to the bundled floor', async () => {
+  test('S3 with no cache and no network it falls back to the bundled floor', { tags: ['standard'] }, async () => {
     const read = await readFirstParty({ files: memoryFiles([]), fetch: routed({}) });
     expect(read.source).toBe('floor');
     expect(read.entries.map((entry) => entry.apworld)).toContain('relic_of_the_past');
