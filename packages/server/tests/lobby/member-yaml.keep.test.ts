@@ -7,11 +7,7 @@ type Rig = Awaited<ReturnType<typeof startLobbyRig>>;
 
 const ENGINE = { id: 'ap-0.6.8', ap: '0.6.8', python: '3.12.0' };
 
-const YAML = 'name: Ana
-game: A Link to the Past
-A Link to the Past:
-  goal: ganon
-';
+const YAML = ['name: Ana', 'game: A Link to the Past', 'A Link to the Past:', '  goal: ganon', ''].join('\n');
 
 let rig: Rig | undefined;
 

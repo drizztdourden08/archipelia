@@ -94,7 +94,7 @@ describe('the seats of the players who joined', () => {
     expect(actions.map((action) => action.id)).toEqual(['world-Zelda', 'options', 'remove']);
     expect(actions[0]).toMatchObject({ label: 'Review the world of', nameSuffix: 'Zelda', primary: true });
     expect(memberSeatActions(lobby({ phase: 'hosting' }), member(), model([])).map((action) => action.id)).toEqual(['options']);
-    expect(memberSeatActions(lobby(), member({ slots: [] }), model([]))).toEqual([]);
+    expect(memberSeatActions(lobby({ phase: 'hosting' }), member({ slots: [] }), model([]))).toEqual([]);
   });
 
   test('puts the games and Joined on one line, the client and its trust on the next, and the first slot that is not ready in the status', () => {

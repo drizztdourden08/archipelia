@@ -16,10 +16,9 @@ const schema: GameSchema = {
   ],
 };
 
-const yamlOf = (block: string) => `name: Zelda
-game: ${GAME}
-${GAME}:
-${block}`;
+const yamlOf = (block: string) => lines('name: Zelda', `game: ${GAME}`, `${GAME}:`, block);
+
+const lines = (...rows: string[]) => rows.join('\n');
 
 const installed = (): InstalledGame[] => [{ apworld: 'quest', game: GAME, schema } as InstalledGame];
 
@@ -40,11 +39,7 @@ describe('the text of an option value', () => {
 
 describe('the options of a player file', () => {
   test('groups the options like the world and puts the ones it does not know last', () => {
-    const { groups, problem } = optionsOfYaml(yamlOf('  hearts: 5
-  shuffle: false
-  goal: all
-  extra_thing: 4
-'), GAME, schema);
+    const { groups, problem } = optionsOfYaml(yamlOf(lines('  hearts: 5', '  shuffle: false', '  goal: all', '  extra_thing: 4')), GAME, schema);
     expect(problem).toBeUndefined();
     expect(groups.map((group) => group.name)).toEqual(['Goal', 'Items', 'Other options']);
     expect(groups[0]?.rows).toEqual([{ key: 'goal', label: 'Goal', value: 'Collect everything' }]);
@@ -53,19 +48,13 @@ describe('the options of a player file', () => {
   });
 
   test('lists every option in one plain group when the world is not known', () => {
-    const { groups } = optionsOfYaml(yamlOf('  hearts: 5
-  shuffle: true
-'), GAME);
+    const { groups } = optionsOfYaml(yamlOf(lines('  hearts: 5', '  shuffle: true')), GAME);
     expect(groups).toEqual([{ name: 'Options', rows: [{ key: 'hearts', label: 'hearts', value: '5' }, { key: 'shuffle', label: 'shuffle', value: 'On' }] }]);
   });
 
   test('says so when the file has no options for the game or cannot be read', () => {
-    expect(optionsOfYaml(`name: Zelda
-game: ${GAME}
-`, GAME, schema)).toEqual({ groups: [], problem: `The file sets no options for ${GAME}.` });
-    expect(optionsOfYaml('- just
-- a list
-', GAME).problem).toBe('The file of this player could not be read as YAML.');
+    expect(optionsOfYaml(lines('name: Zelda', `game: ${GAME}`, ''), GAME, schema)).toEqual({ groups: [], problem: `The file sets no options for ${GAME}.` });
+    expect(optionsOfYaml(lines('- just', '- a list', ''), GAME).problem).toBe('The file of this player could not be read as YAML.');
     expect(optionsOfYaml('a: [unclosed', GAME).problem).toBe('The file of this player could not be read as YAML.');
   });
 });
@@ -73,12 +62,7 @@ game: ${GAME}
 describe('the slots a host reads', () => {
   test('keep the raw file and flag a world that is not installed, and a slot with no file yet', () => {
     const [known, other, missing] = memberSlotOptions(
-      { memberId: 'm_1', slots: [{ name: 'Zelda', game: GAME, yaml: yamlOf('  hearts: 5
-') }, { name: 'Link', game: 'Relic', yaml: 'name: Link
-game: Relic
-Relic:
-  speed: fast
-' }, { name: 'Ganon', game: GAME, yaml: null }] },
+      { memberId: 'm_1', slots: [{ name: 'Zelda', game: GAME, yaml: yamlOf('  hearts: 5') }, { name: 'Link', game: 'Relic', yaml: lines('name: Link', 'game: Relic', 'Relic:', '  speed: fast', '') }, { name: 'Ganon', game: GAME, yaml: null }] },
       installed(),
     );
     expect(known).toMatchObject({ name: 'Zelda', known: true, yaml: expect.stringContaining('hearts: 5') as string });
