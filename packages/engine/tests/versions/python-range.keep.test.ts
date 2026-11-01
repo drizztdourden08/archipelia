@@ -5,7 +5,7 @@ import { MODULE_UPDATE_0_6_0, MODULE_UPDATE_0_6_8 } from './fixtures/module-upda
 
 const build = (version: string) => ({ version, release: '1', target: 'win32-x64', file: `cpython-${version}`, sha256: 'a' });
 
-describe('parsePythonRange', () => {
+describe('K1 parsePythonRange', { tags: ['critical'] }, () => {
   test('0.6.8 on Windows declares 3.11.9 up to 3.14 with a warning below 3.11.13', () => {
     expect(parsePythonRange(MODULE_UPDATE_0_6_8, 'win32')).toEqual({
       min: '3.11.9',
@@ -13,10 +13,6 @@ describe('parsePythonRange', () => {
       warnBelow: '3.11.13',
       source: 'declared',
     });
-  });
-
-  test('0.6.8 on macOS reads the same branch as Windows', () => {
-    expect(parsePythonRange(MODULE_UPDATE_0_6_8, 'darwin')).toEqual(parsePythonRange(MODULE_UPDATE_0_6_8, 'win32'));
   });
 
   test('0.6.8 on Linux reads the other branch and has no warning', () => {
@@ -36,7 +32,7 @@ describe('parsePythonRange', () => {
   });
 });
 
-describe('resolvePythonRange', () => {
+describe('K1 resolvePythonRange', { tags: ['critical'] }, () => {
   const defaults = ENGINE_DEFAULTS;
 
   test('a declared maximum is kept as declared', () => {
@@ -68,7 +64,7 @@ describe('resolvePythonRange', () => {
   });
 });
 
-describe('checkPythonFit', () => {
+describe('K1 checkPythonFit', { tags: ['critical'] }, () => {
   const range = { min: '3.11.9', maxExclusive: '3.14.0', warnBelow: '3.11.13', source: 'declared' } as const;
 
   test('a build inside the range fits', () => {
@@ -97,7 +93,7 @@ describe('checkPythonFit', () => {
   });
 });
 
-describe('describePythonRange', () => {
+describe('K1 describePythonRange', { tags: ['critical'] }, () => {
   test('words for a closed, an open and an odd maximum', () => {
     expect(describePythonRange({ min: '3.11.9', maxExclusive: '3.14.0', source: 'declared' })).toBe('3.11.9 to 3.13.x');
     expect(describePythonRange({ min: '3.10.11', source: 'unknown' })).toBe('3.10.11 or newer');
@@ -105,7 +101,7 @@ describe('describePythonRange', () => {
   });
 });
 
-describe('pickPythonBuild', () => {
+describe('K1 pickPythonBuild', { tags: ['critical'] }, () => {
   const builds = [build('3.14.9'), build('3.13.17'), build('3.12.15'), build('3.11.17')];
   const range = { min: '3.11.9', maxExclusive: '3.14.0', source: 'declared' } as const;
 

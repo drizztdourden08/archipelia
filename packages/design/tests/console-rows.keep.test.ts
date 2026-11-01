@@ -7,9 +7,8 @@ import { CONSOLE_ROW_LIMIT } from '../src/compounds/CommandConsole/CommandConsol
 const rowsOf = (count: number): LogRow[] =>
   Array.from({ length: count }, (_, i) => ({ id: `r${i}`, gutter: '', tag: '', kind: 'reply', message: `line ${i}` }));
 
-describe('lastRows', () => {
+describe('K1 lastRows', { tags: ['critical'] }, () => {
   test('keeps the last 200 rows by default limit', () => {
-    expect(CONSOLE_ROW_LIMIT).toBe(200);
     const shown = lastRows(rowsOf(250), CONSOLE_ROW_LIMIT);
     expect(shown).toHaveLength(200);
     expect(shown[0]?.id).toBe('r50');

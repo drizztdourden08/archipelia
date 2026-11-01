@@ -76,7 +76,7 @@ beforeEach(async () => {
 
 afterEach(() => rm(buildDir, { recursive: true, force: true }));
 
-describe('buildEngine output', () => {
+describe('S2 buildEngine output', { tags: ['standard'] }, () => {
   test('builds into a folder named by the spec id and writes the extended manifest', async () => {
     const steps = [];
     const stamp = await buildEngine({ buildDir, spec: spec('0.6.8', '3.12.15'), onStep: (step) => steps.push(step) });
@@ -128,7 +128,7 @@ describe('buildEngine output', () => {
   });
 });
 
-describe('buildEngine reuse and failure', () => {
+describe('S2 buildEngine reuse and failure', { tags: ['standard'] }, () => {
   test('a second spec builds beside the first and leaves it untouched', async () => {
     const first = await buildEngine({ buildDir, spec: spec('0.6.7', '3.12.14') });
     await writeFile(join(buildDir, 'ap-0.6.7_py-3.12.14_win32-x64', 'user-world.apworld'), 'x', 'utf8');
@@ -155,7 +155,7 @@ describe('buildEngine reuse and failure', () => {
   });
 });
 
-describe('buildEngine cancel and source check', () => {
+describe('S2 buildEngine cancel and source check', { tags: ['standard'] }, () => {
   test('a cancel before the build leaves no folder and starts no download', async () => {
     const { signal, cancel } = cancelSignal();
     cancel();

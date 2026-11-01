@@ -42,7 +42,7 @@ const request = (overrides: Partial<Parameters<typeof readVersionFeed>[0]>) => (
   ...overrides,
 });
 
-describe('parseReleases', () => {
+describe('K1 parseReleases', { tags: ['critical'] }, () => {
   test('keeps stable tags only, newest first', () => {
     const tags = parseReleases([...RELEASES_PAGE_ONE, ...RELEASES_PAGE_TWO]).map((release) => release.version);
     expect(tags).toEqual(['0.6.8', '0.6.7', '0.6.2', '0.6.1']);
@@ -58,7 +58,7 @@ describe('parseReleases', () => {
   });
 });
 
-describe('parsePythonBuilds', () => {
+describe('K1 parsePythonBuilds', { tags: ['critical'] }, () => {
   const builds = parsePythonBuilds(SHA256SUMS, PYTHON_LATEST.tag, TARGET);
 
   test('keeps the newest build of each minor line for the target', () => {
@@ -75,7 +75,7 @@ describe('parsePythonBuilds', () => {
   });
 });
 
-describe('readVersionFeed', () => {
+describe('K1 readVersionFeed', { tags: ['critical'] }, () => {
   test('a first read is fresh, follows the next link and fills the cache', async () => {
     const fake = fakeFetch(onlineRoutes());
     const store = memoryStore();
@@ -128,7 +128,7 @@ describe('readVersionFeed', () => {
 
 });
 
-describe('readVersionFeed failures', () => {
+describe('K1 readVersionFeed failures', { tags: ['critical'] }, () => {
   test('a network failure keeps the cache and says offline', async () => {
     const fake = fakeFetch({ ...onlineRoutes(), [RELEASES_URL_ONE]: { fail: 'getaddrinfo ENOTFOUND' } });
     const store = memoryStore(cacheAt(NOW - 7 * HOUR));
@@ -168,7 +168,7 @@ describe('readVersionFeed failures', () => {
 
 });
 
-describe('readVersionFeed modes', () => {
+describe('K1 readVersionFeed modes', { tags: ['critical'] }, () => {
   test('cache only mode never calls and says never without a cache', async () => {
     const fake = fakeFetch(onlineRoutes());
     const none = await readVersionFeed(request({ fetch: fake.fetch, mode: 'cache-only' }));
@@ -185,7 +185,7 @@ describe('readVersionFeed modes', () => {
   });
 });
 
-describe('readPythonRange', () => {
+describe('K1 readPythonRange', { tags: ['critical'] }, () => {
   const COMMIT = 'b'.repeat(40);
   const RAW = `https://raw.githubusercontent.com/ArchipelagoMW/Archipelago/${COMMIT}/ModuleUpdate.py`;
 

@@ -4,7 +4,7 @@ import { strToU8, zipSync } from 'fflate';
 import { lieAboutSize as declare } from '@archipelia/model/testing';
 import { readWorldGame } from '../src/verify/read-world-game';
 
-describe('I-81: the game of a world is read with caps', () => {
+describe('K5 I-81: the game of a world is read with caps', { tags: ['critical'] }, () => {
   test('reads the game from the manifest', () => {
     expect(readWorldGame(zipSync({ 'demo/archipelago.json': strToU8('{"game":"Demo"}') }))).toBe('Demo');
   });

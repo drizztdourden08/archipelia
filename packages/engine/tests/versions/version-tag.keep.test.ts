@@ -12,7 +12,7 @@ const feed = (patch: Partial<VersionFeed>): VersionFeed => ({ state: 'fresh', re
 
 const ACTIVE = { ap: '0.6.7', python: '3.12.14' };
 
-describe('versionTag', () => {
+describe('K1 versionTag', { tags: ['critical'] }, () => {
   test('a newer stable release is a new version', () => {
     expect(versionTag(feed({ releases: [release('0.6.8'), release('0.6.7')], python: [python('3.12.14')] }), ACTIVE)).toBe('new-version');
   });
@@ -43,7 +43,7 @@ describe('versionTag', () => {
   });
 });
 
-describe('fetchTagCommit', () => {
+describe('K1 fetchTagCommit', { tags: ['critical'] }, () => {
   const URL = 'https://api.github.com/repos/ArchipelagoMW/Archipelago/commits/0.6.8';
 
   test('asks for the bare sha and returns it', async () => {

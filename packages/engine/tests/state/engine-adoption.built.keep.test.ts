@@ -9,7 +9,7 @@ import { cleanTempRoots, tempRoot, writeEngineFolder } from './temp-root';
 
 afterEach(cleanTempRoots);
 
-describe('adopting engines the new build wrote', () => {
+describe('K3 adopting engines the new build wrote', { tags: ['critical'] }, () => {
   test('an engine built by the new build is adopted as it is and the default Archipelago wins', async () => {
     const root = await tempRoot();
     await writeEngineFolder(root, 'ap-0.6.8_py-3.12.15_win32-x64', builtManifest('0.6.8', '3.12.15'));

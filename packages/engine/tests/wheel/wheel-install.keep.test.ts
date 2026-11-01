@@ -27,7 +27,7 @@ const fakePip = (code = 0, origin = 'absent') => {
   return { run, seen };
 };
 
-describe('installWheel', () => {
+describe('K4 installWheel', { tags: ['critical'] }, () => {
   test('installs one wheel by its hash, with no dependencies and no index, held to the engine packages, from a temp folder', async () => {
     const file = await writeWheelFile('ctrando-1.2.0-py3-none-any.whl');
     const { run, seen } = fakePip();

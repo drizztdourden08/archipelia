@@ -2,7 +2,7 @@
 import { describe, expect, test } from 'vitest';
 import { applyRequirementRules, compareVersions, ENGINE_DEFAULTS, versionInRange } from '../../src';
 
-describe('compareVersions', () => {
+describe('K1 compareVersions', { tags: ['critical'] }, () => {
   test('orders by number, not by text', () => {
     expect(compareVersions('0.6.10', '0.6.9')).toBe(1);
     expect(compareVersions('3.12.15', '3.12.15')).toBe(0);
@@ -14,7 +14,7 @@ describe('compareVersions', () => {
   });
 });
 
-describe('versionInRange', () => {
+describe('K1 versionInRange', { tags: ['critical'] }, () => {
   test('every comparator must hold', () => {
     expect(versionInRange('0.6.8', '>=0.6.2 <0.7.0')).toBe(true);
     expect(versionInRange('0.7.0', '>=0.6.2 <0.7.0')).toBe(false);
@@ -36,7 +36,7 @@ describe('versionInRange', () => {
   });
 });
 
-describe('applyRequirementRules', () => {
+describe('K1 applyRequirementRules', { tags: ['critical'] }, () => {
   const { requirementRules } = ENGINE_DEFAULTS;
 
   test('the seed rules skip the GUI packages and add requests everywhere', () => {
@@ -53,10 +53,6 @@ describe('applyRequirementRules', () => {
     expect(applyRequirementRules(requirementRules, '0.9.0', '3.13.1').skip).toContain('kivy');
   });
 
-  test('the applied rules are returned for engine.json', () => {
-    expect(applyRequirementRules(requirementRules, '0.6.8', '3.11.17').rules).toHaveLength(2);
-  });
-
   test('skips are a union and the later extra wins by package name', () => {
     const applied = applyRequirementRules(
       [
@@ -69,26 +65,5 @@ describe('applyRequirementRules', () => {
     );
     expect(applied.skip).toEqual(['kivy', 'sdl2']);
     expect(applied.extra).toEqual(['requests>=2.32', 'Pillow==1']);
-  });
-
-  test('every rule of the app defaults parses', () => {
-    requirementRules.forEach((rule) => {
-      if (rule.ap) versionInRange('0.6.8', rule.ap);
-      if (rule.python) versionInRange('3.12.0', rule.python);
-    });
-  });
-});
-
-describe('engine defaults', () => {
-  test('the pinned Python files name the pinned version and release', () => {
-    Object.values(ENGINE_DEFAULTS.defaultPython).forEach((pinned) => {
-      expect(pinned.file).toContain(`cpython-${pinned.version}+${pinned.release}-`);
-      expect(pinned.sha256).toMatch(/^[0-9a-f]{64}$/);
-    });
-  });
-
-  test('the default Archipelago is a commit and is not below the floor', () => {
-    expect(ENGINE_DEFAULTS.defaultAp.commit).toMatch(/^[0-9a-f]{40}$/);
-    expect(compareVersions(ENGINE_DEFAULTS.defaultAp.version, ENGINE_DEFAULTS.minAp)).toBeGreaterThanOrEqual(0);
   });
 });

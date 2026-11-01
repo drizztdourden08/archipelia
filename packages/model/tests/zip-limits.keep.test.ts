@@ -17,7 +17,7 @@ const lyingAboutSize = (declared: number) => {
 
 const small = { entries: 3, entryBytes: 1000, totalBytes: 1500 };
 
-describe('A2: generator zips are read with limits', () => {
+describe('K4 A2: generator zips are read with limits', { tags: ['critical'] }, () => {
   test('reads stored and deflated entries back', () => {
     const zip = zipSync({ 'a.txt': text('alpha '.repeat(100)), 'b.txt': [text('beta'), { level: 0 }] });
     const entries = zipEntries(zip);

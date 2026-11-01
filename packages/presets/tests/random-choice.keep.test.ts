@@ -14,7 +14,7 @@ const ALTTP: GameSchema = {
   ],
 };
 
-describe('a choice that defaults to random', () => {
+describe('K1 a choice that defaults to random', { tags: ['critical'] }, () => {
   test('the untouched defaults need no fix, so they never block a save', () => {
     expect(defaultValues(ALTTP)).toEqual({ misery_mire_medallion: 'random', turtle_rock_medallion: 'random' });
     expect(checkValues(ALTTP, defaultValues(ALTTP))).toEqual([]);
