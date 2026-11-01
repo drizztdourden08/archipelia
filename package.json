@@ -40,7 +40,7 @@
     "@drizztdourden08/brock-build": "^0.115.3",
     "@drizztdourden08/brock-lint-config": "^0.115.3",
     "@drizztdourden08/brock-thread": "^0.115.3",
-    "@drizztdourden08/standards": "^0.14.0",
+    "@drizztdourden08/standards": "^0.14.2",
     "jscpd": "catalog:",
     "knip": "catalog:",
     "markdownlint-cli2": "catalog:",
