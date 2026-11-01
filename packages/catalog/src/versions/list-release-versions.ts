@@ -24,7 +24,7 @@ const listReleaseVersions = async ({ files, request, readReleases }: ReleaseList
     const checks = plans.map((plan) => checkRelease({
       ...plan, entry, game, ap, manifest: plan.asset ? reads.get(manifestKey(repo, { release: plan.release, asset: plan.asset })) : undefined,
     }));
-    return choicesOf(entry, releases, checks, limitedUntil, game?.release.manifest);
+    return choicesOf({ entry, releases, checks, limitedUntil, legacy: game?.release.manifest });
   } catch (error) {
     return { by: 'tag', choices: [], problem: error instanceof Error ? error.message : NO_PROBLEM };
   }

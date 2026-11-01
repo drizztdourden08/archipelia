@@ -46,6 +46,8 @@ type ManifestStore = Record<string, ManifestRecord>;
 
 type Checked = { reason?: string; version?: string };
 
+type ChoicesParams = { entry: CatalogEntry; releases: ReleaseSummary[]; checks: Checked[]; limitedUntil: number | undefined; legacy?: string };
+
 type ManifestReads = Map<string, Record<string, unknown> | null>;
 
 type ReadManifestsParams = { files: DataFiles; request: typeof fetch; repo: string; wants: ManifestWant[] };
@@ -53,6 +55,6 @@ type ReadManifestsParams = { files: DataFiles; request: typeof fetch; repo: stri
 type TagEntryParams = { entry: CatalogEntry; game: RegistryGame | undefined; state: ReleaseState; tag: string };
 
 export type {
-  Checked, FetchedReleases, ManifestAsset, ManifestReads, ManifestRecord, ManifestStore, ManifestWant, ReadManifestsParams, Repin, RepinParams, RepinWays, Pinned, PinnedParams, ReleaseAsset, ReleasesRead, ReleaseSummary, StoredReleases,
+  Checked, ChoicesParams, FetchedReleases, ManifestAsset, ManifestReads, ManifestRecord, ManifestStore, ManifestWant, ReadManifestsParams, Repin, RepinParams, RepinWays, Pinned, PinnedParams, ReleaseAsset, ReleasesRead, ReleaseSummary, StoredReleases,
   TagEntryParams, VersionChoice, VersionList, VersionsDeps, VersionsParams, VersionsRequest,
 };

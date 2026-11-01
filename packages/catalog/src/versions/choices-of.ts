@@ -1,9 +1,8 @@
 /* @layer core @kind logic */
-import type { CatalogEntry } from '@archipelia/model';
 import { defaultRelease } from '../first-party/default-release';
 import { releaseVersion } from '../first-party/release-version';
 import { GithubLimitError } from '../source/github-limit-error';
-import type { Checked, ReleaseSummary, VersionChoice, VersionList } from './versions.type';
+import type { Checked, ChoicesParams, ReleaseSummary, VersionChoice, VersionList } from './versions.type';
 
 const choiceOf = (release: ReleaseSummary, check: Checked | undefined, version: string | undefined): VersionChoice => ({
   id: release.tag,
@@ -14,7 +13,7 @@ const choiceOf = (release: ReleaseSummary, check: Checked | undefined, version: 
   ...(check?.reason ? { reason: check.reason } : {}),
 });
 
-const choicesOf = (entry: CatalogEntry, releases: ReleaseSummary[], checks: Checked[], limitedUntil: number | undefined, legacy?: string): VersionList => {
+const choicesOf = ({ entry, releases, checks, limitedUntil, legacy }: ChoicesParams): VersionList => {
   const target = defaultRelease(releases, legacy);
   const onlyPrereleases = target?.prerelease === true;
   const at = target ? releases.indexOf(target) : -1;

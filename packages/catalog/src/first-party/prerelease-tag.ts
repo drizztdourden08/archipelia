@@ -1,6 +1,6 @@
 /* @layer core @kind logic */
 import type { ReleasesRead } from '../versions/versions.type';
-import { manifestRelease } from './default-release';
+import { manifestRelease } from './manifest-release';
 
 const prereleaseTag = async (readReleases: (repo: string) => Promise<ReleasesRead>, repo: string, legacy?: string): Promise<string | undefined> => {
   const { releases } = await readReleases(repo);

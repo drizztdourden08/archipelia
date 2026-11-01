@@ -176,7 +176,9 @@ describe('a world found by its topic', () => {
   test('with no release at all it is not shown', async () => {
     expect(await starQuest(topicService([], false))).toBeUndefined();
   });
+});
 
+describe('topic worlds resolved from a pre-release', () => {
   test('only the five most recently updated repos without a latest manifest are resolved per refresh, the rest on the next one', async () => {
     const repos = Array.from({ length: 7 }, (_, i) => ({ id: i + 1, repo: `maker/world-${i}`, pushedAt: `2026-10-0${i + 1}T00:00:00Z` }));
     const rc = [{ tag: 'v1.0.0-rc1', prerelease: true, assets: ['archipelia.json'] }];
