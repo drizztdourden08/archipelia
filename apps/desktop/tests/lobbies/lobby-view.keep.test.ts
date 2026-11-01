@@ -38,7 +38,7 @@ describe('K1 the How players join section of the setup page', { tags: ['critical
   });
 });
 
-describe('the session tab facts', () => {
+describe('K1 the session tab facts', { tags: ['critical'] }, () => {
   test('shows the session code with a copy button, the server address and the Archipelago version', () => {
     const facts = joinFacts(lobby(), '127.0.0.1:38290');
     expect(facts.map((fact) => fact.label)).toEqual(['Session code', 'Server address', 'Archipelago version']);
