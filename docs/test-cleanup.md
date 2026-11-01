@@ -8,14 +8,16 @@ Branch: standards/phase.
 
 | | before | after |
 |---|---|---|
-| files | 229 | 225 |
-| cases | 1654 | 1548 |
-| tagged critical | 0 | 1175 |
-| tagged standard | 0 | 326 |
-| tagged e2e | 0 | 47 |
-| untagged | 1654 | 0 |
+| files | 232 | 228 |
+| cases | 1669 | 1563 |
+| tagged critical | 0 | 1184 |
+| tagged standard | 0 | 330 |
+| tagged e2e | 0 | 49 |
+| untagged | 1669 | 0 |
 
-The counts add up the four parts below. The 3 cases defined in the desktop e2e rig helper are tagged e2e and are not counted. A raw scan of the final tree finds 225 files.
+The counts add up the four parts below. The 3 cases defined in the desktop e2e rig helper are tagged e2e and are not counted. A raw scan of the final tree finds 228 files.
+
+Nine files came from main after the branch was cut (direct-worlds, lobby-view, member-options, server-draft, lobby-seats, sessions-editor, template-validation, prerelease-only, member-yaml) and got the same treatment in a later pass. They add 15 cases (member-options 5, sessions-editor 4, member-yaml 2, prerelease-only 4 new) to both columns; lobby-view lost 2 cases to W3 and W10 as before.
 
 ## How tags were chosen
 
@@ -30,9 +32,9 @@ Scope: every test file under `apps/desktop/tests` (unit tests and e2e specs). A 
 
 | | before | after |
 |---|---|---|
-| test files | 64 | 63 |
-| cases | 418 | 382 |
-| tagged `critical` | 0 | 293 |
+| test files | 66 | 65 |
+| cases | 427 | 391 |
+| tagged `critical` | 0 | 302 |
 | tagged `standard` | 0 | 75 |
 | tagged `e2e` | 0 | 14 (plus the 3 rig cases) |
 
@@ -76,6 +78,7 @@ Every kept case carries exactly one tag, set on its describe or on the test, and
 | lobbies/lobby-security.keep.test.ts | trim | K1 K4 | 11 | 8 |
 | lobbies/lobby-server.keep.test.ts | keep | S2 S3 | 5 | 5 |
 | lobbies/lobby-view.keep.test.ts | trim | K1 K4 | 11 | 8 |
+| lobbies/member-options.keep.test.ts | keep | K1 | 5 | 5 |
 | lobbies/probe-lobby.keep.test.ts | keep | S2 | 3 | 3 |
 | lobbies/remote-admin.keep.test.ts | keep | S2 | 6 | 6 |
 | lobbies/server-view.keep.test.ts | trim | K1 | 12 | 11 |
@@ -102,6 +105,7 @@ Every kept case carries exactly one tag, set on its describe or on the test, and
 | sessions/problem-focus.keep.test.ts | keep | K1 | 3 | 3 |
 | sessions/run-stages.keep.test.ts | keep | K1 | 1 | 1 |
 | sessions/session-view.keep.test.ts | trim | K1 | 7 | 6 |
+| sessions/sessions-editor.keep.test.ts | keep | K1 | 4 | 4 |
 | sessions/template-defaults.keep.test.ts | keep | K1 | 7 | 7 |
 | sessions/template-validation.keep.test.ts | keep | K1 K3 | 12 | 12 |
 
@@ -151,11 +155,11 @@ Rules: K1 to K5 map to the critical tag, S2 and S3 to the standard tag. No case 
 | | before | after |
 |---|---|---|
 | files | 57 | 57 |
-| cases | 473 | 464 |
+| cases | 477 | 468 |
 | tagged critical | 0 | 306 |
-| tagged standard | 0 | 158 |
+| tagged standard | 0 | 162 |
 | tagged e2e | 0 | 0 |
-| untagged | 473 | 0 |
+| untagged | 477 | 0 |
 
 A case is one test, it or each call site. No file was deleted whole, no helper or fixture became orphaned, and no per-test timeout or testTimeout option existed.
 
@@ -194,7 +198,7 @@ A case is one test, it or each call site. No file was deleted whole, no helper o
 | package-unavailable.keep.test.ts | keep | K1, K2, S3 | 8 | 8 |
 | parse-entry.keep.test.ts | keep | K1 | 9 | 9 |
 | prerelease-enrich.keep.test.ts | keep | S2 | 1 | 1 |
-| prerelease-only.keep.test.ts | keep | S2, S3 | 10 | 10 |
+| prerelease-only.keep.test.ts | keep | S2, S3 | 14 | 14 |
 | read-apworld.keep.test.ts | keep | K1, K5 | 5 | 5 |
 | ready-names.keep.test.ts | keep | K4 | 2 | 2 |
 | ready-search.keep.test.ts | keep | K1, K3, K4, S2, S3 | 8 | 8 |
@@ -243,14 +247,14 @@ Verdicts against `docs/test-standard.md`. A case is one `it` or `test` call site
 
 | | before | after |
 |---|---|---|
-| files | 57 | 57 |
-| cases | 395 | 358 |
+| files | 58 | 58 |
+| cases | 397 | 360 |
 | tagged critical | 0 | 282 |
 | tagged standard | 0 | 43 |
-| tagged e2e | 0 | 33 |
-| untagged | 395 | 0 |
+| tagged e2e | 0 | 35 |
+| untagged | 397 | 0 |
 
-By package (cases before, after): server 145 to 138, lobby-protocol 106 to 85, client-kit 81 to 74, sessions 63 to 61.
+By package (cases before, after): server 147 to 140, lobby-protocol 106 to 85, client-kit 81 to 74, sessions 63 to 61.
 
 Tag rule used: a real socket, listener or spawned process is e2e; a read of a committed fixture file outside a temp folder is standard (S2/S3/S4 or the KEEP rule of the case); fake timers, in-memory fakes and temp-folder files are critical. The KEEP rule is named in the title of the tagged describe or test.
 
@@ -274,6 +278,7 @@ W7 changes (sleeps and real clocks):
 | server/tests/lobby/conformance.keep.test.ts | keep | K2 e2e | 1 | 1 |
 | server/tests/lobby/consent-gate.keep.test.ts | keep | K4 critical | 9 | 9 |
 | server/tests/lobby/local-address.keep.test.ts | keep | K1 critical | 2 | 2 |
+| server/tests/lobby/member-yaml.keep.test.ts | keep | K2 K4 e2e | 2 | 2 |
 | server/tests/lobby/overlay-engine.keep.test.ts | keep | E2 e2e | 1 | 1 |
 | server/tests/lobby/room-secrets.keep.test.ts | keep | K4 critical | 5 | 5 |
 | server/tests/lobby/run-record.keep.test.ts | keep | K2 e2e | 4 | 4 |

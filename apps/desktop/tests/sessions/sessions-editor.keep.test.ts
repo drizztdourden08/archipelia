@@ -7,7 +7,7 @@ import { newTemplate } from '../../src/views/SessionBuilder/behavior/new-templat
 import { sessionSummary } from '../../src/views/Sessions/behavior/session-summary';
 import { PRESET, presetPlayer } from './session-fixtures';
 
-describe('the one line of a saved player', () => {
+describe('K1 the one line of a saved player', { tags: ['critical'] }, () => {
   test('names the game and the preset, or the file, and marks a direct player game as the fallback', () => {
     expect(playerSummary(presetPlayer(1, 'Ana'), [PRESET])).toBe('Demo, preset Open');
     expect(playerSummary({ ...presetPlayer(1, 'Ana'), direct: true }, [PRESET])).toBe('Demo, preset Open (fallback)');
@@ -21,7 +21,7 @@ describe('the one line of a saved player', () => {
   });
 });
 
-describe('the summaries of the Sessions page', () => {
+describe('K1 the summaries of the Sessions page', { tags: ['critical'] }, () => {
   test('sums the world settings in one line', () => {
     const { generator, server } = newTemplate('t1');
     expect(worldSummary(generator, server)).toBe('Hint cost 10%, release auto, collect auto, race off');
