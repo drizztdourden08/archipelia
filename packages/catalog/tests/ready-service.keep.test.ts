@@ -45,7 +45,7 @@ beforeEach(() => {
 });
 
 describe('Archipelia ready worlds found by their topic', () => {
-  test('a tagged repo with a manifest is listed as an unreviewed Archipelia ready world', async () => {
+  test('S2 a tagged repo with a manifest is listed as an unreviewed Archipelia ready world', { tags: ['standard'] }, async () => {
     const view = await serviceWith({
       [SEARCH_URL]: searchOf([{ id: 7, repo: 'maker/star-quest', stars: 12 }]),
       ...manifestRoute('maker/star-quest', readyManifest('Star Quest', 'star_quest')),
@@ -58,7 +58,7 @@ describe('Archipelia ready worlds found by their topic', () => {
     expect(entry?.versions[0]).toMatchObject({ version: '1.0.0', url: 'https://github.com/maker/star-quest/releases/latest/download/star_quest.apworld' });
   });
 
-  test('a repo with no manifest, no stable release or a bad manifest is not shown', async () => {
+  test('K4 a repo with no manifest, no stable release or a bad manifest is not shown', { tags: ['critical'] }, async () => {
     const view = await serviceWith({
       [SEARCH_URL]: searchOf([{ id: 1, repo: 'a/none' }, { id: 2, repo: 'b/bad' }, { id: 3, repo: 'c/huge' }, { id: 4, repo: 'd/path' }]),
       ...noManifest('a/none'),
@@ -73,7 +73,7 @@ describe('Archipelia ready worlds found by their topic', () => {
 });
 
 describe('Archipelia ready worlds and the registry', () => {
-  test('a repo that is in the registry is not listed twice, and its id decides, not its name', async () => {
+  test('K4 a repo that is in the registry is not listed twice, and its id decides, not its name', { tags: ['critical'] }, async () => {
     const same = await serviceWith({
       [REGISTRY_URL]: () => json(registry({ repoId: 55 })),
       [SEARCH_URL]: searchOf([{ id: 55, repo: REPO }]),
@@ -91,7 +91,7 @@ describe('Archipelia ready worlds and the registry', () => {
     expect(swapped.problems).toBe(1);
   });
 
-  test('a repo that claims the module or the game of a listed world is hidden and reported', async () => {
+  test('K4 a repo that claims the module or the game of a listed world is hidden and reported', { tags: ['critical'] }, async () => {
     const view = await serviceWith({
       [SEARCH_URL]: searchOf([{ id: 8, repo: 'thief/copy', stars: 900 }, { id: 9, repo: 'thief/renamed', stars: 900 }]),
       ...manifestRoute('thief/copy', readyManifest('Fake', 'relic_of_the_past')),
@@ -106,7 +106,7 @@ describe('Archipelia ready worlds and the registry', () => {
 });
 
 describe('names read from a topic repository', () => {
-  test('a repository whose game name only looks like a listed game is hidden and reported', async () => {
+  test('K4 a repository whose game name only looks like a listed game is hidden and reported', { tags: ['critical'] }, async () => {
     const view = await serviceWith({
       [SEARCH_URL]: searchOf([{ id: 8, repo: 'thief/renamed', stars: 900 }]),
       ...manifestRoute('thief/renamed', readyManifest('R\u0435lic of the Past', 'other_module')),
@@ -115,7 +115,7 @@ describe('names read from a topic repository', () => {
     expect(view.problems).toBe(1);
   });
 
-  test('the name shown is clean, and a name with nothing readable is not shown', async () => {
+  test('S3 the name shown is clean, and a name with nothing readable is not shown', { tags: ['standard'] }, async () => {
     const view = await serviceWith({
       [SEARCH_URL]: searchOf([{ id: 9, repo: 'maker/star-quest' }, { id: 10, repo: 'maker/blank' }]),
       ...manifestRoute('maker/star-quest', readyManifest('Star\u202E Quest\u200B', 'star_quest')),
@@ -127,7 +127,7 @@ describe('names read from a topic repository', () => {
 });
 
 describe('Archipelia ready worlds and the Archipelago index', () => {
-  test('a repo that is the home of the index entry becomes one card that keeps the index guide', async () => {
+  test('S2 a repo that is the home of the index entry becomes one card that keeps the index guide', { tags: ['standard'] }, async () => {
     const view = await serviceWith({
       [SEARCH_URL]: searchOf([{ id: 11, repo: 'someone/alpha' }]),
       ...manifestRoute('someone/alpha', readyManifest('alpha', 'alpha')),
@@ -138,7 +138,7 @@ describe('Archipelia ready worlds and the Archipelago index', () => {
     expect(rows[0]?.discovered).toMatchObject({ repoId: 11, alsoInIndex: true });
   });
 
-  test('a repo that claims an index module from another home is hidden', async () => {
+  test('K4 a repo that claims an index module from another home is hidden', { tags: ['critical'] }, async () => {
     const view = await serviceWith({
       [SEARCH_URL]: searchOf([{ id: 12, repo: 'other/alpha' }]),
       ...manifestRoute('other/alpha', readyManifest('alpha', 'alpha')),
@@ -148,7 +148,7 @@ describe('Archipelia ready worlds and the Archipelago index', () => {
     expect(view.problems).toBe(1);
   });
 
-  test('two repos for one module: the one with more stars stays, then the older one', async () => {
+  test('S3 two repos for one module: the one with more stars stays, then the older one', { tags: ['standard'] }, async () => {
     const view = await serviceWith({
       [SEARCH_URL]: searchOf([{ id: 20, repo: 'a/one', stars: 1 }, { id: 21, repo: 'b/two', stars: 5 }, { id: 22, repo: 'c/three', stars: 5, createdAt: '2025-01-01T00:00:00Z' }]),
       ...manifestRoute('a/one', readyManifest('Twin', 'twin')),
@@ -162,7 +162,7 @@ describe('Archipelia ready worlds and the Archipelago index', () => {
 });
 
 describe('Archipelia ready worlds, blocking and limits', () => {
-  test('a blocked repo id is hidden for everyone and its manifest is never read', async () => {
+  test('K4 a blocked repo id is hidden for everyone and its manifest is never read', { tags: ['critical'] }, async () => {
     const reads: string[] = [];
     const view = await serviceWith({
       [REGISTRY_URL]: () => json(registry({ blocked: [{ repoId: 30 }] })),
@@ -174,13 +174,13 @@ describe('Archipelia ready worlds, blocking and limits', () => {
     expect(view.problems).toBe(0);
   });
 
-  test('says how many were shown when GitHub has more than the search returned', async () => {
+  test('S2 says how many were shown when GitHub has more than the search returned', { tags: ['standard'] }, async () => {
     const view = await serviceWith({ [SEARCH_URL]: searchOf([{ id: 1, repo: 'a/b' }], 742), ...noManifest('a/b') }).read(false);
     expect(view.ready).toEqual({ total: 742, shown: 1 });
   });
 
-  test('a rate limited search shows the notice and keeps the saved worlds', async () => {
-    const reset = Math.floor(Date.now() / 1000) + 3600;
+  test('S3 a rate limited search shows the notice and keeps the saved worlds', { tags: ['standard'] }, async () => {
+    const reset = 4102444800;
     const cache = memoryFiles([]);
     const routes = { [SEARCH_URL]: searchOf([{ id: 7, repo: 'maker/star-quest' }]), ...manifestRoute('maker/star-quest', readyManifest('Star Quest', 'star_quest')) };
     await serviceWith(routes, memoryFiles([]), cache).read(false);
@@ -199,26 +199,26 @@ describe('adding a world found by its topic', () => {
     ...manifestRoute('maker/star-quest', readyManifest('Star Quest', 'star_quest')),
   };
 
-  test('is refused until the person accepts that repository', async () => {
+  test('K4 is refused until the person accepts that repository', { tags: ['critical'] }, async () => {
     await expect(serviceWith(routes).install({ kind: 'index', apworld: 'star_quest', version: '1.0.0' })).rejects.toThrow(/has not reviewed/);
     await expect(serviceWith(routes).install({ kind: 'index', apworld: 'star_quest', version: '1.0.0', acceptRepoId: 8 })).rejects.toThrow(/has not reviewed/);
     expect(installWorld).not.toHaveBeenCalled();
   });
 
-  test('goes ahead once the repository id is accepted', async () => {
+  test('S2 goes ahead once the repository id is accepted', { tags: ['standard'] }, async () => {
     installWorld.mockResolvedValue({ apworld: 'star_quest' });
     await serviceWith(routes).install({ kind: 'index', apworld: 'star_quest', version: '1.0.0', acceptRepoId: 7 });
     expect(installWorld).toHaveBeenCalledOnce();
   });
 
-  test('an update of a world already accepted from the same repository does not ask again', async () => {
+  test('S3 an update of a world already accepted from the same repository does not ask again', { tags: ['standard'] }, async () => {
     installWorld.mockResolvedValue({ apworld: 'star_quest' });
     const files = memoryFiles([{ apworld: 'star_quest', origin: { repoId: 7, repo: 'maker/star-quest' } } as never]);
     await serviceWith(routes, files).install({ kind: 'index', apworld: 'star_quest', version: '1.0.0' });
     expect(installWorld).toHaveBeenCalledOnce();
   });
 
-  test('a repository that moved to another owner asks again', async () => {
+  test('K4 a repository that moved to another owner asks again', { tags: ['critical'] }, async () => {
     const files = memoryFiles([{ apworld: 'star_quest', origin: { repoId: 7, repo: 'someone-else/star-quest' } } as never]);
     await expect(serviceWith(routes, files).install({ kind: 'index', apworld: 'star_quest', version: '1.0.0' })).rejects.toThrow(/has not reviewed/);
     expect(installWorld).not.toHaveBeenCalled();

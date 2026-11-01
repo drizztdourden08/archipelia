@@ -13,7 +13,7 @@ const { previewFilePackages } = await import('../src/install/preview-file-packag
 const bed = registerBed();
 
 describe('consent to the packages of a world', () => {
-  test('is required for the whole resolved set, and nothing is installed without it', async () => {
+  test('K4 is required for the whole resolved set, and nothing is installed without it', { tags: ['critical'] }, async () => {
     await expect(commitInstall(await bed.jobOf('foo>=1\n'))).rejects.toThrow(
       `${GAME} needs the Python packages foo==1.0, dep-one==2.1.3. Nothing is installed into the engine until you accept.`,
     );
@@ -23,7 +23,7 @@ describe('consent to the packages of a world', () => {
     expect(await bed.placed()).toBe(false);
   });
 
-  test('MEDIUM 2: installs exactly the accepted resolved pins, indirect ones too, then loads the world, and records them', async () => {
+  test('S2 MEDIUM 2: installs exactly the accepted resolved pins, indirect ones too, then loads the world, and records them', { tags: ['standard'] }, async () => {
     const order: string[] = [];
     engine.resolvePackages.mockImplementation(() => { order.push('resolve'); return Promise.resolve(RESOLVED); });
     engine.installPackages.mockImplementation(() => { order.push('pip'); return Promise.resolve(); });
@@ -35,7 +35,7 @@ describe('consent to the packages of a world', () => {
     expect(await bed.placed()).toBe(true);
   });
 
-  test('MEDIUM 1: consent given for another apworld file is refused', async () => {
+  test('K4 MEDIUM 1: consent given for another apworld file is refused', { tags: ['critical'] }, async () => {
     await expect(commitInstall(await bed.jobOf('foo>=1\n', { packages: consentOf({ sha256: 'other' }) }))).rejects.toThrow(
       `${GAME} or its packages changed since you reviewed them. Nothing was installed.`,
     );
@@ -43,7 +43,7 @@ describe('consent to the packages of a world', () => {
     expect(await bed.placed()).toBe(false);
   });
 
-  test('MEDIUM 1: consent given to a different resolved set is refused, a new indirect dependency included', async () => {
+  test('K4 MEDIUM 1: consent given to a different resolved set is refused, a new indirect dependency included', { tags: ['critical'] }, async () => {
     const wider = RESOLVED.concat([{ name: 'evil', version: '9', pin: 'evil==9', url: '', direct: false }]);
     engine.resolvePackages.mockResolvedValue(wider);
     await expect(commitInstall(await bed.jobOf('foo>=1\n', { packages: consentOf() }))).rejects.toThrow('changed since you reviewed them');
@@ -53,14 +53,14 @@ describe('consent to the packages of a world', () => {
     expect(engine.installPackages).not.toHaveBeenCalled();
   });
 
-  test('a world that resolves to nothing new needs no consent', async () => {
+  test('S3 a world that resolves to nothing new needs no consent', { tags: ['standard'] }, async () => {
     engine.resolvePackages.mockResolvedValue([]);
     const record = await commitInstall(await bed.jobOf('numpy\n'));
     expect(engine.installPackages).not.toHaveBeenCalled();
     expect(record.packages).toBeUndefined();
   });
 
-  test('official worlds are not gated or installed: the engine build installed their requirements', async () => {
+  test('S3 official worlds are not gated or installed: the engine build installed their requirements', { tags: ['standard'] }, async () => {
     await commitInstall(await bed.jobOf('foo==1.0\n', { source: 'official' }));
     expect(engine.resolvePackages).toHaveBeenCalledWith(bed.bed.runtime, []);
     expect(engine.installPackages).not.toHaveBeenCalled();
@@ -68,7 +68,7 @@ describe('consent to the packages of a world', () => {
 });
 
 describe('packages that cannot be installed', () => {
-  test('a failed pip run says which packages and why, and places nothing', async () => {
+  test('S3 a failed pip run says which packages and why, and places nothing', { tags: ['standard'] }, async () => {
     engine.installPackages.mockRejectedValue(new Error('No matching distribution found for foo'));
     await expect(commitInstall(await bed.jobOf('foo>=1\n', { packages: consentOf() }))).rejects.toThrow(
       `${GAME} needs the Python packages foo, dep-one, which could not be installed: No matching distribution found for foo.`,
@@ -77,7 +77,7 @@ describe('packages that cannot be installed', () => {
     expect(await bed.placed()).toBe(false);
   });
 
-  test('a requirement pip cannot resolve is reported with the declared names', async () => {
+  test('S3 a requirement pip cannot resolve is reported with the declared names', { tags: ['standard'] }, async () => {
     engine.resolvePackages.mockRejectedValue(new Error('No matching distribution found for ctrando'));
     await expect(commitInstall(await bed.jobOf('ctrando>=1\n'))).rejects.toThrow(
       `${GAME} needs the Python package ctrando, which could not be installed: No matching distribution found for ctrando.`,
@@ -85,7 +85,7 @@ describe('packages that cannot be installed', () => {
     expect(engine.installPackages).not.toHaveBeenCalled();
   });
 
-  test('a requirement that is an option, a marker trick or a wheel name is refused by name before pip runs', async () => {
+  test('K4 a requirement that is an option, a marker trick or a wheel name is refused by name before pip runs', { tags: ['critical'] }, async () => {
     await expect(commitInstall(await bed.jobOf('--index-url https://evil.example/simple\nfoo\n', { packages: consentOf() }))).rejects.toThrow(
       `${GAME} lists a requirement Archipelia will not install: --index-url https://evil.example/simple.`,
     );
@@ -97,7 +97,7 @@ describe('packages that cannot be installed', () => {
 });
 
 describe('the preview and the install see the same apworld', () => {
-  test('LOW 7: the preview lists every package with its normalized name, version and pypi link, and the file hash', async () => {
+  test('S2 LOW 7: the preview lists every package with its normalized name, version and pypi link, and the file hash', { tags: ['standard'] }, async () => {
     const file = await bed.worldFile('Foo_Bar>=1\n');
     const preview = await previewFilePackages(bed.bed.base, file);
     expect(preview.sha256).toBe(createHash('sha256').update(await readFile(file)).digest('hex'));
@@ -107,7 +107,7 @@ describe('the preview and the install see the same apworld', () => {
     expect(engine.resolvePackages).toHaveBeenCalledWith(bed.bed.runtime, ['Foo_Bar>=1']);
   });
 
-  test('what the preview returned is accepted by the install of the same file, and refused for a changed file', async () => {
+  test('S2 what the preview returned is accepted by the install of the same file, and refused for a changed file', { tags: ['standard'] }, async () => {
     const file = await bed.worldFile('foo>=1\n');
     const { sha256, packages } = await previewFilePackages(bed.bed.base, file);
     const accepted = { sha256, packages: packages.map((found) => found.pin) };

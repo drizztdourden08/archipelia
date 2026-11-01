@@ -7,7 +7,7 @@ const REPO = 'someone/ts-world';
 const TAGGED = `https://github.com/${REPO}/releases/download/v0.21.2`;
 
 describe('the standard files of a world with only a pre-release', () => {
-  test('the thumbnail and the description are read from the tag, never from latest', async () => {
+  test('S2 the thumbnail and the description are read from the tag, never from latest', { tags: ['standard'] }, async () => {
     const png = pngBytes(1280, 640);
     const seen: string[] = [];
     const net: typeof fetch = (input) => {

@@ -39,7 +39,7 @@ const planOf = (table: Record<string, Response>) => {
 };
 
 describe('planning the install of a chosen repo', () => {
-  test('pins the newest tag, builds the command for the engine Python and reads the build facts', async () => {
+  test('S2 pins the newest tag, builds the command for the engine Python and reads the build facts', { tags: ['standard'] }, async () => {
     const plan = await planOf(routes());
     expect(plan.pin).toEqual({ kind: 'tag', ref: 'v1.10.0', sha: TAG, date: '2026-09-01T00:00:00Z' });
     expect(plan.command).toBe(`"C:\\engine\\python.exe" -m pip install "git+https://github.com/Pseudoarc/ctrando@${TAG}"`);
@@ -47,7 +47,7 @@ describe('planning the install of a chosen repo', () => {
     expect(plan.pypi).toEqual({ name: 'CTRando', version: '1.10.0', linked: true });
   });
 
-  test('a repo with no tags pins the head of its default branch', async () => {
+  test('S2 a repo with no tags pins the head of its default branch', { tags: ['standard'] }, async () => {
     const plan = await planOf(routes({
       [`${REPO}/tags`]: json([]),
       [`${REPO}/git/trees/${HEAD}`]: json({ tree: [{ path: 'a.py' }] }),
@@ -56,13 +56,13 @@ describe('planning the install of a chosen repo', () => {
     expect(plan.pin).toEqual({ kind: 'head', ref: 'main', sha: HEAD, date: '2026-10-20T00:00:00Z' });
   });
 
-  test('a repo that does not exist is reported in plain words', async () => {
+  test('S2 a repo that does not exist is reported in plain words', { tags: ['standard'] }, async () => {
     await expect(planOf({})).rejects.toThrow('GitHub has no repository Pseudoarc/ctrando.');
   });
 });
 
 describe('what the renderer may send', () => {
-  test('an owner, a repo and a module name are checked, and a distribution name becomes a module name', () => {
+  test('K4 an owner, a repo and a module name are checked, and a distribution name becomes a module name', { tags: ['critical'] }, () => {
     expect(parseSourceRef({ owner: 'Pseudoarc', repo: 'ctrando', module: 'ct-rando' })).toEqual({ owner: 'Pseudoarc', repo: 'ctrando', module: 'ct_rando' });
     expect(() => parseSourceRef({ owner: 'a/b', repo: 'x', module: 'm' })).toThrow('not valid');
     expect(() => parseSourceRef({ owner: 'a', repo: '..', module: 'm' })).toThrow('not valid');
@@ -70,7 +70,7 @@ describe('what the renderer may send', () => {
     expect(() => parseSourceRef(null)).toThrow('not valid');
   });
 
-  test('a suggestion request needs a safe world name and a module, and trims what is too long', () => {
+  test('K4 a suggestion request needs a safe world name and a module, and trims what is too long', { tags: ['critical'] }, () => {
     expect(parseSuggestRequest({ apworld: 'ctrdi', module: 'ctrando', paste: 'x'.repeat(500) })).toEqual({ apworld: 'ctrdi', module: 'ctrando', linked: undefined, paste: undefined });
     expect(() => parseSuggestRequest({ apworld: '../x', module: 'ctrando' })).toThrow('not valid');
   });

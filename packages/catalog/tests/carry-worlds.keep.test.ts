@@ -32,7 +32,7 @@ beforeAll(async () => {
 afterAll(() => rm(base, { recursive: true, force: true }));
 
 describe('carryWorlds', () => {
-  test('copies files and folders, and reinstalls official worlds from the new engine', async () => {
+  test('K3 copies files and folders, and reinstalls official worlds from the new engine', { tags: ['critical'] }, async () => {
     const files = memoryFiles([
       recordOf('alpha', {}),
       recordOf('folderworld', { layout: 'folder', path: 'worlds/folderworld', source: 'file' }),
@@ -51,7 +51,7 @@ describe('carryWorlds', () => {
     expect(await exists(join(base, 'old/ap/custom_worlds/alpha.apworld'))).toBe(true);
   });
 
-  test('a missing source, an unsafe path and a failed reinstall are problems, not throws', async () => {
+  test('K3 a missing source, an unsafe path and a failed reinstall are problems, not throws', { tags: ['critical'] }, async () => {
     const files = memoryFiles([
       recordOf('ghost', {}),
       recordOf('evil', { path: '../../escape' }),
@@ -68,7 +68,7 @@ describe('carryWorlds', () => {
     });
   });
 
-  test('since skips records the first pass already carried', async () => {
+  test('K3 since skips records the first pass already carried', { tags: ['critical'] }, async () => {
     const files = memoryFiles([recordOf('alpha', { installedAt: 100 }), recordOf('late', { installedAt: 300 })]);
     await writeFile(join(base, 'old/ap/custom_worlds/late.apworld'), 'late');
     const result = await carryWorlds({ from: runtimeAt('old'), to: runtimeAt('new'), files, reinstall: () => Promise.resolve(), reinstallFirstParty: () => Promise.resolve(), since: 200 });

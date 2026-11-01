@@ -55,7 +55,7 @@ beforeEach(() => {
 });
 
 describe('installing a first-party release', () => {
-  test('verified: the attestation passes and the record is marked first-party and verified', async () => {
+  test('K4 verified: the attestation passes and the record is marked first-party and verified', { tags: ['critical'] }, async () => {
     verify.mockReturnValue({ ok: true, sha256: sha256Of(bytes), game: 'Relic of the Past', signer: { identity: 'i', repo: 'drizztdourden08/relic-of-the-past', workflow: '.github/workflows/release.yml', ref: 'refs/heads/main' } });
     await install({}, { [BUNDLE_URL]: () => json({ mediaType: 'bundle' }) });
     expect(verify).toHaveBeenCalledOnce();
@@ -63,14 +63,14 @@ describe('installing a first-party release', () => {
     expect(committed().trust?.detail).toContain('drizztdourden08/relic-of-the-past');
   });
 
-  test('unverified: a release without a bundle still installs, with a not verified yet line', async () => {
+  test('K4 unverified: a release without a bundle still installs, with a not verified yet line', { tags: ['critical'] }, async () => {
     await install({}, { [BUNDLE_URL]: missing });
     expect(verify).not.toHaveBeenCalled();
     expect(committed()).toMatchObject({ source: 'first-party', trust: { state: 'unverified' } });
     expect(committed().trust?.detail).toContain('Not verified yet');
   });
 
-  test('records the release a chosen version came from', async () => {
+  test('K3 records the release a chosen version came from', { tags: ['critical'] }, async () => {
     await installWorld({
       engineDir: '', files, entry: entryOf(), version: '0.1.0', fetch: createWorldFetch(bytes, { [BUNDLE_URL]: missing }), trust: trustWith(),
       release: { tag: 'v0.1.0-rc1', prerelease: true },
@@ -78,13 +78,13 @@ describe('installing a first-party release', () => {
     expect((commit.mock.calls[0]?.[0] as { release?: unknown }).release).toEqual({ tag: 'v0.1.0-rc1', prerelease: true });
   });
 
-  test('a tampered asset is refused with the reason and nothing is installed', async () => {
+  test('K4 a tampered asset is refused with the reason and nothing is installed', { tags: ['critical'] }, async () => {
     verify.mockReturnValue({ ok: false, code: 'trust-failed', reason: 'digest-mismatch', detail: 'the bundle attests a different file' });
     await expect(install({}, { [BUNDLE_URL]: () => json({ mediaType: 'bundle' }) })).rejects.toThrow(/Relic of the Past is refused: the bundle attests a different file/);
     expect(commit).not.toHaveBeenCalled();
   });
 
-  test('a changed file fails the manifest checksum before the attestation is read', async () => {
+  test('K4 a changed file fails the manifest checksum before the attestation is read', { tags: ['critical'] }, async () => {
     const other = entryOf({ versions: [{ version: '0.1.0', url: WORLD_URL, sha256: 'f'.repeat(64) }] });
     await expect(installWorld({
       engineDir: '', files, entry: other, version: '0.1.0', fetch: createWorldFetch(bytes, { [BUNDLE_URL]: missing }), trust: trustWith(),
@@ -92,22 +92,22 @@ describe('installing a first-party release', () => {
     expect(commit).not.toHaveBeenCalled();
   });
 
-  test('a revoked client is refused even without a bundle', async () => {
+  test('K4 a revoked client is refused even without a bundle', { tags: ['critical'] }, async () => {
     await expect(install({}, { [BUNDLE_URL]: missing }, 'revoked')).rejects.toThrow(/revoked in the registry/);
     expect(commit).not.toHaveBeenCalled();
   });
 
-  test('no release: the install says No release yet', async () => {
+  test('S3 no release: the install says No release yet', { tags: ['standard'] }, async () => {
     await expect(install({ versions: [], unavailable: 'No release yet' }, {})).rejects.toThrow('Relic of the Past: No release yet');
   });
 
-  test('version fit: an engine older than the minimum is refused with the reason', async () => {
+  test('K4 version fit: an engine older than the minimum is refused with the reason', { tags: ['critical'] }, async () => {
     apVersion.value = '0.6.2';
     await expect(install({}, { [BUNDLE_URL]: missing })).rejects.toThrow(/Needs Archipelago 0.6.4 or newer, the active engine is 0.6.2/);
     expect(commit).not.toHaveBeenCalled();
   });
 
-  test('a community install is not vetted and stays an index install', async () => {
+  test('K2 a community install is not vetted and stays an index install', { tags: ['critical'] }, async () => {
     const community = communityEntry('alpha', { versions: [{ version: '1.0.0', url: WORLD_URL, sha256: sha256Of(bytes) }] });
     await installWorld({ engineDir: '', files, entry: community, version: '1.0.0', fetch: createWorldFetch(bytes, {}) });
     expect(committed()).toMatchObject({ source: 'index' });
@@ -134,7 +134,7 @@ const installBuild = (entry: CatalogEntry, routes: Record<string, () => Response
   });
 
 describe('installing a per-version build', () => {
-  test('installs the build for the engine version and verifies that build own bundle', async () => {
+  test('K4 installs the build for the engine version and verifies that build own bundle', { tags: ['critical'] }, async () => {
     apVersion.value = '0.6.5';
     verify.mockReturnValue({ ok: true, sha256: sha256Of(at665), game: 'Relic of the Past', signer: { identity: 'i', repo: 'drizztdourden08/relic-of-the-past', workflow: 'w', ref: 'r' } });
     await installBuild(buildsEntry(), { [buildBundleUrl('0.6.5')]: () => json({ mediaType: 'bundle' }) });
@@ -143,7 +143,7 @@ describe('installing a per-version build', () => {
     expect(committed()).toMatchObject({ source: 'first-party', hash: { verified: true }, trust: { state: 'verified' } });
   });
 
-  test('a build with no bundle of its own installs as not verified yet, even if another build has one', async () => {
+  test('K4 a build with no bundle of its own installs as not verified yet, even if another build has one', { tags: ['critical'] }, async () => {
     apVersion.value = '0.6.7';
     await installBuild(buildsEntry(), { [buildBundleUrl('0.6.5')]: () => json({ mediaType: 'bundle' }), [buildBundleUrl('0.6.7')]: missing });
     expect(verify).not.toHaveBeenCalled();
@@ -151,27 +151,27 @@ describe('installing a per-version build', () => {
     expect(committed().trust?.detail).toContain('Not verified yet');
   });
 
-  test('no build for the engine version is refused with the list of builds', async () => {
+  test('S3 no build for the engine version is refused with the list of builds', { tags: ['standard'] }, async () => {
     apVersion.value = '0.6.6';
     await expect(installBuild(buildsEntry(), {})).rejects.toThrow('No Relic of the Past build for Archipelago 0.6.6; builds exist for 0.6.5, 0.6.7');
     expect(commit).not.toHaveBeenCalled();
   });
 
-  test('a build whose size differs from the index is refused before anything is installed', async () => {
+  test('K4 a build whose size differs from the index is refused before anything is installed', { tags: ['critical'] }, async () => {
     apVersion.value = '0.6.7';
     const entry = buildsEntry([buildOf('0.6.7', at667, { size: at667.length + 1 })]);
     await expect(installBuild(entry, { [buildBundleUrl('0.6.7')]: missing })).rejects.toThrow(/size is \d+ bytes, the release says/);
     expect(commit).not.toHaveBeenCalled();
   });
 
-  test('a build whose checksum differs from the index is refused', async () => {
+  test('K4 a build whose checksum differs from the index is refused', { tags: ['critical'] }, async () => {
     apVersion.value = '0.6.7';
     const entry = buildsEntry([buildOf('0.6.7', at667, { sha256: 'e'.repeat(64) })]);
     await expect(installBuild(entry, { [buildBundleUrl('0.6.7')]: missing })).rejects.toThrow(/sha256/);
     expect(commit).not.toHaveBeenCalled();
   });
 
-  test('a tampered build is refused with the reason', async () => {
+  test('K4 a tampered build is refused with the reason', { tags: ['critical'] }, async () => {
     apVersion.value = '0.6.7';
     verify.mockReturnValue({ ok: false, code: 'trust-failed', reason: 'digest-mismatch', detail: 'the bundle attests a different file' });
     await expect(installBuild(buildsEntry(), { [buildBundleUrl('0.6.7')]: () => json({ mediaType: 'bundle' }) })).rejects.toThrow(/is refused: the bundle attests a different file/);
@@ -189,7 +189,7 @@ const installTopic = (patch: Partial<CatalogEntry> = {}) =>
   installWorld({ engineDir: '', files, entry: topicOf(patch), version: '0.1.0', fetch: createWorldFetch(bytes, {}) });
 
 describe('installing a world found by its topic', () => {
-  test('is recorded as not reviewed, with the repository it came from, and no signature is asked for', async () => {
+  test('K4 is recorded as not reviewed, with the repository it came from, and no signature is asked for', { tags: ['critical'] }, async () => {
     await installTopic();
     expect(verify).not.toHaveBeenCalled();
     expect(committed()).toMatchObject({
@@ -199,12 +199,12 @@ describe('installing a world found by its topic', () => {
     });
   });
 
-  test('is refused when the apworld holds another world than the release lists', async () => {
+  test('K4 is refused when the apworld holds another world than the release lists', { tags: ['critical'] }, async () => {
     await expect(installTopic({ apworld: 'other_world' })).rejects.toThrow(/holds the world relic_of_the_past, the release lists other_world/);
     expect(commit).not.toHaveBeenCalled();
   });
 
-  test('is refused when the apworld names another game than the release lists', async () => {
+  test('K4 is refused when the apworld names another game than the release lists', { tags: ['critical'] }, async () => {
     await expect(installTopic({ game: 'Another Game' })).rejects.toThrow(/names the game Relic of the Past, the release lists Another Game/);
     expect(commit).not.toHaveBeenCalled();
   });
