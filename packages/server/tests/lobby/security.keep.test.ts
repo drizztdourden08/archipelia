@@ -11,7 +11,7 @@ import { createLobbyConnection } from '../../src/lobby/link/create-lobby-connect
 import { createRateLimiter } from '../../src/lobby/link/create-rate-limiter';
 import { buildOverlay } from '../../src/lobby/overlay/build-overlay';
 import { startListener } from '../../src/listener/start-listener';
-import { admin, engine, fileOf, helloOf, holdFiles, linkOf, startService } from './security-kit';
+import { admin, engine, fileOf, helloOf, holdFiles, linkOf, startHeldCheck, startService } from './security-kit';
 import { fakeTrust, testDeps } from '../../src/testing';
 
 const joined = async (service: Awaited<ReturnType<typeof startService>>['service'], hello = helloOf()) => {
@@ -24,20 +24,16 @@ const slotOf = (lobby: Lobby | undefined, memberId: string) => lobby?.members.fi
 
 describe('K4 lobby security: checks', { tags: ['critical'] }, () => {
   test('F1: a check that finishes after the member was refused does not apply', async () => {
-    let release = () => undefined as void;
-    const gate = new Promise<void>((resolve) => { release = resolve; });
-    let reach = () => undefined as void;
-    const reached = new Promise<void>((resolve) => { reach = resolve; });
-    const kit = await startService({ trust: fakeTrust('active', false, () => { reach(); return gate; }) });
+    const { kit, release, reached } = await startHeldCheck();
     const lobby = await kit.service.create({ name: 'Race', engine });
     const ref = await joined(kit.service);
     await holdFiles(kit.store, lobby.id, ['W', 'Y']);
     await kit.service.protocol.settle(lobby.id);
     const approving = kit.service.approve(lobby.id, ref.memberId);
     await reached;
-    await kit.service.refuse(lobby.id, ref.memberId, 'gone');
+    const refusing = kit.service.refuse(lobby.id, ref.memberId, 'gone');
     release();
-    await approving;
+    await Promise.all([approving, refusing]);
     const after = await kit.service.get(lobby.id);
     expect(after?.members[0]?.admission).toBe('refused');
     expect(slotOf(after, ref.memberId)?.state).toBe('checking');

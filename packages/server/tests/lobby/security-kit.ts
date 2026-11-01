@@ -54,6 +54,15 @@ const startService = async (options: KitOptions = {}) => {
   return { service, store, dataDir, domains, stop };
 };
 
+const startHeldCheck = async () => {
+  let release = () => undefined as void;
+  const gate = new Promise<void>((resolve) => { release = resolve; });
+  let reach = () => undefined as void;
+  const reached = new Promise<void>((resolve) => { reach = resolve; });
+  const held = await startService({ trust: fakeTrust('active', false, () => { reach(); return gate; }) });
+  return { kit: held, release: () => release(), reached };
+};
+
 const engine = { id: 'ap-0.6.8', ap: '0.6.8', python: '3.12.0' };
 
 const holdFiles = async (store: ReturnType<typeof createLobbyStore>, lobbyId: string, names: string[]) => {
@@ -62,4 +71,4 @@ const holdFiles = async (store: ReturnType<typeof createLobbyStore>, lobbyId: st
 
 const admin = { token: () => Promise.resolve('t'), watch: () => () => undefined, engines: () => Promise.resolve([]) };
 
-export { admin, engine, fileOf, helloOf, holdFiles, linkOf, startService };
+export { admin, engine, fileOf, helloOf, holdFiles, linkOf, startHeldCheck, startService };

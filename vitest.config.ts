@@ -7,7 +7,7 @@ export default defineBrockVitestConfig(
   defineStandardsVitest({
     test: {
       include: ['**/*.{test,spec}.?(c|m)[jt]s?(x)', 'apps/desktop/tests/e2e/**/*.e2e.ts'],
-      exclude: ['**/node_modules/**', '**/dist/**', '**/.worktrees/**', '**/.claude/**'],
+      exclude: ['**/node_modules/**', '**/dist/**', '**/.*/**'],
     },
   }),
   { appDir: 'apps/desktop' },

@@ -6,7 +6,7 @@ import { setStates } from '../../src/lobby/checks/set-states';
 import { lobbyOptions } from '../../src/lobby/state/lobby-options';
 import { createLobbyService } from '../../src/lobby/create-lobby-service';
 import { startListener } from '../../src/listener/start-listener';
-import { admin, engine, fileOf, helloOf, holdFiles, linkOf, startService } from './security-kit';
+import { admin, engine, fileOf, helloOf, holdFiles, linkOf, startHeldCheck, startService } from './security-kit';
 import { fakeTrust, testDeps } from '../../src/testing';
 
 const unlistedHello = () => {
@@ -67,11 +67,7 @@ describe('K4 review: stale checks and start', { tags: ['critical'] }, () => {
   });
 
   test('F1: a slots.set sent while a check runs leaves the new slot unchecked', async () => {
-    let release = () => undefined as void;
-    const gate = new Promise<void>((resolve) => { release = resolve; });
-    let reach = () => undefined as void;
-    const reached = new Promise<void>((resolve) => { reach = resolve; });
-    const kit = await startService({ trust: fakeTrust('active', false, () => { reach(); return gate; }) });
+    const { kit, release, reached } = await startHeldCheck();
     const lobby = await kit.service.create({ name: 'Swap', engine, options: { admission: 'open' } });
     const joined = await kit.service.protocol.join(helloOf(), linkOf().link);
     if (!joined.ok) throw new Error(joined.failure.message);

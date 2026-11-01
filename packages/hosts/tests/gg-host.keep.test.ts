@@ -26,6 +26,15 @@ afterEach(() => rm(dir, { recursive: true, force: true }));
 const hostFor = (site: ReturnType<typeof createFakeGgSite>) =>
   createGgHost({ ownerId: site.owner, baseUrl: site.base, pollMs: 5, stopTimeoutMs: 500, passwordTimeoutMs: 500, fetch: site.fetch });
 
+const countingHost = (site: ReturnType<typeof createFakeGgSite>, onLogRead: () => void) =>
+  createGgHost({
+    ownerId: site.owner, baseUrl: site.base, pollMs: 5, stopTimeoutMs: 500, passwordTimeoutMs: 500,
+    fetch: (input, init) => {
+      if (String(input).includes('/log/')) onLogRead();
+      return site.fetch(input, init);
+    },
+  });
+
 const start = (host: SessionHost, password?: string) => host.start({ sessionId: 's1', sessionDir: dir, seedFile, server, password });
 
 const logText = (host: SessionHost) => {
@@ -81,13 +90,7 @@ describe('S2 archipelago.gg host', { tags: ['standard'] }, () => {
   test('the log is read by byte offset and split on complete lines only', async () => {
     const site = createFakeGgSite();
     let logReads = 0;
-    const host = createGgHost({
-      ownerId: site.owner, baseUrl: site.base, pollMs: 5, stopTimeoutMs: 500, passwordTimeoutMs: 500,
-      fetch: (input, init) => {
-        if (String(input).includes('/log/')) logReads += 1;
-        return site.fetch(input, init);
-      },
-    });
+    const host = countingHost(site, () => { logReads += 1; });
     await start(host);
     site.appendLog('[t]: half a li');
     const seen = logReads;

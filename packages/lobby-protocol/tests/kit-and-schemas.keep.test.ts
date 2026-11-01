@@ -24,11 +24,6 @@ const setAt = (root: Record<string, unknown>, path: string[], value: unknown): v
 
 describe('K1 scenario kit', { tags: ['critical'] }, () => {
   const kit = createScenarioKit();
-  const file = (name: string) => {
-    const found = kit.files.find((candidate) => candidate.name === name);
-    if (!found) throw new Error(`no kit file ${name}`);
-    return found;
-  };
 
   test('every value hash is the hash of its bytes', () => {
     for (const entry of kit.files) {
