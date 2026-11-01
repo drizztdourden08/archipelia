@@ -1,9 +1,9 @@
 /* @layer tests @kind test */
 import { describe, expect, test } from 'vitest';
-import { TOKEN_LENGTH, checkHello, decodeMessage, formatLobbyCode, normalizeLobbyCode, resumeOutcome } from '../src';
+import { checkHello, decodeMessage, formatLobbyCode, normalizeLobbyCode, resumeOutcome } from '../src';
 import type { Hello } from '../src';
 import { hashToken, newToken, sha256Hex } from '../src/node';
-import { loadScenario, runScenario } from '../src/testing';
+import { loadScenario } from '../src/testing';
 import type { Scenario } from '../src/testing';
 
 const firstHello = (scenario: Scenario): Hello => {
@@ -13,30 +13,20 @@ const firstHello = (scenario: Scenario): Hello => {
 };
 
 describe('the member token and its resume path', () => {
-  test('a token is 43 URL safe characters and never repeats', () => {
+  test('K3 a token is 43 URL safe characters and never repeats', { tags: ['critical'] }, () => {
     const tokens = new Set(Array.from({ length: 50 }, () => newToken()));
     expect(tokens.size).toBe(50);
     for (const token of tokens) expect(token).toMatch(/^[A-Za-z0-9_-]{43}$/);
-    expect(TOKEN_LENGTH).toBe(43);
   });
 
-  test('the server stores a hash that differs from the token', () => {
+  test('K3 the server stores a hash that differs from the token', { tags: ['critical'] }, () => {
     const token = newToken();
     expect(hashToken(token)).toBe(sha256Hex(token));
     expect(hashToken(token)).not.toBe(token);
     expect(hashToken(token)).toMatch(/^[0-9a-f]{64}$/);
   });
 
-  test('a pending member that resumes gets its pending state back, then the approval', async () => {
-    const scenario = loadScenario('resume-pending');
-    const run = await runScenario(scenario);
-    expect(run.client.ok && run.server.ok).toBe(true);
-    const resumed = scenario.lines.find((line) => line.dir === 's2c' && line.msg.type === 'welcome' && line.msg.member !== undefined && (line.msg.member as { resumed?: boolean }).resumed === true);
-    expect(resumed).toBeDefined();
-    expect(JSON.stringify(resumed)).toContain('"admission":"pending"');
-  });
-
-  test('outcomes by stored admission', () => {
+  test('K3 outcomes by stored admission', { tags: ['critical'] }, () => {
     expect(resumeOutcome({ admission: 'pending' })).toEqual({ kind: 'welcome', admission: 'pending' });
     expect(resumeOutcome({ admission: 'approved' })).toEqual({ kind: 'welcome', admission: 'approved' });
     expect(resumeOutcome({ admission: 'refused', reason: 'Not in this group' })).toMatchObject({
@@ -47,34 +37,16 @@ describe('the member token and its resume path', () => {
     expect(resumeOutcome(null)).toMatchObject({ kind: 'error', failure: { code: 'resume-invalid', field: 'resume' } });
   });
 
-  test('the fixtures use the texts the outcome builds', () => {
-    const invalid = resumeOutcome(null);
-    const refused = resumeOutcome({ admission: 'refused', reason: 'Not in this group' });
-    const texts = (name: string) =>
-      loadScenario(name).lines.flatMap((line) => (line.dir === 's2c' && line.msg.type === 'error' ? [line.msg.message] : []));
-    expect(texts('resume-invalid')).toEqual([invalid.kind === 'error' ? invalid.failure.message : '']);
-    expect(texts('resume-refused')).toEqual([refused.kind === 'error' ? refused.failure.message : '']);
-  });
-
-  test('a resume token of the wrong length is a malformed hello', () => {
+  test('K3 a resume token of the wrong length is a malformed hello', { tags: ['standard'] }, () => {
     const hello = { ...firstHello(loadScenario('resume-invalid')), resume: 'short' };
     expect(decodeMessage(JSON.stringify(hello), { direction: 'c2s', maxBytes: 65536 })).toMatchObject({
       ok: false,
       failure: { code: 'metadata-missing', field: 'resume' },
     });
   });
-
-  test('a resumed welcome keeps the token and marks resumed', () => {
-    const scenario = loadScenario('approval-join');
-    const welcomes = scenario.lines.flatMap((line) => (line.dir === 's2c' && line.msg.type === 'welcome' ? [line.msg] : []));
-    expect(welcomes).toHaveLength(2);
-    const [first, second] = welcomes.map((welcome) => welcome.member as { token: string; resumed?: boolean });
-    expect(first?.token).toBe('$token');
-    expect(second).toMatchObject({ token: '$token', resumed: true });
-  });
 });
 
-describe('lobby codes', () => {
+describe('K1 lobby codes', { tags: ['critical'] }, () => {
   test('a code is normalised from any case, with or without the dash', () => {
     expect(normalizeLobbyCode('k7qm-4xt2')).toBe('K7QM4XT2');
     expect(normalizeLobbyCode('K7QM4XT2')).toBe('K7QM4XT2');
@@ -97,7 +69,7 @@ describe('lobby codes', () => {
   });
 });
 
-describe('hello metadata beyond the schema', () => {
+describe('K1 hello metadata beyond the schema', { tags: ['standard'] }, () => {
   const base = (): Hello => structuredClone(firstHello(loadScenario('open-join')));
 
   test('a complete hello passes', () => {

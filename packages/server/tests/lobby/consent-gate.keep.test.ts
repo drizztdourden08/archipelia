@@ -13,7 +13,7 @@ import { createNodeDomains } from '../../src/node';
 import { createBwrapRunner } from '../../src/sandbox/create-bwrap-runner';
 import { BASIC_FEATURES } from '../../src/sandbox/sandbox.constants';
 import type { SandboxRunner } from '../../src/sandbox/sandbox.type';
-import { engine, fileOf, helloOf, holdFiles, linkOf, tick } from './security-kit';
+import { engine, fileOf, helloOf, holdFiles, linkOf } from './security-kit';
 import { fakeTrust, testDeps } from '../../src/testing';
 
 type GateOptions = { sandbox?: SandboxRunner; trust?: LobbyTrust };
@@ -85,7 +85,7 @@ const wrappedGenerate = (gate: Gate) => {
   return { run, command: wrap({ file: 'python', args: ['Generate.py'], cwd: '/srv/sessions/s1', env: {} }) };
 };
 
-describe('consent gate with no sandbox (Windows, macOS, Linux without bubblewrap)', () => {
+describe('K4 consent gate with no sandbox (Windows, macOS, Linux without bubblewrap)', { tags: ['critical'] }, () => {
   test('no run and no overlay touch an unlisted world before the host allows it', async () => {
     const gate = await setup();
     const { lobby } = await joinUnlisted(gate);
@@ -113,7 +113,7 @@ describe('consent gate with no sandbox (Windows, macOS, Linux without bubblewrap
   });
 });
 
-describe('consent survives no bypass', () => {
+describe('K4 consent survives no bypass', { tags: ['critical'] }, () => {
   test('slots.set with another world after consent waits for consent again', async () => {
     const gate = await setup();
     const { lobby, ref } = await joinUnlisted(gate);
@@ -165,7 +165,7 @@ describe('consent survives no bypass', () => {
   });
 });
 
-describe('sandboxed lobby runs', () => {
+describe('K4 sandboxed lobby runs', { tags: ['critical'] }, () => {
   test('Generate of an unlisted world runs in bubblewrap with only the overlay and run folder writable, and the room runs from the plain engine', async () => {
     const gate = await setup({ sandbox: createBwrapRunner('/usr/bin/bwrap', BASIC_FEATURES) });
     const { lobby } = await joinUnlisted(gate);
@@ -193,17 +193,18 @@ describe('sandboxed lobby runs', () => {
   });
 });
 
-describe('N3: trust checks run outside the lobby queue', () => {
+describe('K4 N3: trust checks run outside the lobby queue', { tags: ['critical'] }, () => {
   test('a slow registry does not hold the lobby while a join waits on it', async () => {
     let release = () => undefined as void;
     const held = new Promise<void>((resolve) => { release = resolve; });
+    let reach = () => undefined as void;
+    const reached = new Promise<void>((resolve) => { reach = resolve; });
     const base = fakeTrust('active');
-    const gate = await setup({ trust: { ...base, registry: async () => { await held; return base.registry(); } } });
+    const gate = await setup({ trust: { ...base, registry: async () => { reach(); await held; return base.registry(); } } });
     const lobby = await gate.service.create({ name: 'Slow', engine, options: { admission: 'open', allowUnlisted: true } });
     const joining = gate.service.protocol.join(unlisted(), linkOf().link);
-    await tick();
-    const settled = await Promise.race([gate.service.protocol.settle(lobby.id).then(() => 'settled'), tick(1000).then(() => 'stuck')]);
-    expect(settled).toBe('settled');
+    await reached;
+    await gate.service.protocol.settle(lobby.id);
     release();
     expect((await joining).ok).toBe(true);
     await gate.stop();

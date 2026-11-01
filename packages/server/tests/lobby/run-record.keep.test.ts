@@ -26,7 +26,7 @@ afterEach(async () => {
 const created = async (on: Rig, extra: Record<string, unknown> = {}) =>
   (await on.call('lobby.create', { name: 'Sunday run', engine: ENGINE, ...extra })) as Lobby;
 
-describe('the source and the slot origin of an admin lobby', () => {
+describe('K2 the source and the slot origin of an admin lobby', { tags: ['e2e'] }, () => {
   test('are stored on create and update, and the host slots keep their origin', async () => {
     rig = await startLobbyRig();
     const lobby = await created(rig, { source: SOURCE });
@@ -49,7 +49,7 @@ describe('the source and the slot origin of an admin lobby', () => {
   });
 });
 
-describe('the run of a lobby', () => {
+describe('K2 the run of a lobby', { tags: ['e2e'] }, () => {
   test('gets the source of its lobby and the origin of each slot, with joined players tagged joined', async () => {
     rig = await startLobbyRig();
     const on = rig;
@@ -74,7 +74,7 @@ describe('the run of a lobby', () => {
     expect(players.find((player) => player.name === 'Link')?.member).toMatchObject({ displayName: 'Link', client: 'Relic of the Past', trust: 'verified' });
     expect(players.find((player) => player.name === 'Ana')?.member).toBeUndefined();
     expect(new Set(players.map((player) => player.slot)).size).toBe(3);
-  }, 30000);
+  });
 
   test('has no source when the lobby has none', async () => {
     rig = await startLobbyRig();

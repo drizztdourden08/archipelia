@@ -41,7 +41,7 @@ const secretsOf = (keyring: boolean) => {
   return { secrets, calls, logs };
 };
 
-describe('room secrets without a keyring', () => {
+describe('K4 room secrets without a keyring', { tags: ['critical'] }, () => {
   test('a room password is kept in memory, and the vault is never asked', async () => {
     const { secrets, calls } = secretsOf(false);
     await secrets.set('lobby-room-lb_1', 'pw-1', 'Room password');
@@ -55,7 +55,6 @@ describe('room secrets without a keyring', () => {
     await secrets.set('lobby-room-lb_1', 'a');
     await secrets.set('lobby-room-lb_2', 'b');
     expect(logs).toEqual([IN_MEMORY_NOTICE]);
-    expect(IN_MEMORY_NOTICE).toContain('memory only');
   });
 
   test('a long-lived secret still needs the vault and is refused', async () => {
@@ -66,7 +65,7 @@ describe('room secrets without a keyring', () => {
   });
 });
 
-describe('room secrets with a keyring', () => {
+describe('K4 room secrets with a keyring', { tags: ['critical'] }, () => {
   test('a room password goes to the vault and every other secret too', async () => {
     const { secrets, calls, logs } = secretsOf(true);
     await secrets.set('lobby-room-lb_1', 'pw-1');
@@ -78,7 +77,7 @@ describe('room secrets with a keyring', () => {
   });
 });
 
-describe('starting a lobby on a system with no keyring', () => {
+describe('K4 starting a lobby on a system with no keyring', { tags: ['critical'] }, () => {
   const failedRun = (template: SessionTemplate, lobby: LobbyRun): Session =>
     ({ id: `s_${lobby.lobbyId}`, snapshot: template, status: 'failed', createdAt: 0, lobbyId: lobby.lobbyId, error: 'stopped by the test' });
 

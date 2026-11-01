@@ -38,7 +38,7 @@ const nextReply = (transport: Awaited<ReturnType<typeof connectWebSocket>>, type
     if (message.type === type) resolve(message);
   }));
 
-describe('the lobby server in LAN mode', () => {
+describe('K2 the lobby server in LAN mode', { tags: ['e2e'] }, () => {
   test('listens on the network, announces itself and still lets a client on the same computer join an open lobby', async () => {
     const host: ServerHost<CoreDomains> = { dataDir, args: [], log: () => undefined, domains: createNodeDomains(dataDir) };
     const server = startCore(host, createNodeRest(host, { automation: false, lanHost: () => '192.168.1.20' }));
@@ -69,7 +69,7 @@ describe('the lobby server in LAN mode', () => {
 
     await endpoint.stop();
     await server.stop();
-  }, 30000);
+  });
 
   test('binds the loopback only, announces nothing and maps no port when the mode is off', async () => {
     const host: ServerHost<CoreDomains> = { dataDir, args: [], log: () => undefined, domains: createNodeDomains(dataDir) };

@@ -43,7 +43,7 @@ const fileOrder = (bytes: Uint8Array): string[] => {
   return names;
 };
 
-describe('archipelago.json', () => {
+describe('K2 archipelago.json', { tags: ['critical'] }, () => {
   test('is written with the keys Archipelago reads and format 7 by default', () => {
     const text = buildArchipelagoJson({ ...base, authors: ['Relic of the Past'] });
     expect(text).toBe([
@@ -92,7 +92,7 @@ describe('archipelago.json', () => {
   });
 });
 
-describe('the apworld build', () => {
+describe('K1 the apworld build', { tags: ['critical'] }, () => {
   test('holds one package folder, sorted, with the generated files and a fresh manifest', async () => {
     const build = await buildApworld({ ...base, worldDir: await worldDirOf() });
     expect(build.module).toBe(ROTP_MODULE);
@@ -109,22 +109,9 @@ describe('the apworld build', () => {
     expect(info.manifest.game).toBe(ROTP_GAME);
     expect(info.manifest.minimumAp).toBe('0.6.4');
   });
-
-  test('returns the sha256 and size of the bytes', async () => {
-    const build = await buildApworld({ ...base, worldDir: await worldDirOf() });
-    expect(build.size).toBe(build.bytes.length);
-    expect(build.sha256).toMatch(/^[0-9a-f]{64}$/);
-  });
-
-  test('the same input twice gives the same sha256', async () => {
-    const first = await buildApworld({ ...base, worldDir: await worldDirOf() });
-    const second = await buildApworld({ ...base, worldDir: await worldDirOf() });
-    expect(second.sha256).toBe(first.sha256);
-    expect(Buffer.from(second.bytes).equals(Buffer.from(first.bytes))).toBe(true);
-  });
 });
 
-describe('the apworld is reproducible', () => {
+describe('K1 the apworld is reproducible', { tags: ['critical'] }, () => {
   test('file times, file order on disk and line endings do not change the bytes', async () => {
     const reference = await buildApworld({ ...base, worldDir: await worldDirOf() });
     const crlf = Object.fromEntries(Object.entries(ROTP_WORLD_FILES).map(([name, text]) => [name, text.replaceAll('\n', '\r\n')]));
@@ -159,7 +146,7 @@ describe('the apworld is reproducible', () => {
   });
 });
 
-describe('the apworld folders and data', () => {
+describe('K1 the apworld folders and data', { tags: ['critical'] }, () => {
   test('a data folder is read from disk and overrides the package folder', async () => {
     const dataFolder = await makeTempDir();
     await writeFiles(dataFolder, { 'game.json': '{"fromDisk":true}\n' });

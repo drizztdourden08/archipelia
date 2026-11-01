@@ -2,7 +2,7 @@
 import { describe, expect, test } from 'vitest';
 import { localAddress } from '../../src/lobby/start/local-address';
 
-describe('the loopback address of a room', () => {
+describe('K1 the loopback address of a room', { tags: ['critical'] }, () => {
   test('is offered when the room runs on the computer of the server', () => {
     expect(localAddress({ kind: 'local', port: 38281 }, { port: 38281 })).toBe('127.0.0.1:38281');
   });

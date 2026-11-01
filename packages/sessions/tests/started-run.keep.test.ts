@@ -24,7 +24,7 @@ const PLAYERS = [
 
 const lobbyRun = (patch: Partial<LobbyRun> = {}): LobbyRun => ({ lobbyId: 'lb_1', worlds: [], runtime: {} as LobbyRun['runtime'], ...patch });
 
-describe('the first record of a run', () => {
+describe('K1 the first record of a run', { tags: ['critical'] }, () => {
   test('a lobby run keeps the source and players its lobby handed over, and its lobby and worlds', () => {
     const run = startedRun(TEMPLATE, lobbyRun({ source: SOURCE, players: PLAYERS, worlds: [{ game: 'Celeste', sha256: 'w' }] }), 'r1', 7);
     expect(run).toMatchObject({

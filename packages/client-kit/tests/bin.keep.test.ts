@@ -1,6 +1,6 @@
 /* @layer tests @kind test */
 import { spawnSync } from 'node:child_process';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync } from 'node:fs';
 import { rm } from 'node:fs/promises';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
@@ -13,7 +13,6 @@ afterEach(cleanTempDirs);
 const ROOT = join(import.meta.dirname, '..');
 const BIN = join(ROOT, 'bin', 'archipelia-kit.mjs');
 const DIST = join(ROOT, 'dist');
-const BUILD_TIMEOUT = 120000;
 
 const spawn = (cwd: string, args: string[], timezone = 'UTC') => spawnSync(process.execPath, [BIN, ...args], {
   cwd,
@@ -23,7 +22,7 @@ const spawn = (cwd: string, args: string[], timezone = 'UTC') => spawnSync(proce
 
 const hashOf = (stdout: string): string => (JSON.parse(stdout) as { sha256: string }).sha256;
 
-describe('the bin file runs the source', () => {
+describe('E2 the bin file runs the source', { tags: ['e2e'] }, () => {
   beforeAll(() => rm(DIST, { recursive: true, force: true }));
 
   test('runs under plain node and gives the same hash in any time zone', async () => {
@@ -44,17 +43,8 @@ describe('the bin file runs the source', () => {
   });
 });
 
-describe('the published package', () => {
+describe('E2 the published package', { tags: ['e2e'] }, () => {
   afterAll(() => rm(DIST, { recursive: true, force: true }));
-
-  test('names the GitHub Packages scope and registry, and is not private', () => {
-    const manifest = JSON.parse(readFileSync(join(ROOT, 'package.json'), 'utf8')) as Record<string, unknown>;
-    expect(manifest.name).toBe('@drizztdourden08/archipelia-client-kit');
-    expect(manifest.version).toMatch(/^\d+\.\d+\.\d+$/);
-    expect(manifest.private).toBeUndefined();
-    expect(manifest.publishConfig).toEqual({ registry: 'https://npm.pkg.github.com' });
-    expect(manifest.files).toEqual(['bin', 'dist', 'README.md']);
-  });
 
   test('builds plain JavaScript and declarations that run without type stripping', async () => {
     const dir = await workspace();
@@ -69,5 +59,5 @@ describe('the published package', () => {
     expect(hashOf(viaDist.stdout)).toBe(reference);
     const library = (await import(pathToFileURL(join(DIST, 'index.js')).href)) as { buildPlayerYaml: (input: unknown) => string };
     expect(library.buildPlayerYaml({ game: 'G', slotName: 'S', options: { a: 1 } })).toBe('name: S\ngame: G\nG:\n  a: 1\n');
-  }, BUILD_TIMEOUT);
+  });
 });

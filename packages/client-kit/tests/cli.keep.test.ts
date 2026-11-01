@@ -21,7 +21,7 @@ const run = async (cwd: string, args: string[]): Promise<{ code: number; out: st
 };
 
 describe('the command line', () => {
-  test('build-apworld writes the file and prints its hash and size', async () => {
+  test('K2 build-apworld writes the file and prints its hash and size', { tags: ['critical'] }, async () => {
     const dir = await workspace();
     const result = await run(dir, [...BUILD, '--author', 'Relic of the Past']);
     expect(result.code).toBe(0);
@@ -36,7 +36,7 @@ describe('the command line', () => {
     expect(info.manifest).toMatchObject({ authors: ['Relic of the Past'], minimumAp: '0.6.4' });
   });
 
-  test('check-fit exits 0 when the world fits and 1 with the sentence when it does not', async () => {
+  test('K2 check-fit exits 0 when the world fits and 1 with the sentence when it does not', { tags: ['critical'] }, async () => {
     const dir = await workspace();
     await run(dir, [...BUILD, '--maximum-ap', '0.6.8']);
     const fits = await run(dir, ['check-fit', 'out/world.apworld', '--ap', '0.6.8']);
@@ -47,7 +47,7 @@ describe('the command line', () => {
     expect(tooNew.err).toContain('supports Archipelago 0.6.4 to 0.6.8, not Archipelago 0.6.9');
   });
 
-  test('build-set reads a config and writes the files and the index', async () => {
+  test('K2 build-set reads a config and writes the files and the index', { tags: ['critical'] }, async () => {
     const dir = await workspace();
     const config = { game: ROTP_GAME, worldVersion: '0.1.0', appVersion: '0.22.0', minimumAp: '0.6.4', worldDir: ROTP_MODULE, dataFolder: 'generated', outDir: 'release', builds: ['0.6.7', { archipelagoVersion: '0.6.8' }] };
     await writeFiles(dir, { 'kit.json': JSON.stringify(config) });
@@ -58,7 +58,7 @@ describe('the command line', () => {
     expect((await readFile(join(dir, 'release', 'relic_of_the_past.apworld'))).length).toBe(index.builds[1]?.size);
   });
 
-  test('player-yaml writes the YAML to stdout or a file and explains an invalid input', async () => {
+  test('K2 player-yaml writes the YAML to stdout or a file and explains an invalid input', { tags: ['standard'] }, async () => {
     const dir = await workspace();
     const options = await readFile(join(import.meta.dirname, 'fixtures', 'rotp-options.json'), 'utf8');
     const input = { game: ROTP_GAME, slotName: 'Link', description: 'Relic of the Past 0.22.0', options: { progression_balancing: 50, accessibility: 'full', death_link: false, shop_shuffle: 'random', capacity_mode: 2, dungeon_count: 5, seed_text: 'seed: 1234' }, preRolled: { pond: { demands: [1, 2, 3] }, shop: { prices: [], tag: 'random' } } };
@@ -75,7 +75,7 @@ describe('the command line', () => {
   });
 });
 
-describe('the release-files command', () => {
+describe('K2 the release-files command', { tags: ['critical'] }, () => {
   test('writes archipelia.json beside the index, copies the files and warns about HTML', async () => {
     const dir = await workspace();
     const config = { game: ROTP_GAME, worldVersion: '0.1.0', appVersion: '0.22.0', minimumAp: '0.6.4', worldDir: ROTP_MODULE, dataFolder: 'generated', outDir: 'release', builds: ['0.6.7', '0.6.8'] };
@@ -109,7 +109,7 @@ describe('the release-files command', () => {
   });
 });
 
-describe('the cli reports problems', () => {
+describe('K2 the cli reports problems', { tags: ['critical'] }, () => {
   test('usage mistakes exit 2 and say what is wrong', async () => {
     const dir = await workspace();
     expect((await run(dir, [])).code).toBe(2);

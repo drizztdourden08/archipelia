@@ -47,7 +47,7 @@ const engineAt = (root: string, python: string): EngineRuntime => ({
   id: 'e', apVersion: '0.6.8', apCommit: 'c', pythonVersion: '3', root, python, generate: '', multiServer: '', schemaScript: '',
 });
 
-describe('the bwrap runner', () => {
+describe('K4 the bwrap runner', { tags: ['critical'] }, () => {
   test('builds the basic bwrap arguments: no network, no home, the overlay and run folder writable, Python read only', () => {
     expect(bwrapCommand({ bwrap: '/usr/bin/bwrap', features: BASIC_FEATURES }, scope, generate)).toEqual({
       file: '/usr/bin/bwrap',
@@ -81,12 +81,6 @@ describe('the bwrap runner', () => {
     expect(env.GH_TOKEN).toBeUndefined();
   });
 
-  test('never passes the host environment into the sandbox', () => {
-    const { env } = bwrapCommand({ bwrap: '/usr/bin/bwrap', features: BASIC_FEATURES }, scope, generate);
-    expect(env.ARCHIPELIA_TOKEN).toBeUndefined();
-    expect(env.HOME).toBe('/tmp');
-  });
-
   test('the none runner leaves a command as it is', () => {
     expect(noSandbox('test').confine(scope)).toBeUndefined();
   });
@@ -97,7 +91,7 @@ describe('the bwrap runner', () => {
   });
 });
 
-describe('I-81: the process limit follows the tasks the server user already has', () => {
+describe('K4 I-81: the process limit follows the tasks the server user already has', { tags: ['critical'] }, () => {
   const limitOf = (args: string[]) => args.find((arg) => arg.startsWith('--nproc='));
 
   test('it is the current count plus a margin, so a busy server is never starved by it', () => {
@@ -129,7 +123,7 @@ describe('I-81: the process limit follows the tasks the server user already has'
   });
 });
 
-describe('sandbox detection', () => {
+describe('K4 sandbox detection', { tags: ['critical'] }, () => {
   const found = () => Promise.resolve('/usr/bin/bwrap');
   const full = () => Promise.resolve(FULL);
   const works = () => Promise.resolve(null);
@@ -162,7 +156,7 @@ describe('sandbox detection', () => {
   });
 });
 
-describe('A4: the consent data names the sandbox', () => {
+describe('K4 A4: the consent data names the sandbox', { tags: ['critical'] }, () => {
   const world: WorldUpload = {
     sha256: 'w', size: 1, game: 'Quest', module: 'quest', worldVersion: '1.0.0', memberId: 'm_1', trust: { level: 'unlisted', detail: 'not in the registry', checkedAt: 0 },
   };

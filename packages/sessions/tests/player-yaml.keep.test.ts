@@ -6,7 +6,7 @@ import { gameOfYaml, renderImportedYaml, renderPresetYaml } from '../src';
 
 const player = (source: HostedPlayer['source']): HostedPlayer => ({ slot: 1, name: 'Alice', game: 'Timespinner', source });
 
-describe('player yaml', () => {
+describe('K2 player yaml', { tags: ['critical'] }, () => {
   test('a preset player writes the game block under the game name', () => {
     const yaml = renderPresetYaml(player({ kind: 'preset', presetId: 'p', overrides: {} }), { death_link: true, goal: 'x' });
     expect(parse(yaml)).toEqual({ name: 'Alice', game: 'Timespinner', description: 'Written by Archipelia', Timespinner: { death_link: true, goal: 'x' } });

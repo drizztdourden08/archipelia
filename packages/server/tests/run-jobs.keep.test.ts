@@ -37,7 +37,7 @@ const fakeJobs = () => {
   return { calls, job };
 };
 
-describe('run job steps', () => {
+describe('K1 run job steps', { tags: ['critical'] }, () => {
   test('the engine stages fold into five steps and the host step', () => {
     const steps = runJobSteps(run('a', 't', 0));
     expect(steps.map((step) => step.id)).toEqual(['roll', 'worlds', 'rules', 'fill', 'output', 'host']);
@@ -52,7 +52,7 @@ describe('run job steps', () => {
   });
 });
 
-describe('run jobs', () => {
+describe('K1 run jobs', { tags: ['critical'] }, () => {
   test('a live run walks its steps and ends when the room hosts', () => {
     const { calls, job } = fakeJobs();
     const jobs = createRunJobs({ job, cancel: () => Promise.resolve() });

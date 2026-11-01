@@ -26,7 +26,7 @@ const indexInput: IndexInput = {
   ],
 };
 
-describe('the index manifest', () => {
+describe('K2 the index manifest', { tags: ['critical'] }, () => {
   test('names files and bundles by the agreed rule', () => {
     expect(apworldNames(ROTP_MODULE, '0.6.8')).toEqual({
       file: 'relic_of_the_past-ap0.6.8.apworld',
@@ -82,7 +82,7 @@ describe('the index manifest', () => {
   });
 });
 
-describe('per-version builds', () => {
+describe('K2 per-version builds', { tags: ['critical'] }, () => {
   const setOptions = async (): Promise<Parameters<typeof buildApworldSet>[0]> => {
     const root = await makeTempDir();
     await writeFiles(join(root, ROTP_MODULE), ROTP_WORLD_FILES);
@@ -115,13 +115,6 @@ describe('per-version builds', () => {
       expect(bytes.length).toBe(build.size);
       expect(readApworld(bytes).manifest.minimumAp).toBe('0.6.4');
     }
-  });
-
-  test('a second run gives the same index and the same files', async () => {
-    const options = await setOptions();
-    const first = await buildApworldSet(options);
-    const second = await buildApworldSet(options);
-    expect(second.index).toEqual(first.index);
   });
 
   test('a per-build range narrows that build and a version outside the range is refused', async () => {

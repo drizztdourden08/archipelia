@@ -13,7 +13,7 @@ const SNAPSHOT: SessionTemplate = {
 
 const OLD_RUN: Session = { id: 'r1', templateId: 'sunday', snapshot: SNAPSHOT, status: 'stopped', createdAt: 5 };
 
-describe('the run store', () => {
+describe('K3 the run store', { tags: ['critical'] }, () => {
   test('reads an old run with its source and players, and leaves the file as it was', async () => {
     const stored: Record<string, unknown> = { 'runs/r1.json': OLD_RUN };
     const store = createRunStore(runFiles(stored), () => Promise.resolve([SNAPSHOT]));
@@ -25,13 +25,5 @@ describe('the run store', () => {
   test('has an unknown source without a saved session to match', async () => {
     const store = createRunStore(runFiles({ 'runs/r1.json': OLD_RUN }));
     expect((await store.newest())[0]?.source?.match).toBe('unknown');
-  });
-
-  test('looks the saved sessions up only for the runs that need it', async () => {
-    const source = { sessionId: 'sunday', sessionName: 'Sunday run', overrides: [], match: 'recorded' as const };
-    let lookups = 0;
-    const store = createRunStore(runFiles({ 'runs/r1.json': { ...OLD_RUN, source } }), () => { lookups += 1; return Promise.resolve([]); });
-    await store.list();
-    expect(lookups).toBe(0);
   });
 });

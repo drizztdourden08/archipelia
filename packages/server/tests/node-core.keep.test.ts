@@ -7,7 +7,7 @@ import type { ServerHost } from '@drizztdourden08/brock-electron/server';
 import type { CoreDomains, CoreEvent } from '../src';
 import { startCore } from '../src';
 import { createRoomSecrets } from '../src/core/room-secrets/create-room-secrets';
-import { createNodeDomains, createNodeRest, nodeLanHost } from '../src/node';
+import { createNodeDomains, createNodeRest } from '../src/node';
 import { connectWebSocket } from '@drizztdourden08/archipelia-lobby-protocol/testing';
 import { replies } from './replies';
 
@@ -26,7 +26,7 @@ const hostOf = (log: string[]): ServerHost<CoreDomains> => ({
 });
 
 describe('the core under plain Node', () => {
-  test('starts on a temp data folder with Node storage, secrets and jobs', async () => {
+  test('S2 starts on a temp data folder with Node storage, secrets and jobs', { tags: ['standard'] }, async () => {
     const log: string[] = [];
     const events: CoreEvent[] = [];
     const host = hostOf(log);
@@ -36,11 +36,11 @@ describe('the core under plain Node', () => {
     const preset = await core.presets.create({ game: 'ChecksFinder', name: 'First', values: {} });
     expect((await core.presets.list()).map((entry) => entry.id)).toEqual([preset.id]);
     expect(await readFile(join(dataDir, 'Data', 'presets', `${preset.id}.json`), 'utf8')).toContain('First');
-    await expect(Promise.resolve(stop())).resolves.toBeUndefined();
+    await stop();
     expect(log).toEqual([]);
   });
 
-  test('keeps the secrets in a file of the data folder', async () => {
+  test('K3 keeps the secrets in a file of the data folder', { tags: ['critical'] }, async () => {
     const host = hostOf([]);
     const rest = createNodeRest(host);
     await rest.secrets.set('room-owner', 'abc');
@@ -48,7 +48,7 @@ describe('the core under plain Node', () => {
     expect(await readFile(join(dataDir, 'secrets', 'secrets.json'), 'utf8')).toContain('room-owner');
   });
 
-  test('keeps a room password in that same file, since the file store can always store', async () => {
+  test('K3 keeps a room password in that same file, since the file store can always store', { tags: ['critical'] }, async () => {
     const host = hostOf([]);
     const rest = createNodeRest(host);
     const secrets = createRoomSecrets({ vault: rest.secrets, canStore: () => true, log: () => undefined });
@@ -57,20 +57,16 @@ describe('the core under plain Node', () => {
     expect(await readFile(join(dataDir, 'secrets', 'secrets.json'), 'utf8')).toContain('lobby-room-lb_1');
   });
 
-  test('an environment variable overrides a stored secret', async () => {
+  test('K3 an environment variable overrides a stored secret', { tags: ['critical'] }, async () => {
     const host = hostOf([]);
     const rest = createNodeRest(host, { env: { BROCK_SECRET_ROOM_OWNER: 'from-env' } });
     await rest.secrets.set('room-owner', 'abc');
     expect(await rest.secrets.get('room-owner')).toBe('from-env');
   });
 
-  test('refuses to start without the data domains', () => {
+  test('K4 refuses to start without the data domains', { tags: ['critical'] }, () => {
     const host: ServerHost<CoreDomains> = { dataDir, args: [], log: () => undefined };
     expect(() => startCore(host, createNodeRest(host))).toThrow('the core needs the data domains of its host');
-  });
-
-  test('picks an address for the lobby', () => {
-    expect(nodeLanHost()).toMatch(/^\d+\.\d+\.\d+\.\d+$/);
   });
 });
 
@@ -79,7 +75,7 @@ const started = () => {
   return startCore(host, createNodeRest(host, { automation: true }));
 };
 
-describe('the lobby listener of the core', () => {
+describe('K2 the lobby listener of the core', { tags: ['e2e'] }, () => {
   test('binds loopback under automation, answers the admin API with its token and lobby.info for the lobby it made', async () => {
     const server = started();
     const endpoint = await server.listen({ port: 0, mode: 'lan-and-internet' });

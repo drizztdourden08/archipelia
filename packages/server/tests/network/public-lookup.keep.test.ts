@@ -10,7 +10,7 @@ const answering = (answers: Record<string, string | Error>, asked: string[]): Pu
   return Promise.resolve({ ok: true, text: () => Promise.resolve(answer) });
 };
 
-describe('the public address lookup', () => {
+describe('K1 the public address lookup', { tags: ['critical'] }, () => {
   test('asks ipify first and reports the address it found', async () => {
     const asked: string[] = [];
     const lookup = createPublicLookup({ fetch: answering({ 'https://api.ipify.org': '203.0.113.7' }, asked) });
