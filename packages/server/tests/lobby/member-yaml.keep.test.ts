@@ -16,7 +16,7 @@ afterEach(async () => {
   rig = undefined;
 });
 
-describe('K2 the member.yaml admin request', { tags: ['e2e'] }, () => {
+describe('K2 the member.yaml admin request', { tags: ['standard'] }, () => {
   test('gives the host the player file of each slot of a member, read only', async () => {
     rig = await startLobbyRig();
     const lobby = (await rig.call('lobby.create', { name: 'Sunday run', engine: ENGINE })) as Lobby;

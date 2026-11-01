@@ -22,7 +22,7 @@ const welcomeOf = async (sandbox?: SandboxMode) => {
   return message;
 };
 
-describe('K2 server.info', { tags: ['e2e'] }, () => {
+describe('K2 server.info', { tags: ['standard'] }, () => {
   test('reports the sandbox the server has', async () => {
     expect(await welcomeOf('bwrap')).toMatchObject({ type: 'admin.welcome', server: { sandbox: 'bwrap' } });
   });

@@ -38,7 +38,7 @@ const nextReply = (transport: Awaited<ReturnType<typeof connectWebSocket>>, type
     if (message.type === type) resolve(message);
   }));
 
-describe('K2 the lobby server in LAN mode', { tags: ['e2e'] }, () => {
+describe('K2 the lobby server in LAN mode', { tags: ['standard'] }, () => {
   test('listens on the network, announces itself and still lets a client on the same computer join an open lobby', async () => {
     const host: ServerHost<CoreDomains> = { dataDir, args: [], log: () => undefined, domains: createNodeDomains(dataDir) };
     const server = startCore(host, createNodeRest(host, { automation: false, lanHost: () => '192.168.1.20' }));

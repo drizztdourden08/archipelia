@@ -19,7 +19,7 @@ const playOverSocket = async (name: string) => {
   }
 };
 
-describe('K2 real WebSocket transport', { tags: ['e2e'] }, () => {
+describe('K2 real WebSocket transport', { tags: ['standard'] }, () => {
   test.each(['approval-join', 'upload-resume', 'version-mismatch', 'wrong-code-rate-limit', 'bad-message-binary'])(
     '%s plays over ws://',
     async (name) => {

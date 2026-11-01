@@ -42,7 +42,7 @@ describe('K4 lobby security: checks', { tags: ['critical'] }, () => {
 });
 
 describe('lobby security: connections', () => {
-  test('K4 F2: a fragmented message over the pre-welcome limit closes the socket with 1009', { tags: ['e2e'] }, async () => {
+  test('K4 F2: a fragmented message over the pre-welcome limit closes the socket with 1009', { tags: ['standard'] }, async () => {
     const kit = await startService();
     const listener = await startListener({ service: kit.service, host: '127.0.0.1', port: 0, serverVersion: 't', admin });
     const socket = connect(listener.port, '127.0.0.1');
@@ -106,7 +106,7 @@ describe('K4 lobby security: files', { tags: ['critical'] }, () => {
 });
 
 describe('lobby security: timeouts and starts', () => {
-  test('K4 F5: a socket that never upgrades is dropped after the upgrade timeout', { tags: ['e2e'] }, async () => {
+  test('K4 F5: a socket that never upgrades is dropped after the upgrade timeout', { tags: ['standard'] }, async () => {
     const kit = await startService();
     const listener = await startListener({ service: kit.service, host: '127.0.0.1', port: 0, serverVersion: 't', admin, upgradeTimeoutMs: 200 });
     const socket = connect(listener.port, '127.0.0.1');

@@ -26,7 +26,7 @@ afterEach(async () => {
 const created = async (on: Rig, extra: Record<string, unknown> = {}) =>
   (await on.call('lobby.create', { name: 'Sunday run', engine: ENGINE, ...extra })) as Lobby;
 
-describe('K2 the source and the slot origin of an admin lobby', { tags: ['e2e'] }, () => {
+describe('K2 the source and the slot origin of an admin lobby', { tags: ['standard'] }, () => {
   test('are stored on create and update, and the host slots keep their origin', async () => {
     rig = await startLobbyRig();
     const lobby = await created(rig, { source: SOURCE });
@@ -49,7 +49,7 @@ describe('K2 the source and the slot origin of an admin lobby', { tags: ['e2e'] 
   });
 });
 
-describe('K2 the run of a lobby', { tags: ['e2e'] }, () => {
+describe('K2 the run of a lobby', { tags: ['standard'] }, () => {
   test('gets the source of its lobby and the origin of each slot, with joined players tagged joined', async () => {
     rig = await startLobbyRig();
     const on = rig;

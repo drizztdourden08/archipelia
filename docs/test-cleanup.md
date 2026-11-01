@@ -9,10 +9,10 @@ Branch: standards/phase.
 | | before | after |
 |---|---|---|
 | files | 232 | 228 |
-| cases | 1669 | 1563 |
-| tagged critical | 0 | 1184 |
-| tagged standard | 0 | 330 |
-| tagged e2e | 0 | 49 |
+| cases | 1669 | 1562 |
+| tagged critical | 0 | 1183 |
+| tagged standard | 0 | 352 |
+| tagged e2e | 0 | 27 |
 | untagged | 1669 | 0 |
 
 The counts add up the four parts below. The 3 cases defined in the desktop e2e rig helper are tagged e2e and are not counted. A raw scan of the final tree finds 228 files.
@@ -24,6 +24,7 @@ Nine files came from main after the branch was cut (direct-worlds, lobby-view, m
 - critical: K1 to K5 with no process, network, real build or real clock.
 - standard: S1 to S4, plus K cases that run a real loopback listener, a temp folder tree or mocked Sigstore signing, the same as Brock's choice for its http server tests.
 - e2e: the desktop app journeys, real sandbox and real server specs.
+- Rule D-89, one tag rule for the repo: a test that runs an in-process loopback server (the lobby rig `startLobbyRig`, a websocket or http listener on 127.0.0.1 inside the test process, a fake site) is `standard`; `e2e` is only for a test that spawns a child process, runs a real sandbox (bwrap), a real external tool or Python, a real Archipelago server process, or the real app.
 - Per-test timeouts were removed. The preset sets the limit per tag.
 
 ## Part 1: apps/desktop
@@ -248,15 +249,15 @@ Verdicts against `docs/test-standard.md`. A case is one `it` or `test` call site
 | | before | after |
 |---|---|---|
 | files | 58 | 58 |
-| cases | 397 | 360 |
-| tagged critical | 0 | 282 |
-| tagged standard | 0 | 43 |
-| tagged e2e | 0 | 35 |
+| cases | 397 | 359 |
+| tagged critical | 0 | 281 |
+| tagged standard | 0 | 65 |
+| tagged e2e | 0 | 13 |
 | untagged | 397 | 0 |
 
 By package (cases before, after): server 147 to 140, lobby-protocol 106 to 85, client-kit 81 to 74, sessions 63 to 61.
 
-Tag rule used: a real socket, listener or spawned process is e2e; a read of a committed fixture file outside a temp folder is standard (S2/S3/S4 or the KEEP rule of the case); fake timers, in-memory fakes and temp-folder files are critical. The KEEP rule is named in the title of the tagged describe or test.
+Tag rule used (D-89): an in-process loopback server, socket or listener is standard; a spawned process, a real sandbox, a real engine or Python is e2e; a read of a committed fixture file outside a temp folder is standard (S2/S3/S4 or the KEEP rule of the case); fake timers, in-memory fakes and temp-folder files are critical. The KEEP rule is named in the title of the tagged describe or test.
 
 No helper was deleted: every file under `tests/` that is not a test is still imported by a kept test. The `tick` export of `packages/server/tests/lobby/security-kit.ts` was removed because nothing uses it any more (W7).
 
@@ -265,7 +266,7 @@ W7 changes (sleeps and real clocks):
 - `consent-gate` N3: the sleep and the 1 s race are gone; the test waits for the registry call to be reached, then settles the lobby.
 - `security-review` F1 and `security` F1: `tick()` replaced by a promise that resolves when the gated trust check is reached. `security` F1 now awaits the refusal itself before it releases the check.
 - `security` F2: waits for the 101 response instead of 100 ms. `security` F3: waits for the first reply instead of 30 ms.
-- `security-review` N1 and `security` F5 (e2e): the `Date.now()` upper bound is gone; the awaited socket close is the outcome.
+- `security-review` N1 and `security` F5 (standard): the `Date.now()` upper bound is gone; the awaited socket close is the outcome.
 - `confined-output` (e2e): the `Date.now()` bound on the disk cap test is gone.
 - Per-test timeouts removed in conformance, run-record, overlay-engine, bwrap-sandbox, lan-loopback, bin and confined-output.
 
@@ -273,31 +274,31 @@ W7 changes (sleeps and real clocks):
 |---|---|---|---|---|
 | server/tests/core/room-binding.keep.test.ts | keep | K1 critical | 3 | 3 |
 | server/tests/create-core.keep.test.ts | trim | S2 standard | 8 | 5 |
-| server/tests/listener/admin-hardening.keep.test.ts | trim | K4 e2e | 4 | 3 |
+| server/tests/listener/admin-hardening.keep.test.ts | trim | K4 standard | 4 | 3 |
 | server/tests/lobby/apworld-caps.keep.test.ts | keep | K4 critical | 4 | 4 |
-| server/tests/lobby/conformance.keep.test.ts | keep | K2 e2e | 1 | 1 |
+| server/tests/lobby/conformance.keep.test.ts | keep | K2 standard | 1 | 1 |
 | server/tests/lobby/consent-gate.keep.test.ts | keep | K4 critical | 9 | 9 |
 | server/tests/lobby/local-address.keep.test.ts | keep | K1 critical | 2 | 2 |
-| server/tests/lobby/member-yaml.keep.test.ts | keep | K2 K4 e2e | 2 | 2 |
-| server/tests/lobby/overlay-engine.keep.test.ts | keep | E2 e2e | 1 | 1 |
+| server/tests/lobby/member-yaml.keep.test.ts | keep | K2 K4 standard | 2 | 2 |
+| server/tests/lobby/overlay-engine.keep.test.ts | keep | E2 e2e (real engine, Python) | 1 | 1 |
 | server/tests/lobby/room-secrets.keep.test.ts | keep | K4 critical | 5 | 5 |
-| server/tests/lobby/run-record.keep.test.ts | keep | K2 e2e | 4 | 4 |
-| server/tests/lobby/security-review.keep.test.ts | keep | K4 critical, N1 e2e | 6 | 6 |
-| server/tests/lobby/security.keep.test.ts | keep | K4 critical, F2 and F5 e2e | 9 | 9 |
+| server/tests/lobby/run-record.keep.test.ts | keep | K2 standard | 4 | 4 |
+| server/tests/lobby/security-review.keep.test.ts | keep | K4 critical, N1 standard | 6 | 6 |
+| server/tests/lobby/security.keep.test.ts | keep | K4 critical, F2 and F5 standard | 9 | 9 |
 | server/tests/network/advertise.keep.test.ts | keep | K2 critical | 8 | 8 |
 | server/tests/network/browse.keep.test.ts | keep | K1 critical | 14 | 14 |
 | server/tests/network/codec.keep.test.ts | keep | K1 critical | 7 | 7 |
 | server/tests/network/map-port.keep.test.ts | keep | K1 critical | 12 | 12 |
 | server/tests/network/mode.keep.test.ts | keep | K1 critical | 2 | 2 |
 | server/tests/network/public-lookup.keep.test.ts | keep | K1 critical | 3 | 3 |
-| server/tests/node-core.keep.test.ts | trim | K3 and K4 critical, S2 standard, K2 e2e | 8 | 7 |
+| server/tests/node-core.keep.test.ts | trim | K3 and K4 critical, S2 and K2 standard | 8 | 7 |
 | server/tests/run-jobs.keep.test.ts | keep | K1 critical | 4 | 4 |
-| server/tests/sandbox/bwrap-sandbox.keep.test.ts | keep | K4 e2e | 1 | 1 |
+| server/tests/sandbox/bwrap-sandbox.keep.test.ts | keep | K4 e2e (real bwrap) | 1 | 1 |
 | server/tests/sandbox/sandbox-path.keep.test.ts | keep | K4 critical | 4 | 4 |
 | server/tests/sandbox/sandbox-runner.keep.test.ts | trim | K4 critical | 18 | 17 |
-| server/tests/sandbox/server-info.keep.test.ts | trim | K2 e2e | 2 | 1 |
-| server/tests/start/lan-loopback.keep.test.ts | keep | K2 e2e | 2 | 2 |
-| server/tests/start/listen-again.keep.test.ts | keep | K1 e2e | 2 | 2 |
+| server/tests/sandbox/server-info.keep.test.ts | trim | K2 standard | 2 | 1 |
+| server/tests/start/lan-loopback.keep.test.ts | keep | K2 standard | 2 | 2 |
+| server/tests/start/listen-again.keep.test.ts | keep | K1 standard | 2 | 2 |
 | server/tests/start/reach-cgnat.keep.test.ts | keep | K1 critical | 2 | 2 |
 | lobby-protocol/tests/client-frames.keep.test.ts | keep | K2 critical | 2 | 2 |
 | lobby-protocol/tests/codec.keep.test.ts | trim | K1 and K2, 3 standard (fixtures), rest critical | 17 | 15 |
@@ -308,16 +309,16 @@ W7 changes (sleeps and real clocks):
 | lobby-protocol/tests/resume.keep.test.ts | trim | K1 and K3, 5 standard (fixtures), rest critical | 15 | 12 |
 | lobby-protocol/tests/scenarios.keep.test.ts | trim | K2 standard | 5 | 2 |
 | lobby-protocol/tests/version.keep.test.ts | trim | K1 critical | 12 | 8 |
-| lobby-protocol/tests/wire.keep.test.ts | keep | K2 e2e (real sockets), K1 and K2 critical (frames, memory) | 6 | 6 |
+| lobby-protocol/tests/wire.keep.test.ts | keep | K2 standard (real sockets), K1 and K2 critical (frames, memory) | 6 | 6 |
 | client-kit/tests/apworld.keep.test.ts | trim | K1, K2 and K3 critical | 14 | 12 |
-| client-kit/tests/bin.keep.test.ts | trim | E2 e2e | 4 | 3 |
+| client-kit/tests/bin.keep.test.ts | trim | E2 e2e (spawns node) | 4 | 3 |
 | client-kit/tests/cli.keep.test.ts | keep | K2 critical, player-yaml standard | 7 | 7 |
 | client-kit/tests/index-manifest.keep.test.ts | trim | K2 critical | 8 | 7 |
 | client-kit/tests/release-files.keep.test.ts | trim | K1 and K3 critical | 14 | 12 |
 | client-kit/tests/release-manifest.keep.test.ts | trim | K2 critical | 10 | 9 |
 | client-kit/tests/version.keep.test.ts | keep | K1 critical | 5 | 5 |
 | client-kit/tests/yaml.keep.test.ts | keep | K1 and K2, 5 standard (read the rotp fixtures), rest critical | 19 | 19 |
-| sessions/tests/confined-output.keep.test.ts | trim | K4 e2e | 9 | 8 |
+| sessions/tests/confined-output.keep.test.ts | trim | K4 e2e (spawns the generator) | 9 | 8 |
 | sessions/tests/failure-of.keep.test.ts | keep | K1 critical | 2 | 2 |
 | sessions/tests/hints-from-log.keep.test.ts | keep | K1 critical | 1 | 1 |
 | sessions/tests/live-room.keep.test.ts | keep | K1 and K2 critical | 12 | 12 |
@@ -365,12 +366,12 @@ Every deleted case that would have run as critical or standard (the e2e case is 
 - client-kit release-manifest "the kit version in the manifest is the version of this package": reads package.json, W1.
 - sessions confined-output "a message names the cap in gibibytes": prose wording, W10.
 - sessions run-store "looks the saved sessions up only for the runs that need it": counts lookups of a callback, W6.
-- server admin-hardening "the network mode off" (e2e): the same host assertions are made by lan-loopback, W4.
-- server server-info "reports no sandbox when none was found" (e2e): another state of one behavior, W4.
+- server admin-hardening "the network mode off" (standard): the same host assertions are made by lan-loopback, W4.
+- server server-info "reports no sandbox when none was found" (standard): another state of one behavior, W4.
 
 ### Left as is, unsure
 
-- `lobby/conformance.keep.test.ts` still uses a 150 ms drain sleep in its test transport (`DRAIN_MS`); it needs a real socket to flush, so it stays e2e. A deterministic close would need a change in the protocol testing kit.
+- `lobby/conformance.keep.test.ts` still uses a 150 ms drain sleep in its test transport (`DRAIN_MS`); it needs a real socket to flush (standard, an in-process loopback). A deterministic close would need a change in the protocol testing kit.
 - `security` F3 now waits for the first reply, then asserts no second one; a late second reply could land after the check.
 - `network/map-port` and `start/reach-cgnat` run code under test with 2 ms internal retry delays (tagged critical); a retry-delay option on the code would make them timer free.
 - `yaml.keep.test.ts` reads two fixtures at import, so every case in the file loads them; only the cases that use them are tagged standard.

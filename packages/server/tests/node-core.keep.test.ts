@@ -75,7 +75,7 @@ const started = () => {
   return startCore(host, createNodeRest(host, { automation: true }));
 };
 
-describe('K2 the lobby listener of the core', { tags: ['e2e'] }, () => {
+describe('K2 the lobby listener of the core', { tags: ['standard'] }, () => {
   test('binds loopback under automation, answers the admin API with its token and lobby.info for the lobby it made', async () => {
     const server = started();
     const endpoint = await server.listen({ port: 0, mode: 'lan-and-internet' });

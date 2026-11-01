@@ -56,7 +56,7 @@ const admin = async (port: number, token: string) => {
   return { call, close: () => transport.close() };
 };
 
-describe('K4 a browser cannot open a socket to the server', { tags: ['e2e'] }, () => {
+describe('K4 a browser cannot open a socket to the server', { tags: ['standard'] }, () => {
   test('refuses an upgrade that carries an Origin header on the lobby path and the admin path', async () => {
     const { endpoint } = await serve(true);
     expect(await upgrade(endpoint.port, '/archipelia/lobby', 'https://evil.example')).toContain('403');
@@ -66,7 +66,7 @@ describe('K4 a browser cannot open a socket to the server', { tags: ['e2e'] }, (
   });
 });
 
-describe('K4 the admin API takes only options it knows', { tags: ['e2e'] }, () => {
+describe('K4 the admin API takes only options it knows', { tags: ['standard'] }, () => {
   test('refuses a password reference, an unknown key and a wrong type when a lobby is created', async () => {
     const { endpoint, token, core } = await serve(true);
     const api = await admin(endpoint.port, token);

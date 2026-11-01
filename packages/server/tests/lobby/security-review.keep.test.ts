@@ -19,7 +19,7 @@ const slotOf = (lobby: Lobby | undefined) => lobby?.members[0]?.slots[0];
 const markOk = (lobby: Lobby): Lobby => ({ ...lobby, members: lobby.members.map((member) => ({ ...member, slots: member.slots.map((slot) => ({ ...slot, state: 'ok' })) })) });
 
 describe('review: connections and slots', () => {
-  test('K4 N1: a client that drips one byte at a time is dropped at the fixed upgrade deadline', { tags: ['e2e'] }, async () => {
+  test('K4 N1: a client that drips one byte at a time is dropped at the fixed upgrade deadline', { tags: ['standard'] }, async () => {
     const kit = await startService();
     const listener = await startListener({ service: kit.service, host: '127.0.0.1', port: 0, serverVersion: 't', admin, upgradeTimeoutMs: 300 });
     const socket = connect(listener.port, '127.0.0.1');
