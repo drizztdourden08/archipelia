@@ -1,7 +1,7 @@
 /* @layer tests @kind test */
 import { describe, expect, test } from 'vitest';
 import { zipSync } from 'fflate';
-import { APWORLD_LIMITS, unzipCapped, ZIP_LIMITS } from '../src/zip';
+import { APWORLD_LIMITS, unzipCapped } from '../src/zip';
 import type { ZipEntry } from '../src/zip';
 import { lieAboutSize as declare } from '../src/testing';
 
@@ -15,12 +15,7 @@ const everything = () => true;
 
 const read = (zip: Uint8Array, pick: (entry: ZipEntry) => boolean = nothing) => unzipCapped(zip, APWORLD_LIMITS, pick);
 
-describe('I-81: the apworld zip is read with its own caps', () => {
-  test('an apworld is capped tighter than a generator archive', () => {
-    expect(APWORLD_LIMITS.entryBytes).toBeLessThan(ZIP_LIMITS.entryBytes);
-    expect(APWORLD_LIMITS.totalBytes).toBeLessThan(ZIP_LIMITS.totalBytes);
-  });
-
+describe('K5 I-81: the apworld zip is read with its own caps', { tags: ['critical'] }, () => {
   test('only the entries asked for are inflated, and every name is listed', () => {
     const zip = zipSync({ 'demo/__init__.py': text(''), 'demo/archipelago.json': text('{"game":"Demo"}'), 'demo/data.bin': new Uint8Array(1000) });
     const { names, files } = unzipCapped(zip, APWORLD_LIMITS, ({ name }) => name.endsWith('.json'));

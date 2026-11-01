@@ -3,7 +3,7 @@ import { describe, expect, test } from 'vitest';
 import { coerceOptionValue } from '../src/compounds/OptionControl/behavior/coerce-option-value';
 import { defOf } from './option-defs';
 
-describe('coerceOptionValue', () => {
+describe('K1 coerceOptionValue', { tags: ['critical'] }, () => {
   test('toggles read words and weights', () => {
     expect(coerceOptionValue(defOf('death_link'), 'on')).toBe(true);
     expect(coerceOptionValue(defOf('death_link'), 'false')).toBe(false);

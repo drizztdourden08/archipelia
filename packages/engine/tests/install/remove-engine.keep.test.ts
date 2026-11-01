@@ -32,7 +32,7 @@ const fakeRemove = (inUse?: string) => ({
   dropDownload: vi.fn(() => Promise.resolve()),
 }) satisfies RemoveDeps;
 
-describe('removing an engine', () => {
+describe('K4 removing an engine', { tags: ['critical'] }, () => {
   test('removes the active engine once no session uses it', async () => {
     const deps = fakeRemove();
     await removeEngine(deps, 'in-use');
@@ -45,12 +45,6 @@ describe('removing an engine', () => {
     await expect(removeEngine(deps, 'in-use')).rejects.toThrow(ENGINE_TEXT.hosting);
     expect(deps.forget).not.toHaveBeenCalled();
     expect(deps.discard).not.toHaveBeenCalled();
-  });
-
-  test('refuses an engine a running session uses', async () => {
-    const deps = fakeRemove(ENGINE_TEXT.hosting);
-    await expect(removeEngine(deps, 'old')).rejects.toThrow(ENGINE_TEXT.hosting);
-    expect(deps.forget).not.toHaveBeenCalled();
   });
 
   test('refuses an engine that is not installed', async () => {

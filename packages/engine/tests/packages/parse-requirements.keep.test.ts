@@ -3,7 +3,7 @@ import { describe, expect, test } from 'vitest';
 import { normalizePackageName } from '../../src/packages/normalize-package-name';
 import { parseRequirements } from '../../src/packages/parse-requirements';
 
-describe('parseRequirements', () => {
+describe('K4 parseRequirements', { tags: ['critical'] }, () => {
   test('keeps plain names with versions, extras and markers, and skips comments and blanks', () => {
     const text = [
       '# the world needs these', '', 'numpy==2.5.1', 'Pillow>=10,<12  # imaging', 'requests[socks]~=2.32',
@@ -59,7 +59,7 @@ describe('parseRequirements', () => {
   });
 });
 
-describe('normalizePackageName', () => {
+describe('K1 normalizePackageName', { tags: ['critical'] }, () => {
   test('follows PEP 503: lower case, runs of dash, underscore and dot become one dash', () => {
     expect(normalizePackageName('Foo_Bar')).toBe('foo-bar');
     expect(normalizePackageName('ruamel.yaml')).toBe('ruamel-yaml');

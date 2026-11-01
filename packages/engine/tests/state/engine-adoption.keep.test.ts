@@ -9,7 +9,7 @@ import { cleanTempRoots, tempRoot, writeEngineFolder } from './temp-root';
 
 afterEach(cleanTempRoots);
 
-describe('adopting the legacy engine folder', () => {
+describe('K3 adopting the legacy engine folder', { tags: ['critical'] }, () => {
   test('a 0.6.7 folder becomes the active engine under its new id without a download', async () => {
     const root = await tempRoot();
     await writeEngineFolder(root, '0.6.7-win32-x64', LEGACY_MANIFEST);

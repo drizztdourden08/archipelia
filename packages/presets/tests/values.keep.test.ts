@@ -17,7 +17,7 @@ const SCHEMA: GameSchema = {
   ],
 };
 
-describe('resolveValues', () => {
+describe('K1 resolveValues', { tags: ['critical'] }, () => {
   test('defaults, then the preset, then the overrides; unknown keys are dropped', () => {
     const values = resolveValues(SCHEMA, { goal: 'pedestal', crystals: 3, removed: 1 }, { crystals: 5 });
     expect(values).toMatchObject({ death_link: false, goal: 'pedestal', crystals: 5 });
@@ -29,7 +29,7 @@ describe('resolveValues', () => {
   });
 });
 
-describe('checkValues', () => {
+describe('K1 checkValues', { tags: ['critical'] }, () => {
   test('every default passes', () => {
     expect(checkValues(SCHEMA, resolveValues(SCHEMA))).toEqual([]);
   });

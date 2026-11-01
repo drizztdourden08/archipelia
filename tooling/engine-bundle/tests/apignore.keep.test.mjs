@@ -4,7 +4,7 @@ import { createIgnore } from '../src/official/apignore.mjs';
 
 const GLOBAL = ['# comment', '__MACOSX', '.DS_Store', '__pycache__', '', '/archipelago.json', '/.apignore'];
 
-describe('createIgnore', () => {
+describe('K1 createIgnore', { tags: ['critical'] }, () => {
   test('a cache folder is dropped at any depth', () => {
     const ignored = createIgnore(GLOBAL);
     expect(ignored('__pycache__/a.pyc')).toBe(true);

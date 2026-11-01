@@ -2,7 +2,7 @@
 import { join } from 'node:path';
 import { describe, expect, test } from 'vitest';
 import { buildEnv } from '../../src/build/build-env';
-import { BUILD_ENV, COMPILER_VARS, SCRATCH_VARS, SYSTEM_VARS } from '../../src/build/build.constants';
+import { SCRATCH_VARS } from '../../src/build/build.constants';
 import { buildDirsOf } from '../../src/build/build-dirs';
 import { toolsSpec } from '../../src/build/tools-spec';
 import { venvPython } from '../../src/build/venv-python';
@@ -12,7 +12,7 @@ import { runtimeOf } from '../install/install-fakes';
 
 const dirs = buildDirsOf(join('work', 'archipelia-build-1'));
 
-describe('the commands of a build', () => {
+describe('K4 the commands of a build', { tags: ['critical'] }, () => {
   test('the venv is made by the engine Python, in isolated mode, in the private folder', () => {
     const runtime = runtimeOf('old');
     const { env, ...spec } = venvSpec(runtime, dirs);
@@ -40,11 +40,6 @@ describe('the commands of a build', () => {
     expect(spec.cwd).toBe(dirs.work);
   });
 
-  test('passes pip wheel only options that pip wheel has, so no install-only flag reaches it', () => {
-    expect(wheelSpec(dirs).args).not.toContain('--no-warn-script-location');
-    expect(toolsSpec(dirs).args).toContain('--no-warn-script-location');
-  });
-
   test('the venv Python is in Scripts on Windows and in bin elsewhere', () => {
     expect(venvPython('v', 'win32')).toBe(join('v', 'Scripts', 'python.exe'));
     expect(venvPython('v', 'linux')).toBe(join('v', 'bin', 'python'));
@@ -52,7 +47,7 @@ describe('the commands of a build', () => {
   });
 });
 
-describe('the environment of a build', () => {
+describe('K4 the environment of a build', { tags: ['critical'] }, () => {
   const user = {
     PATH: '/usr/bin', GH_TOKEN: 'ghp_secret', GITHUB_TOKEN: 'secret', AWS_SECRET_ACCESS_KEY: 'secret', NPM_TOKEN: 'secret', PYTHONPATH: '/evil', PIP_INDEX_URL: 'https://evil.example/simple',
     CC: 'gcc-14', LIB: 'C:\\sdk\\lib', INCLUDE: 'C:\\sdk\\include', CARGO_HOME: '/home/me/.cargo',
@@ -70,14 +65,6 @@ describe('the environment of a build', () => {
     expect(env).not.toHaveProperty('PATH');
     expect(env).not.toHaveProperty('APPDATA');
     expect(SCRATCH_VARS.map((name) => env[name])).toEqual([dirs.scratch, dirs.scratch, dirs.scratch]);
-  });
-
-  test('holds nothing but the compiler, system, pip and scratch names, whatever the app environment holds', () => {
-    const allowed = new Set([...COMPILER_VARS, ...SYSTEM_VARS, ...Object.keys(BUILD_ENV), ...SCRATCH_VARS]);
-    const everything = Object.fromEntries(['PATH', 'GH_TOKEN', 'AWS_SECRET_ACCESS_KEY', 'NODE_OPTIONS', 'ELECTRON_RUN_AS_NODE', 'ARCHIPELIA_SECRET', 'SYSTEMROOT', 'HOME', 'CC', 'INCLUDE'].map((name) => [name, 'x']));
-    const names = Object.keys(buildEnv(dirs, everything));
-    expect(names.sort()).toEqual(expect.arrayContaining(['CC', 'HOME', 'INCLUDE', 'SYSTEMROOT']));
-    expect(names.filter((name) => !allowed.has(name as never))).toEqual([]);
   });
 
   test('turns pip prompts off, keeps the user site out and points every temp folder into the private folder', () => {

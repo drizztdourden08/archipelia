@@ -10,7 +10,7 @@ const failure = {
 
 const unavailable = () => Object.assign(new Error(failure.message), { code: failure.code, packages: failure.packages });
 
-describe('an install failure', () => {
+describe('K2 an install failure', { tags: ['critical'] }, () => {
   test('is found on an error and through its cause', () => {
     expect(installFailureOf(unavailable())).toEqual(failure);
     expect(installFailureOf(new Error('outer', { cause: unavailable() }))).toEqual(failure);

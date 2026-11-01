@@ -13,7 +13,7 @@ import { numberShown } from '../src/compounds/OptionControl/behavior/number-show
 import { readJsonText } from '../src/compounds/OptionControl/behavior/read-json-text';
 import { defOf } from './option-defs';
 
-describe('values read back from controls', () => {
+describe('K1 values read back from controls', { tags: ['critical'] }, () => {
   test('numbers', () => {
     expect(numberValue(4)).toBe(4);
     expect(numberValue(Number.NaN)).toBeUndefined();
@@ -33,7 +33,7 @@ describe('values read back from controls', () => {
   });
 });
 
-describe('named range', () => {
+describe('K1 named range', { tags: ['critical'] }, () => {
   const def = defOf('pieces');
 
   test('the number shown follows a name, a number or the default', () => {
@@ -44,7 +44,7 @@ describe('named range', () => {
   });
 });
 
-describe('key values', () => {
+describe('K1 key values', { tags: ['critical'] }, () => {
   test('a counter counts from 0 over its valid names, and keeps only counts', () => {
     expect(keyValueLook(defOf('start_inventory'), {})).toEqual({ valueKind: 'count', keys: ['Arrows', 'Bombs'], min: 0, newValue: 1 });
     expect(countsOf({ Bombs: 2, Bad: 'x' })).toEqual({ Bombs: 2 });
@@ -63,7 +63,7 @@ describe('key values', () => {
   });
 });
 
-describe('json text', () => {
+describe('K1 json text', { tags: ['critical'] }, () => {
   test('text that parses to the right shape is the value', () => {
     expect(readJsonText('{ "Bow": [1, 2] }', 'object')).toEqual({ value: { Bow: [1, 2] }, problem: null });
     expect(readJsonText('[{ "item": "Bow" }]', 'array')).toEqual({ value: [{ item: 'Bow' }], problem: null });

@@ -34,7 +34,7 @@ const game = (patch: Record<string, unknown> = {}) => ({
 
 const file = (clients: unknown[], games: unknown[] = []) => ({ format: 1, clients, games });
 
-describe('parseRegistry', () => {
+describe('K4 parseRegistry', { tags: ['critical'] }, () => {
   test('reads a release that says it is a builds index, and refuses any other kind', () => {
     const release = { repo: 'owner/repo', world: 'a.apworld', manifest: 'a.apworld.json', bundle: 'a.apworld.sigstore.json' };
     const parsed = parseRegistry(file([client()], [game({ release: { ...release, kind: 'builds' } }), game({ game: 'Odd', module: 'odd', release: { ...release, kind: 'other' } })]));
@@ -80,7 +80,7 @@ describe('parseRegistry', () => {
 
 });
 
-describe('parseRegistry drops what is malformed', () => {
+describe('K4 parseRegistry drops what is malformed', { tags: ['critical'] }, () => {
   test.each([
     ['an id that is not a slug', client({ id: 'Not A Slug' })],
     ['a missing name', client({ name: '' })],

@@ -20,7 +20,7 @@ const python = (version: string) => ({
 
 afterEach(cleanTempRoots);
 
-describe('the runtime of a built engine', () => {
+describe('K3 the runtime of a built engine', { tags: ['critical'] }, () => {
   test('reads the id, commit and Python version the build wrote', async () => {
     const root = await tempRoot();
     const dir = await writeEngineFolder(root, 'ap-0.6.8_py-3.12.15_win32-x64', builtManifest('0.6.8', '3.12.15'));
@@ -50,7 +50,7 @@ describe('the runtime of a built engine', () => {
   });
 });
 
-describe('finding the active engine', () => {
+describe('K1 finding the active engine', { tags: ['critical'] }, () => {
   test('no active engine reads as missing and refuses to load', async () => {
     const root = await tempRoot();
     expect(await readActiveEngineStatus(root)).toEqual({ state: 'missing', dir: root });
@@ -79,7 +79,7 @@ describe('finding the active engine', () => {
   });
 });
 
-describe('engine specs', () => {
+describe('K1 engine specs', { tags: ['critical'] }, () => {
   test('a spec names its folder and applies the requirement rules for its versions', () => {
     const spec = createEngineSpec({ ap: { version: '0.6.8', commit: 'd'.repeat(40) }, python: python('3.12.15') });
     expect(spec.id).toBe('ap-0.6.8_py-3.12.15_win32-x64');
@@ -94,7 +94,7 @@ describe('engine specs', () => {
   });
 });
 
-describe('verifying the unpacked source', () => {
+describe('K1 verifying the unpacked source', { tags: ['critical'] }, () => {
   test('a Python inside the declared range passes', async () => {
     const root = await tempRoot();
     await writeFile(join(root, 'ModuleUpdate.py'), MODULE_UPDATE_0_6_8, 'utf8');
