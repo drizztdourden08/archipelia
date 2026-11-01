@@ -5,12 +5,15 @@ import { useLocalServerStatus } from '../../../hooks/useLocalServerStatus';
 import { usePendingCloses } from '../../../hooks/usePendingCloses';
 import { useServerPlace } from '../../../hooks/useServerPlace';
 import type { LiveTab } from '../../../live/live.type';
+import { ROOM_PASSWORDS_IN_MEMORY } from '../../../lobbies/lobbies.constants';
 
 const useLobbyNotices = (tab: LiveTab): string[] => {
   const place = useServerPlace(tab.serverId);
   const { status } = useLocalServerStatus();
   const closing = usePendingCloses(tab.sessionId).length > 0;
-  return [serverNotice(place.local, status), closing ? LOBBY_TEXT.closing : null].filter((notice): notice is string => notice !== null);
+  const server = serverNotice(place.local, status);
+  const shown = server === ROOM_PASSWORDS_IN_MEMORY ? null : server;
+  return [shown, closing ? LOBBY_TEXT.closing : null].filter((notice): notice is string => notice !== null);
 };
 
 export { useLobbyNotices };

@@ -1,4 +1,5 @@
 /* @layer renderer-app @kind config */
+import { PORT_BOUNDS } from '@archipelia/model';
 import type { SettingsOption } from '@drizztdourden08/tessera/composites';
 import type { RowText } from './ServerOptionsForm.type';
 
@@ -31,9 +32,7 @@ const HOST_OPTIONS: SettingsOption[] = [
 
 const HINT_COST_RANGE = { min: 0, max: 100, step: 1 };
 
-const PORT_RANGE = { min: 1024, max: 65535, step: 1 };
-
-const PORT_PROBLEM = `The port must be between ${PORT_RANGE.min} and ${PORT_RANGE.max}.`;
+const PORT_RANGE = { ...PORT_BOUNDS, step: 1 };
 
 const SHUTDOWN_RANGE = { min: 0, step: 1, unit: 'minutes' };
 
@@ -79,5 +78,5 @@ const GENERATION_TEXT = {
 } as const satisfies Record<string, RowText>;
 
 export {
-  GENERATION_TEXT, HINT_COST_RANGE, HOST_OPTIONS, PORT_PROBLEM, PORT_RANGE, RELEASE_OPTIONS, REMAINING_OPTIONS, SERVER_TEXT, SHUTDOWN_RANGE, SPOILER_OPTIONS,
+  GENERATION_TEXT, HINT_COST_RANGE, HOST_OPTIONS, PORT_RANGE, RELEASE_OPTIONS, REMAINING_OPTIONS, SERVER_TEXT, SHUTDOWN_RANGE, SPOILER_OPTIONS,
 };

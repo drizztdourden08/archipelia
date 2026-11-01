@@ -101,6 +101,24 @@ describe('a world with a stable release', () => {
     expect(list.choices.map((choice) => [choice.id, choice.prerelease])).toEqual([['v0.22.0-rc1', true], ['v0.21.1', false]]);
   });
 
+  test('S2 a stable release without a manifest is skipped: the newest pre-release with one is used and marked', { tags: ['standard'] }, async () => {
+    const OLD = [{ tag: 'v0.21.2', prerelease: true, assets: ASSETS }, { tag: 'v0.19.3', assets: ['relic_of_the_past.apworld'] }];
+    const service = serviceWith(OLD, false);
+    const entry = await rotp(service);
+    expect(entry?.firstParty).toMatchObject({ prerelease: true, tag: 'v0.21.2' });
+    expect(entry?.versions[0]?.url).toBe(downloadUrl(REPO, 'v0.21.2', 'relic_of_the_past.apworld'));
+    expect(await service.versions(key)).toMatchObject({ defaultId: 'v0.21.2', latestId: 'v0.21.2' });
+    await service.install({ kind: 'index', apworld: 'relic_of_the_past', version: '' });
+    expect((installWorld.mock.calls[0]?.[0] as { release: unknown }).release).toEqual({ tag: 'v0.21.2', prerelease: true });
+  });
+
+  test('S3 no release carries a manifest: the card stays without a release', { tags: ['standard'] }, async () => {
+    const bare = [{ tag: 'v0.21.2', prerelease: true, assets: ['relic_of_the_past.apworld'] }, { tag: 'v0.19.3', assets: ['relic_of_the_past.apworld'] }];
+    const entry = await rotp(serviceWith(bare, false));
+    expect(entry?.firstParty?.prerelease).toBeUndefined();
+    expect(entry?.unavailable).toBeDefined();
+  });
+
   test('S2 stable only: nothing changes, and the default is the newest stable', { tags: ['standard'] }, async () => {
     const service = serviceWith(STABLE, true);
     expect((await rotp(service))?.firstParty?.prerelease).toBeUndefined();
@@ -145,10 +163,22 @@ describe('a world found by its topic', () => {
     expect(entry?.versions[0]?.url).toBe(`https://github.com/${TOPIC}/releases/latest/download/star_quest.apworld`);
   });
 
+  test('S2 a stable release without a manifest is skipped for the newest pre-release with one', { tags: ['standard'] }, async () => {
+    const entry = await starQuest(topicService([...RC, { tag: 'v1.0.0', assets: ['star_quest.apworld'] }], false));
+    expect(entry?.firstParty).toMatchObject({ prerelease: true, tag: 'v2.0.0-rc1' });
+  });
+
+  test('S3 no release carries a manifest: it is not shown', { tags: ['standard'] }, async () => {
+    const bare = [{ tag: 'v2.0.0-rc1', prerelease: true, assets: ['star_quest.apworld'] }, { tag: 'v1.0.0', assets: ['star_quest.apworld'] }];
+    expect(await starQuest(topicService(bare, false))).toBeUndefined();
+  });
+
   test('S3 with no release at all it is not shown', { tags: ['standard'] }, async () => {
     expect(await starQuest(topicService([], false))).toBeUndefined();
   });
+});
 
+describe('topic worlds resolved from a pre-release', () => {
   test('S3 only the five most recently updated repos without a latest manifest are resolved per refresh, the rest on the next one', { tags: ['standard'] }, async () => {
     const repos = Array.from({ length: 7 }, (_, i) => ({ id: i + 1, repo: `maker/world-${i}`, pushedAt: `2026-10-0${i + 1}T00:00:00Z` }));
     const rc = [{ tag: 'v1.0.0-rc1', prerelease: true, assets: ['archipelia.json'] }];

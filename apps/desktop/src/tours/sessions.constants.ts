@@ -33,7 +33,7 @@ const SESSIONS_STEPS: readonly TourStepDef[] = [
   {
     id: 'sessions-builder',
     title: 'The session setup',
-    body: 'The setup holds the session itself: its name, where the room runs, direct connection and the server options. Save keeps it and Run opens its tab. With unsaved changes, Run once uses them for one run and leaves the saved session as it is.',
+    body: 'The setup holds the session itself: its name, where the room runs, direct connections, the room password and a short line of the world settings. The port and every world setting sit under Advanced. Save keeps it and Run opens its tab. With unsaved changes, Run once uses them for one run and leaves the saved session as it is.',
     target: { tour: TOUR_TARGET.builderBar },
     mascot: 'idea',
     open: ROUTE.newSession,
@@ -41,7 +41,7 @@ const SESSIONS_STEPS: readonly TourStepDef[] = [
   {
     id: 'sessions-players',
     title: 'Saved players',
-    body: 'The players saved with the session. Direct lets a player connect on their own and bring their own game, after you approve them. Such a player can stay without a game. A game set here is the fallback used if they have not joined when you run.',
+    body: 'The players saved with the session, one line each. Click a player to change their name, game and preset. Their switch lets them connect on their own and bring their own game, after you approve them. Such a player can stay without a game. A game set here is the fallback used if they have not joined when you run.',
     target: { tour: TOUR_TARGET.sessionsPlayers },
     mascot: 'curious',
     open: ROUTE.newSession,

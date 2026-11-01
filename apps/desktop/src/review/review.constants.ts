@@ -46,7 +46,7 @@ const DIRECT_RUN_MS = 30000;
 
 const REVIEW_PLAYER = 'Zelda';
 
-const DIRECT_UI = { allow: /^Allow direct connection/, unlisted: /^Allow unlisted clients/, section: /how players join/i } as const;
+const DIRECT_UI = { allow: /^Allow direct connection/, unlisted: /^Allow unlisted clients/, approval: /^Host approval/, section: /how players join/i } as const;
 
 const LOBBY_UI = {
   start: 'Save and run', run: 'Run', close: 'Close lobby', closeTitle: 'Close the lobby?', open: 'Open lobby',
@@ -54,7 +54,22 @@ const LOBBY_UI = {
 
 const TAB_UI = { stopAndClose: 'Stop the room and close' } as const;
 
-const SEAT_UI = { card: '.seat-card', pending: 'attention', add: 'Add player', refuse: 'Refuse' } as const;
+const OPTIONS_UI = { view: 'View options', title: (name: string) => `${name}'s options`, close: 'Close' } as const;
+
+const SEAT_UI = {
+  card: '.lobby-seat', pending: 'attention', held: 'held', filled: 'filled', add: 'Add player', refuse: 'Refuse', keep: 'Keep in session', ready: 'Ready', done: 'Done',
+} as const;
+
+const LOBBY_STAGE = {
+  session: 'Review lobby',
+  held: 'Alice',
+  portOffset: 3,
+  hintCost: 5,
+  count: /\d+ players?/,
+  config: /Hint cost\s*5%[\s\S]*Release\s*Auto[\s\S]*Joining\s*Direct, with approval/,
+  widgets: ['network', 'room', 'players', 'hints', 'log', 'console', 'spoiler'],
+  sizes: [{ name: 'wide', width: 1920, height: 1080 }, { name: 'hd', width: 1280, height: 720 }],
+} as const;
 
 const REVIEW_SECOND = 'Review second session';
 
@@ -71,7 +86,19 @@ const STORAGE_FOLDERS = ['Sessions', 'Presets', 'Installed games'];
 
 const GUARD_DIALOG = 'Unsaved changes';
 
+const REVIEW_LAYOUT = {
+  lan: 'Review LAN session', remote: 'Review remote session', solo: 'Review solo session', lanPlayers: ['Cy', 'Dee', 'Eli'], soloPlayers: ['Fay'], portOffset: 4,
+  wide: { name: 'wide', width: 1920, height: 1080 }, small: { name: 'small', width: 1280, height: 720 }, minListWidth: 200, minRowHeight: 40,
+} as const;
+
+const SESSIONS_UI = {
+  heading: /History of this session/, list: 'Saved sessions', back: 'All sessions', tabOpen: 'Tab open', unsaved: /\d+ unsaved changes?/, once: 'Run once with these changes', discard: 'Discard',
+  tab: 'Go to its tab', run: 'Run',
+} as const;
+
+const EDITOR_UI = { rows: ['Where', 'Direct', 'Password', 'World'], worldSections: ['generation', 'server-rules'], players: 'Players' } as const;
+
 export {
-  DIRECT_RUN_MS, DIRECT_UI, GUARD_DIALOG, HOST_UI, JOIN_UI, LAN_STEP_TIMEOUT_MS, LISTEN_POLL_MS, LISTEN_WAIT_MS, LOBBY_UI, MS_PER_SECOND, REVIEW_CHECKS, REVIEW_DIRECT, REVIEW_GAME, REVIEW_JOINER, REVIEW_PLAYER, REVIEW_PLAYERS, REVIEW_PORT, REVIEW_PRESET, REVIEW_SECOND, REVIEW_SERVER, REVIEW_SESSION, RUN_TIMEOUT_MS, SAVE_STATE, SEAT_UI, SEED_TIMEOUT_MS, SERVER_ANSWER_MS, SERVER_FIELDS, SERVER_PROBLEMS,
-  SERVER_UI, SERVER_UNTOUCHED, STORAGE_FOLDERS, TAB_UI,
+  DIRECT_RUN_MS, DIRECT_UI, EDITOR_UI, GUARD_DIALOG, HOST_UI, JOIN_UI, LAN_STEP_TIMEOUT_MS, LISTEN_POLL_MS, LISTEN_WAIT_MS, LOBBY_STAGE, LOBBY_UI, MS_PER_SECOND, OPTIONS_UI, REVIEW_CHECKS, REVIEW_DIRECT, REVIEW_GAME, REVIEW_JOINER, REVIEW_LAYOUT, REVIEW_PLAYER, REVIEW_PLAYERS, REVIEW_PORT, REVIEW_PRESET, REVIEW_SECOND, REVIEW_SERVER, REVIEW_SESSION, RUN_TIMEOUT_MS, SAVE_STATE, SEAT_UI, SEED_TIMEOUT_MS, SERVER_ANSWER_MS, SERVER_FIELDS, SERVER_PROBLEMS,
+  SERVER_UI, SERVER_UNTOUCHED, SESSIONS_UI, STORAGE_FOLDERS, TAB_UI,
 };

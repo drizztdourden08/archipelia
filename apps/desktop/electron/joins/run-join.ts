@@ -1,5 +1,5 @@
 /* @layer electron-main @kind logic */
-import { LIVE_STATES } from '../../src/joins/joins.constants';
+import { LIVE_STATES } from '../../src/joins/join-states.constants';
 import type { SocketTransport } from '@drizztdourden08/archipelia-lobby-protocol/node';
 import { IDLE_CLOSE_CODE, MS_PER_SECOND, TEXT } from './joins.constants';
 import type { JoinContext, JoinRecord, JoinRun } from './joins.type';

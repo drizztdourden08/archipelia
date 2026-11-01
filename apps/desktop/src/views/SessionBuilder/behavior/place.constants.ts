@@ -16,6 +16,12 @@ const PLACE_TEXT = {
   noArchipelia: 'Direct connections on a remote server need an Archipelia server, and none is saved yet. Add one on the Servers page.',
 } as const;
 
+const PLACE_CAPTION = {
+  local: 'Only this computer reaches the room.',
+  lan: 'Open to your local network. Run asks once before it opens a port.',
+  remote: 'A remote server runs the room.',
+} as const;
+
 const REMOTE_TEXT = {
   row: { title: 'Server', description: 'The remote server that runs the session.', hint: 'Add or edit servers on the Servers page.' },
   gg: 'The website hosts the room.',
@@ -59,4 +65,4 @@ const DIRECT_TEXT = {
   passwordRemote: 'An Archipelia server makes its own room password and gives it to the players with their files.',
 } as const;
 
-export { DIRECT_TEXT, GG_VALUE, LOBBY_PREFIX, PLACE_TEXT, REMOTE_TEXT, SSH_PREFIX };
+export { DIRECT_TEXT, GG_VALUE, LOBBY_PREFIX, PLACE_CAPTION, PLACE_TEXT, REMOTE_TEXT, SSH_PREFIX };

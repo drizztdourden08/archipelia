@@ -1,5 +1,5 @@
 /* @layer renderer-app @kind logic */
-import type { TemplateProblem } from '../SessionLobby.type';
+import type { TemplateProblem } from '@archipelia/sessions/validation';
 import { SEAT_EDITOR_CLASS } from '../SessionLobby.constants';
 
 const quoted = (value: string) => `"${value.replace(/["\\]/g, '\\$&')}"`;

@@ -5,6 +5,7 @@ type BuilderActionsProps = {
   buttons: BuilderButton[];
   busy: boolean;
   reasons: ButtonReasons;
+  reasonId: string;
   on: Record<BuilderButton, () => void>;
 };
 

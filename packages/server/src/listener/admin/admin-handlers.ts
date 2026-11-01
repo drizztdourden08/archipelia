@@ -50,6 +50,10 @@ const memberCalls: Record<string, AdminHandler> = {
     const params = adminParams(request);
     return adminView(sandbox, await service.remove(params.text('lobbyId'), params.text('memberId'), params.maybeText('reason')));
   },
+  'member.yaml': async ({ service }, request) => {
+    const params = adminParams(request);
+    return service.yaml(params.text('lobbyId'), params.text('memberId'));
+  },
   'member.host': async ({ service, sandbox }, request) => {
     const params = adminParams(request);
     return adminView(sandbox, await service.addHost(params.text('lobbyId'), { displayName: params.text('displayName'), slots: hostSlotsOf(params.list('slots')) }));

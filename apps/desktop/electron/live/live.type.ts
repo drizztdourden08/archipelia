@@ -1,5 +1,6 @@
 /* @layer electron-main @kind types */
-import type { DataFiles, GamePreset, InstalledGame, SessionTemplate } from '@archipelia/model';
+import type { DataFiles, SessionTemplate } from '@archipelia/model';
+import type { LibraryView } from '@archipelia/sessions/validation';
 import type { PendingClose } from '../../src/lobbies/lobbies.type';
 import type { LiveTab } from '../../src/live/live.type';
 import type { SessionLobbyDeps } from '../sessions/sessions.type';
@@ -22,8 +23,6 @@ type SavedTemplates = {
   save: (template: SessionTemplate) => Promise<SessionTemplate>;
 };
 
-type LibraryView = { installed: InstalledGame[]; presets: GamePreset[] };
-
 type LobbyOps = Pick<SessionLobbyDeps, 'act' | 'list'>;
 
 type LiveServiceDeps = {
@@ -39,4 +38,4 @@ type LiveServiceDeps = {
   cancelRun: (runId: string) => Promise<unknown>;
 };
 
-export type { LibraryView, LiveDeps, LiveServiceDeps, TabInput };
+export type { LiveDeps, LiveServiceDeps, TabInput };

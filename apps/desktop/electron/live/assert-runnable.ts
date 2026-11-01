@@ -1,9 +1,9 @@
 /* @layer electron-main @kind logic */
 import type { SessionTemplate } from '@archipelia/model';
-import { validatePlayers } from '../../src/views/SessionLobby/behavior/validate-players';
+import { validatePlayers } from '@archipelia/sessions/validation';
 import { assertStartable } from './assert-startable';
 import { LIVE_TEXT } from './live.constants';
-import type { LibraryView } from './live.type';
+import type { LibraryView } from '@archipelia/sessions/validation';
 
 const assertRunnable = (template: SessionTemplate, library: LibraryView): void => {
   assertStartable(template);

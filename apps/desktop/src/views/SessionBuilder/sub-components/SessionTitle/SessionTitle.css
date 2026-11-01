@@ -1,0 +1,15 @@
+/* @layer renderer-app @kind style */
+.session-title {
+  min-inline-size: 0;
+}
+
+.session-title__text {
+  font-family: var(--font-title);
+  font-size: var(--text-xl);
+  line-height: var(--leading-tight);
+}
+
+.session-title__input {
+  inline-size: var(--size-288);
+  max-inline-size: 100%;
+}

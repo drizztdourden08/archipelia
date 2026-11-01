@@ -1,11 +1,11 @@
 /* @layer renderer-app @kind hook */
 import { useMemo } from 'react';
 import { buttonsOf } from './builder-buttons';
-import { setupProblems } from './setup-problems';
+import { setupProblems } from '../../../lobbies/setup-problems';
 import { unsavedChanges } from './unsaved-changes';
 import { SETUP_TEXT } from '../SessionBuilder.constants';
 import type { BuilderActionsInput } from '../SessionBuilder.type';
-import { validatePlayers } from '../../SessionLobby';
+import { validatePlayers } from '@archipelia/sessions/validation';
 
 const useBuilderActions = ({ draft, base, dirty, pending, stored, tab, library, runs, onSave, onDiscard }: BuilderActionsInput) => {
   const changes = useMemo(() => unsavedChanges(base, draft, pending), [base, draft, pending]);

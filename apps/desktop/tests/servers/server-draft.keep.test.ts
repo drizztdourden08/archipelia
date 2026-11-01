@@ -1,6 +1,6 @@
 /* @layer tests @kind test */
 import { describe, expect, test } from 'vitest';
-import { PORT_PROBLEM } from '@archipelia/design';
+import { PORT_PROBLEM } from '@archipelia/model';
 import type { ServerEntry } from '@archipelia/model';
 import { draftProblems } from '../../src/views/ServerManager/behavior/draft-problems';
 import { shownErrors } from '../../src/views/ServerManager/behavior/shown-errors';

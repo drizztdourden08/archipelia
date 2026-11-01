@@ -3,9 +3,9 @@ import { describe, expect, test } from 'vitest';
 import type { InstalledGame, SessionTemplate } from '@archipelia/model';
 import { templateOf } from '@archipelia/model';
 import { newTemplate } from '../../src/views/SessionBuilder/behavior/new-template';
-import { setupProblems } from '../../src/views/SessionBuilder/behavior/setup-problems';
-import { validatePlayers } from '../../src/views/SessionLobby/behavior/validate-players';
-import { PORT_PROBLEM } from '@archipelia/design';
+import { setupProblems } from '../../src/lobbies/setup-problems';
+import { validatePlayers } from '@archipelia/sessions/validation';
+import { PORT_PROBLEM } from '@archipelia/model';
 import { GAME, PRESET, presetPlayer } from './session-fixtures';
 
 const LIBRARY = { installed: [GAME], presets: [PRESET] };

@@ -1,5 +1,5 @@
 /* @layer renderer-app @kind config */
-const LIST_WIDTH = { initial: 380, min: 300, max: 560 } as const;
+const LIST_WIDTH = { initial: 320, min: 260, max: 480 } as const;
 
 const DATE_FORMAT = new Intl.DateTimeFormat(undefined, { month: 'short', day: 'numeric' });
 
@@ -9,6 +9,12 @@ const TEXT = {
   pick: 'Pick a session to see its setup and its players.',
   neverRun: 'never run',
   join: 'Join a session',
+  back: 'All sessions',
+  filter: 'Filter sessions',
+  list: 'Saved sessions',
+  loading: 'Loading your sessions',
+  tabOpen: 'Tab open',
+  unsaved: 'Unsaved',
 } as const;
 
 const LEAVE_UNSAVED = {

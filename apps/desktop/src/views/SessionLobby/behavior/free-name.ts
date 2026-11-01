@@ -1,6 +1,6 @@
 /* @layer renderer-app @kind logic */
 import type { SessionPlayer } from '@archipelia/model';
-import { NAME_LIMIT } from '../SessionLobby.constants';
+import { NAME_LIMIT } from '@archipelia/sessions/validation';
 
 const isTaken = (players: SessionPlayer[], name: string) =>
   players.some((player) => player.name.toLowerCase() === name.toLowerCase());

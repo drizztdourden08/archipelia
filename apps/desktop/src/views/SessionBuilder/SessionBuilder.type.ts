@@ -1,7 +1,7 @@
 /* @layer renderer-app @kind types */
-import type { DirectConnection, GamePreset, InstalledGame, LobbyServerEntry, ServerEntry, ServerSettings, SessionTemplate } from '@archipelia/model';
-import type { Dispatch, ReactNode, SetStateAction } from 'react';
-import type { SettingsOption } from '@drizztdourden08/tessera/composites';
+import type { GamePreset, InstalledGame, LobbyServerEntry, ServerEntry, ServerSettings, SessionTemplate } from '@archipelia/model';
+import type { Dispatch, SetStateAction } from 'react';
+import type { PresetInput } from '@archipelia/presets';
 import type { LiveTab } from '../../live/live.type';
 import type { AppSettings } from '../../settings.type';
 import type { useSessionRuns } from './behavior/useSessionRuns';
@@ -22,22 +22,23 @@ type PlaceDeps = { draft: SessionTemplate; servers: readonly ServerEntry[]; host
 
 type DirectWorld = { game: string; listed: boolean };
 
-type JoinRowsInput = {
+type SessionPlayersDeps = {
   draft: SessionTemplate;
-  directWorlds: readonly DirectWorld[];
-  worlds: ReactNode;
-  live: boolean;
-  place: SessionPlace;
-  placeOptions: readonly SettingsOption[];
-  remoteOptions: readonly SettingsOption[];
-  remoteValue: string;
-  busy: boolean;
-  password: ReactNode;
-  onPlace: (place: SessionPlace) => void;
-  onRemote: (value: string) => void;
-  onPort: (port: number) => void;
-  onAllow: (on: boolean) => void;
-  onOptions: (patch: Partial<DirectConnection>) => void;
+  setDraft: Dispatch<SetStateAction<SessionTemplate>>;
+  installed: InstalledGame[];
+  presets: GamePreset[];
+  createPreset: (preset: PresetInput) => Promise<GamePreset>;
+  guard: Guard;
+};
+
+type DirectState = {
+  on: boolean;
+  approval: boolean;
+  unlisted: boolean;
+  allowOff: boolean;
+  optionsOff: boolean;
+  hint: string;
+  problem?: string;
 };
 
 type BuilderButton = 'tab' | 'run' | 'once' | 'save-run' | 'save' | 'discard';
@@ -74,6 +75,6 @@ type BuilderActionsInput = {
 };
 
 export type {
-  BuilderActionsInput, BuilderButton, ButtonReasons, ButtonsInput, DirectWorld, HostingDefaults, JoinRowsInput, PlaceContext, PlaceDeps, PlaceView, RemoteView, SessionBuilderProps, SessionPlace,
-  SessionRunDeps, UnsavedChanges,
+  BuilderActionsInput, BuilderButton, ButtonReasons, ButtonsInput, DirectState, DirectWorld, HostingDefaults, PlaceContext, PlaceDeps, PlaceView, RemoteView, SessionBuilderProps, SessionPlace,
+  SessionPlayersDeps, SessionRunDeps, UnsavedChanges,
 };
