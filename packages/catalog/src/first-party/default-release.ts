@@ -1,6 +1,16 @@
 /* @layer core @kind logic */
 import type { ReleaseSummary } from '../versions/versions.type';
+import { STANDARD_MANIFEST } from './first-party.constants';
 
-const defaultRelease = (releases: ReleaseSummary[]): ReleaseSummary | undefined => releases.find((release) => !release.prerelease) ?? releases[0];
+const carries = (release: ReleaseSummary, legacy: string | undefined): boolean =>
+  release.assets.some((asset) => asset.name === STANDARD_MANIFEST || asset.name === legacy);
 
-export { defaultRelease };
+const manifestRelease = (releases: ReleaseSummary[], legacy?: string): ReleaseSummary | undefined => {
+  const carrying = releases.filter((release) => carries(release, legacy));
+  return carrying.find((release) => !release.prerelease) ?? carrying[0];
+};
+
+const defaultRelease = (releases: ReleaseSummary[], legacy?: string): ReleaseSummary | undefined =>
+  manifestRelease(releases, legacy) ?? releases.find((release) => !release.prerelease) ?? releases[0];
+
+export { defaultRelease, manifestRelease };

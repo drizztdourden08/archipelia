@@ -14,8 +14,8 @@ const choiceOf = (release: ReleaseSummary, check: Checked | undefined, version: 
   ...(check?.reason ? { reason: check.reason } : {}),
 });
 
-const choicesOf = (entry: CatalogEntry, releases: ReleaseSummary[], checks: Checked[], limitedUntil: number | undefined): VersionList => {
-  const target = defaultRelease(releases);
+const choicesOf = (entry: CatalogEntry, releases: ReleaseSummary[], checks: Checked[], limitedUntil: number | undefined, legacy?: string): VersionList => {
+  const target = defaultRelease(releases, legacy);
   const onlyPrereleases = target?.prerelease === true;
   const at = target ? releases.indexOf(target) : -1;
   const choices = releases.map((release, index) => choiceOf(release, checks[index], checks[index]?.version ?? (index === at ? releaseVersion(entry) : undefined)));
