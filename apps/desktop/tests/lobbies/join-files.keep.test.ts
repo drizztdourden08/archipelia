@@ -57,7 +57,7 @@ const runWith = async (served: Record<string, Served>) => {
   return { run, asked, started, results: () => current.results };
 };
 
-describe('the files a joined session sends', () => {
+describe('K4 the files a joined session sends', { tags: ['critical'] }, () => {
   test('saves a patch file, and refuses an unknown kind, an oversize file and a size that does not match', async () => {
     const good = new Uint8Array([1, 2, 3]);
     const { run, asked, started } = await runWith({
@@ -86,7 +86,7 @@ describe('the files a joined session sends', () => {
   });
 });
 
-describe('the keepalive of a join', () => {
+describe('K1 the keepalive of a join', { tags: ['critical'] }, () => {
   test('pings while the server talks, and gives up on a silent server', () => {
     vi.useFakeTimers();
     let heard = 0;

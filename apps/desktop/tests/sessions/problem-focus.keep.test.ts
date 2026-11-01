@@ -6,7 +6,7 @@ import { presetPlayer } from './session-fixtures';
 
 const yamlPlayer = { slot: 2, name: 'B', game: 'Demo', source: { kind: 'yaml' as const, fileName: '', yaml: '' } };
 
-describe('problem focus on the lobby screen', () => {
+describe('K1 problem focus on the lobby screen', { tags: ['critical'] }, () => {
   test('a player problem points at the field of the seat editor', () => {
     expect(problemTarget({ slot: 3, field: 'name', message: '' })).toBe('.session-lobby__seat-editor [data-cell="name"]');
     expect(problemTarget({ slot: 3, field: 'game', message: '' })).toBe('.session-lobby__seat-editor [data-cell="game"]');

@@ -33,7 +33,7 @@ const run = (id: string, createdAt: number): Session => ({
   },
 });
 
-describe('home summary', () => {
+describe('K1 home summary', { tags: ['critical'] }, () => {
   test('engine line, value and setup need', () => {
     const ready = { state: 'ready', dir: 'x', apVersion: '0.6.7' } as const;
     expect(engineLine(ready)).toBe('Engine AP 0.6.7 ready');

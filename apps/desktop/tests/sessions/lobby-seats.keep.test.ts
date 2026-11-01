@@ -14,7 +14,7 @@ import { PRESET, presetPlayer } from './session-fixtures';
 
 const held: SessionPlayer = { slot: 2, name: 'Alice', direct: true };
 
-describe('the seats of the lobby phase', () => {
+describe('K1 the seats of the lobby phase', { tags: ['critical'] }, () => {
   const saved = [presetPlayer(1, 'Drizzt'), held];
 
   test('draws saved players as saved, new ones as added here, and a direct seat with no game as held', () => {
@@ -62,7 +62,7 @@ describe('the seats of the lobby phase', () => {
   });
 });
 
-describe('the seats of the players who joined', () => {
+describe('K1 the seats of the players who joined', { tags: ['critical'] }, () => {
   const model = (calls: string[]): LobbyMembersModel => ({
     lobby: lobby(), actionError: null, isBusy: () => false,
     review: () => calls.push('review'), remove: () => calls.push('remove'),

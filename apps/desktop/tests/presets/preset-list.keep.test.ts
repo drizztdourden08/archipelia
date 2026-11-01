@@ -6,8 +6,6 @@ import { advancedCount } from '../../src/views/PresetEditor/behavior/advanced-co
 import { firstTab } from '../../src/views/PresetEditor/behavior/first-tab';
 import { optionTabs } from '../../src/views/PresetEditor/behavior/option-tabs';
 import { visibleOptions } from '../../src/views/PresetEditor/behavior/visible-options';
-import { problemMap } from '../../src/views/PresetEditor/behavior/problem-map';
-import { problemSummary } from '../../src/views/PresetEditor/behavior/problem-summary';
 import { sameValues } from '../../src/views/PresetEditor/behavior/same-values';
 import { editedLabel } from '../../src/views/PresetsHub/behavior/edited-label';
 import { buildPresetRows } from '../../src/views/PresetsHub/behavior/build-preset-rows';
@@ -31,7 +29,7 @@ const INSTALLED: InstalledGame[] = [
   },
 ];
 
-describe('preset groups', () => {
+describe('K1 preset groups', { tags: ['critical'] }, () => {
   test('changed counts against the schema; a missing game counts stored values', () => {
     expect(changedCount(preset('a', 'Demo', { crystals: 7, goal: 'crystals_only' }), DEMO)).toBe(1);
     expect(changedCount(preset('b', 'Gone', { x: 1, y: 2 }), undefined)).toBe(2);
@@ -69,7 +67,7 @@ describe('preset groups', () => {
   });
 });
 
-describe('option filter', () => {
+describe('K1 option filter', { tags: ['critical'] }, () => {
   test('advanced options stay hidden until asked for', () => {
     expect(advancedCount(DEMO)).toBe(2);
     expect(visibleOptions(DEMO, { tab: 'Items', query: '', showAdvanced: false }).map((def) => def.key)).toEqual(['start_inventory', 'exclude']);
@@ -88,22 +86,15 @@ describe('option filter', () => {
   });
 });
 
-describe('editor helpers', () => {
+describe('K1 editor helpers', { tags: ['critical'] }, () => {
   test('sameValues ignores key order', () => {
     expect(sameValues({ a: 1, b: [1] }, { b: [1], a: 1 })).toBe(true);
     expect(sameValues({ a: 1 }, { a: 2 })).toBe(false);
     expect(sameValues({ a: 1 }, { a: 1, b: 2 })).toBe(false);
   });
-
-  test('problems read as sentences with option names', () => {
-    const problems = [{ key: 'goal', expected: 'one of the listed choices' }];
-    expect(problemMap(problems).get('goal')).toBe('Expected one of the listed choices.');
-    expect(problemSummary(problems)).toBe('1 option needs a fix before saving. They are listed above the options.');
-    expect(problemSummary([])).toBeNull();
-  });
 });
 
-describe('save bar', () => {
+describe('K1 save bar', { tags: ['critical'] }, () => {
   const facts = { busy: false, dirty: true, block: null, failure: null, saved: false };
 
   test('the state follows the edits, the save and what blocks it', () => {

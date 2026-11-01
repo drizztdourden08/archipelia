@@ -8,7 +8,7 @@ const run = (id: string, templateId: string, createdAt: number, patch: Partial<S
   id, templateId, createdAt, status: 'generating', snapshot: newTemplate(templateId), ...patch,
 });
 
-describe('finding the launched run', () => {
+describe('K1 finding the launched run', { tags: ['critical'] }, () => {
   test('picks the first run of the session started after the click', () => {
     const runs = [run('new', 't1', 5000), run('old', 't1', 100), run('other', 't2', 5000)];
     expect(findLaunchedRun(runs, { templateId: 't1', startedAt: 4000 })?.id).toBe('new');

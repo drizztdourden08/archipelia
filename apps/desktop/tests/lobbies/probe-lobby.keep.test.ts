@@ -20,7 +20,7 @@ const withLobby = async () => {
   return { address: `127.0.0.1:${fixture.endpoint.port}`, code: lobby.code };
 };
 
-describe('looking at a lobby from its address and code', () => {
+describe('S2 looking at a lobby from its address and code', { tags: ['standard'] }, () => {
   test('shows the name, the Archipelago version and that the lobby is open', async () => {
     const { address, code } = await withLobby();
     expect(await probeLobby(address, code)).toMatchObject({ ok: true, name: 'Friday seed', ap: '0.6.8', phase: 'open', joinable: true, admission: 'open' });

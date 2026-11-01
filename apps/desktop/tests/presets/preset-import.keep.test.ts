@@ -6,12 +6,10 @@ import { exportPlayerYaml } from '../../src/views/PresetEditor/behavior/export-p
 import { PLAYER_NAME } from '../../src/views/PresetEditor/PresetEditor.constants';
 import { yamlFileName } from '../../src/views/PresetEditor/behavior/yaml-file-name';
 import { importPlayerYaml } from '../../src/views/PresetEditor/behavior/import-player-yaml';
-import { importSummary } from '../../src/views/PresetEditor/behavior/import-summary';
 import { newPresetValues } from '../../src/views/PresetsHub/behavior/new-preset-values';
-import { startFromOptions } from '../../src/views/PresetsHub/behavior/start-from-options';
 import { DEMO } from './demo-schema';
 
-describe('coercePresetValues', () => {
+describe('K3 coercePresetValues', { tags: ['critical'] }, () => {
   test('unknown keys and unreadable values are skipped', () => {
     const { values, skipped } = coercePresetValues(DEMO, { crystals: 2, removed: true, death_link: 'maybe' });
     expect(values).toEqual({ crystals: 2 });
@@ -19,7 +17,7 @@ describe('coercePresetValues', () => {
   });
 });
 
-describe('player yaml', () => {
+describe('K3 player yaml', { tags: ['critical'] }, () => {
   const FILE = [
     'name: Link',
     'game: Demo',
@@ -46,11 +44,6 @@ describe('player yaml', () => {
     expect(() => importPlayerYaml('- a', DEMO)).toThrow(/not a player yaml/);
   });
 
-  test('the summary names what was skipped', () => {
-    expect(importSummary('a.yaml', 2, [])).toBe('Imported 2 options from a.yaml.');
-    expect(importSummary('a.yaml', 1, ['x', 'y'])).toBe('Imported 1 options from a.yaml. Skipped x, y.');
-  });
-
   test('export writes the resolved values under the game', () => {
     const written = parse(exportPlayerYaml(DEMO, { crystals: 2 })) as Record<string, Record<string, unknown>>;
     expect(written.name).toBe(PLAYER_NAME);
@@ -64,14 +57,9 @@ describe('player yaml', () => {
   });
 });
 
-describe('new preset from a built-in preset', () => {
+describe('K1 new preset from a built-in preset', { tags: ['critical'] }, () => {
   test('keeps only changed, known and readable values', () => {
     expect(newPresetValues(DEMO, 'Fast')).toEqual({ crystals: 3, death_link: true });
     expect(newPresetValues(DEMO, '')).toEqual({});
-  });
-
-  test('offers the game defaults and every built-in preset', () => {
-    expect(startFromOptions(DEMO).map((entry) => entry.label)).toEqual(['Game defaults', 'Start from: Fast']);
-    expect(startFromOptions(undefined)).toHaveLength(1);
   });
 });

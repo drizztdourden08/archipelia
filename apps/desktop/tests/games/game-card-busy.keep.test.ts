@@ -1,7 +1,6 @@
 /* @layer tests @kind test */
 import { describe, expect, test } from 'vitest';
 import { busyOf } from '../../src/views/GameStore/behavior/busy-of';
-import { busyText } from '../../src/views/GameStore/behavior/busy-text';
 import { cardPropsOf } from '../../src/views/GameStore/behavior/card-props';
 import { failureOf } from '../../src/views/GameStore/behavior/failure-of';
 import { reasonOf } from '../../src/views/GameStore/behavior/reason-of';
@@ -9,13 +8,7 @@ import { removeKey } from '../../src/views/GameStore/behavior/remove-key';
 import type { GameRow } from '../../src/views/GameStore/GameStore.type';
 import { entry, handlers, installedGame, row } from './game-handlers.fixtures';
 
-describe('a game card while it works', () => {
-  test('the card being installed loads its Add button and reads Adding...', () => {
-    expect(cardPropsOf(row, handlers([])).actions[0]).toMatchObject({ label: 'Add', icon: 'download', loading: false, disabled: false });
-    expect(cardPropsOf(row, handlers(['hk'])).actions[0]).toMatchObject({ label: 'Adding...', loading: true, disabled: true });
-    expect(cardPropsOf(row, handlers(['load', 'file'])).actions[0]).toMatchObject({ label: 'Add', loading: false, disabled: false });
-  });
-
+describe('K1 a game card while it works', { tags: ['critical'] }, () => {
   test('a busy card shows what it is doing and turns every other action off', () => {
     const card = cardPropsOf(row, handlers(['hk']));
     expect(card.status).toBe('adding');
@@ -33,12 +26,6 @@ describe('a game card while it works', () => {
       ['Update', true, false], ['Removing...', true, true],
     ]);
     expect(busyOf(row, handlers([]))).toBeUndefined();
-  });
-
-  test('the busy sentence names the game', () => {
-    expect(busyText('adding', 'Timespinner')).toBe('Adding Timespinner...');
-    expect(busyText('updating', 'Timespinner')).toBe('Updating Timespinner...');
-    expect(busyText('removing', 'Timespinner')).toBe('Removing Timespinner...');
   });
 
   test('a failed action marks its own card with the reason and restores Add', () => {

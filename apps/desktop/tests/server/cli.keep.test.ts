@@ -26,7 +26,7 @@ const run = async (words: string[]) => {
   return { code, out, err };
 };
 
-describe('parsing the command line', () => {
+describe('K1 parsing the command line', { tags: ['critical'] }, () => {
   test('defaults to start and keeps words and flags apart', () => {
     expect(parseCommand([])).toEqual({ name: 'start', words: [], flags: {} });
     expect(parseCommand(['--user-data=/d', '--no-focus'])).toMatchObject({ name: 'start', flags: { 'user-data': '/d', 'no-focus': '' } });
@@ -41,14 +41,14 @@ describe('parsing the command line', () => {
 });
 
 describe('the archipelia-server commands', () => {
-  test('help shows the usage and unknown commands exit with 2', async () => {
+  test('K2 help shows the usage and unknown commands exit with 2', { tags: ['critical'] }, async () => {
     expect((await run(['help'])).out.join('\n')).toContain('archipelia-server');
     const unknown = await run(['frobnicate']);
     expect(unknown.code).toBe(2);
     expect(unknown.err[0]).toContain('Unknown command "frobnicate"');
   });
 
-  test('token prints the path and exits 1 until the server has made the file', async () => {
+  test('K2 token prints the path and exits 1 until the server has made the file', { tags: ['standard'] }, async () => {
     const before = await run(['token']);
     expect(before.out[0]).toBe(join(dir, 'Data', 'server', 'admin-token'));
     expect(before.code).toBe(1);
@@ -62,9 +62,9 @@ describe('the archipelia-server commands', () => {
     } finally {
       await server.stop();
     }
-  }, 60000);
+  });
 
-  test('status reports the folder, the settings, the TLS state and a missing engine', async () => {
+  test('K2 status reports the folder, the settings, the TLS state and a missing engine', { tags: ['standard'] }, async () => {
     const status = await run(['status']);
     const text = status.out.join('\n');
     expect(text).toContain(`data folder: ${dir}`);
@@ -73,11 +73,11 @@ describe('the archipelia-server commands', () => {
     expect(text).toContain('TLS: a self-signed certificate is made on the first start');
     expect(text).toContain('engine: missing');
     expect(status.code).toBe(1);
-  }, 60000);
+  });
 
-  test('engine install asks for a version and engine switch for an id', async () => {
+  test('K2 engine install asks for a version and engine switch for an id', { tags: ['critical'] }, async () => {
     expect((await run(['engine', 'install'])).code).toBe(2);
     expect((await run(['engine', 'switch'])).code).toBe(2);
     expect((await run(['engine', 'nonsense'])).code).toBe(2);
-  }, 60000);
+  });
 });

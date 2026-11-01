@@ -24,7 +24,7 @@ const setUp = async (ap: string, options: Partial<LobbyOptions>) => {
 
 const memberOf = async (rig: Rig, lobbyId: string) => (await rig.service.get(lobbyId))?.members.find((member) => member.displayName === 'Cy');
 
-describe('Archipelia joins a session as a player', () => {
+describe('S2 Archipelia joins a session as a player', { tags: ['standard'] }, () => {
   test('joins an open session as an unlisted client, waits for consent, and shows the room once it runs', async () => {
     const { rig, lobby, files, record } = await setUp('0.6.8', { admission: 'open', allowUnlisted: true });
     const joins = startJoins(files, '0.6.8');
@@ -40,7 +40,7 @@ describe('Archipelia joins a session as a player', () => {
     expect(started.results).toMatchObject({ address: 'archipelago.gg:38281', slot: 'Cy', game: 'Quest', sameComputer: true });
     expect(started.results?.password).toBeTruthy();
     expect(rig.templates[0]?.players.map((player) => player.name)).toEqual(['Cy']);
-  }, 30000);
+  });
 
   test('refuses before it sends anything when the session runs another Archipelago version', async () => {
     const { rig, lobby, files, record } = await setUp('0.6.9', { admission: 'open', allowUnlisted: true });
@@ -67,7 +67,7 @@ describe('Archipelia joins a session as a player', () => {
     await rig.stop();
     const lost = await joins.until((view) => view.state === 'offline');
     expect(lost.message).toMatch(/lost\. Archipelia tries again in \d+ s\./);
-  }, 30000);
+  });
 
   test('keeps its token in its own storage and resumes its place after a restart', async () => {
     const { rig, lobby, files, record } = await setUp('0.6.8', { admission: 'host-approval', allowUnlisted: true });
@@ -86,5 +86,5 @@ describe('Archipelia joins a session as a player', () => {
     await rig.service.approve(lobby.id, member?.id ?? '');
     await second.until((view) => view.state === 'approved');
     expect((await rig.service.get(lobby.id))?.members.filter((entry) => entry.displayName === 'Cy')).toHaveLength(1);
-  }, 30000);
+  });
 });

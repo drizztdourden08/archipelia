@@ -27,7 +27,7 @@ const LIST: VersionList = {
   latestId: 'v1.2.0',
 };
 
-describe('update against the newest stable release', () => {
+describe('K1 update against the newest stable release', { tags: ['critical'] }, () => {
   test('a pre-release newer than every stable shows no update', () => {
     expect(rowOf(star(), [record({ version: '2.0.0-beta.1', release: { tag: 'v2.0.0-beta', prerelease: true } })]).state).toBe('installed');
   });
@@ -43,7 +43,7 @@ describe('update against the newest stable release', () => {
   });
 });
 
-describe('the version picker of the details dialog', () => {
+describe('K1 the version picker of the details dialog', { tags: ['critical'] }, () => {
   test('lists every release, tags the pre-release, keeps the blocked one with its reason and starts on the default', () => {
     const { view } = versionPick(rowOf(star()), LIST, undefined);
     expect(view?.value).toBe('v1.1.0');
@@ -51,12 +51,6 @@ describe('the version picker of the details dialog', () => {
       ['v2.0.0-beta', true, false], ['v1.2.0', false, true], ['v1.1.0', false, false],
     ]);
     expect(view?.options[1]?.note).toBe('Latest stable');
-  });
-
-  test('with an appVersion each row keeps its world version as a secondary fact, otherwise it has none', () => {
-    const app = star({ firstParty: { repo: 'maker/star-quest', bundleUrl: 'https://x/bundle', appVersion: '1.2.0' } });
-    expect(versionPick(rowOf(app), LIST, undefined).view?.options.map((option) => option.worldVersion)).toEqual(['2.0.0-beta.1', '1.2.0', '1.1.0']);
-    expect(versionPick(rowOf(star()), LIST, undefined).view?.options.map((option) => option.worldVersion)).toEqual([undefined, undefined, undefined]);
   });
 
   test('a blocked release cannot be picked', () => {

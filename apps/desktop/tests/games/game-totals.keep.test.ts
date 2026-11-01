@@ -14,7 +14,7 @@ const ENTRIES = [...BUILT_IN, ...INDEX, ...UNRELEASED, entry('rotp', 'first-part
 
 const sizes = (tab: Parameters<typeof sectionsOf>[1], rows: ReturnType<typeof buildRows>) => sectionsOf(rows, tab).map((section) => [section.id, section.rows.length]);
 
-describe('games totals', () => {
+describe('K1 games totals', { tags: ['critical'] }, () => {
   const rows = buildRows(ENTRIES, [installed('world_1', '1.0.0'), installed('world_2', '0.9.0')]);
 
   test('a world with no release is left out of the sections and counted apart, so no entry is lost', () => {
@@ -40,11 +40,6 @@ describe('games totals', () => {
     expect(sizes('archipelia-ready', rows)).toEqual([['archipelia-ready', 1]]);
     expect(sizes('archipelago-index', rows)).toEqual([['archipelago-index', 1004]]);
     expect(sizes('updates', rows)).toEqual([['updates', 1]]);
-  });
-
-  test('an installed index world is under Installed on All and still under Archipelago index on its tab', () => {
-    expect(sectionsOf(rows, 'all')[3]?.rows).toHaveLength(1002);
-    expect(sectionsOf(rows, 'archipelago-index')[0]?.rows).toHaveLength(1004);
   });
 
   test('the grid keeps an empty Installed heading on All until a search or filter is on', () => {

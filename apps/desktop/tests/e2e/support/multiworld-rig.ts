@@ -76,7 +76,7 @@ const reachEveryGoal = async (state: RigState) => {
   await waitFor(() => goalCount(state.log) >= count, 15000, `${count} goals`);
 };
 
-const defineMultiworld = (multiworld: Multiworld) => describe(multiworld.title, () => {
+const defineMultiworld = (multiworld: Multiworld) => describe(`E2 ${multiworld.title}`, { tags: ['e2e'] }, () => {
   const state: RigState = { root: '', engineDir: '', players: [], clients: [], log: [] };
 
   beforeAll(() => startRig(state, multiworld));

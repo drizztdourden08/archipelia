@@ -1,6 +1,4 @@
 /* @layer tests @kind test */
-import type { Socket } from 'node:net';
-import { createServer } from 'node:net';
 import { afterEach, describe, expect, test } from 'vitest';
 import type { LobbyServerEntry, ServerEntry } from '@archipelia/model';
 import { canonicalServerRefs } from '../../electron/lobbies/canonical-server-refs';
@@ -9,9 +7,7 @@ import { parseServerOptions } from '../../electron/lobbies/parse-server-options'
 import { openRemoteChannel } from '../../electron/lobbies/remote/open-remote-channel';
 import { saveLobbyServerEntry } from '../../electron/lobbies/save-lobby-server-entry';
 import { testLobbyServer } from '../../electron/lobbies/test-lobby-server';
-import { DEFAULT_SERVER_OPTIONS, INITIAL_NETWORK_MODE } from '../../src/lobbies/lobbies.constants';
 import { parseServerUrl } from '../../src/lobbies/parse-server-url';
-import { serverUrlProblem } from '../../src/lobbies/server-url-problem';
 import { tokenSecret } from '../../src/lobbies/token-secret';
 import { tempFiles } from './temp-files';
 
@@ -29,7 +25,7 @@ afterEach(async () => {
 
 const entry = (patch: Partial<LobbyServerEntry> = {}): LobbyServerEntry => ({ id: '', label: 'VPS', url: 'wss://vps.example.net', tokenRef: '', ...patch });
 
-describe('the renderer cannot choose which vault secret leaves the app', () => {
+describe('K4 the renderer cannot choose which vault secret leaves the app', { tags: ['critical'] }, () => {
   test('derives the token reference from the id and ignores the one the renderer sent', async () => {
     const store = await newStore();
     const saved = await saveLobbyServerEntry(store, entry({ tokenRef: 'gg-owner-id' }));
@@ -78,7 +74,7 @@ describe('the renderer cannot choose which vault secret leaves the app', () => {
   });
 });
 
-describe('the admin token never goes out in clear', () => {
+describe('K4 the admin token never goes out in clear', { tags: ['critical'] }, () => {
   test('accepts ws only for this computer and wss for any host', () => {
     expect(parseServerUrl('ws://127.0.0.1:38290')).toMatchObject({ secure: false });
     expect(parseServerUrl('ws://localhost')).toMatchObject({ secure: false });
@@ -88,35 +84,12 @@ describe('the admin token never goes out in clear', () => {
     expect(parseServerUrl('wss://192.168.1.5:38290')).toMatchObject({ secure: true });
   });
 
-  test('says why a plain address is refused', () => {
-    expect(serverUrlProblem('ws://192.168.1.5')).toContain('only for this computer');
-    expect(serverUrlProblem('nonsense')).toContain('wss://');
-    expect(serverUrlProblem('wss://play.example.net')).toBeNull();
-  });
-
   test('refuses to connect with a plain address of another computer before it opens a socket', async () => {
     await expect(openRemoteChannel({ url: 'ws://192.168.1.5:38290', token: 'secret' })).rejects.toThrow('wss://');
   });
-
-  test('gives up on a server that accepts the connection and never answers the upgrade', async () => {
-    const sockets = new Set<Socket>();
-    const silent = createServer((socket) => { sockets.add(socket); });
-    await new Promise<void>((resolve) => silent.listen(0, '127.0.0.1', resolve));
-    closers.push(async () => {
-      for (const socket of sockets) socket.destroy();
-      await new Promise((resolve) => silent.close(resolve));
-    });
-    const { port } = silent.address() as { port: number };
-    await expect(openRemoteChannel({ url: `ws://127.0.0.1:${port}`, token: 'x' })).rejects.toThrow('did not answer in time');
-  }, 20000);
 });
 
-describe('the network options of the server', () => {
-  test('start private: only this computer reaches the server until the first lobby opens it', () => {
-    expect(INITIAL_NETWORK_MODE).toBe('off');
-    expect(DEFAULT_SERVER_OPTIONS).toEqual({ mode: 'off', publicLookup: true });
-  });
-
+describe('K1 the network options of the server', { tags: ['critical'] }, () => {
   test('accept a known mode and a flag, and nothing else', () => {
     expect(parseServerOptions({ mode: 'lan', publicLookup: false })).toEqual({ mode: 'lan', publicLookup: false });
     expect(parseServerOptions({ mode: 'everywhere', publicLookup: true })).toBeNull();

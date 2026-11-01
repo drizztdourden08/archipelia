@@ -51,7 +51,7 @@ beforeEach(() => {
   api.sourcesToolPlan.mockReset().mockResolvedValue(TOOL);
 });
 
-describe('after a tool install ends', () => {
+describe('K1 after a tool install ends', { tags: ['critical'] }, () => {
   test('checks again by itself and builds with the plan the tool gave back', async () => {
     const { ended, stages } = run();
     await ended({ status: 'done', after: 'check', found: 'found', log: [], plan: WITH_CMAKE });

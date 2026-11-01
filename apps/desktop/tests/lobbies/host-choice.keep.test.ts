@@ -45,7 +45,7 @@ const CONTEXT = { lobbyServers: [FRIEND], servers: [BOX], hosting: HOSTING };
 
 const offs = (options: readonly SettingsOption[]) => options.map((option) => Boolean(option.disabled));
 
-describe('where a session lives', () => {
+describe('K1 where a session lives', { tags: ['critical'] }, () => {
   test('reads Local, LAN or Remote from the session alone, never from the network mode or direct connections', () => {
     expect(placeOf(LOCAL)).toBe('local');
     expect(placeOf({ ...LOCAL, direct: DIRECT })).toBe('local');
@@ -109,7 +109,7 @@ describe('where a session lives', () => {
   });
 });
 
-describe('the address of a lobby to join', () => {
+describe('K1 the address of a lobby to join', { tags: ['critical'] }, () => {
   test('accepts a bare host on the private network, with or without a port', () => {
     expect(joinAddress('192.168.1.20:38290')).toEqual({ target: { secure: false, host: '192.168.1.20', port: 38290 } });
     expect(joinAddress('192.168.1.20')).toEqual({ target: { secure: false, host: '192.168.1.20', port: 38290 } });
@@ -130,7 +130,7 @@ describe('the address of a lobby to join', () => {
   });
 });
 
-describe('the players and the place of a session with direct connection', () => {
+describe('K1 the players and the place of a session with direct connection', { tags: ['critical'] }, () => {
   const game = {
     apworld: 'zelda', game: 'A Link to the Past', version: '1', source: 'official', installedAt: 0, sha256: 'x', verified: true, layout: 'folder', path: 'p', requires: [],
     schema: { game: 'A Link to the Past', worldVersion: '1.0.0', groups: [], presets: {}, options: [{ key: 'death_link', displayName: 'Death link', group: 'g', kind: 'toggle', description: '', default: false, visibility: ['simple'], weightable: false }] },

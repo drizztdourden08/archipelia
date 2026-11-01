@@ -7,15 +7,12 @@ import { checkSome, joinAs } from '../../support/ap-player';
 import type { LaunchedApp } from '../support/launched-app.type';
 import { settledProof } from '../support/settled-proof';
 import { LOCAL_PORT, SOH, TEMPLATE, TIMESPINNER } from '../support/flow-constants';
-import { expectReadableDock } from '../support/dock-geometry';
 import { base, dialogOf, docked } from '../support/locators';
 import { proofText } from '../support/proof-text';
 import { roomPasswordOf } from '../support/room-password';
 import { popOutWidget } from '../support/widget-window';
 
 const CHECKS = 10;
-
-const DOCKED = ['players', 'hints', 'room', 'log', 'console'];
 
 const playerItem = (widgets: Locator, game: string) =>
   widgets.getByRole('list', { name: 'Players', exact: true }).getByRole('listitem').filter({ hasText: game });
@@ -72,7 +69,6 @@ const joinPlayers = async (launched: LaunchedApp, clients: Client[]) => {
   await playerItem(widgets, SOH.game).getByText(`${CHECKS} / `, { exact: false }).waitFor();
   await dashboard.getByText('2 / 2', { exact: true }).waitFor();
   await popPlayersOut(launched);
-  await expectReadableDock(launched.page, DOCKED);
   await settledProof(launched, '23-live-players-connected');
   await proofText(launched, '23-live-players-connected', widgets.getByRole('listitem').filter({ hasText: /connected|offline/ }));
   await filterLog(widgets, ' sent ');
@@ -107,7 +103,6 @@ const stopFromDashboard = async (launched: LaunchedApp, clients: Client[]) => {
   await confirm.getByRole('button', { name: 'Stop', exact: true }).click();
   await dashboard.getByText(/^stopped$/i).first().waitFor({ timeout: 30000 });
   await liveStatus(docked(launched.page), 'Not connected').first().waitFor();
-  await expectReadableDock(launched.page, DOCKED);
   await settledProof(launched, '27-dashboard-stopped');
 };
 

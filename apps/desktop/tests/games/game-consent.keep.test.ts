@@ -22,7 +22,7 @@ const run = (request: InstallRequest, found: PackagePreview, answer: boolean) =>
   return { result, asked, previewed };
 };
 
-describe('package consent before an install', () => {
+describe('K4 package consent before an install', { tags: ['critical'] }, () => {
   test('a world with no packages installs as it does today, without a question', async () => {
     const { result, asked } = run(index, preview([]), true);
     expect(await result).toBe(index);
@@ -56,7 +56,7 @@ describe('package consent before an install', () => {
   });
 });
 
-describe('finding a world in the grid', () => {
+describe('K1 finding a world in the grid', { tags: ['critical'] }, () => {
   const rows = buildRows([worldEntry('hk', 'official'), worldEntry('soh', 'index', ['1.0.0']), worldEntry('zzz', 'index', ['1.0.0'])], [worldInstalled('soh', '1.0.0')]);
 
   test('the index runs through the sections in order, so a card that is not drawn can be scrolled to', () => {

@@ -13,7 +13,7 @@ import { launchApp } from './support/launch-app';
 import type { LaunchedApp } from './support/launched-app.type';
 import { tearDown } from './support/safety-net';
 
-describe('Archipelia app, headless, every screen end to end', () => {
+describe('E1 Archipelia app, headless, every screen end to end', { tags: ['e2e'] }, () => {
   const state: { launched?: LaunchedApp; clients: Client[] } = { clients: [] };
   const app = () => {
     if (!state.launched) throw new Error('the app did not launch');

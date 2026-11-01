@@ -59,7 +59,7 @@ const hostHook = (on: Rig, template: SessionTemplate, lobbyId: string) => async 
 };
 
 describe('a session that takes direct connections', () => {
-  test('lets a client connect, be approved in the lobby, and run in one seed with a player the host adds later', async () => {
+  test('S2 lets a client connect, be approved in the lobby, and run in one seed with a player the host adds later', { tags: ['standard'] }, async () => {
     rig = await startLobbyRig();
     const on = rig;
     const { lobby, template } = await started(on, sessionOf({ direct: DIRECT, players: [] }));
@@ -75,16 +75,16 @@ describe('a session that takes direct connections', () => {
     expect(players).toHaveLength(2);
     const ran = (await on.service.get(lobby.id))?.members.find((member) => member.displayName === 'Link');
     expect(ran).toMatchObject({ kind: 'client', admission: 'approved', trust: 'verified', client: { name: 'Relic of the Past', version: '0.22.0' } });
-  }, 30000);
+  });
 
-  test('refuses a second run on a lobby that already ran, and names the way out', async () => {
+  test('S3 refuses a second run on a lobby that already ran, and names the way out', { tags: ['standard'] }, async () => {
     rig = await startLobbyRig();
     const { lobby, template } = await started(rig, sessionOf({ direct: DIRECT }));
     await runSession(syncPlan(template, lobby.id), lobbyDeps(rig));
     await expect(runSession(syncPlan(template, lobby.id), lobbyDeps(rig))).rejects.toThrow('Start session opens a new one');
   });
 
-  test('opens the lobby with no player and makes no seed, reuses it on the next start, and refuses Run until a player is ready', async () => {
+  test('S3 opens the lobby with no player and makes no seed, reuses it on the next start, and refuses Run until a player is ready', { tags: ['standard'] }, async () => {
     rig = await startLobbyRig();
     const on = rig;
     const draft = sessionOf({ players: [], direct: DIRECT });
@@ -99,7 +99,7 @@ describe('a session that takes direct connections', () => {
 });
 
 describe('a session without direct connections', () => {
-  test('creates its lobby already locked to clients, never open, and runs the players of the host', async () => {
+  test('S2 creates its lobby already locked to clients, never open, and runs the players of the host', { tags: ['standard'] }, async () => {
     rig = await startLobbyRig();
     const on = rig;
     const sent: LobbyRequest[] = [];
@@ -117,7 +117,7 @@ describe('a session without direct connections', () => {
     expect(on.templates[0]?.players.map((player) => player.name)).toEqual(['Ana']);
   });
 
-  test('runs under its lobby on this computer, and on no launch the app follows for a remote server', () => {
+  test('K1 runs under its lobby on this computer, and on no launch the app follows for a remote server', { tags: ['critical'] }, () => {
     expect(launchOf({ serverId: 'local', lobbyId: 'lb_1' }, 5)).toEqual({ templateId: 'lobby-lb_1', startedAt: 5 });
     expect(launchOf({ serverId: 'srv_1', lobbyId: 'lb_1' }, 5)).toBeNull();
   });
@@ -126,7 +126,7 @@ describe('a session without direct connections', () => {
 describe('the main action of the lobby screen', () => {
   const run = () => undefined;
 
-  test('waits for the lobby, then runs once a player is ready', async () => {
+  test('S2 waits for the lobby, then runs once a player is ready', { tags: ['standard'] }, async () => {
     rig = await startLobbyRig();
     const { lobby } = await started(rig, sessionOf({ players: [], direct: DIRECT }));
     const empty = sessionOf({ players: [], direct: DIRECT });
@@ -140,7 +140,7 @@ describe('the main action of the lobby screen', () => {
 });
 
 describe('the slots of the host in a session that takes direct connections', () => {
-  test('are reserved, so a client with a host slot name is refused at join, and the run still works', async () => {
+  test('K4 are reserved, so a client with a host slot name is refused at join, and the run still works', { tags: ['standard'] }, async () => {
     rig = await startLobbyRig();
     const on = rig;
     const draft = sessionOf({ direct: { admission: 'open', allowUnlisted: true }, players: [{ slot: 1, name: 'Cy', game: 'Quest', source: { kind: 'yaml', fileName: 'cy.yaml', yaml: CY_YAML } }] });
@@ -156,11 +156,11 @@ describe('the slots of the host in a session that takes direct connections', () 
     await runSession(syncPlan(template, lobby.id), lobbyDeps(on));
     await vi.waitFor(() => expect(on.templates).toHaveLength(1));
     expect(on.templates[0]?.players.map((player) => player.name)).toEqual(['Cy']);
-  }, 30000);
+  });
 });
 
 describe('turning direct connections off on a lobby with joined players', () => {
-  test('removes every joined player before it locks, so none can resume or run', async () => {
+  test('K4 removes every joined player before it locks, so none can resume or run', { tags: ['standard'] }, async () => {
     rig = await startLobbyRig();
     const on = rig;
     const { lobby, template } = await started(on, sessionOf({ direct: { admission: 'host-approval', allowUnlisted: true }, players: [] }));
@@ -171,7 +171,7 @@ describe('turning direct connections off on a lobby with joined players', () => 
     expect(closed.phase).toBe('locked');
     expect(closed.members.find((member) => member.id === joinedId)?.admission).toBe('removed');
     expect(hostSlotNames(closed)).toEqual(['Ana']);
-  }, 30000);
+  });
 });
 
 const serverAt = (options: Partial<LobbyServerStatus['options']>) => {
@@ -183,7 +183,7 @@ const serverAt = (options: Partial<LobbyServerStatus['options']>) => {
 describe('what a session opens on the network', () => {
   const lan = sessionOf({ host: { kind: 'local', port: 38281 }, lan: true });
 
-  test('opens the lobby port on LAN only with direct connections, and only after the recorded consent', async () => {
+  test('K4 opens the lobby port on LAN only with direct connections, and only after the recorded consent', { tags: ['critical'] }, async () => {
     const consented = serverAt({ lanConsent: true });
     await openToNetwork(consented.server)(lan);
     expect(consented.apply).not.toHaveBeenCalled();
@@ -195,7 +195,7 @@ describe('what a session opens on the network', () => {
     expect(asked.apply).not.toHaveBeenCalled();
   });
 
-  test('opens the room on LAN for a LAN session, and shares only the password the session itself keeps', async () => {
+  test('K4 opens the room on LAN for a LAN session, and shares only the password the session itself keeps', { tags: ['critical'] }, async () => {
     const sharePassword = vi.fn(() => Promise.resolve());
     const setLanRoom = vi.fn();
     const before = prepareRun({ server: serverAt({ lanConsent: true }).server, setLanRoom, sharePassword });

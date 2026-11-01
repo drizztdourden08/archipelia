@@ -24,7 +24,7 @@ const ipcError = () => {
 
 const needOfError = (error: Error) => (isAppError(error, code) ? installFailureFrom(error) : undefined);
 
-describe('a world that needs a package Archipelia cannot install', () => {
+describe('K2 a world that needs a package Archipelia cannot install', { tags: ['critical'] }, () => {
   const failed = () => {
     const error = ipcError();
     const found = needOfError(error);
@@ -53,7 +53,7 @@ describe('a world that needs a package Archipelia cannot install', () => {
   });
 });
 
-describe('the way out of a missing package', () => {
+describe('K2 the way out of a missing package', { tags: ['critical'] }, () => {
   const found = installFailureFrom({ code, message: MESSAGE, data: { packages: PACKAGES } });
   const needs: Record<string, InstallFailure> = found ? { hk: found } : {};
 

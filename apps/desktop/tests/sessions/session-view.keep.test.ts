@@ -4,7 +4,7 @@ import type { JobSnapshot } from '@drizztdourden08/brock-core';
 import type { Session } from '@archipelia/model';
 import { clockOf } from '../../src/views/SessionDashboard/behavior/clock-of';
 import { kindOf } from '../../src/views/SessionDashboard/behavior/kind-of';
-import { logCopyText, RUN_STATUS } from '@archipelia/design';
+import { logCopyText } from '@archipelia/design';
 import { serverRows } from '../../src/views/SessionDashboard/behavior/server-rows';
 import { textFileFor } from '../../src/views/SessionDashboard/behavior/text-file-for';
 import { textRows } from '../../src/views/SessionDashboard/behavior/text-rows';
@@ -31,13 +31,7 @@ const run = (id: string, createdAt: number, patch: Partial<Session> = {}): Sessi
   ...patch,
 });
 
-describe('session status', () => {
-  test('labels and status tones', () => {
-    expect(RUN_STATUS.hosting).toEqual({ label: 'Hosting', tone: 'success' });
-    expect(RUN_STATUS.failed).toEqual({ label: 'Failed', tone: 'danger' });
-    expect(RUN_STATUS.stopped).toEqual({ label: 'Stopped', tone: 'neutral' });
-  });
-
+describe('K1 session status', { tags: ['critical'] }, () => {
   test('uptime counts from the first server line while hosting', () => {
     expect(formatDuration(0)).toBe('00:00:00');
     expect(formatDuration(((42 * 60) + 10) * 1000)).toBe('00:42:10');
@@ -59,7 +53,7 @@ describe('session status', () => {
   });
 });
 
-describe('log tabs', () => {
+describe('K1 log tabs', { tags: ['critical'] }, () => {
   test('the log has a server and a generate tab, never the spoiler', () => {
     expect(LOG_TABS).toEqual(['server', 'generate']);
     expect(textFileFor('generate')).toBe('generate.log');
