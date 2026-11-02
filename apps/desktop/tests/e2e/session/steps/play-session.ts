@@ -79,6 +79,8 @@ const checkSpoiler = async (launched: LaunchedApp, slots: string[]) => {
   await settledProof(launched, '62-session-spoiler');
   await frame.getByRole('button', { name: 'Hide spoiler' }).click();
   await frame.getByRole('button', { name: 'Show spoiler' }).waitFor();
+  await frame.getByRole('button', { name: 'Close Spoiler', exact: true }).click();
+  await frame.waitFor({ state: 'detached' });
 };
 
 const checkRoom = async (launched: LaunchedApp) => {
