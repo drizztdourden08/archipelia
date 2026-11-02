@@ -37,9 +37,9 @@
   },
   "devDependencies": {
     "@archipelia/engine-bundle": "workspace:*",
-    "@drizztdourden08/brock-build": "^0.115.3",
-    "@drizztdourden08/brock-lint-config": "^0.115.3",
-    "@drizztdourden08/brock-thread": "^0.115.3",
+    "@drizztdourden08/brock-build": "^0.116.0",
+    "@drizztdourden08/brock-lint-config": "^0.116.0",
+    "@drizztdourden08/brock-thread": "^0.116.0",
     "@drizztdourden08/standards": "^0.14.2",
     "jscpd": "catalog:",
     "knip": "catalog:",
@@ -50,7 +50,7 @@
     "archipelia": "./bin/archipelia.mjs"
   },
   "brock": {
-    "version": "0.115.3"
+    "version": "0.116.0"
   },
   "packageManager": "pnpm@10.17.0"
 }
