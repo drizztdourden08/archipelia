@@ -62,6 +62,7 @@ const GameStore = ({ tab }: GameStoreProps) => {
               label="Games"
               tileWidth={TILE.width}
               tileHeight={TILE.height}
+              rowHeight="measured"
               sections={sections.map(({ id, rows }) => ({ key: id, label: <SectionLabel id={id} empty={rows.length === 0} />, items: rows }))}
               getKey={rowKey}
               renderItem={(row) => (
