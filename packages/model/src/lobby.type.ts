@@ -68,6 +68,7 @@ type LobbyMember = {
   id: string;
   kind: 'host' | 'client';
   displayName: string;
+  seat?: string;
   client?: ClientMeta;
   tokenHash?: string;
   admission: MemberAdmission;
@@ -104,6 +105,7 @@ type Lobby = {
   engine: SessionEngine;
   options: LobbyOptions;
   source?: LobbySource;
+  seats?: string[];
   members: LobbyMember[];
   worlds: WorldUpload[];
   nextMember: number;

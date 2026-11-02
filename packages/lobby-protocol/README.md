@@ -100,7 +100,8 @@ The server answers with `lobby.info.reply`:
     "admission": "host-approval",
     "allowUnlisted": false,
     "worlds": [ { "game": "Relic of the Past", "worldVersion": "0.1.0" } ],
-    "requires": { "capabilities": ["slots.yaml"] }
+    "requires": { "capabilities": ["slots.yaml"] },
+    "seats": [ { "name": "Alice", "free": true }, { "name": "Bob", "free": false } ]
   },
   "limits": { "maxMessageBytes": 1048576, "chunkBytes": 262144, "maxWorldBytes": 67108864, "maxYamlBytes": 262144, "maxMemberBytes": 134217728 }
 }
@@ -111,6 +112,7 @@ The server answers with `lobby.info.reply`:
 - `lobby.joinable` is true when the phase is `open` and a slot is free. A locked, generating or hosting lobby still answers, with `joinable: false`.
 - `requires.capabilities` lists what a client must declare. `limits` are the upload limits, so a client can check its files first.
 - The reply holds no member list, no member count, no token, no password and no room address.
+- `lobby.seats` is optional. It lists the seats the host holds for people who are not in the lobby yet, each with a `free` flag that is false when someone already took it. A client that lets its player pick a seat shows the free ones and names the choice in `hello.seat` (see the section on held seats). A lobby that holds no seat leaves the field out.
 - A wrong code gets `lobby-not-found` and a close with `4404`. A closed lobby gets `lobby-closed` and `4410`. No common protocol major gets `protocol-unsupported` and `4401`.
 - Because the exchange needs no proof, it is limited. A `lobby.info` request MUST be at most 1 024 bytes, else the server answers `bad-message` and closes with `4400`. A server answers at most 30 `lobby.info` requests per minute per source address (`LOBBY_INFO_LIMIT`). The 31st gets `rate-limited` with `retryAfter` and a close with `4429` (see the back-off below). A wrong code in a `lobby.info` request counts as a failed attempt in the same counter as a wrong code in `hello` (see the checks below).
 - After the reply the connection stays open. The 15 s timer for `hello` starts again at the reply. A client that wants no more can close.
@@ -171,7 +173,7 @@ A `hello` missing any field below, or carrying one that is malformed, is refused
 | `slots` | 1 to 8 entries; `name` 1 to 16 printable characters; `game` exactly as the world names it |
 | `worlds` | one entry per game the slots use, when the client has `worlds.upload`; else empty |
 
-Optional: `client.build` (a commit or build id), `client.homepage` (https URL), `client.sdk`, `resume`, `worlds[].proof`.
+Optional: `client.build` (a commit or build id), `client.homepage` (https URL), `client.sdk`, `resume`, `seat` (1 to 16 printable characters, the seat the player asks for), `worlds[].proof`.
 
 `checkHello` checks the rules that a schema cannot hold (the required capability, one world per game, a world for every slot game).
 
@@ -184,8 +186,9 @@ Optional: `client.build` (a commit or build id), `client.homepage` (https URL), 
 5. The token, when `resume` is set (see the section on the member token).
 6. Version: the Archipelago version of the client equals the lobby version. Failure: `version-mismatch`, close `4409`.
 7. Trust (see the section on the trust proof). Failure: `trust-failed`, `client-revoked` or `unlisted-not-allowed`, close `4403`.
-8. Slot names unique in the lobby (`slot-name-taken`, not fatal: the client may send `slots.set`).
-9. World versions agree with the lobby (`world-version-conflict`, close `4409`).
+8. A seat choice, when `seat` is set: the lobby holds a seat of that name, compared without regard to case, and nobody took it (`seat-unavailable`, close `4403`).
+9. Slot names unique in the lobby (`slot-name-taken`, not fatal: the client may send `slots.set`).
+10. World versions agree with the lobby (`world-version-conflict`, close `4409`).
 
 ### The welcome
 
@@ -307,6 +310,19 @@ Before the lobby locks, a member MAY replace its slot list:
 
 The server answers `slots.ok` with a new `need` list, or an error. After `locked`, `slots.set` gets `lobby-locked`, not fatal.
 
+## Held seats
+
+A host can hold named seats for players who are not in the lobby yet. The server advertises them so a joining client can pick its seat. The choice is a request. The host still approves the member, and the seat belongs to the member for as long as the member is pending or approved.
+
+1. The client reads `lobby.seats` from the `lobby.info.reply` (or `seats` from a later `lobby.state`) and shows the seats whose `free` is true.
+2. The client names the pick in `hello.seat`, spelled as the lobby spells it. The server compares without regard to case and keeps the spelling of the lobby.
+3. A pick that names no held seat, or a seat that is taken, gets `seat-unavailable` with `field: "seat"` and a close with `4403`. The message says which of the two it was. The client asks again with a free seat or with none.
+4. A seat is taken while another pending or approved client member holds it by an explicit `seat`. A member that sent no `seat` holds the seat equal to its display name or to one of its slot names. A refused, removed or departed member frees its seat. `free` follows the same rule.
+5. A `hello` with `resume` set ignores `seat`: the member keeps the seat it has.
+6. A client that sends no `seat`, and a server that holds no seat, behave as in version 1.2.
+
+The host sees the requested seat next to the member in its approval view. Approving the member puts it in that seat. Refusing it frees the seat.
+
 ## Admission states
 
 ```text
@@ -357,6 +373,7 @@ The server sends the whole public view on join and on any change. `rev` grows by
 - `phase`: `open` (joins accepted), `locked` (no new members), `generating`, `hosting`, `closed`, `failed`.
 - `trust`: `verified` or `unlisted`.
 - Slot `state`: `uploading`, `checking`, `waiting-consent`, `ok`, `refused` (with `reason`).
+- `seats` is optional and has the shape of `lobby.seats` in the `lobby.info` reply. A pending member sees it too.
 - A pending member sees only its own entry, and an `others` object with the counts `approved` and `pending` of the other members.
 - The client marks itself ready when its uploads are done: `{ "type": "ready", "seq": 9, "ready": true }`. Ready is advisory. The host decides when to start.
 - A resumed member does not send `ready` again when its own entry in the first `lobby.state` after the `welcome` already has `ready: true`. It sends `ready` only when that entry says `ready: false` and its uploads are done.
@@ -424,6 +441,7 @@ On success each approved member gets its own results:
 | `refused` | yes | 4403 | the host refused or removed the member, seen on resume |
 | `resume-invalid` | yes | 4403 | the token is unknown to this lobby |
 | `resume-replaced` | yes | 4412 | another connection took over this member |
+| `seat-unavailable` | yes before welcome, else no | 4403 | the lobby holds no seat of that name, or the seat is taken |
 | `slot-name-taken` | no | none | another slot has the name |
 | `upload-unexpected` | no | none | hash or kind not declared |
 | `upload-too-large` | no | none | over a limit |
@@ -583,7 +601,7 @@ A string value of the form `$name` is a placeholder.
 
 ### Scenarios
 
-`SCENARIO_CATALOG` lists every scenario with the setup a real server needs for it (lobby name, admission, whether unlisted clients are allowed, the Archipelago version, the phase, the slot limit, slots held by other members, the registry state, and the output file for `file-download`).
+`SCENARIO_CATALOG` lists every scenario with the setup a real server needs for it (lobby name, admission, whether unlisted clients are allowed, the Archipelago version, the phase, the slot limit, slots held by other members, the held seat names, the registry state, and the output file for `file-download`).
 
 | Group | Scenarios |
 | --- | --- |
@@ -632,5 +650,6 @@ A scenario fails with a text such as `line 12 (s2c): members[0].id: expected "m_
 
 ## Changes
 
+- 1.3.0: held seats. `lobby.info.reply` (`lobby.seats`) and `lobby.state` (`seats`) carry the seats the host holds, each with a `free` flag. `hello` carries an optional `seat`. The new error code `seat-unavailable` answers a choice that names no seat or a taken seat. All three fields are optional, and a client that sends no `seat` joins as before, so protocol major 1 is unchanged.
 - 1.2.0: `lobby.started` carries an optional `room.localAddress`, the loopback address of a room that runs on the computer of the server. A client that joined through a loopback address SHOULD use it. The change is additive, so protocol major 1 is unchanged.
 - 1.1.0: the socket transport has a client-side masking option.

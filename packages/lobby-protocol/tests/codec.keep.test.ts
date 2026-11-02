@@ -33,6 +33,7 @@ const SPEC_TABLE: Record<ErrorCode, [before: boolean, after: boolean, close: num
   refused: [true, true, 4403],
   'resume-invalid': [true, true, 4403],
   'resume-replaced': [true, true, 4412],
+  'seat-unavailable': [true, false, 4403],
   'slot-name-taken': [false, false, null],
   'upload-unexpected': [false, false, null],
   'upload-too-large': [false, false, null],

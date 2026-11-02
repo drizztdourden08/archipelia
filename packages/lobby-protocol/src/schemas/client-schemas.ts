@@ -31,6 +31,7 @@ const HELLO_SCHEMA = {
     resume: { type: ['string', 'null'], pattern: '^[A-Za-z0-9_-]{43}$' },
     client: { $ref: '#/$defs/clientInfo' },
     player: { type: 'object', required: ['displayName'], properties: { displayName: { $ref: '#/$defs/text32' } } },
+    seat: { $ref: '#/$defs/text16' },
     archipelago: {
       type: 'object',
       required: ['version'],

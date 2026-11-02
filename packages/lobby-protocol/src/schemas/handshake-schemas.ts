@@ -38,6 +38,7 @@ const LOBBY_INFO_REPLY_SCHEMA = {
           required: ['capabilities'],
           properties: { capabilities: { type: 'array', maxItems: 32, items: { $ref: '#/$defs/text64' } } },
         },
+        seats: { $ref: '#/$defs/heldSeats' },
       },
     },
     limits: { $ref: '#/$defs/limits' },

@@ -10,6 +10,7 @@ import { rejected } from '../state/rejected';
 import type { Admitted } from './admit-slots.type';
 import { admitInDraft } from './admit-in-draft';
 import { checkTrust } from './check-trust';
+import { claimSeat } from './claim-seat';
 import { clientMeta } from './client-meta';
 import { welcomeMember } from './welcome-member';
 import { LOBBY_LOCKED } from './join.constants';
@@ -17,8 +18,9 @@ import type { JoinRequest } from './join-lobby.type';
 
 const enter = (ctx: LobbyContext, draft: Lobby, hello: Hello, joined: { tokenHash: string; trust: UploadTrust }): Admitted => {
   if (draft.phase !== 'open') throw rejected(LOBBY_LOCKED);
+  const seat = claimSeat(draft, hello.seat);
   const member: LobbyMember = {
-    id: `${MEMBER_ID_PREFIX}${draft.nextMember}`, kind: 'client', displayName: hello.player.displayName, client: clientMeta(hello), tokenHash: joined.tokenHash,
+    id: `${MEMBER_ID_PREFIX}${draft.nextMember}`, kind: 'client', displayName: hello.player.displayName, ...(seat ? { seat } : {}), client: clientMeta(hello), tokenHash: joined.tokenHash,
     admission: draft.options.admission === 'open' ? 'approved' : 'pending', trust: joined.trust.level, ready: false, slots: [],
     joinedAt: ctx.now(), lastSeenAt: ctx.now(),
   };

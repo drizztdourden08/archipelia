@@ -44,6 +44,7 @@ type Hello = {
   resume?: string | null;
   client: ClientInfo;
   player: { displayName: string };
+  seat?: string;
   archipelago: { version: string };
   capabilities: string[];
   worlds: WorldEntry[];

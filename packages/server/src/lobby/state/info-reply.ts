@@ -3,6 +3,7 @@ import type { LobbyInfoReply } from '@drizztdourden08/archipelia-lobby-protocol'
 import { PROTOCOL_NAME, PROTOCOL_VERSION, REQUIRED_CAPABILITY, lobbyJoinable } from '@drizztdourden08/archipelia-lobby-protocol';
 import type { Lobby } from '@archipelia/model';
 import { SERVER_NAME } from '../lobby.constants';
+import { advertisedSeats } from './advertised-seats';
 import { fixedWorlds } from './fixed-worlds';
 import { limitsOf } from './limits-of';
 import { usedSlots } from './used-slots';
@@ -20,6 +21,7 @@ const infoReply = (lobby: Lobby, serverVersion: string): LobbyInfoReply => ({
     allowUnlisted: lobby.options.allowUnlisted,
     worlds: [...fixedWorlds(lobby)].map(([game, worldVersion]) => ({ game, worldVersion })),
     requires: { capabilities: [REQUIRED_CAPABILITY] },
+    ...advertisedSeats(lobby),
   },
   limits: limitsOf(lobby),
 });
