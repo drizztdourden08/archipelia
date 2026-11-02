@@ -12,7 +12,7 @@ import type { ChestItem } from '../support/chest-line';
 import { apConnectArgs } from '../support/rotp-args';
 import { startRotp, waitForChestItem } from '../support/rotp-instance';
 import type { RotpInstance } from '../support/rotp-instance';
-import { ROTP_B, TIMEOUT } from '../support/session-constants';
+import { HINT_LOCATION, ROTP_B, TIMEOUT } from '../support/session-constants';
 import type { SessionEnv } from '../support/session-env';
 import type { SessionDirs } from './session-dirs.type';
 
@@ -46,13 +46,13 @@ const checkResults = async (launched: LaunchedApp, slots: string[]): Promise<Che
 
 const hintCount = (widgets: Locator) => widgets.getByRole('list', { name: 'Hints', exact: true }).getByRole('listitem').count();
 
-const sendHints = async (launched: LaunchedApp, results: ChestItem[]) => {
+const sendHints = async (launched: LaunchedApp, slots: string[]) => {
   const page = launched.page;
   const widgets = docked(page);
   const consoleWidget = page.locator('[data-widget-id="console"]');
   const command = consoleWidget.getByRole('combobox', { name: 'Server command', exact: true });
-  for (const [index, result] of results.entries()) {
-    const text = `/hint ${result.receiver} ${result.item}`;
+  for (const [index, slot] of slots.entries()) {
+    const text = `/hint_location ${slot} ${HINT_LOCATION}`;
     await command.fill(text);
     await command.press('Enter');
     await consoleWidget.getByText(`> ${text}`, { exact: true }).waitFor();
@@ -62,10 +62,11 @@ const sendHints = async (launched: LaunchedApp, results: ChestItem[]) => {
 };
 
 const openSpoilerWidget = async (page: Page) => {
+  const frame = page.locator('[data-widget-id="spoiler"]');
+  if (await frame.isVisible()) return frame;
   await page.getByRole('button', { name: 'Menu', exact: true }).click();
   await page.getByRole('menuitem', { name: 'Widgets', exact: true }).click();
   await page.getByRole('menuitemcheckbox', { name: 'Spoiler', exact: true }).click();
-  const frame = page.locator('[data-widget-id="spoiler"]');
   await frame.waitFor();
   return frame;
 };

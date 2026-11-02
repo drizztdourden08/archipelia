@@ -64,9 +64,9 @@ describe.skipIf(process.env.E2E_SESSION !== '1')('Archipelia session with a live
 
   test("12. play: RotP-B opens its chest in Link's house", () => waitForChest(rotpOf(ROTP_B.slot)));
 
-  test('13. results and hints: both chest items arrive in Players and Log, and a hint goes out for each', async () => {
-    const results = await checkResults(app(), [ROTP_A.slot, ROTP_B.slot]);
-    await sendHints(app(), results);
+  test('13. results and hints: both chest items arrive in Players and Log, and each RotP world gets a hint', async () => {
+    await checkResults(app(), [ROTP_A.slot, ROTP_B.slot]);
+    await sendHints(app(), [ROTP_A.slot, ROTP_B.slot]);
   });
 
   test('14. runner functions: spoiler, room, console and stop', async () => {
