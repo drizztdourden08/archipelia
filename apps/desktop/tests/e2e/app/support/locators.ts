@@ -58,6 +58,13 @@ const seatEditorOf = (scope: Locator, slot: number) => scope.getByRole('region',
 
 const seatsOf = (scope: Locator) => scope.getByRole('group', { name: 'Seats', exact: true });
 
+const openAdvanced = async (sessions: Locator) => {
+  const summary = sessions.locator('summary', { hasText: 'Advanced' });
+  const opened = await summary.locator('xpath=..').evaluate((node) => (node as HTMLDetailsElement).open);
+  if (!opened) await summary.click();
+  await sessions.getByRole('combobox', { name: 'Spoiler', exact: true }).waitFor();
+};
+
 const openSection = async (scope: Locator, label: string) => {
   await sectionsNav(scope).getByRole('button', { name: label, exact: true }).click();
   await currentPage(scope, label).waitFor();
@@ -102,5 +109,5 @@ const shownOpacity = (target: Locator) => target.evaluate((node) => {
   return opacity;
 });
 
-export { base, cardOf, docked, closeHub, dialogOf, hub, installedCountOf, nestedButtons, openScreen, openSection, pickOption, removeButtonOf, seatEditorOf, seatsOf, shownOpacity };
+export { base, cardOf, docked, closeHub, dialogOf, hub, installedCountOf, nestedButtons, openAdvanced, openScreen, openSection, pickOption, removeButtonOf, seatEditorOf, seatsOf, shownOpacity };
 export type { HubTitle };

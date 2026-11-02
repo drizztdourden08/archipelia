@@ -3,7 +3,7 @@ import { expect } from 'vitest';
 import type { Locator, Page } from 'playwright-core';
 import type { LaunchedApp } from '../../app/support/launched-app.type';
 import { TEMPLATE } from '../../app/support/flow-constants';
-import { dialogOf, openScreen, pickOption, seatEditorOf, seatsOf } from '../../app/support/locators';
+import { dialogOf, openAdvanced, openScreen, pickOption, seatEditorOf, seatsOf } from '../../app/support/locators';
 import { settledProof } from '../../app/support/settled-proof';
 import { answerOpenDialogWith } from '../support/open-dialog';
 import { BALDUR, RELIC, ROTP_B, TIMEOUT } from '../support/session-constants';
@@ -19,13 +19,6 @@ const chooseLanWithDirect = async (sessions: Locator) => {
   const direct = sessions.getByRole('switch', { name: /^Allow direct connections/ });
   await direct.press('Space');
   expect(await direct.getAttribute('aria-checked'), 'direct connections are on').toBe('true');
-};
-
-const openAdvanced = async (sessions: Locator) => {
-  const summary = sessions.locator('summary', { hasText: 'Advanced' });
-  const opened = await summary.locator('xpath=..').evaluate((node) => (node as HTMLDetailsElement).open);
-  if (!opened) await summary.click();
-  await sessions.getByRole('combobox', { name: 'Spoiler', exact: true }).waitFor();
 };
 
 const confirmLan = async (page: Page) => {
