@@ -7,7 +7,7 @@ import { stopFromDashboard } from '../app/steps/live-room';
 import { proof } from '../app/support/proof';
 import { buildLanSession } from './steps/build-session';
 import { addRelic, startBaldurInstall, waitBaldurInstalled } from './steps/install-worlds';
-import { approveJoin, checkJoinedOptions, startRotpA } from './steps/lobby-join';
+import { approveJoin, checkJoinedOptions, startRotpA, waitForJoinRequest } from './steps/lobby-join';
 import { checkConsole, checkResults, checkRoom, checkSpoiler, hostSession, sendHints, startRotpB, waitForChest } from './steps/play-session';
 import { E2E_TEST_TIMEOUT_MS, ROTP_A, ROTP_B } from './support/session-constants';
 import { sessionState } from './support/session-state';
@@ -41,11 +41,13 @@ describe.skipIf(process.env.E2E_SESSION !== '1')('Archipelia session with a live
     await buildLanSession(app());
   });
 
-  test('6. lobby: RotP-A starts and asks to join live', async () => {
-    state.rotp.push(await startRotpA(app(), env(), dirs()));
+  test('6. lobby: RotP-A starts, stays up and its join request reaches the host', async () => {
+    const rotp = await startRotpA(app(), env(), dirs());
+    state.rotp.push(rotp);
+    await waitForJoinRequest(app(), tabOf(), env(), rotp);
   });
 
-  test('7. lobby: the host approves RotP-A', () => approveJoin(app(), tabOf()));
+  test('7. lobby: the host approves RotP-A', () => approveJoin(app(), tabOf(), rotpOf(ROTP_A.slot)));
 
   test('8. lobby: the host views the options of RotP-A and cannot edit them', () => checkJoinedOptions(app(), tabOf()));
 

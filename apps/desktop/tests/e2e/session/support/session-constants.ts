@@ -15,6 +15,8 @@ const LOOPBACK = '127.0.0.1';
 
 const LOBBY_SERVER = 'local';
 
+const ROTP_COMMAND = 'rotp';
+
 const BALDUR = { search: 'Baldur', title: "Baldur's Gate 3", game: "Baldur's Gate 3", slot: 'Minsc' };
 
 const RELIC = { search: 'Relic', title: 'Relic of the Past', game: 'Relic of the Past' };
@@ -26,4 +28,4 @@ const E2E_TEST_TIMEOUT_MS = 120000;
 
 const TIMEOUT = { install: 100000, join: 100000, chest: 100000, line: 60000 };
 
-export { AUTO_STATE, BALDUR, CHEST_INPUT, E2E_TEST_TIMEOUT_MS, LOBBY_SERVER, LOOPBACK, RELIC, ROTP_A, ROTP_B, SESSION_PROOF_DIR, TIMEOUT };
+export { AUTO_STATE, BALDUR, CHEST_INPUT, E2E_TEST_TIMEOUT_MS, LOBBY_SERVER, LOOPBACK, RELIC, ROTP_A, ROTP_B, ROTP_COMMAND, SESSION_PROOF_DIR, TIMEOUT };

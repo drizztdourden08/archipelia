@@ -4,23 +4,25 @@ import type { ChildProcess } from 'node:child_process';
 import { createWriteStream } from 'node:fs';
 import { mkdir, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
+import { ROTP_COMMAND } from './session-constants';
 
 const POLL_MS = 500;
 const STOP_GRACE_MS = 10000;
 
 type RotpInstance = {
   name: string;
+  startedAt: number;
   child: ChildProcess;
   eventLog: string;
   output: () => string;
   exited: () => boolean;
 };
 
-type RotpStart = { name: string; command: string; args: (eventLog: string) => string[]; outDir: string };
+type RotpStart = { name: string; cwd: string; args: (eventLog: string) => string[]; outDir: string };
 
 const pause = (ms: number) => new Promise<void>((resolve) => { setTimeout(resolve, ms); });
 
-const startRotp = async ({ name, command, args, outDir }: RotpStart): Promise<RotpInstance> => {
+const startRotp = async ({ name, cwd, args, outDir }: RotpStart): Promise<RotpInstance> => {
   await mkdir(outDir, { recursive: true });
   const sink = createWriteStream(join(outDir, `${name}.log`));
   const chunks: string[] = [];
@@ -31,13 +33,15 @@ const startRotp = async ({ name, command, args, outDir }: RotpStart): Promise<Ro
   const childEnv = { ...process.env };
   delete childEnv.ELECTRON_RUN_AS_NODE;
   const eventLog = join(outDir, `${name}.events.jsonl`);
-  const child = spawn(command, args(eventLog), { windowsHide: true, shell: process.platform === 'win32', stdio: ['ignore', 'pipe', 'pipe'], env: childEnv });
+  const windows = process.platform === 'win32';
+  const startedAt = Date.now();
+  const child = spawn(ROTP_COMMAND, args(eventLog), { cwd, windowsHide: true, shell: windows, detached: !windows, stdio: ['ignore', 'pipe', 'pipe'], env: childEnv });
   const state = { exited: false };
   child.stdout.on('data', keep);
   child.stderr.on('data', keep);
   child.on('error', (error) => { chunks.push(`spawn error: ${error.message}\n`); state.exited = true; });
   child.on('exit', (code) => { chunks.push(`exited with code ${String(code)}\n`); state.exited = true; sink.end(); });
-  return { name, child, eventLog, output: () => chunks.join(''), exited: () => state.exited };
+  return { name, startedAt, child, eventLog, output: () => chunks.join(''), exited: () => state.exited };
 };
 
 const eventsOf = async (path: string): Promise<Record<string, unknown>[]> => {
@@ -69,13 +73,32 @@ const waitForChestItem = async (instance: RotpInstance, timeoutMs: number, until
   await waitForChestItem(instance, timeoutMs, until);
 };
 
+const signalGroup = (pid: number): boolean => {
+  try {
+    process.kill(-pid, 'SIGTERM');
+    return true;
+  } catch {
+    return false;
+  }
+};
+
+const killTree = (pid: number): Promise<void> => new Promise((resolve) => {
+  if (process.platform !== 'win32') {
+    signalGroup(pid);
+    resolve();
+    return;
+  }
+  const killer = spawn('taskkill', ['/PID', String(pid), '/T', '/F'], { windowsHide: true, stdio: 'ignore' });
+  killer.once('exit', () => resolve());
+  killer.once('error', () => resolve());
+});
+
 const stopRotp = async (instance: RotpInstance) => {
-  if (instance.exited()) return;
-  const gone = new Promise<void>((resolve) => { instance.child.once('exit', () => resolve()); });
-  instance.child.kill();
-  await Promise.race([gone, pause(STOP_GRACE_MS)]);
   const { pid } = instance.child;
-  if (!instance.exited() && pid !== undefined && process.platform === 'win32') spawn('taskkill', ['/PID', String(pid), '/T', '/F'], { windowsHide: true });
+  if (instance.exited() || pid === undefined) return;
+  const gone = new Promise<void>((resolve) => { instance.child.once('exit', () => resolve()); });
+  await killTree(pid);
+  await Promise.race([gone, pause(STOP_GRACE_MS)]);
 };
 
 export { startRotp, stopRotp, waitForChestItem };
