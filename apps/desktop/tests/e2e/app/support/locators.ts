@@ -47,7 +47,7 @@ const currentPage = (scope: Locator, label: string) =>
   sectionsNav(scope).getByRole('button', { name: label, exact: true }).and(scope.locator('[aria-current="page"]'));
 
 const cardOf = (scope: Locator, title: string) =>
-  scope.locator('.item-card').filter({ has: scope.getByRole('heading', { level: 3, name: title, exact: true }) });
+  scope.locator('.item-card').filter({ has: scope.page().getByRole('heading', { level: 3, name: title, exact: true }) });
 
 const seatEditorOf = (scope: Locator, slot: number) => scope.getByRole('region', { name: `Edit player ${slot}`, exact: true });
 
