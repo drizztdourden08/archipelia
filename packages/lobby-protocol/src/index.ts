@@ -36,6 +36,7 @@ export type {
   AdmissionMessage,
   EngineRef,
   ErrorMessage,
+  HeldSeat,
   LobbyFailed,
   LobbyInfoReply,
   LobbyProgress,

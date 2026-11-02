@@ -146,6 +146,11 @@ const SCHEMA_DEFS = {
       },
     },
   },
+  heldSeats: {
+    type: 'array',
+    maxItems: 64,
+    items: { type: 'object', required: ['name', 'free'], properties: { name: { $ref: '#/$defs/text16' }, free: { type: 'boolean' } } },
+  },
   roomTls: { enum: ROOM_TLS },
   errorCode: { enum: ERROR_CODE_LIST },
 };

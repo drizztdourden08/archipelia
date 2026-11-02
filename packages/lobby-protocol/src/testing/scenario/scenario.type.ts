@@ -35,6 +35,7 @@ type ScenarioSetup = {
   existingSlots: ScenarioSlot[];
   registry: 'active' | 'revoked';
   heldFiles?: boolean;
+  heldSeats?: string[];
   outputFile?: ScenarioOutputFile;
 };
 

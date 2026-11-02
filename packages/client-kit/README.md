@@ -260,7 +260,7 @@ It is the builds index above under a fixed name, with three keys added: `format`
   "minimumAp": "0.6.4",
   "maximumAp": "0.6.8",
   "direct": true,
-  "kit": "0.2.0",
+  "kit": "0.3.0",
   "appVersion": "0.22.0",
   "builds": [{ "archipelagoVersion": "0.6.7", "file": "relic_of_the_past-ap0.6.7.apworld", "sha256": "<64 lowercase hex>", "size": 812345, "bundle": "relic_of_the_past-ap0.6.7.apworld.sigstore.json" }]
 }
@@ -404,6 +404,14 @@ How it fits together:
 - `actions/attest-build-provenance` signs one attestation that covers every listed file. The step copies its bundle beside each file as `<file>.sigstore.json`, the name the manifest gives. Anyone can check a download with `gh attestation verify <file> --repo <owner>/<repo>`.
 - A tag with a hyphen, such as `v1.2.0-beta.1`, is uploaded as a pre-release. Pre-releases are never shown on the card.
 - `release/*` uploads the apworlds, the index, `archipelia.json`, the thumbnail, the description and the bundles.
+
+## Held seats of a lobby
+
+A host can hold named seats for players. The lobby lists them as `lobby.seats` in the `lobby.info` reply and as `seats` in `lobby.state`, each with a `free` flag (lobby protocol 1.3). The kit gives a client three small tools, with no dependency on the protocol package.
+
+- `freeSeats(seats)` returns the names of the free seats, so the client can offer them to the player. It accepts `undefined`, as a lobby with no held seat sends no list.
+- `pickSeat(seats, wanted)` checks the player's pick against the list without regard to case. It returns `{ ok: true, seat }` with the spelling of the lobby, or `{ ok: false, reason: 'unknown' | 'taken', message }` with a sentence for the player.
+- `withSeat(hello, seat)` adds `seat` to a `hello` when a seat was picked, and returns the `hello` unchanged when not. The host still approves the player. A server answers a pick that is unknown or taken with the error `seat-unavailable`.
 
 ## Errors
 

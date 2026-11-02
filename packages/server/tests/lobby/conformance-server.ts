@@ -67,6 +67,7 @@ const prepareLobby = async ({ service }: ConformanceServer, setup: ScenarioSetup
     name: setup.name,
     engine: { id: `ap-${setup.ap}`, ap: setup.ap, python: '3.12.0' },
     options: { admission: setup.admission, allowUnlisted: setup.allowUnlisted, maxSlots: setup.maxSlots, room: { kind: 'archipelago-gg' } },
+    ...(setup.heldSeats ? { seats: setup.heldSeats } : {}),
   });
   if (setup.existingSlots.length > 0) {
     const slots = setup.existingSlots.map((slot) => ({ ...slot, yaml: `name: ${slot.name}\ngame: ${slot.game}\n` }));

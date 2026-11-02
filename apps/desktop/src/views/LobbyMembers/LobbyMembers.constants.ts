@@ -14,6 +14,7 @@ const MEMBER_TEXT = {
   remove: 'Remove',
   review: 'Review the world of',
   options: 'View options',
+  seat: (seat: string, pending: boolean) => (pending ? `Wants the seat ${seat}` : `Seat ${seat}`),
 } as const;
 
 const OPTION_TEXT = {
