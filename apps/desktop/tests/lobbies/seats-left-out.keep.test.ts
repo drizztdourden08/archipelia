@@ -4,7 +4,7 @@ import { seatsLeftOut } from '../../src/lobbies/seats-left-out';
 import { leftOutOptions } from '../../src/views/SessionLobby/behavior/left-out-options';
 import { lobby, member, slot } from './lobby-fixtures';
 
-describe('the seats a run would leave out', () => {
+describe('the seats a run would leave out', { tags: ['critical'] }, () => {
   test('names the not ready seats of approved players with the reason', () => {
     const waiting = member({ admission: 'approved', displayName: 'Ana', slots: [slot({ name: 'Ana-Quest', state: 'waiting-consent' }), slot({ name: 'Ana-Two' })] });
     const checking = member({ id: 'm_2', admission: 'approved', displayName: 'Bo', slots: [slot({ name: 'Bo-Quest', state: 'checking' })] });
