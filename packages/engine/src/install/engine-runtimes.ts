@@ -15,7 +15,7 @@ const createEngineRuntimes = (root: string, target: string) => {
   };
 
   const runtimeFor = async (engine: SessionEngine): Promise<EngineRuntime | undefined> => {
-    if (process.env[ENGINE_DIR_ENV]) return undefined;
+    if (process.env[ENGINE_DIR_ENV]) return runtime().catch(() => undefined);
     const state = await readEngineState(root);
     const found = engine.id
       ? state.installed.find((entry) => entry.id === engine.id)

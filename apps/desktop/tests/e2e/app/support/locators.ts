@@ -16,8 +16,6 @@ const HUB_OF: Record<MenuEntry, HubTitle> = {
   Storage: 'Multiworld',
 };
 
-const LIBRARY_ENTRIES: readonly MenuEntry[] = ['Games', 'Presets'];
-
 const PAGE_OF: Record<MenuEntry, string> = {
   Home: 'Home',
   Sessions: 'Sessions',
@@ -29,7 +27,11 @@ const PAGE_OF: Record<MenuEntry, string> = {
   Storage: 'Storage',
 };
 
-const OPENED_BY: Partial<Record<MenuEntry, MenuEntry>> = { Sessions: 'Home', History: 'Home', Storage: 'Settings' };
+const MENU_BUTTON = 'Menu';
+
+const MENU_HOME = 'Home';
+
+const IDLE_OPEN = 'Open Sessions';
 
 const dialogOf = (page: Page, title: string) => page.getByRole('dialog', { name: title, exact: true });
 
@@ -45,11 +47,23 @@ const currentPage = (scope: Locator, label: string) =>
   sectionsNav(scope).getByRole('button', { name: label, exact: true }).and(scope.locator('[aria-current="page"]'));
 
 const cardOf = (scope: Locator, title: string) =>
-  scope.locator('.item-card').filter({ has: scope.getByRole('heading', { level: 3, name: title, exact: true }) });
+  scope.getByRole('gridcell').filter({ has: scope.page().getByRole('heading', { level: 3, name: title, exact: true }) });
+
+const installedCountOf = (scope: Locator) =>
+  scope.getByRole('region', { name: 'Games status' }).locator('dt', { hasText: /^Installed$/ }).locator('xpath=following-sibling::dd[1]');
+
+const removeButtonOf = (scope: Locator, title: string) => cardOf(scope, title).getByRole('button', { name: `Remove ${title}`, exact: true });
 
 const seatEditorOf = (scope: Locator, slot: number) => scope.getByRole('region', { name: `Edit player ${slot}`, exact: true });
 
 const seatsOf = (scope: Locator) => scope.getByRole('group', { name: 'Seats', exact: true });
+
+const openAdvanced = async (sessions: Locator) => {
+  const summary = sessions.locator('summary', { hasText: 'Advanced' });
+  const opened = await summary.locator('xpath=..').evaluate((node) => (node as HTMLDetailsElement).open);
+  if (!opened) await summary.click();
+  await sessions.getByRole('combobox', { name: 'Spoiler', exact: true }).waitFor();
+};
 
 const openSection = async (scope: Locator, label: string) => {
   await sectionsNav(scope).getByRole('button', { name: label, exact: true }).click();
@@ -57,15 +71,22 @@ const openSection = async (scope: Locator, label: string) => {
   return scope;
 };
 
+const hubIsOpen = (page: Page) => hub(page, 'Multiworld').first().isVisible();
+
+const openHubFromMenu = async (page: Page) => {
+  const menu = page.getByRole('button', { name: MENU_BUTTON, exact: true });
+  if (await menu.count()) {
+    await menu.click();
+    await page.getByRole('menuitem', { name: MENU_HOME, exact: true }).click();
+  } else {
+    await base(page).getByRole('button', { name: IDLE_OPEN, exact: true }).click();
+  }
+  await hub(page, 'Multiworld').first().waitFor();
+};
+
 const openScreen = async (page: Page, entry: MenuEntry): Promise<Locator> => {
-  const via = OPENED_BY[entry];
-  if (via !== undefined) return openSection(await openScreen(page, via), PAGE_OF[entry]);
-  await page.getByRole('button', { name: 'Menu', exact: true }).click();
-  if (LIBRARY_ENTRIES.includes(entry)) await page.getByRole('menuitem', { name: 'Library', exact: true }).click();
-  await page.getByRole('menuitem', { name: entry, exact: true }).click();
-  const opened = hub(page, HUB_OF[entry]);
-  await currentPage(opened, PAGE_OF[entry]).waitFor();
-  return opened;
+  if (!(await hubIsOpen(page))) await openHubFromMenu(page);
+  return openSection(hub(page, HUB_OF[entry]), PAGE_OF[entry]);
 };
 
 const closeHub = async (page: Page, title: HubTitle) => {
@@ -88,5 +109,5 @@ const shownOpacity = (target: Locator) => target.evaluate((node) => {
   return opacity;
 });
 
-export { base, cardOf, docked, closeHub, dialogOf, hub, nestedButtons, openScreen, openSection, pickOption, seatEditorOf, seatsOf, shownOpacity };
+export { base, cardOf, docked, closeHub, dialogOf, hub, installedCountOf, nestedButtons, openAdvanced, openScreen, openSection, pickOption, removeButtonOf, seatEditorOf, seatsOf, shownOpacity };
 export type { HubTitle };

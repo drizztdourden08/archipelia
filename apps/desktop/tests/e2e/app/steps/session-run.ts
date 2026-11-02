@@ -4,7 +4,7 @@ import type { Locator, Page } from 'playwright-core';
 import type { LaunchedApp } from '../support/launched-app.type';
 import { settledProof } from '../support/settled-proof';
 import { LOCAL_PORT, SOH, TEMPLATE, TIMESPINNER } from '../support/flow-constants';
-import { base, docked, openScreen, pickOption, seatEditorOf, seatsOf } from '../support/locators';
+import { base, docked, openAdvanced, openScreen, pickOption, seatEditorOf, seatsOf } from '../support/locators';
 
 const RUN_TIMEOUT = 300000;
 
@@ -34,6 +34,7 @@ const buildSession = async (launched: LaunchedApp) => {
   await sessions.getByRole('textbox', { name: 'Session name' }).waitFor();
   await settledProof(launched, '18-sessions-new');
   expect(await sessions.getByRole('region', { name: 'Players', exact: true }).count(), 'the setup page lists the saved players').toBe(1);
+  await openAdvanced(sessions);
   expect(await sessions.getByRole('spinbutton', { name: 'Local port', exact: true }).inputValue()).toBe(String(LOCAL_PORT));
   const where = sessions.getByRole('radiogroup', { name: 'Where', exact: true });
   expect(await where.getByRole('radio', { name: 'Local', exact: true }).getAttribute('aria-checked')).toBe('true');
@@ -47,7 +48,7 @@ const buildSession = async (launched: LaunchedApp) => {
   await settledProof(launched, '19-sessions-saved');
   await sessions.getByRole('button', { name: 'Run', exact: true }).click();
   const tab = page.locator('.session-tabs__body');
-  await tab.getByRole('region', { name: 'Players', exact: true }).waitFor();
+  await seatsOf(tab).waitFor();
   await page.getByRole('tablist', { name: 'Open sessions' }).getByRole('tab', { name: new RegExp(TEMPLATE) }).waitFor();
   for (const player of PLAYERS) await fillPlayer(page, tab, player);
   await settledProof(launched, '20-lobby-two-players');
@@ -66,11 +67,13 @@ const runSession = async (launched: LaunchedApp, tab: Locator) => {
   await dashboard.getByText(/^hosting$/i).first().waitFor({ timeout: RUN_TIMEOUT });
   await dashboard.getByText(new RegExp(`^[\\w.-]+:${LOCAL_PORT}$`)).first().waitFor();
   await docked(page).getByText(/_Spoiler\.txt$/).waitFor();
-  await page.getByText(`Hosting: ${TEMPLATE}`, { exact: true }).filter({ visible: true }).first().waitFor();
+  await page.getByRole('banner', { name: 'Title bar' }).getByRole('button', { name: 'Hosting', exact: true }).click();
+  await page.getByText(new RegExp(`Hosting: ${TEMPLATE}$`)).filter({ visible: true }).first().waitFor();
+  await page.keyboard.press('Escape');
   await settledProof(launched, '23-dashboard-hosting');
   return dashboard;
 };
 
 const buildAndRun = async (launched: LaunchedApp) => runSession(launched, await buildSession(launched));
 
-export { buildAndRun };
+export { buildAndRun, runSession };
