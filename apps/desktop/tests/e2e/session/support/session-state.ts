@@ -1,6 +1,7 @@
 /* @layer tests @kind helper */
 import { join } from 'node:path';
 import { expect } from 'vitest';
+import type { Client } from 'archipelago.js';
 import { engineLeftovers } from '../../app/support/engine-cleanup';
 import { launchApp } from '../../app/support/launch-app';
 import type { LaunchedApp } from '../../app/support/launched-app.type';
@@ -12,10 +13,10 @@ import { SESSION_PROOF_DIR } from './session-constants';
 import { sessionEnv } from './session-env';
 import type { SessionEnv } from './session-env';
 
-type SessionState = { launched?: LaunchedApp; dirs?: SessionDirs; env?: SessionEnv; rotp: RotpInstance[] };
+type SessionState = { launched?: LaunchedApp; dirs?: SessionDirs; env?: SessionEnv; rotp: RotpInstance[]; clients: Client[] };
 
 const sessionState = () => {
-  const state: SessionState = { rotp: [] };
+  const state: SessionState = { rotp: [], clients: [] };
   const app = () => {
     if (!state.launched) throw new Error('the app did not launch');
     return state.launched;
@@ -42,7 +43,7 @@ const sessionState = () => {
   };
   const stop = async () => {
     await Promise.all(state.rotp.map((instance) => stopRotp(instance)));
-    const notes = await tearDown(state.launched, []);
+    const notes = await tearDown(state.launched, state.clients);
     expect(await engineLeftovers()).toEqual([]);
     expect(notes, 'teardown notes').toEqual([]);
   };

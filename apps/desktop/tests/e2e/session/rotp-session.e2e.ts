@@ -7,6 +7,7 @@ import { removeWorlds } from '../app/steps/games';
 import { stopFromDashboard } from '../app/steps/live-room';
 import { proof } from '../app/support/proof';
 import { buildLanSession } from './steps/build-session';
+import { connectMinsc, releaseRotpB } from './steps/cross-world';
 import { addRelic, startBaldurInstall, waitBaldurInstalled } from './steps/install-worlds';
 import { approveJoin, checkJoinedOptions, startRotpA, waitForJoinRequest } from './steps/lobby-join';
 import { closeRotpA, expectRejoined, reopenRotpA } from './steps/rejoin-session';
@@ -77,12 +78,18 @@ describe.skipIf(process.env.E2E_SESSION !== '1')('Archipelia session with a live
     await expectRejoined(app(), tabOf(), reopened);
   }, E2E_TEST_TIMEOUT_MS * 2);
 
-  test('15. runner functions: spoiler, room, console and stop', async () => {
+  test("15. cross-world: RotP-B releases its world and items reach RotP-A and Baldur's Gate 3", async () => {
+    const minsc = await connectMinsc(app());
+    state.clients.push(minsc);
+    await releaseRotpB(app(), minsc, rotpOf(ROTP_A.slot));
+  });
+
+  test('16. runner functions: spoiler, room, console and stop', async () => {
     await checkSpoiler(app(), [ROTP_A.slot, ROTP_B.slot]);
     await checkRoom(app());
     await checkConsole(app());
     await stopFromDashboard(app(), []);
   });
 
-  test('16. games: remove both worlds', () => removeWorlds(app(), [BALDUR.title, RELIC.title]));
+  test('17. games: remove both worlds', () => removeWorlds(app(), [BALDUR.title, RELIC.title]));
 });

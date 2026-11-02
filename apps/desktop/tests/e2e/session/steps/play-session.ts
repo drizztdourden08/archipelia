@@ -14,6 +14,7 @@ import { startRotp, waitForChestItem } from '../support/rotp-instance';
 import type { RotpInstance } from '../support/rotp-instance';
 import { HINT_LOCATION, ROTP_B, TIMEOUT } from '../support/session-constants';
 import type { SessionEnv } from '../support/session-env';
+import { runConsoleCommand } from './console-command';
 import type { SessionDirs } from './session-dirs.type';
 
 const playerRow = (widgets: Locator, slot: string) =>
@@ -49,13 +50,8 @@ const hintCount = (widgets: Locator) => widgets.getByRole('list', { name: 'Hints
 const sendHints = async (launched: LaunchedApp, slots: string[]) => {
   const page = launched.page;
   const widgets = docked(page);
-  const consoleWidget = page.locator('[data-widget-id="console"]');
-  const command = consoleWidget.getByRole('combobox', { name: 'Server command', exact: true });
   for (const [index, slot] of slots.entries()) {
-    const text = `/hint_location ${slot} ${HINT_LOCATION}`;
-    await command.fill(text);
-    await command.press('Enter');
-    await consoleWidget.getByText(`> ${text}`, { exact: true }).waitFor();
+    await runConsoleCommand(launched, `/hint_location ${slot} ${HINT_LOCATION}`);
     await expect.poll(() => hintCount(widgets), { timeout: TIMEOUT.line }).toBeGreaterThan(index);
   }
   await settledProof(launched, '61-session-hints');
