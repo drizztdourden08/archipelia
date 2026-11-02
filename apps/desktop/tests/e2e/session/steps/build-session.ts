@@ -19,6 +19,9 @@ const chooseLanWithDirect = async (sessions: Locator) => {
   const direct = sessions.getByRole('switch', { name: /^Allow direct connections/ });
   await direct.press('Space');
   expect(await direct.getAttribute('aria-checked'), 'direct connections are on').toBe('true');
+  const unlisted = sessions.getByRole('switch', { name: /^Allow unlisted clients/ });
+  await unlisted.press('Space');
+  expect(await unlisted.getAttribute('aria-checked'), 'unlisted clients are allowed').toBe('true');
 };
 
 const confirmLan = async (page: Page) => {
