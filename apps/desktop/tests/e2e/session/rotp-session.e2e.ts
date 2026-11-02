@@ -1,4 +1,6 @@
 /* @layer tests @kind test */
+import { writeFile } from 'node:fs/promises';
+import { join } from 'node:path';
 import { afterAll, afterEach, beforeAll, describe, test } from 'vitest';
 import { bootWithDefaultProfile, setLocalPort } from '../app/steps/first-boot';
 import { stopFromDashboard } from '../app/steps/live-room';
@@ -18,7 +20,10 @@ describe.skipIf(process.env.E2E_SESSION !== '1')('Archipelia session with a live
   afterAll(stop, E2E_TEST_TIMEOUT_MS);
 
   afterEach(async ({ task }) => {
-    if (task.result?.state === 'fail') await proof(app(), `failed-step-${task.name.split('.')[0]}`);
+    if (task.result?.state !== 'fail') return;
+    const name = `failed-step-${task.name.split('.')[0]}`;
+    await proof(app(), name);
+    await writeFile(join(app().proofDir, `${name}.aria.yml`), await app().page.locator('body').ariaSnapshot());
   });
 
   test('1. first boot on a fresh profile, with the local port set', async () => {
