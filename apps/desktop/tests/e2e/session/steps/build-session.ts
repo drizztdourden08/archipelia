@@ -17,7 +17,7 @@ const chooseLanWithDirect = async (sessions: Locator) => {
   await where.getByRole('radio', { name: 'LAN', exact: true }).click();
   expect(await where.getByRole('radio', { name: 'LAN', exact: true }).getAttribute('aria-checked')).toBe('true');
   const direct = sessions.getByRole('switch', { name: /^Allow direct connections/ });
-  await direct.click();
+  await direct.press('Space');
   expect(await direct.getAttribute('aria-checked'), 'direct connections are on').toBe('true');
 };
 
