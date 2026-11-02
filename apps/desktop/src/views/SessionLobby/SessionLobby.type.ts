@@ -1,5 +1,5 @@
 /* @layer renderer-app @kind types */
-import type { GamePreset, InstalledGame, OptionDef, OptionValue, SessionPlayer, SessionTemplate } from '@archipelia/model';
+import type { AdminLobby, GamePreset, InstalledGame, OptionDef, OptionValue, SessionPlayer, SessionTemplate } from '@archipelia/model';
 import type { Dispatch, SetStateAction } from 'react';
 import type { PresetInput } from '@archipelia/presets';
 import type { LiveTab } from '../../live/live.type';
@@ -32,6 +32,7 @@ type LobbyActionDeps = {
   saveTemplate: (template: SessionTemplate) => Promise<SessionTemplate>;
   guard: (key: string, work: () => Promise<unknown>) => Promise<unknown>;
   attemptRun: () => boolean;
+  lobby: AdminLobby | undefined;
 };
 
 type SeatKind = 'saved' | 'added' | 'held';

@@ -24,9 +24,9 @@ const useLobbyScreen = ({ tab, saved }: LobbyScreenProps) => {
   const players = usePlayersEditor({ setDraft, installed, presets, createPreset, guard });
   const showSeat = useCallback((slot: number, overrides: boolean) => setEditing({ slot, overrides }), []);
   const check = useProblems(draft, { installed, presets }, showSeat);
-  const actions = useLobbyActions({ tab, saved, draft, saveTemplate, guard, attemptRun: check.attemptRun });
-  const action = useRunAction(tab, draft, () => void actions.run());
   const lobby = useLobbyStore((state) => state.lobbies[tab.serverId]?.find((entry) => entry.id === tab.lobbyId));
+  const actions = useLobbyActions({ tab, saved, draft, saveTemplate, guard, attemptRun: check.attemptRun, lobby });
+  const action = useRunAction(tab, draft, () => void actions.run());
   const changes = useMemo(() => runOverridesOf(saved, draft), [draft, saved]);
   const toggleSelected = useCallback((slot: number) => setEditing((current) => toggleSeat(current, slot)), []);
   const toggleSeatOverrides = useCallback((slot: number) => setEditing((current) => toggleOverrides(current, slot)), []);

@@ -86,6 +86,13 @@ const CONFIG_TEXT = {
   open: 'Direct, open',
 } as const;
 
+const LEFT_OUT_TEXT = {
+  title: 'Some seats will not play',
+  message: 'These seats of approved players are not ready, so the run starts without them. Cancel to wait for them.',
+  confirmLabel: 'Run without them',
+  cancelLabel: 'Cancel',
+} as const;
+
 const LOBBY_FAILURE = {
   run: 'Could not start the run.',
   close: 'Could not close the lobby.',
@@ -95,5 +102,5 @@ const LOBBY_FAILURE = {
 } as const;
 
 export {
-  CONFIG_TEXT, LOBBY_FAILURE, LOBBY_SCREEN, NEW_PRESET_VALUE, OWN_GAME, PHASE_URGENT, PLAYERS_TEXT, PRESET_PREFIX, SEAT_EDITOR_CLASS, SEAT_STATUS, SEAT_TEXT, YAML_EXTENSIONS, YAML_VALUE,
+  CONFIG_TEXT, LEFT_OUT_TEXT, LOBBY_FAILURE, LOBBY_SCREEN, NEW_PRESET_VALUE, OWN_GAME, PHASE_URGENT, PLAYERS_TEXT, PRESET_PREFIX, SEAT_EDITOR_CLASS, SEAT_STATUS, SEAT_TEXT, YAML_EXTENSIONS, YAML_VALUE,
 };
