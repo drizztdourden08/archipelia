@@ -11,8 +11,7 @@ const run = promisify(execFile);
 const WRITER = 'tooling/apworld/write-player-file.mjs';
 
 const worktreePathsOf = (porcelain: string): string[] =>
-  porcelain.split(/?
-/).filter((line) => line.startsWith('worktree ')).map((line) => line.slice('worktree '.length).trim());
+  porcelain.split(/\r?\n/).filter((line) => line.startsWith('worktree ')).map((line) => line.slice('worktree '.length).trim());
 
 const instanceFolderOf = async (env: SessionEnv): Promise<string> => {
   const { stdout } = await run('git', ['worktree', 'list', '--porcelain'], { cwd: env.rotpDir, windowsHide: true });
