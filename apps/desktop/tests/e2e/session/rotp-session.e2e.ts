@@ -38,7 +38,7 @@ describe.skipIf(process.env.E2E_SESSION !== '1')('Archipelia session with a live
   test('4. games: Relic of the Past, verified, from Archipelia ready', () => addRelic(app()));
 
   test("5. session: LAN with direct connections, slot 1 Baldur's Gate 3 saved, slot 2 RotP-B from its own YAML", async () => {
-    await buildLanSession(app());
+    await buildLanSession(app(), env());
   });
 
   test('6. lobby: RotP-A starts, stays up and its join request reaches the host', async () => {

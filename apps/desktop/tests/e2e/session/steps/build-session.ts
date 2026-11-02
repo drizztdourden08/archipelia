@@ -6,7 +6,9 @@ import { TEMPLATE } from '../../app/support/flow-constants';
 import { dialogOf, openAdvanced, openScreen, pickOption, seatEditorOf, seatsOf } from '../../app/support/locators';
 import { settledProof } from '../../app/support/settled-proof';
 import { answerOpenDialogWith } from '../support/open-dialog';
+import { writeRotpBFile } from '../support/player-file';
 import { BALDUR, RELIC, ROTP_B, TIMEOUT } from '../support/session-constants';
+import type { SessionEnv } from '../support/session-env';
 
 const OPEN_LAN = { title: 'Open this computer to your network?', confirm: 'Open to my network' };
 
@@ -67,21 +69,22 @@ const addSavedBaldur = async (page: Page, tab: Locator) => {
   await seatsOf(tab).getByText(/ · Saved$/).first().waitFor();
 };
 
-const addYamlRotpB = async (launched: LaunchedApp, tab: Locator) => {
+const addYamlRotpB = async (launched: LaunchedApp, tab: Locator, env: SessionEnv) => {
   const { page } = launched;
+  const yaml = await writeRotpBFile(env);
   const editor = await addSeat(tab, 2, ROTP_B.slot);
   await pickOption(page, editor.getByRole('combobox', { name: 'Game', exact: true }), RELIC.game);
-  await answerOpenDialogWith(launched.app, ROTP_B.yaml);
+  await answerOpenDialogWith(launched.app, yaml);
   await pickOption(page, presetOf(editor), 'Imported file');
   await editor.getByText(ROTP_B.fileName, { exact: true }).waitFor();
   await editor.getByRole('button', { name: 'Done', exact: true }).click();
   await seatsOf(tab).getByRole('button', { name: ROTP_B.slot, exact: true }).waitFor();
 };
 
-const buildLanSession = async (launched: LaunchedApp) => {
+const buildLanSession = async (launched: LaunchedApp, env: SessionEnv) => {
   const tab = await openLobby(launched);
   await addSavedBaldur(launched.page, tab);
-  await addYamlRotpB(launched, tab);
+  await addYamlRotpB(launched, tab, env);
   await settledProof(launched, '53-session-lobby-two-seats');
   return tab;
 };
