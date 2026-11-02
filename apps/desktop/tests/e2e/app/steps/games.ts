@@ -4,7 +4,7 @@ import type { Locator } from 'playwright-core';
 import type { LaunchedApp } from '../support/launched-app.type';
 import { settledProof } from '../support/settled-proof';
 import { SOH, TIMESPINNER } from '../support/flow-constants';
-import { cardOf, closeHub, dialogOf, openScreen } from '../support/locators';
+import { cardOf, closeHub, dialogOf, installedCountOf, openScreen, removeButtonOf } from '../support/locators';
 
 const INSTALL_TIMEOUT = 180000;
 
@@ -21,7 +21,7 @@ const search = (games: Locator, text: string) => games.getByRole('searchbox', { 
 const addWorld = async (games: Locator, title: string) => {
   const card = cardOf(games, title);
   await card.getByRole('button', { name: `Add ${title}`, exact: true }).click();
-  await card.getByText('Installed', { exact: true }).waitFor({ timeout: INSTALL_TIMEOUT });
+  await removeButtonOf(games, title).waitFor({ timeout: INSTALL_TIMEOUT });
   return card;
 };
 
@@ -50,8 +50,8 @@ const addBothWorlds = async (launched: LaunchedApp) => {
   await settledProof(launched, '09-games-soh-installed');
   await search(games, '');
   await openTab(games, 'Installed');
-  for (const title of [SOH.card, TIMESPINNER.card]) await cardOf(games, title).getByText('Installed', { exact: true }).waitFor();
-  await games.getByText(/ · 2 installed/).waitFor();
+  for (const title of [SOH.card, TIMESPINNER.card]) await removeButtonOf(games, title).waitFor();
+  await installedCountOf(games).filter({ hasText: /^2$/ }).waitFor();
   await settledProof(launched, '10-games-installed-tab');
   await openTab(games, 'Updates');
   await games.getByText('Every installed game is up to date').waitFor();
@@ -69,7 +69,7 @@ const removeBothWorlds = async (launched: LaunchedApp) => {
   }
   await games.getByText('No game installed yet').waitFor();
   await games.getByRole('button', { name: 'Open Built-in', exact: true }).waitFor();
-  await games.getByText(/0 installed/).waitFor();
+  await installedCountOf(games).filter({ hasText: /^0$/ }).waitFor();
   await settledProof(launched, '40-games-all-removed');
   await closeHub(launched.page, 'Multiworld');
 };

@@ -49,6 +49,11 @@ const currentPage = (scope: Locator, label: string) =>
 const cardOf = (scope: Locator, title: string) =>
   scope.getByRole('gridcell').filter({ has: scope.page().getByRole('heading', { level: 3, name: title, exact: true }) });
 
+const installedCountOf = (scope: Locator) =>
+  scope.getByRole('region', { name: 'Games status' }).locator('dt', { hasText: /^Installed$/ }).locator('xpath=following-sibling::dd[1]');
+
+const removeButtonOf = (scope: Locator, title: string) => cardOf(scope, title).getByRole('button', { name: `Remove ${title}`, exact: true });
+
 const seatEditorOf = (scope: Locator, slot: number) => scope.getByRole('region', { name: `Edit player ${slot}`, exact: true });
 
 const seatsOf = (scope: Locator) => scope.getByRole('group', { name: 'Seats', exact: true });
@@ -97,5 +102,5 @@ const shownOpacity = (target: Locator) => target.evaluate((node) => {
   return opacity;
 });
 
-export { base, cardOf, docked, closeHub, dialogOf, hub, nestedButtons, openScreen, openSection, pickOption, seatEditorOf, seatsOf, shownOpacity };
+export { base, cardOf, docked, closeHub, dialogOf, hub, installedCountOf, nestedButtons, openScreen, openSection, pickOption, removeButtonOf, seatEditorOf, seatsOf, shownOpacity };
 export type { HubTitle };
