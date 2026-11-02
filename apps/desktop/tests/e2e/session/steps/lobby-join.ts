@@ -8,7 +8,7 @@ import { TEMPLATE } from '../../app/support/flow-constants';
 import { dialogOf } from '../../app/support/locators';
 import { settledProof } from '../../app/support/settled-proof';
 import { lobbyTargetOf } from '../support/app-api';
-import { rotpProblemsSince } from '../support/rotp-console';
+import { joinRefusalOf } from '../support/rotp-console';
 import { lobbyJoinArgs } from '../support/rotp-args';
 import { startRotp } from '../support/rotp-instance';
 import type { RotpInstance } from '../support/rotp-instance';
@@ -19,13 +19,10 @@ import type { SessionDirs } from './session-dirs.type';
 const EDITABLE_ROLES = ['textbox', 'combobox', 'switch', 'slider', 'spinbutton', 'checkbox', 'radio'] as const;
 
 const POLL_MS = 500;
-const REFUSED = '--lobby-join refused';
 
 const pause = (ms: number) => new Promise<void>((resolve) => { setTimeout(resolve, ms); });
 
 const approveOf = (tab: Locator) => tab.getByRole('button', { name: /^Approve / });
-
-const loggedOf = (problems: string[]) => (problems.length > 0 ? ` RotP logged: ${problems.join(' | ')}` : '');
 
 const startRotpA = async (launched: LaunchedApp, env: SessionEnv, dirs: SessionDirs): Promise<RotpInstance> => {
   const target = await lobbyTargetOf(launched, TEMPLATE);
@@ -33,18 +30,18 @@ const startRotpA = async (launched: LaunchedApp, env: SessionEnv, dirs: SessionD
   return startRotp({ name: ROTP_A.slot, cwd: env.rotpDir, args: (eventLog) => lobbyJoinArgs(instance(eventLog), target), outDir: dirs.logs });
 };
 
-const waitJoinReached = async (tab: Locator, env: SessionEnv, rotp: RotpInstance, until = Date.now() + TIMEOUT.join): Promise<void> => {
-  const problems = await rotpProblemsSince(env.rotpDir, env.instanceA, rotp.startedAt);
-  if (rotp.exited()) throw new Error(`${rotp.name} ended before its join reached the host.${loggedOf(problems)} Its output ends: ${rotp.output().slice(-2000)}`);
+const waitJoinReached = async (tab: Locator, rotp: RotpInstance, until = Date.now() + TIMEOUT.join): Promise<void> => {
+  if (rotp.exited()) throw new Error(`${rotp.name} ended before its join reached the host. Its output ends: ${rotp.output().slice(-2000)}`);
   if (await approveOf(tab).count() > 0) return;
-  if (problems.some((line) => line.includes(REFUSED))) throw new Error(`${rotp.name} refused to join.${loggedOf(problems)}`);
-  if (Date.now() > until) throw new Error(`the join of ${rotp.name} never reached the host in ${TIMEOUT.join} ms.${loggedOf(problems)}`);
+  const refusal = await joinRefusalOf(rotp.eventLog);
+  if (refusal !== undefined) throw new Error(`${rotp.name} refused to join: ${refusal}`);
+  if (Date.now() > until) throw new Error(`the join of ${rotp.name} never reached the host in ${TIMEOUT.join} ms. Its output ends: ${rotp.output().slice(-2000)}`);
   await pause(POLL_MS);
-  await waitJoinReached(tab, env, rotp, until);
+  await waitJoinReached(tab, rotp, until);
 };
 
-const waitForJoinRequest = async (launched: LaunchedApp, tab: Locator, env: SessionEnv, rotp: RotpInstance) => {
-  await waitJoinReached(tab, env, rotp);
+const waitForJoinRequest = async (launched: LaunchedApp, tab: Locator, rotp: RotpInstance) => {
+  await waitJoinReached(tab, rotp);
   const seat = tab.locator('.lobby-seat').filter({ has: approveOf(tab) });
   await seat.getByText('Waiting for your approval').waitFor();
   await seat.getByText(RELIC.game).first().waitFor();

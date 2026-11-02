@@ -101,5 +101,5 @@ const stopRotp = async (instance: RotpInstance) => {
   await Promise.race([gone, pause(STOP_GRACE_MS)]);
 };
 
-export { startRotp, stopRotp, waitForChestItem };
+export { eventsOf, startRotp, stopRotp, waitForChestItem };
 export type { RotpInstance };

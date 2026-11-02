@@ -1,25 +1,12 @@
 /* @layer tests @kind helper */
-import { readFile } from 'node:fs/promises';
-import { join } from 'node:path';
+import { eventsOf } from './rotp-instance';
 
-const STAMP = /^\[([^\]]+)\]/;
-const PROBLEM = /\[(?:error|warn)\]/;
+const REFUSED = 'lobby-join-refused';
 
-const rendererLogOf = (rotpDir: string, instance: string) =>
-  join(rotpDir, '.claude', 'worktrees', instance, '.user-data', 'Data', 'debug', 'renderer-console.log');
-
-const writtenSince = (line: string, since: number) => {
-  const stamp = STAMP.exec(line)?.[1];
-  return stamp !== undefined && Date.parse(stamp) >= since;
+const joinRefusalOf = async (eventLog: string): Promise<string | undefined> => {
+  const refused = (await eventsOf(eventLog)).find((entry) => entry.t === REFUSED);
+  if (refused === undefined) return undefined;
+  return typeof refused.reason === 'string' ? refused.reason : 'no reason given';
 };
 
-const rotpProblemsSince = async (rotpDir: string, instance: string, since: number): Promise<string[]> => {
-  try {
-    const lines = (await readFile(rendererLogOf(rotpDir, instance), 'utf8')).split(/\r?\n/);
-    return lines.filter((line) => PROBLEM.test(line) && writtenSince(line, since));
-  } catch {
-    return [];
-  }
-};
-
-export { rotpProblemsSince };
+export { joinRefusalOf };

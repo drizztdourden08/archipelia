@@ -44,7 +44,7 @@ describe.skipIf(process.env.E2E_SESSION !== '1')('Archipelia session with a live
   test('6. lobby: RotP-A starts, stays up and its join request reaches the host', async () => {
     const rotp = await startRotpA(app(), env(), dirs());
     state.rotp.push(rotp);
-    await waitForJoinRequest(app(), tabOf(), env(), rotp);
+    await waitForJoinRequest(app(), tabOf(), rotp);
   });
 
   test('7. lobby: the host approves RotP-A', () => approveJoin(app(), tabOf(), rotpOf(ROTP_A.slot)));
