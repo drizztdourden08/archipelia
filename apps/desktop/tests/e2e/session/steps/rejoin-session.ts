@@ -38,4 +38,4 @@ const expectRejoined = async (launched: LaunchedApp, tab: Locator, rotp: RotpIns
   await settledProof(launched, '62a-session-rejoin');
 };
 
-export { closeRotpA, expectRejoined, reopenRotpA };
+export { REJOIN_NAME, closeRotpA, expectRejoined, reopenRotpA };

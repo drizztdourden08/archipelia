@@ -10,7 +10,7 @@ import { buildLanSession } from './steps/build-session';
 import { connectMinsc, releaseRotpB } from './steps/cross-world';
 import { addRelic, startBaldurInstall, waitBaldurInstalled } from './steps/install-worlds';
 import { approveJoin, checkJoinedOptions, startRotpA, waitForJoinRequest } from './steps/lobby-join';
-import { closeRotpA, expectRejoined, reopenRotpA } from './steps/rejoin-session';
+import { REJOIN_NAME, closeRotpA, expectRejoined, reopenRotpA } from './steps/rejoin-session';
 import { checkConsole,checkResults, checkRoom, checkSpoiler, hostSession, sendHints, startRotpB, waitForChest } from './steps/play-session';
 import { BALDUR, E2E_TEST_TIMEOUT_MS, RELIC, ROTP_A, ROTP_B } from './support/session-constants';
 import { sessionState } from './support/session-state';
@@ -81,7 +81,7 @@ describe.skipIf(process.env.E2E_SESSION !== '1')('Archipelia session with a live
   test("15. cross-world: RotP-B releases its world and items reach RotP-A and Baldur's Gate 3", async () => {
     const minsc = await connectMinsc(app());
     state.clients.push(minsc);
-    await releaseRotpB(app(), minsc, rotpOf(ROTP_A.slot));
+    await releaseRotpB(app(), minsc, rotpOf(REJOIN_NAME));
   });
 
   test('16. runner functions: spoiler, room, console and stop', async () => {
