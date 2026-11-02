@@ -51,11 +51,26 @@ const waitForJoinRequest = async (launched: LaunchedApp, tab: Locator, rotp: Rot
   await settledProof(launched, '54-lobby-join-request');
 };
 
+const CONSENT_NAME = `${MEMBER_TEXT.review} ${ROTP_A.slot}`;
+
+const ALLOW_WORLD = 'Allow this world';
+
+const NEEDS_CONSENT = 'Needs your consent';
+
+const consentToWorld = async (tab: Locator) => {
+  await tab.getByRole('button', { name: CONSENT_NAME, exact: true }).click();
+  await tab.page().getByRole('button', { name: ALLOW_WORLD, exact: true }).click();
+  const seat = tab.locator('.lobby-seat').filter({ hasText: ROTP_A.slot });
+  await seat.getByText(NEEDS_CONSENT).waitFor({ state: 'detached', timeout: TIMEOUT.join });
+  await seat.getByText(MEMBER_TEXT.ready, { exact: true }).first().waitFor({ timeout: TIMEOUT.join });
+};
+
 const approveJoin = async (launched: LaunchedApp, tab: Locator, rotp: RotpInstance) => {
   await approveOf(tab).click();
   await tab.getByRole('button', { name: `${MEMBER_TEXT.remove} ${ROTP_A.slot}`, exact: true }).waitFor({ timeout: TIMEOUT.join });
   await tab.getByText(/Joined/).first().waitFor();
-  expect(rotp.exited(), `${rotp.name} is still running once the host approved it`).toBe(false);
+  await consentToWorld(tab);
+  expect(rotp.exited(), `${rotp.name} is still running once the host approved it and allowed its world`).toBe(false);
   await settledProof(launched, '55-lobby-join-approved');
 };
 

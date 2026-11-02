@@ -67,7 +67,9 @@ const runSession = async (launched: LaunchedApp, tab: Locator) => {
   await dashboard.getByText(/^hosting$/i).first().waitFor({ timeout: RUN_TIMEOUT });
   await dashboard.getByText(new RegExp(`^[\\w.-]+:${LOCAL_PORT}$`)).first().waitFor();
   await docked(page).getByText(/_Spoiler\.txt$/).waitFor();
-  await page.getByText(`Hosting: ${TEMPLATE}`, { exact: true }).filter({ visible: true }).first().waitFor();
+  await page.getByRole('banner', { name: 'Title bar' }).getByRole('button', { name: 'Hosting', exact: true }).click();
+  await page.getByText(new RegExp(`Hosting: ${TEMPLATE}$`)).filter({ visible: true }).first().waitFor();
+  await page.keyboard.press('Escape');
   await settledProof(launched, '23-dashboard-hosting');
   return dashboard;
 };
