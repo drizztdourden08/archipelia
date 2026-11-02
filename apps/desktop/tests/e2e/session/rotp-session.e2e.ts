@@ -9,7 +9,8 @@ import { proof } from '../app/support/proof';
 import { buildLanSession } from './steps/build-session';
 import { addRelic, startBaldurInstall, waitBaldurInstalled } from './steps/install-worlds';
 import { approveJoin, checkJoinedOptions, startRotpA, waitForJoinRequest } from './steps/lobby-join';
-import { checkConsole, checkResults, checkRoom, checkSpoiler, hostSession, sendHints, startRotpB, waitForChest } from './steps/play-session';
+import { closeRotpA, expectRejoined, reopenRotpA } from './steps/rejoin-session';
+import { checkConsole,checkResults, checkRoom, checkSpoiler, hostSession, sendHints, startRotpB, waitForChest } from './steps/play-session';
 import { BALDUR, E2E_TEST_TIMEOUT_MS, RELIC, ROTP_A, ROTP_B } from './support/session-constants';
 import { sessionState } from './support/session-state';
 
@@ -69,12 +70,19 @@ describe.skipIf(process.env.E2E_SESSION !== '1')('Archipelia session with a live
     await sendHints(app(), [ROTP_A.slot, ROTP_B.slot]);
   });
 
-  test('14. runner functions: spoiler, room, console and stop', async () => {
+  test('14. rejoin: RotP-A closes, reopens with the same profile and rejoins the session', async () => {
+    await closeRotpA(app(), rotpOf(ROTP_A.slot));
+    const reopened = await reopenRotpA(app(), env(), dirs());
+    state.rotp = state.rotp.map((instance) => (instance.name === ROTP_A.slot ? reopened : instance));
+    await expectRejoined(app(), tabOf(), reopened);
+  }, E2E_TEST_TIMEOUT_MS * 2);
+
+  test('15. runner functions: spoiler, room, console and stop', async () => {
     await checkSpoiler(app(), [ROTP_A.slot, ROTP_B.slot]);
     await checkRoom(app());
     await checkConsole(app());
     await stopFromDashboard(app(), []);
   });
 
-  test('15. games: remove both worlds', () => removeWorlds(app(), [BALDUR.title, RELIC.title]));
+  test('16. games: remove both worlds', () => removeWorlds(app(), [BALDUR.title, RELIC.title]));
 });

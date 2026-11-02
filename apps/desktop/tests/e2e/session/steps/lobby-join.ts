@@ -26,10 +26,10 @@ const APPROVE_NAME = /^Approve /;
 
 const approveOf = (tab: Locator) => tab.getByRole('button', { name: APPROVE_NAME });
 
-const startRotpA = async (launched: LaunchedApp, env: SessionEnv, dirs: SessionDirs): Promise<RotpInstance> => {
+const startRotpA = async (launched: LaunchedApp, env: SessionEnv, dirs: SessionDirs, name: string = ROTP_A.slot): Promise<RotpInstance> => {
   const target = await lobbyTargetOf(launched, TEMPLATE);
   const instance = (eventLog: string) => ({ instance: env.instanceA, eventLog, profileName: ROTP_A.slot });
-  return startRotp({ name: ROTP_A.slot, cwd: env.rotpDir, args: (eventLog) => lobbyJoinArgs(instance(eventLog), target), outDir: dirs.logs });
+  return startRotp({ name, cwd: env.rotpDir, args: (eventLog) => lobbyJoinArgs(instance(eventLog), target), outDir: dirs.logs });
 };
 
 const waitJoinReached = async (tab: Locator, rotp: RotpInstance, until = Date.now() + TIMEOUT.join): Promise<void> => {
@@ -97,4 +97,4 @@ const checkJoinedOptions = async (launched: LaunchedApp, tab: Locator) => {
   await dialog.waitFor({ state: 'detached' });
 };
 
-export { approveJoin, checkJoinedOptions, startRotpA, waitForJoinRequest };
+export { approveJoin, approveOf, checkJoinedOptions, startRotpA, waitForJoinRequest };

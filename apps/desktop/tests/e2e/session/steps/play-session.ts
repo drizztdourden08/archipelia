@@ -98,4 +98,4 @@ const checkConsole = async (launched: LaunchedApp) => {
   await settledProof(launched, '64-session-console');
 };
 
-export { checkConsole, checkResults, checkRoom, checkSpoiler, hostSession, sendHints, startRotpB, waitForChest };
+export { checkConsole, checkResults, checkRoom, checkSpoiler, hostSession, playerRow, sendHints, startRotpB, waitForChest };
