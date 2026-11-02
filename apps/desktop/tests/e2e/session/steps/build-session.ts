@@ -21,6 +21,13 @@ const chooseLanWithDirect = async (sessions: Locator) => {
   expect(await direct.getAttribute('aria-checked'), 'direct connections are on').toBe('true');
 };
 
+const openAdvanced = async (sessions: Locator) => {
+  const summary = sessions.locator('summary', { hasText: 'Advanced' });
+  const opened = await summary.locator('xpath=..').evaluate((node) => (node as HTMLDetailsElement).open);
+  if (!opened) await summary.click();
+  await sessions.getByRole('combobox', { name: 'Spoiler', exact: true }).waitFor();
+};
+
 const confirmLan = async (page: Page) => {
   const ask = dialogOf(page, OPEN_LAN.title);
   await ask.waitFor({ timeout: TIMEOUT.line });
@@ -33,6 +40,7 @@ const openLobby = async (launched: LaunchedApp) => {
   await sessions.getByRole('button', { name: 'New session' }).click();
   await sessions.getByRole('textbox', { name: 'Session name' }).fill(TEMPLATE);
   await chooseLanWithDirect(sessions);
+  await openAdvanced(sessions);
   await pickOption(page, sessions.getByRole('combobox', { name: 'Spoiler', exact: true }), 'Full with paths');
   await sessions.getByRole('button', { name: 'Save', exact: true }).click();
   await sessions.getByText('Saved', { exact: true }).waitFor();
@@ -40,7 +48,7 @@ const openLobby = async (launched: LaunchedApp) => {
   await sessions.getByRole('button', { name: 'Run', exact: true }).click();
   await confirmLan(page);
   const tab = tabBody(page);
-  await tab.getByRole('region', { name: 'Players', exact: true }).waitFor();
+  await seatsOf(tab).waitFor();
   return tab;
 };
 
@@ -60,7 +68,7 @@ const addSavedBaldur = async (page: Page, tab: Locator) => {
   await presetOf(editor).filter({ hasText: 'Default' }).waitFor();
   await editor.getByRole('button', { name: 'Done', exact: true }).click();
   await seatsOf(tab).getByRole('button', { name: new RegExp(`^Keep in session ${BALDUR.slot}`) }).click();
-  await seatsOf(tab).getByText('Saved', { exact: true }).first().waitFor();
+  await seatsOf(tab).getByText(/ · Saved$/).first().waitFor();
 };
 
 const addYamlRotpB = async (launched: LaunchedApp, tab: Locator) => {

@@ -2,7 +2,7 @@
 import { expect } from 'vitest';
 import type { Locator } from 'playwright-core';
 import { OPTIONS_UI } from '../../../../src/review/review.constants';
-import { OPTION_TEXT } from '../../../../src/views/LobbyMembers/LobbyMembers.constants';
+import { MEMBER_TEXT, OPTION_TEXT } from '../../../../src/views/LobbyMembers/LobbyMembers.constants';
 import type { LaunchedApp } from '../../app/support/launched-app.type';
 import { TEMPLATE } from '../../app/support/flow-constants';
 import { dialogOf } from '../../app/support/locators';
@@ -36,7 +36,7 @@ const waitForJoinRequest = async (launched: LaunchedApp, tab: Locator): Promise<
 const approveJoin = async (launched: LaunchedApp, tab: Locator) => {
   const approve = await waitForJoinRequest(launched, tab);
   await approve.click();
-  await tab.getByRole('button', { name: /^Remove / }).first().waitFor({ timeout: TIMEOUT.join });
+  await tab.getByRole('button', { name: `${MEMBER_TEXT.remove} ${ROTP_A.slot}`, exact: true }).waitFor({ timeout: TIMEOUT.join });
   await tab.getByText(/Joined/).first().waitFor();
   await settledProof(launched, '55-lobby-join-approved');
 };
