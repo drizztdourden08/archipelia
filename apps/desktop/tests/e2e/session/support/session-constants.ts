@@ -21,8 +21,9 @@ const BALDUR = { search: 'Baldur', title: "Baldur's Gate 3", game: "Baldur's Gat
 
 const RELIC = { search: 'Relic', title: 'Relic of the Past', game: 'Relic of the Past' };
 
-const ROTP_A = { slot: 'RotP-A' };
-const ROTP_B = { slot: 'RotP-B', yaml: YAML_B, fileName: 'RotP-B.yaml' };
+const RUN_ID = Math.floor(Date.now() / 1000).toString(36);
+const ROTP_A = { slot: `RotP-A-${RUN_ID}` };
+const ROTP_B = { slot: 'RotP-B', profile: `RotP-B-${RUN_ID}`, yaml: YAML_B, fileName: 'RotP-B.yaml' };
 
 const ROTP_B_OPTIONS = ['death_link=true', 'pot_shuffle=true', 'bush_shuffle=true', 'killable_thieves=true'];
 
