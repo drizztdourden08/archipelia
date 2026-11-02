@@ -1,4 +1,5 @@
 /* @layer tests @kind helper */
+import { expect } from 'vitest';
 import type { LaunchedApp } from '../../app/support/launched-app.type';
 
 const runConsoleCommand = async (launched: LaunchedApp, text: string) => {
@@ -6,7 +7,7 @@ const runConsoleCommand = async (launched: LaunchedApp, text: string) => {
   const command = consoleWidget.getByRole('combobox', { name: 'Server command', exact: true });
   await command.fill(text);
   await command.press('Enter');
-  await consoleWidget.getByText(`> ${text}`, { exact: true }).waitFor();
+  await expect.poll(() => command.inputValue(), { message: `the Console sent ${text}` }).toBe('');
 };
 
 export { runConsoleCommand };
