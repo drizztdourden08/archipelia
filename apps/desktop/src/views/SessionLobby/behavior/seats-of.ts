@@ -4,11 +4,14 @@ import type { AdminLobbyMember, SessionPlayer } from '@archipelia/model';
 import { CONNECTED_ADMISSIONS } from '../../../lobbies/lobbies.constants';
 import type { OwnSeat } from '../SessionLobby.type';
 
+const namesOfMember = (member: AdminLobbyMember): string[] =>
+  member.seat ? [member.seat] : [member.displayName, ...member.slots.map((slot) => slot.name)];
+
 const namesOf = (members: readonly AdminLobbyMember[]): Set<string> =>
   new Set(
     members
       .filter((member) => member.kind === 'client' && CONNECTED_ADMISSIONS.includes(member.admission))
-      .flatMap((member) => [member.displayName, ...member.slots.map((slot) => slot.name)])
+      .flatMap(namesOfMember)
       .map((name) => name.toLowerCase()),
   );
 

@@ -7,7 +7,8 @@ import { trustTag } from './trust-tag';
 const memberMeta = (member: AdminLobbyMember): string[] => {
   const games = [...new Set(member.slots.map((slot) => slot.game))].join(', ');
   const client = member.kind === 'client' ? `${memberLine(member)}, ${trustTag(member).text.toLowerCase()}` : memberLine(member);
-  return [[games, MEMBER_TEXT.joined].filter(Boolean).join(' · '), client];
+  const seat = member.seat ? [MEMBER_TEXT.seat(member.seat, member.admission === 'pending')] : [];
+  return [[games, MEMBER_TEXT.joined].filter(Boolean).join(' · '), client, ...seat];
 };
 
 export { memberMeta };
