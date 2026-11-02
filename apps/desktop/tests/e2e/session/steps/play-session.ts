@@ -64,7 +64,7 @@ const sendHints = async (launched: LaunchedApp, results: ChestItem[]) => {
 const openSpoilerWidget = async (page: Page) => {
   await page.getByRole('button', { name: 'Menu', exact: true }).click();
   await page.getByRole('menuitem', { name: 'Widgets', exact: true }).click();
-  await page.locator('[role^="menuitem"]', { hasText: /Spoiler/ }).first().click();
+  await page.getByRole('menuitemcheckbox', { name: 'Spoiler', exact: true }).click();
   const frame = page.locator('[data-widget-id="spoiler"]');
   await frame.waitFor();
   return frame;

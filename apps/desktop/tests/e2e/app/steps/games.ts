@@ -59,10 +59,10 @@ const addBothWorlds = async (launched: LaunchedApp) => {
   await closeHub(launched.page, 'Multiworld');
 };
 
-const removeBothWorlds = async (launched: LaunchedApp) => {
+const removeWorlds = async (launched: LaunchedApp, titles: string[]) => {
   const games = await openGames(launched);
   await openTab(games, 'Installed');
-  for (const title of [TIMESPINNER.card, SOH.card]) {
+  for (const title of titles) {
     await cardOf(games, title).getByRole('button', { name: `Remove ${title}`, exact: true }).click();
     await dialogOf(launched.page, `Delete ${title}?`).getByRole('button', { name: 'Delete', exact: true }).click();
     await cardOf(games, title).waitFor({ state: 'detached' });
@@ -74,4 +74,6 @@ const removeBothWorlds = async (launched: LaunchedApp) => {
   await closeHub(launched.page, 'Multiworld');
 };
 
-export { addBothWorlds, addWorld, openGames, openTab, removeBothWorlds, search };
+const removeBothWorlds = (launched: LaunchedApp) => removeWorlds(launched, [TIMESPINNER.card, SOH.card]);
+
+export { addBothWorlds, addWorld, openGames, openTab, removeBothWorlds, removeWorlds, search };
