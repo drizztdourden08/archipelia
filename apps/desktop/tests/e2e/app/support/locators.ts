@@ -16,8 +16,6 @@ const HUB_OF: Record<MenuEntry, HubTitle> = {
   Storage: 'Multiworld',
 };
 
-const LIBRARY_ENTRIES: readonly MenuEntry[] = ['Games', 'Presets'];
-
 const PAGE_OF: Record<MenuEntry, string> = {
   Home: 'Home',
   Sessions: 'Sessions',
@@ -29,7 +27,11 @@ const PAGE_OF: Record<MenuEntry, string> = {
   Storage: 'Storage',
 };
 
-const OPENED_BY: Partial<Record<MenuEntry, MenuEntry>> = { Sessions: 'Home', History: 'Home', Storage: 'Settings' };
+const MENU_BUTTON = 'Menu';
+
+const MENU_HOME = 'Home';
+
+const IDLE_OPEN = 'Open Sessions';
 
 const dialogOf = (page: Page, title: string) => page.getByRole('dialog', { name: title, exact: true });
 
@@ -57,15 +59,22 @@ const openSection = async (scope: Locator, label: string) => {
   return scope;
 };
 
+const hubIsOpen = (page: Page) => hub(page, 'Multiworld').first().isVisible();
+
+const openHubFromMenu = async (page: Page) => {
+  const menu = page.getByRole('button', { name: MENU_BUTTON, exact: true });
+  if (await menu.count()) {
+    await menu.click();
+    await page.getByRole('menuitem', { name: MENU_HOME, exact: true }).click();
+  } else {
+    await base(page).getByRole('button', { name: IDLE_OPEN, exact: true }).click();
+  }
+  await hub(page, 'Multiworld').first().waitFor();
+};
+
 const openScreen = async (page: Page, entry: MenuEntry): Promise<Locator> => {
-  const via = OPENED_BY[entry];
-  if (via !== undefined) return openSection(await openScreen(page, via), PAGE_OF[entry]);
-  await page.getByRole('button', { name: 'Menu', exact: true }).click();
-  if (LIBRARY_ENTRIES.includes(entry)) await page.getByRole('menuitem', { name: 'Library', exact: true }).click();
-  await page.getByRole('menuitem', { name: entry, exact: true }).click();
-  const opened = hub(page, HUB_OF[entry]);
-  await currentPage(opened, PAGE_OF[entry]).waitFor();
-  return opened;
+  if (!(await hubIsOpen(page))) await openHubFromMenu(page);
+  return openSection(hub(page, HUB_OF[entry]), PAGE_OF[entry]);
 };
 
 const closeHub = async (page: Page, title: HubTitle) => {

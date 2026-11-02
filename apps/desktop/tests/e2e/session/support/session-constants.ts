@@ -7,7 +7,7 @@ const SESSION_PROOF_DIR = process.env.PROOF_DIR ?? join(tmpdir(), 'archipelia-pr
 const FIXTURES = join(import.meta.dirname, '../fixtures/rotp');
 
 const YAML_B = join(FIXTURES, 'rotp-b.yaml');
-const CHEST_INPUT = join(FIXTURES, 'links-house-chest.input');
+const CHEST_INPUT = join(FIXTURES, 'links-house-chest.json');
 
 const AUTO_STATE = 'test-links-house';
 
