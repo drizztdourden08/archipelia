@@ -10,6 +10,7 @@ const startBaldurInstall = async (launched: LaunchedApp) => {
   const games = await openGames(launched);
   await openTab(games, 'Archipelago index');
   await search(games, BALDUR.search);
+  await settledProof(launched, '06-session-baldur-search');
   await cardOf(games, BALDUR.title).getByRole('button', { name: 'Add', exact: true }).click();
 };
 

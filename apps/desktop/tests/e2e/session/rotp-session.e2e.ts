@@ -1,7 +1,8 @@
 /* @layer tests @kind test */
-import { afterAll, beforeAll, describe, test } from 'vitest';
+import { afterAll, afterEach, beforeAll, describe, test } from 'vitest';
 import { bootWithDefaultProfile, setLocalPort } from '../app/steps/first-boot';
 import { stopFromDashboard } from '../app/steps/live-room';
+import { proof } from '../app/support/proof';
 import { buildLanSession } from './steps/build-session';
 import { addRelic, startBaldurInstall, waitBaldurInstalled } from './steps/install-worlds';
 import { approveJoin, checkJoinedOptions, startRotpA } from './steps/lobby-join';
@@ -15,6 +16,10 @@ describe.skipIf(process.env.E2E_SESSION !== '1')('Archipelia session with a live
   beforeAll(start, E2E_TEST_TIMEOUT_MS);
 
   afterAll(stop, E2E_TEST_TIMEOUT_MS);
+
+  afterEach(async ({ task }) => {
+    if (task.result?.state === 'fail') await proof(app(), `failed-step-${task.name.split('.')[0]}`);
+  });
 
   test('1. first boot on a fresh profile, with the local port set', async () => {
     await bootWithDefaultProfile(app());
