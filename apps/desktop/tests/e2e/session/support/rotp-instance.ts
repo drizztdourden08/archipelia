@@ -60,15 +60,17 @@ const eventsOf = async (path: string): Promise<Record<string, unknown>[]> => {
   }
 };
 
-const ownItemSeen = (events: Record<string, unknown>[]) => {
+const CHEST_LOCATION = "Link's House";
+
+const chestChecked = (events: Record<string, unknown>[]) => {
   const connected = events.findIndex((entry) => entry.t === 'connected');
-  return connected >= 0 && events.slice(connected + 1).some((entry) => entry.t === 'item-received' && entry.self === true);
+  return connected >= 0 && events.slice(connected + 1).some((entry) => entry.t === 'location-checked' && entry.name === CHEST_LOCATION);
 };
 
 const waitForChestItem = async (instance: RotpInstance, timeoutMs: number, until = Date.now() + timeoutMs): Promise<void> => {
-  if (ownItemSeen(await eventsOf(instance.eventLog))) return;
-  if (instance.exited()) throw new Error(`${instance.name} ended before its own chest item arrived. Its output ends: ${instance.output().slice(-2000)}`);
-  if (Date.now() > until) throw new Error(`${instance.name} never got its own chest item (no item-received with self true after connected)`);
+  if (chestChecked(await eventsOf(instance.eventLog))) return;
+  if (instance.exited()) throw new Error(`${instance.name} ended before its chest check went out. Its output ends: ${instance.output().slice(-2000)}`);
+  if (Date.now() > until) throw new Error(`${instance.name} never sent its chest check (no location-checked for ${CHEST_LOCATION} after connected)`);
   await pause(POLL_MS);
   await waitForChestItem(instance, timeoutMs, until);
 };
