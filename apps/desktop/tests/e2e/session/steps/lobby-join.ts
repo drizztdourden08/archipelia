@@ -22,7 +22,9 @@ const POLL_MS = 500;
 
 const pause = (ms: number) => new Promise<void>((resolve) => { setTimeout(resolve, ms); });
 
-const approveOf = (tab: Locator) => tab.getByRole('button', { name: /^Approve / });
+const APPROVE_NAME = /^Approve /;
+
+const approveOf = (tab: Locator) => tab.getByRole('button', { name: APPROVE_NAME });
 
 const startRotpA = async (launched: LaunchedApp, env: SessionEnv, dirs: SessionDirs): Promise<RotpInstance> => {
   const target = await lobbyTargetOf(launched, TEMPLATE);
@@ -42,7 +44,7 @@ const waitJoinReached = async (tab: Locator, rotp: RotpInstance, until = Date.no
 
 const waitForJoinRequest = async (launched: LaunchedApp, tab: Locator, rotp: RotpInstance) => {
   await waitJoinReached(tab, rotp);
-  const seat = tab.locator('.lobby-seat').filter({ has: approveOf(tab) });
+  const seat = tab.locator('.lobby-seat').filter({ has: tab.page().getByRole('button', { name: APPROVE_NAME }) });
   await seat.getByText('Waiting for your approval').waitFor();
   await seat.getByText(RELIC.game).first().waitFor();
   expect(rotp.exited(), `${rotp.name} is still running once its join reached the host`).toBe(false);
