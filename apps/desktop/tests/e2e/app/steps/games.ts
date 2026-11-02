@@ -28,7 +28,9 @@ const addWorld = async (games: Locator, title: string) => {
 const openGames = async (launched: LaunchedApp) => {
   const games = await openScreen(launched.page, 'Games');
   await games.getByText('Loading the catalog').waitFor({ state: 'hidden', timeout: 120000 });
-  await games.getByText(/index for AP 0\.6\.7/).waitFor();
+  const status = games.getByRole('region', { name: 'Games status' });
+  await status.getByText('Archipelago index for AP', { exact: true }).waitFor();
+  await status.getByRole('definition').filter({ hasText: /^0\.6\.7$/ }).waitFor();
   return games;
 };
 
