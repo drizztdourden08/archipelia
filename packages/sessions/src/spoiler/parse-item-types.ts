@@ -1,9 +1,7 @@
 /* @layer core @kind logic */
 import { classOfFlags } from './class-of-flags';
 import { placementKey } from './placement-key';
-import type { ItemClass, SpoilerItemTypes } from './spoiler.type';
-
-type SidecarRow = { finder: string; location: string; flags: number };
+import type { ItemClass, SidecarRow, SpoilerItemTypes } from './spoiler.type';
 
 const isRow = (value: unknown): value is SidecarRow => {
   if (typeof value !== 'object' || value === null) return false;

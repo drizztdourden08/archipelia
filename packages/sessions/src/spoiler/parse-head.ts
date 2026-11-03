@@ -1,11 +1,7 @@
 /* @layer core @kind logic */
 import { settingOf } from './setting-of';
 import { GAME_KEY, PLAYER_LINE, SINGLE_PLAYER_NAME, VERSION_LINE } from './spoiler.constants';
-import type { SpoilerHead, SpoilerKnown, SpoilerPlayer, SpoilerSetting } from './spoiler.type';
-
-type OpenPlayer = { slot: number; name: string; options: SpoilerSetting[] };
-
-type HeadState = { settings: SpoilerSetting[]; open: OpenPlayer[]; inPlayer: boolean };
+import type { HeadState, OpenPlayer, SpoilerHead, SpoilerKnown, SpoilerPlayer, SpoilerSetting } from './spoiler.type';
 
 const playerOf = ({ slot, name, options }: OpenPlayer): SpoilerPlayer => ({
   slot,

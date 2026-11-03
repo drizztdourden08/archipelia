@@ -1,8 +1,7 @@
 /* @layer core @kind logic */
 import { indexesOf } from './indexes-of';
+import { SEPARATOR } from './spoiler.constants';
 import type { SplitLine } from './spoiler.type';
-
-const SEPARATOR = ': ';
 
 const soloCandidates = (line: string, name: string): SplitLine[] =>
   indexesOf(line, SEPARATOR).map((at) => ({

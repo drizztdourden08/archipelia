@@ -1,10 +1,9 @@
 /* @layer renderer-app @kind logic */
 import type { SpoilerGroup } from '@archipelia/design';
+import { SHARED_AREA } from '../SpoilerWidget.constants';
 import type { SpoilerEntry } from '../SpoilerWidget.type';
 import { countsOf } from './counts-of';
 import { rowOf } from './row-of';
-
-const SHARED_AREA = 2;
 
 const areasOf = (entries: readonly SpoilerEntry[]): Map<string, SpoilerEntry[]> => {
   const byArea = new Map<string, SpoilerEntry[]>();

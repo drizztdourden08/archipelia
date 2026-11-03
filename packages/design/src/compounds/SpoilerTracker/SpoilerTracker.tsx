@@ -13,7 +13,7 @@ const SpoilerTracker = ({ stats, tabs, activeTab, onTabChange, actions, filters,
         {actions}
       </Box>
       <Tabs tabs={tabs} activeTab={activeTab} onTabChange={onTabChange} />
-      {(filters || controls) && (
+      {(filters ?? controls) && (
         <Box className="spoiler-tracker__tools">
           {filters}
           {controls && <SpoilerControls {...controls} />}

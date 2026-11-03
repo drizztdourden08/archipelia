@@ -3,12 +3,8 @@ import { useCallback } from 'react';
 import { useWidgetState } from '@drizztdourden08/brock-react';
 import type { FilterClause } from '@drizztdourden08/tessera/data';
 import type { SpoilerView } from '@archipelia/design';
-import { NONE } from '../SpoilerWidget.constants';
+import { NO_CLAUSES, NO_OPEN, NONE } from '../SpoilerWidget.constants';
 import type { GroupBy, SpoilerTab } from '../SpoilerWidget.type';
-
-const NO_CLAUSES: readonly FilterClause[] = [];
-
-const NO_OPEN: Record<string, readonly string[]> = {};
 
 const useSpoilerState = () => {
   const [tab, setTab] = useWidgetState<SpoilerTab>('tab', 'placements');

@@ -1,9 +1,8 @@
 /* @layer renderer-app @kind logic */
 import type { SpoilerGroup } from '@archipelia/design';
 import type { SpoilerEntrance } from '@archipelia/sessions/spoiler';
+import { ALL_WORLDS } from '../SpoilerWidget.constants';
 import { listCount } from './list-count';
-
-const ALL_WORLDS = 'All worlds';
 
 const entrancesOf = (entrances: readonly SpoilerEntrance[]): SpoilerGroup => {
   const byPlayer = new Map<string, SpoilerEntrance[]>();

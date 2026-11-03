@@ -3,9 +3,7 @@ import { lineCandidates } from './line-candidates';
 import { pickCandidate } from './pick-candidate';
 import { placementKey } from './placement-key';
 import { SPHERE_OPEN } from './spoiler.constants';
-import type { SpoilerPlacement, SpoilerSphere } from './spoiler.type';
-
-type Block = { index: number; lines: string[] };
+import type { Block, SpoilerPlacement, SpoilerSphere } from './spoiler.type';
 
 const blocksOf = (lines: readonly string[]): Block[] => {
   const blocks: Block[] = [];

@@ -1,14 +1,9 @@
 /* @layer renderer-app @kind logic */
 import type { SpoilerTrackerControls } from '@archipelia/design';
-import { GROUP_OPTIONS, VIEW_OPTIONS } from '../SpoilerWidget.constants';
-import type { GroupBy, SpoilerTab } from '../SpoilerWidget.type';
-import type { useSpoilerState } from './useSpoilerState';
+import { GROUP_OPTIONS, LISTED, VIEW_OPTIONS } from '../SpoilerWidget.constants';
+import type { GroupBy, SpoilerState } from '../SpoilerWidget.type';
 
-type State = ReturnType<typeof useSpoilerState>;
-
-const LISTED: readonly SpoilerTab[] = ['placements', 'playthrough', 'entrances', 'paths'];
-
-const controlsOf = ({ tab, by, setBy, view, setView }: State): SpoilerTrackerControls | undefined => {
+const controlsOf = ({ tab, by, setBy, view, setView }: SpoilerState): SpoilerTrackerControls | undefined => {
   if (!LISTED.includes(tab)) return undefined;
   return {
     groupBy: tab === 'placements'

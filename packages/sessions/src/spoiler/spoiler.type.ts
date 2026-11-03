@@ -57,7 +57,15 @@ type SplitSpoiler = { head: readonly string[]; sections: readonly SpoilerSection
 
 type SpoilerHead = Pick<SpoilerLog, 'version' | 'seed' | 'settings' | 'players'>;
 
+type OpenPlayer = { slot: number; name: string; options: SpoilerSetting[] };
+
+type HeadState = { settings: SpoilerSetting[]; open: OpenPlayer[]; inPlayer: boolean };
+
+type SidecarRow = { finder: string; location: string; flags: number };
+
+type Block = { index: number; lines: string[] };
+
 export type {
-  EntranceDirection, ItemClass, LineContext, SpoilerEntrance, SpoilerHead, SpoilerItemType, SpoilerItemTypes, SpoilerKnown, SpoilerLog,
+  Block, EntranceDirection, HeadState, ItemClass, LineContext, OpenPlayer, SidecarRow, SpoilerEntrance, SpoilerHead, SpoilerItemType, SpoilerItemTypes, SpoilerKnown, SpoilerLog,
   SpoilerPath, SpoilerPlacement, SpoilerPlayer, SpoilerSection, SpoilerSetting, SpoilerSphere, SplitLine, SplitSpoiler,
 };

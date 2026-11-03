@@ -1,7 +1,6 @@
 /* @layer core @kind logic */
 import { SPOILER } from '../output/read-output.constants';
-
-const ITEM_TYPES_SUFFIX = '_ItemTypes.json';
+import { ITEM_TYPES_SUFFIX } from './item-types.constants';
 
 const itemTypesNameOf = (spoilerName: string) => spoilerName.replace(SPOILER, ITEM_TYPES_SUFFIX);
 

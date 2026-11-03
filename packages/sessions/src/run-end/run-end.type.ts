@@ -49,4 +49,4 @@ type LiveTally = {
   flush: () => Promise<void>;
 };
 
-export type { LiveTally, RunEndInput, RunTally, SeenSpan, SlotFacts, TallyState };
+export type { LiveTally, RunEndInput, RunTally, SlotFacts, TallyState };

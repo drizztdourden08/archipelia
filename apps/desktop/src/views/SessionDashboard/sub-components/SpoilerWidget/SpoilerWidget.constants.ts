@@ -2,6 +2,7 @@
 import type { SegmentOption, SelectOption } from '@drizztdourden08/tessera/primitives';
 import type { SpoilerTone, SpoilerView } from '@archipelia/design';
 import type { SpoilerItemType } from '@archipelia/sessions/spoiler';
+import type { FilterClause } from '@drizztdourden08/tessera/data';
 import type { GroupBy, SpoilerTab } from './SpoilerWidget.type';
 
 const SPOILER_SUFFIX = '_Spoiler.txt';
@@ -76,7 +77,17 @@ const EMPTY_LABEL: Record<SpoilerTab, string> = {
 
 const NONE: readonly string[] = [];
 
+const NO_CLAUSES: readonly FilterClause[] = [];
+
+const NO_OPEN: Record<string, readonly string[]> = {};
+
+const LISTED: readonly SpoilerTab[] = ['placements', 'playthrough', 'entrances', 'paths'];
+
+const ALL_WORLDS = 'All worlds';
+
+const SHARED_AREA = 2;
+
 export {
-  AREA_SPLIT, EMPTY_LABEL, GROUP_ALL, GROUP_OPTIONS, ITEM_ENUM_LIMIT, ITEM_TONE, ITEM_TYPE_LABEL, ITEM_TYPE_ORDER, ITEM_TYPES_FAILED, ITEM_TYPES_SUFFIX,
-  NO_SPHERE, NONE, REQUIRED_LABEL, SPOILER_SUFFIX, UNKNOWN_GAME, VIEW_OPTIONS, WORLD_LABEL,
+  ALL_WORLDS, AREA_SPLIT, EMPTY_LABEL, GROUP_ALL, GROUP_OPTIONS, ITEM_ENUM_LIMIT, ITEM_TONE, ITEM_TYPE_LABEL, ITEM_TYPE_ORDER, ITEM_TYPES_FAILED, ITEM_TYPES_SUFFIX,
+  LISTED, NO_CLAUSES, NO_OPEN, NO_SPHERE, NONE, REQUIRED_LABEL, SHARED_AREA, SPOILER_SUFFIX, UNKNOWN_GAME, VIEW_OPTIONS, WORLD_LABEL,
 };

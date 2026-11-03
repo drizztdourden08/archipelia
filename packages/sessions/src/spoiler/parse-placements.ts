@@ -3,12 +3,10 @@ import { lineCandidates } from './line-candidates';
 import { pickCandidate } from './pick-candidate';
 import type { LineContext, SpoilerPlacement } from './spoiler.type';
 
-type ParsedPlacements = { placements: SpoilerPlacement[]; unparsed: string[] };
-
 const itemsOfUnique = (candidates: readonly (readonly { item: string }[])[]) =>
   new Set(candidates.filter((found) => found.length === 1).map((found) => found[0]?.item ?? ''));
 
-const parsePlacements = (lines: readonly string[], base: Omit<LineContext, 'items'>): ParsedPlacements => {
+const parsePlacements = (lines: readonly string[], base: Omit<LineContext, 'items'>): { placements: SpoilerPlacement[]; unparsed: string[] } => {
   const rows = lines.filter((line) => line.trim() !== '');
   const candidates = rows.map((line) => lineCandidates(line, base.names));
   const context: LineContext = { ...base, items: itemsOfUnique(candidates) };
@@ -23,4 +21,3 @@ const parsePlacements = (lines: readonly string[], base: Omit<LineContext, 'item
 };
 
 export { parsePlacements };
-export type { ParsedPlacements };

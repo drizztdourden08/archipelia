@@ -4,15 +4,9 @@ import type { Session, SessionTemplate } from '@archipelia/model';
 import { recoverRuns } from '../src/service/recover-runs';
 import { createRunStore } from '../src/store/create-run-store';
 import { runFiles } from './run-files';
+import { SNAPSHOT } from './run-snapshot';
 
 const START = 1_700_000_000_000;
-
-const SNAPSHOT: SessionTemplate = {
-  id: 'sunday', name: 'Sunday run', updatedAt: 0, players: [{ kind: 'set', slot: 1, name: 'Drizzt', game: 'Celeste', source: { kind: 'preset', presetId: '', overrides: {} } }],
-  generator: { spoiler: 3, race: false, progressionBalancing: true },
-  server: { hintCost: 10, releaseMode: 'auto', collectMode: 'auto', remainingMode: 'goal', autoShutdownMinutes: 0 },
-  host: { kind: 'local', port: 38281 },
-};
 
 const hosting = (id: string, host: SessionTemplate['host'] = SNAPSHOT.host): Session => ({
   id, snapshot: { ...SNAPSHOT, host }, status: 'hosting', createdAt: START - 1000, players: [{ slot: 1, name: 'Drizzt', game: 'Celeste' }],

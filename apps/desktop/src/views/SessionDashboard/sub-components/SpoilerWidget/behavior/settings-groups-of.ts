@@ -2,11 +2,9 @@
 import type { FactsPanelFact } from '@drizztdourden08/tessera/composites';
 import type { SpoilerLog, SpoilerSetting } from '@archipelia/sessions/spoiler';
 
-type SettingsGroup = { key: string; title: string; facts: FactsPanelFact[] };
-
 const factsOf = (settings: readonly SpoilerSetting[]): FactsPanelFact[] => settings.map(({ key, value }) => ({ label: key, value: value || 'none' }));
 
-const settingsGroupsOf = (log: SpoilerLog): SettingsGroup[] => [
+const settingsGroupsOf = (log: SpoilerLog): { key: string; title: string; facts: FactsPanelFact[] }[] => [
   {
     key: 'world',
     title: 'Generation',
@@ -20,4 +18,3 @@ const settingsGroupsOf = (log: SpoilerLog): SettingsGroup[] => [
 ];
 
 export { settingsGroupsOf };
-export type { SettingsGroup };
