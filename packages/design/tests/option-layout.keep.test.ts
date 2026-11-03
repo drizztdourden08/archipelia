@@ -4,7 +4,7 @@ import { optionDef as option } from '@archipelia/model';
 import type { GameSchema } from '@archipelia/model';
 import { matchesQuery } from '../src/compounds/GameOptionsPanel/behavior/matches-query';
 import { optionLayoutOf } from '../src/compounds/GameOptionsPanel/behavior/option-layout';
-import { tabIdOf } from '../src/compounds/GameOptionsPanel/behavior/tab-groups';
+import { tabIdOf } from '../src/compounds/GameOptionsPanel/behavior/tab-id-of';
 import { choiceOptions } from '../src/compounds/OptionControl/behavior/choice-options';
 import { hintOf } from '../src/compounds/OptionControl/behavior/option-hint';
 import { defOf } from './option-defs';
