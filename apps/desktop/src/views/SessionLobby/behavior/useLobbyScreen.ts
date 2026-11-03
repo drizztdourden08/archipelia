@@ -7,7 +7,6 @@ import { useTabDraft } from '../../../hooks/useTabDraft';
 import { useLobbyStore } from '../../../stores/useLobbyStore';
 import type { LobbyScreenProps, SeatEditing } from '../SessionLobby.type';
 import { LOBBY_FAILURE } from '../SessionLobby.constants';
-import { nextSlot } from './next-slot';
 import { toggleSeat } from './toggle-seat';
 import { useLobbyActions } from './useLobbyActions';
 import { usePlayersEditor } from './usePlayersEditor';
@@ -30,11 +29,7 @@ const useLobbyScreen = ({ tab, saved }: LobbyScreenProps) => {
   const toggleSelected = useCallback((slot: number) => setEditing((current) => toggleSeat(current, slot)), []);
   const clearFocus = useCallback(() => setEditing((current) => (current ? { slot: current.slot } : current)), []);
   const closeEditor = useCallback(() => setEditing(null), []);
-  const { add, duplicate, remove } = players;
-  const addPlayer = useCallback(() => {
-    add();
-    setEditing({ slot: nextSlot(draft.players), overrides: false });
-  }, [add, draft.players]);
+  const { duplicate, remove } = players;
   const removePlayer = useCallback((slot: number) => {
     remove(slot);
     setEditing(null);
@@ -46,7 +41,7 @@ const useLobbyScreen = ({ tab, saved }: LobbyScreenProps) => {
   const selected = draft.players.find((player) => player.slot === editing?.slot);
   const focusKey = selected ? (editing?.option ?? null) : null;
   return {
-    ...data, ...check, ...actions, action, addPlayer, busy, changes, clearFocus, closeEditor, draft, duplicatePlayer, error, focusKey, lobby, players, removePlayer, saved, selected, tab,
+    ...data, ...check, ...actions, action, busy, changes, clearFocus, closeEditor, draft, duplicatePlayer, error, focusKey, lobby, players, removePlayer, saved, selected, tab,
     toggleSelected,
   };
 };
