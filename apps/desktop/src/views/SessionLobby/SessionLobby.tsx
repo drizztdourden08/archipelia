@@ -1,26 +1,42 @@
 /* @layer renderer-app @kind component */
-import { Button, EmptyState, Spinner, Stack } from '@drizztdourden08/tessera/primitives';
-import { ErrorCallout } from '@archipelia/design';
-import { SESSION_FAILED } from '../../hooks/lobby-hooks.constants';
-import { useSavedTemplate } from '../../hooks/useSavedTemplate';
-import { closeTab } from '../../live/close-tab';
+import { useId } from 'react';
+import { formatLobbyCode } from '@drizztdourden08/archipelia-lobby-protocol';
+import { Text } from '@drizztdourden08/tessera/primitives';
+import { openSessionEditor } from '../../hooks/open-session-editor';
+import { useConnectedCount } from '../../hooks/useConnectedCount';
 import { LOBBY_SCREEN } from './SessionLobby.constants';
 import type { SessionLobbyProps } from './SessionLobby.type';
-import { LobbyScreen } from './sub-components/LobbyScreen';
+import { configFacts } from './behavior/config-facts';
+import { stageGames } from './behavior/stage-games';
+import { useLobbyScreen } from './behavior/useLobbyScreen';
+import { LobbyNotices } from './sub-components/LobbyNotices';
+import { SeatsPane } from './sub-components/SeatsPane';
+import { StageActions } from './sub-components/StageActions';
+import { StageChips } from './sub-components/StageChips';
 import './SessionLobby.css';
 
-const SessionLobby = ({ tab }: SessionLobbyProps) => {
-  const saved = useSavedTemplate(tab.sessionId);
-  const { template } = saved;
-  if (saved.failed) return <ErrorCallout message={SESSION_FAILED.template} onRetry={saved.retry} />;
-  if (template) return <LobbyScreen key={tab.tabId} tab={tab} saved={template} />;
-  if (!saved.loaded) return <EmptyState icon={<Spinner />} message={SESSION_FAILED.loading} />;
-  return (
-    <Stack gap="md" align="center">
-      <EmptyState message={SESSION_FAILED.gone} />
-      <Button variant="secondary" onClick={() => void closeTab(tab.tabId)}>{LOBBY_SCREEN.closeTab}</Button>
-    </Stack>
-  );
+const SessionLobby = ({ tab, saved, children }: SessionLobbyProps) => {
+  const screen = useLobbyScreen({ tab, saved });
+  const connected = useConnectedCount(tab);
+  const reasonId = useId();
+  const { action, draft, lobby } = screen;
+  const direct = draft.direct !== undefined;
+  const codes = lobby ? [{ label: LOBBY_SCREEN.code, value: formatLobbyCode(lobby.code) ?? lobby.code, copyLabel: LOBBY_SCREEN.codeCopy }] : [];
+  const problems = screen.runAttempted ? screen.problems.length : 0;
+  return children({
+    title: draft.name,
+    chips: <StageChips lobby={lobby} serverId={tab.serverId} direct={direct} changes={screen.changes} count={draft.players.length + connected} problems={problems} />,
+    actions: <StageActions live={lobby !== undefined && lobby.phase !== 'closed'} busy={screen.busy} action={action} reasonId={reasonId} onClose={() => void screen.close()} />,
+    codes,
+    note: action.reason && <Text id={reasonId} variant="caption" tone="dim">{action.reason}</Text>,
+    config: { label: LOBBY_SCREEN.config, facts: configFacts(draft), games: stageGames(draft.direct), editLabel: LOBBY_SCREEN.configEdit, onEdit: () => openSessionEditor(saved.id) },
+    children: (
+      <>
+        <LobbyNotices screen={screen} />
+        <SeatsPane screen={screen} empty={draft.players.length + connected === 0} />
+      </>
+    ),
+  });
 };
 
 export { SessionLobby };

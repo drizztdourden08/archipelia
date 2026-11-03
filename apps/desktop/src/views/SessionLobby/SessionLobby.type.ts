@@ -1,15 +1,15 @@
 /* @layer renderer-app @kind types */
-import type { LobbySeatAction, LobbySeatSide, LobbySeatSideValue } from '@archipelia/design';
+import type { LobbySeatAction, LobbyStageProps, LobbySeatSide, LobbySeatSideValue } from '@archipelia/design';
 import type { AdminLobby, GamePreset, InstalledGame, OptionValue, SessionPlayer, SessionTemplate } from '@archipelia/model';
-import type { Dispatch, SetStateAction } from 'react';
+import type { Dispatch, ReactNode, SetStateAction } from 'react';
 import type { PresetInput } from '@archipelia/presets';
 import type { LiveTab } from '../../live/live.type';
 import type { useLobbyScreen } from './behavior/useLobbyScreen';
 import type { usePlayersEditor } from './behavior/usePlayersEditor';
 
-type SessionLobbyProps = { tab: LiveTab };
-
 type LobbyScreenProps = { tab: LiveTab; saved: SessionTemplate };
+
+type SessionLobbyProps = LobbyScreenProps & { children: (stage: LobbyStageProps) => ReactNode };
 
 type Overrides = Record<string, OptionValue>;
 

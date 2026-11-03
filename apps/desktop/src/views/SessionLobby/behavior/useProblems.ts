@@ -1,5 +1,5 @@
 /* @layer renderer-app @kind hook */
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import type { SessionTemplate } from '@archipelia/model';
 import { validatePlayers } from '@archipelia/sessions/validation';
 import type { LibraryView, TemplateProblem } from '@archipelia/sessions/validation';
@@ -10,7 +10,6 @@ const useProblems = (draft: SessionTemplate, library: LibraryView, select: (slot
   const { installed, presets } = library;
   const problems = useMemo(() => validatePlayers(draft, { installed, presets }), [draft, installed, presets]);
   const [runAttempted, setRunAttempted] = useState(false);
-  const rootRef = useRef<HTMLElement>(null);
 
   const attemptRun = useCallback(() => {
     setRunAttempted(true);
@@ -29,7 +28,7 @@ const useProblems = (draft: SessionTemplate, library: LibraryView, select: (slot
     else select(slot);
   }, [problems, select, showProblem]);
 
-  return { attemptRun, openSlot, problems, rootRef, runAttempted, showProblem };
+  return { attemptRun, openSlot, problems, runAttempted, showProblem };
 };
 
 export { useProblems };

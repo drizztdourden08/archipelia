@@ -12,7 +12,7 @@ const usage = {
   rules: [
     'Pass the id of the run to show; the tab that holds it owns which run that is and loads the runs.',
     'Ask before stopping a room.',
-    'Keep the frame of the lobby so Run does not move the stage or the widgets around it.',
+    'Keep the frame of the lobby so Run does not move the stage or the widgets around it: the tab keeps one stage mounted and RunStage hands it the run content.',
     'Show generation progress and errors inside the stage under the header, never in a separate dialog.',
     'Show a Set slot nobody has connected to as Waiting for its player with the slot name to connect as, never Offline.',
   ],

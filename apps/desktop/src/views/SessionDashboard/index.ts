@@ -1,5 +1,6 @@
 /* @layer renderer-app @kind barrel */
 export { SessionDashboard } from './SessionDashboard';
+export { RunStage } from './sub-components/RunStage';
 export { ConsoleWidget } from './sub-components/ConsoleWidget';
 export { HintsWidget } from './sub-components/HintsWidget';
 export { LobbyLog } from './sub-components/LobbyLog';
