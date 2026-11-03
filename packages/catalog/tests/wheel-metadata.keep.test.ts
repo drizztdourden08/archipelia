@@ -22,7 +22,7 @@ const fileOf = async (name: string, bytes: Uint8Array) => {
 };
 
 describe('reading the metadata of a wheel without running it', () => {
-  test('reads the name, the version, the dependencies and the top level modules', async () => {
+  test('K1 reads the name, the version, the dependencies and the top level modules', { tags: ['critical'] }, async () => {
     const bytes = wheelBytes({
       requires: ['numpy==2.5.1', 'colorama (>=0.4) ; sys_platform == "win32"', 'pytest>=8; extra == "test"'], modules: ['ctrando', 'ctrando_data'],
     });
@@ -31,14 +31,14 @@ describe('reading the metadata of a wheel without running it', () => {
     expect(found.modules.sort()).toEqual(['ctrando', 'ctrando_data']);
   });
 
-  test('finds single file modules and compiled modules', async () => {
+  test('K1 finds single file modules and compiled modules', { tags: ['critical'] }, async () => {
     const bytes = zipSync({
       'x-1.dist-info/METADATA': strToU8('Name: x\nVersion: 1'), 'single.py': strToU8(''), 'fast.cp312-win_amd64.pyd': strToU8(''), 'x-1.data/scripts/run': strToU8(''),
     });
     expect((await readWheelMetadata(await fileOf('b.whl', bytes))).modules.sort()).toEqual(['fast', 'single']);
   });
 
-  test('refuses a file with no METADATA, two of them, no name, or that is not a zip', async () => {
+  test('K1 refuses a file with no METADATA, two of them, no name, or that is not a zip', { tags: ['critical'] }, async () => {
     await expect(readWheelMetadata(await fileOf('c.whl', zipSync({ 'a.py': strToU8('') })))).rejects.toThrow('no single METADATA');
     const two = zipSync({ 'a-1.dist-info/METADATA': strToU8('Name: a\nVersion: 1'), 'b-1.dist-info/METADATA': strToU8('Name: b\nVersion: 1') });
     await expect(readWheelMetadata(await fileOf('d.whl', two))).rejects.toThrow('no single METADATA');

@@ -31,8 +31,10 @@ apps/desktop/public/logos/mark.svg
 
 # AI config — managed in the private ai-config repo, never committed here
 .ai-config.json
+.claude/
 CLAUDE.md
 .claude/settings.json
+.ai/
 AGENTS.md
 .codex/config.toml
 .github/copilot-instructions.md

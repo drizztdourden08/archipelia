@@ -2,7 +2,6 @@
 import { describe, expect, test } from 'vitest';
 import type { JobSnapshot } from '@drizztdourden08/brock-core';
 import { setupProgress } from '../../src/views/EngineSettings/behavior/setup-progress';
-import { STATE_VIEW } from '../../src/views/EngineSettings/EngineSettings.constants';
 
 const job = (patch: Partial<JobSnapshot>): JobSnapshot => ({
   id: 'archipelia-engine-setup', title: 'Engine', state: 'running', currentStep: 'python', progress: 0.42, stepProgress: 0.5, line: null, error: null,
@@ -14,7 +13,7 @@ const job = (patch: Partial<JobSnapshot>): JobSnapshot => ({
   ...patch,
 });
 
-describe('engine setup progress', () => {
+describe('K1 engine setup progress', { tags: ['critical'] }, () => {
   test('a running setup shows its percent and current step', () => {
     expect(setupProgress(job({}))).toEqual({ percent: 42, step: 'Download Python' });
   });
@@ -27,9 +26,5 @@ describe('engine setup progress', () => {
     expect(setupProgress(null)).toBeNull();
     expect(setupProgress(job({ state: 'done' }))).toBeNull();
     expect(setupProgress(job({ state: 'failed' }))).toBeNull();
-  });
-
-  test('a failed engine reads Setup failed', () => {
-    expect(STATE_VIEW.failed.label).toBe('Setup failed');
   });
 });

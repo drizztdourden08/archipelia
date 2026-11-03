@@ -1,6 +1,6 @@
 /* @layer electron-main @kind logic */
 import type { SessionTemplate } from '@archipelia/model';
-import { setupProblems } from '../../src/views/SessionBuilder/behavior/setup-problems';
+import { setupProblems } from '../../src/lobbies/setup-problems';
 import { LIVE_TEXT } from './live.constants';
 
 const assertStartable = (template: SessionTemplate): void => {

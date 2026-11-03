@@ -1,6 +1,6 @@
 /* @layer tests @kind test */
 import { describe, expect, test } from 'vitest';
-import { PORT_PROBLEM } from '@archipelia/design';
+import { PORT_PROBLEM } from '@archipelia/model';
 import type { ServerEntry } from '@archipelia/model';
 import { draftProblems } from '../../src/views/ServerManager/behavior/draft-problems';
 import { shownErrors } from '../../src/views/ServerManager/behavior/shown-errors';
@@ -18,7 +18,7 @@ const messages = (entry: ServerEntry) => draftProblems(entry, NO_INPUTS).map((pr
 
 const filled = () => ({ ...newServerEntry(), id: 'abc', host: 'vps.example.net', auth: { kind: 'ssh-key' as const, username: 'me', keyPath: '/k' } });
 
-describe('server drafts', () => {
+describe('K1 server drafts', { tags: ['critical'] }, () => {
   test('a new entry lists what is missing', () => {
     expect(draftProblems(newServerEntry(), NO_INPUTS)).toEqual([
       { field: 'host', message: 'Enter the host name or address.' },

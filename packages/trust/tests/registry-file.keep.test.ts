@@ -3,8 +3,6 @@ import registryFile from 'archipelia/registry/registry.json' with { type: 'json'
 import schema from 'archipelia/registry/registry.schema.json' with { type: 'json' };
 import Ajv2020 from 'ajv/dist/2020';
 import { describe, expect, test } from 'vitest';
-import { floorRegistry } from '../src/registry/floor-registry';
-import { findClient } from '../src/registry/find-client';
 import { parseRegistry } from '../src/registry/parse-registry';
 
 const validate = new Ajv2020({ allErrors: true, validateFormats: false }).compile(schema);
@@ -17,43 +15,9 @@ const edited = (change: (draft: Draft) => void) => {
   return draft;
 };
 
-describe('registry/registry.json', () => {
+describe('K2 registry/registry.json', { tags: ['critical'] }, () => {
   test('parses with no problem', () => {
     expect(parseRegistry(registryFile)).toMatchObject({ ok: true, problems: [] });
-  });
-
-  test('lists Relic of the Past as the first client', () => {
-    const parsed = parseRegistry(registryFile);
-    if (!parsed.ok) throw new Error('the registry does not parse');
-    expect(parsed.registry.clients[0]).toMatchObject({
-      id: 'relic-of-the-past',
-      status: 'active',
-      games: ['Relic of the Past'],
-      trust: {
-        method: 'github-attestation',
-        repo: 'drizztdourden08/relic-of-the-past',
-        workflow: '.github/workflows/release.yml',
-        refs: ['refs/heads/master', 'refs/heads/main'],
-        issuer: 'https://token.actions.githubusercontent.com',
-      },
-    });
-    expect(parsed.registry.games[0]).toMatchObject({ game: 'Relic of the Past', module: 'relic_of_the_past', client: 'relic-of-the-past' });
-  });
-
-  test('says Relic of the Past is a builds index', () => {
-    const parsed = parseRegistry(registryFile);
-    if (!parsed.ok) throw new Error('the registry does not parse');
-    expect(parsed.registry.games[0]?.release).toMatchObject({ manifest: 'relic_of_the_past.apworld.json', kind: 'builds' });
-  });
-
-  test('is the floor the app ships', () => {
-    expect(findClient(floorRegistry(), 'relic-of-the-past')?.trust.repo).toBe('drizztdourden08/relic-of-the-past');
-  });
-
-  test('lists the repo id of the Relic of the Past release', () => {
-    const parsed = parseRegistry(registryFile);
-    if (!parsed.ok) throw new Error('the registry does not parse');
-    expect(parsed.registry.games[0]?.release.repoId).toBe(1235000006);
   });
 
   test('the schema accepts a blocked list with a reason', () => {

@@ -20,7 +20,7 @@ afterEach(async () => {
   await rm(apDir, { recursive: true, force: true });
 });
 
-describe('readGlobalIgnore', () => {
+describe('K3 readGlobalIgnore', { tags: ['critical'] }, () => {
   test('an engine without GLOBAL.apignore (0.6.6) falls back to the built-in rules', async () => {
     const ignore = createIgnore(await readGlobalIgnore(apDir));
     expect(ignore('__pycache__/a.pyc')).toBe(true);

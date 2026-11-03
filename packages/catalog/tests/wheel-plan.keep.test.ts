@@ -47,7 +47,7 @@ const planOf = (table: Routes) => {
 };
 
 describe('the ready-made build in the plan of a repo', () => {
-  test('a repo with no releases, like Pseudoarc/ctrando, has none, asks the engine for nothing and keeps the manual and build paths', async () => {
+  test('S2 a repo with no releases, like Pseudoarc/ctrando, has none, asks the engine for nothing and keeps the manual and build paths', { tags: ['standard'] }, async () => {
     const plan = await planOf(routes(undefined));
     expect(plan).toMatchObject({ wheelState: 'none', native: true, pin: { kind: 'head', sha: HEAD } });
     expect(plan.wheel).toBeUndefined();
@@ -55,13 +55,13 @@ describe('the ready-made build in the plan of a repo', () => {
     expect(state.asked).toBe(0);
   });
 
-  test('releases with only source archives have none', async () => {
+  test('S3 releases with only source archives have none', { tags: ['standard'] }, async () => {
     const plan = await planOf(routes(json([releaseJson('v1', [{ name: 'source.tar.gz', size: 10, state: 'uploaded' }])])));
     expect(plan.wheelState).toBe('none');
     expect(state.asked).toBe(0);
   });
 
-  test('a release with a wheel that fits this engine is offered with its tag, size, digest and fit', async () => {
+  test('S2 a release with a wheel that fits this engine is offered with its tag, size, digest and fit', { tags: ['standard'] }, async () => {
     const plan = await planOf(routes(json([releaseJson('v1.2.0', [assetJson('ctrando-1.2.0-cp312-cp312-win_amd64.whl', BYTES)])])));
     expect(plan.wheelState).toBe('found');
     expect(plan.wheel).toEqual({
@@ -69,25 +69,25 @@ describe('the ready-made build in the plan of a repo', () => {
     });
   });
 
-  test('a wheel without a digest is offered with no digest, so the dialog asks for the typed name', async () => {
+  test('S3 a wheel without a digest is offered with no digest, so the dialog asks for the typed name', { tags: ['standard'] }, async () => {
     const plan = await planOf(routes(json([releaseJson('v1.2.0', [assetJson('ctrando-1.2.0-py3-none-any.whl', BYTES, false)])])));
     expect(plan.wheel).toMatchObject({ fit: 'pure', digest: undefined });
   });
 
-  test('wheels for another Python or platform leave the plan with none', async () => {
+  test('S3 wheels for another Python or platform leave the plan with none', { tags: ['standard'] }, async () => {
     const plan = await planOf(routes(json([releaseJson('v1.2.0', [assetJson('ctrando-1.2.0-cp313-cp313-win_amd64.whl', BYTES)])])));
     expect(plan.wheelState).toBe('none');
     expect(plan.wheel).toBeUndefined();
   });
 
-  test('when GitHub cannot be read for releases the plan still comes back and says it does not know', async () => {
+  test('S3 when GitHub cannot be read for releases the plan still comes back and says it does not know', { tags: ['standard'] }, async () => {
     const limited = () => new Response('', { status: 403, headers: { 'x-ratelimit-remaining': '0', 'x-ratelimit-reset': String(Math.floor(NOW / 1000) + 600) } });
     const plan = await planOf(routes(limited));
     expect(plan.wheelState).toBe('unknown');
     expect(plan.pin.sha).toBe(HEAD);
   });
 
-  test('an engine that cannot list its tags leaves the plan with unknown, not an error', async () => {
+  test('S3 an engine that cannot list its tags leaves the plan with unknown, not an error', { tags: ['standard'] }, async () => {
     state.broken = true;
     const plan = await planOf(routes(json([releaseJson('v1.2.0', [assetJson('ctrando-1.2.0-cp312-cp312-win_amd64.whl', BYTES)])])));
     expect(plan.wheelState).toBe('unknown');

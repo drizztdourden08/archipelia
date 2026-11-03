@@ -3,7 +3,7 @@ import { describe, expect, test } from 'vitest';
 import { parseGameName } from '../src/official/game-name.mjs';
 import { parseLooseGames } from '../src/official/loose-worlds.mjs';
 
-describe('parseGameName', () => {
+describe('K1 parseGameName', { tags: ['critical'] }, () => {
   test('reads a plain class attribute', () => {
     expect(parseGameName(['class TimespinnerWorld(World):\n    game = "Timespinner"\n'])).toBe('Timespinner');
   });
@@ -27,7 +27,7 @@ describe('parseGameName', () => {
   });
 });
 
-describe('parseLooseGames', () => {
+describe('K1 parseLooseGames', { tags: ['critical'] }, () => {
   test('reads the set of worlds AP keeps as folders', () => {
     const setup = 'non_apworlds: set[str] = {\n    "A Link to the Past",\n    "Raft",\n}\n';
     expect([...(parseLooseGames(setup) ?? [])]).toEqual(['A Link to the Past', 'Raft']);

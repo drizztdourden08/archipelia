@@ -1,6 +1,6 @@
 {
   "name": "@drizztdourden08/archipelia-lobby-protocol",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "The Archipelia lobby protocol: message types, JSON Schemas, codec, version rules, fixtures, a fake client and a fake server.",
   "type": "module",
   "license": "UNLICENSED",
@@ -51,7 +51,7 @@
   },
   "devDependencies": {
     "@archipelia/package-build": "workspace:*",
-    "@drizztdourden08/brock-lint-config": "^0.115.3",
+    "@drizztdourden08/brock-lint-config": "^0.116.0",
     "@types/node": "catalog:",
     "eslint": "catalog:",
     "typescript": "catalog:"

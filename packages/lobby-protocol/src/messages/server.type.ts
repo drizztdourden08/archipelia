@@ -13,6 +13,8 @@ import type {
 
 type EngineRef = { ap: string };
 
+type HeldSeat = { name: string; free: boolean };
+
 type LobbyInfoReply = {
   type: 'lobby.info.reply';
   re?: number;
@@ -27,6 +29,7 @@ type LobbyInfoReply = {
     allowUnlisted: boolean;
     worlds: { game: string; worldVersion: string }[];
     requires: { capabilities: string[] };
+    seats?: HeldSeat[];
   };
   limits: Limits;
 };
@@ -82,6 +85,7 @@ type LobbyState = {
   phase: LobbyPhase;
   engine: EngineRef;
   members: StateMember[];
+  seats?: HeldSeat[];
   others?: { approved: number; pending: number };
 };
 
@@ -113,6 +117,7 @@ export type {
   AdmissionMessage,
   EngineRef,
   ErrorMessage,
+  HeldSeat,
   LobbyFailed,
   LobbyInfoReply,
   LobbyProgress,

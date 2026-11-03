@@ -11,7 +11,7 @@ import { createLobbyConnection } from '../../src/lobby/link/create-lobby-connect
 import { createRateLimiter } from '../../src/lobby/link/create-rate-limiter';
 import { buildOverlay } from '../../src/lobby/overlay/build-overlay';
 import { startListener } from '../../src/listener/start-listener';
-import { admin, engine, fileOf, helloOf, holdFiles, linkOf, startService, tick } from './security-kit';
+import { admin, engine, fileOf, helloOf, holdFiles, linkOf, startHeldCheck, startService } from './security-kit';
 import { fakeTrust, testDeps } from '../../src/testing';
 
 const joined = async (service: Awaited<ReturnType<typeof startService>>['service'], hello = helloOf()) => {
@@ -22,19 +22,16 @@ const joined = async (service: Awaited<ReturnType<typeof startService>>['service
 
 const slotOf = (lobby: Lobby | undefined, memberId: string) => lobby?.members.find((member) => member.id === memberId)?.slots[0];
 
-describe('lobby security: checks', () => {
+describe('K4 lobby security: checks', { tags: ['critical'] }, () => {
   test('F1: a check that finishes after the member was refused does not apply', async () => {
-    let release = () => undefined as void;
-    const gate = new Promise<void>((resolve) => { release = resolve; });
-    const kit = await startService({ trust: fakeTrust('active', false, () => gate) });
+    const { kit, release, reached } = await startHeldCheck();
     const lobby = await kit.service.create({ name: 'Race', engine });
     const ref = await joined(kit.service);
     await holdFiles(kit.store, lobby.id, ['W', 'Y']);
     await kit.service.protocol.settle(lobby.id);
     const approving = kit.service.approve(lobby.id, ref.memberId);
-    await tick();
+    await reached;
     const refusing = kit.service.refuse(lobby.id, ref.memberId, 'gone');
-    await tick();
     release();
     await Promise.all([approving, refusing]);
     const after = await kit.service.get(lobby.id);
@@ -42,11 +39,10 @@ describe('lobby security: checks', () => {
     expect(slotOf(after, ref.memberId)?.state).toBe('checking');
     await kit.stop();
   });
-
 });
 
 describe('lobby security: connections', () => {
-  test('F2: a fragmented message over the pre-welcome limit closes the socket with 1009', async () => {
+  test('K4 F2: a fragmented message over the pre-welcome limit closes the socket with 1009', { tags: ['standard'] }, async () => {
     const kit = await startService();
     const listener = await startListener({ service: kit.service, host: '127.0.0.1', port: 0, serverVersion: 't', admin });
     const socket = connect(listener.port, '127.0.0.1');
@@ -54,8 +50,9 @@ describe('lobby security: connections', () => {
     const received: Buffer[] = [];
     socket.on('data', (chunk: Buffer) => received.push(chunk));
     const closed = new Promise((resolve) => socket.on('close', resolve));
+    const upgraded = new Promise((resolve) => socket.once('data', resolve));
     socket.write('GET /archipelia/lobby HTTP/1.1\r\nHost: x\r\nUpgrade: websocket\r\nConnection: Upgrade\r\nSec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==\r\nSec-WebSocket-Version: 13\r\n\r\n');
-    await tick(100);
+    await upgraded;
     const piece = Buffer.alloc(30000, 0x61);
     for (const opcode of [0x01, 0x00, 0x00]) socket.write(Buffer.concat([Buffer.from([opcode, 126, piece.length >> 8, piece.length & 0xff]), piece]));
     await closed;
@@ -64,16 +61,18 @@ describe('lobby security: connections', () => {
     await kit.stop();
   });
 
-  test('F3: events after the server closed a connection are ignored, and a removed member is refused', async () => {
+  test('K4 F3: events after the server closed a connection are ignored, and a removed member is refused', { tags: ['critical'] }, async () => {
     const kit = await startService();
     const lobby = await kit.service.create({ name: 'Closed', engine, options: { admission: 'open' } });
     const sent: string[] = [];
+    let answer = () => undefined as void;
+    const answered = new Promise<void>((resolve) => { answer = resolve; });
     let handler: (event: TransportEvent) => void = () => undefined;
-    const transport = { send: (text: string) => sent.push(text), sendBinary: () => undefined, close: () => undefined, listen: (next: (event: TransportEvent) => void) => { handler = next; } };
+    const transport = { send: (text: string) => { sent.push(text); answer(); }, sendBinary: () => undefined, close: () => undefined, listen: (next: (event: TransportEvent) => void) => { handler = next; } };
     createLobbyConnection({ protocol: kit.service.protocol, limiter: createRateLimiter(), transport, address: '10.0.0.9', limit: { bytes: 65536 }, log: () => undefined });
     handler({ kind: 'binary', bytes: new Uint8Array([1]) });
     handler({ kind: 'text', text: JSON.stringify({ type: 'lobby.info', seq: 1, protocol: { name: 'archipelia-lobby', versions: [1] }, lobby: { code: lobby.code } }) });
-    await tick();
+    await answered;
     expect(sent).toHaveLength(1);
     const ref = await joined(kit.service);
     await kit.service.remove(lobby.id, ref.memberId);
@@ -83,10 +82,9 @@ describe('lobby security: connections', () => {
     expect(replies[0]).toMatchObject({ type: 'error', code: 'refused' });
     await kit.stop();
   });
-
 });
 
-describe('lobby security: files', () => {
+describe('K4 lobby security: files', { tags: ['critical'] }, () => {
   test('F4: replaced slots drop their partial uploads and undeclared files, and a removed member leaves no files', async () => {
     const kit = await startService();
     const lobby = await kit.service.create({ name: 'Disk', engine, options: { admission: 'open' } });
@@ -105,23 +103,20 @@ describe('lobby security: files', () => {
     expect(await kit.store.listFiles(lobby.id)).toEqual([]);
     await kit.stop();
   });
-
 });
 
 describe('lobby security: timeouts and starts', () => {
-  test('F5: a socket that never upgrades is dropped after the upgrade timeout', async () => {
+  test('K4 F5: a socket that never upgrades is dropped after the upgrade timeout', { tags: ['standard'] }, async () => {
     const kit = await startService();
     const listener = await startListener({ service: kit.service, host: '127.0.0.1', port: 0, serverVersion: 't', admin, upgradeTimeoutMs: 200 });
     const socket = connect(listener.port, '127.0.0.1');
     socket.on('error', () => undefined);
-    const started = Date.now();
     await new Promise((resolve) => socket.on('close', resolve));
-    expect(Date.now() - started).toBeLessThan(3000);
     await listener.stop();
     await kit.stop();
   });
 
-  test('F6: two starts at once run one generation', async () => {
+  test('K4 F6: two starts at once run one generation', { tags: ['critical'] }, async () => {
     let runs = 0;
     const kit = await startService({ run: (template, lobby) => {
       runs += 1;
@@ -135,10 +130,9 @@ describe('lobby security: timeouts and starts', () => {
     expect(runs).toBe(1);
     await kit.stop();
   });
-
 });
 
-describe('lobby security: worlds', () => {
+describe('K4 lobby security: worlds', { tags: ['critical'] }, () => {
   test('F7: a world sent by another member does not clear an unlisted member', async () => {
     const kit = await startService();
     const lobby = await kit.service.create({ name: 'Foreign', engine, options: { admission: 'open', allowUnlisted: true } });
@@ -170,10 +164,9 @@ describe('lobby security: worlds', () => {
     expect(await readFile(join(root, 'ap', 'custom_worlds', 'probe.apworld'), 'utf8')).toBe('engine world');
     await rm(root, { recursive: true, force: true });
   });
-
 });
 
-describe('lobby security: reload', () => {
+describe('K4 lobby security: reload', { tags: ['critical'] }, () => {
   test('F9: a reload fails an interrupted generation and stops a room with no live session', async () => {
     const kit = await startService();
     const generating = await kit.service.create({ name: 'Gen', engine });

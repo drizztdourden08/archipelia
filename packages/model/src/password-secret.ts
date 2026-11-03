@@ -1,0 +1,4 @@
+/* @layer core @kind logic */
+const passwordSecret = (id: string) => `server-${id}-password`;
+
+export { passwordSecret };

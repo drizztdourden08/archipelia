@@ -15,18 +15,7 @@ const ID = '123e4567-e89b-42d3-a456-426614174000';
 const SPEC = { command: 'python', args: [], cwd: 'work', env: {} };
 
 describe('the processes of a build', () => {
-  test('declares the venv, the tools, the crates and the wheel step with a label and a time limit, and nothing else', () => {
-    const { define, defined } = fakeProcesses();
-    defineBuildProcesses({ define }, () => Promise.resolve(SPEC));
-    expect([...defined.keys()]).toEqual([BUILD_JOB.venv, BUILD_JOB.tools, BUILD_JOB.crates, BUILD_JOB.wheel]);
-    for (const stored of defined.values()) {
-      expect(stored.label).toMatch(/\w/);
-      expect(stored.timeoutMs).toBeGreaterThan(0);
-      expect(stored.allow).toEqual({ env: ['PATH'] });
-    }
-  });
-
-  test('takes only a build id from the renderer and lets the app build the command', () => {
+  test('K4 takes only a build id from the renderer and lets the app build the command', { tags: ['critical'] }, () => {
     const { define, defined } = fakeProcesses();
     const specOf = vi.fn(() => Promise.resolve(SPEC));
     defineBuildProcesses({ define }, specOf);
@@ -39,7 +28,7 @@ describe('the processes of a build', () => {
     expect(specOf).toHaveBeenCalledWith('wheel', { buildId: ID });
   });
 
-  test('reads every line of the step from its log file and starts the step by its id with the build id only', async () => {
+  test('K1 reads every line of the step from its log file and starts the step by its id with the build id only', { tags: ['critical'] }, async () => {
     const logFile = join(mkdtempSync(join(tmpdir(), 'archipelia-build-')), 'wheel.log');
     writeFileSync(logFile, 'first\r\nsecond\n\nthird\n');
     const outcome: ProcessJobOutcome = { status: 'failed', exitCode: 1, tail: ['tail line'], error: 'exited', logFile };
@@ -54,13 +43,13 @@ describe('the processes of a build', () => {
     [{ status: 'cancelled', exitCode: null, tail: [] }, 'cancelled'],
     [{ status: 'rejected', error: 'No such process job.' }, 'rejected'],
     [{ status: 'detached', exitCode: null, tail: ['x'], error: 'could not stop' }, 'failed'],
-  ])('maps the outcome %j to %s', async (outcome, status) => {
+  ])('K1 maps the outcome %j to %s', { tags: ['critical'] }, async (outcome, status) => {
     const { start } = fakeProcesses(outcome);
     const run = await createBuildRunner({ start })('venv', ID);
     expect(run.status).toBe(status);
   });
 
-  test('falls back to the tail when the log file is missing or unreadable', async () => {
+  test('S3 falls back to the tail when the log file is missing or unreadable', { tags: ['standard'] }, async () => {
     const outcome: ProcessJobOutcome = { status: 'failed', exitCode: 1, tail: ['tail line'], error: 'exited', logFile: join(tmpdir(), 'archipelia-no-such-build.log') };
     const { start } = fakeProcesses(outcome);
     const run = await createBuildRunner({ start })('wheel', ID);

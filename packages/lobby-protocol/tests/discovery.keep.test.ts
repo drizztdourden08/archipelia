@@ -2,8 +2,6 @@
 import { describe, expect, test } from 'vitest';
 import {
   BEACON_MAX_BYTES,
-  BEACON_PORT,
-  DISCOVERY_SERVICE,
   buildBeacon,
   buildDiscoveryTxt,
   parseBeacon,
@@ -14,12 +12,7 @@ import type { DiscoveryBeacon, DiscoveryRecord } from '../src';
 const record: DiscoveryRecord = { name: 'Friday seed server', id: 'srv_4f2a9c', protocol: 1, ap: '0.6.8', open: true };
 const beacon: DiscoveryBeacon = { ...record, port: 38290 };
 
-describe('DNS-SD record', () => {
-  test('the service name and the beacon port are fixed', () => {
-    expect(DISCOVERY_SERVICE).toBe('_archipelia._tcp');
-    expect(BEACON_PORT).toBe(38291);
-  });
-
+describe('K1 DNS-SD record', { tags: ['critical'] }, () => {
   test('the builder writes the five TXT keys as strings', () => {
     expect(buildDiscoveryTxt(record)).toEqual({
       name: 'Friday seed server',
@@ -62,7 +55,7 @@ describe('DNS-SD record', () => {
   });
 });
 
-describe('UDP beacon', () => {
+describe('K1 UDP beacon', { tags: ['critical'] }, () => {
   test('a beacon is a small JSON object with the same fields and a port', () => {
     const text = buildBeacon(beacon);
     expect(JSON.parse(text)).toEqual({

@@ -2,7 +2,7 @@
 import { describe, expect, test } from 'vitest';
 import { matchStage } from '../src';
 
-describe('matchStage', () => {
+describe('K1 matchStage', { tags: ['critical'] }, () => {
   test.each([
     ['Generating for 2 players, 11 Seed 123 with plando: bosses', { stage: 'rolling' }],
     ['Creating MultiWorld.', { stage: 'worlds' }],

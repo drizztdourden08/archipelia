@@ -38,7 +38,7 @@ const setup = ({ router, upnp, publicAddress, automation = false, onChange }: Se
   return { options, net, requests: fakeRouter.requests, upnp: fakeUpnp };
 };
 
-describe('mapping over PCP and NAT-PMP', () => {
+describe('K1 mapping over PCP and NAT-PMP', { tags: ['critical'] }, () => {
   test('maps over PCP, reports the external address and unmaps on stop', async () => {
     const { options, requests, upnp } = setup({ router: { externalIp: '203.0.113.9', pcp: true, natpmp: true } });
     const result = await mapPort(options);
@@ -63,7 +63,7 @@ describe('mapping over PCP and NAT-PMP', () => {
   });
 });
 
-describe('mapping over UPnP', () => {
+describe('K1 mapping over UPnP', { tags: ['critical'] }, () => {
   test('falls back to UPnP and removes the mapping on stop', async () => {
     const { options, upnp } = setup({ upnp: { publicIp: '203.0.113.9' } });
     const result = await mapPort(options);
@@ -87,7 +87,7 @@ describe('mapping over UPnP', () => {
   });
 });
 
-describe('renewal', () => {
+describe('K1 renewal', { tags: ['critical'] }, () => {
   test('renews at half the lifetime, reports a lost mapping, recovers and unmaps on stop', async () => {
     vi.useFakeTimers();
     let answering = true;
@@ -120,7 +120,7 @@ describe('renewal', () => {
   });
 });
 
-describe('failure', () => {
+describe('K1 failure', { tags: ['critical'] }, () => {
   test('says no router answered when nothing responds', async () => {
     const { options } = setup({ upnp: { silent: true } });
     const result = await mapPort(options);
@@ -152,7 +152,7 @@ describe('failure', () => {
   });
 });
 
-describe('carrier-grade NAT', () => {
+describe('K1 carrier-grade NAT', { tags: ['critical'] }, () => {
   test('detects a shared-range address, unmaps and explains the options', async () => {
     const { options, requests } = setup({ router: { externalIp: '100.72.3.4', natpmp: true } });
     const result = await mapPort(options);

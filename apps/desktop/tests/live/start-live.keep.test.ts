@@ -7,7 +7,7 @@ const { kitOn } = liveSuite();
 const hostedSlots = (lobby: { members: { kind: string; slots: { name: string; origin?: string }[] }[] }) =>
   lobby.members.filter((member) => member.kind === 'host').flatMap((member) => member.slots.map((slot) => [slot.name, slot.origin]));
 
-describe('start by session id', () => {
+describe('K4 start by session id', { tags: ['standard'] }, () => {
   test('loads the saved session, applies the allowed overrides, and records what changed on the lobby and the tab', async () => {
     const { live, saved, rig: on } = await kitOn();
     const { tab, lobby } = await live.start('t1', { server: { hintCost: 5 }, players: [playerOf(1, 'Ana'), playerOf(2, 'Bob')] });
@@ -52,7 +52,7 @@ describe('start by session id', () => {
 
 });
 
-describe('start by session id, twice', () => {
+describe('S3 start by session id, twice', { tags: ['standard'] }, () => {
   test('returns the tab the session already has, never a second one, and keeps its overrides when none are given', async () => {
     const { live, rig: on } = await kitOn();
     const first = await live.start('t1', { server: { hintCost: 5 } });
@@ -79,7 +79,7 @@ describe('start by session id, twice', () => {
   });
 });
 
-describe('the tabs in the store', () => {
+describe('K3 the tabs in the store', { tags: ['standard'] }, () => {
   test('survive a reload of the main process, and tell the renderer on every change', async () => {
     const { live, store, files, events } = await kitOn();
     const { tab } = await live.start('t1');

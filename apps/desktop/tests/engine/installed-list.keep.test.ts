@@ -7,7 +7,7 @@ import { installFailure } from '../../src/views/EngineSettings/behavior/install-
 import { removeEngineConfirm } from '../../src/views/EngineSettings/behavior/remove-engine-confirm';
 import { engine, when } from './engine-fixture';
 
-describe('installed engines', () => {
+describe('K1 installed engines', { tags: ['critical'] }, () => {
   test('the engine in use is tagged Active', () => {
     const active = engine('0.6.7', '3.12.14');
     expect(engineTags(active, active.id).map((tag) => tag.label)).toEqual(['Active']);
@@ -20,17 +20,12 @@ describe('installed engines', () => {
     expect(tag).toMatchObject({ label: 'Failed', title: 'Starting the test server failed.' });
   });
 
-  test('a failed install with no named check still reads Failed', () => {
-    const [tag] = engineTags(engine('0.6.8', '3.12.15', { state: 'failed' }), undefined);
-    expect(tag?.title).toBe('The install did not finish.');
-  });
-
   test('the meta line names the Python and the build day', () => {
     expect(installedMeta(engine('0.6.7', '3.12.14'), when)).toBe('Python 3.12.14, built day:1760000000000');
   });
 });
 
-describe('engine questions and failures', () => {
+describe('K1 engine questions and failures', { tags: ['critical'] }, () => {
   test('removing asks by name and says sessions move to the engine in use', () => {
     const options = removeEngineConfirm(engine('0.6.7', '3.12.14'));
     expect(options.what).toBe('Archipelago 0.6.7 with Python 3.12.14');

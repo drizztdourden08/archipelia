@@ -40,7 +40,7 @@ const ask = (enricher: ReturnType<typeof setup>['enricher']) => enricher.enrich(
 const gone = () => new Response('', { status: 404 });
 
 describe('parseGithubHome', () => {
-  test('accepts a repo page and refuses everything else', () => {
+  test('K1 accepts a repo page and refuses everything else', { tags: ['critical'] }, () => {
     expect(parseGithubHome('https://github.com/a/b')).toEqual({ owner: 'a', repo: 'b' });
     expect(parseGithubHome('https://github.com/a/b.git/')).toEqual({ owner: 'a', repo: 'b' });
     expect(parseGithubHome('https://github.com/a/b/tree/main/docs')).toEqual({ owner: 'a', repo: 'b' });
@@ -57,14 +57,14 @@ describe('parseGithubHome', () => {
 describe('a community world on GitHub', () => {
   const ok = { [README_URL]: () => textResponse(README, { etag: '"v1"' }), [ART_URL]: () => imageResponse() };
 
-  test('keeps the README as markdown and the preview image as a data uri', async () => {
+  test('S2 keeps the README as markdown and the preview image as a data uri', { tags: ['standard'] }, async () => {
     const found = await ask(setup(ok).enricher);
     expect(found?.markdown).toBe(README.trim());
     expect(found?.origin).toBe('github');
     expect(found?.art?.startsWith('data:image/png;base64,')).toBe(true);
   });
 
-  test('falls back from the default branch to main and then master', async () => {
+  test('S2 falls back from the default branch to main and then master', { tags: ['standard'] }, async () => {
     const t = setup({
       [README_URL]: gone, [`${RAW}/HEAD/readme.md`]: gone, [`${RAW}/main/README.md`]: gone, [`${RAW}/main/readme.md`]: gone,
       [`${RAW}/master/README.md`]: () => textResponse(README), [ART_URL]: gone,
@@ -74,7 +74,7 @@ describe('a community world on GitHub', () => {
     expect(found?.art).toBeUndefined();
   });
 
-  test('a fresh cache answers without any request', async () => {
+  test('S2 a fresh cache answers without any request', { tags: ['standard'] }, async () => {
     const t = setup(ok);
     await ask(t.enricher);
     const before = t.calls.length;
@@ -84,7 +84,7 @@ describe('a community world on GitHub', () => {
     expect([...t.cache.store.keys()]).toEqual(['enrich/ts_world.json']);
   });
 
-  test('after the TTL it asks again with the ETag and keeps the cache on a 304', async () => {
+  test('S2 after the TTL it asks again with the ETag and keeps the cache on a 304', { tags: ['standard'] }, async () => {
     let status = 200;
     const t = setup({
       [README_URL]: (init) => (status === 304 && (init?.headers as Record<string, string>)['If-None-Match'] === '"v1"'
@@ -109,7 +109,7 @@ describe('a community world on GitHub', () => {
 });
 
 describe('a community world on GitHub, offline and edge cases', () => {
-  test('offline with nothing cached shows no enrichment and does not retry at once', async () => {
+  test('S3 offline with nothing cached shows no enrichment and does not retry at once', { tags: ['standard'] }, async () => {
     const t = setup({});
     expect(await ask(t.enricher)).toBeUndefined();
     const count = t.calls.length;
@@ -117,7 +117,7 @@ describe('a community world on GitHub, offline and edge cases', () => {
     expect(t.calls.length).toBe(count);
   });
 
-  test('offline after the TTL still shows what was cached', async () => {
+  test('S3 offline after the TTL still shows what was cached', { tags: ['standard'] }, async () => {
     let online = true;
     const t = setup({
       [README_URL]: () => {
@@ -132,7 +132,7 @@ describe('a community world on GitHub, offline and edge cases', () => {
     expect((await ask(t.enricher))?.markdown).toContain('community world');
   });
 
-  test('a repo with no README is remembered for a day, not asked again', async () => {
+  test('S3 a repo with no README is remembered for a day, not asked again', { tags: ['standard'] }, async () => {
     const t = setup({
       [README_URL]: gone, [`${RAW}/HEAD/readme.md`]: gone, [`${RAW}/main/README.md`]: gone, [`${RAW}/main/readme.md`]: gone,
       [`${RAW}/master/README.md`]: gone, [`${RAW}/master/readme.md`]: gone, [ART_URL]: gone,
@@ -144,14 +144,14 @@ describe('a community world on GitHub, offline and edge cases', () => {
     expect(t.calls.length).toBe(count);
   });
 
-  test('art that is not a small image is ignored', async () => {
+  test('S3 art that is not a small image is ignored', { tags: ['standard'] }, async () => {
     const svg = setup({ [README_URL]: () => textResponse(README), [ART_URL]: () => imageResponse(64, 'image/svg+xml') });
     expect((await ask(svg.enricher))?.art).toBeUndefined();
     const huge = setup({ [README_URL]: () => textResponse(README), [ART_URL]: () => imageResponse(900 * 1024) });
     expect((await ask(huge.enricher))?.art).toBeUndefined();
   });
 
-  test('a world whose home is not a GitHub repo is never fetched', async () => {
+  test('K4 a world whose home is not a GitHub repo is never fetched', { tags: ['critical'] }, async () => {
     const net = fakeFetch({});
     const enricher = createEnricher({
       cache: cacheFiles(), engineDir: () => Promise.resolve('engine'), fetch: net.fetchFn,

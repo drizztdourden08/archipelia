@@ -31,7 +31,7 @@ afterEach(async () => {
 
 const files = () => createNodeDomains(dir).domain(DOMAIN.server);
 
-describe('the server certificate', () => {
+describe('K4 the server certificate', { tags: ['standard'] }, () => {
   test('is made on the first start, kept on the next and pinned by its SHA-256 fingerprint', async () => {
     const first = await resolveTls(AUTO, files());
     expect(first).toMatchObject({ source: 'generated' });
@@ -77,7 +77,7 @@ describe('the server certificate', () => {
   });
 });
 
-describe('the started server with a self-signed certificate', () => {
+describe('S2 the started server with a self-signed certificate', { tags: ['standard'] }, () => {
   test('answers a TLS handshake with the fingerprint it printed and upgrades a websocket', async () => {
     const port = await freePort();
     await writeConfig(dir, `port = ${port}\nnetwork = "off"\nloopback = true\npublicLookup = false\n[engine]\nauto = false\n`);
@@ -91,5 +91,5 @@ describe('the started server with a self-signed certificate', () => {
     } finally {
       await server.stop();
     }
-  }, 60000);
+  });
 });

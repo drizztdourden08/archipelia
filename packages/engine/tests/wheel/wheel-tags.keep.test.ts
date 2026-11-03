@@ -7,7 +7,7 @@ import { wheelFit } from '../../src/wheel/wheel-fit';
 import { runtimeOf } from '../install/install-fakes';
 import { LINUX_TAGS, WINDOWS_TAGS } from './wheel.fixtures';
 
-describe('reading a wheel file name', () => {
+describe('K1 reading a wheel file name', { tags: ['critical'] }, () => {
   test('splits the name and expands every tag combination', () => {
     expect(parseWheelName('ctrando-1.2.0-cp312-cp312-win_amd64.whl')).toEqual({ distribution: 'ctrando', version: '1.2.0', triples: ['cp312-cp312-win_amd64'] });
     expect(parseWheelName('pkg-1.0-1-py2.py3-none-any.whl')?.triples).toEqual(['py2-none-any', 'py3-none-any']);
@@ -21,7 +21,7 @@ describe('reading a wheel file name', () => {
   });
 });
 
-describe('matching a wheel to the engine tags', () => {
+describe('K1 matching a wheel to the engine tags', { tags: ['critical'] }, () => {
   test('an exact build for this Python and platform fits and ranks first', () => {
     expect(wheelFit('ctrando-1.2.0-cp312-cp312-win_amd64.whl', WINDOWS_TAGS)).toEqual({ rank: 0, kind: 'exact' });
   });
@@ -52,7 +52,7 @@ describe('matching a wheel to the engine tags', () => {
 
 const answering = (code: number, lines: string[]) => vi.fn((_runtime: unknown, _run: PythonRun) => Promise.resolve({ code, lines }));
 
-describe('asking the engine Python for its tags', () => {
+describe('K1 asking the engine Python for its tags', { tags: ['critical'] }, () => {
   test('runs the engine Python isolated and reads the last line as the tag list', async () => {
     const run = answering(0, ['', JSON.stringify(WINDOWS_TAGS)]);
     expect(await engineTags(runtimeOf('old'), { run })).toEqual(WINDOWS_TAGS);

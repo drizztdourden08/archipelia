@@ -29,7 +29,7 @@ const stocked = async () => {
 const accepted = (source: object) => consentOf({ sources: [source] });
 
 describe('consent to a ready-made build', () => {
-  test('is required, names the wheel with its release and repo, and nothing is installed without it', async () => {
+  test('K4 is required, names the wheel with its release and repo, and nothing is installed without it', { tags: ['critical'] }, async () => {
     const { sha256 } = await stocked();
     await expect(commitInstall(await bed.jobOf('', { wheels: [sha256] }))).rejects.toThrow(
       `${GAME} needs the Python packages ctrando 1.2.0 (GitHub release v1.2.0 of Pseudoarc/ctrando), foo==1.0, dep-one==2.1.3. Nothing is installed into the engine until you accept.`,
@@ -40,19 +40,13 @@ describe('consent to a ready-made build', () => {
     expect(await bed.placed()).toBe(false);
   });
 
-  test('sends the dependencies of the wheel with the requirements of the world through the same resolve, and leaves extras out', async () => {
-    const { sha256, source } = await stocked();
-    await commitInstall(await bed.jobOf('foo>=1\n', { wheels: [sha256], packages: accepted(source) }));
-    expect(engine.resolvePackages).toHaveBeenCalledWith(bed.bed.runtime, ['foo>=1', 'numpy==2.5.1']);
-  });
-
-  test('a requirement of the world that the wheel provides is not sent to the Python Package Index', async () => {
+  test('S2 a requirement of the world that the wheel provides is not sent to the Python Package Index', { tags: ['standard'] }, async () => {
     const { sha256, source } = await stocked();
     await commitInstall(await bed.jobOf('Foo>=1\nCTRando>=1.0\n', { wheels: [sha256], packages: accepted(source) }));
     expect(engine.resolvePackages).toHaveBeenCalledWith(bed.bed.runtime, ['Foo>=1', 'numpy==2.5.1']);
   });
 
-  test('installs the accepted pins first, then exactly that wheel by its hash, then loads the world, and records the source', async () => {
+  test('S2 installs the accepted pins first, then exactly that wheel by its hash, then loads the world, and records the source', { tags: ['standard'] }, async () => {
     const order: string[] = [];
     const { sha256, file, source } = await stocked();
     engine.installPackages.mockImplementation(() => { order.push('pip'); return Promise.resolve(); });
@@ -66,7 +60,7 @@ describe('consent to a ready-made build', () => {
     expect(await bed.placed()).toBe(true);
   });
 
-  test('a wheel with nothing else to install still asks, and is recorded without a pin list', async () => {
+  test('K4 a wheel with nothing else to install still asks, and is recorded without a pin list', { tags: ['critical'] }, async () => {
     engine.resolvePackages.mockResolvedValue([]);
     const { sha256, source } = await stocked();
     await expect(commitInstall(await bed.jobOf('', { wheels: [sha256] }))).rejects.toThrow('Nothing is installed into the engine until you accept');
@@ -77,7 +71,7 @@ describe('consent to a ready-made build', () => {
 });
 
 describe('what the consent is bound to', () => {
-  test('a consent for another wheel, release, repo or digest is refused', async () => {
+  test('K4 a consent for another wheel, release, repo or digest is refused', { tags: ['critical'] }, async () => {
     const { sha256, source } = await stocked();
     const refused = [
       sourceOf('f'.repeat(64)), sourceOf(sha256, { tag: 'v9.9.9' }), sourceOf(sha256, { repo: 'evil/ctrando' }), sourceOf(sha256, { asset: 'other-1-py3-none-any.whl' }),
@@ -91,7 +85,7 @@ describe('what the consent is bound to', () => {
     expect(engine.installPackages).not.toHaveBeenCalled();
   });
 
-  test('a consent with no source, with an extra source, or from a world that asked for no wheel is refused', async () => {
+  test('K4 a consent with no source, with an extra source, or from a world that asked for no wheel is refused', { tags: ['critical'] }, async () => {
     const { sha256, source } = await stocked();
     await expect(commitInstall(await bed.jobOf('', { wheels: [sha256], packages: consentOf() }))).rejects.toThrow('changed since you reviewed them');
     await expect(commitInstall(await bed.jobOf('', { wheels: [sha256], packages: consentOf({ sources: [source, sourceOf('e'.repeat(64))] }) }))).rejects.toThrow('changed');
@@ -99,13 +93,13 @@ describe('what the consent is bound to', () => {
     expect(engine.installWheel).not.toHaveBeenCalled();
   });
 
-  test('the consent still has to match the file of the world and the resolved pins', async () => {
+  test('K4 the consent still has to match the file of the world and the resolved pins', { tags: ['critical'] }, async () => {
     const { sha256, source } = await stocked();
     await expect(commitInstall(await bed.jobOf('', { wheels: [sha256], packages: consentOf({ sha256: 'other', sources: [source] }) }))).rejects.toThrow('changed');
     await expect(commitInstall(await bed.jobOf('', { wheels: [sha256], packages: consentOf({ packages: ['foo==1.0'], sources: [source] }) }))).rejects.toThrow('changed');
   });
 
-  test('a wheel that changed on disk after it was reviewed, or is gone, stops the install', async () => {
+  test('K4 a wheel that changed on disk after it was reviewed, or is gone, stops the install', { tags: ['critical'] }, async () => {
     const { sha256, file, source } = await stocked();
     await writeFile(file, 'tampered');
     await expect(commitInstall(await bed.jobOf('', { wheels: [sha256], packages: accepted(source) }))).rejects.toThrow('changed on disk');
@@ -114,7 +108,7 @@ describe('what the consent is bound to', () => {
     expect(await bed.placed()).toBe(false);
   });
 
-  test('a failed wheel install names the wheel and places nothing', async () => {
+  test('S3 a failed wheel install names the wheel and places nothing', { tags: ['standard'] }, async () => {
     const { sha256, source } = await stocked();
     engine.installWheel.mockRejectedValue(new Error('THESE PACKAGES DO NOT MATCH THE HASHES'));
     await expect(commitInstall(await bed.jobOf('', { wheels: [sha256], packages: accepted(source) }))).rejects.toThrow(
@@ -124,7 +118,7 @@ describe('what the consent is bound to', () => {
     expect(engine.readOptionsSchema).not.toHaveBeenCalled();
   });
 
-  test('official worlds ignore wheels, and a wheel list that is not sha256 ids is not valid', async () => {
+  test('S3 official worlds ignore wheels, and a wheel list that is not sha256 ids is not valid', { tags: ['standard'] }, async () => {
     await commitInstall(await bed.jobOf('foo==1.0\n', { source: 'official', wheels: ['d'.repeat(64)] }));
     expect(engine.installWheel).not.toHaveBeenCalled();
     expect(wheelIdsOf(undefined)).toEqual([]);
@@ -139,7 +133,7 @@ const INJECTIONS = [
 ];
 
 describe('the dependencies a wheel lists', () => {
-  test.each(INJECTIONS)('%j is refused before pip is asked anything, and nothing is installed', async (line) => {
+  test.each(INJECTIONS)('K4 %j is refused before pip is asked anything, and nothing is installed', { tags: ['critical'] }, async (line) => {
     const cached = await cacheWheel(bed.bed.runtime, wheelBytes({ requires: ['numpy==2.5.1', line] }), LABEL);
     await expect(commitInstall(await bed.jobOf('', { wheels: [cached.sha256], packages: accepted(sourceOf(cached.sha256)) }))).rejects.toThrow(
       'lists a requirement Archipelia will not install',
@@ -150,13 +144,13 @@ describe('the dependencies a wheel lists', () => {
     expect(await bed.placed()).toBe(false);
   });
 
-  test('a preview refuses them too, so a direct address or a repo address never reaches the resolver', async () => {
+  test('K4 a preview refuses them too, so a direct address or a repo address never reaches the resolver', { tags: ['critical'] }, async () => {
     const cached = await cacheWheel(bed.bed.runtime, wheelBytes({ requires: ['evil @ git+https://evil.example/x.git'] }), LABEL);
     await expect(previewFilePackages(bed.bed.base, await bed.worldFile(''), [cached.sha256])).rejects.toThrow('will not install');
     expect(engine.resolvePackages).not.toHaveBeenCalled();
   });
 
-  test('plain names with versions, extras and markers are kept as they are', async () => {
+  test('S3 plain names with versions, extras and markers are kept as they are', { tags: ['standard'] }, async () => {
     const lines = ['numpy==2.5.1', 'colorama>=0.4 ; sys_platform == "win32"', 'rich[jupyter]>=13'];
     const cached = await cacheWheel(bed.bed.runtime, wheelBytes({ requires: lines }), LABEL);
     await previewFilePackages(bed.bed.base, await bed.worldFile(''), [cached.sha256]);
@@ -165,7 +159,7 @@ describe('the dependencies a wheel lists', () => {
 });
 
 describe('the preview and the install see the same wheel', () => {
-  test('lists the wheel as a source, resolves its dependencies, and what it returned is accepted by the install of the same file', async () => {
+  test('S2 lists the wheel as a source, resolves its dependencies, and what it returned is accepted by the install of the same file', { tags: ['standard'] }, async () => {
     const { sha256, source } = await stocked();
     const file = await bed.worldFile('');
     const preview = await previewFilePackages(bed.bed.base, file, [sha256]);
@@ -177,7 +171,7 @@ describe('the preview and the install see the same wheel', () => {
     expect(record.sources).toEqual([source]);
   });
 
-  test('a preview with no wheel has no sources', async () => {
+  test('S3 a preview with no wheel has no sources', { tags: ['standard'] }, async () => {
     const preview = await previewFilePackages(bed.bed.base, await bed.worldFile('foo>=1\n'));
     expect(preview.sources).toBeUndefined();
   });

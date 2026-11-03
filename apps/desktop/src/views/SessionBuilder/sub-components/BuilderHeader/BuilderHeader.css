@@ -1,0 +1,9 @@
+/* @layer renderer-app @kind style */
+.builder-header__actions {
+  margin-inline-start: auto;
+}
+
+.builder-header__reason {
+  margin-inline-start: auto;
+  text-align: end;
+}

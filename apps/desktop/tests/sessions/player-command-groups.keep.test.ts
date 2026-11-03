@@ -2,7 +2,7 @@
 import { describe, expect, test, vi } from 'vitest';
 import { playerCommandGroups } from '../../src/views/SessionDashboard/behavior/player-command-groups';
 
-describe('player command groups', () => {
+describe('K1 player command groups', { tags: ['critical'] }, () => {
   test('each player gets Release and Collect, which ask before they send', () => {
     const confirm = vi.fn();
     const groups = playerCommandGroups(['Ana', 'Bo'], confirm, false);

@@ -44,9 +44,12 @@ const APP_TREE = [
       'a player of a live room': null,
       'a hint in a live room': null,
       'a saved session': null,
+      'a seat of a session lobby': null,
+      'the seats of a session lobby': null,
     },
   },
   { at: ['layout', 'window chrome'], answers: { 'the bar of a hosted room': null } },
+  { at: ['layout'], answers: { 'the stage of a session lobby': null } },
   { at: ['something over the page'], answers: { 'a way to pick where a missing package comes from': null } },
 ] as const satisfies AppTree;
 

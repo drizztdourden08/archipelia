@@ -32,7 +32,7 @@ const site = { owner: 'Pseudoarc', repo: 'ctrando', sha: COMMIT };
 const signal = new AbortController().signal;
 
 describe('downloading the source archive', () => {
-  test('takes the archive of the pinned commit from codeload, and hashes the bytes it received', async () => {
+  test('K4 takes the archive of the pinned commit from codeload, and hashes the bytes it received', { tags: ['critical'] }, async () => {
     const bytes = archiveOf(PROJECT_FILES);
     const { net, seen } = routedFetch({ [SOURCE_URL]: () => new Response(bytes) });
     const dir = await fresh('download');
@@ -42,13 +42,13 @@ describe('downloading the source archive', () => {
     expect(new Uint8Array(await readFile(archive.file))).toEqual(bytes);
   });
 
-  test('never follows a redirect, so the archive can only come from codeload', async () => {
+  test('K4 never follows a redirect, so the archive can only come from codeload', { tags: ['critical'] }, async () => {
     const { net, seen } = routedFetch({ [SOURCE_URL]: () => new Response(null, { status: 302, headers: { location: 'https://evil.example/x.zip' } }) });
     await expect(downloadArchive(site, net, { dir: await fresh('redirect'), signal })).rejects.toThrow('GitHub answered 302');
     expect(seen).toEqual([SOURCE_URL]);
   });
 
-  test('refuses an answer that is not a success, and an archive that announces more than it takes', async () => {
+  test('K4 refuses an answer that is not a success, and an archive that announces more than it takes', { tags: ['critical'] }, async () => {
     const missing = routedFetch({});
     await expect(downloadArchive(site, missing.net, { dir: await fresh('missing'), signal })).rejects.toThrow('GitHub answered 404');
     const huge = routedFetch({ [SOURCE_URL]: () => new Response('x', { headers: { 'content-length': String(900 * 1024 * 1024) } }) });
@@ -57,7 +57,7 @@ describe('downloading the source archive', () => {
 });
 
 describe('unpacking the source archive', () => {
-  test('writes the project into the folder without the top folder of the archive', async () => {
+  test('K4 writes the project into the folder without the top folder of the archive', { tags: ['critical'] }, async () => {
     const dir = await fresh('unpack');
     const file = join(dir, 'source.zip');
     await writeFile(file, archiveOf(PROJECT_FILES));
@@ -78,7 +78,7 @@ describe('unpacking the source archive', () => {
     'an empty segment': { [`${TOP}//evil.txt`]: 'x' },
   };
 
-  test.each(Object.keys(hostile))('refuses an archive with %s, and writes nothing outside the folder', async (label) => {
+  test.each(Object.keys(hostile))('K4 refuses an archive with %s, and writes nothing outside the folder', { tags: ['critical'] }, async (label) => {
     const dir = await fresh(`hostile-${label.replace(/\W+/g, '-')}`);
     const file = join(dir, 'source.zip');
     await writeFile(file, rawArchive({ [`${TOP}/ok.txt`]: 'fine', ...hostile[label] }));
@@ -88,18 +88,18 @@ describe('unpacking the source archive', () => {
     expect(await stat(join(dir, 'src')).then(() => true, () => false)).toBe(false);
   });
 
-  test.each(['file.txt:stream', 'con.txt', 'AUX', 'odd.', 'odd '])('refuses the name %j on Windows only, where it means something else', (part) => {
+  test.each(['file.txt:stream', 'con.txt', 'AUX', 'odd.', 'odd '])('K4 refuses the name %j on Windows only, where it means something else', { tags: ['critical'] }, (part) => {
     expect(() => entryParts(`${TOP}/${part}`, 'win32')).toThrow('will not unpack');
     expect(entryParts(`${TOP}/${part}`, 'linux').parts).toEqual([TOP, part]);
     expect(entryParts(`${TOP}/${part}`, 'darwin').folder).toBe(false);
   });
 
-  test.each(['linux', 'darwin', 'win32'] as const)('refuses a path that climbs out on %s', (platform) => {
+  test.each(['linux', 'darwin', 'win32'] as const)('K4 refuses a path that climbs out on %s', { tags: ['critical'] }, (platform) => {
     expect(() => entryParts(`${TOP}/../evil.txt`, platform)).toThrow('will not unpack');
     expect(() => entryParts('/evil.txt', platform)).toThrow('will not unpack');
   });
 
-  test('refuses an archive that does not hold one project folder, or holds a path twice', async () => {
+  test('K4 refuses an archive that does not hold one project folder, or holds a path twice', { tags: ['critical'] }, async () => {
     const dir = await fresh('layout');
     const file = join(dir, 'source.zip');
     await writeFile(file, rawArchive({ [`${TOP}/ok.txt`]: 'a', 'other/ok.txt': 'b' }));
@@ -110,7 +110,7 @@ describe('unpacking the source archive', () => {
     await expect(unpack(file, join(dir, 'three'))).rejects.toThrow('same path twice');
   });
 
-  test('refuses an archive that is not a zip', async () => {
+  test('K4 refuses an archive that is not a zip', { tags: ['critical'] }, async () => {
     const dir = await fresh('garbage');
     const file = join(dir, 'source.zip');
     await writeFile(file, 'this is not a zip file at all, it has no central directory');

@@ -24,6 +24,7 @@ export default defineBrockConfig({
   targets: ['desktop', 'server'],
   server: { ports: [38290, 38281], osPackages: ['bubblewrap'], optionalAddons: ['ssh2', 'cpu-features'] },
   modules: ['secrets', 'updater'],
+  mainProcess: { forbid: ['@archipelia/design'] },
   workflows: {
     testEnv: { linuxPackages: ['bubblewrap'], userNamespaces: true },
     publish: { packages: ['packages/lobby-protocol', 'packages/client-kit'], registry: 'github' },

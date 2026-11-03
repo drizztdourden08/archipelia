@@ -22,7 +22,7 @@ const rowOf = (entry: CatalogEntry, installed: InstalledGame[] = []) => {
   return row;
 };
 
-describe('a world whose newest release is a pre-release', () => {
+describe('K1 a world whose newest release is a pre-release', { tags: ['critical'] }, () => {
   test('the card and the dialog carry the Pre-release tag, a stable world does not', () => {
     expect(cardPropsOf(rowOf(rotp(true)), handlers).prerelease).toBe(true);
     expect(cardPropsOf(rowOf(rotp(false)), handlers).prerelease).toBeUndefined();

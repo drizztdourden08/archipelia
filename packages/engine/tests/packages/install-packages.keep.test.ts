@@ -35,7 +35,7 @@ const fakePip = (result: { code: number; lines: string[] } = { code: 0, lines: [
   return { run, seen };
 };
 
-describe('installPackages', () => {
+describe('K4 installPackages', { tags: ['critical'] }, () => {
   test('installs exact pins with no dependencies, wheels only, held to the engine packages, in isolated mode from a temp folder', async () => {
     const { run, seen } = fakePip();
     await installPackages(runtimeOf('old'), ['foo==1.0', 'dep-one==2.1.3'], { run });
@@ -88,7 +88,7 @@ describe('installPackages', () => {
   });
 });
 
-describe('resolvePackages', () => {
+describe('K1 resolvePackages', { tags: ['critical'] }, () => {
   test('dry-runs the install with the same flags and constraints and returns the whole resolved set', async () => {
     const { run, seen } = fakePip();
     const resolved = await resolvePackages(runtimeOf('old'), ['Foo_Bar>=1'], { run });

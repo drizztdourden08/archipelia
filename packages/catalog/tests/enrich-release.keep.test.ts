@@ -46,7 +46,7 @@ const asked = (routes: Record<string, Route>, source: 'first-party' | 'index' = 
 const bytesOf = (bytes: Uint8Array, headers: Record<string, string> = {}) => new Response(Buffer.from(bytes), { status: 200, headers });
 
 describe('the standard files of a listed world', () => {
-  test('the thumbnail is the card art and the description replaces the README', async () => {
+  test('S2 the thumbnail is the card art and the description replaces the README', { tags: ['standard'] }, async () => {
     const png = pngBytes(1280, 640);
     const { seen, found } = asked({ [PNG_URL]: () => bytesOf(png), [TEXT_URL]: () => textResponse(DESCRIPTION) });
     const result = await found;
@@ -57,20 +57,20 @@ describe('the standard files of a listed world', () => {
     expect(seen).not.toContain(SOCIAL_URL);
   });
 
-  test('a WebP thumbnail is found by its second name', async () => {
+  test('S2 a WebP thumbnail is found by its second name', { tags: ['standard'] }, async () => {
     const webp = webpBytes('VP8L', 1024, 512);
     const result = await asked({ [WEBP_URL]: () => bytesOf(webp) }).found;
     expect(result?.art?.startsWith('data:image/webp;base64,')).toBe(true);
     expect(result?.markdown).toContain('README text');
   });
 
-  test('the type comes from the bytes, not from the content type', async () => {
+  test('S3 the type comes from the bytes, not from the content type', { tags: ['standard'] }, async () => {
     const png = pngBytes(640, 320);
     const result = await asked({ [PNG_URL]: () => bytesOf(png, { 'content-type': 'application/octet-stream' }) }).found;
     expect(result?.art?.startsWith('data:image/png;base64,')).toBe(true);
   });
 
-  test('a thumbnail that fails a check falls back to the repository image', async () => {
+  test('K4 a thumbnail that fails a check falls back to the repository image', { tags: ['critical'] }, async () => {
     const refused: Route[] = [
       () => new Response(Buffer.alloc(32, 1), { status: 200 }),
       () => bytesOf(pngBytes(4000, 600)),
@@ -86,14 +86,14 @@ describe('the standard files of a listed world', () => {
     }
   });
 
-  test('a file served from a host that is not GitHub is refused', async () => {
+  test('K4 a file served from a host that is not GitHub is refused', { tags: ['critical'] }, async () => {
     const stray = bytesOf(pngBytes(640, 320));
     Object.defineProperty(stray, 'url', { value: 'https://evil.example/archipelia-thumbnail.png' });
     const result = await asked({ [PNG_URL]: () => stray }).found;
     expect(result?.art).toBe(`data:image/png;base64,${Buffer.alloc(64, 7).toString('base64')}`);
   });
 
-  test('a description that is not UTF-8 or is over 64 KB falls back to the README', async () => {
+  test('S3 a description that is not UTF-8 or is over 64 KB falls back to the README', { tags: ['standard'] }, async () => {
     const latin: Route = () => new Response(Buffer.from([0x23, 0x20, 0xe9, 0xe9, 0xe9, 0xe9, 0xe9, 0x0a]), { status: 200 });
     const huge: Route = () => textResponse(`# Big
 
@@ -104,7 +104,7 @@ ${'word '.repeat(20_000)}`);
     }
   });
 
-  test('a world that is not listed never reads the release files', async () => {
+  test('S3 a world that is not listed never reads the release files', { tags: ['standard'] }, async () => {
     const { seen, found } = asked({ [PNG_URL]: () => bytesOf(pngBytes(640, 320)), [TEXT_URL]: () => textResponse(DESCRIPTION) }, 'index');
     const result = await found;
     expect(seen.some((url) => url.includes('/releases/'))).toBe(false);
@@ -113,7 +113,7 @@ ${'word '.repeat(20_000)}`);
 });
 
 describe('the cache of a listed world', () => {
-  test('a new release refreshes the art at once, the same release keeps the cache', async () => {
+  test('S2 a new release refreshes the art at once, the same release keeps the cache', { tags: ['standard'] }, async () => {
     let png = pngBytes(640, 320);
     let version = '1.0.0';
     const { net } = served({ [PNG_URL]: () => bytesOf(png), [TEXT_URL]: () => textResponse(DESCRIPTION) });
@@ -127,13 +127,13 @@ describe('the cache of a listed world', () => {
 });
 
 describe('sniffImage', () => {
-  test('reads the size of a PNG and of the three WebP kinds from the header', () => {
+  test('K1 reads the size of a PNG and of the three WebP kinds from the header', { tags: ['critical'] }, () => {
     expect(sniffImage(pngBytes(300, 200))).toEqual({ type: 'image/png', width: 300, height: 200, animated: false });
     expect(sniffImage(webpBytes('VP8X', 300, 200))).toEqual({ type: 'image/webp', width: 300, height: 200, animated: false });
     expect(sniffImage(webpBytes('VP8L', 300, 200))).toEqual({ type: 'image/webp', width: 300, height: 200, animated: false });
   });
 
-  test('refuses anything that is not a PNG or a WebP', () => {
+  test('K1 refuses anything that is not a PNG or a WebP', { tags: ['critical'] }, () => {
     expect(sniffImage(Buffer.from('GIF89a'.padEnd(40, ' ')))).toBeUndefined();
     expect(sniffImage(Buffer.alloc(40))).toBeUndefined();
     expect(sniffImage(new Uint8Array(3))).toBeUndefined();

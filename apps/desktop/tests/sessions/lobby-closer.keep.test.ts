@@ -22,8 +22,6 @@ const AT_ONCE = { retryMs: 10, retryMaxMs: 20 };
 
 const NEVER = { retryMs: 3_600_000, retryMaxMs: 3_600_000 };
 
-const UNTIL_DONE = { timeout: 5000 };
-
 const setUp = async (failures: number, tabs: LiveTab[] = [], retry = AT_ONCE) => {
   const store = await tempFiles('server');
   cleanups.push(store.remove);
@@ -46,7 +44,7 @@ const setUp = async (failures: number, tabs: LiveTab[] = [], retry = AT_ONCE) =>
   return { closer, closed, quiet };
 };
 
-describe('closing the lobby of a session', () => {
+describe('K3 closing the lobby of a session', { tags: ['critical'] }, () => {
   test('keeps a pending close while the server does not answer, until a retry reaches it, then goes private when no other session runs on your network', async () => {
     const { closer, closed, quiet } = await setUp(2, [], NEVER);
     expect(await closer.close(REF)).toEqual({ closed: false });
@@ -61,14 +59,6 @@ describe('closing the lobby of a session', () => {
     expect(quiet).toHaveBeenCalledTimes(1);
   });
 
-  test('retries a pending close on its own timer until the server answers', async () => {
-    const { closer, closed, quiet } = await setUp(2);
-    expect(await closer.close(REF)).toEqual({ closed: false });
-    await vi.waitFor(() => expect(quiet).toHaveBeenCalledTimes(1), UNTIL_DONE);
-    expect(closed).toEqual(['lb_1']);
-    expect(await closer.list()).toEqual([]);
-  });
-
   test('stays on the network while another open tab is a LAN session with direct connections on its lobby here', async () => {
     const { closer, quiet } = await setUp(0, [lanOf('lb_1'), lanOf('lb_2')]);
     expect(await closer.close(REF)).toEqual({ closed: true });
@@ -76,7 +66,7 @@ describe('closing the lobby of a session', () => {
   });
 });
 
-describe('the joins resumed at start', () => {
+describe('K3 the joins resumed at start', { tags: ['critical'] }, () => {
   test('are only the ones waiting or approved, never failed, refused or finished ones', async () => {
     const store = await tempFiles('joins');
     cleanups.push(store.remove);

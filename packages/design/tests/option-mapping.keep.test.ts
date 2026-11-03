@@ -11,7 +11,7 @@ import { optionDef as option } from '@archipelia/model';
 import type { OptionValue } from '@archipelia/model';
 import { defOf } from './option-defs';
 
-describe('controlKindOf', () => {
+describe('K1 controlKindOf', { tags: ['critical'] }, () => {
   test('each option kind picks its control', () => {
     expect(controlKindOf(defOf('death_link'), false)).toBe('toggle');
     expect(controlKindOf(defOf('goal'), 'ganon')).toBe('choice');
@@ -49,7 +49,7 @@ describe('controlKindOf', () => {
   });
 });
 
-describe('labels and hints', () => {
+describe('K1 labels and hints', { tags: ['critical'] }, () => {
   test('titleCase turns underscores into words', () => {
     expect(titleCase('crystals_only')).toBe('Crystals Only');
     expect(titleCase("ganon's tower")).toBe("Ganon's Tower");

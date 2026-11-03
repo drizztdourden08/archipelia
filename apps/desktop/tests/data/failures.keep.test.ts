@@ -10,7 +10,7 @@ vi.mock('@drizztdourden08/brock-react', () => ({
 const { failWith } = await import('../../src/hooks/fail-with');
 const { logFailure } = await import('../../src/hooks/log-failure');
 
-describe('failures', () => {
+describe('K1 failures', { tags: ['critical'] }, () => {
   test('a failed action throws its plain sentence and logs the raw error', async () => {
     logged.length = 0;
     const work = failWith('Could not load your sessions.', () => Promise.reject(new Error('ENOENT: sessions.json')));

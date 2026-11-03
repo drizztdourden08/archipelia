@@ -32,6 +32,9 @@ export { validateOptions } from './yaml/schema/validate-options';
 export { checkWorldFit } from './versions/check-world-fit';
 export { compareApVersions } from './versions/compare-ap-versions';
 export { parseApVersion } from './versions/parse-ap-version';
+export { freeSeats } from './seats/free-seats';
+export { pickSeat } from './seats/pick-seat';
+export { withSeat } from './seats/with-seat';
 export { readApworld } from './zip/read-apworld';
 export { zipApworld } from './zip/zip-apworld';
 export type { AssembleInput, AssembledApworld, DataFile } from './apworld/apworld.type';
@@ -47,6 +50,7 @@ export type {
 export type { ReleaseInput, ReleaseManifest, ReleaseWorld } from './release-manifest/release.type';
 export type { DescriptionCheck, ImageFormat, ImageHeader, ThumbnailCheck } from './release-files/release-files.type';
 export type { ArchipelagoManifest, ManifestInput } from './manifest/archipelago-manifest.type';
+export type { HeldSeat, SeatPick } from './seats/seats.type';
 export type { PlayerYamlInput } from './yaml/player-yaml.type';
 export type { OptionChoice, OptionRow, OptionSchema, OptionType } from './yaml/schema/option-schema.type';
 export type { ValidateOptionsInput, ValidatedOptions } from './yaml/schema/validate-options.type';

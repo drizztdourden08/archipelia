@@ -23,7 +23,7 @@ afterEach(async () => {
 
 const config = (port: number) => `port = ${port}\nnetwork = "off"\nloopback = true\npublicLookup = false\n[engine]\nauto = false\n[tls]\nselfSigned = false\n`;
 
-describe('the headless server started from its entry', () => {
+describe('S2 the headless server started from its entry', { tags: ['standard'] }, () => {
   test('completes the open-join scenario of the fake client', async () => {
     const port = await freePort();
     await writeConfig(dataDir, config(port));
@@ -34,5 +34,5 @@ describe('the headless server started from its entry', () => {
     expect(result.failure).toBeUndefined();
     expect(result.ok).toBe(true);
     expect(server.lines.join('\n')).toContain(`lobby server on ws://127.0.0.1:${port}`);
-  }, 60000);
+  });
 });

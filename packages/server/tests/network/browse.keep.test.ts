@@ -16,7 +16,7 @@ const open = async (extra: { onChange?: (list: LanServer[]) => void; refuse?: bo
   return { net, browser };
 };
 
-describe('listing servers', () => {
+describe('K1 listing servers', { tags: ['critical'] }, () => {
   test('lists a server heard over mDNS and tells the listener', async () => {
     const changes: number[] = [];
     const { net, browser } = await open({ onChange: (list) => changes.push(list.length) });
@@ -55,7 +55,7 @@ describe('listing servers', () => {
   });
 });
 
-describe('deduplication and expiry', () => {
+describe('K1 deduplication and expiry', { tags: ['critical'] }, () => {
   test('dedupes by server id across both sources', async () => {
     const { net, browser } = await open();
     net.mdns().hear(announcement(), '192.168.1.50');
@@ -89,7 +89,7 @@ describe('deduplication and expiry', () => {
   });
 });
 
-describe('hostile input', () => {
+describe('K1 hostile input', { tags: ['critical'] }, () => {
   test('ignores hostile beacon datagrams', async () => {
     const { net, browser } = await open();
     const from = { address: '192.168.1.66', port: 40000 };
@@ -142,7 +142,7 @@ describe('hostile input', () => {
   });
 });
 
-describe('the browser lifecycle', () => {
+describe('K1 the browser lifecycle', { tags: ['critical'] }, () => {
   test('survives a failed beacon bind and reports it', async () => {
     const errors: string[] = [];
     const net = createFakeNetwork({ refuseUdp: () => true });

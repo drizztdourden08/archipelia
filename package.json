@@ -22,12 +22,14 @@
     "node": ">=24"
   },
   "scripts": {
-    "lint": "pnpm -r lint && brock prose && brock knip && jscpd .",
+    "lint": "standards lint",
+    "lint:all": "standards lint --all",
     "lint:md": "markdownlint-cli2",
     "structure": "brock structure --check",
-    "test": "vitest run",
+    "test": "standards test",
+    "test:pr": "standards test pr",
     "build": "pnpm --filter ./apps/desktop build",
-    "test:e2e": "vitest run --config vitest.e2e.config.ts",
+    "test:e2e": "standards test e2e",
     "prose": "brock prose",
     "deadcode": "brock knip",
     "duplicates": "jscpd .",
@@ -35,9 +37,10 @@
   },
   "devDependencies": {
     "@archipelia/engine-bundle": "workspace:*",
-    "@drizztdourden08/brock-build": "^0.115.3",
-    "@drizztdourden08/brock-lint-config": "^0.115.3",
-    "@drizztdourden08/brock-thread": "^0.115.3",
+    "@drizztdourden08/brock-build": "^0.116.0",
+    "@drizztdourden08/brock-lint-config": "^0.116.0",
+    "@drizztdourden08/brock-thread": "^0.116.0",
+    "@drizztdourden08/standards": "^0.14.6",
     "jscpd": "catalog:",
     "knip": "catalog:",
     "markdownlint-cli2": "catalog:",
@@ -47,7 +50,7 @@
     "archipelia": "./bin/archipelia.mjs"
   },
   "brock": {
-    "version": "0.115.3"
+    "version": "0.116.0"
   },
   "packageManager": "pnpm@10.17.0"
 }

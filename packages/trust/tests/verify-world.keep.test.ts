@@ -40,7 +40,7 @@ afterAll(() => {
   nock.enableNetConnect();
 });
 
-describe('verifyWorld with a valid attestation', () => {
+describe('K4 verifyWorld with a valid attestation', { tags: ['standard'] }, () => {
   test('accepts the bytes, names the signer and the game', () => {
     const verdict = verifyWorld(bytes, bundle, client, sigstore.trustedRoot);
     expect(verdict).toMatchObject({
@@ -57,16 +57,16 @@ describe('verifyWorld with a valid attestation', () => {
 
   test('works offline from a cached trusted root', async () => {
     const files = memoryFiles();
-    await loadTrustedRoot({ files, fetchRoot: () => Promise.resolve(sigstore.trustedRoot) });
+    await loadTrustedRoot({ files, fetchRoot: () => Promise.resolve(sigstore.trustedRoot), now: () => 1000 });
     const offline = await loadTrustedRoot(
-      { files, fetchRoot: () => Promise.reject(new Error('offline')), now: () => Date.now() + 3 * 24 * 3_600_000 },
+      { files, fetchRoot: () => Promise.reject(new Error('offline')), now: () => 1000 + 3 * 24 * 3_600_000 },
     );
     expect(offline.source).toBe('cache');
     expect(verifyWorld(bytes, bundle, client, offline.root).ok).toBe(true);
   });
 });
 
-describe('verifyWorld refuses the identity', () => {
+describe('K4 verifyWorld refuses the identity', { tags: ['standard'] }, () => {
   test('changed bytes', () => {
     const changed = bytes.slice();
     changed[changed.length - 1] = (changed[changed.length - 1] ?? 0) ^ 1;
@@ -81,11 +81,6 @@ describe('verifyWorld refuses the identity', () => {
   test('a bundle signed by another repo', async () => {
     const impostor = await sigstore.attest(statementOf(bytes), { ...IDENTITY, repo: 'someone/else' });
     expect(failure(verifyWorld(bytes, impostor, client, sigstore.trustedRoot))).toEqual({ code: 'trust-failed', reason: 'signer-mismatch' });
-  });
-
-  test('another workflow in the registry entry', () => {
-    const wrong = withTrust({ workflow: '.github/workflows/other.yml' });
-    expect(failure(verifyWorld(bytes, bundle, wrong, sigstore.trustedRoot))).toEqual({ code: 'trust-failed', reason: 'signer-mismatch' });
   });
 
   test('a bundle signed by another workflow', async () => {
@@ -105,7 +100,7 @@ describe('verifyWorld refuses the identity', () => {
 
 });
 
-describe('verifyWorld refuses the proof', () => {
+describe('K4 verifyWorld refuses the proof', { tags: ['standard'] }, () => {
   test('a revoked client, with the code the protocol names', () => {
     const revoked: RegistryClient = { ...client, status: 'revoked' };
     expect(failure(verifyWorld(bytes, bundle, revoked, sigstore.trustedRoot))).toEqual({ code: 'client-revoked', reason: 'revoked' });

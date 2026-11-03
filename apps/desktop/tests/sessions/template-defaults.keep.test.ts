@@ -11,7 +11,7 @@ import { passwordNameOf } from '../../src/lobbies/password-name-of';
 import { removePlayer } from '../../src/views/SessionLobby/behavior/remove-player';
 import { presetPlayer } from './session-fixtures';
 
-describe('new session defaults', () => {
+describe('K1 new session defaults', { tags: ['critical'] }, () => {
   test('a new session hosts locally on the default port with a full spoiler', () => {
     const template = newTemplate('t1');
     expect(template).toMatchObject({ id: 't1', players: [], host: { kind: 'local', port: DEFAULT_PORT } });
@@ -25,7 +25,7 @@ describe('new session defaults', () => {
   });
 });
 
-describe('player numbering', () => {
+describe('K1 player numbering', { tags: ['critical'] }, () => {
   test('slots continue after the highest one and names stay unique', () => {
     const players = [presetPlayer(1, 'Player1'), presetPlayer(2, 'Player2')];
     expect(nextSlot(players)).toBe(3);

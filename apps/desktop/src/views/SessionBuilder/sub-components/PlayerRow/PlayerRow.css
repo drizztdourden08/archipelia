@@ -1,0 +1,70 @@
+/* @layer renderer-app @kind style */
+.player-row {
+  border-block-end: var(--border-width-thin) solid var(--c-hairline);
+}
+
+.player-row:last-child {
+  border-block-end: 0;
+}
+
+.player-row__line {
+  display: grid;
+  grid-template-columns: var(--size-24) minmax(0, 1fr) var(--size-96) var(--size-32);
+  gap: var(--space-sm);
+  align-items: center;
+  padding-block: var(--space-xs);
+}
+
+.player-row__number {
+  text-align: end;
+}
+
+.player-row__pick {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2xs);
+  min-inline-size: 0;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-md);
+  text-align: start;
+  cursor: pointer;
+}
+
+.player-row__pick:hover {
+  background: var(--c-hover);
+}
+
+.player-row__pick:focus-visible {
+  outline: var(--border-width-thick) solid var(--c-focus);
+}
+
+.player-row--open .player-row__pick {
+  background: var(--c-primary-soft);
+}
+
+.player-row__name {
+  font-weight: var(--weight-medium);
+}
+
+.player-row__summary {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  max-inline-size: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.player-row__direct {
+  display: flex;
+  justify-content: center;
+}
+
+.player-row__editor {
+  margin-inline-start: calc(var(--size-24) + var(--space-sm));
+  padding: var(--space-sm) var(--space-md) var(--space-md);
+  border-radius: var(--radius-md);
+  background: var(--c-sunken);
+}

@@ -6,7 +6,7 @@ const OFFICIAL = new Set(['alttp', 'sm', 'smz3', 'demo']);
 
 const scan = (files) => worldImports(files, 'demo', OFFICIAL);
 
-describe('worldImports', () => {
+describe('K1 worldImports', { tags: ['critical'] }, () => {
   test('a top level import of another world is required', () => {
     expect(scan([{ path: '__init__.py', source: 'from worlds.sm import Rom\n' }])).toEqual({ requires: ['sm'], optional: [] });
   });

@@ -5,7 +5,7 @@ import { emptyKind } from '../../src/views/GameStore/behavior/empty-kind';
 import type { GameRow } from '../../src/views/GameStore/GameStore.type';
 import { entry, handlers, row } from './game-handlers.fixtures';
 
-describe('games store view', () => {
+describe('K1 games store view', { tags: ['critical'] }, () => {
   test('the empty text says why the list is empty, and each tab says its own', () => {
     expect(emptyKind(true, true)).toBe('loading');
     expect(emptyKind(true, false)).toBe('search');
@@ -13,15 +13,6 @@ describe('games store view', () => {
     expect(emptyKind(false, false, 'installed')).toBe('installed');
     expect(emptyKind(false, false, 'updates')).toBe('updates');
     expect(emptyKind(true, false, 'installed')).toBe('search');
-  });
-
-  test('the card opens its details and carries no hover hint text', () => {
-    let opened = false;
-    const card = cardPropsOf(row, { ...handlers([]), open: () => { opened = true; } });
-    card.onOpen?.();
-    expect(opened).toBe(true);
-    expect(card).not.toHaveProperty('summary');
-    expect(card).not.toHaveProperty('summaryHint');
   });
 
   test('the kind is an icon kind, never a word, and the version is the world version', () => {

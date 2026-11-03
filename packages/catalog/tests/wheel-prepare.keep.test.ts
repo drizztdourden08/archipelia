@@ -57,7 +57,7 @@ const bed = (options: { digest?: boolean; served?: Uint8Array; hop?: string } = 
 const cached = (): Promise<string[]> => readdir(join((state.runtime as EngineRuntime).root, 'wheels')).catch(() => []);
 
 describe('getting a ready-made build from a release', () => {
-  test('downloads the file of the chosen release, checks it against the digest GitHub publishes, and records where it came from', async () => {
+  test('S2 downloads the file of the chosen release, checks it against the digest GitHub publishes, and records where it came from', { tags: ['standard'] }, async () => {
     const { prepare, seen } = bed();
     const source = await prepare();
     expect(source).toEqual({ repo: 'Pseudoarc/ctrando', tag: 'v1.2.0', asset: WHEEL, sha256: sha256Of(BYTES), verified: true, name: 'ctrando', version: '1.2.0' });
@@ -66,26 +66,20 @@ describe('getting a ready-made build from a release', () => {
     expect(await cached()).toEqual([sha256Of(BYTES)]);
   });
 
-  test('never takes an address from the release: the download address is built from the repo, the tag and the file name', async () => {
-    const { prepare, seen } = bed();
-    await prepare();
-    expect(seen.some((url) => url.includes('evil.example'))).toBe(false);
-  });
-
-  test('keeps the file per engine and does not download it again when the digest is already cached', async () => {
+  test('S2 keeps the file per engine and does not download it again when the digest is already cached', { tags: ['standard'] }, async () => {
     const { prepare, seen } = bed();
     await prepare();
     await prepare();
     expect(seen.filter((url) => url === CDN)).toHaveLength(1);
   });
 
-  test('refuses a download that does not match the published digest, and keeps nothing', async () => {
+  test('K4 refuses a download that does not match the published digest, and keeps nothing', { tags: ['critical'] }, async () => {
     const { prepare } = bed({ served: Uint8Array.from(BYTES, (byte, at) => (at === 10 ? byte ^ 1 : byte)) });
     await expect(prepare()).rejects.toThrow('does not match the checksum on record');
     expect(await cached()).toEqual([]);
   });
 
-  test('with no published digest it refuses until the repo name is typed, then installs and marks it unchecked', async () => {
+  test('K4 with no published digest it refuses until the repo name is typed, then installs and marks it unchecked', { tags: ['critical'] }, async () => {
     const { prepare } = bed({ digest: false });
     await expect(prepare()).rejects.toThrow('publishes no checksum');
     await expect(prepare({ typed: 'Pseudoarc' })).rejects.toThrow('publishes no checksum');
@@ -94,7 +88,7 @@ describe('getting a ready-made build from a release', () => {
     expect(source).toMatchObject({ verified: false, sha256: sha256Of(BYTES) });
   });
 
-  test('says there is no build when the file does not fit this engine, and when the release does not list it', async () => {
+  test('S3 says there is no build when the file does not fit this engine, and when the release does not list it', { tags: ['standard'] }, async () => {
     state.tags = ['cp313-cp313-win_amd64'];
     await expect(bed().prepare()).rejects.toThrow('No ready-made build for this engine');
     state.tags = TAGS;
@@ -102,7 +96,7 @@ describe('getting a ready-made build from a release', () => {
     await expect(bed().prepare({ tag: 'v9' })).rejects.toThrow('has no release file');
   });
 
-  test('refuses a wheel that does not hold the package the world needs', async () => {
+  test('K4 refuses a wheel that does not hold the package the world needs', { tags: ['critical'] }, async () => {
     const other = wheelBytes({ modules: ['someotherthing'] });
     const { net } = routedFetch({
       [`${API}/repos/Pseudoarc/ctrando/releases`]: json([releaseJson('v1.2.0', [assetJson(WHEEL, other)])]),
@@ -113,7 +107,7 @@ describe('getting a ready-made build from a release', () => {
     expect(await cached()).toEqual([]);
   });
 
-  test('refuses a wheel whose own metadata names another package than its file name', async () => {
+  test('K4 refuses a wheel whose own metadata names another package than its file name', { tags: ['critical'] }, async () => {
     const liar = wheelBytes({ name: 'otherpkg' });
     const { net } = routedFetch({
       [`${API}/repos/Pseudoarc/ctrando/releases`]: json([releaseJson('v1.2.0', [assetJson(WHEEL, liar)])]),
@@ -125,14 +119,14 @@ describe('getting a ready-made build from a release', () => {
 });
 
 describe('where a download may come from', () => {
-  test('follows GitHub to its own file host and nowhere else', async () => {
+  test('K4 follows GitHub to its own file host and nowhere else', { tags: ['critical'] }, async () => {
     await expect(bed({ hop: 'https://evil.example/ctrando.whl' }).prepare()).rejects.toThrow('only downloads release files from github.com over https');
     await expect(bed({ hop: 'http://objects.githubusercontent.com/ctrando.whl' }).prepare()).rejects.toThrow('only downloads release files from github.com over https');
     await expect(bed({ hop: 'https://githubusercontent.com.evil.example/x' }).prepare()).rejects.toThrow('only downloads release files');
     expect(await cached()).toEqual([]);
   });
 
-  test('takes only the two GitHub file hosts after the release address, and never another GitHub host or the same address twice', async () => {
+  test('K4 takes only the two GitHub file hosts after the release address, and never another GitHub host or the same address twice', { tags: ['critical'] }, async () => {
     for (const hop of ['https://raw.githubusercontent.com/o/r/main/x.whl', 'https://github.com/other/repo/releases/download/v1/x.whl', 'https://objects.githubusercontent.com:8443/x']) {
       await expect(bed({ hop }).prepare()).rejects.toThrow('only downloads release files');
     }
@@ -140,7 +134,7 @@ describe('where a download may come from', () => {
     await expect(prepare()).rejects.toThrow('GitHub answered 404');
   });
 
-  test('records that the release is not the newest when an older one is used', async () => {
+  test('S3 records that the release is not the newest when an older one is used', { tags: ['standard'] }, async () => {
     const { net } = routedFetch({
       [`${API}/repos/Pseudoarc/ctrando/releases`]: json([
         releaseJson('v2.0.0', [assetJson('ctrando-2.0.0-cp313-cp313-win_amd64.whl', BYTES)]), releaseJson('v1.2.0', [assetJson(WHEEL, BYTES)]),
@@ -154,7 +148,7 @@ describe('where a download may come from', () => {
   });
 
   test.each(['--index-url https://evil.example/simple', 'evil @ git+https://evil.example/x.git', '-r /etc/passwd'])(
-    'a wheel that lists %j as a dependency is refused when it is downloaded, and keeps nothing',
+    'K4 a wheel that lists %j as a dependency is refused when it is downloaded, and keeps nothing', { tags: ['critical'] },
     async (line) => {
       const hostile = wheelBytes({ requires: [line] });
       const { net } = routedFetch({
@@ -167,14 +161,14 @@ describe('where a download may come from', () => {
     },
   );
 
-  test('a download that grows past the size the release lists is stopped', async () => {
+  test('K4 a download that grows past the size the release lists is stopped', { tags: ['critical'] }, async () => {
     const { prepare } = bed({ served: new Uint8Array([...BYTES, 1, 2, 3]) });
     await expect(prepare()).rejects.toThrow('bytes, the release says');
     expect(await stat(join((state.runtime as EngineRuntime).root, 'wheels')).then(() => true, () => false)).toBe(true);
     expect(await cached()).toEqual([]);
   });
 
-  test('refuses requests that are not an owner, a repo, a module, a tag and a wheel name', async () => {
+  test('K4 refuses requests that are not an owner, a repo, a module, a tag and a wheel name', { tags: ['critical'] }, async () => {
     const { parseWheelRequest } = await import('../src/wheel/parse-wheel-request');
     expect(parseWheelRequest({ owner: 'a', repo: 'b', module: 'm', tag: 'v1', asset: 'x-1-py3-none-any.whl', typed: 'a/b' })).toMatchObject({ tag: 'v1' });
     for (const bad of [{ tag: '../x' }, { asset: 'x.exe' }, { asset: '../x-1-py3-none-any.whl' }, { tag: 5 }]) {

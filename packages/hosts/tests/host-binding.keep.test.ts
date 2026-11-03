@@ -25,7 +25,7 @@ const buildLocal = async (automation: boolean) => {
   return createLocalHost.mock.calls[0]?.[0];
 };
 
-describe('host binding', () => {
+describe('K4 host binding', { tags: ['critical'] }, () => {
   beforeEach(() => createLocalHost.mockClear());
 
   test('an automation launch binds and advertises loopback', async () => {

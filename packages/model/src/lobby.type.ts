@@ -68,6 +68,7 @@ type LobbyMember = {
   id: string;
   kind: 'host' | 'client';
   displayName: string;
+  seat?: string;
   client?: ClientMeta;
   tokenHash?: string;
   admission: MemberAdmission;
@@ -104,6 +105,7 @@ type Lobby = {
   engine: SessionEngine;
   options: LobbyOptions;
   source?: LobbySource;
+  seats?: string[];
   members: LobbyMember[];
   worlds: WorldUpload[];
   nextMember: number;
@@ -120,7 +122,11 @@ type AdminWorld = Omit<WorldUpload, 'proof'> & { proofSent: boolean; runsUnconfi
 
 type AdminLobby = Omit<Lobby, 'members' | 'worlds'> & { members: AdminLobbyMember[]; worlds: AdminWorld[] };
 
+type MemberYamlSlot = { name: string; game: string; yaml: string | null };
+
+type MemberYaml = { memberId: string; slots: MemberYamlSlot[] };
+
 export type {
   AdminLobby, AdminLobbyMember, AdminWorld, ClientMeta, Lobby, LobbyAdmission, LobbyFailure, LobbyLimits, LobbyMember, LobbySource, LobbyOptions, LobbyPhase, LobbyRoom, LobbyRoomFile,
-  MemberAdmission, SlotOrigin, SlotState, SlotUpload, TrustLevel, UploadTrust, WorldUpload,
+  MemberAdmission, MemberYaml, MemberYamlSlot, SlotOrigin, SlotState, SlotUpload, TrustLevel, UploadTrust, WorldUpload,
 };

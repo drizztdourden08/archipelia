@@ -2,6 +2,7 @@
 import type { LobbyState, StateMember } from '@drizztdourden08/archipelia-lobby-protocol';
 import type { Lobby, LobbyMember } from '@archipelia/model';
 import { SERVER_NAME } from '../lobby.constants';
+import { advertisedSeats } from './advertised-seats';
 import { liveMembers } from './live-members';
 
 const slotView = ({ name, game, state, reason }: LobbyMember['slots'][number]) => (reason === undefined ? { name, game, state } : { name, game, state, reason });
@@ -17,7 +18,7 @@ const memberView = (member: LobbyMember, serverVersion: string): StateMember => 
 });
 
 const lobbyView = (lobby: Lobby, viewer: LobbyMember, serverVersion: string): LobbyState => {
-  const base = { type: 'lobby.state' as const, rev: lobby.rev, phase: lobby.phase, engine: { ap: lobby.engine.ap } };
+  const base = { type: 'lobby.state' as const, rev: lobby.rev, phase: lobby.phase, engine: { ap: lobby.engine.ap }, ...advertisedSeats(lobby) };
   if (viewer.admission !== 'pending') {
     return { ...base, members: liveMembers(lobby).map((member) => memberView(member, serverVersion)) };
   }

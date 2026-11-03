@@ -36,7 +36,7 @@ const reply = (body: unknown, init: ResponseInit = { status: 200, headers: { eta
 
 const ids = (load: Awaited<ReturnType<typeof loadRegistry>>) => load.registry.clients.map((client) => client.id);
 
-describe('loadRegistry', () => {
+describe('K1 loadRegistry', { tags: ['critical'] }, () => {
   test('reads the network and caches the file with its etag', async () => {
     const files = memoryFiles();
     const fetchFn = vi.fn(reply(remote()));
@@ -76,7 +76,7 @@ describe('loadRegistry', () => {
 
 });
 
-describe('loadRegistry fallbacks', () => {
+describe('K1 loadRegistry fallbacks', { tags: ['critical'] }, () => {
   test('falls back to the stale cache when offline', async () => {
     const files = memoryFiles();
     await loadRegistry({ files, fetch: reply(remote()), now: () => 1000 });

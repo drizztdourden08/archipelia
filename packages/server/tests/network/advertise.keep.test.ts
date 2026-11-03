@@ -23,7 +23,7 @@ const txtOf = (records: MdnsRecord[]): Record<string, string> => {
   return Object.fromEntries(entries.map((entry) => [entry.slice(0, entry.indexOf('=')), entry.slice(entry.indexOf('=') + 1)]));
 };
 
-describe('the mDNS advertisement', () => {
+describe('K2 the mDNS advertisement', { tags: ['critical'] }, () => {
   test('answers a service query with records that parse back to the record', async () => {
     const net = createFakeNetwork();
     const handle = await start(net);
@@ -62,7 +62,7 @@ describe('the mDNS advertisement', () => {
   });
 });
 
-describe('the beacon', () => {
+describe('K2 the beacon', { tags: ['critical'] }, () => {
   test('is sent at once to every broadcast address and on every interval', async () => {
     vi.useFakeTimers();
     const net = createFakeNetwork();
@@ -90,7 +90,7 @@ describe('the beacon', () => {
   });
 });
 
-describe('the advertiser lifecycle', () => {
+describe('K2 the advertiser lifecycle', { tags: ['critical'] }, () => {
   test('stop closes every socket and may be called twice', async () => {
     const net = createFakeNetwork();
     const handle = await start(net);

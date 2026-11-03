@@ -5,7 +5,7 @@ import type { PasswordView } from '../src/live-room';
 
 const idle: PasswordView = { sessionId: null, phase: 'idle', passwordRequired: false };
 
-describe('roomPasswordNeed', () => {
+describe('K1 roomPasswordNeed', { tags: ['critical'] }, () => {
   test('a room without a password never asks for one', () => {
     expect(roomPasswordNeed({ sessionId: 's1', phase: 'live', passwordRequired: false }, 's1')).toBe('none');
     expect(roomPasswordNeed({ sessionId: 's1', phase: 'connecting', passwordRequired: false }, 's1')).toBe('none');
@@ -27,7 +27,7 @@ describe('roomPasswordNeed', () => {
   });
 });
 
-describe('scopedTo', () => {
+describe('K1 scopedTo', { tags: ['critical'] }, () => {
   const held: { sessionId: string | null; phase: string } = { sessionId: 's1', phase: 'password' };
   const empty: { sessionId: string | null; phase: string } = { sessionId: null, phase: 'idle' };
 

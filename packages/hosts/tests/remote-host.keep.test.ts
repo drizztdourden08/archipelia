@@ -26,7 +26,7 @@ const lines = (host: SessionHost) => {
 
 const dir = '/srv/ap/archipelia/sessions/abc-1';
 
-describe('remote host', () => {
+describe('S2 remote host', { tags: ['standard'] }, () => {
   test('uploads the seed, writes a private host.yaml, launches and waits for the hosting line', async () => {
     const fake = createFakeSsh();
     const host = hostWith(fake);
@@ -88,7 +88,7 @@ describe('remote host', () => {
   });
 });
 
-describe('testServer', () => {
+describe('S2 testServer', { tags: ['standard'] }, () => {
   test('reports every check and ignores the advisory linger check for the verdict', async () => {
     const fake = createFakeSsh({ probe: PROBE.replace('linger=yes', 'linger=no') });
     const result = await testServer(entry, {}, '0.6.7', { connect: fake.connect });

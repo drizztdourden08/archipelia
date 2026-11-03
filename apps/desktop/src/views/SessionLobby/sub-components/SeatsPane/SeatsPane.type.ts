@@ -1,6 +1,6 @@
 /* @layer renderer-app @kind types */
-import type { useLobbyScreen } from '../../behavior/useLobbyScreen';
+import type { LobbyScreenModel } from '../../SessionLobby.type';
 
-type SeatsPaneProps = { screen: ReturnType<typeof useLobbyScreen> };
+type SeatsPaneProps = { screen: LobbyScreenModel; empty: boolean };
 
 export type { SeatsPaneProps };

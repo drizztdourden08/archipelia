@@ -1,8 +1,7 @@
 /* @layer renderer-app @kind logic */
 import type { ServerEntry } from '@archipelia/model';
 import type { SecretInputs } from '../ServerManager.type';
-import { passwordSecret } from './password-secret';
-import { passphraseSecret } from './passphrase-secret';
+import { passphraseSecret, passwordSecret } from '@archipelia/model';
 
 const withSecretRefs = (entry: ServerEntry, inputs: SecretInputs): ServerEntry => {
   const { auth, id } = entry;

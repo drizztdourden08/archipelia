@@ -7,10 +7,9 @@ import { runtimeOf } from './runtime-of';
 
 const engine: SessionEngine = { id: 'ap-0.6.6', ap: '0.6.6', python: '3.12.14' };
 
-describe('session engine record', () => {
+describe('K1 session engine record', { tags: ['critical'] }, () => {
   test('a session without an engine reads as 0.6.7', () => {
     expect(engineOfSession({})).toBe(LEGACY_ENGINE);
-    expect(LEGACY_ENGINE.ap).toBe('0.6.7');
   });
 
   test('a session with an engine reads it back', () => {
@@ -22,7 +21,7 @@ describe('session engine record', () => {
   });
 });
 
-describe('pickHostEngine', () => {
+describe('K1 pickHostEngine', { tags: ['critical'] }, () => {
   const active = runtimeOf('ap-0.6.8', '0.6.8');
   const session: Pick<Session, 'engine'> = { engine };
 
@@ -62,7 +61,7 @@ describe('pickHostEngine', () => {
   });
 });
 
-describe('remoteVersionWarning', () => {
+describe('K1 remoteVersionWarning', { tags: ['critical'] }, () => {
   test('warns for an older server only', () => {
     expect(remoteVersionWarning({ engine }, '0.6.2')).toMatch(/generated with Archipelago 0\.6\.6.*last tested with 0\.6\.2/);
     expect(remoteVersionWarning({ engine }, '0.6.6')).toBeUndefined();

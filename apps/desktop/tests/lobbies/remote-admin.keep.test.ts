@@ -27,7 +27,7 @@ const certificateSha256 = createHash('sha256').update(new X509Certificate(TEST_C
 
 const createRequest: LobbyRequest = { type: 'lobby.create', params: { name: 'Friday seed', options: { admission: 'host-approval', allowUnlisted: false, maxSlots: 4, room: { kind: 'archipelago-gg' } } } };
 
-describe('the remote admin client against the real listener', () => {
+describe('S2 the remote admin client against the real listener', { tags: ['standard'] }, () => {
   test('lists, creates and locks a lobby over ws', async () => {
     const { endpoint, token } = await serve();
     const { channel, info } = await openRemoteChannel({ url: `ws://127.0.0.1:${endpoint.port}`, token });

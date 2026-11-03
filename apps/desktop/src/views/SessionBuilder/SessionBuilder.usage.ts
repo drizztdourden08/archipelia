@@ -23,8 +23,10 @@ const usage = {
     'Choosing LAN opens nothing; Run asks once before it opens a network port.',
     'Direct connections follow Where: this computer for Local, the network for LAN, the Archipelia server for Remote. archipelago.gg and SSH say inline why they do not take direct connections.',
     'While the lobby of the session is open, Where and Allow direct connections are locked with the reason, and a callout says the session is running its lobby.',
-    'List the saved players under the settings. Each has a Direct switch; a direct player may have no game, and a game set for one is the fallback used when they have not joined at Run.',
-    'Lay the settings out in two columns once the width allows, with a Grid and a minimum column width: How players join on the left, the world settings on the right; one column in that order when narrow.',
+    'Each saved player has a Direct switch; a direct player may have no game, and a game set for one is the fallback used when they have not joined at Run.',
+    'Lay the setup out compact: the name as the title with its chips and the actions on one line, the history link under it, then one row each for Where, Direct, Password and World, with a short caption under a row only when it helps.',
+    'The World row sums the world settings in one line; Change opens Advanced, which holds the local port and every generation and server rule, closed by default.',
+    'List the players one line each: number, name, game and preset, and the Direct switch; clicking a player opens their name, game, preset and overrides under the line, and its menu duplicates or removes them.',
     'Guard unsaved edits with useUnsavedChanges, so Back, Escape, the hub switch, the close button and Quit ask first, and report them with onDirty so the page can ask before it shows another session.',
   ],
   a11y: [

@@ -54,14 +54,21 @@ const startService = async (options: KitOptions = {}) => {
   return { service, store, dataDir, domains, stop };
 };
 
+const startHeldCheck = async () => {
+  let release = () => undefined as void;
+  const gate = new Promise<void>((resolve) => { release = resolve; });
+  let reach = () => undefined as void;
+  const reached = new Promise<void>((resolve) => { reach = resolve; });
+  const held = await startService({ trust: fakeTrust('active', false, () => { reach(); return gate; }) });
+  return { kit: held, release: () => release(), reached };
+};
+
 const engine = { id: 'ap-0.6.8', ap: '0.6.8', python: '3.12.0' };
 
 const holdFiles = async (store: ReturnType<typeof createLobbyStore>, lobbyId: string, names: string[]) => {
   for (const name of names) await store.writeFile(lobbyId, fileOf(name).sha256, fileOf(name).bytes);
 };
 
-const tick = (ms = 30) => new Promise((resolve) => setTimeout(resolve, ms));
-
 const admin = { token: () => Promise.resolve('t'), watch: () => () => undefined, engines: () => Promise.resolve([]) };
 
-export { admin, engine, fileOf, helloOf, holdFiles, linkOf, startService, tick };
+export { admin, engine, fileOf, helloOf, holdFiles, linkOf, startHeldCheck, startService };

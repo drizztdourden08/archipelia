@@ -8,7 +8,7 @@ const MIB = 1024 * 1024;
 
 const NOT_VALID = { ok: false, problem: 'is not a valid apworld zip' };
 
-describe('I-81: an uploaded apworld is read with caps', () => {
+describe('K4 I-81: an uploaded apworld is read with caps', { tags: ['critical'] }, () => {
   test('a normal apworld reads its package and manifest', () => {
     const zip = zipSync({ 'demo/__init__.py': strToU8(''), 'demo/archipelago.json': strToU8('{"game":"Demo","world_version":"1.0.0"}') });
     expect(readApworld(zip)).toMatchObject({ ok: true, module: 'demo', manifest: { game: 'Demo', worldVersion: '1.0.0' } });

@@ -1,5 +1,5 @@
 /* @layer renderer-app @kind logic */
-import type { TemplateProblem } from '../SessionLobby.type';
+import type { TemplateProblem } from '@archipelia/sessions/validation';
 import { FIELD_CONTROLS, OPTION_CONTROLS } from './focus-problem.constants';
 import { problemTarget } from './problem-target';
 

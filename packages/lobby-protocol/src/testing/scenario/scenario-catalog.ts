@@ -110,6 +110,12 @@ const SCENARIO_CATALOG: ScenarioEntry[] = [
     setup: { ...BASE_SETUP, existingSlots: [{name:'Link',game:'Relic of the Past',worldVersion:'0.1.0'}] },
   },
   {
+    name: 'seat-unavailable',
+    title: 'A hello that asks for a seat the lobby does not hold is refused',
+    requires: ['slots.yaml', 'worlds.upload'],
+    setup: { ...BASE_SETUP, heldSeats: ['Alice'] },
+  },
+  {
     name: 'wrong-code-rate-limit',
     title: 'Wrong lobby codes are counted and the eleventh attempt is rate limited',
     requires: ['slots.yaml'],

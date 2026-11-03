@@ -15,17 +15,17 @@ const POWERSHELL = 'C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.e
 const lines = (...parts: string[]) => parts.join('\n');
 
 describe('reading a distinguished name', () => {
-  test('splits at the commas that are not inside quotes', () => {
+  test('K1 splits at the commas that are not inside quotes', { tags: ['critical'] }, () => {
     expect(parseDn('CN="a, O=Microsoft Corporation", O=Other, C=US')).toEqual({ CN: ['a, O=Microsoft Corporation'], O: ['Other'], C: ['US'] });
   });
 
-  test('does not read a value of another field as the organisation', () => {
+  test('K1 does not read a value of another field as the organisation', { tags: ['critical'] }, () => {
     expect(parseDn('OU=O=Microsoft Corporation, CN=x').O).toBeUndefined();
   });
 });
 
 describe('who signed the file', () => {
-  test('is accepted for Microsoft Corporation, valid, under the Microsoft Code Signing PCA', () => {
+  test('K4 is accepted for Microsoft Corporation, valid, under the Microsoft Code Signing PCA', { tags: ['critical'] }, () => {
     expect(signatureTrusted(SIGNED_BY_MICROSOFT)).toBe(true);
     expect(signatureTrusted(`${SIGNED_BY_MICROSOFT.replaceAll('\n', '\r\n')}\r\n`)).toBe(true);
     expect(signatureTrusted(SIGNED_BY_MICROSOFT.replaceAll('PCA 2011', 'PCA'))).toBe(true);
@@ -44,7 +44,7 @@ describe('who signed the file', () => {
     ['no chain at all', lines('status=Valid', 'subject=CN=Microsoft Corporation, O=Microsoft Corporation')],
     ['two subjects', `${SIGNED_BY_MICROSOFT}\nsubject=O=Microsoft Corporation`],
     ['nothing', ''],
-  ])('is refused for %s', (_name, out) => {
+  ])('K4 is refused for %s', { tags: ['critical'] }, (_name, out) => {
     expect(signatureTrusted(out)).toBe(false);
   });
 });
@@ -52,7 +52,7 @@ describe('who signed the file', () => {
 describe('the winget that Archipelia runs elevated', () => {
   const env = { ...WINDOWS_ENV };
 
-  test('asks Windows for the App Installer package and checks the signature of the winget inside it', async () => {
+  test('K4 asks Windows for the App Installer package and checks the signature of the winget inside it', { tags: ['critical'] }, async () => {
     const { probe, calls } = probeOf({ [POWERSHELL]: answer(true, SIGNED_BY_MICROSOFT) });
     expect(await verifyWinget(probe, env)).toBe(true);
     expect(calls).toHaveLength(1);
@@ -60,7 +60,7 @@ describe('the winget that Archipelia runs elevated', () => {
     expect(calls[0]?.args.join(' ')).toContain('Get-AuthenticodeSignature');
   });
 
-  test('is the alias path when the alias exists and Microsoft signed the App Installer', async () => {
+  test('K4 is the alias path when the alias exists and Microsoft signed the App Installer', { tags: ['critical'] }, async () => {
     const { probe } = probeOf({ [POWERSHELL]: answer(true, SIGNED_BY_MICROSOFT) });
     expect(await resolveWinget(env, () => Promise.resolve(true), probe)).toBe('C:\\Users\\me\\AppData\\Local\\Microsoft\\WindowsApps\\winget.exe');
   });
@@ -69,26 +69,26 @@ describe('the winget that Archipelia runs elevated', () => {
     ['a signature by someone else', answer(true, SIGNED_BY_MICROSOFT.replaceAll('Microsoft Corporation', 'Evil Corporation'))],
     ['a package that is not installed', answer(true, 'status=Missing')],
     ['a check that fails', answer(false)],
-  ])('is not used after %s', async (_name, verdict) => {
+  ])('K4 is not used after %s', { tags: ['critical'] }, async (_name, verdict) => {
     const { probe } = probeOf({ [POWERSHELL]: verdict });
     expect(await resolveWinget(env, () => Promise.resolve(true), probe)).toBeUndefined();
   });
 
-  test('is not checked when there is no alias, and not used when PowerShell cannot be found', async () => {
+  test('K4 is not checked when there is no alias, and not used when PowerShell cannot be found', { tags: ['critical'] }, async () => {
     const { probe, calls } = probeOf({ [POWERSHELL]: answer(true, SIGNED_BY_MICROSOFT) });
     expect(await resolveWinget(env, () => Promise.resolve(false), probe)).toBeUndefined();
     expect(calls).toEqual([]);
     expect(await verifyWinget(probe, { SystemRoot: '\\\\server\\share' })).toBe(false);
   });
 
-  test('is shown by its resolved path in the command the user confirms', () => {
+  test('K2 is shown by its resolved path in the command the user confirms', { tags: ['critical'] }, () => {
     const plan = toolPlanOf('msvc', hostOf('C:\\tools'), 'missing');
     expect(plan.install?.command.startsWith('C:\\Users\\me\\AppData\\Local\\Microsoft\\WindowsApps\\winget.exe install ')).toBe(true);
   });
 });
 
 describe('the licence of the Build Tools', () => {
-  test('is part of the plan of both ways to install them, with a link to Microsoft', () => {
+  test('K2 is part of the plan of both ways to install them, with a link to Microsoft', { tags: ['critical'] }, () => {
     for (const winget of ['C:\\Users\\me\\AppData\\Local\\Microsoft\\WindowsApps\\winget.exe', undefined]) {
       const license = toolPlanOf('msvc', hostOf('C:\\tools', { winget }), 'missing').install?.license;
       expect(license?.name).toBe('Microsoft Visual Studio Build Tools licence');
@@ -96,7 +96,7 @@ describe('the licence of the Build Tools', () => {
     }
   });
 
-  test('is not claimed for tools that carry none', () => {
+  test('K2 is not claimed for tools that carry none', { tags: ['critical'] }, () => {
     expect(toolPlanOf('cmake', hostOf('C:\\tools'), 'missing').install?.license).toBeUndefined();
     expect(toolPlanOf('rust', hostOf('C:\\tools'), 'missing').install?.license).toBeUndefined();
     expect(toolPlanOf('compiler', hostOf('/home/me/tools', { platform: 'linux', release: 'ubuntu' }), 'missing').install?.license).toBeUndefined();
@@ -109,14 +109,14 @@ describe('the Visual Studio installer right before it runs', () => {
   const net = ((input: string | URL) => Promise.resolve(String(input) === FIRST ? new Response('vs bytes') : new Response('', { status: 404 }))) as typeof fetch;
   const noWinget = { winget: undefined };
 
-  test('is checked again, on disk, after it was downloaded and checked', async () => {
+  test('K4 is checked again, on disk, after it was downloaded and checked', { tags: ['critical'] }, async () => {
     const { deps, host, calls } = bed.depsOf({ fetch: net, host: noWinget, answers: { [POWERSHELL]: answer(true, SIGNED_BY_MICROSOFT) } });
     const spec = await toolSpecOf(deps, 'msvc', host);
     expect(calls.filter((call) => call.file === POWERSHELL)).toHaveLength(2);
     expect(calls[1]?.env).toEqual({ ARCHIPELIA_CHECK: spec.command });
   });
 
-  test('is refused when its signature is no longer good the second time', async () => {
+  test('K4 is refused when its signature is no longer good the second time', { tags: ['critical'] }, async () => {
     const { deps, host } = bed.depsOf({ fetch: net, host: noWinget });
     let seen = 0;
     const probe: Probe = () => {
@@ -127,7 +127,7 @@ describe('the Visual Studio installer right before it runs', () => {
     expect(seen).toBe(2);
   });
 
-  test('is refused when the file on disk is not the file that was downloaded', async () => {
+  test('K4 is refused when the file on disk is not the file that was downloaded', { tags: ['critical'] }, async () => {
     const { deps, host } = bed.depsOf({ fetch: net, host: noWinget });
     const probe: Probe = async (_file, _args, env) => {
       await writeFile(env?.ARCHIPELIA_CHECK ?? '', 'something else');

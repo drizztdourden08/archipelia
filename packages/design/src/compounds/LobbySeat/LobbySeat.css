@@ -1,0 +1,197 @@
+/* @layer renderer-app @kind style */
+.lobby-seat {
+  --seat-edge: var(--c-border);
+  --seat-ground: var(--c-surface);
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  box-sizing: border-box;
+  min-inline-size: 0;
+  min-block-size: var(--size-128);
+  padding: var(--space-md);
+  border: var(--border-width-thin) solid var(--seat-edge);
+  border-radius: var(--radius-xl);
+  background: var(--seat-ground);
+  box-shadow: var(--shadow-1);
+  transition: border-color var(--duration-fast) var(--ease-standard);
+}
+
+.lobby-seat:hover {
+  --seat-edge: var(--c-border-strong);
+}
+
+.lobby-seat[data-selected] {
+  --seat-edge: var(--c-primary);
+
+  box-shadow: 0 0 0 var(--border-width-thin) var(--c-primary), var(--shadow-1);
+}
+
+.lobby-seat[data-state='attention'] {
+  --seat-edge: var(--c-warning);
+  --seat-ground: var(--c-warning-dim);
+}
+
+.lobby-seat[data-state='held'] {
+  --seat-edge: var(--c-border-strong);
+  --seat-ground: var(--c-inset);
+
+  justify-content: center;
+  border-style: dashed;
+  box-shadow: none;
+}
+
+.lobby-seat__who {
+  min-inline-size: 0;
+}
+
+.lobby-seat__text {
+  flex: 1;
+  min-inline-size: 0;
+}
+
+.lobby-seat[data-state='held'] .lobby-seat__text {
+  align-items: center;
+  text-align: center;
+}
+
+.lobby-seat .lobby-seat__name {
+  margin: 0;
+  overflow: hidden;
+  color: var(--c-text);
+  font-size: var(--text-md);
+  font-weight: var(--weight-semi);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-normal);
+  text-overflow: ellipsis;
+  text-transform: none;
+  white-space: nowrap;
+}
+
+.lobby-seat[data-state='held'] .lobby-seat__name {
+  color: var(--c-text-dim);
+}
+
+.lobby-seat__open {
+  max-inline-size: 100%;
+  overflow: hidden;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  text-overflow: ellipsis;
+}
+
+.lobby-seat__open:hover {
+  color: var(--c-primary-text);
+}
+
+.lobby-seat__meta {
+  overflow-wrap: anywhere;
+}
+
+.lobby-seat__tools {
+  flex: none;
+  flex-wrap: nowrap;
+  margin-block-start: calc(var(--space-2xs) * -1);
+  margin-inline-end: calc(var(--space-xs) * -1);
+}
+
+.lobby-seat__reason {
+  color: var(--c-warning-bright);
+  font-weight: var(--weight-medium);
+}
+
+.lobby-seat__foot {
+  margin-block-start: auto;
+}
+
+.lobby-seat__actions {
+  margin-inline-start: auto;
+}
+
+.lobby-seat__avatar {
+  --seat-tint: var(--c-tag-violet);
+  --seat-tint-soft: var(--c-tag-violet-soft);
+
+  position: relative;
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  inline-size: var(--size-48);
+  block-size: var(--size-48);
+  border: var(--border-width-thin) solid var(--seat-tint);
+  border-radius: var(--radius-lg);
+  background: var(--seat-tint-soft);
+  color: var(--seat-tint);
+}
+
+.lobby-seat__avatar[data-tint='blue'] {
+  --seat-tint: var(--c-tag-blue);
+  --seat-tint-soft: var(--c-tag-blue-soft);
+}
+
+.lobby-seat__avatar[data-tint='teal'] {
+  --seat-tint: var(--c-tag-teal);
+  --seat-tint-soft: var(--c-tag-teal-soft);
+}
+
+.lobby-seat__avatar[data-tint='green'] {
+  --seat-tint: var(--c-tag-green);
+  --seat-tint-soft: var(--c-tag-green-soft);
+}
+
+.lobby-seat__avatar[data-tint='amber'] {
+  --seat-tint: var(--c-tag-amber);
+  --seat-tint-soft: var(--c-tag-amber-soft);
+}
+
+.lobby-seat__avatar[data-tint='orange'] {
+  --seat-tint: var(--c-tag-orange);
+  --seat-tint-soft: var(--c-tag-orange-soft);
+}
+
+.lobby-seat__avatar[data-tint='rose'] {
+  --seat-tint: var(--c-tag-rose);
+  --seat-tint-soft: var(--c-tag-rose-soft);
+}
+
+.lobby-seat__avatar[data-tint='pink'] {
+  --seat-tint: var(--c-tag-pink);
+  --seat-tint-soft: var(--c-tag-pink-soft);
+}
+
+.lobby-seat__avatar[data-tint='cyan'] {
+  --seat-tint: var(--c-tag-cyan);
+  --seat-tint-soft: var(--c-tag-cyan-soft);
+}
+
+.lobby-seat__avatar[data-tint='lime'] {
+  --seat-tint: var(--c-tag-lime);
+  --seat-tint-soft: var(--c-tag-lime-soft);
+}
+
+.lobby-seat__avatar[data-art] {
+  border-color: var(--c-border-strong);
+}
+
+.lobby-seat__initials {
+  font-family: var(--font-title);
+  font-size: var(--text-md);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-wide);
+}
+
+.lobby-seat__art {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  opacity: 0;
+}
+
+.lobby-seat__avatar[data-art] .lobby-seat__art {
+  opacity: 1;
+}

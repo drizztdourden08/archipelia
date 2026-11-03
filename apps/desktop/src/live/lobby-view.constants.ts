@@ -15,6 +15,7 @@ const SEAT_TEXT = {
   held: 'Held for a player who joins',
   unknownClient: 'Unknown client',
   unlisted: 'unlisted client',
+  wantsSeat: (seat: string) => `wants the seat ${seat}`,
 } as const;
 
 export { SEAT_TEXT, SLOT_SEAT };

@@ -5,7 +5,7 @@ import { fallbackChoice } from '../../src/install/fallback-choice';
 import { installEngine } from '../../src/install/install-engine';
 import { fakeInstall, passed, pickedChoice, runtimeOf, testedChoice } from './install-fakes';
 
-describe('the install job', () => {
+describe('K1 the install job', { tags: ['critical'] }, () => {
   test('a passing install carries the worlds, tests the engine and switches to it', async () => {
     const { deps, job, guard } = fakeInstall();
     const result = await installEngine(deps, pickedChoice);
@@ -46,7 +46,7 @@ describe('the install job', () => {
 
 });
 
-describe('an install that stops early', () => {
+describe('K3 an install that stops early', { tags: ['critical'] }, () => {
   test('a cancel removes the half built folder and reports cancelled', async () => {
     const { deps, controller } = fakeInstall();
     deps.build.mockImplementation(() => {
@@ -76,7 +76,7 @@ describe('an install that stops early', () => {
 
 });
 
-describe('the switch at the end of an install', () => {
+describe('K3 the switch at the end of an install', { tags: ['critical'] }, () => {
   test('a switch that fails puts the game records back and keeps the tested engine', async () => {
     const { deps, guard } = fakeInstall();
     deps.activate.mockImplementation(() => Promise.reject(new Error('disk full')));
@@ -106,7 +106,7 @@ describe('the switch at the end of an install', () => {
   });
 });
 
-describe('the tested version offered after a failure', () => {
+describe('K1 the tested version offered after a failure', { tags: ['critical'] }, () => {
   const engineOf = (choice: EngineChoice) => ({
     id: 'x', ap: choice.ap, apCommit: '', python: choice.python, pythonRelease: choice.pythonRelease, target: 'win32-x64', builtAt: 0, state: 'ready' as const,
   });

@@ -1,10 +1,10 @@
 /* @layer core @kind logic */
 import type { ReleasesRead } from '../versions/versions.type';
-import { defaultRelease } from './default-release';
+import { manifestRelease } from './manifest-release';
 
-const prereleaseTag = async (readReleases: (repo: string) => Promise<ReleasesRead>, repo: string): Promise<string | undefined> => {
+const prereleaseTag = async (readReleases: (repo: string) => Promise<ReleasesRead>, repo: string, legacy?: string): Promise<string | undefined> => {
   const { releases } = await readReleases(repo);
-  const chosen = defaultRelease(releases);
+  const chosen = manifestRelease(releases, legacy);
   return chosen?.prerelease ? chosen.tag : undefined;
 };
 

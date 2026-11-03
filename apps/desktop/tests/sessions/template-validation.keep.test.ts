@@ -3,9 +3,9 @@ import { describe, expect, test } from 'vitest';
 import type { InstalledGame, SessionTemplate } from '@archipelia/model';
 import { templateOf } from '@archipelia/model';
 import { newTemplate } from '../../src/views/SessionBuilder/behavior/new-template';
-import { setupProblems } from '../../src/views/SessionBuilder/behavior/setup-problems';
-import { validatePlayers } from '../../src/views/SessionLobby/behavior/validate-players';
-import { PORT_PROBLEM } from '@archipelia/design';
+import { setupProblems } from '../../src/lobbies/setup-problems';
+import { validatePlayers } from '@archipelia/sessions/validation';
+import { PORT_PROBLEM } from '@archipelia/model';
 import { GAME, PRESET, presetPlayer } from './session-fixtures';
 
 const LIBRARY = { installed: [GAME], presets: [PRESET] };
@@ -16,7 +16,7 @@ const brokenCrystals = () => ({ ...presetPlayer(1, 'A'), source: { kind: 'preset
 
 const DIRECT = { admission: 'host-approval', allowUnlisted: false } as const;
 
-describe('the setup of a session', () => {
+describe('K1 the setup of a session', { tags: ['critical'] }, () => {
   test('a named session with no player is ready to start', () => {
     expect(setupProblems(withPlayers([]))).toEqual([]);
   });
@@ -40,7 +40,7 @@ describe('the setup of a session', () => {
   });
 });
 
-describe('the players in the lobby', () => {
+describe('K1 the players in the lobby', { tags: ['critical'] }, () => {
   test('one valid player has no problem', () => {
     expect(validatePlayers(withPlayers([presetPlayer(1, 'Johnny')]), LIBRARY)).toEqual([]);
   });
@@ -91,7 +91,7 @@ describe('the players in the lobby', () => {
   });
 });
 
-describe('a session saved before the split', () => {
+describe('K3 a session saved before the split', { tags: ['critical'] }, () => {
   test('keeps its players, which the lobby takes as its own players when it starts', () => {
     const stored = withPlayers([presetPlayer(1, 'Ana'), presetPlayer(2, 'Bo')]);
     expect(templateOf(stored)).toEqual({ ...stored, players: stored.players.map((player) => ({ ...player, direct: false })) });

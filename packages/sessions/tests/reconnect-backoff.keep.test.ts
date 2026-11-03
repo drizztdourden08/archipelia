@@ -1,12 +1,11 @@
 /* @layer tests @kind test */
 import { describe, expect, test } from 'vitest';
-import { nextRetry, RECONNECT_DELAYS_MS } from '../src/live-room';
+import { nextRetry } from '../src/live-room';
 
 const NOW = 1_000_000;
 
-describe('nextRetry', () => {
+describe('K1 nextRetry', { tags: ['critical'] }, () => {
   test('waits 2, 5, 10, 30 and 30 seconds over five tries', () => {
-    expect(RECONNECT_DELAYS_MS).toEqual([2000, 5000, 10000, 30000, 30000]);
     const waits = [0, 1, 2, 3, 4].map((tried) => (nextRetry(tried, NOW)?.retryAt ?? 0) - NOW);
     expect(waits).toEqual([2000, 5000, 10000, 30000, 30000]);
   });

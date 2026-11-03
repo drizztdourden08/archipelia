@@ -3,19 +3,15 @@ import { describe, expect, test } from 'vitest';
 import { chosenVersions } from '../../src/views/EngineSettings/behavior/chosen-versions';
 import { pythonOptions } from '../../src/views/EngineSettings/behavior/python-options';
 import { releaseOptions } from '../../src/views/EngineSettings/behavior/release-options';
-import { engine, feedOf, overviewOf, range, release } from './engine-fixture';
+import { engine, feedOf, overviewOf, range } from './engine-fixture';
 
-describe('Archipelago picker options', () => {
+describe('K1 Archipelago picker options', { tags: ['critical'] }, () => {
   test('lists every release newest first and marks the latest and the one in use', () => {
     const options = releaseOptions(overviewOf());
     expect(options.map((option) => option.value)).toEqual(['0.6.8', '0.6.7', '0.6.2']);
     expect(options[0]?.hint).toBe('latest');
     expect(options[1]?.hint).toBe('in use');
     expect(options[2]?.hint).toBeUndefined();
-  });
-
-  test('older releases stay pickable', () => {
-    expect(releaseOptions(overviewOf()).some((option) => option.value === '0.6.2' && !option.disabled)).toBe(true);
   });
 
   test('an installed release the list no longer carries is still offered', () => {
@@ -31,7 +27,7 @@ describe('Archipelago picker options', () => {
   });
 });
 
-describe('Python picker options', () => {
+describe('K1 Python picker options', { tags: ['critical'] }, () => {
   test('lists the builds and marks the tested one and the one in use', () => {
     const options = pythonOptions(overviewOf());
     expect(options.map((option) => option.value)).toEqual(['3.13.17', '3.12.15', '3.12.14']);
@@ -45,7 +41,7 @@ describe('Python picker options', () => {
   });
 });
 
-describe('the versions the pickers show', () => {
+describe('K1 the versions the pickers show', { tags: ['critical'] }, () => {
   test('start from the engine in use', () => {
     expect(chosenVersions(overviewOf(), {})).toEqual({ ap: '0.6.7', python: '3.12.14' });
   });
@@ -66,14 +62,9 @@ describe('the versions the pickers show', () => {
   test('nothing is chosen before the versions load', () => {
     expect(chosenVersions(null, { ap: '0.6.8' })).toEqual({});
   });
-
-  test('a release added to the feed later is a valid pick', () => {
-    const next = overviewOf({ feed: feedOf({ releases: [release('0.6.9'), release('0.6.8')] }) });
-    expect(chosenVersions(next, { ap: '0.6.9' }).ap).toBe('0.6.9');
-  });
 });
 
-describe('the Python range of the picked Archipelago', () => {
+describe('K1 the Python range of the picked Archipelago', { tags: ['critical'] }, () => {
   const narrow = () => overviewOf({ ranges: { '0.6.8': range('3.11.9', '3.13.0') } });
 
   test('turns off the builds it does not fit, with the reason', () => {

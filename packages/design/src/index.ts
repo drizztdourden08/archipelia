@@ -13,12 +13,17 @@ export type { ConsentPackage, ConsentWheel, PackageConsentDialogProps } from './
 export { PackageSourceDialog } from './compounds/PackageSourceDialog';
 export type { BuildLogView, BuildStage, PackageSourceDialogProps, PackageSourceHandlers, PackageSourceStep, SourceConsent, SourceFinish, SourceSearch } from './compounds/PackageSourceDialog';
 export { LogLines, logCopyText } from './compounds/LogLines';
+export { LobbySeat } from './compounds/LobbySeat';
+export type { LobbySeatAction, LobbySeatProps, LobbySeatState, LobbySeatStatus, LobbySeatTone } from './compounds/LobbySeat';
+export { LobbySeatGrid } from './compounds/LobbySeatGrid';
+export { LobbyStage } from './compounds/LobbyStage';
+export type { LobbyStageCode, LobbyStageConfig, LobbyStageFact, LobbyStageProps } from './compounds/LobbyStage';
 export { OptionControl, coercePresetValues, hintOf, isChangedValue, isLoose } from './compounds/OptionControl';
 export type { CoercedValues } from './compounds/OptionControl';
 export { OptionFieldRow } from './compounds/OptionFieldRow';
 export { PlayerStatusRow } from './compounds/PlayerStatusRow';
 export {
-  HINT_COST_RANGE, HOST_OPTIONS, PORT_PROBLEM, PORT_RANGE, RELEASE_OPTIONS, REMAINING_OPTIONS, SERVER_TEXT, SHUTDOWN_RANGE, ServerOptionsForm, inPortRange,
+  HINT_COST_RANGE, HOST_OPTIONS, PORT_RANGE, RELEASE_OPTIONS, REMAINING_OPTIONS, SERVER_TEXT, SHUTDOWN_RANGE, ServerOptionsForm,
   percentText,
 } from './compounds/ServerOptionsForm';
 export { RUN_STATUS, SessionStatusBar } from './compounds/SessionStatusBar';

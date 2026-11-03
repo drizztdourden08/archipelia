@@ -36,11 +36,11 @@ const failureOf = (run: () => unknown): { message: string; issues: { key: string
 };
 
 describe('the player YAML builder', () => {
-  test('writes the RotP shaped fixture exactly', () => {
+  test('K2 writes the RotP shaped fixture exactly', { tags: ['standard'] }, () => {
     expect(buildPlayerYaml(input)).toBe(readFixture('rotp-player.yaml'));
   });
 
-  test('the output reads back as the same data under YAML 1.1 and 1.2', () => {
+  test('K1 the output reads back as the same data under YAML 1.1 and 1.2', { tags: ['standard'] }, () => {
     const text = buildPlayerYaml(input);
     for (const version of ['1.1', '1.2'] as const) {
       const doc = parse(text, { version }) as Record<string, unknown>;
@@ -55,12 +55,12 @@ describe('the player YAML builder', () => {
     }
   });
 
-  test('works without a schema and keeps the caller order', () => {
+  test('K1 works without a schema and keeps the caller order', { tags: ['critical'] }, () => {
     const text = buildPlayerYaml({ game: 'Other Game', slotName: 'Zed', options: { b: 1, a: true } });
     expect(text).toBe('name: Zed\ngame: Other Game\nOther Game:\n  b: 1\n  a: true\n');
   });
 
-  test('withDefaults fills the rows the caller left out', () => {
+  test('K1 withDefaults fills the rows the caller left out', { tags: ['standard'] }, () => {
     const text = buildPlayerYaml({ game: ROTP_GAME, slotName: 'Link', schema, options: { dungeon_count: 3 }, withDefaults: true });
     const block = (parse(text) as Record<string, Record<string, unknown>>)[ROTP_GAME] ?? {};
     expect(block.dungeon_count).toBe(3);
@@ -68,14 +68,14 @@ describe('the player YAML builder', () => {
     expect(block.accessibility).toBe('full');
   });
 
-  test('common Archipelago options pass without a schema row', () => {
+  test('K1 common Archipelago options pass without a schema row', { tags: ['standard'] }, () => {
     const text = buildPlayerYaml({ game: ROTP_GAME, slotName: 'Link', schema, options: { local_items: ['Sword'], start_hints: [] } });
     expect(text).toContain('local_items:\n    - Sword');
     expect(text).toContain('start_hints: []');
   });
 });
 
-describe('validation errors', () => {
+describe('K1 validation errors', { tags: ['standard'] }, () => {
   test('lists every problem with the option name', () => {
     const failure = failureOf(() => buildPlayerYaml({
       ...input,
@@ -114,7 +114,7 @@ describe('validation errors', () => {
   });
 });
 
-describe('validation of the other inputs', () => {
+describe('K1 validation of the other inputs', { tags: ['critical'] }, () => {
   test.each([
     ['', 'non-empty'],
     [' Link', 'start or end with a space'],
@@ -158,7 +158,7 @@ const NASTY = [
   'y', 'n', 'random', '<<', '=', 'on', 'Off', 'plain words here', 'path/to.file (1)',
 ];
 
-describe('the emitter is safe', () => {
+describe('K1 the emitter is safe', { tags: ['critical'] }, () => {
   test.each(NASTY.map((value) => [JSON.stringify(value), value]))('the text %s reads back unchanged as a value and as a key', (_label, value) => {
     const text = emitYaml({ key: value, list: [value], nested: { [value]: value } });
     for (const version of ['1.1', '1.2'] as const) {

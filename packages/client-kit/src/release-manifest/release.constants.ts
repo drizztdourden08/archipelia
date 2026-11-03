@@ -2,7 +2,7 @@
 
 const RELEASE_FORMAT = 1;
 
-const KIT_VERSION = '0.2.0';
+const KIT_VERSION = '0.3.0';
 
 const MANIFEST_NAME = 'archipelia.json';
 

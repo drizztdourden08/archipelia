@@ -9,7 +9,7 @@ const carried = (reinstalled: string[]) => ({ copied: [], reinstalled, problems:
 const read = (files: DataFiles, apworld: string) => files.readJson<InstalledGame | null>(`${apworld}.json`, null);
 
 describe('guardRecords', () => {
-  test('puts back the records a carry rewrote for the new engine', async () => {
+  test('K3 puts back the records a carry rewrote for the new engine', { tags: ['critical'] }, async () => {
     const files = memoryFiles([recordOf('alpha'), recordOf('beta')]);
     const guard = await guardRecords(files);
     await files.writeJson('beta.json', recordOf('beta', { version: '0.6.8', installedAt: 200 }));
@@ -19,7 +19,7 @@ describe('guardRecords', () => {
     expect((await read(files, 'alpha'))?.installedAt).toBe(100);
   });
 
-  test('leaves a record the owner changed after the carry', async () => {
+  test('K3 leaves a record the owner changed after the carry', { tags: ['critical'] }, async () => {
     const files = memoryFiles([recordOf('beta')]);
     const guard = await guardRecords(files);
     await files.writeJson('beta.json', recordOf('beta', { version: '0.6.8', installedAt: 200 }));
@@ -29,7 +29,7 @@ describe('guardRecords', () => {
     expect((await read(files, 'beta'))?.version).toBe('2.0.0');
   });
 
-  test('restores nothing when no carry was noted, and a second restore is harmless', async () => {
+  test('K3 restores nothing when no carry was noted, and a second restore is harmless', { tags: ['critical'] }, async () => {
     const files = memoryFiles([recordOf('beta')]);
     const guard = await guardRecords(files);
     expect(await guard.restore()).toEqual([]);

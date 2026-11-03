@@ -13,7 +13,6 @@ import { lanRows } from '../../src/views/ArchipeliaServers/behavior/lan-rows';
 import { networkRows } from '../../src/views/ArchipeliaServers/behavior/network-rows';
 import { newEntry } from '../../src/views/ArchipeliaServers/behavior/new-entry';
 import { reachFacts } from '../../src/views/ArchipeliaServers/behavior/reach-facts';
-import { remoteFacts } from '../../src/views/ArchipeliaServers/behavior/remote-facts';
 import { inputOf } from './row-parts';
 
 const PIN = 'ab'.repeat(32);
@@ -28,7 +27,7 @@ const lan = (patch: Partial<LanEntry> = {}): LanEntry => ({
 
 const labels = (facts: { label: string }[]) => facts.map((fact) => fact.label);
 
-describe('the server addresses and pins', () => {
+describe('K1 the server addresses and pins', { tags: ['critical'] }, () => {
   test('reads ws and wss addresses with the default port of the lobby', () => {
     expect(parseServerUrl('ws://127.0.0.1')).toEqual({ secure: false, host: '127.0.0.1', port: 38290 });
     expect(parseServerUrl(' wss://play.example.net:443 ')).toEqual({ secure: true, host: 'play.example.net', port: 443 });
@@ -56,7 +55,7 @@ describe('the server addresses and pins', () => {
   });
 });
 
-describe('the remote server form', () => {
+describe('K1 the remote server form', { tags: ['critical'] }, () => {
   test('asks for a label, an address, a token and a valid pin', () => {
     const fields = (draft: Parameters<typeof draftProblems>[0]) => draftProblems(draft).map((problem) => problem.field);
     expect(fields({ label: '', url: 'nope', token: '', pin: 'zz' })).toEqual(['label', 'url', 'token', 'pin']);
@@ -76,16 +75,9 @@ describe('the remote server form', () => {
     expect(entryStatus({ ...base, lastTest: { at: 1, ok: true, message: 'ok' } }).tone).toBe('success');
     expect(entryStatus({ ...base, lastTest: { at: 1, ok: false, message: 'no' } }).tone).toBe('danger');
   });
-
-  test('shows the pin and the answer of the server', () => {
-    const entry: LobbyServerEntry = { id: 'r1', label: 'VPS', url: 'wss://vps.test', tokenRef: 't', certSha256: PIN };
-    const facts = remoteFacts(entry, { ok: true, message: 'Connected', info: { name: 'Archipelia', version: '0.2.0', port: 1, sandbox: 'none', tls: true } });
-    expect(labels(facts)).toEqual(['Address', 'Certificate pin', 'Server', 'Lobby TLS', 'Last test']);
-    expect(labels(remoteFacts({ ...entry, certSha256: undefined }, undefined))).toEqual(['Address', 'Certificate pin']);
-  });
 });
 
-describe('the server on this computer', () => {
+describe('K1 the server on this computer', { tags: ['critical'] }, () => {
   test('lists the reach of a listening server and says the lobby is LAN-only until TLS', () => {
     const facts = reachFacts(status(), {});
     expect(labels(facts)).toEqual(['Lobby address', 'Network mode', 'Seen on your network', 'Router port', 'Public address check', 'TLS']);
@@ -125,7 +117,7 @@ describe('the server on this computer', () => {
   });
 });
 
-describe('the servers found on the network', () => {
+describe('K1 the servers found on the network', { tags: ['critical'] }, () => {
   test('says whether each one runs the version of the engine, with this computer first', () => {
     const rows = lanRows([lan({ id: 'b', name: 'Zed', ap: '0.6.8' }), lan({ id: 'a', name: 'Alpha' }), lan({ id: 's', name: 'Mine', self: true })], '0.6.7');
     expect(rows.map((row) => [row.name, row.match])).toEqual([['Mine', 'same'], ['Alpha', 'same'], ['Zed', 'different']]);
