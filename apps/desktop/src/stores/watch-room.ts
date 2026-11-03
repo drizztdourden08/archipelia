@@ -1,9 +1,10 @@
 /* @layer renderer-app @kind logic */
 import { slotTypes } from 'archipelago.js';
 import type { API, Client } from 'archipelago.js';
-import type { HintLookup, ProtocolHint, RoomNames, RoomPlayer, WatchedChecks } from '@archipelia/sessions/live-room';
+import type { HintLookup, ProtocolHint, RoomPlayer, WatchedChecks } from '@archipelia/sessions/live-room';
 import { HINTS_KEY_PREFIX, STATUS_KEY_PREFIX, asHints, hintRows, hintsKey, statusKey } from '@archipelia/sessions/live-room';
 import { NO_RETRY } from './live-room-store.constants';
+import { roomNamesOf } from './room-names-of';
 import type { LiveRoomSet } from './live-room-store.type';
 
 const lookupOf = (room: Client): HintLookup => ({
@@ -19,16 +20,6 @@ const roomPlayers = (room: Client): RoomPlayer[] => {
     .filter(([, info]) => info.type === slotTypes.player)
     .map(([slot, info]) => ({ team, slot: Number(slot), name: info.name, game: info.game }))
     .sort((a, b) => a.slot - b.slot);
-};
-
-const namesOf = (room: Client, players: readonly RoomPlayer[]): RoomNames => {
-  const { games } = room.package.exportPackage();
-  const mine = new Set(players.map((player) => player.game));
-  return Object.fromEntries(
-    Object.entries(games)
-      .filter(([game]) => mine.has(game))
-      .map(([game, data]) => [game, { items: Object.keys(data.item_name_to_id), locations: Object.keys(data.location_name_to_id) }]),
-  );
 };
 
 const watchedOf = (room: Client): WatchedChecks => ({
@@ -48,7 +39,8 @@ const watchRoom = async (room: Client, set: LiveRoomSet, current: () => boolean,
     }
   };
   const players = roomPlayers(room);
-  set({ phase: 'live', error: null, players, names: namesOf(room, players), watched: watchedOf(room), passwordRequired: room.room.password, ...NO_RETRY });
+  set({ phase: 'live', error: null, players, watched: watchedOf(room), passwordRequired: room.room.password, ...NO_RETRY });
+  void roomNamesOf(room, players).then((names) => { if (current()) set({ names }); });
   room.room.on('locationsChecked', () => { if (current()) set({ watched: watchedOf(room) }); });
   room.socket.on('disconnected', () => { if (current()) onLost(); });
   const keys = players.flatMap((p) => [statusKey(p.team, p.slot), hintsKey(p.team, p.slot)]);
