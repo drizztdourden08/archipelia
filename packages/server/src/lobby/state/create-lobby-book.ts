@@ -41,6 +41,9 @@ const createLobbyBook = (store: LobbyStore, now: () => number) => {
     return all.find((lobby) => lobby.phase !== 'closed') ?? all[0];
   };
 
+  const byJoinToken = async (token: string) =>
+    (await list()).find((lobby) => lobby.joinToken === token && lobby.options.listed === true && lobby.phase !== 'closed');
+
   const add = async (lobby: Lobby) => {
     await ready();
     await save(lobby);
@@ -62,7 +65,7 @@ const createLobbyBook = (store: LobbyStore, now: () => number) => {
   const queue = createQueue();
   const commit = (id: string, change: (draft: Lobby) => void | Promise<void>): Promise<Lobby> => queue(id, () => write(id, change));
 
-  return { add, byCode, commit, get, list };
+  return { add, byCode, byJoinToken, commit, get, list };
 };
 
 export { createLobbyBook };

@@ -16,6 +16,7 @@ const readLobbyOptions = (value: Record<string, unknown> | undefined, base: Lobb
   return {
     ...(value.admission === undefined ? {} : { admission: readChoice('options.admission', value.admission, ADMISSIONS) }),
     ...(value.allowUnlisted === undefined ? {} : { allowUnlisted: readFlag('options.allowUnlisted', value.allowUnlisted) }),
+    ...(value.listed === undefined ? {} : { listed: readFlag('options.listed', value.listed) }),
     ...(value.allowedGames === undefined ? {} : { allowedGames: readGames(value.allowedGames) }),
     ...(value.maxSlots === undefined ? {} : { maxSlots: readWhole('options.maxSlots', value.maxSlots, SLOT_RANGE) }),
     ...(value.room === undefined ? {} : { room: readRoom(value.room) }),

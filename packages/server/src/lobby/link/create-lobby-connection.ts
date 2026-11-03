@@ -43,7 +43,7 @@ const createLobbyConnection = (options: ConnectionOptions) => {
     if (!decoded.ok) return fail(decoded.failure, seqOf(text));
     const message = decoded.message as ClientMessage;
     if (state.welcomed) return state.ref ? answerMember(conversation, state.ref, message) : undefined;
-    if (message.type === 'lobby.info' || message.type === 'hello') return answerFirst(conversation, message);
+    if (message.type === 'lobby.info' || message.type === 'lobby.browse' || message.type === 'hello') return answerFirst(conversation, message);
     return fail(HELLO_FIRST, seqOf(text));
   };
 

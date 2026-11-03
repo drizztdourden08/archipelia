@@ -57,6 +57,7 @@ type DirectConnection = {
   admission: LobbyAdmission;
   allowUnlisted: boolean;
   allowedGames: string[];
+  listed?: boolean;
 };
 
 type SessionLobby = {

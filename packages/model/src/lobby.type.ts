@@ -15,6 +15,7 @@ type LobbyOptions = {
   admission: LobbyAdmission;
   allowUnlisted: boolean;
   allowedGames?: string[];
+  listed?: boolean;
   maxSlots: number;
   limits: LobbyLimits;
   room: HostTarget;
@@ -101,6 +102,7 @@ type LobbyFailure = { stage: 'generate' | 'host'; message: string };
 type Lobby = {
   id: string;
   code: string;
+  joinToken?: string;
   name: string;
   phase: LobbyPhase;
   rev: number;

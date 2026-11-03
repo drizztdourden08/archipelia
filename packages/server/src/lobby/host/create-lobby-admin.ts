@@ -10,6 +10,7 @@ import { consentWorld } from './consent-world';
 import { createLobby } from './create-lobby';
 import { lockLobby } from './lock-lobby';
 import { memberYaml } from './member-yaml';
+import { rotateJoinToken } from './rotate-join-token';
 import { unlockLobby } from './unlock-lobby';
 import { sweepLobbies } from './sweep-lobbies';
 import { updateLobby } from './update-lobby';
@@ -34,6 +35,7 @@ const createLobbyAdmin = (ctx: LobbyContext) => {
     update: (lobbyId: string, patch: LobbyPatch) => updateLobby(ctx, lobbyId, patch),
     lock: (lobbyId: string) => lockLobby(ctx, lobbyId),
     unlock: (lobbyId: string) => unlockLobby(ctx, lobbyId),
+    rotateJoinToken: (lobbyId: string) => rotateJoinToken(ctx, lobbyId),
     close: (lobbyId: string) => closeLobby(ctx, lobbyId),
     start: (lobbyId: string) => startLobby(ctx, lobbyId),
     stopRoom,

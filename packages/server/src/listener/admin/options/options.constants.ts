@@ -1,7 +1,7 @@
 /* @layer core @kind config */
 import { ADMISSIONS, RELEASE_MODES, REMAINING_MODES, SPOILER_LEVELS } from '@archipelia/model';
 
-const OPTION_KEYS = ['admission', 'allowUnlisted', 'allowedGames', 'maxSlots', 'room', 'generator', 'server'] as const;
+const OPTION_KEYS = ['admission', 'allowUnlisted', 'allowedGames', 'listed', 'maxSlots', 'room', 'generator', 'server'] as const;
 
 const GENERATOR_KEYS = ['spoiler', 'race', 'progressionBalancing'] as const;
 

@@ -1,6 +1,7 @@
 /* @layer core @kind logic */
 import type { LobbyContext } from '../lobby-context.type';
 import type { LobbyPatch } from '../lobby-service.type';
+import { syncJoinToken } from '../state/sync-join-token';
 import { EDITABLE_PHASES } from './host.constants';
 
 const updateLobby = async (ctx: LobbyContext, lobbyId: string, patch: LobbyPatch) => {
@@ -11,6 +12,7 @@ const updateLobby = async (ctx: LobbyContext, lobbyId: string, patch: LobbyPatch
     if (patch.source !== undefined) draft.source = patch.source;
     if (patch.seats !== undefined) draft.seats = patch.seats;
     if (patch.openSeats !== undefined) draft.openSeats = patch.openSeats;
+    syncJoinToken(draft);
   });
   ctx.publish(lobby);
   return lobby;

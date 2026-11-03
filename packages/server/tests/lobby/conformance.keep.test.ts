@@ -52,13 +52,14 @@ const hostHook = (server: ConformanceServer, lobby: Lobby, name: string) => asyn
   else if (line.action === 'lock') await service.lock(lobby.id);
   else if (line.action === 'consent') await service.consent(lobby.id, String(line.world), line.allowed === true);
   else if (line.action === 'takeover') await takeOver(server, name, bindings);
+  else if (line.action === 'hide') await service.update(lobby.id, { options: { listed: false } });
   else if (line.action === 'start') {
     await (await service.start(lobby.id)).finished;
   }
 };
 
 describe('K2 the real lobby server against the fake client', { tags: ['standard'] }, () => {
-  test.each(SCENARIO_CATALOG.map((entry) => entry.name))('%s', async (name) => {
+  test.each(SCENARIO_CATALOG.filter((entry) => entry.clientSideOnly !== true).map((entry) => entry.name))('%s', async (name) => {
     const entry = SCENARIO_CATALOG.find((candidate) => candidate.name === name);
     if (!entry) throw new Error(`no catalog entry for ${name}`);
     running = await startConformanceServer(name, entry.setup);
