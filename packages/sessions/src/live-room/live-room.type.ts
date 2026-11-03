@@ -3,6 +3,10 @@ type PlayerStatus = 'unknown' | 'offline' | 'connected' | 'ready' | 'playing' | 
 
 type RoomPlayer = { team: number; slot: number; name: string; game: string };
 
+type GameNames = { items: readonly string[]; locations: readonly string[] };
+
+type RoomNames = Readonly<Record<string, GameNames>>;
+
 type WatchedChecks = { team: number; slot: number; checked: number; total: number };
 
 type ProtocolHint = {
@@ -50,6 +54,6 @@ type RetryPlan = { attempt: number; attempts: number; retryAt: number };
 type LiveRoomTarget = { sessionId: string; urls: string[]; slotName: string };
 
 export type {
-  HintLookup, HintState, HintView, LiveRoomPhase, LiveRoomTarget, PlayerStatus, PlayerView, ProtocolHint, RetryPlan, RoomPlayer,
-  WatchedChecks,
+  GameNames, HintLookup, HintState, HintView, LiveRoomPhase, LiveRoomTarget, PlayerStatus, PlayerView, ProtocolHint, RetryPlan, RoomNames,
+  RoomPlayer, WatchedChecks,
 };

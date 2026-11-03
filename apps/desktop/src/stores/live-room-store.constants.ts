@@ -6,7 +6,7 @@ const TRACKER_TAGS = ['Tracker', 'NoText'];
 const NO_RETRY: LiveRoomRetry = { retryAt: null, attempt: 0, attempts: 0, retrying: false };
 
 const IDLE: LiveRoomData = {
-  sessionId: null, phase: 'idle', error: null, players: [], statuses: {}, hints: [], watched: null, passwordRequired: false, ...NO_RETRY,
+  sessionId: null, phase: 'idle', error: null, players: [], names: {}, statuses: {}, hints: [], watched: null, passwordRequired: false, ...NO_RETRY,
 };
 
 const LIVE_FAILED = 'Could not connect to the room.';

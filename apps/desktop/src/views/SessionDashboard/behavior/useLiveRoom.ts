@@ -4,6 +4,7 @@ import { setPlayers } from '@archipelia/model';
 import type { Session } from '@archipelia/model';
 import type { HostLogLine } from '@archipelia/hosts';
 import { checksFromLog, hintsFromLog, playerRows, presenceOf, roomPasswordNeed, roomPlayersOf, scopedTo, targetKey, watchTarget } from '@archipelia/sessions/live-room';
+import type { ConsoleRoom } from './console-room.type';
 import { holdLiveRoom } from './hold-live-room';
 import { IDLE } from '../../../stores/live-room-store.constants';
 import { useLiveRoomStore } from '../../../stores/useLiveRoomStore';
@@ -12,7 +13,7 @@ import type { LiveConnection } from '../SessionDashboard.type';
 const useLiveRoom = (session: Session | null, lines: readonly HostLogLine[]) => {
   const store = useLiveRoomStore();
   const sessionId = session?.id ?? null;
-  const { phase, error, players, statuses, watched, hints, connect, retry, retryAt, attempt, attempts, retrying } = scopedTo(store, sessionId, { ...store, ...IDLE });
+  const { phase, error, players, names: gameNames, statuses, watched, hints, connect, retry, retryAt, attempt, attempts, retrying } = scopedTo(store, sessionId, { ...store, ...IDLE });
   const passwordNeed = roomPasswordNeed(store, sessionId);
   const target = useMemo(() => (session ? watchTarget(session) : null), [session]);
   const targetRef = useRef(target);
@@ -31,6 +32,7 @@ const useLiveRoom = (session: Session | null, lines: readonly HostLogLine[]) => 
   const logChecks = useMemo(() => checksFromLog(texts, names), [texts, names]);
   const online = useMemo(() => presenceOf(texts, names), [texts, names]);
   const live = phase === 'live' && players.length > 0;
+  const room: ConsoleRoom = useMemo(() => ({ players: live ? players : [], names: live ? gameNames : {} }), [live, players, gameNames]);
   const rows = useMemo(
     () => playerRows({ players: live ? players : roomPlayersOf(planned ?? []), statuses: live ? statuses : {}, watched: live ? watched : null, logChecks, online }),
     [live, players, planned, statuses, watched, logChecks, online],
@@ -43,7 +45,7 @@ const useLiveRoom = (session: Session | null, lines: readonly HostLogLine[]) => 
     [phase, error, retryAt, attempt, attempts, retrying, submitPassword, retry],
   );
 
-  return { connection, hints: phase === 'live' ? hints : logHints, passwordNeed, phase, players: rows };
+  return { connection, hints: phase === 'live' ? hints : logHints, passwordNeed, phase, players: rows, room };
 };
 
 export { useLiveRoom };

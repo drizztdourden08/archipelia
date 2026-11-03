@@ -9,13 +9,15 @@ import { useConsole } from '../../behavior/useConsole';
 import { playerCommandGroups } from '../../behavior/player-command-groups';
 import { consoleSpecsOf } from '../../behavior/console-specs-of';
 import { useCommandSubmit } from '../../behavior/useCommandSubmit';
+import { useLiveRoom } from '../../behavior/useLiveRoom';
 
 const ConsoleWidget = ({ session, lines, enabled }: ConsoleWidgetProps) => {
   const { confirmSend, draft, history, rows, send, setDraft } = useConsole(session.id, lines);
   const save = useCallback(() => { void send('/save'); }, [send]);
   const players = useCallback(() => { void send('/players'); }, [send]);
   const names = useMemo(() => setPlayers(session.snapshot.players).map((player) => player.name), [session.snapshot.players]);
-  const specs = useMemo(() => consoleSpecsOf(names), [names]);
+  const { room } = useLiveRoom(session, lines);
+  const specs = useMemo(() => consoleSpecsOf(names, room), [names, room]);
   const clearDraft = useCallback(() => setDraft(''), [setDraft]);
   const submit = useCommandSubmit(send, clearDraft);
   const groups = useMemo(() => playerCommandGroups(names, confirmSend, !enabled), [names, confirmSend, enabled]);

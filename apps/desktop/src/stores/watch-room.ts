@@ -4,6 +4,7 @@ import type { API, Client } from 'archipelago.js';
 import type { HintLookup, ProtocolHint, RoomPlayer, WatchedChecks } from '@archipelia/sessions/live-room';
 import { HINTS_KEY_PREFIX, STATUS_KEY_PREFIX, asHints, hintRows, hintsKey, statusKey } from '@archipelia/sessions/live-room';
 import { NO_RETRY } from './live-room-store.constants';
+import { roomNamesOf } from './room-names-of';
 import type { LiveRoomSet } from './live-room-store.type';
 
 const lookupOf = (room: Client): HintLookup => ({
@@ -39,6 +40,7 @@ const watchRoom = async (room: Client, set: LiveRoomSet, current: () => boolean,
   };
   const players = roomPlayers(room);
   set({ phase: 'live', error: null, players, watched: watchedOf(room), passwordRequired: room.room.password, ...NO_RETRY });
+  void roomNamesOf(room, players).then((names) => { if (current()) set({ names }); });
   room.room.on('locationsChecked', () => { if (current()) set({ watched: watchedOf(room) }); });
   room.socket.on('disconnected', () => { if (current()) onLost(); });
   const keys = players.flatMap((p) => [statusKey(p.team, p.slot), hintsKey(p.team, p.slot)]);

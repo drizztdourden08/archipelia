@@ -8,8 +8,8 @@ const specOf = (id: string) => specs.find((spec) => spec.id === id);
 
 describe('K2 console command specs', { tags: ['critical'] }, () => {
   test('every command becomes a pattern spec with a fixed command word and one slot per param', () => {
-    expect(specOf('hint')?.pattern).toBe('/hint {player:choice @players} {item:text}');
-    expect(specOf('send_multiple')?.pattern).toBe('/send_multiple {amount:number 1..100} {player:choice @players} {item:text}');
+    expect(specOf('hint')?.pattern).toBe('/hint {player:choice @players} {item:choice @items}');
+    expect(specOf('send_multiple')?.pattern).toBe('/send_multiple {amount:number 1..100} {player:choice @players} {item:choice @items}');
     expect(specOf('players')?.pattern).toBe('/players');
   });
 
