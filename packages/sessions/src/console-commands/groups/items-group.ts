@@ -34,7 +34,7 @@ const itemsGroup: readonly ConsoleCommand[] = [
     icon: 'layers',
     group: 'Items and hints',
     description: 'Send several copies of one item to a player, up to 100.',
-    params: [{ name: 'amount', label: 'Amount', kind: 'number', placeholder: `1 to ${MAX_SEND_AMOUNT}` }, playerParam, itemParam],
+    params: [{ name: 'amount', label: 'Amount', kind: 'number', min: 1, max: MAX_SEND_AMOUNT, placeholder: `1 to ${MAX_SEND_AMOUNT}` }, playerParam, itemParam],
     format: (values) => commandLine('send_multiple', String(wholeNumber(values, 'amount', MAX_SEND_AMOUNT, 1)), ...target(values, 'item')),
   },
   {

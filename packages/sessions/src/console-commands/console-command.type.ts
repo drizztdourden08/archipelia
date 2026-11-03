@@ -14,6 +14,8 @@ type ConsoleParam = {
   optional?: boolean;
   placeholder?: string;
   dependsOn?: string;
+  min?: number;
+  max?: number;
 };
 
 type ConsoleValue = string | number | boolean | undefined;

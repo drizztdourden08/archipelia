@@ -1,16 +1,18 @@
 /* @layer renderer-app @kind logic */
-import type { CommandSpec } from '@drizztdourden08/tessera/composites';
+import type { CommandSpec, PatternLists } from '@drizztdourden08/tessera/composites';
 import type { IconName } from '@drizztdourden08/tessera/primitives';
-import type { ConsoleCommand } from '@archipelia/sessions/console-commands';
-import { consoleParamOf } from './console-param-of';
+import type { ConsoleCommand, ConsoleParam } from '@archipelia/sessions/console-commands';
+import { consolePatternOf } from './console-pattern-of';
+import { consoleSlotsOf } from './console-slots-of';
 
-const consoleSpecOf = (command: ConsoleCommand, players: readonly string[]): CommandSpec => ({
-  id: command.id,
-  label: command.label,
+const consoleSpecOf = (command: ConsoleCommand, params: readonly ConsoleParam[], label: string, lists: PatternLists): CommandSpec => ({
+  id: params.length === command.params.length ? command.id : `${command.id}-short`,
+  label,
   icon: command.icon as IconName,
   group: command.group,
   description: command.description,
-  params: command.params.map((param) => consoleParamOf(param, players)),
+  pattern: consolePatternOf(command.id, params),
+  setup: { slots: consoleSlotsOf(params), lists },
   format: command.format,
 });
 

@@ -38,7 +38,7 @@
     "@drizztdourden08/brock-react": "^0.116.0",
     "@drizztdourden08/brock-secrets": "^0.116.0",
     "@drizztdourden08/brock-updater": "^0.116.0",
-    "@drizztdourden08/tessera": "^0.95.0",
+    "@drizztdourden08/tessera": "^0.96.0",
     "@electron-toolkit/utils": "catalog:",
     "@peculiar/x509": "^2.1.0",
     "@runonflux/nat-upnp": "^2.0.5",

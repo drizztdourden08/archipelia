@@ -52,7 +52,7 @@ const roomGroup: readonly ConsoleCommand[] = [
     icon: 'clock',
     group: 'Room',
     description: 'Start a countdown for every connected player, from 1 second up to 1 hour.',
-    params: [{ name: 'seconds', label: 'Seconds', kind: 'number', optional: true, placeholder: String(DEFAULT_COUNTDOWN_SECONDS) }],
+    params: [{ name: 'seconds', label: 'Seconds', kind: 'number', min: 1, max: MAX_COUNTDOWN_SECONDS, optional: true, placeholder: String(DEFAULT_COUNTDOWN_SECONDS) }],
     format: (values) => commandLine('countdown', String(wholeNumber(values, 'seconds', MAX_COUNTDOWN_SECONDS, DEFAULT_COUNTDOWN_SECONDS))),
   },
 ];
