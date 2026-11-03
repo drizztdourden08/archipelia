@@ -8,15 +8,14 @@ import { sessionSummary } from '../../src/views/Sessions/behavior/session-summar
 import { PRESET, presetPlayer } from './session-fixtures';
 
 describe('K1 the one line of a saved player', { tags: ['critical'] }, () => {
-  test('names the game and the preset, or the file, and marks a direct player game as the fallback', () => {
+  test('names the game and the preset, or the file', () => {
     expect(playerSummary(presetPlayer(1, 'Ana'), [PRESET])).toBe('Demo, preset Open');
-    expect(playerSummary({ ...presetPlayer(1, 'Ana'), direct: true }, [PRESET])).toBe('Demo, preset Open (fallback)');
-    const yaml: SessionPlayer = { slot: 2, name: 'Bo', game: 'Demo', source: { kind: 'yaml', fileName: 'bo.yaml', yaml: 'x' } };
+    const yaml: SessionPlayer = { kind: 'set', slot: 2, name: 'Bo', game: 'Demo', source: { kind: 'yaml', fileName: 'bo.yaml', yaml: 'x' } };
     expect(playerSummary(yaml, [])).toBe('Demo, YAML bo.yaml');
   });
 
-  test('says when a direct player brings their own game, and when a game is missing', () => {
-    expect(playerSummary({ slot: 3, name: 'Cy', direct: true }, [])).toBe('Brings their own game');
+  test('says when a seat is open to any player, and when a game is missing', () => {
+    expect(playerSummary({ kind: 'direct', slot: 3 }, [])).toBe('Open seat, any player');
     expect(playerSummary({ ...presetPlayer(4, 'Dee'), game: '' }, [PRESET])).toBe('No game picked yet');
   });
 });

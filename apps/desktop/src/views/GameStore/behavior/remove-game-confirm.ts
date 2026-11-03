@@ -6,7 +6,7 @@ const counted = (count: number, word: string) => `${count} ${word}${count === 1 
 
 const usersOf = (game: string, presets: readonly GamePreset[], templates: readonly SessionTemplate[]) => {
   const presetCount = presets.filter((preset) => preset.game === game).length;
-  const templateCount = templates.filter((template) => template.players.some((player) => player.game === game)).length;
+  const templateCount = templates.filter((template) => template.players.some((player) => player.kind === 'set' && player.game === game)).length;
   if (presetCount + templateCount === 0) return 'No preset or session uses it.';
   return `${counted(presetCount, 'preset')} and ${counted(templateCount, 'session')} use it.`;
 };

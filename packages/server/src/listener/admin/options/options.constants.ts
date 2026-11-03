@@ -1,7 +1,7 @@
 /* @layer core @kind config */
 import { ADMISSIONS, RELEASE_MODES, REMAINING_MODES, SPOILER_LEVELS } from '@archipelia/model';
 
-const OPTION_KEYS = ['admission', 'allowUnlisted', 'maxSlots', 'room', 'generator', 'server'] as const;
+const OPTION_KEYS = ['admission', 'allowUnlisted', 'allowedGames', 'maxSlots', 'room', 'generator', 'server'] as const;
 
 const GENERATOR_KEYS = ['spoiler', 'race', 'progressionBalancing'] as const;
 
@@ -25,6 +25,10 @@ const SEAT_LIMIT = 64;
 
 const SEAT_NAME_LIMIT = 16;
 
+const GAME_LIMIT = 200;
+
+const GAME_NAME_LIMIT = 100;
+
 const SLOT_RANGE ={ min: 1, max: 500 };
 
 const PORT_RANGE = { min: 1024, max: 65535 };
@@ -36,6 +40,6 @@ const SHUTDOWN_RANGE = { min: 0, max: 525600 };
 const TEXT_LIMIT = 200;
 
 export {
-  ADMISSIONS, ENGINE_KEYS, GENERATOR_KEYS, HINT_RANGE, OPTION_KEYS, OVERRIDE_KEYS, OVERRIDE_TEXT_LIMIT, OVERRIDES_MAX, PORT_RANGE, RELEASE_MODES, REMAINING_MODES, ROOM_KEYS,
+  ADMISSIONS, ENGINE_KEYS, GAME_LIMIT, GAME_NAME_LIMIT, GENERATOR_KEYS, HINT_RANGE, OPTION_KEYS, OVERRIDE_KEYS, OVERRIDE_TEXT_LIMIT, OVERRIDES_MAX, PORT_RANGE, RELEASE_MODES, REMAINING_MODES, ROOM_KEYS,
   SEAT_LIMIT, SEAT_NAME_LIMIT, SERVER_KEYS, SHUTDOWN_RANGE, SLOT_ORIGINS, SLOT_RANGE, SOURCE_KEYS, SPOILER_LEVELS, TEXT_LIMIT,
 };

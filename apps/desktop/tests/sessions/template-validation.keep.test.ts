@@ -14,7 +14,7 @@ const withPlayers = (players: SessionTemplate['players']): SessionTemplate => ({
 
 const brokenCrystals = () => ({ ...presetPlayer(1, 'A'), source: { kind: 'preset' as const, presetId: 'p1', overrides: { crystals: 12 } } });
 
-const DIRECT = { admission: 'host-approval', allowUnlisted: false } as const;
+const DIRECT = { admission: 'host-approval', allowUnlisted: false, allowedGames: [] } as const;
 
 describe('K1 the setup of a session', { tags: ['critical'] }, () => {
   test('a named session with no player is ready to start', () => {
@@ -82,8 +82,8 @@ describe('K1 the players in the lobby', { tags: ['critical'] }, () => {
   });
 
   test('an imported player needs a file and an installed game', () => {
-    const empty = { slot: 1, name: 'A', game: 'Demo', source: { kind: 'yaml' as const, fileName: '', yaml: '' } };
-    const other = { slot: 2, name: 'B', game: 'Other', source: { kind: 'yaml' as const, fileName: 'b.yaml', yaml: 'game: Other' } };
+    const empty = { kind: 'set' as const, slot: 1, name: 'A', game: 'Demo', source: { kind: 'yaml' as const, fileName: '', yaml: '' } };
+    const other = { kind: 'set' as const, slot: 2, name: 'B', game: 'Other', source: { kind: 'yaml' as const, fileName: 'b.yaml', yaml: 'game: Other' } };
     expect(validatePlayers(withPlayers([empty, other]), LIBRARY)).toEqual([
       { slot: 1, field: 'source', message: 'A: import a player file' },
       { slot: 2, field: 'source', message: 'B: Other is not installed' },
@@ -134,13 +134,13 @@ Relic:
 describe('K3 a session saved before the split', { tags: ['critical'] }, () => {
   test('keeps its players, which the lobby takes as its own players when it starts', () => {
     const stored = withPlayers([presetPlayer(1, 'Ana'), presetPlayer(2, 'Bo')]);
-    expect(templateOf(stored)).toEqual({ ...stored, players: stored.players.map((player) => ({ ...player, direct: false })) });
+    expect(templateOf(stored)).toEqual(stored);
   });
 
   test('moves the lobby out of a direct connection and keeps the admission settings', () => {
     const legacy = { ...withPlayers([]), direct: { serverId: 'r1', lobbyId: 'lb_1', admission: 'open' as const, allowUnlisted: true } };
     expect(templateOf(legacy)).toMatchObject({ lobby: { serverId: 'r1', lobbyId: 'lb_1' }, direct: { admission: 'open', allowUnlisted: true } });
-    expect(templateOf(legacy).direct).toEqual({ admission: 'open', allowUnlisted: true });
+    expect(templateOf(legacy).direct).toEqual({ admission: 'open', allowUnlisted: true, allowedGames: [] });
     const local = { ...withPlayers([]), direct: { serverId: 'local', admission: 'host-approval' as const, allowUnlisted: false } };
     expect(templateOf(local)).toMatchObject({ lobby: { serverId: 'local' }, direct: DIRECT });
   });

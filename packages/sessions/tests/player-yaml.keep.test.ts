@@ -1,10 +1,10 @@
 /* @layer tests @kind test */
 import { describe, expect, test } from 'vitest';
 import { parse } from 'yaml';
-import type { HostedPlayer } from '@archipelia/model';
+import type { SetPlayer } from '@archipelia/model';
 import { gameOfYaml, renderImportedYaml, renderPresetYaml } from '../src';
 
-const player = (source: HostedPlayer['source']): HostedPlayer => ({ slot: 1, name: 'Alice', game: 'Timespinner', source });
+const player = (source: SetPlayer['source']): SetPlayer => ({ kind: 'set', slot: 1, name: 'Alice', game: 'Timespinner', source });
 
 describe('K2 player yaml', { tags: ['critical'] }, () => {
   test('a preset player writes the game block under the game name', () => {

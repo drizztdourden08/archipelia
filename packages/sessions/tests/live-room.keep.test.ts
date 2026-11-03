@@ -26,8 +26,8 @@ const SNAPSHOT: SessionTemplate = {
   generator: { race: false, spoiler: 1, progressionBalancing: true },
   server: { remainingMode: 'goal', releaseMode: 'auto', collectMode: 'auto', hintCost: 10, autoShutdownMinutes: 0 },
   players: [
-    { slot: 2, name: 'Marie', game: 'Ocarina of Time', source: { kind: 'preset', presetId: 'p', overrides: {} } },
-    { slot: 1, name: 'Johnny', game: 'A Link to the Past', source: { kind: 'preset', presetId: 'p', overrides: {} } },
+    { kind: 'set', slot: 2, name: 'Marie', game: 'Ocarina of Time', source: { kind: 'preset', presetId: 'p', overrides: {} } },
+    { kind: 'set', slot: 1, name: 'Johnny', game: 'A Link to the Past', source: { kind: 'preset', presetId: 'p', overrides: {} } },
   ],
 };
 

@@ -22,6 +22,7 @@ const OVERRIDE_FIELDS: readonly OverrideField[] = [
   { field: 'lobby.serverId', label: 'Lobby server', read: ({ lobby }) => lobby?.serverId ?? NOT_SET },
   { field: 'direct.admission', label: 'Direct connections', read: ({ direct }) => direct?.admission ?? 'off' },
   { field: 'direct.allowUnlisted', label: 'Unlisted clients', read: ({ direct }) => onOff(direct?.allowUnlisted) },
+  { field: 'direct.allowedGames', label: 'Allowed games', read: ({ direct }) => (direct?.allowedGames.length ? direct.allowedGames.join(', ') : 'any') },
   { field: 'server.password', label: 'Room password', read: passwordOf },
   { field: 'server.hintCost', label: 'Hint cost', read: ({ server }) => String(server.hintCost) },
   { field: 'server.releaseMode', label: 'Release', read: ({ server }) => server.releaseMode },

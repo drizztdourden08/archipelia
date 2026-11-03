@@ -8,18 +8,17 @@ import { playerLabel } from '../../behavior/player-label';
 import { APP_FILE_TEXT } from '../../SessionLobby.constants';
 
 const PlayerSourceCell = ({ player, presets, appGame, busy, onSource, onImport }: PlayerSourceCellProps) => {
-  const { slot, source } = player;
-  const game = player.game ?? '';
+  const { slot, source, game } = player;
   const pick = useCallback((value: string) => onSource(slot, value, game), [game, onSource, slot]);
   const importFile = useCallback(() => onImport(slot), [onImport, slot]);
-  const fileName = source?.kind === 'yaml' ? source.fileName : '';
+  const fileName = source.kind === 'yaml' ? source.fileName : '';
   const verb = fileName ? 'Replace file' : 'Import file';
   return (
     <Stack gap="xs">
       {appGame
         ? <Text variant="caption" tone="muted">{APP_FILE_TEXT.note}</Text>
         : <Select value={sourceValueOf(player)} options={sourceOptionsOf(game, presets)} placeholder="Pick a preset" onChange={pick} />}
-      {(appGame || source?.kind === 'yaml') && (
+      {(appGame || source.kind === 'yaml') && (
         <ButtonRow gap="xs" align="start">
           <Button size="sm" variant="secondary" disabled={busy} aria-label={`${verb} for ${playerLabel(player)}`} onClick={importFile}>{verb}</Button>
           {fileName && <Text variant="caption" className="session-lobby__file">{fileName}</Text>}

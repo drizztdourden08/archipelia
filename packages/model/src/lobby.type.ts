@@ -14,6 +14,7 @@ type LobbyLimits = { worldBytes: number; yamlBytes: number; memberBytes: number 
 type LobbyOptions = {
   admission: LobbyAdmission;
   allowUnlisted: boolean;
+  allowedGames?: string[];
   maxSlots: number;
   limits: LobbyLimits;
   room: HostTarget;
@@ -69,6 +70,7 @@ type LobbyMember = {
   kind: 'host' | 'client';
   displayName: string;
   seat?: string;
+  openSeat?: true;
   client?: ClientMeta;
   tokenHash?: string;
   admission: MemberAdmission;
@@ -106,6 +108,7 @@ type Lobby = {
   options: LobbyOptions;
   source?: LobbySource;
   seats?: string[];
+  openSeats?: number;
   members: LobbyMember[];
   worlds: WorldUpload[];
   nextMember: number;

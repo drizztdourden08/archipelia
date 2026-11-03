@@ -16,7 +16,7 @@ afterEach(async () => {
 });
 
 const legacy = (id: string, lobbyId: string, patch: Partial<SessionTemplate> = {}): SessionTemplate =>
-  sessionOf({ id, lobby: { serverId: 'local', lobbyId }, lan: true, direct: { admission: 'host-approval', allowUnlisted: false }, ...patch });
+  sessionOf({ id, lobby: { serverId: 'local', lobbyId }, lan: true, direct: { admission: 'host-approval', allowUnlisted: false, allowedGames: [] }, ...patch });
 
 const settleWith = async (templates: SessionTemplate[], lobbies: () => Promise<AdminLobby[]>, tabs: LiveTab[] = []) => {
   const files = await tempFiles('server');

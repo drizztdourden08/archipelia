@@ -1,12 +1,11 @@
 /* @layer renderer-app @kind logic */
-import { isHosted } from '@archipelia/model';
-import type { GamePreset, InstalledGame, SessionPlayer } from '@archipelia/model';
-import { withGame } from './with-game';
+import type { SessionPlayer } from '@archipelia/model';
+import { heldOf } from './held-of';
+import { newSet } from './new-set';
 
-const withDirect = (player: SessionPlayer, on: boolean, installed: InstalledGame[], presets: GamePreset[]): SessionPlayer => {
-  if (on) return { ...player, direct: true };
-  if (isHosted(player)) return { ...player, direct: false };
-  return { ...withGame(player, installed[0]?.game ?? '', presets), direct: false };
+const withDirect = (player: SessionPlayer, on: boolean, name: string): SessionPlayer => {
+  if (on) return heldOf(player);
+  return player.kind === 'set' ? player : newSet(player.slot, name, '', '');
 };
 
 export { withDirect };

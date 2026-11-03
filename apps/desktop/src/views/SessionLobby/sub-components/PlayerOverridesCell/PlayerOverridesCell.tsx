@@ -9,7 +9,7 @@ import { APP_FILE_TEXT } from '../../SessionLobby.constants';
 const PlayerOverridesCell = ({ player, selected, appGame, onEdit }: PlayerOverridesCellProps) => {
   const { slot, source } = player;
   const edit = useCallback(() => onEdit(slot), [onEdit, slot]);
-  const changed = source?.kind === 'preset' && Object.keys(source.overrides).length > 0;
+  const changed = source.kind === 'preset' && Object.keys(source.overrides).length > 0;
   return (
     <Inline gap="xs" wrap>
       <Status tone={changed ? 'warning' : 'neutral'}>{overridesLabel(player)}</Status>
@@ -17,7 +17,7 @@ const PlayerOverridesCell = ({ player, selected, appGame, onEdit }: PlayerOverri
         size="sm"
         variant={selected ? 'secondary' : 'ghost'}
         aria-pressed={selected}
-        disabled={source?.kind !== (appGame ? 'yaml' : 'preset')}
+        disabled={source.kind !== (appGame ? 'yaml' : 'preset')}
         aria-label={`${appGame ? APP_FILE_TEXT.viewLabel : 'Edit overrides of'} ${playerLabel(player)}`}
         onClick={edit}
       >

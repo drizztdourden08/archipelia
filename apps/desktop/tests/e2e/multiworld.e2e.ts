@@ -13,7 +13,7 @@ defineMultiworld({
     const preset = await ctx.presets.create({ game: official.game, name: 'Defaults' });
     return [
       await sohPlayer(ctx, 1, 'Link'),
-      { slot: 2, name: 'Lunais', game: official.game, source: { kind: 'preset', presetId: preset.id, overrides: {} } },
+      { kind: 'set', slot: 2, name: 'Lunais', game: official.game, source: { kind: 'preset', presetId: preset.id, overrides: {} } },
     ];
   },
 });
@@ -26,7 +26,7 @@ defineMultiworld({
     const installed = await installFromFile({ engineDir: ctx.engineDir, files: ctx.games, path: relic.apworld });
     const yaml = await readFile(relic.yamlPath, 'utf8');
     return [
-      { slot: 1, name: 'Relic', game: installed.game, source: { kind: 'yaml', fileName: 'Relic.yaml', yaml } },
+      { kind: 'set', slot: 1, name: 'Relic', game: installed.game, source: { kind: 'yaml', fileName: 'Relic.yaml', yaml } },
       await sohPlayer(ctx, 2, 'Link'),
     ];
   },

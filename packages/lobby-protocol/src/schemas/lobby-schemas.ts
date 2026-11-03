@@ -49,6 +49,8 @@ const LOBBY_STATE_SCHEMA = {
       },
     },
     seats: { $ref: '#/$defs/heldSeats' },
+    open: { $ref: '#/$defs/openSeats' },
+    allowedGames: { $ref: '#/$defs/allowedGames' },
     others: {
       type: 'object',
       required: ['approved', 'pending'],

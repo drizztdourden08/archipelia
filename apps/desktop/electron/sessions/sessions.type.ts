@@ -1,5 +1,5 @@
 /* @layer electron-main @kind types */
-import type { AdminLobby, DataFiles, HostedPlayer, LobbySource, SessionTemplate } from '@archipelia/model';
+import type { AdminLobby, DataFiles, SetPlayer, LobbySource, SessionTemplate } from '@archipelia/model';
 import type { LiveTab } from '../../src/live/live.type';
 import type { HostPlayerSlot, LobbyRequest, LobbyServerStatus, PendingClose } from '../../src/lobbies/lobbies.type';
 
@@ -8,7 +8,7 @@ type NetworkSwitch = { status: () => LobbyServerStatus; apply: (options: unknown
 type SessionLobbyDeps = {
   act: (request: LobbyRequest) => Promise<AdminLobby>;
   list: () => Promise<AdminLobby[]>;
-  slotOf: (player: HostedPlayer) => Promise<HostPlayerSlot>;
+  slotOf: (player: SetPlayer) => Promise<HostPlayerSlot>;
   beforeOpen?: (template: SessionTemplate) => Promise<void>;
   assertConsent?: (template: SessionTemplate) => void;
   beforeRun?: (lobbyId: string, template: SessionTemplate) => Promise<void>;

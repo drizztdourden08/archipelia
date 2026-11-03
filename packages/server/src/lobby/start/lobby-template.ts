@@ -8,7 +8,7 @@ import type { Participant } from './start.type';
 const playerOf = async (ctx: LobbyContext, lobby: Lobby, { slot }: Participant, index: number): Promise<SessionPlayer> => {
   const bytes = await ctx.deps.store.readFile(lobby.id, slot.yamlSha256);
   if (!bytes) throw new Error(`the YAML of ${slot.name} is missing`);
-  return { slot: index + 1, name: slot.name, game: slot.game, source: { kind: 'yaml', fileName: `${slot.name}.yaml`, yaml: new TextDecoder().decode(bytes) } };
+  return { kind: 'set', slot: index + 1, name: slot.name, game: slot.game, source: { kind: 'yaml', fileName: `${slot.name}.yaml`, yaml: new TextDecoder().decode(bytes) } };
 };
 
 const lobbyTemplate = async (ctx: LobbyContext, lobby: Lobby, players: Participant[]): Promise<SessionTemplate> => ({

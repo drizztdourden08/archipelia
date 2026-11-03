@@ -12,7 +12,7 @@ describe('K4 lobby.info before any join', { tags: ['standard'] }, () => {
     const properties = Object.keys(
       ((SERVER_SCHEMAS['lobby.info.reply'].properties.lobby as { properties: object }).properties),
     ).sort();
-    expect(properties).toEqual(['admission', 'allowUnlisted', 'engine', 'joinable', 'name', 'phase', 'requires', 'seats', 'worlds']);
+    expect(properties).toEqual(['admission', 'allowUnlisted', 'allowedGames', 'engine', 'joinable', 'name', 'open', 'phase', 'requires', 'seats', 'worlds']);
     for (const name of ['lobby-info', 'lobby-info-locked']) {
       const text = JSON.stringify(messages(loadScenario(name), 's2c'));
       for (const secret of ['members', 'token', 'displayName', 'password', 'client']) {

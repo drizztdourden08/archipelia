@@ -140,15 +140,15 @@ describe('K1 the players and the place of a session with direct connection', { t
   const slotOf = hostSlotOf(() => Promise.resolve([game]), { get: (id) => Promise.resolve(id === preset.id ? preset : null) });
 
   test('builds the slot of a player of the session from its preset', async () => {
-    const slot = await slotOf({ slot: 1, name: 'Ana', game: 'A Link to the Past', source: { kind: 'preset', presetId: 'p1', overrides: {} } });
+    const slot = await slotOf({ kind: 'set', slot: 1, name: 'Ana', game: 'A Link to the Past', source: { kind: 'preset', presetId: 'p1', overrides: {} } });
     expect(slot).toMatchObject({ name: 'Ana', game: 'A Link to the Past', worldVersion: '1.0.0' });
     expect(slot.yaml).toContain('name: Ana');
     expect(slot.yaml).toContain('death_link: true');
-    await expect(slotOf({ slot: 2, name: 'Bo', game: 'Other', source: { kind: 'preset', presetId: 'p1', overrides: {} } })).rejects.toThrow('Other is not installed');
+    await expect(slotOf({ kind: 'set', slot: 2, name: 'Bo', game: 'Other', source: { kind: 'preset', presetId: 'p1', overrides: {} } })).rejects.toThrow('Other is not installed');
   });
 
   test('sends the players of the session through the admin request member.host', async () => {
-    const slots = [await slotOf({ slot: 1, name: 'Ana', game: 'A Link to the Past', source: { kind: 'preset', presetId: 'p1', overrides: {} } })];
+    const slots = [await slotOf({ kind: 'set', slot: 1, name: 'Ana', game: 'A Link to the Past', source: { kind: 'preset', presetId: 'p1', overrides: {} } })];
     expect(lobbyRequest.host('lb1', 'Host', slots)).toEqual({ type: 'member.host', params: { lobbyId: 'lb1', displayName: 'Host', slots } });
   });
 });

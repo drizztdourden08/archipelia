@@ -1,6 +1,6 @@
 /* @layer electron-main @kind logic */
-import { hostedPlayers } from '@archipelia/model';
-import type { AdminLobby, HostedPlayer } from '@archipelia/model';
+import { setPlayers } from '@archipelia/model';
+import type { AdminLobby, SetPlayer } from '@archipelia/model';
 import { CONNECTED_ADMISSIONS } from '../../src/lobbies/lobbies.constants';
 import type { HostPlayerSlot } from '../../src/lobbies/lobbies.type';
 import { lobbyRequest } from '../../src/lobbies/lobby-request';
@@ -13,7 +13,7 @@ const closeToClients = async (lobby: AdminLobby, deps: SessionLobbyDeps) => {
   if (lobby.phase === 'open') await deps.act(lobbyRequest.lock(lobby.id));
 };
 
-const slotWithOrigin = (plan: SyncPlan, deps: SessionLobbyDeps) => async (player: HostedPlayer): Promise<HostPlayerSlot> =>
+const slotWithOrigin = (plan: SyncPlan, deps: SessionLobbyDeps) => async (player: SetPlayer): Promise<HostPlayerSlot> =>
   ({ ...(await deps.slotOf(player)), origin: plan.savedNames.has(player.name) ? 'saved' : 'added' });
 
 const syncSession = async (plan: SyncPlan, deps: SessionLobbyDeps) => {
@@ -22,7 +22,7 @@ const syncSession = async (plan: SyncPlan, deps: SessionLobbyDeps) => {
   const lobby = (await deps.list()).find((entry) => entry.id === lobbyId);
   if (!lobby) throw new Error(TEXT.gone);
   if (!RUNNABLE_PHASES.includes(lobby.phase)) return lobby;
-  const slots = await Promise.all(hostedPlayers(template.players).map(slotWithOrigin(plan, deps)));
+  const slots = await Promise.all(setPlayers(template.players).map(slotWithOrigin(plan, deps)));
   await deps.act(lobbyRequest.update(lobbyId, template, source));
   if (!template.direct) await closeToClients(lobby, deps);
   else if (lobby.phase === 'locked') await deps.act(lobbyRequest.unlock(lobbyId));

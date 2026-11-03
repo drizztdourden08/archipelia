@@ -1,10 +1,9 @@
 /* @layer renderer-app @kind logic */
-import type { SessionPlayer } from '@archipelia/model';
+import type { SetPlayer } from '@archipelia/model';
 
-const overridesLabel = (player: SessionPlayer) => {
-  if (!player.source) return 'their own';
-  if (player.source.kind === 'yaml') return 'from file';
-  const count = Object.keys(player.source.overrides).length;
+const overridesLabel = ({ source }: SetPlayer) => {
+  if (source.kind === 'yaml') return 'from file';
+  const count = Object.keys(source.overrides).length;
   return count ? `${count} changed` : 'none';
 };
 

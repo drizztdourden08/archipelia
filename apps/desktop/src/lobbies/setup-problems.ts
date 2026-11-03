@@ -10,7 +10,7 @@ const hostProblems = ({ host }: SessionTemplate): string[] => [
 ];
 
 const directProblems = (template: SessionTemplate): string[] => {
-  if (!template.direct) return template.players.some((player) => player.direct) ? [SETUP_PROBLEM.directSeat] : [];
+  if (!template.direct) return template.players.some((player) => player.kind === 'direct') ? [SETUP_PROBLEM.directSeat] : [];
   const reach = sessionReach(template);
   return reach === 'gg' || reach === 'ssh' ? [SETUP_PROBLEM.directPlace] : [];
 };
