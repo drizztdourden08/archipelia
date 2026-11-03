@@ -6,8 +6,7 @@ const LOBBY_ID_BYTES = 4;
 
 const LOCKABLE_PHASES: LobbyPhase[] = ['open'];
 const ROOM_COMMAND_LIMIT = 500;
-const LINE_BREAK = /[
-]/;
+const LINE_BREAK = /[\r\n]/;
 
 const EDITABLE_PHASES: LobbyPhase[] = ['open', 'locked', 'failed'];
 
