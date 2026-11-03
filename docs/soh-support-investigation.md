@@ -3,6 +3,8 @@
 
 Date: 2026-11-03 (second revision, after owner feedback). Research only, no code written, nothing built or run. Sources: this repository and the public GitHub repositories named below, read through the GitHub API (HarbourMasters/Shipwright `develop`, read 2026-11-03).
 
+> Superseded in direction (2026-11-03): the owner wants the integration inside a maintained SoH fork, with an Archipelia tab in the game. The plan is the published page `.claude/plans/soh-archipelia-in-game.html`. Sections 1 and 2 below stay valid as research; sections 4 and 5 (the stock-SoH adapter) are background only.
+
 ## 1. Direct answers
 
 **Does SoH have a plugin system?** No. There is no runtime code plugin, no scripting language, no `dlopen` of mods (the only `dlopen` is for the eSpeak speech library). `docs/MODDING.md` defines a "code mod" as: fork the repository, branch from `develop`, edit the C++, rebuild. The `mods` folder only loads **asset** archives (`.otr` / `.o2r`: textures, models, audio), managed by `mod_menu.cpp`.
