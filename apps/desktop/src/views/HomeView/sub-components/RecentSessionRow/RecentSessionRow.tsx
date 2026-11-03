@@ -2,7 +2,7 @@
 import { useCallback } from 'react';
 import { Button, ButtonRow, Status } from '@drizztdourden08/tessera/primitives';
 import { ListItemRow } from '@drizztdourden08/tessera/composites';
-import { RUN_STATUS } from '@archipelia/design';
+import { RUN_STATUS } from '../../../../stage';
 import type { RecentSessionRowProps } from './RecentSessionRow.type';
 import { sessionMeta } from '../../behavior/session-meta';
 

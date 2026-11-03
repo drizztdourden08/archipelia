@@ -1,9 +1,7 @@
 /* @layer renderer-app @kind logic */
 import type { LobbyStageConfig } from '@archipelia/design';
 import type { SessionTemplate } from '@archipelia/model';
-import { configFacts } from '../../SessionLobby/behavior/config-facts';
-import { stageGames } from '../../SessionLobby/behavior/stage-games';
-import { CONFIG_TEXT } from '../../SessionLobby/SessionLobby.constants';
+import { CONFIG_TEXT, configFacts, stageGames } from '../../../stage';
 import { RUN_STAGE_TEXT } from './run-stage.constants';
 
 const runConfig = (snapshot: SessionTemplate): LobbyStageConfig => {

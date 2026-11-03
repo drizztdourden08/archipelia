@@ -28,8 +28,6 @@ export {
   HINT_COST_RANGE, HOST_OPTIONS, PORT_RANGE, RELEASE_OPTIONS, REMAINING_OPTIONS, SERVER_TEXT, SHUTDOWN_RANGE, ServerOptionsForm,
   percentText,
 } from './compounds/ServerOptionsForm';
-export { RUN_STATUS, SessionStatusBar } from './compounds/SessionStatusBar';
-export type { RunStatusView } from './compounds/SessionStatusBar';
 export { SessionRow } from './compounds/SessionRow';
 export type { SessionRowProps } from './compounds/SessionRow';
 export type * from './guide/app-tree.type';

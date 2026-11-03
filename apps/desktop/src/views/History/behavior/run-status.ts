@@ -1,7 +1,7 @@
 /* @layer renderer-app @kind logic */
 import type { Session } from '@archipelia/model';
-import type { RunStatusView } from '@archipelia/design';
-import { RUN_STATUS } from '@archipelia/design';
+import type { RunStatusView } from '../../../stage';
+import { RUN_STATUS } from '../../../stage';
 
 const statusOf = (run: Session): RunStatusView => {
   const view = RUN_STATUS[run.status];

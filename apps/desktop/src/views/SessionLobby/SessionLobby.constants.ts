@@ -1,8 +1,5 @@
 /* @layer renderer-app @kind config */
 import type { LobbySeatStatus } from '@archipelia/design';
-import type { TagUrgencyColor } from '@drizztdourden08/tessera/primitives';
-
-const PHASE_URGENT: readonly TagUrgencyColor[] = ['success', 'warning', 'danger', 'info'];
 
 const YAML_VALUE = 'yaml';
 
@@ -35,8 +32,6 @@ const SEAT_TEXT = {
   keep: 'Keep in session',
   duplicate: 'Duplicate',
   remove: 'Remove',
-  player: 'player',
-  players: 'players',
 } as const;
 
 const SEAT_STATUS = {
@@ -55,21 +50,6 @@ const LOBBY_SCREEN = {
   config: 'Config',
   configEdit: 'Edit',
   failed: 'The last run failed:',
-} as const;
-
-const CONFIG_TEXT = {
-  hintCost: 'Hint cost',
-  release: 'Release',
-  race: 'Race',
-  password: 'Password',
-  joining: 'Joining',
-  on: 'On',
-  off: 'Off',
-  set: 'Set',
-  none: 'None',
-  hostOnly: 'Host only',
-  withApproval: 'Direct, with approval',
-  open: 'Direct, open',
 } as const;
 
 const LEFT_OUT_TEXT = {
@@ -96,5 +76,5 @@ const LOBBY_FAILURE = {
 } as const;
 
 export {
-  APP_FILE_TEXT, CONFIG_TEXT, LEFT_OUT_TEXT, LOBBY_FAILURE, LOBBY_SCREEN, NEW_PRESET_VALUE, OWN_GAME, PHASE_URGENT, PLAYERS_TEXT, PRESET_PREFIX, SEAT_EDITOR_CLASS, SEAT_STATUS, SEAT_TEXT, YAML_EXTENSIONS, YAML_VALUE,
+  APP_FILE_TEXT, LEFT_OUT_TEXT, LOBBY_FAILURE, LOBBY_SCREEN, NEW_PRESET_VALUE, OWN_GAME, PLAYERS_TEXT, PRESET_PREFIX, SEAT_EDITOR_CLASS, SEAT_STATUS, SEAT_TEXT, YAML_EXTENSIONS, YAML_VALUE,
 };

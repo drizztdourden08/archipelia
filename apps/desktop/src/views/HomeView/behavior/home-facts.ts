@@ -1,6 +1,6 @@
 /* @layer renderer-app @kind logic */
 import type { FactsPanelGroup } from '@drizztdourden08/tessera/composites';
-import { RUN_STATUS } from '@archipelia/design';
+import { RUN_STATUS } from '../../../stage';
 import type { HomeFactsInput } from '../HomeView.type';
 import { engineMeta } from './engine-meta';
 import { engineValue } from './engine-value';

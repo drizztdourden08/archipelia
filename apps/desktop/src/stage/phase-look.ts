@@ -1,6 +1,6 @@
 /* @layer renderer-app @kind logic */
 import type { StatusTone, TagLook } from '@drizztdourden08/tessera/primitives';
-import { PHASE_URGENT } from '../SessionLobby.constants';
+import { PHASE_URGENT } from './stage.constants';
 
 const phaseLook = (tone: StatusTone): TagLook => {
   const urgent = PHASE_URGENT.find((color) => color === tone);

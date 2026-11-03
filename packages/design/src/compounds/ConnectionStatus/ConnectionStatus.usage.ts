@@ -8,7 +8,6 @@ const usage = {
     'A connection the app opens again by itself after a wait, with Retry to skip the wait.',
   ],
   avoidWhen: [
-    { case: 'The state of a run, such as Hosting or Stopped.', use: 'SessionStatusBar' },
     { case: 'A load or an action that failed and is not a connection.', use: 'ErrorCallout' },
   ],
   rules: [

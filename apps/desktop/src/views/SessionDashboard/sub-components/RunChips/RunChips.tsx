@@ -1,8 +1,6 @@
 /* @layer renderer-app @kind component */
 import { Tag } from '@drizztdourden08/tessera/primitives';
-import { RUN_STATUS } from '@archipelia/design';
-import { countLabel } from '../../../SessionLobby/behavior/count-label';
-import { phaseLook } from '../../../SessionLobby/behavior/phase-look';
+import { RUN_STATUS, countLabel, phaseLook } from '../../../../stage';
 import { progressLabel } from '../../behavior/progress-label';
 import { RUN_STAGE_TEXT } from '../../behavior/run-stage.constants';
 import type { RunChipsProps } from './RunChips.type';

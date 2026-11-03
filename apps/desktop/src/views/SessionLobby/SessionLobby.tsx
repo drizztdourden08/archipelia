@@ -2,12 +2,11 @@
 import { useId } from 'react';
 import { formatLobbyCode } from '@drizztdourden08/archipelia-lobby-protocol';
 import { Text } from '@drizztdourden08/tessera/primitives';
+import { configFacts, stageGames } from '../../stage';
 import { openSessionEditor } from '../../hooks/open-session-editor';
 import { useConnectedCount } from '../../hooks/useConnectedCount';
 import { LOBBY_SCREEN } from './SessionLobby.constants';
 import type { SessionLobbyProps } from './SessionLobby.type';
-import { configFacts } from './behavior/config-facts';
-import { stageGames } from './behavior/stage-games';
 import { useLobbyScreen } from './behavior/useLobbyScreen';
 import { LobbyNotices } from './sub-components/LobbyNotices';
 import { SeatsPane } from './sub-components/SeatsPane';

@@ -2,7 +2,7 @@
 import { RELEASE_OPTIONS } from '@archipelia/design';
 import type { LobbyStageFact } from '@archipelia/design';
 import type { DirectConnection, SessionTemplate } from '@archipelia/model';
-import { CONFIG_TEXT } from '../SessionLobby.constants';
+import { CONFIG_TEXT } from './stage.constants';
 
 const joiningOf = (direct: DirectConnection | undefined): string => {
   if (!direct) return CONFIG_TEXT.hostOnly;
