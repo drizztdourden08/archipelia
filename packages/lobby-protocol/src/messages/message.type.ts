@@ -1,4 +1,5 @@
 /* @layer protocol @kind types */
+import type { LobbyBrowseReply, LobbyBrowseRequest } from './browse.type';
 import type { Hello, LobbyInfoRequest } from './hello.type';
 import type {
   AdmissionMessage,
@@ -25,10 +26,11 @@ import type {
   UploadReady,
 } from './upload.type';
 
-type ClientMessage = LobbyInfoRequest | Hello | Ready | Leave | SlotsSet | UploadBegin | UploadChunk | FileGet;
+type ClientMessage = LobbyInfoRequest | LobbyBrowseRequest | Hello | Ready | Leave | SlotsSet | UploadBegin | UploadChunk | FileGet;
 
 type ServerMessage =
   | LobbyInfoReply
+  | LobbyBrowseReply
   | Welcome
   | ErrorMessage
   | AdmissionMessage

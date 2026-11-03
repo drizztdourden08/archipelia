@@ -16,6 +16,7 @@ const SAMPLE_VALUES = {
   MISSING: '04f66a868a886bd32148b79585606073f21128e03b4a06505e6fc716b3bd7560',
   member: 'm_2',
   token: 'MipwoA44XJBKbLEKIhL74LO5-2Yr-YVXQvNZh4UhFx0',
+  join: 'Rq3vT9xLmB2nC8pWdY4kZs6HfJ1aGe7uNo0iQcVtXbE',
   proof: {
     method: 'github-attestation',
     bundle: { mediaType: 'application/vnd.dev.sigstore.bundle.v0.3+json' },

@@ -1,0 +1,2 @@
+{"dir":"c2s","msg":{"type":"lobby.browse","protocol":{"name":"archipelia-lobby","versions":[1]},"seq":1}}
+{"dir":"s2c","msg":{"type":"lobby.browse.reply","protocol":{"name":"archipelia-lobby","version":1},"server":{"name":"Archipelia","version":"$any_str"},"lobbies":[{"name":"Friday seed","joinToken":"$join","engine":{"ap":"0.6.8"},"admission":"host-approval","allowUnlisted":false,"joinable":true,"seats":{"total":16,"free":16}}],"re":1}}

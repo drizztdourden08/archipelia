@@ -121,6 +121,43 @@ The server answers with `lobby.info.reply`:
 - Because the exchange needs no proof, it is limited. A `lobby.info` request MUST be at most 1 024 bytes, else the server answers `bad-message` and closes with `4400`. A server answers at most 30 `lobby.info` requests per minute per source address (`LOBBY_INFO_LIMIT`). The 31st gets `rate-limited` with `retryAfter` and a close with `4429` (see the back-off below). A wrong code in a `lobby.info` request counts as a failed attempt in the same counter as a wrong code in `hello` (see the checks below).
 - After the reply the connection stays open. The 15 s timer for `hello` starts again at the reply. A client that wants no more can close.
 
+## Listing the lobbies of a server
+
+Since 1.5.0 a host can show a lobby on the network. A client that found a server (see the section on finding a server) asks it for the lobbies it shows, then joins one with its join token instead of the code. The request is the first message of a connection, like `lobby.info`, and a `hello` can follow on the same connection.
+
+```json
+{ "type": "lobby.browse", "seq": 1, "protocol": { "name": "archipelia-lobby", "versions": [1] } }
+```
+
+The server answers with `lobby.browse.reply`:
+
+```json
+{
+  "type": "lobby.browse.reply", "re": 1,
+  "protocol": { "name": "archipelia-lobby", "version": 1 },
+  "server": { "name": "Archipelia", "version": "0.9.0" },
+  "lobbies": [
+    {
+      "name": "Friday seed",
+      "joinToken": "Rq3vT9xLmB2nC8pWdY4kZs6HfJ1aGe7uNo0iQcVtXbE",
+      "engine": { "ap": "0.6.8" },
+      "admission": "host-approval",
+      "allowUnlisted": false,
+      "joinable": true,
+      "seats": { "total": 16, "free": 12 }
+    }
+  ]
+}
+```
+
+- Showing a lobby is the host's choice, per lobby, and off by default. Only a shown lobby in the `open` phase is listed. A server lists at most 64 lobbies (`LOBBY_BROWSE_MAX`), oldest first.
+- `joinToken` is 32 random bytes in base64url, 43 characters. It is not derived from the code. The server makes it when the host shows the lobby, and a host can rotate it. When the host hides the lobby the token stops working, and showing the lobby again makes a new one.
+- `seats` counts the open seats when the lobby holds any, else the slot limit and the slots still free.
+- A client joins with `"lobby": { "joinToken": "..." }` in `hello`, or asks `lobby.info` with it, in place of `"lobby": { "code": "..." }`. A lobby ref carries a code or a join token, never both. A join by token goes through every check of a join by code: the approval rule, trust, the unlisted-client rule and the version rules.
+- A token no shown lobby has gets `lobby-not-found` with `field: "lobby.joinToken"` and a close with `4404`. It counts as a failed attempt, like a wrong code.
+- A `lobby.browse` request MUST be at most 1 024 bytes. It shares the `lobby.info` counter of 30 requests per minute per source address. After the reply the connection stays open and the 15 s timer for `hello` starts again.
+- A server older than 1.5.0 does not know the request. It answers `bad-message` with `field: "type"` and closes with `4400`. A `hello` with a join token sent to such a server gets `metadata-missing` with `field: "lobby.code"` and `4400`. A client that gets either falls back to asking the player for the code.
+
 ## Handshake
 
 The client speaks first, with `lobby.info` or `hello`, within 15 s of the connection opening.
@@ -594,7 +631,7 @@ A fixture is a file `fixtures/<scenario>.jsonl`. Each line is one JSON object:
 
 A line with `"invalid": true` carries a message that breaks the schema on purpose, so the peers do not validate it.
 
-The `host` actions used by the scenarios are `approve`, `refuse` (with `reason`), `lock`, `start`, `consent` (with `world` and `allowed`) and `takeover`. The fake server skips them. A test of a real server passes a hook to the fake client and does the action there.
+The `host` actions used by the scenarios are `approve`, `refuse` (with `reason`), `lock`, `start`, `consent` (with `world` and `allowed`), `takeover` and `hide` (the host stops showing the lobby on the network). The fake server skips them. A test of a real server passes a hook to the fake client and does the action there.
 
 The lines `close`, `connect`, `host`, `raw`, `binary`, `repeat` and `invalid` extend the plain message list. They are additive and live in the fixtures only, never on the wire.
 
@@ -616,6 +653,7 @@ A string value of the form `$name` is a placeholder.
 | Group | Scenarios |
 | --- | --- |
 | lobby.info | `lobby-info`, `lobby-info-unknown-code`, `lobby-info-closed`, `lobby-info-locked`, `lobby-info-protocol-unsupported`, `lobby-info-rate-limit`, `lobby-info-oversize` |
+| lobby.browse | `lobby-browse`, `lobby-browse-join`, `lobby-browse-hidden`, `lobby-browse-old-server`, `join-token-old-server` |
 | joining | `open-join`, `approval-join`, `refused`, `unlisted-consent`, `slots-set`, `file-download`, `start-failure` |
 | resume | `upload-resume`, `resume-after-start`, `resume-pending`, `resume-invalid`, `resume-refused`, `resume-replaced` |
 | version and trust | `version-mismatch`, `world-version-conflict`, `world-range-mismatch`, `trust-failed`, `client-revoked`, `unlisted-refused` |
@@ -623,7 +661,7 @@ A string value of the form `$name` is a placeholder.
 | uploads and files | `upload-unexpected`, `upload-too-large`, `upload-hash-mismatch`, `yaml-invalid`, `world-invalid`, `consent-refused` |
 | protocol | `protocol-unsupported`, `wrong-code-rate-limit`, `bad-message-prewelcome`, `bad-message-binary`, `bad-message-after-welcome`, `metadata-missing`, `internal-error` |
 
-A catalog entry may carry two more facts. `setup.heldFiles` is true when the server already holds the apworld and the YAML before the client joins, as when another member sent the same files, so the `welcome` says `need: []` and the script uploads nothing. `serverSideOnly` marks a scenario that a conforming client cannot play, because the client would have to send a frame that the protocol forbids. `bad-message-binary` and `bad-message-after-welcome` are such scenarios. A client test skips them, and a server test plays them.
+A catalog entry may carry two more facts. `setup.heldFiles` is true when the server already holds the apworld and the YAML before the client joins, as when another member sent the same files, so the `welcome` says `need: []` and the script uploads nothing. `serverSideOnly` marks a scenario that a conforming client cannot play, because the client would have to send a frame that the protocol forbids. `bad-message-binary` and `bad-message-after-welcome` are such scenarios. A client test skips them, and a server test plays them. `clientSideOnly` marks a scenario that describes a server older than this version, such as `lobby-browse-old-server` and `join-token-old-server`. A client test plays them to check its fallback, and a test of a current server skips them. `setup.listed` is true when the host shows the lobby on the network.
 
 The scenario `approval-join` is the RotP example exchange above. Every error code has at least one scenario.
 
@@ -660,6 +698,7 @@ A scenario fails with a text such as `line 12 (s2c): members[0].id: expected "m_
 
 ## Changes
 
+- 1.5.0: listing the lobbies of a server. The new request `lobby.browse` and its reply `lobby.browse.reply` list the lobbies a host shows on the network, each with a join token. `hello.lobby` and `lobby.info.lobby` take `joinToken` in place of `code`. A token no shown lobby has gets `lobby-not-found` with `field: "lobby.joinToken"`. All additions are optional, so protocol major 1 is unchanged. The scenarios `lobby-browse-old-server` and `join-token-old-server` describe a server older than 1.5.0 and are `clientSideOnly`.
 - 1.4.0: open seats and allowed games. `lobby.info.reply` (`lobby.open`, `lobby.allowedGames`) and `lobby.state` (`open`, `allowedGames`) carry the count of open seats (`total`, `free`) and the games the lobby takes. The new error code `game-not-allowed` answers a slot whose game is not listed. The named `seats` field is deprecated and still sent, so 1.3 clients work. All additions are optional, so protocol major 1 is unchanged.
 - 1.3.0: held seats. `lobby.info.reply` (`lobby.seats`) and `lobby.state` (`seats`) carry the seats the host holds, each with a `free` flag. `hello` carries an optional `seat`. The new error code `seat-unavailable` answers a choice that names no seat or a taken seat. All three fields are optional, and a client that sends no `seat` joins as before, so protocol major 1 is unchanged.
 - 1.2.0: `lobby.started` carries an optional `room.localAddress`, the loopback address of a room that runs on the computer of the server. A client that joined through a loopback address SHOULD use it. The change is additive, so protocol major 1 is unchanged.

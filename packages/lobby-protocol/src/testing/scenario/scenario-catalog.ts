@@ -296,6 +296,38 @@ const SCENARIO_CATALOG: ScenarioEntry[] = [
     requires: ['slots.yaml', 'worlds.upload'],
     setup: { ...BASE_SETUP, admission: 'open', heldFiles: true },
   },
+  {
+    name: 'lobby-browse',
+    title: 'A client lists the lobbies a server shows on the network',
+    requires: ['slots.yaml'],
+    setup: { ...BASE_SETUP, listed: true },
+  },
+  {
+    name: 'lobby-browse-join',
+    title: 'A client joins a listed lobby with its join token, without the code',
+    requires: ['slots.yaml', 'worlds.upload'],
+    setup: { ...BASE_SETUP, listed: true },
+  },
+  {
+    name: 'lobby-browse-hidden',
+    title: 'A lobby the host hides leaves the list and its join token stops working',
+    requires: ['slots.yaml'],
+    setup: { ...BASE_SETUP, listed: true },
+  },
+  {
+    name: 'lobby-browse-old-server',
+    title: 'A server older than 1.5 answers lobby.browse with a clean error',
+    requires: ['slots.yaml'],
+    setup: BASE_SETUP,
+    clientSideOnly: true,
+  },
+  {
+    name: 'join-token-old-server',
+    title: 'A server older than 1.5 refuses a hello with a join token and names lobby.code',
+    requires: ['slots.yaml'],
+    setup: BASE_SETUP,
+    clientSideOnly: true,
+  },
 ];
 
 export { BASE_SETUP, SCENARIO_CATALOG };

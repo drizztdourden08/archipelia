@@ -18,6 +18,7 @@ const WRONG_CODE_LIMIT = 10;
 const WRONG_CODE_WINDOW_MS = 60000;
 const LOBBY_INFO_LIMIT = 30;
 const LOBBY_INFO_WINDOW_MS = 60000;
+const LOBBY_BROWSE_MAX = 64;
 
 const MAX_SLOTS_PER_HELLO = 8;
 const MAX_WORLDS_PER_HELLO = 8;
@@ -49,6 +50,7 @@ const UPLOAD_KINDS = ['world', 'yaml'] as const;
 
 const CLIENT_MESSAGE_TYPES = [
   'lobby.info',
+  'lobby.browse',
   'hello',
   'ready',
   'leave',
@@ -60,6 +62,7 @@ const CLIENT_MESSAGE_TYPES = [
 
 const SERVER_MESSAGE_TYPES = [
   'lobby.info.reply',
+  'lobby.browse.reply',
   'welcome',
   'error',
   'admission',
@@ -83,6 +86,7 @@ export {
   HELLO_TIMEOUT_MS,
   IDLE_TIMEOUT_MS,
   LOBBY_ADMISSIONS,
+  LOBBY_BROWSE_MAX,
   LOBBY_INFO_LIMIT,
   LOBBY_INFO_MAX_REQUEST_BYTES,
   LOBBY_INFO_WINDOW_MS,

@@ -13,7 +13,7 @@ const LOBBY_INFO_SCHEMA = {
     type: { const: 'lobby.info' },
     seq: { $ref: '#/$defs/seq' },
     protocol: { $ref: '#/$defs/protocolOffer' },
-    lobby: { type: 'object', required: ['code'], properties: { code: { $ref: '#/$defs/lobbyCode' } } },
+    lobby: { $ref: '#/$defs/lobbyRef' },
   },
 };
 
@@ -27,7 +27,7 @@ const HELLO_SCHEMA = {
     type: { const: 'hello' },
     seq: { $ref: '#/$defs/seq' },
     protocol: { $ref: '#/$defs/protocolOffer' },
-    lobby: { type: 'object', required: ['code'], properties: { code: { $ref: '#/$defs/lobbyCode' } } },
+    lobby: { $ref: '#/$defs/lobbyRef' },
     resume: { type: ['string', 'null'], pattern: '^[A-Za-z0-9_-]{43}$' },
     client: { $ref: '#/$defs/clientInfo' },
     player: { type: 'object', required: ['displayName'], properties: { displayName: { $ref: '#/$defs/text32' } } },

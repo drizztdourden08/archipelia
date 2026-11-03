@@ -32,6 +32,11 @@ const SCHEMA_DEFS = {
   apVersion: { type: 'string', pattern: AP_VERSION_PATTERN, maxLength: 32 },
   token: { type: 'string', pattern: TOKEN_PATTERN },
   lobbyCode: { type: 'string', pattern: LOBBY_CODE_PATTERN },
+  lobbyRef: {
+    type: 'object',
+    properties: { code: { $ref: '#/$defs/lobbyCode' }, joinToken: { $ref: '#/$defs/token' } },
+    oneOf: [{ required: ['code'] }, { required: ['joinToken'] }],
+  },
   clientId: { type: 'string', pattern: CLIENT_ID_PATTERN },
   moduleName: { type: 'string', pattern: MODULE_PATTERN },
   text16: { type: 'string', minLength: 1, maxLength: 16, pattern: PRINTABLE_PATTERN },
