@@ -1,6 +1,5 @@
 /* @layer renderer-app @kind logic */
 import type { SpoilerGroup } from '@archipelia/design';
-import type { SpoilerLog } from '@archipelia/sessions/spoiler';
 import type { RootSource, SpoilerTab } from '../SpoilerWidget.type';
 import { entrancesOf } from './entrances-of';
 import { groupsOf } from './groups-of';
