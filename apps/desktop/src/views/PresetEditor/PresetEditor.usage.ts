@@ -2,13 +2,13 @@
 import type { ComponentUsage } from '@drizztdourden08/tessera';
 
 const usage = {
-  job: 'The editor of one preset: its name, the option groups with search, every option row, a SaveBar for save and discard, and the More actions menu with duplicate, import and export of its yaml, reset and delete.',
+  job: 'The editor of one preset: its name, the options of its game in a GameOptionsPanel with tabs, Basic and Advanced rows and search, a SaveBar for save and discard, and the More actions menu with duplicate, import and export of its yaml, reset and delete.',
   useWhen: [
     'The detail side of the Presets page once a preset is picked.',
   ],
   avoidWhen: [
     { case: 'The presets list with its detail side.', use: 'PresetsHub' },
-    { case: 'One option row on its own.', use: 'OptionFieldRow' },
+    { case: 'The options of a game without the preset around them.', use: 'GameOptionsPanel' },
   ],
   rules: [
     'Report dirty changes through onDirtyChange and the save through onSaveChange, so the hub asks over the editor before it shows another preset, and guard them with useUnsavedChanges so a page switch, Back, Escape, the hub switch, the close button and Quit ask first.',

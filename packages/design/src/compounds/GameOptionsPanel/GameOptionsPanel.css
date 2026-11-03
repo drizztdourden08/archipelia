@@ -1,0 +1,26 @@
+/* @layer renderer-app @kind style */
+.game-options-toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.game-options-toolbar__search {
+  inline-size: var(--size-192);
+}
+
+.game-option-row__about {
+  display: block;
+  white-space: pre-line;
+}
+
+.game-option-row__facts {
+  display: block;
+}
+
+.game-option-row__control {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  min-inline-size: 0;
+}

@@ -7,6 +7,8 @@ export { DIRECT_LABEL, DirectTag, GameCard, VERIFIED_LABEL } from './compounds/G
 export type { GameCardAction, GameCardKind, GameCardNote, GameCardProps, GameCardStatus } from './compounds/GameCard';
 export { GameDetails } from './compounds/GameDetails';
 export type { GameDetailsPicker, GameDetailsProps, GameDetailsVersion } from './compounds/GameDetails';
+export { GameOptionsPanel } from './compounds/GameOptionsPanel';
+export type { GameOptionsPanelProps } from './compounds/GameOptionsPanel';
 export { HintRow } from './compounds/HintRow';
 export { PackageConsentDialog } from './compounds/PackageConsentDialog';
 export type { ConsentPackage, ConsentWheel, PackageConsentDialogProps } from './compounds/PackageConsentDialog';
