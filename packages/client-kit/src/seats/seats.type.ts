@@ -2,6 +2,10 @@
 
 type HeldSeat = { name: string; free: boolean };
 
+type OpenSeats = { total: number; free: number };
+
 type SeatPick = { ok: true; seat: string } | { ok: false; reason: 'unknown' | 'taken'; message: string };
 
-export type { HeldSeat, SeatPick };
+type OpenPick = { ok: true } | { ok: false; reason: 'none' | 'full'; message: string };
+
+export type { HeldSeat, OpenPick, OpenSeats, SeatPick };

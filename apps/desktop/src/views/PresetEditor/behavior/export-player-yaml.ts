@@ -6,7 +6,7 @@ import { PLAYER_NAME } from '../PresetEditor.constants';
 
 const exportPlayerYaml = (schema: GameSchema, values: Record<string, OptionValue>) =>
   renderPresetYaml(
-    { slot: 1, name: PLAYER_NAME, game: schema.game, source: { kind: 'preset', presetId: '', overrides: {} } },
+    { kind: 'set', slot: 1, name: PLAYER_NAME, game: schema.game, source: { kind: 'preset', presetId: '', overrides: {} } },
     resolveValues(schema, values),
   );
 

@@ -62,7 +62,7 @@ const SEAT_UI = {
 
 const LOBBY_STAGE = {
   session: 'Review lobby',
-  held: 'Alice',
+  held: 'Waiting for a player to connect',
   portOffset: 3,
   hintCost: 5,
   count: /\d+ players?/,

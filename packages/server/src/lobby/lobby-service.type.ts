@@ -61,9 +61,9 @@ type HostSlotInput = { name: string; game: string; yaml: string; worldVersion: s
 
 type HostMemberInput = { displayName: string; slots: HostSlotInput[] };
 
-type CreateLobbyInput = { name: string; engine?: SessionEngine; options?: Partial<LobbyOptions>; locked?: boolean; source?: LobbySource; seats?: string[] };
+type CreateLobbyInput = { name: string; engine?: SessionEngine; options?: Partial<LobbyOptions>; locked?: boolean; source?: LobbySource; seats?: string[]; openSeats?: number };
 
-type LobbyPatch = { name?: string; options?: Partial<LobbyOptions>; source?: LobbySource; seats?: string[] };
+type LobbyPatch = { name?: string; options?: Partial<LobbyOptions>; source?: LobbySource; seats?: string[]; openSeats?: number };
 
 export type {
   CreateLobbyInput, HostMemberInput, HostSlotInput, LobbyLink, LobbyPatch, LobbyServiceDeps, LobbyStore, LobbyTrust,

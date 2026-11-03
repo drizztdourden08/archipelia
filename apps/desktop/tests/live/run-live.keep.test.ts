@@ -5,7 +5,7 @@ import { listOn, liveSuite, playerOf, sessionOf } from './live-kit';
 
 const { kitOn, cleanups, stopRig } = liveSuite();
 
-const DIRECT = { admission: 'host-approval', allowUnlisted: true } as const;
+const DIRECT = { admission: 'host-approval', allowUnlisted: true, allowedGames: [] } as const;
 
 describe('S2 run by tab id', { tags: ['standard'] }, () => {
   test('builds the run from the saved session and the tab overrides, and the run record carries the source and the origin of each player', async () => {
@@ -151,7 +151,7 @@ describe('K4 turning direct on and off on a live tab', { tags: ['standard'] }, (
 
 describe('K4 the preset settings in the players override', { tags: ['standard'] }, () => {
   const preset = (overrides: Record<string, unknown>, game = 'Demo') =>
-    ({ players: [{ slot: 1, name: 'Dee', game, source: { kind: 'preset', presetId: 'p1', overrides } }] });
+    ({ players: [{ kind: 'set', slot: 1, name: 'Dee', game, source: { kind: 'preset', presetId: 'p1', overrides } }] });
 
   test('may only name options that exist in the schema of the game', async () => {
     const { live, rig: on } = await kitOn();

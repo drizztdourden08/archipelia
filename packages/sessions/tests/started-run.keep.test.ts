@@ -7,8 +7,8 @@ import { startedRun } from '../src/service/started-run';
 const TEMPLATE: SessionTemplate = {
   id: 'lobby:lb_1', name: 'Sunday run', updatedAt: 0,
   players: [
-    { slot: 1, name: 'Drizzt', game: 'Celeste', source: { kind: 'preset', presetId: '', overrides: {} } },
-    { slot: 2, name: 'Alice', game: 'Hollow Knight', source: { kind: 'yaml', fileName: 'alice.yaml', yaml: 'name: Alice' } },
+    { kind: 'set', slot: 1, name: 'Drizzt', game: 'Celeste', source: { kind: 'preset', presetId: '', overrides: {} } },
+    { kind: 'set', slot: 2, name: 'Alice', game: 'Hollow Knight', source: { kind: 'yaml', fileName: 'alice.yaml', yaml: 'name: Alice' } },
   ],
   generator: { spoiler: 3, race: false, progressionBalancing: true },
   server: { hintCost: 5, releaseMode: 'auto', collectMode: 'auto', remainingMode: 'goal', autoShutdownMinutes: 0 },

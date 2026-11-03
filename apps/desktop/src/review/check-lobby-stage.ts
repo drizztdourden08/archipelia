@@ -12,8 +12,8 @@ const checkOwnSeats = (tour: AppReviewTour) => {
   const [saved] = REVIEW_PLAYERS;
   const ready = seats(tour, SEAT_UI.filled).some((seat) => seat.innerText.includes(saved) && seat.innerText.includes(SEAT_UI.ready));
   tour.check('lobby-stage-saved', ready, `the saved player ${saved} sits on a filled seat marked Ready`, `the saved player ${saved} has no Ready seat`);
-  const held = seats(tour, SEAT_UI.held).some((seat) => seat.innerText.includes(`Waiting for ${LOBBY_STAGE.held} to connect`));
-  tour.check('lobby-stage-held', held, `the held seat says it waits for ${LOBBY_STAGE.held} to connect`, 'there is no held seat');
+  const held = seats(tour, SEAT_UI.held).some((seat) => seat.innerText.includes(LOBBY_STAGE.held));
+  tour.check('lobby-stage-held', held, `the held seat says: ${LOBBY_STAGE.held}`, 'there is no held seat');
   const added = seats(tour, SEAT_UI.filled).some((seat) => tour.findAll(SELECTOR.button, seat).some((button) => nameOf(button).startsWith(SEAT_UI.keep)));
   tour.check('lobby-stage-added', added, 'the player added here offers Keep in session', 'no added seat offers Keep in session');
 };

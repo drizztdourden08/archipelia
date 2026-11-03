@@ -11,7 +11,7 @@ const ownSeatView = (seat: OwnSeat, context: SeatContext): LobbySeatProps => {
   const { player, slot, kind } = seat;
   const name = playerLabel(player);
   const tools = seatToolsOf(seat, name, context);
-  if (kind === 'held') return { state: 'held', name: `${SEAT_TEXT.slot} ${slot}`, meta: [`${SEAT_TEXT.waitingFor} ${name} ${SEAT_TEXT.toConnect}`], tools };
+  if (kind === 'held') return { state: 'held', name: `${SEAT_TEXT.slot} ${slot}`, meta: [SEAT_TEXT.waitingOpen], tools };
   const keep = { id: 'keep', label: SEAT_TEXT.keep, nameSuffix: name, icon: 'bookmark' as const, primary: true, disabled: context.busy, onSelect: () => context.actions.keep(slot) };
   return {
     state: 'filled',

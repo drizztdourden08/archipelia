@@ -18,7 +18,8 @@ const SeatsPane = ({ screen, empty }: SeatsPaneProps) => {
   const direct = draft.direct !== undefined;
   const seats = useMemo(() => seatsOf(draft.players, saved.players, lobby?.members ?? []), [draft.players, lobby?.members, saved.players]);
   const context = useSeatContext(screen);
-  const { game, preset } = sourcesOf(selected, installed, presets);
+  const selectedSet = selected?.kind === 'set' ? selected : undefined;
+  const { game, preset } = sourcesOf(selectedSet, installed, presets);
   return (
     <>
       <LobbySeatGrid label={SEAT_TEXT.grid} addLabel={SEAT_TEXT.add} addDisabled={screen.busy} onAdd={screen.addPlayer}>
@@ -38,9 +39,9 @@ const SeatsPane = ({ screen, empty }: SeatsPaneProps) => {
           onClose={screen.closeEditor}
         />
       )}
-      {selected && screen.overridesOpen && (
+      {selectedSet && screen.overridesOpen && (
         <OverridesPanel
-          player={selected}
+          player={selectedSet}
           game={game}
           preset={preset}
           onValue={screen.players.setOverride}

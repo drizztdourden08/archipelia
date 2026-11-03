@@ -1,18 +1,18 @@
 /* @layer tests @kind helper */
 import { installWorld, readCatalog } from '@archipelia/catalog';
-import type { HostedPlayer } from '@archipelia/model';
+import type { SetPlayer } from '@archipelia/model';
 import type { RigContext } from './multiworld-rig';
 
 const SOH = 'oot_soh';
 
-const sohPlayer = async ({ engineDir, games: files, cache, presets }: RigContext, slot: number, name: string): Promise<HostedPlayer> => {
+const sohPlayer = async ({ engineDir, games: files, cache, presets }: RigContext, slot: number, name: string): Promise<SetPlayer> => {
   const catalog = await readCatalog({ files: cache, cacheDir: 'catalog' });
   const entry = catalog.entries.find((candidate) => candidate.apworld === SOH);
   const latest = entry?.versions.at(-1);
   if (!entry || !latest) throw new Error('the index has no Ship of Harkinian version');
   const installed = await installWorld({ engineDir, files, entry, version: latest.version });
   const preset = await presets.create({ game: installed.game, name: 'Defaults' });
-  return { slot, name, game: installed.game, source: { kind: 'preset', presetId: preset.id, overrides: {} } };
+  return { kind: 'set', slot, name, game: installed.game, source: { kind: 'preset', presetId: preset.id, overrides: {} } };
 };
 
 export { sohPlayer };

@@ -16,23 +16,31 @@ type PlayerSource =
   | { kind: 'preset'; presetId: string; overrides: Record<string, OptionValue> }
   | { kind: 'yaml'; fileName: string; yaml: string };
 
-type HostedPlayer = {
+type SetPlayer = {
+  kind: 'set';
   slot: number;
   name: string;
   game: string;
   source: PlayerSource;
+};
+
+type DirectPlayer = {
+  kind: 'direct';
+  slot: number;
+};
+
+type SessionPlayer = DirectPlayer | SetPlayer;
+
+type LegacyPlayer = {
+  kind?: undefined;
+  slot: number;
+  name?: string;
+  game?: string;
+  source?: PlayerSource;
   direct?: boolean;
 };
 
-type HeldPlayer = {
-  slot: number;
-  name: string;
-  direct: true;
-  game?: string;
-  source?: PlayerSource;
-};
-
-type SessionPlayer = HostedPlayer | HeldPlayer;
+type StoredPlayer = SessionPlayer | LegacyPlayer;
 
 type GeneratorSettings = { spoiler: SpoilerLevel; race: boolean; progressionBalancing: boolean };
 
@@ -48,6 +56,7 @@ type ServerSettings = {
 type DirectConnection = {
   admission: LobbyAdmission;
   allowUnlisted: boolean;
+  allowedGames: string[];
 };
 
 type SessionLobby = {
@@ -55,7 +64,7 @@ type SessionLobby = {
   lobbyId?: string;
 };
 
-type StoredDirect = DirectConnection & Partial<SessionLobby>;
+type StoredDirect = Omit<DirectConnection, 'allowedGames'> & { allowedGames?: string[] } & Partial<SessionLobby>;
 
 type SessionTemplate = {
   id: string;
@@ -70,7 +79,7 @@ type SessionTemplate = {
   updatedAt: number;
 };
 
-type StoredTemplate = Omit<SessionTemplate, 'direct'> & { direct?: StoredDirect };
+type StoredTemplate = Omit<SessionTemplate, 'direct' | 'players'> & { direct?: StoredDirect; players: StoredPlayer[] };
 
 type SessionStatus = 'draft' | 'generating' | 'starting' | 'hosting' | 'stopped' | 'failed';
 
@@ -115,7 +124,7 @@ type Session = {
 type StoredRun = Omit<Session, 'snapshot'> & { snapshot: StoredTemplate };
 
 export type {
-  DirectConnection, Endpoint, GeneratorSettings, HeldPlayer, HostTarget, HostedPlayer, PlayerOrigin, PlayerSource, ReleaseMode, RemainingMode, RunMember, RunOverride, RunPlayer,
+  DirectConnection, DirectPlayer, Endpoint, GeneratorSettings, HostTarget, LegacyPlayer, PlayerOrigin, PlayerSource, ReleaseMode, RemainingMode, RunMember, RunOverride, RunPlayer,
   RunSource, RunSourceMatch, ServerSettings, Session, SessionEngine, SessionLobby, SessionOutput, SessionPlayer, SessionStatus, SessionTemplate,
-  SessionWorld, SpoilerLevel, StoredRun, StoredTemplate,
+  SessionWorld, SetPlayer, SpoilerLevel, StoredPlayer, StoredRun, StoredTemplate,
 };

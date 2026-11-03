@@ -24,7 +24,7 @@ describe('K1 the overrides of a run', { tags: ['critical'] }, () => {
   });
 
   test('say where and how clients connect', () => {
-    const changed = used({ host: { kind: 'archipelago-gg' }, direct: { admission: 'open', allowUnlisted: true } });
+    const changed = used({ host: { kind: 'archipelago-gg' }, direct: { admission: 'open', allowUnlisted: true, allowedGames: [] } });
     expect(runOverridesOf(SAVED, changed).map(({ field, from, to }) => [field, from, to])).toEqual([
       ['host', 'local :38281', 'archipelago.gg'],
       ['direct.admission', 'off', 'open'],
@@ -52,14 +52,14 @@ describe('K1 the overrides of a run', { tags: ['critical'] }, () => {
   });
 
   test('notice an imported file that changed under the same name', () => {
-    const yaml = (text: string) => template({ players: [{ slot: 1, name: 'Bob', game: 'Celeste', source: { kind: 'yaml', fileName: 'bob.yaml', yaml: text } }] });
+    const yaml = (text: string) => template({ players: [{ kind: 'set' as const, slot: 1, name: 'Bob', game: 'Celeste', source: { kind: 'yaml' as const, fileName: 'bob.yaml', yaml: text } }] });
     expect(runOverridesOf(yaml('game: Celeste'), yaml('game: Celestf'))).toHaveLength(1);
     expect(runOverridesOf(yaml('game: Celeste'), yaml('game: Celeste'))).toEqual([]);
   });
 });
 
 describe('K1 the players of a run', { tags: ['critical'] }, () => {
-  const saved = template({ players: [...SAVED.players, { ...preset(3, 'Bob', 'Celeste'), direct: true }] });
+  const saved = template({ players: [...SAVED.players, preset(3, 'Bob', 'Celeste')] });
   const client = { slot: 3, name: 'Bob', game: 'Celeste', member: { displayName: "Bob's PC", client: 'Archipelia 1.0', trust: 'verified' as const } };
 
   test('are saved when the setup had them, added when the lobby brought them', () => {
@@ -74,7 +74,7 @@ describe('K1 the players of a run', { tags: ['critical'] }, () => {
   });
 
   test('a seat the host also set up goes to the client who joined it', () => {
-    const players = runPlayersOf({ saved, hosted: [...SAVED.players, { ...preset(3, 'Bob', 'Celeste'), direct: true }], joined: [client] });
+    const players = runPlayersOf({ saved, hosted: [...SAVED.players, preset(3, 'Bob', 'Celeste')], joined: [client] });
     expect(players.filter((player) => player.slot === 3)).toEqual([{ ...client, origin: 'joined' }]);
   });
 });

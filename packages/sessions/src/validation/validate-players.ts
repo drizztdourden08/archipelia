@@ -1,15 +1,15 @@
 /* @layer core @kind logic */
-import { hostedPlayers } from '@archipelia/model';
-import type { HostedPlayer, SessionPlayer, SessionTemplate } from '@archipelia/model';
+import { setPlayers } from '@archipelia/model';
+import type { SessionTemplate, SetPlayer } from '@archipelia/model';
 import { checkValues, resolveValues } from '@archipelia/presets';
 import { NAME_LIMIT } from './validation.constants';
 import type { LibraryView, ProblemField, TemplateProblem } from './validate-players.type';
 
-const labelOf = (player: SessionPlayer) => player.name.trim() || `Player ${player.slot}`;
+const labelOf = (player: SetPlayer) => player.name.trim() || `Player ${player.slot}`;
 
-const playerProblem = (player: SessionPlayer, field: ProblemField, message: string): TemplateProblem => ({ slot: player.slot, field, message });
+const playerProblem = (player: SetPlayer, field: ProblemField, message: string): TemplateProblem => ({ slot: player.slot, field, message });
 
-const nameProblems = (players: SessionPlayer[]): TemplateProblem[] => {
+const nameProblems = (players: SetPlayer[]): TemplateProblem[] => {
   const seen = new Set<string>();
   return players.flatMap((player) => {
     const name = player.name.trim();
@@ -22,7 +22,7 @@ const nameProblems = (players: SessionPlayer[]): TemplateProblem[] => {
   });
 };
 
-const presetProblems = (player: HostedPlayer, { installed, presets }: LibraryView): TemplateProblem[] => {
+const presetProblems = (player: SetPlayer, { installed, presets }: LibraryView): TemplateProblem[] => {
   if (player.source.kind !== 'preset') return [];
   const game = installed.find((entry) => entry.game === player.game);
   if (!game) return [playerProblem(player, 'game', player.game ? `${labelOf(player)}: ${player.game} is not installed` : `${labelOf(player)}: pick a game`)];
@@ -36,15 +36,15 @@ const presetProblems = (player: HostedPlayer, { installed, presets }: LibraryVie
   });
 };
 
-const yamlProblems = (player: HostedPlayer, { installed }: LibraryView): TemplateProblem[] => {
+const yamlProblems = (player: SetPlayer, { installed }: LibraryView): TemplateProblem[] => {
   if (player.source.kind !== 'yaml') return [];
   if (!player.source.yaml.trim()) return [playerProblem(player, 'source', `${labelOf(player)}: import a player file`)];
   return installed.some((entry) => entry.game === player.game) ? [] : [playerProblem(player, 'source', `${labelOf(player)}: ${player.game || 'the game'} is not installed`)];
 };
 
 const validatePlayers = ({ players }: SessionTemplate, library: LibraryView): TemplateProblem[] => [
-  ...nameProblems(players),
-  ...hostedPlayers(players).flatMap((player) => [...presetProblems(player, library), ...yamlProblems(player, library)]),
+  ...nameProblems(setPlayers(players)),
+  ...setPlayers(players).flatMap((player) => [...presetProblems(player, library), ...yamlProblems(player, library)]),
 ];
 
 export { validatePlayers };

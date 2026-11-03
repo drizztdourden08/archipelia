@@ -26,7 +26,7 @@ const run = (id: string, createdAt: number): Session => ({
   status: 'stopped',
   snapshot: {
     id: 't', name: id, updatedAt: 0,
-    players: [{ slot: 1, name: 'Johnny', game: 'ALttP', source: { kind: 'yaml', fileName: 'a.yaml', yaml: '' } }],
+    players: [{ kind: 'set', slot: 1, name: 'Johnny', game: 'ALttP', source: { kind: 'yaml', fileName: 'a.yaml', yaml: '' } }],
     generator: { spoiler: 1, race: false, progressionBalancing: true },
     server: { hintCost: 10, releaseMode: 'auto', collectMode: 'auto', remainingMode: 'goal', autoShutdownMinutes: 0 },
     host: { kind: 'archipelago-gg' },

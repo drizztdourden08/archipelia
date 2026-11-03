@@ -36,6 +36,7 @@ type ScenarioSetup = {
   registry: 'active' | 'revoked';
   heldFiles?: boolean;
   heldSeats?: string[];
+  allowedGames?: string[];
   outputFile?: ScenarioOutputFile;
 };
 

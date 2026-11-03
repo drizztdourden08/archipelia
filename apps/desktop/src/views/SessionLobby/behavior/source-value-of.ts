@@ -1,10 +1,10 @@
 /* @layer renderer-app @kind logic */
-import type { SessionPlayer } from '@archipelia/model';
+import type { SetPlayer } from '@archipelia/model';
 import { PRESET_PREFIX, YAML_VALUE } from '../SessionLobby.constants';
 
-const sourceValueOf = (player: SessionPlayer) => {
-  if (player.source?.kind === 'yaml') return YAML_VALUE;
-  return player.source?.presetId ? `${PRESET_PREFIX}${player.source.presetId}` : '';
+const sourceValueOf = ({ source }: SetPlayer) => {
+  if (source.kind === 'yaml') return YAML_VALUE;
+  return source.presetId ? `${PRESET_PREFIX}${source.presetId}` : '';
 };
 
 export { sourceValueOf };

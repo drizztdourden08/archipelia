@@ -1,5 +1,6 @@
 /* @layer renderer-app @kind hook */
 import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { setPlayers } from '@archipelia/model';
 import type { Session } from '@archipelia/model';
 import type { HostLogLine } from '@archipelia/hosts';
 import { checksFromLog, hintsFromLog, playerRows, presenceOf, roomPasswordNeed, roomPlayersOf, scopedTo, targetKey, watchTarget } from '@archipelia/sessions/live-room';
@@ -25,7 +26,7 @@ const useLiveRoom = (session: Session | null, lines: readonly HostLogLine[]) => 
   }, [connect]);
 
   const planned = session?.snapshot.players;
-  const names = useMemo(() => (planned ?? []).map((player) => player.name), [planned]);
+  const names = useMemo(() => setPlayers(planned ?? []).map((player) => player.name), [planned]);
   const texts = useMemo(() => lines.map((line) => line.text), [lines]);
   const logChecks = useMemo(() => checksFromLog(texts, names), [texts, names]);
   const online = useMemo(() => presenceOf(texts, names), [texts, names]);

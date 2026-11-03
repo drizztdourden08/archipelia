@@ -3,7 +3,7 @@ import type { SessionPlayer } from '@archipelia/model';
 import { NAME_LIMIT } from '@archipelia/sessions/validation';
 
 const isTaken = (players: SessionPlayer[], name: string) =>
-  players.some((player) => player.name.toLowerCase() === name.toLowerCase());
+  players.some((player) => player.kind === 'set' && player.name.toLowerCase() === name.toLowerCase());
 
 const freeName = (players: SessionPlayer[], base: string) => {
   const stem = base.replace(/\d+$/, '').slice(0, NAME_LIMIT - 2) || 'Player';

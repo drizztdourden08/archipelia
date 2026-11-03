@@ -9,7 +9,7 @@ import './PlayerRow.css';
 
 const PlayerRow = ({ player, index, summary, problem, open, busy, on, children }: PlayerRowProps) => {
   const { slot } = player;
-  const label = player.name.trim() || `Player ${slot}`;
+  const label = player.kind === 'set' ? player.name.trim() || `Player ${slot}` : `${PLAYER_TEXT.openSeat} ${slot}`;
   const edit = useCallback(() => on.edit(slot), [on, slot]);
   const direct = useCallback((checked: boolean) => on.direct(slot, checked), [on, slot]);
   const groups = useMemo<MenuGroup[]>(() => [{
@@ -32,7 +32,7 @@ const PlayerRow = ({ player, index, summary, problem, open, busy, on, children }
           </Text>
         </Pressable>
         <Box className="player-row__direct">
-          <Toggle aria-label={`Lets ${label} connect directly`} checked={player.direct === true} onChange={direct} />
+          <Toggle aria-label={`Lets ${label} connect directly`} checked={player.kind === 'direct'} onChange={direct} />
         </Box>
         <DropdownMenu trigger={{ label: `More actions for ${label}`, icon: 'ellipsis', iconOnly: true }} variant="ghost" size="sm" groups={groups} />
       </Box>

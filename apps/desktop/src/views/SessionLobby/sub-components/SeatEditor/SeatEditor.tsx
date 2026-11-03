@@ -22,26 +22,32 @@ const SeatEditor = ({ player, installed, presets, busy, overridesOpen, actions, 
             subtitle={playerLabel(player)}
             action={<Button size="sm" variant="ghost" onClick={onClose}>{SEAT_TEXT.done}</Button>}
           />
-          <Box data-cell="name">
-            <Field label={SEAT_TEXT.nameLabel} width="full">
-              <TextInput value={player.name} placeholder={SEAT_TEXT.nameLabel} maxLength={NAME_LIMIT} onChange={rename} />
-            </Field>
-          </Box>
+          {player.kind === 'set' && (
+            <Box data-cell="name">
+              <Field label={SEAT_TEXT.nameLabel} width="full">
+                <TextInput value={player.name} placeholder={SEAT_TEXT.nameLabel} maxLength={NAME_LIMIT} onChange={rename} />
+              </Field>
+            </Box>
+          )}
           <Box data-cell="game">
             <Field label={SEAT_TEXT.gameLabel} width="full">
               <GameCell player={player} installed={installed} onGame={actions.setGame} />
             </Field>
           </Box>
-          <Box data-cell="source">
-            <Field label={SEAT_TEXT.presetLabel} width="full">
-              <PlayerSourceCell player={player} presets={presets} busy={busy} onSource={actions.setSource} onImport={actions.importYaml} />
-            </Field>
-          </Box>
-          <Box data-cell="overrides">
-            <Field label={SEAT_TEXT.overridesLabel} width="full">
-              <PlayerOverridesCell player={player} selected={overridesOpen} onEdit={onOverrides} />
-            </Field>
-          </Box>
+          {player.kind === 'set' && (
+            <>
+              <Box data-cell="source">
+                <Field label={SEAT_TEXT.presetLabel} width="full">
+                  <PlayerSourceCell player={player} presets={presets} busy={busy} onSource={actions.setSource} onImport={actions.importYaml} />
+                </Field>
+              </Box>
+              <Box data-cell="overrides">
+                <Field label={SEAT_TEXT.overridesLabel} width="full">
+                  <PlayerOverridesCell player={player} selected={overridesOpen} onEdit={onOverrides} />
+                </Field>
+              </Box>
+            </>
+          )}
         </Stack>
       </Card>
     </Box>

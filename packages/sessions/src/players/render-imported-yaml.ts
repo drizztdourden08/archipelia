@@ -1,8 +1,8 @@
 /* @layer core @kind logic */
-import type { HostedPlayer } from '@archipelia/model';
+import type { SetPlayer } from '@archipelia/model';
 import { parseAllDocuments } from 'yaml';
 
-const renderImportedYaml = (player: HostedPlayer, yaml: string) => {
+const renderImportedYaml = (player: SetPlayer, yaml: string) => {
   const documents = parseAllDocuments(yaml);
   const [document] = documents;
   if (documents.length !== 1 || !document) throw new Error(`${player.name}: an imported file must hold exactly one player`);

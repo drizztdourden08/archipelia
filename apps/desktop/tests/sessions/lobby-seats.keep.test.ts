@@ -13,22 +13,22 @@ import { toggleSeat } from '../../src/views/SessionLobby/behavior/toggle-seat';
 import { lobby, member, slot, world } from '../lobbies/lobby-fixtures';
 import { PRESET, presetPlayer } from './session-fixtures';
 
-const held: SessionPlayer = { slot: 2, name: 'Alice', direct: true };
+const held: SessionPlayer = { kind: 'direct', slot: 2 };
 
 describe('K1 the seats of the lobby phase', { tags: ['critical'] }, () => {
   const saved = [presetPlayer(1, 'Drizzt'), held];
 
-  test('draws saved players as saved, new ones as added here, and a direct seat with no game as held', () => {
+  test('draws saved players as saved, new ones as added here, and a direct seat as held', () => {
     const players = [...saved, presetPlayer(3, 'Carol')];
     expect(seatsOf(players, saved, []).map((seat) => [seat.slot, seat.kind])).toEqual([[1, 'saved'], [2, 'held'], [3, 'added']]);
   });
 
-  test('lets a player who connected take the held seat of the same name', () => {
-    const joined = member({ displayName: 'Alice', admission: 'approved', slots: [slot({ name: 'Alice' })] });
+  test('lets a player who took an open seat fill the held seat', () => {
+    const joined = member({ displayName: 'Alice', admission: 'approved', openSeat: true, slots: [slot({ name: 'Alice' })] });
     expect(seatsOf(saved, saved, [joined]).map((seat) => seat.slot)).toEqual([1]);
-    const pending = member({ displayName: 'ALICE' });
+    const pending = member({ displayName: 'ALICE', openSeat: true });
     expect(seatsOf(saved, saved, [pending]).map((seat) => seat.slot)).toEqual([1]);
-    const gone = member({ displayName: 'Alice', admission: 'removed' });
+    const gone = member({ displayName: 'Alice', admission: 'removed', openSeat: true });
     expect(seatsOf(saved, saved, [gone]).map((seat) => seat.slot)).toEqual([1, 2]);
   });
 
@@ -36,8 +36,8 @@ describe('K1 the seats of the lobby phase', { tags: ['critical'] }, () => {
     const seat = (player: SessionPlayer, kind: 'saved' | 'added' = 'saved') => ({ key: 'seat', slot: player.slot, player, kind });
     expect(seatMetaOf(seat(presetPlayer(1, 'A')), [PRESET])).toEqual(['Slot 1 · Demo · Saved', 'Preset Open']);
     expect(seatMetaOf(seat(presetPlayer(3, 'A', 'gone'), 'added'), [PRESET])).toEqual(['Slot 3 · Demo · Added here', 'No preset']);
-    expect(seatMetaOf(seat({ slot: 1, name: 'A', game: 'Demo', source: { kind: 'yaml', fileName: 'a.yaml', yaml: '' } }), [])[1]).toBe('From file a.yaml');
-    expect(seatMetaOf(seat({ slot: 4, name: 'A', game: '', source: { kind: 'preset', presetId: '', overrides: {} } }), [])[0]).toBe('Slot 4 · Their own game · Saved');
+    expect(seatMetaOf(seat({ kind: 'set', slot: 1, name: 'A', game: 'Demo', source: { kind: 'yaml', fileName: 'a.yaml', yaml: '' } }), [])[1]).toBe('From file a.yaml');
+    expect(seatMetaOf(seat({ kind: 'set', slot: 4, name: 'A', game: '', source: { kind: 'preset', presetId: '', overrides: {} } }), [])[0]).toBe('Slot 4 · Their own game · Saved');
   });
 
   test('keeps Edit, Duplicate and Remove as tools, Keep in session only on an added seat, and Ready or Needs a fix as the status', () => {
@@ -56,7 +56,7 @@ describe('K1 the seats of the lobby phase', { tags: ['critical'] }, () => {
     expect(calls).toEqual(['keep 1', 'remove 1']);
     expect(ownSeatView(savedSeat, { ...context, busy: true }).tools?.every((tool) => tool.disabled)).toBe(true);
     const waiting = ownSeatView({ key: 'seat-2', slot: 2, player: held, kind: 'held' }, context);
-    expect(waiting).toMatchObject({ state: 'held', name: 'Slot 2', meta: ['Waiting for Alice to connect'] });
+    expect(waiting).toMatchObject({ state: 'held', name: 'Slot 2', meta: ['Waiting for a player to connect'] });
     expect(waiting.tools?.map((tool) => tool.id)).toEqual(['edit']);
   });
 

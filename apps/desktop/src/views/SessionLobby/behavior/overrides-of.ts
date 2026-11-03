@@ -1,7 +1,7 @@
 /* @layer renderer-app @kind logic */
-import type { SessionPlayer } from '@archipelia/model';
+import type { SetPlayer } from '@archipelia/model';
 import type { Overrides } from '../SessionLobby.type';
 
-const overridesOf = (player: SessionPlayer): Overrides => (player.source?.kind === 'preset' ? player.source.overrides : {});
+const overridesOf = ({ source }: SetPlayer): Overrides => (source.kind === 'preset' ? source.overrides : {});
 
 export { overridesOf };

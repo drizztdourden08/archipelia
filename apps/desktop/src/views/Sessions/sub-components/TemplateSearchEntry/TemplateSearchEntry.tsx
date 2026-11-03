@@ -11,7 +11,7 @@ const TemplateSearchEntry = ({ template, servers }: TemplateSearchEntryProps) =>
     id: template.id,
     label: template.name,
     description: `${whereLabel(template, servers)} · ${playersLabel(template.players.length)}`,
-    keywords: ['session', 'saved session', 'edit', ...template.players.flatMap((player) => (player.game ? [player.game] : []))],
+    keywords: ['session', 'saved session', 'edit', ...template.players.flatMap((player) => (player.kind === 'set' && player.game ? [player.game] : []))],
   }], [template, servers]);
   useSearchEntries(entries, sessionRoute(template.id));
   return null;

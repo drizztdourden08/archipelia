@@ -10,6 +10,7 @@ const updateLobby = async (ctx: LobbyContext, lobbyId: string, patch: LobbyPatch
     draft.options = { ...draft.options, ...patch.options };
     if (patch.source !== undefined) draft.source = patch.source;
     if (patch.seats !== undefined) draft.seats = patch.seats;
+    if (patch.openSeats !== undefined) draft.openSeats = patch.openSeats;
   });
   ctx.publish(lobby);
   return lobby;

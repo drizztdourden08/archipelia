@@ -2,6 +2,7 @@
 import { useCallback, useMemo } from 'react';
 import { Button, ButtonRow, Stack, Text } from '@drizztdourden08/tessera/primitives';
 import { DropdownMenu } from '@drizztdourden08/tessera/composites';
+import { setPlayers } from '@archipelia/model';
 import { CommandConsole } from '@archipelia/design';
 import type { ConsoleWidgetProps } from './ConsoleWidget.type';
 import { useConsole } from '../../behavior/useConsole';
@@ -11,7 +12,7 @@ const ConsoleWidget = ({ session, lines, enabled }: ConsoleWidgetProps) => {
   const { confirmSend, draft, history, rows, send, setDraft, submit } = useConsole(session.id, lines);
   const save = useCallback(() => { void send('/save'); }, [send]);
   const players = useCallback(() => { void send('/players'); }, [send]);
-  const names = useMemo(() => session.snapshot.players.map((player) => player.name), [session.snapshot.players]);
+  const names = useMemo(() => setPlayers(session.snapshot.players).map((player) => player.name), [session.snapshot.players]);
   const groups = useMemo(() => playerCommandGroups(names, confirmSend, !enabled), [names, confirmSend, enabled]);
   const quick = (
     <ButtonRow align="start" gap="xs">
