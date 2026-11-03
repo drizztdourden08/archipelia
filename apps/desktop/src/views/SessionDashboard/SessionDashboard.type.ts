@@ -3,8 +3,6 @@ import type { LiveRoomPhase } from '@archipelia/sessions/live-room';
 
 type SessionText = { value: string | null; loading: boolean; failed: boolean };
 
-type LogTab = 'server' | 'generate';
-
 type SessionDashboardProps = { sessionId: string };
 
 type LiveConnection = {
@@ -20,4 +18,4 @@ type LiveConnection = {
 
 type SentCommand = { id: number; text: string; at: number; error: string | null };
 
-export type { LiveConnection, LogTab, SentCommand, SessionDashboardProps, SessionText };
+export type { LiveConnection,SentCommand, SessionDashboardProps, SessionText };

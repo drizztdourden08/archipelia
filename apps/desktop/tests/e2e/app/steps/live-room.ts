@@ -17,7 +17,7 @@ const CHECKS = 10;
 const playerItem = (widgets: Locator, game: string) =>
   widgets.getByRole('list', { name: 'Players', exact: true }).getByRole('listitem').filter({ hasText: game });
 
-const filterLog = (widgets: Locator, text: string) => widgets.getByRole('searchbox', { name: 'Filter the log' }).fill(text);
+const filterLog = (widgets: Locator, text: string) => widgets.locator('[data-widget-id="server-log"]').getByRole('searchbox', { name: 'Filter the log' }).fill(text);
 
 const liveStatus = (scope: Locator, text: string | RegExp) => scope.getByRole('status').filter({ hasText: text });
 

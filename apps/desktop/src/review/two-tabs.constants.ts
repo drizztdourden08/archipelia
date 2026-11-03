@@ -5,7 +5,7 @@ const LOBBY_WIDGETS: [string, RegExp][] = [
   ['network', NETWORK_CONTENT],
   ['players', /Seats \(2\)[\s\S]*Ana[\s\S]*Bo/],
   ['room', /not running yet/],
-  ['log', /The lobby opened/],
+  ['server-log',/The lobby opened/],
 ];
 
 const HOSTING_WIDGETS: [string, RegExp][] = [['network', NETWORK_CONTENT], ['players', /Ana[\s\S]*Bo/], ['room', /Seed[\s\S]*Output|Address|Hosting/]];

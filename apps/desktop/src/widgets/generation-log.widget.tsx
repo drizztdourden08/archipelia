@@ -1,11 +1,11 @@
 /* @layer renderer-app @kind component */
 import type { WidgetMeta } from '@drizztdourden08/brock-react';
-import { LobbyLog, LogWidget, NoSession } from '../views/SessionDashboard';
+import { GenerationLogWidget, NoSession } from '../views/SessionDashboard';
 import { useSessionView } from '../hooks/useSessionView';
 
 const meta: WidgetMeta = {
-  label: 'Log',
-  order: 5,
+  label: 'Generation logs',
+  order: 6,
   icon: 'file-text',
   popOut: true,
   padding: 'none',
@@ -18,11 +18,10 @@ const meta: WidgetMeta = {
   defaultFloatingSize: { width: 640, height: 320 },
 };
 
-const Log = () => {
-  const { session, lines, lobby } = useSessionView();
-  if (session) return <LogWidget session={session} lines={lines} />;
-  return lobby ? <LobbyLog events={lobby.events} /> : <NoSession />;
+const GenerationLog = () => {
+  const { session } = useSessionView();
+  return session ? <GenerationLogWidget session={session} /> : <NoSession />;
 };
 
-export default Log;
+export default GenerationLog;
 export { meta };

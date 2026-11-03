@@ -6,7 +6,6 @@ import { clockOf } from '../../src/views/SessionDashboard/behavior/clock-of';
 import { kindOf } from '../../src/views/SessionDashboard/behavior/kind-of';
 import { logCopyText } from '@archipelia/design';
 import { serverRows } from '../../src/views/SessionDashboard/behavior/server-rows';
-import { textFileFor } from '../../src/views/SessionDashboard/behavior/text-file-for';
 import { textRows } from '../../src/views/SessionDashboard/behavior/text-rows';
 import { addressOf } from '../../src/views/SessionDashboard/behavior/address-of';
 import { canStop } from '../../src/views/SessionDashboard/behavior/can-stop';
@@ -14,7 +13,7 @@ import { formatDuration } from '../../src/views/SessionDashboard/behavior/format
 import { hostLabel } from '@archipelia/model';
 import { progressLabel } from '../../src/views/SessionDashboard/behavior/progress-label';
 import { uptimeOf } from '../../src/views/SessionDashboard/behavior/uptime-of';
-import { LOG_TABS } from '../../src/views/SessionDashboard/SessionDashboard.constants';
+import { GENERATE_LOG } from '../../src/views/SessionDashboard/SessionDashboard.constants';
 import { spoilerFileOf } from '../../src/views/SessionDashboard/behavior/spoiler-file-of';
 import { templateOf } from './session-fixtures';
 
@@ -53,11 +52,9 @@ describe('K1 session status', { tags: ['critical'] }, () => {
   });
 });
 
-describe('K1 log tabs', { tags: ['critical'] }, () => {
-  test('the log has a server and a generate tab, never the spoiler', () => {
-    expect(LOG_TABS).toEqual(['server', 'generate']);
-    expect(textFileFor('generate')).toBe('generate.log');
-    expect(textFileFor('server')).toBeNull();
+describe('K1 generation log', { tags: ['critical'] }, () => {
+  test('the generation log reads the generate file, never the spoiler', () => {
+    expect(GENERATE_LOG).toBe('generate.log');
   });
 
   test('the spoiler file comes from the output, and only when it has one', () => {

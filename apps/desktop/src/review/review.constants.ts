@@ -67,7 +67,7 @@ const LOBBY_STAGE = {
   hintCost: 5,
   count: /\d+ players?/,
   config: /Hint cost\s*5%[\s\S]*Release\s*Auto[\s\S]*Joining\s*Direct, with approval/,
-  widgets: ['network', 'room', 'players', 'hints', 'log', 'console', 'spoiler'],
+  widgets: ['network', 'room', 'players', 'hints', 'server-log', 'generation-log', 'console', 'spoiler'],
   sizes: [{ name: 'wide', width: 1920, height: 1080 }, { name: 'hd', width: 1280, height: 720 }],
 } as const;
 

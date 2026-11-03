@@ -5,7 +5,7 @@ import { useSessionView } from '../hooks/useSessionView';
 
 const meta: WidgetMeta = {
   label: 'Console',
-  order: 6,
+  order: 7,
   icon: 'send',
   popOut: true,
   padding: 'md',
