@@ -11,6 +11,17 @@ import { answerSaveDialogWith } from '../support/save-dialog';
 const rowOf = (presets: Locator, name: string, changed: number) =>
   presets.getByRole('button', { name: new RegExp(`^${name} ${changed} changed`) });
 
+const showList = async (presets: Locator) => {
+  const back = presets.getByRole('region', { name: 'Presets', exact: true }).getByRole('button', { name: 'Back', exact: true });
+  if (await back.isVisible()) await back.click();
+};
+
+const openRow = async (presets: Locator, name: string, changed: number) => {
+  await showList(presets);
+  await rowOf(presets, name, changed).click();
+  await expect.poll(() => presets.getByRole('textbox', { name: 'Preset name', exact: true }).inputValue()).toBe(name);
+};
+
 const createForm = (presets: Locator) => presets.getByRole('group', { name: 'New preset', exact: true });
 
 const newPresetFor = async (presets: Locator, game: string) => {
@@ -19,6 +30,7 @@ const newPresetFor = async (presets: Locator, game: string) => {
 };
 
 const newPresetPicking = async (launched: LaunchedApp, presets: Locator, game: string) => {
+  await showList(presets);
   await presets.locator('[data-tour="new-preset"]').click();
   await pickOption(launched.page, createForm(presets).getByRole('combobox', { name: 'Game', exact: true }), game);
 };
@@ -28,13 +40,13 @@ const createPreset = async (presets: Locator, name: string) => {
   await form.getByRole('textbox', { name: 'Name', exact: true }).fill(name);
   await form.getByRole('button', { name: 'Create', exact: true }).click();
   await form.waitFor({ state: 'detached' });
-  await rowOf(presets, name, 0).waitFor();
+  await openRow(presets, name, 0);
 };
 
 const findOption = async (presets: Locator, label: string) => {
   await presets.getByRole('tab', { name: /^All\b/ }).click();
   await presets.getByRole('searchbox', { name: 'Search options' }).fill(label);
-  await presets.getByRole('button', { name: `Reset ${label}`, exact: true }).waitFor();
+  await presets.getByLabel(label, { exact: true }).first().waitFor({ state: 'attached' });
 };
 
 const markedChanged = (presets: Locator, label: string) =>
@@ -43,7 +55,7 @@ const markedChanged = (presets: Locator, label: string) =>
 const save = async (presets: Locator, name: string) => {
   await presets.getByRole('button', { name: 'Save', exact: true }).click();
   await presets.getByRole('status').filter({ hasText: /^\s*Saved\s*$/ }).waitFor();
-  await rowOf(presets, name, 1).waitFor();
+  await openRow(presets, name, 1);
 };
 
 const sohPreset = async (launched: LaunchedApp, presets: Locator) => {
@@ -73,12 +85,12 @@ const timespinnerPreset = async (launched: LaunchedApp, presets: Locator) => {
 const reopenAndSeeChanges = async (launched: LaunchedApp) => {
   await closeHub(launched.page, 'Multiworld');
   const presets = await openScreen(launched.page, 'Presets');
-  await rowOf(presets, SOH.preset, 1).click();
+  await openRow(presets, SOH.preset, 1);
   await findOption(presets, SOH.toggle);
   await markedChanged(presets, SOH.toggle);
   expect(await presets.getByRole('switch', { name: SOH.toggle, exact: true }).isChecked()).toBe(true);
   await settledProof(launched, '15-presets-soh-reopened');
-  await rowOf(presets, TIMESPINNER.preset, 1).click();
+  await openRow(presets, TIMESPINNER.preset, 1);
   await findOption(presets, TIMESPINNER.choice);
   await markedChanged(presets, TIMESPINNER.choice);
   await presets.getByRole('combobox', { name: TIMESPINNER.choice, exact: true }).filter({ hasText: TIMESPINNER.value }).waitFor();

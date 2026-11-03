@@ -33,13 +33,14 @@ const buildSession = async (launched: LaunchedApp) => {
   await sessions.getByRole('button', { name: 'New session' }).click();
   await sessions.getByRole('textbox', { name: 'Session name' }).waitFor();
   await settledProof(launched, '18-sessions-new');
-  expect(await sessions.getByRole('region', { name: 'Players', exact: true }).count(), 'the setup page lists the saved players').toBe(1);
+  await sessions.getByText(/^Players · 0$/).waitFor();
+  await sessions.getByRole('button', { name: 'Add player', exact: true }).waitFor();
   await openAdvanced(sessions);
   expect(await sessions.getByRole('spinbutton', { name: 'Local port', exact: true }).inputValue()).toBe(String(LOCAL_PORT));
   const where = sessions.getByRole('radiogroup', { name: 'Where', exact: true });
   expect(await where.getByRole('radio', { name: 'Local', exact: true }).getAttribute('aria-checked')).toBe('true');
   expect(await where.getByRole('radio', { name: 'LAN', exact: true }).isDisabled()).toBe(false);
-  await sessions.getByRole('switch', { name: /^Allow direct connections/ }).waitFor();
+  await sessions.getByRole('switch', { name: /^Allow direct connections/ }).waitFor({ state: 'attached' });
   await sessions.getByRole('slider', { name: 'Hint cost', exact: true }).waitFor();
   await pickOption(page, sessions.getByRole('combobox', { name: 'Spoiler', exact: true }), 'Full with paths');
   await sessions.getByRole('textbox', { name: 'Session name' }).fill(TEMPLATE);
