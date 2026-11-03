@@ -32,7 +32,7 @@ const APP_TREE = [
     answers: {
       'a game option': {
         question: 'How much of the option?',
-        answers: { 'its control alone': null, 'the whole row from its definition': null },
+        answers: { 'its control alone': null, 'the whole row from its definition': null, 'every option of a game, in tabs': null },
       },
       'how a session is generated and hosted': null,
     },

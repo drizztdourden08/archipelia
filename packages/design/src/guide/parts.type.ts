@@ -10,6 +10,7 @@ declare module '@drizztdourden08/tessera' {
         | 'ErrorCallout'
         | 'GameCard'
         | 'GameDetails'
+        | 'GameOptionsPanel'
         | 'HintRow'
         | 'LobbySeat'
         | 'LobbySeatGrid'

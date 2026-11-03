@@ -1,19 +1,17 @@
 /* @layer renderer-app @kind component */
 import { useCallback } from 'react';
-import { Box, Callout, EmptyState, Stack, Text } from '@drizztdourden08/tessera/primitives';
-import { FormGroupTabs, SaveBar, ValidationSummary } from '@drizztdourden08/tessera/composites';
-import { valueOf } from '@archipelia/presets';
+import { Box, Callout, Stack, Text } from '@drizztdourden08/tessera/primitives';
+import { SaveBar, ValidationSummary } from '@drizztdourden08/tessera/composites';
+import { GameOptionsPanel } from '@archipelia/design';
 import { TOUR_TARGET } from '../../hooks/tour-targets.constants';
-import { optionDomId } from './behavior/option-dom-id';
 import { usePresetEditor } from './behavior/usePresetEditor';
 import type { PresetEditorProps } from './PresetEditor.type';
 import { EditorHeader } from './sub-components/EditorHeader';
-import { OptionRow } from './sub-components/OptionRow';
 import './PresetEditor.css';
 
 const PresetEditor = (props: PresetEditorProps) => {
   const { preset, schema, onDuplicate, onDelete } = props;
-  const { bar, busy, draft, filter, items, jump, problems, resetAll, revert, save, status, transfer } = usePresetEditor(props);
+  const { bar, busy, clearFocus, draft, focusKey, items, jump, problems, resetAll, revert, save, status, transfer } = usePresetEditor(props);
   const handleDuplicate = useCallback(() => onDuplicate(preset), [onDuplicate, preset]);
   const handleDelete = useCallback(() => onDelete(preset), [onDelete, preset]);
   const handleSave = useCallback(() => { void save(); }, [save]);
@@ -36,31 +34,15 @@ const PresetEditor = (props: PresetEditorProps) => {
       {status?.tone === 'info' && <Text variant="caption" role="status" className="preset-editor__status">{status.text}</Text>}
       <ValidationSummary problems={items} onFocusField={jump} />
       <Box data-tour={TOUR_TARGET.presetsOptions}>
-        <FormGroupTabs
-          tabs={filter.tabs}
-          activeTab={filter.tab}
-          onTabChange={filter.setTab}
-          query={filter.query}
-          onQueryChange={filter.setQuery}
-          advanced={filter.showAdvanced}
-          onAdvancedChange={filter.advanced > 0 ? filter.setShowAdvanced : undefined}
-          advancedCount={filter.advanced}
+        <GameOptionsPanel
+          schema={schema}
+          values={draft.values}
+          onChange={draft.setValue}
+          problems={problems}
+          onProblem={draft.setProblem}
+          focusKey={focusKey}
+          onFocused={clearFocus}
         />
-      </Box>
-      <Box>
-        {filter.visible.length === 0 && <EmptyState message="No option matches here." />}
-        {filter.visible.map((def) => (
-          <OptionRow
-            key={def.key}
-            id={optionDomId(def.key)}
-            def={def}
-            value={valueOf(draft.values, def)}
-            problem={problems.get(def.key)}
-            onValue={draft.setValue}
-            onReset={draft.resetValue}
-            onProblem={draft.setProblem}
-          />
-        ))}
       </Box>
       <SaveBar state={bar.state} error={bar.error} onSave={handleSave} onDiscard={revert} />
     </Stack>

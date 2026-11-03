@@ -4,19 +4,17 @@ import { toast, useUnsavedChanges } from '@drizztdourden08/brock-react';
 import type { EditorParams, EditorStatus } from '../PresetEditor.type';
 import { useLibraryStore } from '../../../stores/useLibraryStore';
 import { usePresetDraft } from './usePresetDraft';
-import { useOptionFilter } from './useOptionFilter';
 import { useYamlTransfer } from './useYamlTransfer';
 import { problemMap } from './problem-map';
 import { saveBlock } from './save-block';
 import { saveState } from './save-state';
 import { problemItems } from './problem-items';
-import { useJumpToOption } from './useJumpToOption';
 import { UNSAVED_PRESET } from '../PresetEditor.constants';
 
 const usePresetEditor = ({ preset, schema, onDirtyChange, onSaveChange }: EditorParams) => {
   const { savePreset } = useLibraryStore();
   const draft = usePresetDraft(preset, schema);
-  const filter = useOptionFilter(schema, draft.changed);
+  const [focusKey, setFocusKey] = useState<string | null>(null);
   const [status, setStatus] = useState<EditorStatus | null>(null);
   const [busy, setBusy] = useState(false);
   const [failure, setFailure] = useState<string | null>(null);
@@ -26,14 +24,8 @@ const usePresetEditor = ({ preset, schema, onDirtyChange, onSaveChange }: Editor
   const problems = useMemo(() => problemMap(draft.problems), [draft.problems]);
   const block = useMemo(() => saveBlock(schema, draft.name, draft.problems, draft.unparsed), [schema, draft.name, draft.problems, draft.unparsed]);
   const items = useMemo(() => problemItems(schema, draft.problems, draft.values, draft.unparsed), [schema, draft.problems, draft.values, draft.unparsed]);
-  const jump = useJumpToOption({
-    schema,
-    filter: { tab: filter.tab, query: filter.query, showAdvanced: filter.showAdvanced },
-    visible: filter.visible,
-    setTab: filter.setTab,
-    setQuery: filter.setQuery,
-    setShowAdvanced: filter.setShowAdvanced,
-  });
+  const jump = useCallback((key: string) => setFocusKey(key), []);
+  const clearFocus = useCallback(() => setFocusKey(null), []);
   const name = draft.name.trim();
 
   const save = useCallback(async () => {
@@ -77,7 +69,7 @@ const usePresetEditor = ({ preset, schema, onDirtyChange, onSaveChange }: Editor
 
   const bar = { state: saveState({ busy, dirty: draft.dirty, block, failure, saved }), error: block ?? failure ?? undefined };
 
-  return { bar, busy, draft, filter, items, jump, problems, resetAll, revert, save, status, transfer };
+  return { bar, busy, clearFocus, draft, focusKey, items, jump, problems, resetAll, revert, save, status, transfer };
 };
 
 export { usePresetEditor };

@@ -1,6 +1,7 @@
 /* @layer renderer-app @kind barrel */
 export { OptionControl } from './OptionControl';
 export { hintOf } from './behavior/option-hint';
+export { choiceOptions } from './behavior/choice-options';
 export { coercePresetValues } from './behavior/coerce-preset-values';
 export type { CoercedValues } from './behavior/coerce-preset-values.type';
 export { isChangedValue } from './behavior/is-changed-value';
