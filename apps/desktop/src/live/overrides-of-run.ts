@@ -8,7 +8,7 @@ const serverOf = ({ hintCost, releaseMode, collectMode, remainingMode, autoShutd
   ({ hintCost, releaseMode, collectMode, remainingMode, autoShutdownMinutes });
 
 const directOf = (direct: DirectConnection | undefined): DirectConnection | null =>
-  (direct ? { admission: direct.admission, allowUnlisted: direct.allowUnlisted } : null);
+  (direct ? { admission: direct.admission, allowUnlisted: direct.allowUnlisted, ...(direct.listed === true ? { listed: true } : {}) } : null);
 
 const overridesOfRun = ({ snapshot }: Pick<Session, 'snapshot'>): SessionOverrides => ({
   players: snapshot.players,

@@ -9,6 +9,7 @@ import type { JoiningSectionProps } from './JoiningSection.type';
 const JoiningSection = ({ state, installed, allowedGames, onAllow, onOptions }: JoiningSectionProps) => {
   const approve = useCallback((on: boolean) => onOptions({ admission: on ? 'host-approval' : 'open' }), [onOptions]);
   const unlisted = useCallback((allowUnlisted: boolean) => onOptions({ allowUnlisted }), [onOptions]);
+  const listed = useCallback((shown: boolean) => onOptions({ listed: shown }), [onOptions]);
   const games = useCallback((next: readonly string[]) => onOptions({ allowedGames: [...next] }), [onOptions]);
   const names = useMemo(() => [...new Set(installed.map((world) => world.game))], [installed]);
   const validate = useMemo<TagValidator>(() => (raw) => names.includes(raw) || DIRECT_TEXT.games.unknown, [names]);
@@ -29,6 +30,11 @@ const JoiningSection = ({ state, installed, allowedGames, onAllow, onOptions }: 
           label={DIRECT_TEXT.unlisted.title}
           description={`${DIRECT_TEXT.unlisted.description} ${DIRECT_TEXT.unlisted.hint}`}
           control={<Toggle aria-label={DIRECT_TEXT.unlisted.title} checked={state.unlisted} disabled={state.optionsOff} onChange={unlisted} />}
+        />
+        <OptionRow
+          label={DIRECT_TEXT.listed.title}
+          description={`${DIRECT_TEXT.listed.description} ${DIRECT_TEXT.listed.hint}`}
+          control={<Toggle aria-label={DIRECT_TEXT.listed.title} checked={state.on && state.listed} disabled={state.optionsOff} onChange={listed} />}
         />
         <OptionRow
           label={DIRECT_TEXT.games.title}

@@ -61,6 +61,11 @@ const DIRECT_TEXT = {
     description: 'Let clients that are not in the registry join, Archipelia among them. Each of their worlds needs your consent before it runs.',
     hint: 'An unlisted world runs its Python code with your user rights.',
   },
+  listed: {
+    title: 'Show on the network',
+    description: 'Players on this computer or your network see this lobby in their list and join it without the code.',
+    hint: 'Joining still follows the approval and client rules above.',
+  },
   password: { title: 'Room password', description: 'Players type it to join the room.', hint: 'Kept in the vault, never in the saved session.' },
   passwordStored: 'A password is stored. Type to replace it.',
   passwordRemote: 'An Archipelia server makes its own room password and gives it to the players with their files.',

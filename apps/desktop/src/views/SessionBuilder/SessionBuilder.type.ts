@@ -23,6 +23,7 @@ type DirectState = {
   on: boolean;
   approval: boolean;
   unlisted: boolean;
+  listed: boolean;
   allowOff: boolean;
   optionsOff: boolean;
   hint: string;
