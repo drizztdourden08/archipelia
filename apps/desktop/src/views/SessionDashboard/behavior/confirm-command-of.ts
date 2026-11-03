@@ -1,8 +1,7 @@
 /* @layer renderer-app @kind logic */
 import { consoleCommands } from '@archipelia/sessions/console-commands';
 import type { ConsoleCommand } from '@archipelia/sessions/console-commands';
-
-const VERB = /^\/(\S+)/;
+import { VERB } from './confirm-command-of.constants';
 
 const confirmCommandOf = (line: string): ConsoleCommand | undefined => {
   const verb = VERB.exec(line.trim())?.[1];

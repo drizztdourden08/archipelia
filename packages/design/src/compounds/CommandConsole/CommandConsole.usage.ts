@@ -41,7 +41,7 @@ const CommandConsoleSample = ({ send }: { send: (command: string) => void }) => 
   />
 );
 `,
-  propsHash: '78490c15faa93941',
+  propsHash: '6473c650524b6658',
 } satisfies ComponentUsage;
 
 export { usage };
