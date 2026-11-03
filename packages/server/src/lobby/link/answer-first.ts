@@ -1,5 +1,5 @@
 /* @layer core @kind logic */
-import type { Hello, LobbyInfoRequest } from '@drizztdourden08/archipelia-lobby-protocol';
+import type { Hello, LobbyBrowseRequest, LobbyInfoRequest } from '@drizztdourden08/archipelia-lobby-protocol';
 import { rateLimitedFailure } from '@drizztdourden08/archipelia-lobby-protocol';
 import type { Conversation } from './link.type';
 
@@ -16,6 +16,16 @@ const answerInfo = async ({ options, wire }: Conversation, request: LobbyInfoReq
   return wire.fail(result.failure, request.seq);
 };
 
+const answerBrowse = async ({ options, wire }: Conversation, request: LobbyBrowseRequest) => {
+  const retry = options.limiter.askInfo(options.address);
+  if (retry !== null) return wire.fail(rateLimitedFailure(retry), request.seq);
+  const result = await options.protocol.browse(request);
+  if (!result.ok) return wire.fail(result.failure, request.seq);
+  wire.send(result.value);
+  wire.infoAnswered();
+  return undefined;
+};
+
 const answerHello = async ({ options, state, wire }: Conversation, hello: Hello) => {
   const retry = options.limiter.blocked(options.address);
   if (retry !== null) return wire.fail(rateLimitedFailure(retry), hello.seq);
@@ -30,7 +40,10 @@ const answerHello = async ({ options, state, wire }: Conversation, hello: Hello)
   return wire.fail(result.failure, hello.seq);
 };
 
-const answerFirst = (conversation: Conversation, message: LobbyInfoRequest | Hello) =>
-  message.type === 'lobby.info' ? answerInfo(conversation, message) : answerHello(conversation, message);
+const answerFirst = (conversation: Conversation, message: LobbyInfoRequest | LobbyBrowseRequest | Hello) => {
+  if (message.type === 'lobby.info') return answerInfo(conversation, message);
+  if (message.type === 'lobby.browse') return answerBrowse(conversation, message);
+  return answerHello(conversation, message);
+};
 
 export { answerFirst };

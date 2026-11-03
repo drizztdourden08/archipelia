@@ -9,7 +9,7 @@ const SERVER_OVERRIDE_KEYS = ['hintCost', 'releaseMode', 'collectMode', 'remaini
 
 const GENERATOR_OVERRIDE_KEYS = ['spoiler', 'race', 'progressionBalancing'] as const;
 
-const DIRECT_OVERRIDE_KEYS = ['admission', 'allowUnlisted', 'allowedGames'] as const;
+const DIRECT_OVERRIDE_KEYS = ['admission', 'allowUnlisted', 'allowedGames', 'listed'] as const;
 
 const PLAYER_KEYS = ['kind', 'slot', 'name', 'game', 'source'] as const;
 

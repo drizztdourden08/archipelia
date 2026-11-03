@@ -8,6 +8,7 @@ const optionsOf = (direct: DirectConnection | undefined) => ({
   on: direct !== undefined,
   approval: direct?.admission === 'host-approval',
   unlisted: direct?.allowUnlisted === true,
+  listed: direct?.listed === true,
 });
 
 const directState = (draft: SessionTemplate, live: boolean, busy: boolean): DirectState => {

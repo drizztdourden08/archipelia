@@ -5,6 +5,7 @@ import type { LobbyContext } from '../lobby-context.type';
 import type { CreateLobbyInput } from '../lobby-service.type';
 import { LOBBY_ID_PREFIX, OPEN_TTL_MS } from '../lobby.constants';
 import { lobbyOptions } from '../state/lobby-options';
+import { syncJoinToken } from '../state/sync-join-token';
 import { newCode } from './new-code';
 import { CODE_ATTEMPTS, LOBBY_ID_BYTES } from './host.constants';
 
@@ -25,7 +26,7 @@ const createLobby = async (ctx: LobbyContext, input: CreateLobbyInput): Promise<
     id: `${LOBBY_ID_PREFIX}${randomBytes(LOBBY_ID_BYTES).toString('hex')}`, code: await freeCode(ctx), name: input.name, phase: input.locked ? 'locked' : 'open', rev: 1,
     engine, options: lobbyOptions(input.options), ...(input.source ? { source: input.source } : {}), ...(input.seats ? { seats: input.seats } : {}), ...(input.openSeats ? { openSeats: input.openSeats } : {}), members: [], worlds: [], nextMember: 1, createdAt: now, closesAt: now + OPEN_TTL_MS,
   };
-  const added = await ctx.book.add(lobby);
+  const added = await ctx.book.add(syncJoinToken(lobby));
   ctx.publish(added);
   return added;
 };

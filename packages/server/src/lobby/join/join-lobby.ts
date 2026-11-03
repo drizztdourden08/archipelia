@@ -1,6 +1,6 @@
 /* @layer core @kind logic */
 import type { Hello } from '@drizztdourden08/archipelia-lobby-protocol';
-import { checkHello, lobbyNotFoundFailure, negotiateProtocol, normalizeLobbyCode } from '@drizztdourden08/archipelia-lobby-protocol';
+import { checkHello, negotiateProtocol } from '@drizztdourden08/archipelia-lobby-protocol';
 import { settleLobby } from '../checks/settle-lobby';
 import type { LobbyContext } from '../lobby-context.type';
 import type { LobbyLink, MemberRef, Outcome } from '../lobby-service.type';
@@ -8,6 +8,7 @@ import { rejectionOf } from '../state/rejection-of';
 import { addMember } from './add-member';
 import { assessClient } from './assess-client';
 import { checkAccess } from './check-access';
+import { findLobby } from './find-lobby';
 import { resumeMember } from './resume-member';
 
 const enter = async (ctx: LobbyContext, run: () => Promise<Outcome<MemberRef>>): Promise<Outcome<MemberRef>> => {
@@ -23,9 +24,9 @@ const enter = async (ctx: LobbyContext, run: () => Promise<Outcome<MemberRef>>):
 const joinLobby = async (ctx: LobbyContext, hello: Hello, link: LobbyLink): Promise<Outcome<MemberRef>> => {
   const negotiated = negotiateProtocol(hello.protocol.versions);
   if (!negotiated.ok) return negotiated;
-  const code = normalizeLobbyCode(hello.lobby.code);
-  const lobby = code === null ? undefined : await ctx.book.byCode(code);
-  if (!lobby) return { ok: false, failure: lobbyNotFoundFailure() };
+  const found = await findLobby(ctx.book, hello.lobby);
+  if (!found.ok) return found;
+  const lobby = found.value;
   const failure = checkAccess(lobby, hello) ?? checkHello(hello);
   if (failure) return { ok: false, failure };
   const assessed = await assessClient(hello, ctx.deps.trust, ctx.now());

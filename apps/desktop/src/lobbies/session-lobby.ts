@@ -5,11 +5,12 @@ import { openSeatCount } from './open-seat-count';
 
 const sessionLobby = ({ name, host, generator, server, direct, players }: SessionTemplate) => {
   const { admission, allowUnlisted, allowedGames } = direct ?? CLOSED_DOOR;
+  const listed = direct?.listed === true;
   return {
     name: name.trim() || 'Session',
     openSeats: openSeatCount(players),
     options: {
-      admission, allowUnlisted, allowedGames, room: host, generator,
+      admission, allowUnlisted, allowedGames, listed, room: host, generator,
       server: { hintCost: server.hintCost, releaseMode: server.releaseMode, collectMode: server.collectMode, remainingMode: server.remainingMode, autoShutdownMinutes: server.autoShutdownMinutes },
     },
   };

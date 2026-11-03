@@ -29,18 +29,20 @@ type WorldEntry = {
 
 type SlotEntry = { name: string; game: string; yaml: { sha256: string; size: number } };
 
+type LobbyRef = { code: string; joinToken?: undefined } | { joinToken: string; code?: undefined };
+
 type LobbyInfoRequest = {
   type: 'lobby.info';
   seq?: number;
   protocol: ProtocolOffer;
-  lobby: { code: string };
+  lobby: LobbyRef;
 };
 
 type Hello = {
   type: 'hello';
   seq?: number;
   protocol: ProtocolOffer;
-  lobby: { code: string };
+  lobby: LobbyRef;
   resume?: string | null;
   client: ClientInfo;
   player: { displayName: string };
@@ -51,4 +53,4 @@ type Hello = {
   slots: SlotEntry[];
 };
 
-export type { ClientInfo, Hello, LobbyInfoRequest, ProtocolOffer, SlotEntry, WorldEntry, WorldProof };
+export type { ClientInfo, Hello, LobbyInfoRequest, LobbyRef, ProtocolOffer, SlotEntry, WorldEntry, WorldProof };

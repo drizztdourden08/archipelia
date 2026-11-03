@@ -13,7 +13,7 @@ const GENERIC_FAULT = 'see the server log';
 const GOING_AWAY = 1001;
 
 const BINARY: Failure = { code: 'bad-message', message: 'Binary frames are not used.' };
-const HELLO_FIRST: Failure = { code: 'bad-message', message: 'Send lobby.info or hello first.' };
+const HELLO_FIRST: Failure = { code: 'bad-message', message: 'Send lobby.info, lobby.browse or hello first.' };
 const JOINED: Failure = { code: 'bad-message', message: 'This connection already joined the lobby.' };
 const NO_HELLO: Failure = { code: 'bad-message', message: 'No hello arrived in time.' };
 const OTHER_UPLOAD: Failure = { code: 'bad-message', message: 'Begin the upload of this file before sending its chunks.' };

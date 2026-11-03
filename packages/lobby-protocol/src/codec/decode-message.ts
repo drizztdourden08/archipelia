@@ -5,6 +5,7 @@ import type { DecodeOptions, DecodeOutcome } from './codec.type';
 import { LOBBY_INFO_MAX_REQUEST_BYTES } from '../protocol/protocol.constants';
 import { isRecord } from '../validate/is-record';
 import { byteLength } from './byte-length';
+import { SMALL_REQUEST_TYPES } from './codec.constants';
 import { schemaFor } from './message-types';
 import { validateMessage } from './validate-message';
 
@@ -23,8 +24,8 @@ const parseJson = (text: string): unknown => {
 };
 
 const infoTooBig = (type: string, size: number): string | null =>
-  type === 'lobby.info' && size > LOBBY_INFO_MAX_REQUEST_BYTES
-    ? `A lobby.info request is at most ${LOBBY_INFO_MAX_REQUEST_BYTES} bytes.`
+  SMALL_REQUEST_TYPES.includes(type) && size > LOBBY_INFO_MAX_REQUEST_BYTES
+    ? `A ${type} request is at most ${LOBBY_INFO_MAX_REQUEST_BYTES} bytes.`
     : null;
 
 const shapeFailure = (message: Record<string, unknown>, direction: DecodeOptions['direction']): DecodeOutcome => {

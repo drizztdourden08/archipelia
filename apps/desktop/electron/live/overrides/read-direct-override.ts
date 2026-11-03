@@ -14,6 +14,7 @@ const readDirectOverride = (value: unknown): DirectConnection | null => {
     admission: readChoice('direct.admission', given.admission, ADMISSIONS),
     allowUnlisted: readFlag('direct.allowUnlisted', given.allowUnlisted),
     allowedGames: readGames(given.allowedGames),
+    ...(given.listed === undefined ? {} : { listed: readFlag('direct.listed', given.listed) }),
   };
 };
 

@@ -38,6 +38,7 @@ type ScenarioSetup = {
   heldSeats?: string[];
   allowedGames?: string[];
   outputFile?: ScenarioOutputFile;
+  listed?: boolean;
 };
 
 type ScenarioEntry = {
@@ -46,6 +47,7 @@ type ScenarioEntry = {
   requires: Capability[];
   setup: ScenarioSetup;
   serverSideOnly?: boolean;
+  clientSideOnly?: boolean;
 };
 
 type Scenario = ScenarioEntry & { lines: FixtureLine[] };

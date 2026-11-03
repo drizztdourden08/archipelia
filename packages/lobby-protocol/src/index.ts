@@ -28,6 +28,7 @@ export { checkHello } from './hello/check-hello';
 export { formatLobbyCode } from './lobby/format-lobby-code';
 export { CODE_ALPHABET, CODE_LENGTH } from './lobby/lobby-code.constants';
 export { lobbyJoinable } from './lobby/lobby-joinable';
+export { joinTokenNotFoundFailure } from './lobby/join-token-not-found-failure';
 export { lobbyNotFoundFailure } from './lobby/lobby-not-found-failure';
 export { negotiateProtocol } from './lobby/negotiate-protocol';
 export { normalizeLobbyCode } from './lobby/normalize-lobby-code';
@@ -49,7 +50,8 @@ export type {
   StateSlot,
   Welcome,
 } from './messages/server.type';
-export type { ClientInfo, Hello, LobbyInfoRequest, ProtocolOffer, SlotEntry, WorldEntry, WorldProof } from './messages/hello.type';
+export type { BrowsedLobby, LobbyBrowseReply, LobbyBrowseRequest } from './messages/browse.type';
+export type { ClientInfo, Hello, LobbyInfoRequest, LobbyRef, ProtocolOffer, SlotEntry, WorldEntry, WorldProof } from './messages/hello.type';
 export type { ClientMessage, ProtocolMessage, ServerMessage, UnknownMessage } from './messages/message.type';
 export type {
   FileChunk,
@@ -74,6 +76,7 @@ export {
   DEFAULT_PORT,
   HELLO_TIMEOUT_MS,
   IDLE_TIMEOUT_MS,
+  LOBBY_BROWSE_MAX,
   LOBBY_INFO_LIMIT,
   LOBBY_INFO_MAX_REQUEST_BYTES,
   LOBBY_INFO_WINDOW_MS,

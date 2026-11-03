@@ -1,4 +1,5 @@
 /* @layer protocol @kind data */
+import { LOBBY_BROWSE_REPLY_SCHEMA, LOBBY_BROWSE_SCHEMA } from './browse-schemas';
 import {
   FILE_GET_SCHEMA,
   HELLO_SCHEMA,
@@ -27,6 +28,7 @@ import {
 
 const CLIENT_SCHEMAS = {
   'lobby.info': LOBBY_INFO_SCHEMA,
+  'lobby.browse': LOBBY_BROWSE_SCHEMA,
   hello: HELLO_SCHEMA,
   ready: READY_SCHEMA,
   leave: LEAVE_SCHEMA,
@@ -38,6 +40,7 @@ const CLIENT_SCHEMAS = {
 
 const SERVER_SCHEMAS = {
   'lobby.info.reply': LOBBY_INFO_REPLY_SCHEMA,
+  'lobby.browse.reply': LOBBY_BROWSE_REPLY_SCHEMA,
   welcome: WELCOME_SCHEMA,
   error: ERROR_SCHEMA,
   admission: ADMISSION_SCHEMA,
