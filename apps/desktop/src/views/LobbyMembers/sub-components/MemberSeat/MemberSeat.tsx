@@ -4,6 +4,7 @@ import { useGameArt } from '../../../../hooks/useGameArt';
 import { MEMBER_TEXT } from '../../LobbyMembers.constants';
 import { memberMeta } from '../../behavior/member-meta';
 import { memberSeatActions } from '../../behavior/member-seat-actions';
+import { memberSeatTools } from '../../behavior/member-seat-tools';
 import { memberStatus } from '../../behavior/member-status';
 import type { MemberSeatProps } from './MemberSeat.type';
 
@@ -20,7 +21,9 @@ const MemberSeat = ({ lobby, member, model }: MemberSeatProps) => {
       meta={memberMeta(member)}
       status={pending ? undefined : memberStatus(member)}
       reason={pending ? MEMBER_TEXT.pending : undefined}
+      side={{ label: MEMBER_TEXT.sideLabel, value: 'direct', locked: true }}
       actions={memberSeatActions(lobby, member, model)}
+      tools={memberSeatTools(lobby, member, model)}
     />
   );
 };
