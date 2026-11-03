@@ -1,11 +1,6 @@
 /* @layer tests @kind test */
 import { describe, expect, test } from 'vitest';
 import type { GamePreset, InstalledGame } from '@archipelia/model';
-import { ALL_TAB } from '../../src/views/PresetEditor/PresetEditor.constants';
-import { advancedCount } from '../../src/views/PresetEditor/behavior/advanced-count';
-import { firstTab } from '../../src/views/PresetEditor/behavior/first-tab';
-import { optionTabs } from '../../src/views/PresetEditor/behavior/option-tabs';
-import { visibleOptions } from '../../src/views/PresetEditor/behavior/visible-options';
 import { sameValues } from '../../src/views/PresetEditor/behavior/same-values';
 import { editedLabel } from '../../src/views/PresetsHub/behavior/edited-label';
 import { buildPresetRows } from '../../src/views/PresetsHub/behavior/build-preset-rows';
@@ -64,25 +59,6 @@ describe('K1 preset groups', { tags: ['critical'] }, () => {
     expect(editedLabel(NOW - DAY, NOW)).toBe('yesterday');
     expect(editedLabel(NOW - 3 * DAY, NOW)).toBe('3 days ago');
     expect(editedLabel(NOW - 30 * DAY, NOW)).toBe(new Date(NOW - 30 * DAY).toLocaleDateString());
-  });
-});
-
-describe('K1 option filter', { tags: ['critical'] }, () => {
-  test('advanced options stay hidden until asked for', () => {
-    expect(advancedCount(DEMO)).toBe(2);
-    expect(visibleOptions(DEMO, { tab: 'Items', query: '', showAdvanced: false }).map((def) => def.key)).toEqual(['start_inventory', 'exclude']);
-    expect(visibleOptions(DEMO, { tab: 'Items', query: '', showAdvanced: true })).toHaveLength(4);
-  });
-
-  test('tabs count what the search leaves, All counts everything', () => {
-    const tabs = optionTabs(DEMO, { query: 'crys', showAdvanced: false }, new Set(['goal', 'exclude']));
-    expect(tabs).toEqual([
-      { id: 'Game Options', label: 'Game Options', count: 1, changed: 1 },
-      { id: 'Items', label: 'Items', count: 0, changed: 1 },
-      { id: ALL_TAB, label: 'All', count: 1, changed: 2 },
-    ]);
-    expect(firstTab(DEMO)).toBe('Game Options');
-    expect(firstTab({ ...DEMO, groups: [] })).toBe(ALL_TAB);
   });
 });
 

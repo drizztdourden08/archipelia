@@ -13,10 +13,6 @@ type EditorParams = {
   onSaveChange: (save: PresetSave | null) => void;
 };
 
-type OptionTab = { id: string; label: string; count: number; changed: number };
-
-type OptionFilter = { tab: string; query: string; showAdvanced: boolean };
-
 type PresetEditorProps = EditorParams & {
   onDuplicate: (preset: GamePreset) => void;
   onDelete: (preset: GamePreset) => void;
@@ -43,4 +39,4 @@ type TransferParams = {
 
 type SaveFacts = { busy: boolean; dirty: boolean; block: string | null; failure: string | null; saved: boolean };
 
-export type { EditorParams, EditorStatus, MoreActions, OptionFilter, OptionTab, PresetEditorProps, SaveFacts, TransferParams, Values };
+export type { EditorParams, EditorStatus, MoreActions, PresetEditorProps, SaveFacts, TransferParams, Values };
