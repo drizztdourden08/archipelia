@@ -96,6 +96,20 @@ describe('K2 the release-files command', { tags: ['critical'] }, () => {
     expect(parseReleaseManifest(await readFile(join(dir, 'release', 'archipelia.json'), 'utf8')).direct).toBe(false);
   });
 
+  test('--player-file app writes playerFile, options leaves it out, and a bad value exits 2', async () => {
+    const dir = await workspace();
+    const config = { game: ROTP_GAME, worldVersion: '0.1.0', appVersion: '0.22.0', minimumAp: '0.6.4', worldDir: ROTP_MODULE, dataFolder: 'generated', outDir: 'release', builds: ['0.6.8'] };
+    await writeFiles(dir, { 'kit.json': JSON.stringify(config) });
+    await run(dir, ['build-set', '--config', 'kit.json']);
+    expect((await run(dir, ['release-files', '--dir', 'release', '--player-file', 'app'])).code).toBe(0);
+    expect(parseReleaseManifest(await readFile(join(dir, 'release', 'archipelia.json'), 'utf8')).playerFile).toBe('app');
+    expect((await run(dir, ['release-files', '--dir', 'release', '--player-file', 'options'])).code).toBe(0);
+    expect(parseReleaseManifest(await readFile(join(dir, 'release', 'archipelia.json'), 'utf8')).playerFile).toBeUndefined();
+    const bad = await run(dir, ['release-files', '--dir', 'release', '--player-file', 'both']);
+    expect(bad.code).toBe(2);
+    expect(bad.err).toContain('--player-file must be options or app');
+  });
+
   test('exits 1 with the problems when an image is refused, and 2 without a folder', async () => {
     const dir = await workspace();
     const config = { game: ROTP_GAME, worldVersion: '0.1.0', appVersion: '0.22.0', minimumAp: '0.6.4', worldDir: ROTP_MODULE, dataFolder: 'generated', outDir: 'release', builds: ['0.6.8'] };

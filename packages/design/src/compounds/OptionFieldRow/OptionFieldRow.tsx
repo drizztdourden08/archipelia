@@ -6,7 +6,7 @@ import type { OptionFieldRowProps } from './OptionFieldRow.type';
 import { OptionControl } from '../OptionControl';
 import './OptionFieldRow.css';
 
-const OptionFieldRow = ({ id, def, value, hint, changed, problem, onChange, onReset, onProblem }: OptionFieldRowProps) => {
+const OptionFieldRow = ({ id, def, value, hint, changed, problem, disabled, onChange, onReset, onProblem }: OptionFieldRowProps) => {
   const [jsonProblem, setJsonProblem] = useState<string | null>(null);
   const handleProblem = useCallback((next: string | null) => {
     setJsonProblem(next);
@@ -30,7 +30,7 @@ const OptionFieldRow = ({ id, def, value, hint, changed, problem, onChange, onRe
       problem={problem ?? jsonProblem ?? undefined}
       onReset={onReset}
     >
-      <OptionControl def={def} value={value} onChange={onChange} onProblem={handleProblem} />
+      <OptionControl def={def} value={value} disabled={disabled} onChange={onChange} onProblem={handleProblem} />
     </FormRow>
   );
 };

@@ -2,6 +2,7 @@
 import { useCallback } from 'react';
 import type { ChangeEvent } from 'react';
 import { Box, Button, Card, Field, SectionHeader, Stack, TextInput } from '@drizztdourden08/tessera/primitives';
+import { isAppGame } from '../../behavior/is-app-game';
 import { playerLabel } from '../../behavior/player-label';
 import { NAME_LIMIT } from '@archipelia/sessions/validation';
 import { SEAT_EDITOR_CLASS, SEAT_TEXT } from '../../SessionLobby.constants';
@@ -12,6 +13,7 @@ import type { SeatEditorProps } from './SeatEditor.type';
 
 const SeatEditor = ({ player, installed, presets, busy, overridesOpen, actions, onOverrides, onClose }: SeatEditorProps) => {
   const { slot } = player;
+  const appGame = isAppGame(player, installed);
   const rename = useCallback((event: ChangeEvent<HTMLInputElement>) => actions.rename(slot, event.target.value), [actions, slot]);
   return (
     <Box as="section" className={SEAT_EDITOR_CLASS} aria-label={`${SEAT_TEXT.editTitle} ${slot}`}>
@@ -34,12 +36,12 @@ const SeatEditor = ({ player, installed, presets, busy, overridesOpen, actions, 
           </Box>
           <Box data-cell="source">
             <Field label={SEAT_TEXT.presetLabel} width="full">
-              <PlayerSourceCell player={player} presets={presets} busy={busy} onSource={actions.setSource} onImport={actions.importYaml} />
+              <PlayerSourceCell player={player} presets={presets} appGame={appGame} busy={busy} onSource={actions.setSource} onImport={actions.importYaml} />
             </Field>
           </Box>
           <Box data-cell="overrides">
             <Field label={SEAT_TEXT.overridesLabel} width="full">
-              <PlayerOverridesCell player={player} selected={overridesOpen} onEdit={onOverrides} />
+              <PlayerOverridesCell player={player} selected={overridesOpen} appGame={appGame} onEdit={onOverrides} />
             </Field>
           </Box>
         </Stack>

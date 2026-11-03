@@ -1,9 +1,9 @@
 /* @layer core @kind types */
-import type { CatalogEntry } from '@archipelia/model';
+import type { CatalogEntry, PlayerFile } from '@archipelia/model';
 import type { LoadRegistryDeps, Registry, RegistryClient, RegistrySource } from '@archipelia/trust';
 import type { ReleasesRead } from '../versions/versions.type';
 
-type ReleaseManifest = { game: string; module?: string; worldVersion: string; minimumAp: string; maximumAp?: string; sha256: string; appVersion?: string; size?: number };
+type ReleaseManifest = { game: string; module?: string; worldVersion: string; minimumAp: string; maximumAp?: string; sha256: string; appVersion?: string; size?: number; playerFile?: PlayerFile };
 
 type BuildRecord = { archipelagoVersion: string; file: string; sha256: string; size: number; bundle: string };
 
@@ -14,6 +14,7 @@ type BuildsManifest = {
   appVersion?: string;
   minimumAp?: string;
   maximumAp?: string;
+  playerFile?: PlayerFile;
   builds: BuildRecord[];
 };
 
@@ -36,6 +37,7 @@ type StandardManifest = {
   minimumAp: string;
   maximumAp?: string;
   appVersion?: string;
+  playerFile?: PlayerFile;
   builds?: StandardBuild[];
   world?: StandardFile;
 };

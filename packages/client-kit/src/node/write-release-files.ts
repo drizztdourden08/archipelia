@@ -25,9 +25,9 @@ const writeDescription = async (dir: string, bytes: Uint8Array): Promise<string>
 };
 
 const writeReleaseFiles = async (options: ReleaseFilesOptions): Promise<ReleaseFilesResult> => {
-  const { dir, module, direct, kit, thumbnail, description } = options;
+  const { dir, module, direct, playerFile, kit, thumbnail, description } = options;
   const index = parseApworldIndex(await readFile(await findIndexFile(dir, module), 'utf8'));
-  const manifest = buildReleaseManifest({ ...index, direct, kit });
+  const manifest = buildReleaseManifest({ ...index, direct, playerFile, kit });
   const extras = await readReleaseExtras(thumbnail, description);
   if (extras.issues.length > 0) throw createIssuesError('invalid-release-file', 'The release files are not valid:', extras.issues);
   const manifestPath = join(dir, MANIFEST_NAME);

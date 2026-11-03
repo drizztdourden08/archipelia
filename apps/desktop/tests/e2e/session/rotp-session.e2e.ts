@@ -6,7 +6,7 @@ import { bootWithDefaultProfile, setLocalPort } from '../app/steps/first-boot';
 import { removeWorlds } from '../app/steps/games';
 import { stopFromDashboard } from '../app/steps/live-room';
 import { proof } from '../app/support/proof';
-import { buildLanSession } from './steps/build-session';
+import { blockPresetRotp, buildLanSession } from './steps/build-session';
 import { connectMinsc, releaseRotpB } from './steps/cross-world';
 import { addRelic, startBaldurInstall, waitBaldurInstalled } from './steps/install-worlds';
 import { approveJoin, checkJoinedOptions, startRotpA, waitForJoinRequest } from './steps/lobby-join';
@@ -43,6 +43,8 @@ describe.skipIf(process.env.E2E_SESSION !== '1')('Archipelia session with a live
   test("5. session: LAN with direct connections, slot 1 Baldur's Gate 3 saved, slot 2 RotP-B from its own YAML", async () => {
     await buildLanSession(app(), env());
   });
+
+  test('5b. session: a RotP slot with a preset source is blocked from running, then removed', () => blockPresetRotp(app(), tabOf()));
 
   test('6. lobby: RotP-A starts, stays up and its join request reaches the host', async () => {
     const rotp = await startRotpA(app(), env(), dirs());

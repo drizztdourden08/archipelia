@@ -7,6 +7,7 @@ type OverrideRowProps = {
   presetValue: OptionValue;
   overridden: boolean;
   problem?: string;
+  disabled?: boolean;
   onValue: (key: string, value: OptionValue, presetValue: OptionValue) => void;
   onReset: (key: string) => void;
 };

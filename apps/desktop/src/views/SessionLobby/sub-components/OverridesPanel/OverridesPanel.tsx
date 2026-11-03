@@ -1,22 +1,18 @@
 /* @layer renderer-app @kind component */
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback } from 'react';
 import type { OptionValue } from '@archipelia/model';
 import { FilterBar } from '@drizztdourden08/tessera/composites';
-import { Button, ButtonRow, Card, EmptyState, ScrollArea, SectionHeader, Stack, Toggle } from '@drizztdourden08/tessera/primitives';
+import { Button, ButtonRow, Card, EmptyState, ScrollArea, SectionHeader, Stack, Text, Toggle } from '@drizztdourden08/tessera/primitives';
 import type { OverridesPanelProps } from './OverridesPanel.type';
 import { overridesOf } from '../../behavior/overrides-of';
-import { overrideRows } from '../../behavior/override-rows';
+import { useOverrideRows } from '../../behavior/useOverrideRows';
+import { APP_FILE_TEXT } from '../../SessionLobby.constants';
 import { OverrideRow } from '../OverrideRow';
 
 const OverridesPanel = ({ player, game, preset, onValue, onReset, onResetAll, onClose }: OverridesPanelProps) => {
-  const [query, setQuery] = useState('');
-  const [changedOnly, setChangedOnly] = useState(false);
   const { slot } = player;
   const overrides = overridesOf(player);
-  const rows = useMemo(
-    () => (game ? overrideRows(game.schema, preset, overrides, { query, changedOnly }) : []),
-    [changedOnly, game, overrides, preset, query],
-  );
+  const { query, setQuery, changedOnly, setChangedOnly, readOnly, rows } = useOverrideRows(game, preset, overrides);
   const handleValue = useCallback((key: string, value: OptionValue, presetValue: OptionValue) => onValue(slot, key, value, presetValue), [onValue, slot]);
   const handleReset = useCallback((key: string) => onReset(slot, key), [onReset, slot]);
   const resetAll = useCallback(() => onResetAll(slot), [onResetAll, slot]);
@@ -44,8 +40,9 @@ const OverridesPanel = ({ player, game, preset, onValue, onReset, onResetAll, on
           searchLabel="Filter options"
           extra={<Toggle label="Changed only" checked={changedOnly} onChange={setChangedOnly} />}
         />
+        {readOnly && <Text variant="caption" tone="muted">{APP_FILE_TEXT.readOnly}</Text>}
         {!game || !preset
-          ? <EmptyState message="Pick an installed game and a preset to change its options." />
+          ? <EmptyState message={readOnly ? APP_FILE_TEXT.empty : 'Pick an installed game and a preset to change its options.'} />
           : (
             <ScrollArea scrollbar="slim" className="session-lobby__override-rows">
               <Stack gap="xs">
@@ -58,6 +55,7 @@ const OverridesPanel = ({ player, game, preset, onValue, onReset, onResetAll, on
                     presetValue={row.presetValue}
                     overridden={row.overridden}
                     problem={row.problem}
+                    disabled={readOnly}
                     onValue={handleValue}
                     onReset={handleReset}
                   />

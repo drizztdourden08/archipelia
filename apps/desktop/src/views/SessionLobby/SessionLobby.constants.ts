@@ -93,6 +93,14 @@ const LEFT_OUT_TEXT = {
   cancelLabel: 'Cancel',
 } as const;
 
+const APP_FILE_TEXT = {
+  note: 'This game makes its player file in its own app. Import the YAML it saved.',
+  readOnly: 'These options come from the imported file. Change them in the app.',
+  empty: 'Import the YAML the app saved to see its options.',
+  view: 'View',
+  viewLabel: 'View options of',
+} as const;
+
 const LOBBY_FAILURE = {
   run: 'Could not start the run.',
   close: 'Could not close the lobby.',
@@ -102,5 +110,5 @@ const LOBBY_FAILURE = {
 } as const;
 
 export {
-  CONFIG_TEXT, LEFT_OUT_TEXT, LOBBY_FAILURE, LOBBY_SCREEN, NEW_PRESET_VALUE, OWN_GAME, PHASE_URGENT, PLAYERS_TEXT, PRESET_PREFIX, SEAT_EDITOR_CLASS, SEAT_STATUS, SEAT_TEXT, YAML_EXTENSIONS, YAML_VALUE,
+  APP_FILE_TEXT, CONFIG_TEXT, LEFT_OUT_TEXT, LOBBY_FAILURE, LOBBY_SCREEN, NEW_PRESET_VALUE, OWN_GAME, PHASE_URGENT, PLAYERS_TEXT, PRESET_PREFIX, SEAT_EDITOR_CLASS, SEAT_STATUS, SEAT_TEXT, YAML_EXTENSIONS, YAML_VALUE,
 };

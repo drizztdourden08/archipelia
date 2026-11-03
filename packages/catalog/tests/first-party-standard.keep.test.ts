@@ -38,6 +38,14 @@ describe('the standard archipelia.json of a listed world', () => {
     expect(found.entries[0]?.firstParty).not.toHaveProperty('appVersion');
   });
 
+  test('K2 a playerFile of app is carried to the entry, and a missing one leaves it out', { tags: ['critical'] }, async () => {
+    const bytes = worldBytes();
+    const app = await read({ [STANDARD_URL]: () => json(standardOf(bytes, { playerFile: 'app' })) });
+    expect(app.entries[0]?.playerFile).toBe('app');
+    const plain = await read({ [STANDARD_URL]: () => json(standardOf(bytes)) });
+    expect(plain.entries[0]).not.toHaveProperty('playerFile');
+  });
+
   test('K2 the world file and its own bundle name decide the download urls', { tags: ['critical'] }, async () => {
     const bytes = worldBytes();
     const world = { ...standardOf(bytes).world, file: 'rotp_v2.apworld', bundle: 'rotp_v2.sig.json' };

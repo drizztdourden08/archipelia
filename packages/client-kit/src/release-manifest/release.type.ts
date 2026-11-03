@@ -1,6 +1,8 @@
 /* @layer client-kit @kind types */
 import type { ApworldBuildRecord, IndexBuildInput } from '../index-manifest/index.type';
 
+type PlayerFile = 'options' | 'app';
+
 type ReleaseWorld = { file: string; sha256: string; size: number; bundle?: string };
 
 type ReleaseCommon = {
@@ -11,6 +13,7 @@ type ReleaseCommon = {
   minimumAp: string;
   maximumAp?: string;
   direct: boolean;
+  playerFile?: PlayerFile;
   kit: string;
   appVersion?: string;
 };
@@ -24,10 +27,11 @@ type ReleaseCommonInput = {
   minimumAp: string;
   maximumAp?: string;
   direct: boolean;
+  playerFile?: PlayerFile;
   kit?: string;
   appVersion?: string;
 };
 
 type ReleaseInput = ReleaseCommonInput & { builds?: readonly IndexBuildInput[]; world?: ReleaseWorld };
 
-export type { ReleaseInput, ReleaseManifest, ReleaseWorld };
+export type { PlayerFile, ReleaseInput, ReleaseManifest, ReleaseWorld };

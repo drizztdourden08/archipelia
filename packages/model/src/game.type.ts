@@ -4,6 +4,8 @@ import type { PackageSource } from './package-source/package-source.type';
 
 type GameSource = 'official' | 'index' | 'file' | 'first-party';
 
+type PlayerFile = 'options' | 'app';
+
 type WorldLayout = 'apworld' | 'folder';
 
 type Stability = 'stable' | 'unstable' | 'alpha' | 'beta' | 'untested' | 'unknown';
@@ -49,6 +51,7 @@ type CatalogEntry = {
   requires?: string[];
   firstParty?: FirstPartyRelease;
   discovered?: DiscoveredWorld;
+  playerFile?: PlayerFile;
   unavailable?: string;
 };
 
@@ -69,6 +72,7 @@ type InstalledGame = {
   trust?: WorldTrust;
   origin?: WorldOrigin;
   release?: InstalledRelease;
+  playerFile?: PlayerFile;
 };
 
-export type { CatalogEntry, CatalogVersion, DiscoveredWorld, FirstPartyBuild, FirstPartyRelease, FuzzVerdict, GameSource, InstalledGame, InstalledRelease, Stability, WorldLayout, WorldOrigin, WorldTrust };
+export type { CatalogEntry, CatalogVersion, DiscoveredWorld, FirstPartyBuild, FirstPartyRelease, FuzzVerdict, GameSource, InstalledGame, InstalledRelease, PlayerFile, Stability, WorldLayout, WorldOrigin, WorldTrust };
