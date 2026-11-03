@@ -43,6 +43,7 @@ const itemsGroup: readonly ConsoleCommand[] = [
     icon: 'compass',
     group: 'Items and hints',
     description: 'Send out the item at a player location as though the player had checked it.',
+    confirm: true,
     params: [playerParam, locationParam],
     format: (values) => commandLine('send_location', ...target(values, 'location')),
   },
