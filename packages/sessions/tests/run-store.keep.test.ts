@@ -1,15 +1,9 @@
 /* @layer tests @kind test */
 import { describe, expect, test } from 'vitest';
-import type { Session, SessionTemplate } from '@archipelia/model';
+import type { Session } from '@archipelia/model';
 import { createRunStore } from '../src/store/create-run-store';
 import { runFiles } from './run-files';
-
-const SNAPSHOT: SessionTemplate = {
-  id: 'sunday', name: 'Sunday run', updatedAt: 0, players: [{ kind: 'set', slot: 1, name: 'Drizzt', game: 'Celeste', source: { kind: 'preset', presetId: '', overrides: {} } }],
-  generator: { spoiler: 3, race: false, progressionBalancing: true },
-  server: { hintCost: 10, releaseMode: 'auto', collectMode: 'auto', remainingMode: 'goal', autoShutdownMinutes: 0 },
-  host: { kind: 'local', port: 38281 },
-};
+import { SNAPSHOT } from './run-snapshot';
 
 const OLD_RUN: Session = { id: 'r1', templateId: 'sunday', snapshot: SNAPSHOT, status: 'stopped', createdAt: 5 };
 

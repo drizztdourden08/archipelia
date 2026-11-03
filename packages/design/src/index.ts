@@ -15,6 +15,14 @@ export type { ConsentPackage, ConsentWheel, PackageConsentDialogProps } from './
 export { PackageSourceDialog } from './compounds/PackageSourceDialog';
 export type { BuildLogView, BuildStage, PackageSourceDialogProps, PackageSourceHandlers, PackageSourceStep, SourceConsent, SourceFinish, SourceSearch } from './compounds/PackageSourceDialog';
 export { LogLines, logCopyText } from './compounds/LogLines';
+export { SpoilerGroups } from './compounds/SpoilerGroups';
+export type {
+  SpoilerCount, SpoilerCountKey, SpoilerGroup, SpoilerGroupsProps, SpoilerMark, SpoilerRowData, SpoilerTone, SpoilerView,
+} from './compounds/SpoilerGroups';
+export { SpoilerTracker } from './compounds/SpoilerTracker';
+export type {
+  SpoilerTrackerControls, SpoilerTrackerGroupBy, SpoilerTrackerProps, SpoilerTrackerStat, SpoilerTrackerViewToggle,
+} from './compounds/SpoilerTracker';
 export { LobbySeat } from './compounds/LobbySeat';
 export type { LobbySeatAction, LobbySeatProps, LobbySeatSide, LobbySeatSideValue, LobbySeatState, LobbySeatStatus, LobbySeatTone } from './compounds/LobbySeat';
 export { LobbySeatGrid } from './compounds/LobbySeatGrid';

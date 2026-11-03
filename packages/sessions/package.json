@@ -13,6 +13,7 @@
     "./console-commands": "./src/console-commands/index.ts",
     "./live-room": "./src/live-room/index.ts",
     "./players": "./src/players/index.ts",
+    "./spoiler": "./src/spoiler/index.ts",
     "./validation": "./src/validation/index.ts",
     "./package.json": "./package.json"
   },

@@ -4,6 +4,7 @@ import { generate } from '@archipelia/engine';
 import { setPlayers } from '@archipelia/model';
 import type { Session } from '@archipelia/model';
 import { removeSessionSettings, writeSessionSettings } from '@archipelia/hosts';
+import { ensureItemTypes } from '../item-types/ensure-item-types';
 import { readOutput } from '../output/read-output';
 import { writePlayers } from '../players/write-players';
 import { bakesPassword } from './bakes-password';
@@ -58,7 +59,9 @@ const produceSession = async (deps: ServiceDeps, session: Session, run: ProduceR
     await files.writeText(`${dir}/generate.log`, result.lines.join('\n'));
     if (!result.ok || !result.zip) throw new Error(failureOf(result.lines));
     const zip = run.confine ? await releaseZip(files.path(`${base}/output`), result.zip, files.path(`${dir}/output`)) : result.zip;
-    return await readOutput(files, `${dir}/output`, zip, 'generate.log');
+    const produced = await readOutput(files, `${dir}/output`, zip, 'generate.log');
+    if (!run.confine) await ensureItemTypes(deps, dir, produced.output, run.runtime);
+    return produced;
   } finally {
     if (run.confine) await rm(files.path(base), { recursive: true, force: true });
   }
