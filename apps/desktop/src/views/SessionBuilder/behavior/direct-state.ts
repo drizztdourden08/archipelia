@@ -1,5 +1,6 @@
 /* @layer renderer-app @kind logic */
 import type { DirectConnection, SessionTemplate } from '@archipelia/model';
+import { isListed } from '../../../lobbies/is-listed';
 import { sessionReach } from '../../../lobbies/session-reach';
 import type { DirectState } from '../SessionBuilder.type';
 import { DIRECT_TEXT } from './place.constants';
@@ -8,7 +9,7 @@ const optionsOf = (direct: DirectConnection | undefined) => ({
   on: direct !== undefined,
   approval: direct?.admission === 'host-approval',
   unlisted: direct?.allowUnlisted === true,
-  listed: direct?.listed === true,
+  listed: isListed(direct),
 });
 
 const directState = (draft: SessionTemplate, live: boolean, busy: boolean): DirectState => {

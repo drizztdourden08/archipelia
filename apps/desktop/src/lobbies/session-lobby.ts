@@ -1,11 +1,12 @@
 /* @layer renderer-app @kind logic */
 import type { SessionTemplate } from '@archipelia/model';
 import { CLOSED_DOOR } from './lobbies.constants';
+import { isListed } from './is-listed';
 import { openSeatCount } from './open-seat-count';
 
 const sessionLobby = ({ name, host, generator, server, direct, players }: SessionTemplate) => {
   const { admission, allowUnlisted, allowedGames } = direct ?? CLOSED_DOOR;
-  const listed = direct?.listed === true;
+  const listed = isListed(direct);
   return {
     name: name.trim() || 'Session',
     openSeats: openSeatCount(players),
