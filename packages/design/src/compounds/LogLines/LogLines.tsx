@@ -6,7 +6,7 @@ import { logCopyText } from './behavior/log-copy-text';
 import type { LogLinesProps } from './LogLines.type';
 
 const LogLines = (props: LogLinesProps) => {
-  const { rows, search, onSearchChange, emptyLabel, countLabel = 'lines', tabs, activeTab, onTabChange, copyText = logCopyText, toolbarExtra, placeholder } = props;
+  const { rows, search, onSearchChange, emptyLabel, countLabel = 'lines', tabs, activeTab, onTabChange, copyText = logCopyText, toolbarExtra, placeholder, filterPlacement, size } = props;
   return (
     <Stack gap="sm">
       {tabs && activeTab && onTabChange && <Tabs tabs={tabs} activeTab={activeTab} onTabChange={onTabChange} />}
@@ -21,6 +21,8 @@ const LogLines = (props: LogLinesProps) => {
           countLabel={countLabel}
           emptyLabel={emptyLabel}
           toolbarExtra={toolbarExtra}
+          filterPlacement={filterPlacement}
+          size={size}
         />
       )}
     </Stack>

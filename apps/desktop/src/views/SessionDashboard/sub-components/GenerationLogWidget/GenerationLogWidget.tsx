@@ -18,6 +18,8 @@ const GenerationLogWidget = ({ session }: GenerationLogWidgetProps) => {
       search={search}
       onSearchChange={setSearch}
       emptyLabel="This file is empty or missing."
+      filterPlacement="left"
+      size="sm"
       placeholder={text.loading || text.failed ? <TextState failed={text.failed} loadingLabel="Loading the log" onRetry={text.retry} /> : undefined}
     />
   );

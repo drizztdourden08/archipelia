@@ -8,7 +8,7 @@ import type { LobbyLogProps } from './LobbyLog.type';
 const LobbyLog = ({ events }: LobbyLogProps) => {
   const [search, setSearch] = useWidgetState('search', '');
   const rows = useMemo(() => serverRows(events), [events]);
-  return <LogLines rows={rows} search={search} onSearchChange={setSearch} emptyLabel="Nothing has happened in this lobby yet." />;
+  return <LogLines rows={rows} search={search} onSearchChange={setSearch} emptyLabel="Nothing has happened in this lobby yet." filterPlacement="left" size="sm" />;
 };
 
 export { LobbyLog };
