@@ -479,4 +479,3 @@ Notes:
 - design/option-layout: lists and tables take the row. W3, widths.
 - model/unzip-capped: an apworld is capped tighter than a generator archive. W5, compares two constants.
 - engine-bundle/default-spec: the default spec is the engine of the app defaults. W5, a constant; the parity case below it covers the logic.
-
