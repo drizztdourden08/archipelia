@@ -3,7 +3,8 @@ import type { GameSchema, OptionValue } from '@archipelia/model';
 import type { OptionLayout } from './option-layout.type';
 import { layoutRowOf } from './layout-row';
 import { matchesQuery } from './matches-query';
-import { tabIdOf, tabIdsOf } from './tab-groups';
+import { tabIdOf } from './tab-id-of';
+import { tabIdsOf } from './tab-ids-of';
 
 const optionLayoutOf = (schema: GameSchema, values: Readonly<Record<string, OptionValue>>, query = ''): OptionLayout => {
   const rows = schema.options.map((def) => layoutRowOf(def, values));

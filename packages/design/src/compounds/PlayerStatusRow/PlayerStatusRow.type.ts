@@ -17,4 +17,4 @@ type PlayerStatusRowProps = {
   menu?: ReactNode;
 };
 
-export type { PlayerStatusGoal, PlayerStatusRowProps };
+export type { PlayerStatusRowProps };

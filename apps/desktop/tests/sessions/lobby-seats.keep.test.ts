@@ -42,6 +42,9 @@ describe('K1 the seats of the lobby phase', { tags: ['critical'] }, () => {
     expect(seatMetaOf(seat(held), [])).toEqual(['Slot 2 · any allowed game', 'Waiting for anyone to join']);
   });
 
+});
+
+describe('K1 the seat cards of the lobby phase', { tags: ['critical'] }, () => {
   test('keeps Edit, Duplicate and Remove as tools, Keep in session only on an added seat, and Ready or Needs a fix as the status', () => {
     const calls: string[] = [];
     const actions = { edit: () => undefined, remove: (at: number) => calls.push(`remove ${at}`), duplicate: () => undefined, keep: (at: number) => calls.push(`keep ${at}`), pick: () => undefined };

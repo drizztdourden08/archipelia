@@ -41,7 +41,7 @@ const SessionLobbySample = ({ tab, saved }: { tab: LiveTab; saved: SessionTempla
   <SessionLobby tab={tab} saved={saved}>{(stage) => <LobbyStage {...stage} />}</SessionLobby>
 );
 `,
-  propsHash: 'pending',
+  propsHash: 'b0a44821d5eccb36',
 } satisfies ComponentUsage;
 
 export { usage };

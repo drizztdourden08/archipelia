@@ -38,7 +38,7 @@ const LobbyStageSample = ({ onEdit }: { onEdit: () => void }) => (
   </LobbyStage>
 );
 `,
-  propsHash: '7a30b0a9ec0de666',
+  propsHash: 'b1a4958a8b3128a1',
 } satisfies ComponentUsage;
 
 export { usage };

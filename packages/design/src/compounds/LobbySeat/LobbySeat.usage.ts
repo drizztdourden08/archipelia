@@ -42,7 +42,7 @@ const LobbySeatSample = ({ onApprove }: { onApprove: () => void }) => (
   />
 );
 `,
-  propsHash: '0ab3d883590c9a72',
+  propsHash: 'ef80441bfacf41cb',
 } satisfies ComponentUsage;
 
 export { usage };

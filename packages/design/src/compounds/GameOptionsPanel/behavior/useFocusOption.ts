@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import type { FocusParams } from './useFocusOption.type';
 import { focusOption } from './focus-option';
 import { matchesQuery } from './matches-query';
-import { tabIdOf } from './tab-groups';
+import { tabIdOf } from './tab-id-of';
 
 const useFocusOption = ({ focusKey, schema, query, tab, setTab, setQuery, onFocused }: FocusParams) => {
   const [pending, setPending] = useState<string | null>(null);

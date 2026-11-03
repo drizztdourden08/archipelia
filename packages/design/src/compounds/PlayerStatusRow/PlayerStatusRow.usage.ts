@@ -35,7 +35,7 @@ const PlayerStatusRowSample = () => (
   </div>
 );
 `,
-  propsHash: '498100cf95aa6e9a',
+  propsHash: '8bf2b9d5d134d0e8',
 } satisfies ComponentUsage;
 
 export { usage };

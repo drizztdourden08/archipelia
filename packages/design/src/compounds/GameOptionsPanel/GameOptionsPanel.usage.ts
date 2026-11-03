@@ -39,7 +39,7 @@ const GameOptionsPanelSample = ({ schema, values, onChange }: {
   onChange: (key: string, value: OptionValue) => void;
 }) => <GameOptionsPanel schema={schema} values={values} onChange={onChange} />;
 `,
-  propsHash: 'pending',
+  propsHash: '82ca09d59db627a8',
 } satisfies ComponentUsage;
 
 export { usage };

@@ -1,8 +1,7 @@
 /* @layer renderer-app @kind logic */
 import type { OptionDef } from '@archipelia/model';
 import type { TermFact } from './option-layout.type';
-
-const FACT_LINE = /^\s*(\w[\w -]{0,39}?)\s*:\s+(\S.*)$/;
+import { FACT_LINE } from './term-facts.constants';
 
 const normal = (text: string) => text.toLowerCase().replace(/[_\-\s]+/g, ' ').trim();
 

@@ -9,7 +9,7 @@ const SeatSide = ({ side }: SeatSideProps) => (
     aria-label={side.label}
     value={side.value ?? ''}
     options={SEAT_SIDES.map(({ value, label }) => ({ value, label }))}
-    disabled={side.locked || side.disabled}
+    disabled={side.locked === true || side.disabled === true}
     onChange={(value) => side.onChange?.(value === 'set' ? 'set' : 'direct')}
   />
 );

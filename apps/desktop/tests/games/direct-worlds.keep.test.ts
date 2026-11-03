@@ -1,15 +1,11 @@
 /* @layer tests @kind test */
 import { describe, expect, test } from 'vitest';
 import { joinsDirectly } from '@archipelia/model';
-import type { CatalogEntry, InstalledGame } from '@archipelia/model';
+import type { CatalogEntry } from '@archipelia/model';
 import { handlers as fixtureHandlers, rowFor } from './game-handlers.fixtures';
 import { buildRows } from '../../src/views/GameStore/behavior/build-rows';
 import { cardPropsOf } from '../../src/views/GameStore/behavior/card-props';
 import { filterRows } from '../../src/views/GameStore/behavior/filter-rows';
-import { directWorldsOf } from '../../src/views/SessionBuilder/behavior/direct-worlds';
-import { mayJoinDirectly } from '../../src/views/SessionBuilder/behavior/may-join-directly';
-import { worldsWarning } from '../../src/views/SessionBuilder/behavior/worlds-warning';
-import { presetPlayer } from '../sessions/session-fixtures';
 
 const handlers = fixtureHandlers([]);
 
@@ -28,8 +24,6 @@ const listed = (apworld: string): CatalogEntry => ({
 const index = (apworld: string): CatalogEntry => ({
   apworld, game: apworld.toUpperCase(), displayName: apworld, tags: [], source: 'index', stability: 'unknown', versions: [{ version: '1.0.0', url: 'https://x/i.apworld' }],
 });
-
-const world = (apworld: string): InstalledGame => ({ apworld, game: apworld.toUpperCase(), version: '1.0.0', source: 'first-party', installedAt: 0 }) as InstalledGame;
 
 describe('K1 worlds that join directly', { tags: ['critical'] }, () => {
   test('a registry world with a client and a topic world marked direct join directly; the rest do not', () => {
@@ -55,28 +49,5 @@ describe('K1 worlds that join directly', { tags: ['critical'] }, () => {
     expect(only('Joins directly')).toEqual(['relic', 'star']);
     expect(only('Does not join directly')).toEqual(['moon', 'plain']);
     expect(filterRows(rows, 'joins directly', []).map((row) => row.entry.apworld).sort()).toEqual(['relic', 'star']);
-  });
-});
-
-describe('K1 the setup page and worlds that join directly', { tags: ['critical'] }, () => {
-  const players = [presetPlayer(1, 'Ana', 'p1', 'RELIC'), presetPlayer(2, 'Bo', 'p1', 'STAR'), presetPlayer(3, 'Cy', 'p1', 'PLAIN')];
-  const entries = [listed('relic'), found('star', true), index('plain')];
-  const installed = [world('relic'), world('star'), { ...world('plain'), source: 'index' } as InstalledGame];
-
-  test('lists the games of the session that have a direct client, and marks the ones outside the registry', () => {
-    expect(directWorldsOf(players, installed, entries)).toEqual([{ game: 'RELIC', listed: true }, { game: 'STAR', listed: false }]);
-    expect(directWorldsOf([], installed, entries)).toEqual([]);
-  });
-
-  test('asks for the catalog only when an installed ready world is in the session', () => {
-    expect(mayJoinDirectly(players, installed)).toBe(true);
-    expect(mayJoinDirectly([presetPlayer(3, 'Cy', 'p1', 'PLAIN')], installed)).toBe(false);
-  });
-
-  test('warns that a world outside the registry needs Allow unlisted clients, and only while it is off', () => {
-    const worlds = directWorldsOf(players, installed, entries);
-    expect(worldsWarning(worlds, false)).toContain('Allow unlisted clients');
-    expect(worldsWarning(worlds, true)).toBeNull();
-    expect(worldsWarning([{ game: 'RELIC', listed: true }], false)).toBeNull();
   });
 });

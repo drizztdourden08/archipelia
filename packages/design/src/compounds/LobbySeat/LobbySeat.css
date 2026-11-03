@@ -48,8 +48,8 @@
 .lobby-seat[data-state='held'] .lobby-seat__avatar,
 .lobby-seat[data-state='new'] .lobby-seat__avatar {
   --seat-tint: var(--c-text-dim);
-  --seat-tint-soft: transparent;
 
+  background: transparent;
   border-style: dashed;
 }
 

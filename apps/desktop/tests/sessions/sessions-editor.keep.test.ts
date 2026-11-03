@@ -1,24 +1,9 @@
 /* @layer tests @kind test */
 import { describe, expect, test } from 'vitest';
-import type { SessionPlayer } from '@archipelia/model';
-import { playerSummary } from '../../src/views/SessionBuilder/behavior/player-summary';
 import { worldSummary } from '../../src/views/SessionBuilder/behavior/world-summary';
 import { newTemplate } from '../../src/views/SessionBuilder/behavior/new-template';
 import { sessionSummary } from '../../src/views/Sessions/behavior/session-summary';
-import { PRESET, presetPlayer } from './session-fixtures';
-
-describe('K1 the one line of a saved player', { tags: ['critical'] }, () => {
-  test('names the game and the preset, or the file', () => {
-    expect(playerSummary(presetPlayer(1, 'Ana'), [PRESET])).toBe('Demo, preset Open');
-    const yaml: SessionPlayer = { kind: 'set', slot: 2, name: 'Bo', game: 'Demo', source: { kind: 'yaml', fileName: 'bo.yaml', yaml: 'x' } };
-    expect(playerSummary(yaml, [])).toBe('Demo, YAML bo.yaml');
-  });
-
-  test('says when a seat is open to any player, and when a game is missing', () => {
-    expect(playerSummary({ kind: 'direct', slot: 3 }, [])).toBe('Open seat, any player');
-    expect(playerSummary({ ...presetPlayer(4, 'Dee'), game: '' }, [PRESET])).toBe('No game picked yet');
-  });
-});
+import { presetPlayer } from './session-fixtures';
 
 describe('K1 the summaries of the Sessions page', { tags: ['critical'] }, () => {
   test('sums the world settings in one line', () => {

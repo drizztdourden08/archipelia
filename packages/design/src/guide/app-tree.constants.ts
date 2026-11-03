@@ -32,7 +32,7 @@ const APP_TREE = [
     answers: {
       'a game option': {
         question: 'How much of the option?',
-        answers: { 'its control alone': null, 'the whole row from its definition': null, 'every option of a game, in tabs': null },
+        answers: { 'its control alone': null, 'every option of a game, in tabs': null },
       },
       'how a session is generated and hosted': null,
     },
@@ -48,7 +48,6 @@ const APP_TREE = [
       'the seats of a session lobby': null,
     },
   },
-  { at: ['layout', 'window chrome'], answers: { 'the bar of a hosted room': null } },
   { at: ['layout'], answers: { 'the stage of a session lobby': null } },
   { at: ['something over the page'], answers: { 'a way to pick where a missing package comes from': null } },
 ] as const satisfies AppTree;
