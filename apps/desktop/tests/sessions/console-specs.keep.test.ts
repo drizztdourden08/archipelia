@@ -5,13 +5,14 @@ import { consoleSpecsOf } from '../../src/views/SessionDashboard/behavior/consol
 
 const specs = consoleSpecsOf(['Ana', 'Bo']);
 const specOf = (id: string) => specs.find((spec) => spec.id === id);
+const hasSpec = (commandId: string) => specs.some((spec) => spec.id.startsWith(commandId));
 
 describe('K2 console command specs', { tags: ['critical'] }, () => {
   test('every command becomes a pattern spec with a fixed command word and one slot per param', () => {
     expect(specOf('hint')?.pattern).toBe('/hint {player:choice @players} {item:text}');
     expect(specOf('send_multiple')?.pattern).toBe('/send_multiple {amount:number 1..100} {player:choice @players} {item:text}');
     expect(specOf('players')?.pattern).toBe('/players');
-    expect(consoleCommands.every((command) => specs.some((spec) => spec.id.startsWith(command.id)))).toBe(true);
+    expect(consoleCommands.every((command) => hasSpec(command.id))).toBe(true);
   });
 
   test('player slots list the room players and the option slot lists the server options', () => {
