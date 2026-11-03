@@ -40,7 +40,7 @@ const LogLinesSample = ({ onSearch }: { onSearch: (query: string) => void }) => 
   />
 );
 `,
-  propsHash: '0689b00bdf56716c',
+  propsHash: '8eaee196211e3150',
 } satisfies ComponentUsage;
 
 export { usage };
