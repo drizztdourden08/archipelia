@@ -24,7 +24,7 @@ describe('K1 the How players join section of the setup page', { tags: ['critical
 
   test('keeps Host approval and unlisted clients off until direct connections are on', () => {
     expect(directState(local, false, false)).toMatchObject({ on: false, approval: false, unlisted: false, allowOff: false, optionsOff: true });
-    const on = directState({ ...local, direct: { admission: 'host-approval', allowUnlisted: false } }, false, false);
+    const on = directState({ ...local, direct: { admission: 'host-approval', allowUnlisted: false, allowedGames: [] } }, false, false);
     expect(on).toMatchObject({ on: true, approval: true, unlisted: false, optionsOff: false });
   });
 
@@ -33,7 +33,7 @@ describe('K1 the How players join section of the setup page', { tags: ['critical
     expect(directState({ ...local, lan: true }, false, false).hint).toContain('your network');
     const gg = { ...local, host: { kind: 'archipelago-gg' as const } };
     expect(directState(gg, false, false)).toMatchObject({ allowOff: true, problem: undefined });
-    expect(directState({ ...gg, direct: { admission: 'open', allowUnlisted: false } }, false, false)).toMatchObject({ allowOff: false, problem: expect.stringContaining('do not work') as string });
+    expect(directState({ ...gg, direct: { admission: 'open', allowUnlisted: false, allowedGames: [] } }, false, false)).toMatchObject({ allowOff: false, problem: expect.stringContaining('do not work') as string });
     expect(directState(local, true, false)).toMatchObject({ allowOff: true, optionsOff: true, hint: expect.stringContaining('Close the lobby') as string });
   });
 });

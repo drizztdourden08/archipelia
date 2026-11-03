@@ -19,6 +19,7 @@ const ERROR_RULES = {
   'resume-invalid': { fatal: 'always', close: CLOSE_CODES.forbidden },
   'resume-replaced': { fatal: 'always', close: CLOSE_CODES.resumeReplaced },
   'seat-unavailable': { fatal: 'before-welcome', close: CLOSE_CODES.forbidden },
+  'game-not-allowed': { fatal: 'before-welcome', close: CLOSE_CODES.forbidden },
   'slot-name-taken': { fatal: 'never', close: null },
   'upload-unexpected': { fatal: 'never', close: null },
   'upload-too-large': { fatal: 'never', close: null },

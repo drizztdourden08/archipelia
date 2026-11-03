@@ -249,7 +249,7 @@ A release that Archipelia can list carries three standard files next to the apwo
 
 ### archipelia.json
 
-It is the builds index above under a fixed name, with three keys added: `format`, `direct` and `kit`. `appVersion` becomes optional, because a world without a client of its own has none.
+It is the builds index above under a fixed name, with three keys added: `format`, `direct` and `kit`. A fourth, `playerFile`, is optional. `appVersion` becomes optional, because a world without a client of its own has none.
 
 ```json
 {
@@ -268,11 +268,12 @@ It is the builds index above under a fixed name, with three keys added: `format`
 
 - `format` is `1`. A reader refuses any other value.
 - `direct` says whether the game's own client joins Archipelia lobbies. It is for display. The repository topic is what search uses, and the lobby `hello` is the truth.
+- `playerFile` says where a player file for the game comes from: `options` (the default, and left out of the file) means Archipelia builds it from the game's options; `app` means only the game's own app can make a valid one (it saves a `pre_rolled` block), so Archipelia asks for the YAML the app saved and shows the options read-only. Any other value is refused.
 - `kit` is the version of this package that wrote the file.
 - A world with a single apworld can give `world: { file, sha256, size, bundle? }` in place of `builds`. Give one of the two, never both. `file` is a plain file name ending in `.apworld`, and `bundle` is `<file>.sigstore.json`.
 - `maximumAp` and `appVersion` are left out when not given.
 
-The functions are pure and work in a renderer: `buildReleaseManifest(input)` builds and checks the object (the input is the index input plus `direct`, an optional `kit` that defaults to the kit's own version, and `appVersion` optional), `checkReleaseManifest(input)` returns the list of issues without throwing, `serializeReleaseManifest` writes indented JSON with a trailing newline, `parseReleaseManifest(text)` reads and re-checks a file (size cap, `format`, the naming rule), and `indexOfRelease(manifest)` gives the old index shape back when the manifest has `builds` and an `appVersion`. Failures throw a `KitError` of code `invalid-release`.
+The functions are pure and work in a renderer: `buildReleaseManifest(input)` builds and checks the object (the input is the index input plus `direct`, an optional `playerFile`, an optional `kit` that defaults to the kit's own version, and `appVersion` optional), `checkReleaseManifest(input)` returns the list of issues without throwing, `serializeReleaseManifest` writes indented JSON with a trailing newline, `parseReleaseManifest(text)` reads and re-checks a file (size cap, `format`, the naming rule), and `indexOfRelease(manifest)` gives the old index shape back when the manifest has `builds` and an `appVersion`. Failures throw a `KitError` of code `invalid-release`.
 
 ### The thumbnail
 
@@ -289,7 +290,7 @@ The functions are pure and work in a renderer: `buildReleaseManifest(input)` bui
 
 ### Writing the files
 
-`writeReleaseFiles({ dir, direct, module?, kit?, thumbnail?, description? })` (Node) reads the index `<module>.apworld.json` that `buildApworldSet` wrote into `dir` (the only `*.apworld.json` there when `module` is left out), then writes `archipelia.json`. When `thumbnail` and `description` are paths, it checks them and copies them to the standard names. The thumbnail name follows the real format (`archipelia-thumbnail.png` or `.webp`), and an older thumbnail of the other format is removed. If any check fails it throws a `KitError` of code `invalid-release-file` listing every problem and writes nothing. It returns `{ manifest, manifestPath, thumbnailPath?, descriptionPath?, warnings }`.
+`writeReleaseFiles({ dir, direct, playerFile?, module?, kit?, thumbnail?, description? })` (Node) reads the index `<module>.apworld.json` that `buildApworldSet` wrote into `dir` (the only `*.apworld.json` there when `module` is left out), then writes `archipelia.json`. When `thumbnail` and `description` are paths, it checks them and copies them to the standard names. The thumbnail name follows the real format (`archipelia-thumbnail.png` or `.webp`), and an older thumbnail of the other format is removed. If any check fails it throws a `KitError` of code `invalid-release-file` listing every problem and writes nothing. It returns `{ manifest, manifestPath, thumbnailPath?, descriptionPath?, warnings }`.
 
 ## Command line
 
@@ -299,7 +300,7 @@ The functions are pure and work in a renderer: `buildReleaseManifest(input)` bui
 | --- | --- |
 | `build-apworld --world <dir> --out <file> --game <name> --world-version <x.y.z> --minimum-ap <x.y.z> [--maximum-ap <x.y.z>] [--module <name>] [--data <dir>] [--author <name>]... [--exclude <path>]... [--line-endings lf\|keep]` | Builds one apworld and prints `{ file, module, sha256, size }` as one JSON line. |
 | `build-set --config <file.json>` | Builds the set and the index. Prints `{ index, latest, files }` as one JSON line. |
-| `release-files --dir <release folder> [--module <name>] [--direct] [--thumbnail <image>] [--description <file.md>]` | Writes `archipelia.json` from the index in the folder, and checks and copies the thumbnail and description into it under their standard names. Prints `{ manifest, thumbnail?, description?, warnings }` as one JSON line and each warning on stderr. Exit 1 when a file is refused. |
+| `release-files --dir <release folder> [--module <name>] [--direct] [--player-file <options\|app>] [--thumbnail <image>] [--description <file.md>]` | Writes `archipelia.json` from the index in the folder, and checks and copies the thumbnail and description into it under their standard names. Prints `{ manifest, thumbnail?, description?, warnings }` as one JSON line and each warning on stderr. Exit 1 when a file is refused. |
 | `inspect <file.apworld>` | Prints the module, the manifest, the sha256, the size and the entry count. |
 | `check-fit <file.apworld> --ap <x.y.z>` | Exit 0 when the world supports that exact version, 1 with the sentence on stderr when it does not. |
 | `player-yaml --input <file.json> [--schema <options.json>] [--out <file>] [--allow-unknown] [--allow-roll] [--with-defaults]` | Writes the YAML to stdout or a file. The input is `{ game, slotName, options, description?, preRolled?, preRolledKey? }`. |

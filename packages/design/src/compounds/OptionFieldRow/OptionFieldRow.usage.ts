@@ -37,7 +37,7 @@ const OptionFieldRowSample = ({ def, value, onChange, onReset }: {
   onReset: () => void;
 }) => <OptionFieldRow def={def} value={value} changed={false} onChange={onChange} onReset={onReset} />;
 `,
-  propsHash: '6149f22fc331aa8e',
+  propsHash: '348b2870261b6ed7',
 } satisfies ComponentUsage;
 
 export { usage };

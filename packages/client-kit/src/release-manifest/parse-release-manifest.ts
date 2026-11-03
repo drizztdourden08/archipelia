@@ -1,5 +1,5 @@
 /* @layer client-kit @kind logic */
-import type { ReleaseInput, ReleaseManifest, ReleaseWorld } from './release.type';
+import type { PlayerFile, ReleaseInput, ReleaseManifest, ReleaseWorld } from './release.type';
 import { createFailer } from '../errors/create-failer';
 import { checkNaming } from '../index-manifest/check-naming';
 import { readBuildList } from '../index-manifest/read-build-list';
@@ -13,6 +13,12 @@ const fail = createFailer('invalid-release', 'The release manifest is not valid:
 
 const optionalText = (record: Record<string, unknown>, key: string): string | undefined =>
   record[key] === undefined ? undefined : readText(fail, record, key);
+
+const playerFileOf = (record: Record<string, unknown>): PlayerFile | undefined => {
+  const text = optionalText(record, 'playerFile');
+  if (text === undefined) return undefined;
+  return text === 'options' || text === 'app' ? text : fail('playerFile must be options or app.');
+};
 
 const worldOf = (raw: unknown): ReleaseWorld => {
   if (!isPlainRecord(raw)) return fail('world must be an object.');
@@ -50,6 +56,7 @@ const parseReleaseManifest = (source: string): ReleaseManifest => {
     minimumAp: readText(fail, record, 'minimumAp'),
     maximumAp: optionalText(record, 'maximumAp'),
     direct: record.direct === true,
+    playerFile: playerFileOf(record),
     kit: readText(fail, record, 'kit'),
     appVersion: optionalText(record, 'appVersion'),
     ...from,

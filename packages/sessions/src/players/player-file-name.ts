@@ -1,6 +1,6 @@
 /* @layer core @kind logic */
-import type { HostedPlayer } from '@archipelia/model';
+import type { SetPlayer } from '@archipelia/model';
 
-const playerFileName = (player: HostedPlayer) => `P${String(player.slot).padStart(2, '0')}.yaml`;
+const playerFileName = (player: SetPlayer) => `P${String(player.slot).padStart(2, '0')}.yaml`;
 
 export { playerFileName };

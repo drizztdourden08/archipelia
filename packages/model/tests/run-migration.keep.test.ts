@@ -35,7 +35,7 @@ describe('K3 a run read from disk', { tags: ['critical'] }, () => {
   test('migrates the snapshot like a saved session and keeps the rest of the record', () => {
     const run = runOf(oldRun({ snapshot: withLegacyDirect() }), SAVED);
     expect(run.snapshot.lobby).toEqual({ serverId: 'r1', lobbyId: 'lb_1' });
-    expect(run.snapshot.players.every((player) => player.direct === false)).toBe(true);
+    expect(run.snapshot.players.every((player) => player.kind === 'set')).toBe(true);
     expect(run).toMatchObject({ id: 'run1', status: 'stopped', seed: '48213', createdAt: 2000 });
   });
 

@@ -147,10 +147,17 @@ const SCHEMA_DEFS = {
     },
   },
   heldSeats: {
+    deprecated: true,
     type: 'array',
     maxItems: 64,
     items: { type: 'object', required: ['name', 'free'], properties: { name: { $ref: '#/$defs/text16' }, free: { type: 'boolean' } } },
   },
+  openSeats: {
+    type: 'object',
+    required: ['total', 'free'],
+    properties: { total: { $ref: '#/$defs/count' }, free: { $ref: '#/$defs/count' } },
+  },
+  allowedGames: { type: 'array', maxItems: 64, items: { $ref: '#/$defs/text256' } },
   roomTls: { enum: ROOM_TLS },
   errorCode: { enum: ERROR_CODE_LIST },
 };

@@ -6,11 +6,11 @@ import { newTemplate } from '../views/SessionBuilder/behavior/new-template';
 import { REVIEW_LAYOUT, REVIEW_PORT } from './review.constants';
 import type { LayoutSeed } from './seed-layout.type';
 
-const heldPlayers = (names: readonly string[]): SessionPlayer[] => names.map((name, index) => ({ slot: index + 1, name, direct: true }));
+const heldPlayers = (names: readonly string[]): SessionPlayer[] => names.map((_name, index) => ({ kind: 'direct', slot: index + 1 }));
 
 const saveSeed = async ({ name, host, lan, players }: LayoutSeed, saved: readonly SessionTemplate[]): Promise<SessionTemplate> => {
   const base = newTemplate(saved.find((entry) => entry.name === name)?.id);
-  const direct = players.length > 0 ? { direct: { admission: 'host-approval' as const, allowUnlisted: false } } : {};
+  const direct = players.length > 0 ? { direct: { admission: 'host-approval' as const, allowUnlisted: false, allowedGames: [] } } : {};
   return appApi().templatesSave({ ...base, name, lan, host, ...direct, players: heldPlayers(players) });
 };
 

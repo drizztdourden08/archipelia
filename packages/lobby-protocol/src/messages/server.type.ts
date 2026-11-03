@@ -15,6 +15,8 @@ type EngineRef = { ap: string };
 
 type HeldSeat = { name: string; free: boolean };
 
+type OpenSeats = { total: number; free: number };
+
 type LobbyInfoReply = {
   type: 'lobby.info.reply';
   re?: number;
@@ -30,6 +32,8 @@ type LobbyInfoReply = {
     worlds: { game: string; worldVersion: string }[];
     requires: { capabilities: string[] };
     seats?: HeldSeat[];
+    open?: OpenSeats;
+    allowedGames?: string[];
   };
   limits: Limits;
 };
@@ -86,6 +90,8 @@ type LobbyState = {
   engine: EngineRef;
   members: StateMember[];
   seats?: HeldSeat[];
+  open?: OpenSeats;
+  allowedGames?: string[];
   others?: { approved: number; pending: number };
 };
 
@@ -118,6 +124,7 @@ export type {
   EngineRef,
   ErrorMessage,
   HeldSeat,
+  OpenSeats,
   LobbyFailed,
   LobbyInfoReply,
   LobbyProgress,

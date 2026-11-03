@@ -2,7 +2,7 @@
 import { normalizeLobbyCode } from '@drizztdourden08/archipelia-lobby-protocol';
 import { sha256Hex } from '@drizztdourden08/archipelia-lobby-protocol/node';
 import { newId } from '@drizztdourden08/brock-core/storage';
-import type { InstalledGame, SessionPlayer } from '@archipelia/model';
+import type { InstalledGame, SetPlayer } from '@archipelia/model';
 import { resolveValues } from '@archipelia/presets';
 import { renderPlayer, renderPresetYaml } from '@archipelia/sessions/players';
 import type { JoinRequest } from '../../src/joins/joins.type';
@@ -16,7 +16,7 @@ const within = (text: string, limit: number) => text.length >= 1 && text.length 
 
 const yamlOf = (request: JoinRequest, game: InstalledGame, deps: RecordDeps): Promise<string> => {
   const { source } = request;
-  const player: SessionPlayer = { slot: 1, name: request.slotName.trim(), game: game.game, source: { kind: 'preset', presetId: '', overrides: {} } };
+  const player: SetPlayer = { kind: 'set', slot: 1, name: request.slotName.trim(), game: game.game, source: { kind: 'preset', presetId: '', overrides: {} } };
   if (source.kind === 'yaml') return renderPlayer({ ...player, source }, { presets: deps.presets, schemaOf: () => Promise.resolve(game.schema) });
   if (source.presetId === '') return Promise.resolve(renderPresetYaml(player, resolveValues(game.schema)));
   return renderPlayer({ ...player, source: { kind: 'preset', presetId: source.presetId, overrides: {} } }, { presets: deps.presets, schemaOf: () => Promise.resolve(game.schema) });

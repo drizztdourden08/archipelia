@@ -1,7 +1,7 @@
 /* @layer renderer-app @kind logic */
-import type { SessionPlayer } from '@archipelia/model';
+import type { SetPlayer } from '@archipelia/model';
 
-const withYaml = (player: SessionPlayer, fileName: string, yaml: string, game: string): SessionPlayer => ({
+const withYaml = (player: SetPlayer, fileName: string, yaml: string, game: string): SetPlayer => ({
   ...player, game, source: { kind: 'yaml', fileName, yaml },
 });
 

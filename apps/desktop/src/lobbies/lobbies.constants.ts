@@ -5,15 +5,13 @@ import type { LobbyServerOptions } from './lobbies.type';
 
 const LOCAL_SERVER = 'local';
 
-const CLOSED_DOOR: DirectConnection = { admission: 'host-approval', allowUnlisted: false };
+const CLOSED_DOOR: DirectConnection = { admission: 'host-approval', allowUnlisted: false, allowedGames: [] };
 
 const CONNECTED_ADMISSIONS: readonly MemberAdmission[] = ['pending', 'approved'];
 
 const LOBBY_REQUESTS = [
   'lobby.create', 'lobby.update', 'lobby.lock', 'lobby.unlock', 'lobby.close', 'lobby.start', 'member.approve', 'member.refuse', 'member.remove', 'member.host', 'world.consent', 'room.stop',
 ] as const;
-
-const SEAT_NAME_LIMIT = 16;
 
 const INITIAL_NETWORK_MODE: NetworkMode = 'off';
 
@@ -66,4 +64,4 @@ const SETUP_PROBLEM = {
 
 export {
   AUTHORITY, BRACKETS, LOOPBACK, LOOPBACK_HOST, MAX_PORT, NEEDS_WSS, NOT_A_JOIN_ADDRESS, PLAIN_REMOTE, PRIVATE_HOST, SCHEME, PIN_DIGEST, PIN_PAIR, PIN_SEPARATORS, WRITTEN_PORT,
-  CLOSED_DOOR, CONNECTED_ADMISSIONS, CONNECTION_TEXT, ROOM_PASSWORDS_IN_MEMORY, SETUP_PROBLEM, DEFAULT_SERVER_OPTIONS, LOBBY_REQUESTS, LOCAL_SERVER, NOT_AN_ADDRESS, SEAT_NAME_LIMIT, SERVER_OPTIONS_FILE };
+  CLOSED_DOOR, CONNECTED_ADMISSIONS, CONNECTION_TEXT, ROOM_PASSWORDS_IN_MEMORY, SETUP_PROBLEM, DEFAULT_SERVER_OPTIONS, LOBBY_REQUESTS, LOCAL_SERVER, NOT_AN_ADDRESS, SERVER_OPTIONS_FILE };

@@ -1,10 +1,11 @@
 /* @layer core @kind logic */
+import { setPlayers } from '@archipelia/model';
 import type { Session } from '@archipelia/model';
 import type { LiveRoomTarget } from './live-room.type';
 import { roomUrls } from './room-urls';
 
 const watchSlotName = (session: Session) =>
-  [...session.snapshot.players].sort((a, b) => a.slot - b.slot)[0]?.name ?? null;
+  setPlayers(session.snapshot.players).sort((a, b) => a.slot - b.slot)[0]?.name ?? null;
 
 const watchTarget = (session: Session): LiveRoomTarget | null => {
   const slotName = watchSlotName(session);

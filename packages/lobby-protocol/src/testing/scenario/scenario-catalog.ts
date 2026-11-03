@@ -116,6 +116,12 @@ const SCENARIO_CATALOG: ScenarioEntry[] = [
     setup: { ...BASE_SETUP, heldSeats: ['Alice'] },
   },
   {
+    name: 'game-not-allowed',
+    title: 'A hello with a game the lobby does not list is refused',
+    requires: ['slots.yaml', 'worlds.upload'],
+    setup: { ...BASE_SETUP, allowedGames: ['Hollow Knight'] },
+  },
+  {
     name: 'wrong-code-rate-limit',
     title: 'Wrong lobby codes are counted and the eleventh attempt is rate limited',
     requires: ['slots.yaml'],

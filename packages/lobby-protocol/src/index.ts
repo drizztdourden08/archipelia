@@ -37,6 +37,7 @@ export type {
   EngineRef,
   ErrorMessage,
   HeldSeat,
+  OpenSeats,
   LobbyFailed,
   LobbyInfoReply,
   LobbyProgress,

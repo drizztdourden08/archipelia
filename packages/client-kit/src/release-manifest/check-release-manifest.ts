@@ -7,7 +7,7 @@ import { checkHashAndSize } from '../index-manifest/check-hash-and-size';
 import { checkModule } from '../index-manifest/check-module';
 import { compareApVersions } from '../versions/compare-ap-versions';
 import { parseApVersion } from '../versions/parse-ap-version';
-import { APWORLD_FILE_NAME, KIT_VERSION_TEXT } from './release.constants';
+import { APWORLD_FILE_NAME, KIT_VERSION_TEXT, PLAYER_FILES } from './release.constants';
 
 const checkRange = ({ minimumAp, maximumAp }: ReleaseInput): KitIssue[] => {
   const issues: KitIssue[] = [];
@@ -34,6 +34,7 @@ const checkSource = (input: ReleaseInput): KitIssue[] => {
 const checkReleaseManifest = (input: ReleaseInput): KitIssue[] => {
   const issues = checkModule(input.module);
   if (input.appVersion?.trim() === '') issues.push(badValue('appVersion', 'appVersion must be a non-empty text when given.'));
+  if (input.playerFile !== undefined && !PLAYER_FILES.includes(input.playerFile)) issues.push(badValue('playerFile', `playerFile "${String(input.playerFile)}" must be options or app.`));
   if (input.kit !== undefined && !KIT_VERSION_TEXT.test(input.kit)) issues.push(badValue('kit', `kit "${input.kit}" must be a version such as 0.2.0.`));
   return [...issues, ...checkRange(input), ...checkSource(input)];
 };

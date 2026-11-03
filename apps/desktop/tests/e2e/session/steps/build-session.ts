@@ -7,7 +7,7 @@ import { dialogOf, openAdvanced, openScreen, pickOption, seatEditorOf, seatsOf }
 import { settledProof } from '../../app/support/settled-proof';
 import { answerOpenDialogWith } from '../support/open-dialog';
 import { writeRotpBFile } from '../support/player-file';
-import { BALDUR, RELIC, ROTP_B, TIMEOUT } from '../support/session-constants';
+import { BALDUR, RELIC, ROTP_B, ROTP_BLOCKED, TIMEOUT } from '../support/session-constants';
 import type { SessionEnv } from '../support/session-env';
 
 const OPEN_LAN = { title: 'Open this computer to your network?', confirm: 'Open to my network' };
@@ -75,10 +75,25 @@ const addYamlRotpB = async (launched: LaunchedApp, tab: Locator, env: SessionEnv
   const editor = await addSeat(tab, 2, ROTP_B.slot);
   await pickOption(page, editor.getByRole('combobox', { name: 'Game', exact: true }), RELIC.game);
   await answerOpenDialogWith(launched.app, yaml);
-  await pickOption(page, presetOf(editor), 'Imported file');
+  await editor.getByRole('button', { name: `Import file for ${ROTP_B.slot}`, exact: true }).click();
   await editor.getByText(ROTP_B.fileName, { exact: true }).waitFor();
   await editor.getByRole('button', { name: 'Done', exact: true }).click();
   await seatsOf(tab).getByRole('button', { name: ROTP_B.slot, exact: true }).waitFor();
+};
+
+const blockPresetRotp = async (launched: LaunchedApp, tab: Locator) => {
+  const { page } = launched;
+  const editor = await addSeat(tab, 3, ROTP_BLOCKED.slot);
+  await pickOption(page, editor.getByRole('combobox', { name: 'Game', exact: true }), RELIC.game);
+  expect(await presetOf(editor).count(), 'an app game offers no preset to pick').toBe(0);
+  await editor.getByText(/player file in its own app/).waitFor();
+  await editor.getByRole('button', { name: 'Done', exact: true }).click();
+  await tab.getByRole('button', { name: 'Run', exact: true }).click();
+  const message = `${ROTP_BLOCKED.slot}: ${RELIC.game} player files come from its own app. Import the YAML it saved, or make the slot Direct.`;
+  await tab.getByRole('button', { name: message, exact: true }).waitFor();
+  expect(await page.getByRole('dialog', { name: /^Running/ }).count(), 'the blocked run did not start').toBe(0);
+  await seatsOf(tab).getByRole('button', { name: `Remove ${ROTP_BLOCKED.slot}`, exact: true }).click();
+  await tab.getByRole('button', { name: message, exact: true }).waitFor({ state: 'detached' });
 };
 
 const buildLanSession = async (launched: LaunchedApp, env: SessionEnv) => {
@@ -89,4 +104,4 @@ const buildLanSession = async (launched: LaunchedApp, env: SessionEnv) => {
   return tab;
 };
 
-export { buildLanSession };
+export { blockPresetRotp, buildLanSession };

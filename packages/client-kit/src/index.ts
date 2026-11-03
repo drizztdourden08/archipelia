@@ -14,9 +14,11 @@ export { indexOfRelease } from './release-manifest/index-of-release';
 export { parseReleaseManifest } from './release-manifest/parse-release-manifest';
 export { serializeReleaseManifest } from './release-manifest/serialize-release-manifest';
 export {
+  DEFAULT_PLAYER_FILE,
   DESCRIPTION_NAME,
   KIT_VERSION,
   MANIFEST_NAME,
+  PLAYER_FILES,
   RELEASE_FORMAT,
   THUMBNAIL_BASE_NAME,
 } from './release-manifest/release.constants';
@@ -33,6 +35,7 @@ export { checkWorldFit } from './versions/check-world-fit';
 export { compareApVersions } from './versions/compare-ap-versions';
 export { parseApVersion } from './versions/parse-ap-version';
 export { freeSeats } from './seats/free-seats';
+export { pickOpenSeat } from './seats/pick-open-seat';
 export { pickSeat } from './seats/pick-seat';
 export { withSeat } from './seats/with-seat';
 export { readApworld } from './zip/read-apworld';
@@ -47,10 +50,10 @@ export type {
   IndexBuildInput,
   IndexInput,
 } from './index-manifest/index.type';
-export type { ReleaseInput, ReleaseManifest, ReleaseWorld } from './release-manifest/release.type';
+export type { PlayerFile, ReleaseInput, ReleaseManifest, ReleaseWorld } from './release-manifest/release.type';
 export type { DescriptionCheck, ImageFormat, ImageHeader, ThumbnailCheck } from './release-files/release-files.type';
 export type { ArchipelagoManifest, ManifestInput } from './manifest/archipelago-manifest.type';
-export type { HeldSeat, SeatPick } from './seats/seats.type';
+export type { HeldSeat, OpenPick, OpenSeats, SeatPick } from './seats/seats.type';
 export type { PlayerYamlInput } from './yaml/player-yaml.type';
 export type { OptionChoice, OptionRow, OptionSchema, OptionType } from './yaml/schema/option-schema.type';
 export type { ValidateOptionsInput, ValidatedOptions } from './yaml/schema/validate-options.type';

@@ -1,6 +1,6 @@
 /* @layer renderer-app @kind types */
 import type { ReactNode } from 'react';
-import type { LogRow } from '@drizztdourden08/tessera/composites';
+import type { LogFilterPlacement, LogPanelSize, LogRow } from '@drizztdourden08/tessera/composites';
 import type { TabItem } from '@drizztdourden08/tessera/primitives';
 
 type LogLinesProps = {
@@ -15,6 +15,8 @@ type LogLinesProps = {
   copyText?: (shown: readonly LogRow[]) => string;
   toolbarExtra?: ReactNode;
   placeholder?: ReactNode;
+  filterPlacement?: LogFilterPlacement;
+  size?: LogPanelSize;
 };
 
 export type { LogLinesProps };

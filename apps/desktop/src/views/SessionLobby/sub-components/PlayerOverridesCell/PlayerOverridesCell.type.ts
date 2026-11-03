@@ -1,9 +1,10 @@
 /* @layer renderer-app @kind types */
-import type { SessionPlayer } from '@archipelia/model';
+import type { SetPlayer } from '@archipelia/model';
 
 type PlayerOverridesCellProps = {
-  player: SessionPlayer;
+  player: SetPlayer;
   selected: boolean;
+  appGame: boolean;
   onEdit: (slot: number) => void;
 };
 

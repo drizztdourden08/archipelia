@@ -13,6 +13,7 @@ const SLOT_SEAT: Record<SlotState, SeatState> = {
 const SEAT_TEXT = {
   yours: 'Your seat',
   held: 'Held for a player who joins',
+  openSeat: 'Open seat',
   unknownClient: 'Unknown client',
   unlisted: 'unlisted client',
   wantsSeat: (seat: string) => `wants the seat ${seat}`,

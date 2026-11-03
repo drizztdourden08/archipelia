@@ -1,6 +1,7 @@
 /* @layer tests @kind test */
 import { afterEach, describe, expect, test, vi } from 'vitest';
-import type { AdminLobby, HostedPlayer, SessionTemplate } from '@archipelia/model';
+import { setPlayers } from '@archipelia/model';
+import type { AdminLobby, SetPlayer, SessionTemplate } from '@archipelia/model';
 import type { Bindings, HostLine } from '@drizztdourden08/archipelia-lobby-protocol/testing';
 import { connectWebSocket, createFakeClient, createScenarioKit, loadScenario } from '@drizztdourden08/archipelia-lobby-protocol/testing';
 import { startLobbyRig } from '@archipelia/server/testing';
@@ -20,7 +21,7 @@ import { runAction } from '../../src/views/SessionLobby/behavior/run-action';
 
 type Rig = Awaited<ReturnType<typeof startLobbyRig>>;
 
-const DIRECT = { admission: 'host-approval', allowUnlisted: false } as const;
+const DIRECT = { admission: 'host-approval', allowUnlisted: false, allowedGames: [] } as const;
 
 const CY_YAML = ['name: Cy', 'game: Quest', ''].join('\n');
 
@@ -35,14 +36,14 @@ const sessionOf = (patch: Partial<SessionTemplate> = {}): SessionTemplate => ({
   ...newTemplate('t1'),
   name: 'Friday seed',
   host: { kind: 'archipelago-gg' },
-  players: [{ slot: 1, name: 'Ana', game: 'A Link to the Past', source: { kind: 'yaml', fileName: 'ana.yaml', yaml: 'name: Ana\ngame: A Link to the Past\n' } }],
+  players: [{ kind: 'set', slot: 1, name: 'Ana', game: 'A Link to the Past', source: { kind: 'yaml', fileName: 'ana.yaml', yaml: 'name: Ana\ngame: A Link to the Past\n' } }],
   ...patch,
 });
 
 const lobbyDeps = (on: Rig) => ({
   act: actOn(on),
   list: listOn(on),
-  slotOf: (player: HostedPlayer) =>
+  slotOf: (player: SetPlayer) =>
     Promise.resolve({ name: player.name, game: player.game, yaml: player.source.kind === 'yaml' ? player.source.yaml : '', worldVersion: '1.0.0' }),
 });
 
@@ -70,7 +71,7 @@ describe('a session that takes direct connections', () => {
     });
     const result = await client.play();
     expect(result.failure).toBeUndefined();
-    const players = on.templates[0]?.players.map((player) => player.name);
+    const players = setPlayers(on.templates[0]?.players ?? []).map((player) => player.name);
     expect(players).toEqual(expect.arrayContaining(['Link', 'Ana']));
     expect(players).toHaveLength(2);
     const ran = (await on.service.get(lobby.id))?.members.find((member) => member.displayName === 'Link');
@@ -114,7 +115,7 @@ describe('a session without direct connections', () => {
     await runSession(syncPlan(template, lobby.id), { ...lobbyDeps(on), beforeRun });
     expect(beforeRun).toHaveBeenCalledWith(lobby.id, template);
     await vi.waitFor(() => expect(on.templates).toHaveLength(1));
-    expect(on.templates[0]?.players.map((player) => player.name)).toEqual(['Ana']);
+    expect(setPlayers(on.templates[0]?.players ?? []).map((player) => player.name)).toEqual(['Ana']);
   });
 
   test('K1 runs under its lobby on this computer, and on no launch the app follows for a remote server', { tags: ['critical'] }, () => {
@@ -143,7 +144,7 @@ describe('the slots of the host in a session that takes direct connections', () 
   test('K4 are reserved, so a client with a host slot name is refused at join, and the run still works', { tags: ['standard'] }, async () => {
     rig = await startLobbyRig();
     const on = rig;
-    const draft = sessionOf({ direct: { admission: 'open', allowUnlisted: true }, players: [{ slot: 1, name: 'Cy', game: 'Quest', source: { kind: 'yaml', fileName: 'cy.yaml', yaml: CY_YAML } }] });
+    const draft = sessionOf({ direct: { admission: 'open', allowUnlisted: true, allowedGames: [] }, players: [{ kind: 'set', slot: 1, name: 'Cy', game: 'Quest', source: { kind: 'yaml', fileName: 'cy.yaml', yaml: CY_YAML } }] });
     const { lobby, template } = await started(on, draft);
     await syncSession(syncPlan(template, lobby.id), lobbyDeps(on));
     const store = await tempFiles('joins');
@@ -155,7 +156,7 @@ describe('the slots of the host in a session that takes direct connections', () 
     await store.remove();
     await runSession(syncPlan(template, lobby.id), lobbyDeps(on));
     await vi.waitFor(() => expect(on.templates).toHaveLength(1));
-    expect(on.templates[0]?.players.map((player) => player.name)).toEqual(['Cy']);
+    expect(setPlayers(on.templates[0]?.players ?? []).map((player) => player.name)).toEqual(['Cy']);
   });
 });
 
@@ -163,7 +164,7 @@ describe('turning direct connections off on a lobby with joined players', () => 
   test('K4 removes every joined player before it locks, so none can resume or run', { tags: ['standard'] }, async () => {
     rig = await startLobbyRig();
     const on = rig;
-    const { lobby, template } = await started(on, sessionOf({ direct: { admission: 'host-approval', allowUnlisted: true }, players: [] }));
+    const { lobby, template } = await started(on, sessionOf({ direct: { admission: 'host-approval', allowUnlisted: true, allowedGames: [] }, players: [] }));
     const joiner = await approvedJoiner(on, lobby);
     const { joinedId } = joiner;
     const closed = await syncSession(syncPlan({ ...template, direct: undefined, players: sessionOf().players }, lobby.id), lobbyDeps(on));

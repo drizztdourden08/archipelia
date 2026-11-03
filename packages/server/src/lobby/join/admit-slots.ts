@@ -6,6 +6,7 @@ import type { Outcome } from '../lobby-service.type';
 import { fixedWorlds } from '../state/fixed-worlds';
 import { liveMembers } from '../state/live-members';
 import type { Admitted, SlotRequest } from './admit-slots.type';
+import { checkGames } from './check-games';
 
 const otherBuild = (lobby: Lobby, memberId: string, world: WorldEntry): Failure | null => {
   const live = new Set(liveMembers(lobby).map((member) => member.id));
@@ -38,7 +39,7 @@ const slotOf = (slot: SlotEntry, world: WorldEntry | undefined, fixed: Map<strin
 });
 
 const admitSlots = (lobby: Lobby, memberId: string, request: SlotRequest): Outcome<Admitted> => {
-  const failure = worldFailure(lobby, memberId, request);
+  const failure = checkGames(lobby.options.allowedGames, request.slots) ?? worldFailure(lobby, memberId, request);
   if (failure) return { ok: false, failure };
   const fixed = fixedWorlds(lobby, memberId);
   const taken = new Set(liveMembers(lobby).filter((member) => member.id !== memberId).flatMap((member) => member.slots.map((slot) => slot.name)));

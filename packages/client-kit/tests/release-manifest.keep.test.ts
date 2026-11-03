@@ -65,6 +65,17 @@ describe('K2 the release manifest forms', { tags: ['critical'] }, () => {
     expect(indexOfRelease(manifest)).toBeUndefined();
   });
 
+  test('playerFile app is written after direct, options is left out, anything else is refused', () => {
+    const app = buildReleaseManifest({ ...input, playerFile: 'app' });
+    expect(Object.keys(app).slice(5, 9)).toEqual(['maximumAp', 'direct', 'playerFile', 'kit']);
+    expect(parseReleaseManifest(serializeReleaseManifest(app)).playerFile).toBe('app');
+    expect(buildReleaseManifest({ ...input, playerFile: 'options' }).playerFile).toBeUndefined();
+    expect(parseReleaseManifest(serializeReleaseManifest(buildReleaseManifest(input))).playerFile).toBeUndefined();
+    expect(checkReleaseManifest({ ...input, playerFile: 'both' as never }).map((issue) => issue.key)).toEqual(['playerFile']);
+    const text = serializeReleaseManifest(app).replace('"playerFile": "app"', '"playerFile": "both"');
+    expect(() => parseReleaseManifest(text)).toThrow('playerFile must be options or app');
+  });
+
   test('text round trips and ends with a newline', () => {
     for (const source of [input, worldInput]) {
       const manifest = buildReleaseManifest(source);
@@ -81,7 +92,9 @@ describe('K2 the release manifest forms', { tags: ['critical'] }, () => {
     expect(indexOfRelease(manifest)).toEqual(old);
     expect(JSON.parse(serializeApworldIndex(old))).not.toHaveProperty('format');
   });
+});
 
+describe('K2 refusing a release manifest', { tags: ['critical'] }, () => {
   test.each([
     [{ builds: [] }, 'at least one build'],
     [{ builds: [buildOf('0.6.8', HASH_A), buildOf('0.6.8', HASH_B)] }, 'same Archipelago version'],

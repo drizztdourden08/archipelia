@@ -3,6 +3,7 @@ import { resolve } from 'node:path';
 import { parseArgs } from 'node:util';
 import type { Command } from '../cli.type';
 import { writeReleaseFiles } from '../../node/write-release-files';
+import { playerFileOf } from '../player-file-of';
 import { requireValue } from '../require-value';
 import { EXIT_OK } from '../cli.constants';
 import { RELEASE_FILES_OPTIONS } from './release-files-command.constants';
@@ -15,6 +16,7 @@ const releaseFilesCommand: Command = async (args, io) => {
     dir: resolve(io.cwd, requireValue(values.dir, '--dir')),
     module: values.module,
     direct: values.direct === true,
+    playerFile: playerFileOf(values['player-file']),
     thumbnail: pathOf(io.cwd, values.thumbnail),
     description: pathOf(io.cwd, values.description),
   });

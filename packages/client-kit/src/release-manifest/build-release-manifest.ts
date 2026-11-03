@@ -4,7 +4,7 @@ import { createIssuesError } from '../errors/create-issues-error';
 import { recordOf } from '../index-manifest/record-of';
 import { compareApVersions } from '../versions/compare-ap-versions';
 import { checkReleaseManifest } from './check-release-manifest';
-import { KIT_VERSION, RELEASE_FORMAT } from './release.constants';
+import { DEFAULT_PLAYER_FILE, KIT_VERSION, RELEASE_FORMAT } from './release.constants';
 
 const worldOf = ({ file, sha256, size, bundle }: ReleaseWorld): ReleaseWorld => ({
   file,
@@ -22,7 +22,7 @@ const sourceOf = (input: ReleaseInput): Pick<ReleaseManifest, 'builds' | 'world'
 const buildReleaseManifest = (input: ReleaseInput): ReleaseManifest => {
   const issues = checkReleaseManifest(input);
   if (issues.length > 0) throw createIssuesError('invalid-release', 'The release manifest input is not valid:', issues);
-  const { game, module, worldVersion, minimumAp, maximumAp, direct, kit, appVersion } = input;
+  const { game, module, worldVersion, minimumAp, maximumAp, direct, playerFile, kit, appVersion } = input;
   return {
     format: RELEASE_FORMAT,
     game,
@@ -31,6 +31,7 @@ const buildReleaseManifest = (input: ReleaseInput): ReleaseManifest => {
     minimumAp,
     ...(maximumAp === undefined ? {} : { maximumAp }),
     direct,
+    ...(playerFile === undefined || playerFile === DEFAULT_PLAYER_FILE ? {} : { playerFile }),
     kit: kit ?? KIT_VERSION,
     ...(appVersion === undefined ? {} : { appVersion }),
     ...sourceOf(input),

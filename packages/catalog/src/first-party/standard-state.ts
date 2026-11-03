@@ -22,7 +22,12 @@ const standardState = (manifest: unknown, expected?: Expected): ReleaseState => 
     throw new Error(`it lists ${manifest.game} (${manifest.module}), the registry lists ${expected.game} (${expected.module})`);
   }
   const { builds, world } = manifest;
-  const base = { game: manifest.game, worldVersion: manifest.worldVersion, ...(manifest.appVersion ? { appVersion: manifest.appVersion } : {}) };
+  const base = {
+    game: manifest.game,
+    worldVersion: manifest.worldVersion,
+    ...(manifest.appVersion ? { appVersion: manifest.appVersion } : {}),
+    ...(manifest.playerFile ? { playerFile: manifest.playerFile } : {}),
+  };
   if (builds) return { kind: 'builds', manifest: { ...base, module: manifest.module, ...rangeOf(manifest), builds: builds.map(buildOf) } };
   if (!world) throw new Error('it names no apworld');
   return {

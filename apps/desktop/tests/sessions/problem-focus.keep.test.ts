@@ -4,7 +4,7 @@ import { problemSlot } from '../../src/views/SessionLobby/behavior/problem-slot'
 import { problemTarget } from '../../src/views/SessionLobby/behavior/problem-target';
 import { presetPlayer } from './session-fixtures';
 
-const yamlPlayer = { slot: 2, name: 'B', game: 'Demo', source: { kind: 'yaml' as const, fileName: '', yaml: '' } };
+const yamlPlayer = { kind: 'set' as const, slot: 2, name: 'B', game: 'Demo', source: { kind: 'yaml' as const, fileName: '', yaml: '' } };
 
 describe('K1 problem focus on the lobby screen', { tags: ['critical'] }, () => {
   test('a player problem points at the field of the seat editor', () => {

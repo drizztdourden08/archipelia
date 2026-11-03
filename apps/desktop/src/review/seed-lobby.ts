@@ -7,8 +7,8 @@ const seedLobby = (): Promise<SessionTemplate | null> => saveReviewTemplate(LOBB
   ...base,
   host: { kind: 'local', port: REVIEW_PORT + LOBBY_STAGE.portOffset },
   server: { ...base.server, hintCost: LOBBY_STAGE.hintCost, releaseMode: 'auto' },
-  direct: { admission: 'host-approval', allowUnlisted: true },
-  players: [...base.players.slice(0, 1), { slot: 2, name: LOBBY_STAGE.held, direct: true }],
+  direct: { admission: 'host-approval', allowUnlisted: true, allowedGames: [] },
+  players: [...base.players.slice(0, 1), { kind: 'direct', slot: 2 }],
 }));
 
 export { seedLobby };

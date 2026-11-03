@@ -25,6 +25,8 @@ const RUN_ID = Math.floor(Date.now() / 1000).toString(36);
 const ROTP_A = { slot: `RotP-A-${RUN_ID}` };
 const ROTP_B = { slot: 'RotP-B', profile: `RotP-B-${RUN_ID}`, yaml: YAML_B, fileName: 'RotP-B.yaml' };
 
+const ROTP_BLOCKED = { slot: 'RotP-C' };
+
 const ROTP_B_OPTIONS = ['death_link=true', 'pot_shuffle=true', 'bush_shuffle=true', 'killable_thieves=true'];
 
 const E2E_TEST_TIMEOUT_MS = 120000;
@@ -33,4 +35,4 @@ const HINT_LOCATION = 'Mushroom';
 
 const TIMEOUT = { install: 100000, join: 100000, chest: 100000, line: 60000 };
 
-export { AUTO_STATE, BALDUR, CHEST_INPUT, E2E_TEST_TIMEOUT_MS, HINT_LOCATION, LOBBY_SERVER, LOOPBACK, RELIC, ROTP_A, ROTP_B, ROTP_B_OPTIONS, ROTP_COMMAND, SESSION_PROOF_DIR, TIMEOUT };
+export { AUTO_STATE, BALDUR, CHEST_INPUT, E2E_TEST_TIMEOUT_MS, HINT_LOCATION, LOBBY_SERVER, LOOPBACK, RELIC, ROTP_A, ROTP_B, ROTP_B_OPTIONS, ROTP_BLOCKED, ROTP_COMMAND, SESSION_PROOF_DIR, TIMEOUT };

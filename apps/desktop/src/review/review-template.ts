@@ -11,7 +11,7 @@ const reviewTemplate = (preset: GamePreset, id?: string): SessionTemplate => {
     host: { kind: 'local', port: REVIEW_PORT },
     server: { ...base.server, hintCost: 0 },
     players: REVIEW_PLAYERS.map((name, index) => ({
-      slot: index + 1, name, game: preset.game, source: { kind: 'preset', presetId: preset.id, overrides: {} },
+      kind: 'set', slot: index + 1, name, game: preset.game, source: { kind: 'preset', presetId: preset.id, overrides: {} },
     })),
   };
 };

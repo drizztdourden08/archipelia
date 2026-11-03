@@ -1,10 +1,11 @@
 /* @layer renderer-app @kind hook */
 import { useCallback } from 'react';
-import type { OptionValue, SessionPlayer } from '@archipelia/model';
+import type { OptionValue, SessionPlayer, SetPlayer } from '@archipelia/model';
 import type { EditorDeps } from '../SessionLobby.type';
 import { useYamlImport } from './useYamlImport';
 import { updatePlayer } from './update-player';
 import { addPlayer } from './add-player';
+import { freeName } from './free-name';
 import { presetsFor } from './presets-for';
 import { removePlayer } from './remove-player';
 import { duplicatePlayer } from './duplicate-player';
@@ -23,6 +24,8 @@ const usePlayersEditor = ({ setDraft, installed, presets, createPreset, guard }:
     setDraft((draft) => ({ ...draft, players: change(draft.players) })), [setDraft]);
   const change = useCallback((slot: number, edit: (player: SessionPlayer) => SessionPlayer) =>
     setPlayers((players) => updatePlayer(players, slot, edit)), [setPlayers]);
+  const changeSet = useCallback((slot: number, edit: (player: SetPlayer) => SetPlayer) =>
+    change(slot, (player) => (player.kind === 'set' ? edit(player) : player)), [change]);
 
   const add = useCallback(() => {
     const game = installed.length === 1 ? (installed[0]?.game ?? '') : '';
@@ -30,35 +33,36 @@ const usePlayersEditor = ({ setDraft, installed, presets, createPreset, guard }:
   }, [installed, presets, setPlayers]);
   const remove = useCallback((slot: number) => setPlayers((players) => removePlayer(players, slot)), [setPlayers]);
   const duplicate = useCallback((slot: number) => setPlayers((players) => duplicatePlayer(players, slot)), [setPlayers]);
-  const rename = useCallback((slot: number, name: string) => change(slot, (player) => ({ ...player, name })), [change]);
-  const setGame = useCallback((slot: number, game: string) => change(slot, (player) => withPickedGame(player, game, presets)), [change, presets]);
+  const rename = useCallback((slot: number, name: string) => changeSet(slot, (player) => ({ ...player, name })), [changeSet]);
+  const setGame = useCallback((slot: number, game: string) =>
+    setPlayers((players) => updatePlayer(players, slot, (player) => withPickedGame(player, game, presets, freeName(players, 'Player')))), [presets, setPlayers]);
   const setDirect = useCallback((slot: number, on: boolean) =>
-    change(slot, (player) => withDirect(player, on, installed, presets)), [change, installed, presets]);
+    setPlayers((players) => updatePlayer(players, slot, (player) => withDirect(player, on, freeName(players, 'Player')))), [setPlayers]);
 
   const importYaml = useCallback((slot: number) => guard(`yaml-${slot}`, async () => {
     const imported = await pickYaml();
-    if (imported) change(slot, (player) => withYaml(player, imported.fileName, imported.yaml, imported.game));
-  }), [change, guard, pickYaml]);
+    if (imported) changeSet(slot, (player) => withYaml(player, imported.fileName, imported.yaml, imported.game));
+  }), [changeSet, guard, pickYaml]);
 
   const createDefault = useCallback((slot: number, game: string) => guard(`preset-${slot}`, async () => {
     const preset = await createPreset({ game, name: 'Default' });
-    change(slot, (player) => withPreset(player, preset.id));
-  }), [change, createPreset, guard]);
+    changeSet(slot, (player) => withPreset(player, preset.id));
+  }), [changeSet, createPreset, guard]);
 
   const setSource = useCallback((slot: number, value: string, game: string) => {
     const choice = parseSource(value);
-    if (choice.kind === 'preset') change(slot, (player) => withPreset(player, choice.presetId));
+    if (choice.kind === 'preset') changeSet(slot, (player) => withPreset(player, choice.presetId));
     if (choice.kind === 'new-preset') void createDefault(slot, game);
     if (choice.kind === 'yaml') {
-      change(slot, (player) => (player.source?.kind === 'yaml' ? player : withYaml(player, '', '', player.game ?? '')));
+      changeSet(slot, (player) => (player.source.kind === 'yaml' ? player : withYaml(player, '', '', player.game)));
       void importYaml(slot);
     }
-  }, [change, createDefault, importYaml]);
+  }, [changeSet, createDefault, importYaml]);
 
   const setOverride = useCallback((slot: number, key: string, value: OptionValue, presetValue: OptionValue | undefined) =>
-    change(slot, (player) => withOverride(player, key, value, presetValue)), [change]);
-  const resetOverride = useCallback((slot: number, key: string) => change(slot, (player) => withoutOverride(player, key)), [change]);
-  const resetAll = useCallback((slot: number) => change(slot, withoutOverrides), [change]);
+    changeSet(slot, (player) => withOverride(player, key, value, presetValue)), [changeSet]);
+  const resetOverride = useCallback((slot: number, key: string) => changeSet(slot, (player) => withoutOverride(player, key)), [changeSet]);
+  const resetAll = useCallback((slot: number) => changeSet(slot, withoutOverrides), [changeSet]);
 
   return { add, duplicate, importYaml, remove, rename, resetAll, resetOverride, setDirect, setGame, setOverride, setSource };
 };

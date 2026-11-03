@@ -1,8 +1,8 @@
 /* @layer renderer-app @kind types */
-import type { GamePreset, InstalledGame, OptionValue, SessionPlayer } from '@archipelia/model';
+import type { GamePreset, InstalledGame, OptionValue, SetPlayer } from '@archipelia/model';
 
 type OverridesPanelProps = {
-  player: SessionPlayer;
+  player: SetPlayer;
   game?: InstalledGame;
   preset?: GamePreset;
   onValue: (slot: number, key: string, value: OptionValue, presetValue: OptionValue) => void;

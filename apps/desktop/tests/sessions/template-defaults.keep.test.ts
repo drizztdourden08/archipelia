@@ -1,5 +1,6 @@
 /* @layer tests @kind test */
 import { describe, expect, test } from 'vitest';
+import { setPlayers } from '@archipelia/model';
 import { addPlayer } from '../../src/views/SessionLobby/behavior/add-player';
 import { DEFAULT_PORT } from '../../src/views/SessionBuilder/SessionBuilder.constants';
 import { duplicatePlayer } from '../../src/views/SessionLobby/behavior/duplicate-player';
@@ -35,14 +36,14 @@ describe('K1 player numbering', { tags: ['critical'] }, () => {
 
   test('removing a player renumbers the rest from one', () => {
     const players = [presetPlayer(1, 'A'), presetPlayer(2, 'B'), presetPlayer(3, 'C')];
-    expect(removePlayer(players, 2).map((p) => [p.slot, p.name])).toEqual([[1, 'A'], [2, 'C']]);
+    expect(setPlayers(removePlayer(players, 2)).map((p) => [p.slot, p.name])).toEqual([[1, 'A'], [2, 'C']]);
   });
 
   test('duplicating inserts a copy after the source with a free name', () => {
     const players = [presetPlayer(1, 'Johnny'), presetPlayer(2, 'Marie')];
     const next = duplicatePlayer(players, 1);
-    expect(next.map((p) => [p.slot, p.name])).toEqual([[1, 'Johnny'], [2, 'Johnny1'], [3, 'Marie']]);
-    expect(next[1]?.source).not.toBe(players[0]?.source);
+    expect(setPlayers(next).map((p) => [p.slot, p.name])).toEqual([[1, 'Johnny'], [2, 'Johnny1'], [3, 'Marie']]);
+    expect(setPlayers(next)[1]?.source).not.toBe(players[0]?.source);
   });
 
   test('a free name skips the taken ones, ignoring case', () => {

@@ -1,6 +1,6 @@
 /* @layer renderer-app @kind logic */
 import type { SessionPlayer } from '@archipelia/model';
 
-const gameOf = ({ game }: SessionPlayer): string | undefined => (game === undefined || game.length === 0 ? undefined : game);
+const gameOf = (player: SessionPlayer): string | undefined => (player.kind === 'set' && player.game.length > 0 ? player.game : undefined);
 
 export { gameOf };

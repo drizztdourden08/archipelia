@@ -8,7 +8,7 @@ const DEFAULT_SERVER: ServerSettings = {
 
 const DEFAULT_GENERATOR: GeneratorSettings = { spoiler: 3, race: false, progressionBalancing: true };
 
-const DEFAULT_DIRECT: DirectConnection = { admission: 'host-approval', allowUnlisted: false };
+const DEFAULT_DIRECT: DirectConnection = { admission: 'host-approval', allowUnlisted: false, allowedGames: [] };
 
 const DEFAULT_PORT = 38281;
 
@@ -38,10 +38,10 @@ const PLAYER_TEXT = {
   heading: 'Players',
   add: 'Add player',
   direct: 'Connects directly',
-  ownGame: 'Brings their own game',
+  ownGame: 'Open seat, any player',
   noGame: 'No game picked yet',
+  openSeat: 'Open seat',
   noPreset: 'no preset',
-  fallback: 'fallback',
   yaml: 'YAML',
   preset: 'preset',
   edit: 'Edit',
