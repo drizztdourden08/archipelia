@@ -16,6 +16,11 @@ describe('K2 console item and location lists', { tags: ['critical'] }, () => {
     expect(consoleNamesList('locations', room)({ player: 'Bo' })).toEqual([]);
   });
 
+  test('the choices of one game are built once and reused', () => {
+    const list = consoleNamesList('items', room);
+    expect(list({ player: 'Ana' })).toBe(list({ player: 'Ana' }));
+  });
+
   test('no chosen player or an unknown one lists nothing', () => {
     expect(consoleNamesList('items', room)({ player: null })).toEqual([]);
     expect(consoleNamesList('items', room)({ player: 'Zed' })).toEqual([]);

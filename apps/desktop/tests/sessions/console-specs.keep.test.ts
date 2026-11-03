@@ -8,9 +8,15 @@ const specOf = (id: string) => specs.find((spec) => spec.id === id);
 
 describe('K2 console command specs', { tags: ['critical'] }, () => {
   test('every command becomes a pattern spec with a fixed command word and one slot per param', () => {
-    expect(specOf('hint')?.pattern).toBe('/hint {player:choice @players} {item:choice @items}');
-    expect(specOf('send_multiple')?.pattern).toBe('/send_multiple {amount:number 1..100} {player:choice @players} {item:choice @items}');
+    expect(specOf('hint')?.pattern).toBe('/hint {player:choice @players} {item:choice @items free}');
+    expect(specOf('send_multiple')?.pattern).toBe('/send_multiple {amount:number 1..100} {player:choice @players} {item:choice @items free}');
     expect(specOf('players')?.pattern).toBe('/players');
+  });
+
+  test('item and location slots search the room names and keep typed text, player slots stay plain choices', () => {
+    expect(specOf('hint_location')?.pattern).toBe('/hint_location {player:choice @players} {location:choice @locations free}');
+    expect(specOf('send')?.pattern).toBe('/send {player:choice @players} {item:choice @items free}');
+    expect(specOf('release')?.pattern).toBe('/release {player:choice @players}');
   });
 
   test('player slots list the room players and the option slot lists the server options', () => {
