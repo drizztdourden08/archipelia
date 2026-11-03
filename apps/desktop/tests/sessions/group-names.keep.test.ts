@@ -1,6 +1,7 @@
 /* @layer tests @kind test */
 import { describe, expect, test } from 'vitest';
-import { groupKeyOf, groupNamesOf } from '../../src/stores/group-names-of';
+import { groupKeyOf } from '../../src/stores/group-key-of';
+import { groupNamesOf } from '../../src/stores/group-names-of';
 
 describe('K2 item and location group names', { tags: ['critical'] }, () => {
   test('a group record gives its group names and anything else gives none', () => {

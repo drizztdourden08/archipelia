@@ -1,7 +1,8 @@
 /* @layer renderer-app @kind logic */
 import type { API, Client } from 'archipelago.js';
 import type { RoomNames, RoomPlayer } from '@archipelia/sessions/live-room';
-import { groupKeyOf, groupNamesOf } from './group-names-of';
+import { groupKeyOf } from './group-key-of';
+import { groupNamesOf } from './group-names-of';
 
 const plainNamesOf = (room: Client, games: ReadonlySet<string>): Record<string, { items: string[]; locations: string[] }> =>
   Object.fromEntries(
