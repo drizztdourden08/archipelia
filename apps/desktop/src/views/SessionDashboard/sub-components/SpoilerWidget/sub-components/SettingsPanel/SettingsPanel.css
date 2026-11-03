@@ -1,0 +1,13 @@
+/* @layer renderer-app @kind style */
+.spoiler-settings {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+}
+
+.spoiler-settings__group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
