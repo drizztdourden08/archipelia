@@ -71,3 +71,18 @@
   align-items: center;
   gap: var(--space-sm);
 }
+
+.spoiler-tracker__top {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  padding-inline-end: var(--space-md);
+  border-block-end: var(--border-width-thin) solid var(--c-border);
+}
+
+.spoiler-tracker__top .spoiler-summary {
+  flex: 1;
+  border-block-end: 0;
+}

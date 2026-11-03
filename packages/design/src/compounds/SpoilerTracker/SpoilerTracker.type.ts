@@ -26,6 +26,7 @@ type SpoilerTrackerProps = {
   tabs: TabItem[];
   activeTab: string;
   onTabChange: (tab: string) => void;
+  actions?: ReactNode;
   filters?: ReactNode;
   controls?: SpoilerTrackerControls;
   subtotal?: ReactNode;

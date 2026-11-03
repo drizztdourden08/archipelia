@@ -5,10 +5,13 @@ import { SpoilerControls } from './sub-components/SpoilerControls';
 import { SpoilerSummary } from './sub-components/SpoilerSummary';
 import './SpoilerTracker.css';
 
-const SpoilerTracker = ({ stats, tabs, activeTab, onTabChange, filters, controls, subtotal, children }: SpoilerTrackerProps) => (
+const SpoilerTracker = ({ stats, tabs, activeTab, onTabChange, actions, filters, controls, subtotal, children }: SpoilerTrackerProps) => (
   <Box className="spoiler-tracker">
     <Box className="spoiler-tracker__header">
-      <SpoilerSummary stats={stats} />
+      <Box className="spoiler-tracker__top">
+        <SpoilerSummary stats={stats} />
+        {actions}
+      </Box>
       <Tabs tabs={tabs} activeTab={activeTab} onTabChange={onTabChange} />
       {(filters || controls) && (
         <Box className="spoiler-tracker__tools">

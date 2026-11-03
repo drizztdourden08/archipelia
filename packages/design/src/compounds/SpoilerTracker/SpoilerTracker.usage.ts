@@ -12,6 +12,7 @@ const usage = {
   rules: [
     'Pass stats with a key, a label, a count and an icon. The keys required and others get the warning and info colour.',
     'Pass the app FilterBar as filters, and the group by Select and the compact or detailed toggle as controls.',
+    'Pass actions, such as a Hide button, to sit at the end of the counts row.',
     'Put the lists, usually a SpoilerGroups, as children; the body scrolls, the header stays.',
   ],
   a11y: [
@@ -34,7 +35,7 @@ const SpoilerTrackerSample = () => (
   </SpoilerTracker>
 );
 `,
-  propsHash: 'cfda83a389d28417',
+  propsHash: '6cc3739510dedf45',
 } satisfies ComponentUsage;
 
 export { usage };
