@@ -2,11 +2,9 @@
 import type { TemplateProblem } from '@archipelia/sessions/validation';
 import { SEAT_EDITOR_CLASS } from '../SessionLobby.constants';
 
-const quoted = (value: string) => `"${value.replace(/["\\]/g, '\\$&')}"`;
-
-const problemTarget = ({ field, optionLabel }: TemplateProblem): string => {
+const problemTarget = ({ field }: TemplateProblem): string => {
   const editor = `.${SEAT_EDITOR_CLASS}`;
-  if (field === 'option') return optionLabel ? `.session-lobby__override-rows [role="group"][aria-label=${quoted(optionLabel)}]` : editor;
+  if (field === 'option') return editor;
   return `${editor} [data-cell="${field}"]`;
 };
 

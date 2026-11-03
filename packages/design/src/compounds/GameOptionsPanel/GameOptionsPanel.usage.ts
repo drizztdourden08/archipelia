@@ -8,7 +8,7 @@ const usage = {
     'Showing the options another player chose, read-only.',
   ],
   avoidWhen: [
-    { case: 'One option row on its own.', use: 'OptionFieldRow' },
+    { case: 'One option row on its own.', use: 'OptionControl' },
     { case: 'The bare input of one option.', use: 'OptionControl' },
   ],
   rules: [

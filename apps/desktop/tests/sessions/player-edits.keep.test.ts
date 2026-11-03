@@ -1,6 +1,5 @@
 /* @layer tests @kind test */
 import { describe, expect, test } from 'vitest';
-import { overrideRows } from '../../src/views/SessionLobby/behavior/override-rows';
 import { overridesLabel } from '../../src/views/SessionLobby/behavior/overrides-label';
 import { withGame } from '../../src/views/SessionLobby/behavior/with-game';
 import { withOverride } from '../../src/views/SessionLobby/behavior/with-override';
@@ -45,15 +44,5 @@ describe('K1 source options', { tags: ['critical'] }, () => {
     expect(gameOptionsOf([GAME], 'Gone')).toEqual([
       { value: 'Demo', label: 'Demo' }, { value: 'Gone', label: 'Gone (not installed)' },
     ]);
-  });
-});
-
-describe('K1 override rows', { tags: ['critical'] }, () => {
-  test('rows show the preset value, the resolved value and inline problems', () => {
-    const rows = overrideRows(GAME.schema, PRESET, { crystals: 9 });
-    const crystals = rows.find((row) => row.def.key === 'crystals');
-    expect(crystals).toMatchObject({ presetValue: 5, value: 9, overridden: true, problem: 'must be between 0 and 7' });
-    expect(overrideRows(GAME.schema, PRESET, { crystals: 9 }, { changedOnly: true }).map((row) => row.def.key)).toEqual(['crystals']);
-    expect(overrideRows(GAME.schema, PRESET, {}, { query: 'goal' }).map((row) => row.def.key)).toEqual(['goal']);
   });
 });

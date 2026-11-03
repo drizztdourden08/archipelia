@@ -13,10 +13,8 @@ describe('K1 problem focus on the lobby screen', { tags: ['critical'] }, () => {
     expect(problemTarget({ slot: 3, field: 'source', message: '' })).toBe('.session-lobby__seat-editor [data-cell="source"]');
   });
 
-  test('an option problem points at the option row of the overrides', () => {
-    expect(problemTarget({ slot: 1, field: 'option', optionKey: 'goal', optionLabel: 'Say "hi"', message: '' }))
-      .toBe('.session-lobby__override-rows [role="group"][aria-label="Say \\"hi\\""]');
-    expect(problemTarget({ slot: 1, field: 'option', message: '' })).toBe('.session-lobby__seat-editor');
+  test('an option problem points at the seat editor, which opens the option by its key', () => {
+    expect(problemTarget({ slot: 1, field: 'option', optionKey: 'goal', optionLabel: 'Goal', message: '' })).toBe('.session-lobby__seat-editor');
   });
 
   test('a problem opens the seat of its player, and nothing when the seat is gone', () => {

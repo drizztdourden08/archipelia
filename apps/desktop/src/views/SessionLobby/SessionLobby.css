@@ -4,10 +4,6 @@
   overflow-wrap: anywhere;
 }
 
-.session-lobby__override-rows {
-  max-height: var(--size-512);
-}
-
 .session-lobby {
   display: flex;
   flex-direction: column;

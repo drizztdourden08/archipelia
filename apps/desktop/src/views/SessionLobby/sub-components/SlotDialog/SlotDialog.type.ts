@@ -9,6 +9,8 @@ type SlotDialogProps = {
   allowed: readonly string[];
   busy: boolean;
   actions: PlayersEditor;
+  focusKey?: string | null;
+  onFocused?: () => void;
   onClose: () => void;
 };
 

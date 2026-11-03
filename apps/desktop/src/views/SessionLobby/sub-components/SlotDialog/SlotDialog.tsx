@@ -11,7 +11,7 @@ import { SlotFields } from '../SlotFields';
 import { SlotSettings } from '../SlotSettings';
 import type { SlotDialogProps } from './SlotDialog.type';
 
-const SlotDialog = ({ player, installed, presets, allowed, busy, actions, onClose }: SlotDialogProps) => {
+const SlotDialog = ({ player, installed, presets, allowed, busy, actions, focusKey, onFocused, onClose }: SlotDialogProps) => {
   const [initial] = useState(player);
   const appGame = isAppGame(player, installed);
   const status = slotStatusOf(player, appGame, false);
@@ -37,7 +37,7 @@ const SlotDialog = ({ player, installed, presets, allowed, busy, actions, onClos
       <Stack gap="md">
         <SlotFields player={player} installed={installed} presets={presets} allowed={allowed} appGame={appGame} busy={busy} actions={actions} />
         {appGame && <Callout tone="info">{SLOT_DIALOG.appFile(player.game)}</Callout>}
-        <SlotSettings player={player} installed={installed} presets={presets} actions={actions} />
+        <SlotSettings player={player} installed={installed} presets={presets} actions={actions} focusKey={focusKey} onFocused={onFocused} />
       </Stack>
     </DialogShell>
   );

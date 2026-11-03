@@ -39,6 +39,7 @@ const SLOT_DIALOG = {
   importFile: 'Import file',
   settings: 'Settings',
   settingsFromFile: 'Settings · from the file',
+  resetToPreset: 'Reset to preset',
   cancel: 'Cancel',
   save: 'Save slot',
   appFile: (game: string) => `${game} writes its own player file. Save the Archipelago files in its app and import them here, or make this slot Direct and join from the app.`,

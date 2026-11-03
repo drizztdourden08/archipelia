@@ -9,7 +9,7 @@ const usage = {
   ],
   avoidWhen: [
     { case: 'The app wide defaults for new sessions.', use: 'SettingsSection' },
-    { case: 'One game option of a player.', use: 'OptionFieldRow' },
+    { case: 'Every option of one game.', use: 'GameOptionsPanel' },
   ],
   rules: [
     'Pass the session values and apply each patch to the draft; the form keeps no state.',

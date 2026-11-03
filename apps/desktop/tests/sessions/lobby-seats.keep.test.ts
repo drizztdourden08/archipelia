@@ -9,7 +9,6 @@ import type { LobbyMembersModel } from '../../src/views/LobbyMembers/LobbyMember
 import { ownSeatView } from '../../src/views/SessionLobby/behavior/own-seat-view';
 import { seatMetaOf } from '../../src/views/SessionLobby/behavior/seat-meta-of';
 import { seatsOf } from '../../src/views/SessionLobby/behavior/seats-of';
-import { toggleOverrides } from '../../src/views/SessionLobby/behavior/toggle-overrides';
 import { toggleSeat } from '../../src/views/SessionLobby/behavior/toggle-seat';
 import { lobby, member, slot, world } from '../lobbies/lobby-fixtures';
 import { PRESET, presetPlayer } from './session-fixtures';
@@ -77,13 +76,10 @@ describe('K1 the seats of the lobby phase', { tags: ['critical'] }, () => {
     expect(picks).toEqual(['1 set']);
   });
 
-  test('opens a seat, closes it on a second pick, and opens its overrides on their own', () => {
-    expect(toggleSeat(null, 2)).toEqual({ slot: 2, overrides: false });
-    expect(toggleSeat({ slot: 2, overrides: true }, 2)).toBeNull();
-    expect(toggleSeat({ slot: 2, overrides: true }, 3)).toEqual({ slot: 3, overrides: false });
-    expect(toggleOverrides({ slot: 2, overrides: false }, 2)).toEqual({ slot: 2, overrides: true });
-    expect(toggleOverrides({ slot: 2, overrides: true }, 2)).toEqual({ slot: 2, overrides: false });
-    expect(toggleOverrides(null, 4)).toEqual({ slot: 4, overrides: true });
+  test('opens a seat and closes it on a second pick', () => {
+    expect(toggleSeat(null, 2)).toEqual({ slot: 2 });
+    expect(toggleSeat({ slot: 2, option: 'goal' }, 2)).toBeNull();
+    expect(toggleSeat({ slot: 2, option: 'goal' }, 3)).toEqual({ slot: 3 });
   });
 });
 

@@ -22,7 +22,6 @@ export { LobbyStage } from './compounds/LobbyStage';
 export type { LobbyStageCode, LobbyStageConfig, LobbyStageFact, LobbyStageGames, LobbyStageProps } from './compounds/LobbyStage';
 export { OptionControl, coercePresetValues, hintOf, isChangedValue, isLoose } from './compounds/OptionControl';
 export type { CoercedValues } from './compounds/OptionControl';
-export { OptionFieldRow } from './compounds/OptionFieldRow';
 export { PlayerStatusRow } from './compounds/PlayerStatusRow';
 export type { PlayerStatusRowProps } from './compounds/PlayerStatusRow';
 export {

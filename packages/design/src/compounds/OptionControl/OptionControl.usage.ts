@@ -8,13 +8,13 @@ const usage = {
     'A preset editor or a session override that needs the right input for each option kind.',
   ],
   avoidWhen: [
-    { case: 'The option with its label, description and reset.', use: 'OptionFieldRow' },
+    { case: 'Every option of a game with labels, tabs and resets.', use: 'GameOptionsPanel' },
     { case: 'An app setting with a fixed input kind.', use: 'SettingsRow' },
   ],
   rules: [
     'Pass the definition from the game schema; the control picks its input from the kind and the value.',
     'Pass the current value, never the default, and write the new value back through onChange.',
-    'Draw it inside a FormRow or a Field, usually through OptionFieldRow, so the row names the input.',
+    'Draw it inside a FormRow or a Field, so the row names the input.',
     'A counter, and a dict one level deep of numbers or of text, is a KeyValueEditor; any other dict or list that is not text is an editable JSON CodeBlock, checked with JSON.parse.',
     'Pass onProblem to hear while the JSON text does not parse or is not the right shape; it hears null once the text parses or the input goes away.',
   ],

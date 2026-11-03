@@ -1,6 +1,6 @@
 /* @layer renderer-app @kind types */
 import type { LobbySeatAction, LobbySeatSide, LobbySeatSideValue } from '@archipelia/design';
-import type { AdminLobby, GamePreset, InstalledGame, OptionDef, OptionValue, SessionPlayer, SessionTemplate } from '@archipelia/model';
+import type { AdminLobby, GamePreset, InstalledGame, OptionValue, SessionPlayer, SessionTemplate } from '@archipelia/model';
 import type { Dispatch, SetStateAction } from 'react';
 import type { PresetInput } from '@archipelia/presets';
 import type { LiveTab } from '../../live/live.type';
@@ -12,10 +12,6 @@ type SessionLobbyProps = { tab: LiveTab };
 type LobbyScreenProps = { tab: LiveTab; saved: SessionTemplate };
 
 type Overrides = Record<string, OptionValue>;
-
-type OverrideRow = { def: OptionDef; presetValue: OptionValue; value: OptionValue; overridden: boolean; problem?: string };
-
-type RowFilter = { query?: string; changedOnly?: boolean };
 
 type SourceChoice = { kind: 'preset'; presetId: string } | { kind: 'yaml' } | { kind: 'new-preset' };
 
@@ -69,12 +65,12 @@ type SeatContext = {
   actions: SeatActions;
 };
 
-type SeatEditing = { slot: number; overrides: boolean };
+type SeatEditing = { slot: number; option?: string };
 
 type RunAction = { label: string; reason?: string; onClick: () => void };
 
 type ImportedYaml = { fileName: string; yaml: string; game: string };
 
 export type {
-  EditorDeps, FreshSlots, ImportedYaml, LobbyActionDeps, LobbyScreenModel, LobbyScreenProps, OverrideRow, Overrides, OwnSeat, PlayersEditor, RowFilter, RunAction, SeatContext, SeatEditing, SeatParts, SessionLobbyProps, SidePickInput, SourceChoice,
+  EditorDeps, FreshSlots, ImportedYaml, LobbyActionDeps, LobbyScreenModel, LobbyScreenProps, Overrides, OwnSeat, PlayersEditor, RunAction, SeatContext, SeatEditing, SeatParts, SessionLobbyProps, SidePickInput, SourceChoice,
 };

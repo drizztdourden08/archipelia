@@ -32,6 +32,8 @@ const SeatsPane = ({ screen, empty }: SeatsPaneProps) => {
           allowed={draft.direct?.allowedGames ?? []}
           busy={screen.busy}
           actions={screen.players}
+          focusKey={screen.focusKey}
+          onFocused={screen.clearFocus}
           onClose={screen.closeEditor}
         />
       )}
