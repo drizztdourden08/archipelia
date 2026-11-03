@@ -27,8 +27,6 @@ const useConsole = (sessionId: string, lines: readonly HostLogLine[]) => {
     }
   }, [command, sessionId]);
 
-  const submit = useCallback((text: string) => { void send(text); }, [send]);
-
   const confirmSend = useCallback((cmd: string, title: string, message: string) => {
     void confirmAction({ title, message, confirmLabel: 'Send', variant: 'danger' }).then((confirmed) => {
       if (confirmed) void send(cmd);
@@ -38,7 +36,7 @@ const useConsole = (sessionId: string, lines: readonly HostLogLine[]) => {
   const history = useMemo(() => sent.map((item) => item.text), [sent]);
   const rows = useMemo(() => consoleRows(sent, lines), [sent, lines]);
 
-  return { confirmSend, draft, history, rows, send, setDraft, submit };
+  return { confirmSend, draft, history, rows, send, setDraft };
 };
 
 export { useConsole };

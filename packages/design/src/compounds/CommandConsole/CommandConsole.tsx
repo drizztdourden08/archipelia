@@ -8,7 +8,7 @@ import type { CommandConsoleProps } from './CommandConsole.type';
 import './CommandConsole.css';
 
 const CommandConsole = (props: CommandConsoleProps) => {
-  const { rows, onSubmit, history, value, onValueChange, disabled, actions, label, placeholder, emptyLabel, limit = CONSOLE_ROW_LIMIT } = props;
+  const { rows, onSubmit, history, commandSpecs, value, onValueChange, disabled, actions, label, placeholder, emptyLabel, limit = CONSOLE_ROW_LIMIT } = props;
   const shown = useMemo(() => lastRows(rows, limit), [rows, limit]);
   return (
     <Stack gap="sm" className="command-console">
@@ -17,6 +17,7 @@ const CommandConsole = (props: CommandConsoleProps) => {
         label={label}
         placeholder={placeholder}
         history={history}
+        commandSpecs={commandSpecs}
         value={value}
         onValueChange={onValueChange}
         disabled={disabled}

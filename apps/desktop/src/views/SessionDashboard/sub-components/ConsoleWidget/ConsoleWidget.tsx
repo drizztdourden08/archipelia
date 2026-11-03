@@ -7,12 +7,17 @@ import { CommandConsole } from '@archipelia/design';
 import type { ConsoleWidgetProps } from './ConsoleWidget.type';
 import { useConsole } from '../../behavior/useConsole';
 import { playerCommandGroups } from '../../behavior/player-command-groups';
+import { consoleSpecsOf } from '../../behavior/console-specs-of';
+import { useCommandSubmit } from '../../behavior/useCommandSubmit';
 
 const ConsoleWidget = ({ session, lines, enabled }: ConsoleWidgetProps) => {
-  const { confirmSend, draft, history, rows, send, setDraft, submit } = useConsole(session.id, lines);
+  const { confirmSend, draft, history, rows, send, setDraft } = useConsole(session.id, lines);
   const save = useCallback(() => { void send('/save'); }, [send]);
   const players = useCallback(() => { void send('/players'); }, [send]);
   const names = useMemo(() => setPlayers(session.snapshot.players).map((player) => player.name), [session.snapshot.players]);
+  const specs = useMemo(() => consoleSpecsOf(names), [names]);
+  const clearDraft = useCallback(() => setDraft(''), [setDraft]);
+  const submit = useCommandSubmit(send, clearDraft);
   const groups = useMemo(() => playerCommandGroups(names, confirmSend, !enabled), [names, confirmSend, enabled]);
   const quick = (
     <ButtonRow align="start" gap="xs">
@@ -26,6 +31,7 @@ const ConsoleWidget = ({ session, lines, enabled }: ConsoleWidgetProps) => {
       <CommandConsole
         rows={rows}
         history={history}
+        commandSpecs={specs}
         value={draft}
         onValueChange={setDraft}
         onSubmit={submit}
