@@ -9,6 +9,7 @@ import { startedRun } from './started-run';
 import { produceSession } from './produce-session';
 import { hostSession } from './host-session';
 import { sessionEngineOf } from '../engine/session-engine-of';
+import { runEndOf } from '../run-end';
 import { CANCELLED, SERVER_LINES, SERVER_LOG } from './session-service.constants';
 
 const createSessionService = (deps: ServiceDeps) => {
@@ -57,7 +58,9 @@ const createSessionService = (deps: ServiceDeps) => {
     await files.writeText(`${id}/${SERVER_LOG}`, entry.log.map((line) => line.text).join('\n'));
     await files.writeJson(`${id}/${SERVER_LINES}`, entry.log);
     const session = await runs.get(id);
-    return session ? update(session, { status: 'stopped', serverLog: SERVER_LOG }) : undefined;
+    if (!session) return undefined;
+    const end = runEndOf({ players: session.players ?? [], lines: entry.log, endedAt: Date.now() });
+    return update(session, { status: 'stopped', serverLog: SERVER_LOG, ...(end ? { end } : {}) });
   };
 
   const command = (id: string, cmd: string) => liveOf(id).host.command(cmd);

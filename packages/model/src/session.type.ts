@@ -103,6 +103,28 @@ type RunMember = { displayName: string; client?: string; trust: TrustLevel };
 
 type RunPlayer = { slot: number; name: string; game: string; origin?: PlayerOrigin; member?: RunMember };
 
+type SlotEndStatus = 'goal' | 'playing' | 'connected' | 'never';
+
+type RunSlotEnd = {
+  slot: number;
+  status: SlotEndStatus;
+  checked: number;
+  total?: number;
+  goalAt?: number;
+  goalAfterMs?: number;
+  firstSeenAt?: number;
+  lastSeenAt?: number;
+};
+
+type RunEnd = {
+  version: 1;
+  startedAt: number;
+  endedAt: number;
+  durationMs: number;
+  finished: number;
+  slots: RunSlotEnd[];
+};
+
 type Session = {
   id: string;
   templateId?: string;
@@ -118,13 +140,14 @@ type Session = {
   output?: SessionOutput;
   endpoint?: Endpoint;
   serverLog?: string;
+  end?: RunEnd;
   error?: string;
 };
 
 type StoredRun = Omit<Session, 'snapshot'> & { snapshot: StoredTemplate };
 
 export type {
-  DirectConnection, DirectPlayer, Endpoint, GeneratorSettings, HostTarget, LegacyPlayer, PlayerOrigin, PlayerSource, ReleaseMode, RemainingMode, RunMember, RunOverride, RunPlayer,
-  RunSource, RunSourceMatch, ServerSettings, Session, SessionEngine, SessionLobby, SessionOutput, SessionPlayer, SessionStatus, SessionTemplate,
-  SessionWorld, SetPlayer, SpoilerLevel, StoredPlayer, StoredRun, StoredTemplate,
+  DirectConnection, DirectPlayer, Endpoint, GeneratorSettings, HostTarget, LegacyPlayer, PlayerOrigin, PlayerSource, ReleaseMode, RemainingMode, RunMember, RunOverride, RunEnd, RunPlayer,
+  RunSlotEnd, RunSource, RunSourceMatch, ServerSettings, Session, SessionEngine, SessionLobby, SessionOutput, SessionPlayer, SessionStatus, SessionTemplate,
+  SessionWorld, SetPlayer, SlotEndStatus, SpoilerLevel, StoredPlayer, StoredRun, StoredTemplate,
 };
