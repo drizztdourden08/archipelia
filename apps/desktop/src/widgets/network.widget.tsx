@@ -10,7 +10,7 @@ const meta: WidgetMeta = {
   popOut: true,
   context: 'session',
   defaultVisibility: 'always',
-  defaultOpen: true,
+  defaultOpen: false,
   defaultSide: 'left',
   defaultDockedSize: 320,
   defaultFloatingSize: { width: 380, height: 420 },

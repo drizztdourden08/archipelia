@@ -4,7 +4,7 @@ import { LOBBY_STAGE } from './review.constants';
 import { SELECTOR } from './review-dom.constants';
 import { named } from './named';
 
-const labelOf = (id: string): string => `${id.charAt(0).toUpperCase()}${id.slice(1)}`;
+const labelOf = (id: string): string => LOBBY_STAGE.widgetLabels[id] ?? id;
 
 const docked = (tour: AppReviewTour, id: string): boolean =>
   tour.find(`[data-widget-id="${id}"]`) !== null || named(tour, SELECTOR.tab, new RegExp(`^${labelOf(id)}\\b`)) !== null;

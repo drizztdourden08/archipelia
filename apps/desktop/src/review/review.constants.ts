@@ -67,7 +67,8 @@ const LOBBY_STAGE = {
   hintCost: 5,
   count: /\d+ players?/,
   config: /Hint cost\s*5%[\s\S]*Release\s*Auto[\s\S]*Joining\s*Direct, with approval/,
-  widgets: ['network', 'room', 'players', 'hints', 'server-log', 'generation-log', 'console', 'spoiler'],
+  widgets: ['room', 'players', 'hints', 'server-log', 'generation-log', 'console', 'spoiler'],
+  widgetLabels: { room: 'Room', players: 'Players', hints: 'Hints', 'server-log': 'Server logs', 'generation-log': 'Generation logs', console: 'Console', spoiler: 'Spoiler' } as Record<string, string>,
   sizes: [{ name: 'wide', width: 1920, height: 1080 }, { name: 'hd', width: 1280, height: 720 }],
 } as const;
 
