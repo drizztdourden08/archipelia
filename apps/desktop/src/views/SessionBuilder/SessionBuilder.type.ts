@@ -1,7 +1,6 @@
 /* @layer renderer-app @kind types */
 import type { GamePreset, InstalledGame, LobbyServerEntry, ServerEntry, ServerSettings, SessionTemplate } from '@archipelia/model';
 import type { Dispatch, SetStateAction } from 'react';
-import type { PresetInput } from '@archipelia/presets';
 import type { LiveTab } from '../../live/live.type';
 import type { AppSettings } from '../../settings.type';
 import type { useSessionRuns } from './behavior/useSessionRuns';
@@ -19,17 +18,6 @@ type RemoteView = { draft: SessionTemplate; lobbyServers: readonly LobbyServerEn
 type PlaceContext = { lobbyServers: readonly LobbyServerEntry[]; servers: readonly ServerEntry[]; hosting: HostingDefaults };
 
 type PlaceDeps = { draft: SessionTemplate; servers: readonly ServerEntry[]; hosting: HostingDefaults; live: boolean; setDraft: Dispatch<SetStateAction<SessionTemplate>> };
-
-type DirectWorld = { game: string; listed: boolean };
-
-type SessionPlayersDeps = {
-  draft: SessionTemplate;
-  setDraft: Dispatch<SetStateAction<SessionTemplate>>;
-  installed: InstalledGame[];
-  presets: GamePreset[];
-  createPreset: (preset: PresetInput) => Promise<GamePreset>;
-  guard: Guard;
-};
 
 type DirectState = {
   on: boolean;
@@ -75,6 +63,6 @@ type BuilderActionsInput = {
 };
 
 export type {
-  BuilderActionsInput, BuilderButton, ButtonReasons, ButtonsInput, DirectState, DirectWorld, HostingDefaults, PlaceContext, PlaceDeps, PlaceView, RemoteView, SessionBuilderProps, SessionPlace,
-  SessionPlayersDeps, SessionRunDeps, UnsavedChanges,
+  BuilderActionsInput, BuilderButton, ButtonReasons, ButtonsInput, DirectState, HostingDefaults, PlaceContext, PlaceDeps, PlaceView, RemoteView, SessionBuilderProps, SessionPlace,
+  SessionRunDeps, UnsavedChanges,
 };

@@ -12,7 +12,7 @@ import { RoomSettings } from '../RoomSettings';
 import { BuilderActions } from '../BuilderActions';
 import { BuilderHeader } from '../BuilderHeader';
 import { HistoryLink } from '../HistoryLink';
-import { SessionPlayers } from '../SessionPlayers';
+import { SlotsSummary } from '../SlotsSummary';
 import { SetupFields } from '../SetupFields';
 import { SETUP_TEXT } from '../../SessionBuilder.constants';
 import './BuilderForm.css';
@@ -53,7 +53,7 @@ const BuilderForm = ({ initial, onDirty }: BuilderFormProps) => {
       <RoomSettings builder={builder} open={advanced} onOpenChange={setAdvanced} />
       <Divider />
       <Box data-tour={TOUR_TARGET.sessionsPlayers}>
-        <SessionPlayers builder={builder} />
+        <SlotsSummary players={draft.players} />
       </Box>
     </Stack>
   );

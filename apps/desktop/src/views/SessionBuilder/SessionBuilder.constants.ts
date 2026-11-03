@@ -23,7 +23,6 @@ const EDITOR_TEXT = {
   name: 'Session name',
   join: 'How players join',
   where: 'Where',
-  direct: 'Direct',
   password: 'Password',
   world: 'World',
   change: 'Change',
@@ -34,27 +33,10 @@ const EDITOR_TEXT = {
   server: 'Server',
 } as const;
 
-const PLAYER_TEXT = {
-  heading: 'Players',
-  add: 'Add player',
-  direct: 'Connects directly',
-  ownGame: 'Open seat, any player',
-  noGame: 'No game picked yet',
-  openSeat: 'Open seat',
-  noPreset: 'no preset',
-  yaml: 'YAML',
-  preset: 'preset',
-  edit: 'Edit',
-  done: 'Done',
-  duplicate: 'Duplicate',
-  remove: 'Remove',
-  name: 'Name',
-  game: 'Game',
-  source: 'Preset',
-  overrides: 'Overrides',
-  none: 'No player yet. Add player saves one with the session.',
-  noneDirect: 'No player yet. Players can still join directly, or Add player saves one.',
-  noInstalled: 'No game is installed yet. Install one on the Games page, or turn on direct connections.',
+const SLOTS_TEXT = {
+  heading: 'Slots',
+  none: 'No slots yet',
+  where: 'Slots are added and set up in the lobby.',
 } as const;
 
 const BUTTON_LABEL: Record<BuilderButton, string> = {
@@ -72,4 +54,4 @@ const BUILDER_FAILURE = {
   password: 'Could not clear the room password.',
 } as const;
 
-export { BUILDER_FAILURE, BUTTON_LABEL, DEFAULT_DIRECT, DEFAULT_GENERATOR, DEFAULT_GG_SITE, DEFAULT_PORT, DEFAULT_SERVER, EDITOR_TEXT, PLAYER_TEXT, SETUP_TEXT };
+export { BUILDER_FAILURE, BUTTON_LABEL, DEFAULT_DIRECT, DEFAULT_GENERATOR, DEFAULT_GG_SITE, DEFAULT_PORT, DEFAULT_SERVER, EDITOR_TEXT, SETUP_TEXT, SLOTS_TEXT };

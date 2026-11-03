@@ -31,9 +31,16 @@ const REMOTE_TEXT = {
 } as const;
 
 const DIRECT_TEXT = {
+  heading: 'Joining',
   allow: {
-    title: 'Allow direct connections',
-    description: 'Players with an Archipelia client join the lobby of this session and add their own players.',
+    title: 'Direct connections',
+    description: 'Players can join open slots from their own client.',
+  },
+  games: {
+    title: 'Allowed games',
+    description: 'Games that may take an open slot or be chosen for a Set slot. Empty means any installed game.',
+    placeholder: 'Any installed game',
+    unknown: 'Not an installed game',
   },
   reach: {
     local: 'Only clients on this computer can join, because Where is Local.',
@@ -45,20 +52,14 @@ const DIRECT_TEXT = {
   mismatch: 'Direct connections do not work with archipelago.gg or SSH. Pick Local, LAN or an Archipelia server under Where, or turn this off.',
   live: 'Close the lobby of this session first to change this.',
   approval: {
-    title: 'Host approval',
-    description: 'You approve each player before the server parses or runs anything they sent. Turn it off to accept every player at once.',
+    title: 'Ask before letting someone in',
+    description: 'Each join waits for your approval, before the server parses or runs anything they sent. Turn it off to accept every player at once.',
     hint: 'Keep it on: a session code can leak.',
   },
   unlisted: {
     title: 'Allow unlisted clients',
     description: 'Let clients that are not in the registry join, Archipelia among them. Each of their worlds needs your consent before it runs.',
     hint: 'An unlisted world runs its Python code with your user rights.',
-  },
-  worlds: {
-    title: 'Joins directly',
-    description: 'These worlds of the session have a client that joins the lobby from inside the game.',
-    hint: 'Those players join from the game itself.',
-    unlisted: 'A world marked with a warning is not in the registry, so its client joins as unlisted. Turn on Allow unlisted clients, or it cannot join.',
   },
   password: { title: 'Room password', description: 'Players type it to join the room.', hint: 'Kept in the vault, never in the saved session.' },
   passwordStored: 'A password is stored. Type to replace it.',
