@@ -62,6 +62,7 @@ const createCore = (ports: CorePorts) => {
       emit({ kind: 'session', event });
     },
   });
+  void sessions.recover().catch((err: unknown) => log(`the core did not close the runs the last session left open: ${String(err)}`, 'error'));
   const { lobbies, watchLobbies, adminToken } = createCoreLobbies({ ports: { ...ports, secrets }, sessions: () => sessions, runtime, runtimeFor, sessionFiles, sandbox });
   const dispose = async () => {
     await catalog.sources.dispose().catch((err: unknown) => log(`the core did not remove its build folder: ${String(err)}`, 'error'));

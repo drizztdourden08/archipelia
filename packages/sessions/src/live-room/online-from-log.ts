@@ -1,22 +1,11 @@
 /* @layer core @kind logic */
-import { JOINED, LEFT, NOTICE, WATCHER_TAGS } from './online-from-log.constants';
-
-const nameOf = (raw: string) => raw.replace(NOTICE, '').trim();
+import { clientEventOf } from './client-event-of';
 
 const onlineFromLog = (lines: readonly string[]): Record<string, boolean> => {
   const clients = new Map<string, number>();
-  const shift = (raw: string, delta: number) => {
-    const name = nameOf(raw);
-    clients.set(name, Math.max(0, (clients.get(name) ?? 0) + delta));
-  };
   lines.forEach((line) => {
-    const [, joined] = JOINED.exec(line) ?? [];
-    if (joined !== undefined) {
-      shift(joined, 1);
-      return;
-    }
-    const [, left, tags] = LEFT.exec(line) ?? [];
-    if (left !== undefined && tags !== undefined && !WATCHER_TAGS.test(tags)) shift(left, -1);
+    const event = clientEventOf(line);
+    if (event) clients.set(event.name, Math.max(0, (clients.get(event.name) ?? 0) + event.delta));
   });
   return Object.fromEntries([...clients].map(([name, count]) => [name, count > 0]));
 };

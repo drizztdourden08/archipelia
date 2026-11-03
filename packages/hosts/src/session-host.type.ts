@@ -19,6 +19,7 @@ interface SessionHost {
   start: (input: HostStart) => Promise<Endpoint>;
   command: (cmd: string) => Promise<void>;
   onLog: (listener: HostListener) => () => void;
+  onExit?: (listener: () => void) => void;
   stop: () => Promise<void>;
 }
 

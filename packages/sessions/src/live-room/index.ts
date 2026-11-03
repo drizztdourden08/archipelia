@@ -6,7 +6,7 @@ export { hintCounts } from './hint-counts';
 export { hintRows } from './hint-rows';
 export { hintsFromLog } from './hints-from-log';
 export { hintsKey } from './hints-key';
-export { checksFromLog } from './log-checks';
+export { checksFromLog } from './checks-from-log';
 export { nextRetry } from './next-retry';
 export { onlineFromLog } from './online-from-log';
 export { playerRows } from './player-rows';

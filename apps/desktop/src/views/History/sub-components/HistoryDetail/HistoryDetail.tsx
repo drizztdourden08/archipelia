@@ -4,6 +4,7 @@ import { Stack, Status } from '@drizztdourden08/tessera/primitives';
 import { configFacts } from '../../behavior/config-facts';
 import { playerRows } from '../../behavior/player-rows';
 import { runChip } from '../../behavior/run-chip';
+import { runSummary } from '../../behavior/run-summary';
 import { sourceLinkOf } from '../../behavior/source-link';
 import { statusOf } from '../../behavior/run-status';
 import { DATE_FORMAT } from '../../History.constants';
@@ -24,7 +25,7 @@ const HistoryDetail = ({ run, templates, busy, actions }: HistoryDetailProps) =>
       <RunActions run={run} sessionId={link.sessionId} busy={busy} onOpenRun={actions.openRun} onOpenSession={actions.openSession} onRunAgain={actions.runAgain} onDelete={actions.deleteRun} />
       <SourceSection link={link} chip={runChip(run)} onOpen={actions.openSession} />
       <OverridesSection overrides={run.source?.overrides ?? []} />
-      <PlayersSection rows={playerRows(run)} />
+      <PlayersSection rows={playerRows(run)} summary={runSummary(run)} />
       <DetailSection title="Config">
         <FactsPanel groups={configFacts(run.snapshot)} layout="rows" label="Config" />
       </DetailSection>

@@ -12,9 +12,11 @@ const usage = {
   ],
   rules: [
     'List the runs newest first with the session name, the date, the seed, the status and a chip that names the source: from the session with its changes, matched by name, or unknown.',
+    'Show the same end summary line under the date on each list row, and nothing when the run has no end state.',
     'Filter the list by session, status and date with the three selects, and by text with the page header filter, read with usePageSearch.',
     'Show the detail of the picked run in this order: source, changes for this run, players, config, output.',
     'The source is a link to the saved session, or the words Session deleted when it is gone.',
+    'Above the players, show one summary line of the end state, such as 3 of 4 finished, 2 h 14 min; for each player show the final status, the checks done and the goal time, or a dash for a run that has no end state.',
     'Show a player origin as a tag, and the client and trust only for a player who joined; show nothing that the record does not hold.',
     'Run again with this config stays off until the session tabs land.',
     'Clean old runs is the action of the list header; it asks first with the count and says the output files go too.',
