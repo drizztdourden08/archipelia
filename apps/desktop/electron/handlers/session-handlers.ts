@@ -34,6 +34,7 @@ const sessionHandlers: HandlerGroup = {
       const opened = await openFolder(sessionFiles.path(`${safe}/output`));
       if (!opened.success) throw new Error(opened.error);
     });
+    ctx.handle(APP_CHANNELS.sessionsItemTypes, (_event, id) => sessions.itemTypes(assertSafeName(id, 'session id')));
     ctx.handle(APP_CHANNELS.sessionsShowJob, async (_event, id) => {
       if (ctx.jobs.list().some((job) => job.id === runJobId(id) && job.state === 'running')) return;
       const session = await runs.get(id);

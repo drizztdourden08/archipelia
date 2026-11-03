@@ -1,0 +1,88 @@
+/* @layer renderer-app @kind style */
+.spoiler-tracker {
+  display: flex;
+  flex-direction: column;
+  block-size: 100%;
+  min-block-size: 0;
+}
+
+.spoiler-tracker__header {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+}
+
+.spoiler-tracker__tools {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  border-block-end: var(--border-width-thin) solid var(--c-border);
+}
+
+.spoiler-tracker__subtotal {
+  padding: var(--space-xs) var(--space-md);
+  border-block-end: var(--border-width-thin) solid var(--c-border);
+  color: var(--c-text-dim);
+  font-size: var(--text-xs);
+}
+
+.spoiler-tracker__body {
+  flex: 1;
+  min-block-size: 0;
+  overflow-y: auto;
+  padding: var(--space-xs) 0;
+}
+
+.spoiler-summary {
+  container-type: inline-size;
+  display: flex;
+  flex: none;
+  flex-wrap: wrap;
+  gap: var(--space-xs) var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  border-block-end: var(--border-width-thin) solid var(--c-border);
+  font-size: var(--text-xs);
+}
+
+.spoiler-summary__stat {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  color: var(--c-text-dim);
+  white-space: nowrap;
+}
+
+.spoiler-summary__value {
+  color: var(--c-text);
+  font-variant-numeric: tabular-nums;
+}
+
+.spoiler-summary__stat--required .spoiler-summary__value { color: var(--c-warning); }
+.spoiler-summary__stat--others .spoiler-summary__value { color: var(--c-info); }
+
+@container (max-width: 320px) {
+  .spoiler-summary__label { display: none; }
+}
+
+.spoiler-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.spoiler-tracker__top {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  padding-inline-end: var(--space-md);
+  border-block-end: var(--border-width-thin) solid var(--c-border);
+}
+
+.spoiler-tracker__top .spoiler-summary {
+  flex: 1;
+  border-block-end: 0;
+}

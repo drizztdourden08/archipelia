@@ -21,7 +21,9 @@ declare module '@drizztdourden08/tessera' {
         | 'PackageSourceDialog'
         | 'PlayerStatusRow'
         | 'ServerOptionsForm'
-        | 'SessionRow';
+        | 'SessionRow'
+        | 'SpoilerGroups'
+        | 'SpoilerTracker';
     };
   }
 }

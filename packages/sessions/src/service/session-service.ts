@@ -8,6 +8,7 @@ import { lobbyEngines } from './lobby-engines';
 import { startedRun } from './started-run';
 import { produceSession } from './produce-session';
 import { hostSession } from './host-session';
+import { sessionItemTypes } from './session-item-types';
 import { sessionEngineOf } from '../engine/session-engine-of';
 import { liveEntry } from './live-entry';
 import { saveStopped } from './save-stopped';
@@ -80,7 +81,9 @@ const createSessionService = (deps: ServiceDeps) => {
 
   const running = (id: string) => live.has(id);
 
-  return { cancel, command, logOf, recover, run, running, stop, stopLocal };
+  const itemTypes = sessionItemTypes(deps);
+
+  return { cancel, command, itemTypes, logOf, recover, run, running, stop, stopLocal };
 };
 
 export { createSessionService };
