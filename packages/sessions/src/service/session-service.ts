@@ -8,6 +8,8 @@ import { lobbyEngines } from './lobby-engines';
 import { startedRun } from './started-run';
 import { produceSession } from './produce-session';
 import { hostSession } from './host-session';
+import { ensureItemTypes } from '../item-types/ensure-item-types';
+import { engineOfSession } from '../engine/engine-of-session';
 import { sessionEngineOf } from '../engine/session-engine-of';
 import { CANCELLED, SERVER_LINES, SERVER_LOG } from './session-service.constants';
 
@@ -78,7 +80,14 @@ const createSessionService = (deps: ServiceDeps) => {
 
   const running = (id: string) => live.has(id);
 
-  return { cancel, command, logOf, run, running, stop, stopLocal };
+  const itemTypes = async (id: string) => {
+    const session = await runs.get(id);
+    if (!session?.output) return false;
+    const runtime = (await deps.runtimeFor?.(engineOfSession(session)).catch(() => undefined)) ?? await deps.runtime();
+    return ensureItemTypes(deps, id, session.output, runtime);
+  };
+
+  return { cancel, command, itemTypes, logOf, run, running, stop, stopLocal };
 };
 
 export { createSessionService };

@@ -3,6 +3,8 @@ export { generate } from './generate/generate';
 export type { GenerateParams, GenerateResult } from './generate/generate.type';
 export { matchStage } from './generate/stages';
 export { STAGE_RULES } from './generate/stages.constants';
+export { writeItemTypes } from './item-types/write-item-types';
+export type { ItemTypesWrite } from './item-types/write-item-types.type';
 export { readOptionsSchema } from './options/read-options-schema';
 export { runPython } from './process/run-python';
 export type { PythonResult, PythonRun } from './process/run-python.type';
