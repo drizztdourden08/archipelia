@@ -24,6 +24,6 @@ export { HINTS_KEY_PREFIX, STATUS_KEY_PREFIX } from './client-status.constants';
 export { RECONNECT_DELAYS_MS } from './reconnect.constants';
 export type { PasswordNeed, PasswordView } from './room-password-need.type';
 export type {
-  HintLookup, HintState, HintView, LiveRoomPhase, LiveRoomTarget, PlayerStatus, PlayerView, ProtocolHint, RetryPlan, RoomPlayer,
-  WatchedChecks,
+  GameNames, HintLookup, HintState, HintView, LiveRoomPhase, LiveRoomTarget, PlayerStatus, PlayerView, ProtocolHint, RetryPlan, RoomNames,
+  RoomPlayer, WatchedChecks,
 } from './live-room.type';

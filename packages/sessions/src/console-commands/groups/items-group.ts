@@ -9,11 +9,11 @@ import { wholeNumber } from '../format/whole-number';
 const playerParam: ConsoleParam = { name: 'player', label: 'Player', kind: 'choice', source: 'players' };
 
 const itemParam: ConsoleParam = {
-  name: 'item', label: 'Item', kind: 'choice', source: 'items', dependsOn: 'player', placeholder: 'Name or item id',
+  name: 'item', label: 'Item', kind: 'choice', source: 'items', dependsOn: 'player', placeholder: 'Item name',
 };
 
 const locationParam: ConsoleParam = {
-  name: 'location', label: 'Location', kind: 'choice', source: 'locations', dependsOn: 'player', placeholder: 'Name or location id',
+  name: 'location', label: 'Location', kind: 'choice', source: 'locations', dependsOn: 'player', placeholder: 'Location name',
 };
 
 const target = (values: ConsoleValues, thing: string): string[] => [quoteArg(valueOf(values, 'player')), quoteArg(valueOf(values, thing))];
