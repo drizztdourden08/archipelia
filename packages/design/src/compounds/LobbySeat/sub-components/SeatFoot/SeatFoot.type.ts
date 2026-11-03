@@ -1,6 +1,6 @@
 /* @layer renderer-app @kind types */
-import type { LobbySeatAction, LobbySeatStatus } from '../../LobbySeat.type';
+import type { LobbySeatAction, LobbySeatSide, LobbySeatStatus } from '../../LobbySeat.type';
 
-type SeatFootProps = { status?: LobbySeatStatus; actions: readonly LobbySeatAction[] };
+type SeatFootProps = { side?: LobbySeatSide; status?: LobbySeatStatus; actions: readonly LobbySeatAction[] };
 
 export type { SeatFootProps };

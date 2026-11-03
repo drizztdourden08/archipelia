@@ -5,10 +5,11 @@ type OverridesPanelProps = {
   player: SetPlayer;
   game?: InstalledGame;
   preset?: GamePreset;
+  plain?: boolean;
   onValue: (slot: number, key: string, value: OptionValue, presetValue: OptionValue) => void;
   onReset: (slot: number, key: string) => void;
   onResetAll: (slot: number) => void;
-  onClose: (slot: number) => void;
+  onClose?: (slot: number) => void;
 };
 
 export type { OverridesPanelProps };

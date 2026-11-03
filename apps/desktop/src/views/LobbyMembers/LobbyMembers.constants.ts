@@ -14,11 +14,17 @@ const MEMBER_TEXT = {
   remove: 'Remove',
   review: 'Review the world of',
   options: 'View options',
+  sideLabel: 'Slot type',
   seat: (seat: string, pending: boolean) => (pending ? `Wants the seat ${seat}` : `Seat ${seat}`),
 } as const;
 
 const OPTION_TEXT = {
-  title: (name: string) => `${name}'s options`,
+  title: (seat: string | undefined, name: string) => (seat ? `Slot ${seat} · ${name}` : name),
+  name: 'Name',
+  game: 'Game',
+  sentBy: 'Sent by',
+  noGame: 'No game sent yet',
+  asks: 'Asks to join',
   close: 'Close',
   readOnly: 'You can read these options. You cannot change them.',
   loading: 'Loading the options.',

@@ -2,14 +2,16 @@
 import type { LobbySeatAction } from '@archipelia/design';
 import { SEAT_TEXT } from '../SessionLobby.constants';
 import type { OwnSeat, SeatContext } from '../SessionLobby.type';
+import { playerLabel } from './player-label';
 
-const seatToolsOf = ({ slot, kind }: OwnSeat, name: string, { busy, actions }: SeatContext): LobbySeatAction[] => {
-  const edit: LobbySeatAction = { id: 'edit', label: SEAT_TEXT.edit, nameSuffix: name, icon: 'pencil', disabled: busy, onSelect: () => actions.edit(slot) };
-  if (kind === 'held') return [edit];
+const seatToolsOf = ({ slot, player }: OwnSeat, fresh: boolean, { busy, actions }: SeatContext): LobbySeatAction[] => {
+  const base = { nameSuffix: playerLabel(player), disabled: busy };
+  const remove: LobbySeatAction = { ...base, id: 'remove', label: SEAT_TEXT.remove, icon: 'trash-2', onSelect: () => actions.remove(slot) };
+  if (player.kind === 'direct' || fresh) return [remove];
   return [
-    edit,
-    { id: 'duplicate', label: SEAT_TEXT.duplicate, nameSuffix: name, icon: 'copy', disabled: busy, onSelect: () => actions.duplicate(slot) },
-    { id: 'remove', label: SEAT_TEXT.remove, nameSuffix: name, icon: 'trash-2', disabled: busy, onSelect: () => actions.remove(slot) },
+    { ...base, id: 'edit', label: SEAT_TEXT.edit, icon: 'pencil', onSelect: () => actions.edit(slot) },
+    { ...base, id: 'duplicate', label: SEAT_TEXT.duplicate, icon: 'copy', onSelect: () => actions.duplicate(slot) },
+    remove,
   ];
 };
 

@@ -18,7 +18,7 @@ const LobbyMembers = (props: LobbyMembersProps) => {
     <>
       {model.actionError && <Box className="lobby-members__error"><ErrorCallout message={model.actionError} /></Box>}
       {clients.map((member) => <MemberSeat key={member.id} lobby={lobby} member={member} model={model} />)}
-      {viewed && <MemberOptionsDialog key={viewed.id} serverId={props.serverId} lobby={lobby} member={viewed} onClose={model.closeOptions} />}
+      {viewed && <MemberOptionsDialog key={viewed.id} serverId={props.serverId} lobby={lobby} member={viewed} model={model} />}
     </>
   );
 };

@@ -33,6 +33,7 @@ const usePlayersEditor = ({ setDraft, installed, presets, createPreset, guard }:
   }, [installed, presets, setPlayers]);
   const remove = useCallback((slot: number) => setPlayers((players) => removePlayer(players, slot)), [setPlayers]);
   const duplicate = useCallback((slot: number) => setPlayers((players) => duplicatePlayer(players, slot)), [setPlayers]);
+  const replace = useCallback((player: SessionPlayer) => change(player.slot, () => player), [change]);
   const rename = useCallback((slot: number, name: string) => changeSet(slot, (player) => ({ ...player, name })), [changeSet]);
   const setGame = useCallback((slot: number, game: string) =>
     setPlayers((players) => updatePlayer(players, slot, (player) => withPickedGame(player, game, presets, freeName(players, 'Player')))), [presets, setPlayers]);
@@ -64,7 +65,7 @@ const usePlayersEditor = ({ setDraft, installed, presets, createPreset, guard }:
   const resetOverride = useCallback((slot: number, key: string) => changeSet(slot, (player) => withoutOverride(player, key)), [changeSet]);
   const resetAll = useCallback((slot: number) => changeSet(slot, withoutOverrides), [changeSet]);
 
-  return { add, duplicate, importYaml, remove, rename, resetAll, resetOverride, setDirect, setGame, setOverride, setSource };
+  return { add, duplicate, importYaml, remove, rename, replace, resetAll, resetOverride, setDirect, setGame, setOverride, setSource };
 };
 
 export { usePlayersEditor };
