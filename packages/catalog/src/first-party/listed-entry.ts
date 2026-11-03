@@ -4,6 +4,7 @@ import { NO_RELEASE } from './first-party.constants';
 import type { ReleaseState } from './first-party.type';
 import type { Listing } from './listing.type';
 import { releaseUrl } from './release-url';
+import { statePlayerFile } from './state-player-file';
 
 const unavailableOf = (state: ReleaseState) => {
   if (state.kind === 'none') return NO_RELEASE;
@@ -57,6 +58,7 @@ const listedEntry = (listing: Listing, state: ReleaseState, tag?: string): Catal
       }]
       : [],
     firstParty: releaseOf(listing, state, tag),
+    ...statePlayerFile(state),
     ...(unavailable ? { unavailable } : {}),
   };
 };

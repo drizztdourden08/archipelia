@@ -4,6 +4,7 @@ import type { GamePreset, SessionPlayer } from '@archipelia/model';
 type PlayerSourceCellProps = {
   player: SessionPlayer;
   presets: GamePreset[];
+  appGame: boolean;
   busy: boolean;
   onSource: (slot: number, value: string, game: string) => void;
   onImport: (slot: number) => void;

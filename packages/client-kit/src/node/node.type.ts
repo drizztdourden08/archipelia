@@ -2,7 +2,7 @@
 import type { AssembledApworld, DataFile } from '../apworld/apworld.type';
 import type { ApworldIndex } from '../index-manifest/index.type';
 import type { KitIssue } from '../errors/kit-issue.type';
-import type { ReleaseManifest } from '../release-manifest/release.type';
+import type { PlayerFile, ReleaseManifest } from '../release-manifest/release.type';
 import type { ArchipelagoManifest, ManifestInput } from '../manifest/archipelago-manifest.type';
 
 type LineEndings = 'lf' | 'keep';
@@ -52,6 +52,7 @@ type ReleaseFilesOptions = {
   dir: string;
   module?: string;
   direct: boolean;
+  playerFile?: PlayerFile;
   kit?: string;
   thumbnail?: string;
   description?: string;

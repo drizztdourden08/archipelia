@@ -2,6 +2,7 @@
 import { useCallback } from 'react';
 import type { ChangeEvent } from 'react';
 import { Box, Field, Stack, TextInput } from '@drizztdourden08/tessera/primitives';
+import { isAppGame } from '../../../SessionLobby/behavior/is-app-game';
 import { sourcesOf } from '../../../SessionLobby/behavior/player-sources';
 import { GameCell } from '../../../SessionLobby/sub-components/GameCell';
 import { OverridesPanel } from '../../../SessionLobby/sub-components/OverridesPanel';
@@ -16,6 +17,7 @@ const PlayerEditor = ({ player, installed, presets, busy, overrides, actions, on
   const { slot } = player;
   const rename = useCallback((event: ChangeEvent<HTMLInputElement>) => actions.rename(slot, event.target.value), [actions, slot]);
   const { game, preset } = sourcesOf(player, installed, presets);
+  const appGame = isAppGame(player, installed);
   return (
     <Stack gap="md">
       <Box className="player-editor">
@@ -26,10 +28,10 @@ const PlayerEditor = ({ player, installed, presets, busy, overrides, actions, on
           <GameCell player={player} installed={installed} onGame={actions.setGame} />
         </Field>
         <Field label={PLAYER_TEXT.source}>
-          <PlayerSourceCell player={player} presets={presets} busy={busy} onSource={actions.setSource} onImport={actions.importYaml} />
+          <PlayerSourceCell player={player} presets={presets} appGame={appGame} busy={busy} onSource={actions.setSource} onImport={actions.importYaml} />
         </Field>
         <Field label={PLAYER_TEXT.overrides}>
-          <PlayerOverridesCell player={player} selected={overrides} onEdit={onOverrides} />
+          <PlayerOverridesCell player={player} selected={overrides} appGame={appGame} onEdit={onOverrides} />
         </Field>
       </Box>
       {overrides && (

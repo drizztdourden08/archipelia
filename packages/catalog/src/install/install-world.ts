@@ -33,6 +33,7 @@ const installWorld = async ({ engineDir, files, entry, version, fetch: request =
       ...(packages ? { packages } : {}),
       ...(wheels ? { wheels } : {}),
       ...(release ? { release } : {}),
+      ...(entry.playerFile ? { playerFile: entry.playerFile } : {}),
     });
   } finally {
     await download.dispose();

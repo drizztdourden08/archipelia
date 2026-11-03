@@ -91,6 +91,46 @@ describe('K1 the players in the lobby', { tags: ['critical'] }, () => {
   });
 });
 
+describe('K1 a game whose player file comes from its own app', { tags: ['critical'] }, () => {
+  const APP_GAME: InstalledGame = { ...GAME, apworld: 'rotp', game: 'Relic', playerFile: 'app' };
+  const library = { installed: [APP_GAME], presets: [{ ...PRESET, game: 'Relic' }] };
+  const imported = (yaml: string) => ({ slot: 1, name: 'Rel', game: 'Relic', source: { kind: 'yaml' as const, fileName: 'r.yaml', yaml } });
+
+  test('a preset source is blocked with the app message, and nothing else is said about it', () => {
+    expect(validatePlayers(withPlayers([presetPlayer(1, 'Rel', 'p1', 'Relic')]), library)).toEqual([
+      { slot: 1, field: 'source', message: 'Rel: Relic player files come from its own app. Import the YAML it saved, or make the slot Direct.' },
+    ]);
+  });
+
+  test('an imported file without pre_rolled is blocked, and one with it passes', () => {
+    expect(validatePlayers(withPlayers([imported('name: Rel
+game: Relic
+Relic:
+  death_link: true
+')]), library)).toEqual([
+      { slot: 1, field: 'source', message: 'Rel: this Relic YAML was not saved by its app (no pre_rolled). Save the Archipelago files from the app again.' },
+    ]);
+    expect(validatePlayers(withPlayers([imported('name: Rel
+game: Relic
+Relic:
+  pre_rolled:
+    world: abc
+')]), library)).toEqual([]);
+  });
+
+  test('an empty import still asks for a file, and a direct slot is left alone', () => {
+    expect(validatePlayers(withPlayers([imported('')]), library)).toEqual([{ slot: 1, field: 'source', message: 'Rel: import a player file' }]);
+    expect(validatePlayers(withPlayers([{ slot: 1, name: 'Rel', direct: true }]), library)).toEqual([]);
+  });
+
+  test('a world with no recorded playerFile but a pre_rolled option counts as an app game', () => {
+    const option = { key: 'pre_rolled', displayName: 'pre_rolled', group: 'Game Options', kind: 'dict' as const, description: '', default: {}, visibility: [], weightable: false };
+    const legacy: InstalledGame = { ...GAME, game: 'Relic', schema: { ...GAME.schema, options: [...GAME.schema.options, option] } };
+    expect(validatePlayers(withPlayers([presetPlayer(1, 'Rel', 'p1', 'Relic')]), { installed: [legacy], presets: [] })).toHaveLength(1);
+    expect(validatePlayers(withPlayers([presetPlayer(1, 'Rel', 'p1', 'Relic')]), { installed: [{ ...legacy, playerFile: 'options' }], presets: [] })[0]?.message).toBe('Rel: pick a preset');
+  });
+});
+
 describe('K3 a session saved before the split', { tags: ['critical'] }, () => {
   test('keeps its players, which the lobby takes as its own players when it starts', () => {
     const stored = withPlayers([presetPlayer(1, 'Ana'), presetPlayer(2, 'Bo')]);

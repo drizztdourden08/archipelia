@@ -21,6 +21,8 @@ export { templateOf } from './template-of';
 export { hostedPlayers } from './hosted-players';
 export { isHosted } from './is-hosted';
 export { joinsDirectly } from './joins-directly';
+export { PRE_ROLLED_KEY } from './player-file-of.constants';
+export { playerFileOf } from './player-file-of';
 export type * from './run-record';
 export { UNKNOWN_SOURCE_NAME, buildRun, runOf, runOverridesOf, runPlayersOf } from './run-record';
 export { runJobId } from './run-job-id';

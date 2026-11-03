@@ -4,6 +4,7 @@ import type { SessionPlayer } from '@archipelia/model';
 type PlayerOverridesCellProps = {
   player: SessionPlayer;
   selected: boolean;
+  appGame: boolean;
   onEdit: (slot: number) => void;
 };
 

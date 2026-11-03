@@ -8,6 +8,7 @@ type OptionFieldRowProps = {
   hint?: string;
   changed: boolean;
   problem?: string;
+  disabled?: boolean;
   onChange: (next: OptionValue) => void;
   onReset: () => void;
   onProblem?: (problem: string | null) => void;

@@ -14,9 +14,11 @@ export { indexOfRelease } from './release-manifest/index-of-release';
 export { parseReleaseManifest } from './release-manifest/parse-release-manifest';
 export { serializeReleaseManifest } from './release-manifest/serialize-release-manifest';
 export {
+  DEFAULT_PLAYER_FILE,
   DESCRIPTION_NAME,
   KIT_VERSION,
   MANIFEST_NAME,
+  PLAYER_FILES,
   RELEASE_FORMAT,
   THUMBNAIL_BASE_NAME,
 } from './release-manifest/release.constants';
@@ -47,7 +49,7 @@ export type {
   IndexBuildInput,
   IndexInput,
 } from './index-manifest/index.type';
-export type { ReleaseInput, ReleaseManifest, ReleaseWorld } from './release-manifest/release.type';
+export type { PlayerFile, ReleaseInput, ReleaseManifest, ReleaseWorld } from './release-manifest/release.type';
 export type { DescriptionCheck, ImageFormat, ImageHeader, ThumbnailCheck } from './release-files/release-files.type';
 export type { ArchipelagoManifest, ManifestInput } from './manifest/archipelago-manifest.type';
 export type { HeldSeat, SeatPick } from './seats/seats.type';

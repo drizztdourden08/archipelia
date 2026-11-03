@@ -2,6 +2,7 @@
 import { isRecord } from '@archipelia/model';
 import { STANDARD_FORMAT } from './first-party.constants';
 import type { StandardBuild, StandardFile, StandardManifest } from './first-party.type';
+import { isOptionalPlayerFile } from './is-optional-player-file';
 import { isOptionalText } from './is-optional-text';
 import { APWORLD_FILE, BUNDLE_FILE, MODULE_NAME, SHA256 } from './is-standard-manifest.constants';
 
@@ -33,6 +34,7 @@ const isStandardManifest = (value: unknown): value is StandardManifest =>
   && text(value.minimumAp)
   && isOptionalText(value.maximumAp)
   && isOptionalText(value.appVersion)
+  && isOptionalPlayerFile(value.playerFile)
   && hasOneSource(value);
 
 export { isStandardManifest };
