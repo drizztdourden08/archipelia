@@ -1,8 +1,10 @@
 /* @layer core @kind logic */
 import type { HostLogLine } from '@archipelia/hosts';
-import { longestFirst } from '../live-room/log-checks';
+import { longestFirst } from '../live-room/longest-first';
 import type { RunTally, TallyState } from './run-end.type';
-import { noteCheck, noteClient, noteGoal } from './tally-steps';
+import { noteCheck } from './note-check';
+import { noteClient } from './note-client';
+import { noteGoal } from './note-goal';
 
 const createRunTally = (names: readonly string[]) => {
   const state: TallyState = { lastAt: 0, names: longestFirst(names), entries: new Map(), clients: new Map(), goals: {}, seen: {} };

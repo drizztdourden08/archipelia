@@ -1,5 +1,5 @@
 /* @layer core @kind logic */
-import type { RunEndReason, Session, SessionTemplate } from '@archipelia/model';
+import type { RunEndReason, SessionTemplate } from '@archipelia/model';
 import type { HostLogLine } from '@archipelia/hosts';
 import { newId } from '@drizztdourden08/brock-core/storage';
 import type { LiveSession, ServiceDeps } from './service-deps.type';
@@ -9,40 +9,27 @@ import { startedRun } from './started-run';
 import { produceSession } from './produce-session';
 import { hostSession } from './host-session';
 import { sessionEngineOf } from '../engine/session-engine-of';
-import { liveEnd } from './live-end';
+import { liveEntry } from './live-entry';
+import { saveStopped } from './save-stopped';
+import { updateRun } from './update-run';
 import { recoverRuns } from './recover-runs';
-import { CANCELLED, SERVER_LINES, SERVER_LOG } from './session-service.constants';
+import { CANCELLED, SERVER_LINES } from './session-service.constants';
 
 const createSessionService = (deps: ServiceDeps) => {
-  const { files, runs, emit } = deps;
+  const { files, runs } = deps;
   const live = new Map<string, LiveSession>();
   const pending = new Map<string, AbortController>();
   const stopping = new Set<string>();
 
-  const update = async (session: Session, patch: Partial<Session>) => {
-    const next = { ...session, ...patch };
-    await runs.put(next);
-    emit({ type: 'session', session: next });
-    return next;
-  };
-
-  const liveOf = (id: string) => {
-    const entry = live.get(id);
-    if (!entry) throw new Error(`session ${id} is not running`);
-    return entry;
-  };
+  const update = updateRun(deps);
+  const liveOf = (id: string) => liveEntry(live, id);
 
   const stop = async (id: string, reason: RunEndReason = 'stopped') => {
     const entry = liveOf(id);
     stopping.add(id);
     await entry.host.stop().finally(() => stopping.delete(id));
     live.delete(id);
-    await files.writeText(`${id}/${SERVER_LOG}`, entry.log.map((line) => line.text).join('\n'));
-    await files.writeJson(`${id}/${SERVER_LINES}`, entry.log);
-    const session = await runs.get(id);
-    if (!session) return undefined;
-    const end = await liveEnd(files, session, entry, reason);
-    return update(session, { status: 'stopped', serverLog: SERVER_LOG, ...(end ? { end } : {}) });
+    return saveStopped(deps, id, entry, reason);
   };
 
   const serverExited = async (id: string) => {

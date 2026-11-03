@@ -1,5 +1,5 @@
 /* @layer renderer-app @kind logic */
-const MINUTE_MS = 60_000;
+import { MINUTE_MS } from './length-text.constants';
 
 const lengthText = (ms: number): string => {
   const minutes = Math.floor(Math.max(0, ms) / MINUTE_MS);
