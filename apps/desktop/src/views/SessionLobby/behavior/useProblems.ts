@@ -20,7 +20,7 @@ const useProblems = (draft: SessionTemplate, library: LibraryView, select: (slot
   const showProblem = useCallback((problem: TemplateProblem) => {
     const slot = problemSlot(problem, draft.players);
     if (slot !== null) select(slot, problem.field === 'option');
-    requestAnimationFrame(() => focusProblem(rootRef.current, problem));
+    requestAnimationFrame(() => focusProblem(document.body, problem));
   }, [draft.players, select]);
 
   return { attemptRun, problems, rootRef, runAttempted, showProblem };

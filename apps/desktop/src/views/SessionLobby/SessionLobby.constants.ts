@@ -17,7 +17,6 @@ const YAML_EXTENSIONS = ['yaml', 'yml'];
 const SEAT_EDITOR_CLASS = 'session-lobby__seat-editor';
 
 const PLAYERS_TEXT = {
-  saved: 'The players saved with this session. A direct player connects on their own and brings their own game, after you approve them.',
   noGame: 'No game installed yet. Add games in Games first.',
   none: 'No player of your own yet.',
   noneDirect: 'No player of your own. Players who join still play.',
@@ -27,13 +26,7 @@ const SEAT_TEXT = {
   grid: 'Seats',
   add: 'Add player',
   saved: 'Saved',
-  added: 'Added here',
-  slot: 'Slot',
-  waitingOpen: 'Waiting for a player to connect',
-  ownGame: 'Their own game',
-  preset: 'Preset',
   noPreset: 'No preset',
-  fromFile: 'From file',
   ready: 'Ready',
   readyTitle: 'This player has a game and a preset and is ready to run.',
   needsFix: 'Needs a fix',
@@ -42,12 +35,6 @@ const SEAT_TEXT = {
   keep: 'Keep in session',
   duplicate: 'Duplicate',
   remove: 'Remove',
-  nameLabel: 'Name',
-  gameLabel: 'Game',
-  presetLabel: 'Preset',
-  overridesLabel: 'Overrides',
-  done: 'Done',
-  editTitle: 'Edit player',
   player: 'player',
   players: 'players',
 } as const;
