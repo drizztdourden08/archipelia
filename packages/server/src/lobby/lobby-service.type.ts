@@ -27,6 +27,7 @@ type LobbyTrust = {
 type LobbyRunner = {
   run: (template: SessionTemplate, lobby: LobbyRun) => Promise<Session>;
   stop: (sessionId: string) => Promise<unknown>;
+  command: (sessionId: string, line: string) => Promise<unknown>;
   running: (sessionId: string) => boolean;
   runtimeFor: (engine: SessionEngine) => Promise<EngineRuntime | undefined>;
   output: DataFiles;

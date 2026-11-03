@@ -39,6 +39,10 @@ const lobbyCalls: Record<string, AdminHandler> = {
   'lobby.token.rotate': async ({ service, sandbox }, request) => adminView(sandbox, await service.rotateJoinToken(adminParams(request).text('lobbyId'))),
   'lobby.close': async ({ service, sandbox }, request) => adminView(sandbox, await service.close(adminParams(request).text('lobbyId'))),
   'lobby.start': async ({ service, sandbox }, request) => adminView(sandbox, (await service.start(adminParams(request).text('lobbyId'))).lobby),
+  'room.command': async ({ service, sandbox }, request) => {
+    const params = adminParams(request);
+    return adminView(sandbox, await service.sendRoomCommand(params.text('lobbyId'), params.text('line')));
+  },
   'room.stop': async ({ service, sandbox }, request) => adminView(sandbox, await service.stopRoom(adminParams(request).text('lobbyId'))),
 };
 

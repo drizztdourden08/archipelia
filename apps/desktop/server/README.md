@@ -80,3 +80,19 @@ Docker image. It needs unprivileged user namespaces:
   (the kernel's `RLIMIT_NPROC` counts every process and thread of that user). The limit follows
   the load, so it never starves the server. Without `/proc/loadavg` it is left out and the pid
   namespace is the only bound.
+
+## Admin API
+
+A WebSocket at `/archipelia/admin` on the lobby port. The first message is `admin.hello` with the
+admin token (`archipelia-server token` prints the token file path). Every request is one JSON
+message with a `type` and a `seq`; the reply is `admin.reply`. The calls are listed in
+`packages/lobby-protocol/README.md`.
+
+`room.command` runs one console line in the room of a started lobby, such as `/send Ana Hookshot`:
+
+```json
+{ "type": "room.command", "seq": 7, "lobbyId": "lb_1a2b3c4d", "line": "/send Ana Hookshot" }
+```
+
+It replies with the lobby. It fails when the lobby has no running room, or when `line` is empty,
+longer than 500 characters or holds a line break.

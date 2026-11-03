@@ -20,7 +20,7 @@ const createCoreLobbies = ({ ports, sessions, runtime, runtimeFor, sessionFiles,
   const lobbies = createLobbyService({
     store: createLobbyStore(ports.domain(DOMAIN.lobbies)),
     trust: createLobbyTrust(ports.domain(DOMAIN.cache)),
-    runner: { run: runOf, stop: (id) => sessions().stop(id), running: (id) => sessions().running(id), runtimeFor, output: sessionFiles },
+    runner: { run: runOf, stop: (id) => sessions().stop(id), command: (id, line) => sessions().command(id, line), running: (id) => sessions().running(id), runtimeFor, output: sessionFiles },
     overlay: buildOverlay,
     sandbox,
     secrets: ports.secrets,

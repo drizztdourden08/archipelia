@@ -13,7 +13,7 @@ const testDeps = ({ store, output, root, trust, run, sandbox = noSandbox('test')
   return {
     store,
     trust,
-    runner: { run, stop: () => Promise.resolve(), running: () => true, runtimeFor: () => Promise.resolve(runtimeOf(root)), output },
+    runner: { run, stop: () => Promise.resolve(), command: () => Promise.resolve(), running: () => true, runtimeFor: () => Promise.resolve(runtimeOf(root)), output },
     overlay: ({ runtime }) => Promise.resolve(runtime),
     sandbox: () => Promise.resolve(sandbox),
     secrets: { get: (key) => Promise.resolve(secrets.get(key) ?? null), set: (key, value) => Promise.resolve(void secrets.set(key, value)) },

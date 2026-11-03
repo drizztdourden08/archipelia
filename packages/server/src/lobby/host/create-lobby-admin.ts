@@ -11,6 +11,7 @@ import { createLobby } from './create-lobby';
 import { lockLobby } from './lock-lobby';
 import { memberYaml } from './member-yaml';
 import { rotateJoinToken } from './rotate-join-token';
+import { sendRoomCommand } from './send-room-command';
 import { unlockLobby } from './unlock-lobby';
 import { sweepLobbies } from './sweep-lobbies';
 import { updateLobby } from './update-lobby';
@@ -39,6 +40,7 @@ const createLobbyAdmin = (ctx: LobbyContext) => {
     close: (lobbyId: string) => closeLobby(ctx, lobbyId),
     start: (lobbyId: string) => startLobby(ctx, lobbyId),
     stopRoom,
+    sendRoomCommand: (lobbyId: string, line: string) => sendRoomCommand(ctx, lobbyId, line),
     approve: (lobbyId: string, memberId: string) => approveMember(ctx, { lobbyId, memberId }),
     refuse: (lobbyId: string, memberId: string, reason?: string) => dismiss(lobbyId, memberId, 'refused', reason),
     remove: (lobbyId: string, memberId: string, reason?: string) => dismiss(lobbyId, memberId, 'removed', reason),
