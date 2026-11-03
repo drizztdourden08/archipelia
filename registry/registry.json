@@ -14,6 +14,20 @@
         "refs": ["refs/heads/master", "refs/heads/main"],
         "issuer": "https://token.actions.githubusercontent.com"
       }
+    },
+    {
+      "id": "soh-archipelia",
+      "name": "Ship of Harkinian for Archipelia",
+      "homepage": "https://github.com/drizztdourden08/archipelia-soh",
+      "games": ["Ship of Harkinian"],
+      "status": "active",
+      "trust": {
+        "method": "github-attestation",
+        "repo": "drizztdourden08/archipelia-soh",
+        "workflow": ".github/workflows/archipelia-release.yml",
+        "refs": ["refs/tags/archipelia-v*"],
+        "issuer": "https://token.actions.githubusercontent.com"
+      }
     }
   ],
   "games": [
@@ -31,6 +45,21 @@
         "manifest": "relic_of_the_past.apworld.json",
         "kind": "builds",
         "bundle": "relic_of_the_past.apworld.sigstore.json"
+      }
+    },
+    {
+      "game": "Ship of Harkinian",
+      "module": "oot_soh",
+      "displayName": "Ship of Harkinian",
+      "home": "https://github.com/drizztdourden08/archipelia-soh",
+      "tags": ["action", "adventure"],
+      "client": "soh-archipelia",
+      "release": {
+        "repo": "drizztdourden08/archipelia-soh",
+        "world": "oot_soh.apworld",
+        "manifest": "oot_soh.apworld.json",
+        "kind": "builds",
+        "bundle": "oot_soh.apworld.sigstore.json"
       }
     }
   ]

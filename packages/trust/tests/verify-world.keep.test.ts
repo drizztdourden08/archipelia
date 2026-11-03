@@ -55,6 +55,11 @@ describe('K4 verifyWorld with a valid attestation', { tags: ['standard'] }, () =
     expect(verifyWorld(bytes, master, client, sigstore.trustedRoot).ok).toBe(true);
   });
 
+  test('a ref ending in * accepts any tag with that prefix', async () => {
+    const tagged = await sigstore.attest(statementOf(bytes), { ...IDENTITY, ref: 'refs/tags/archipelia-v1.4.2' });
+    expect(verifyWorld(bytes, tagged, withTrust({ refs: ['refs/tags/archipelia-v*'] }), sigstore.trustedRoot).ok).toBe(true);
+  });
+
   test('works offline from a cached trusted root', async () => {
     const files = memoryFiles();
     await loadTrustedRoot({ files, fetchRoot: () => Promise.resolve(sigstore.trustedRoot), now: () => 1000 });
@@ -91,6 +96,12 @@ describe('K4 verifyWorld refuses the identity', { tags: ['standard'] }, () => {
   test('a ref the registry does not list', async () => {
     const branch = await sigstore.attest(statementOf(bytes), { ...IDENTITY, ref: 'refs/heads/feature' });
     expect(failure(verifyWorld(bytes, branch, client, sigstore.trustedRoot))).toEqual({ code: 'trust-failed', reason: 'signer-mismatch' });
+  });
+
+  test('a tag outside the * prefix', async () => {
+    const tagged = await sigstore.attest(statementOf(bytes), { ...IDENTITY, ref: 'refs/tags/v1.4.2' });
+    const prefixed = withTrust({ refs: ['refs/tags/archipelia-v*'] });
+    expect(failure(verifyWorld(bytes, tagged, prefixed, sigstore.trustedRoot))).toEqual({ code: 'trust-failed', reason: 'signer-mismatch' });
   });
 
   test('another issuer in the registry entry', () => {

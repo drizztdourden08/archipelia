@@ -3,10 +3,11 @@ import type { VerificationPolicy } from '@sigstore/verify';
 import type { GithubAttestationTrust } from '../registry/registry.type';
 import { derUtf8 } from './der-utf8';
 import { escapePattern } from './escape-pattern';
+import { refPattern } from './ref-pattern';
 import { GITHUB_HOST, SOURCE_REPOSITORY_OID } from './verify-world.constants';
 
 const identityPolicy = ({ repo, workflow, refs, issuer }: GithubAttestationTrust): VerificationPolicy => {
-  const signer = `${escapePattern(`${GITHUB_HOST}/${repo}/${workflow}`)}@(?:${refs.map(escapePattern).join('|')})`;
+  const signer = `${escapePattern(`${GITHUB_HOST}/${repo}/${workflow}`)}@(?:${refs.map(refPattern).join('|')})`;
   return {
     subjectAlternativeName: new RegExp(`^${signer}$`),
     extensions: { issuer },
