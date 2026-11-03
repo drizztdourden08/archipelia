@@ -46,6 +46,8 @@ const APP_TREE = [
       'a saved session': null,
       'a seat of a session lobby': null,
       'the seats of a session lobby': null,
+      'a spoiler log with its placements': null,
+      'the grouped placements of a spoiler log': null,
     },
   },
   { at: ['layout'], answers: { 'the stage of a session lobby': null } },
