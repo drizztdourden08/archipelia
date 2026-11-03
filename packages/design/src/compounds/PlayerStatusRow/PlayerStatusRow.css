@@ -3,3 +3,7 @@
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
+
+.player-status-row__goal {
+  white-space: nowrap;
+}

@@ -1,10 +1,11 @@
 /* @layer renderer-app @kind hook */
 import { useCallback, useMemo, useRef, useState } from 'react';
-import { confirmAction, useWidgetState } from '@drizztdourden08/brock-react';
+import { useWidgetState } from '@drizztdourden08/brock-react';
 import type { HostLogLine } from '@archipelia/hosts';
 import { useRunsStore } from '../../../stores/useRunsStore';
 import { MAX_SENT } from '../SessionDashboard.constants';
 import type { SentCommand } from '../SessionDashboard.type';
+import { confirmCommand } from './confirm-command';
 import { consoleRows } from './console-rows';
 
 const useConsole = (sessionId: string, lines: readonly HostLogLine[]) => {
@@ -28,9 +29,7 @@ const useConsole = (sessionId: string, lines: readonly HostLogLine[]) => {
   }, [command, sessionId]);
 
   const confirmSend = useCallback((cmd: string, title: string, message: string) => {
-    void confirmAction({ title, message, confirmLabel: 'Send', variant: 'danger' }).then((confirmed) => {
-      if (confirmed) void send(cmd);
-    });
+    confirmCommand(title, message, () => { void send(cmd); });
   }, [send]);
 
   const history = useMemo(() => sent.map((item) => item.text), [sent]);

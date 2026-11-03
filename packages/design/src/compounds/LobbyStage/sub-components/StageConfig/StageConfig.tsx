@@ -1,8 +1,10 @@
 /* @layer renderer-app @kind component */
-import { Box, Button, Flex, Icon, Text } from '@drizztdourden08/tessera/primitives';
+import { Box, Flex, Icon, Text } from '@drizztdourden08/tessera/primitives';
 import type { StageConfigProps } from './StageConfig.type';
+import { StageEdit } from '../StageEdit';
+import { StageGames } from '../StageGames';
 
-const StageConfig = ({ label, facts, editLabel, onEdit }: StageConfigProps) => (
+const StageConfig = ({ label, facts, games, editLabel, onEdit, locked }: StageConfigProps) => (
   <Flex as="footer" className="lobby-stage__config" gap="sm" align="center" wrap>
     <Icon name="sliders-horizontal" />
     <Text as="span" variant="overline" tone="dim">{label}</Text>
@@ -13,8 +15,9 @@ const StageConfig = ({ label, facts, editLabel, onEdit }: StageConfigProps) => (
           <Text as="dd" variant="caption" mono>{fact.value}</Text>
         </Box>
       ))}
+      {games && <StageGames {...games} />}
     </Flex>
-    <Button size="sm" variant="ghost" icon={<Icon name="pencil" />} onClick={onEdit}>{editLabel}</Button>
+    <StageEdit editLabel={editLabel} onEdit={onEdit} locked={locked} />
   </Flex>
 );
 

@@ -14,8 +14,6 @@ const useLaunchWatcher = (): void => {
   const launchedId = launched?.id;
   const status = launched?.status;
 
-  useEffect(() => { if (launchedId) jobs.open(runJobId(launchedId)); }, [launchedId]);
-
   useEffect(() => {
     if (!launchedId || (status !== 'hosting' && status !== 'failed')) return;
     begin(null);

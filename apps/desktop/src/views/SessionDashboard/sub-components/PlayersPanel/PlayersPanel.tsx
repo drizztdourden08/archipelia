@@ -1,13 +1,11 @@
 /* @layer renderer-app @kind component */
 import { EmptyState, Stack } from '@drizztdourden08/tessera/primitives';
-import type { PlayerView } from '@archipelia/sessions/live-room';
 import { checksLabel } from '@archipelia/sessions/live-room';
 import { STATUS_TONE } from './PlayersPanel.constants';
 import type { PlayersPanelProps } from './PlayersPanel.type';
 import { LiveStatus } from '../LiveStatus';
+import { progressOf } from '../../behavior/progress-of';
 import { PlayerStatusRow } from '@archipelia/design';
-
-const progressOf = ({ checked, total }: PlayerView) => (checked !== null && total ? { value: checked, max: total } : null);
 
 const PlayersPanel = ({ rows, connection }: PlayersPanelProps) => (
   <Stack gap="sm" className="session-panel">

@@ -5,7 +5,7 @@ import { StageCode } from './sub-components/StageCode';
 import { StageConfig } from './sub-components/StageConfig';
 import './LobbyStage.css';
 
-const LobbyStage = ({ title, chips, actions, code, note, config, children }: LobbyStageProps) => (
+const LobbyStage = ({ title, chips, actions, codes = [], note, config, children }: LobbyStageProps) => (
   <Box as="section" className="lobby-stage" aria-label={title}>
     <Stack as="header" className="lobby-stage__head" gap="sm">
       <Flex className="lobby-stage__line" gap="sm" align="center">
@@ -14,7 +14,7 @@ const LobbyStage = ({ title, chips, actions, code, note, config, children }: Lob
         <Flex className="lobby-stage__actions" gap="sm" align="center">{actions}</Flex>
       </Flex>
       <Flex className="lobby-stage__line" gap="sm" align="center" wrap>
-        {code && <StageCode {...code} />}
+        {codes.map((code) => <StageCode key={code.label} {...code} />)}
         <Box className="lobby-stage__note">{note}</Box>
       </Flex>
     </Stack>

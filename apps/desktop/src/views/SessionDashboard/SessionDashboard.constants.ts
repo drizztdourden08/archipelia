@@ -35,7 +35,6 @@ const READ_FAILED = 'Could not read this file.';
 
 const FAILURE = {
   stop: 'Could not stop the room.',
-  copy: 'Could not copy the address.',
   run: 'This run did not get its room up. Show log on the Sessions page has the details.',
 } as const;
 

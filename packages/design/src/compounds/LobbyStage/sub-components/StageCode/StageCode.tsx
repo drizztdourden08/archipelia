@@ -7,7 +7,7 @@ const StageCode = ({ label, value, copyLabel }: StageCodeProps) => (
   <>
     <Text as="span" variant="overline" tone="dim">{label}</Text>
     <Text as="span" mono className="lobby-stage__code">{value}</Text>
-    <CopyButton text={value} label={copyLabel} variant="ghost" size="sm" showLabel />
+    {copyLabel && <CopyButton text={value} label={copyLabel} variant="ghost" size="sm" showLabel />}
   </>
 );
 

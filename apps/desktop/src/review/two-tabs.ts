@@ -19,7 +19,7 @@ const hostSecond = async (tour: AppReviewTour) => {
   await waitText(tour, REVIEW_SECOND, () => tour.find(SELECTOR.layer));
   await openSavedLobby(tour, REVIEW_SECOND);
   await clickNamed(tour, SELECTOR.button, 'Run', tabBody(tour));
-  const hosting = await waitText(tour, /hosting/i, () => tour.find(SELECTOR.dashboard), RUN_TIMEOUT_MS);
+  const hosting = await waitText(tour, /^running$/im, () => tour.find(SELECTOR.dashboard), RUN_TIMEOUT_MS);
   tour.check('second-hosts', hosting, 'the second session runs and its tab shows the room', `${REVIEW_SECOND} did not host`);
   return hosting;
 };
