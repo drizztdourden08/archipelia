@@ -1,5 +1,6 @@
 /* @layer tests @kind test */
 import { afterEach, describe, expect, test } from 'vitest';
+import { setPlayers } from '@archipelia/model';
 import type { AdminLobby, LobbyOptions } from '@archipelia/model';
 import { startLobbyRig } from '@archipelia/server/testing';
 import { joinRecord, startJoins } from './join-kit';
@@ -39,7 +40,7 @@ describe('S2 Archipelia joins a session as a player', { tags: ['standard'] }, ()
     const started = await joins.until((view) => view.state === 'started');
     expect(started.results).toMatchObject({ address: 'archipelago.gg:38281', slot: 'Cy', game: 'Quest', sameComputer: true });
     expect(started.results?.password).toBeTruthy();
-    expect(rig.templates[0]?.players.map((player) => player.name)).toEqual(['Cy']);
+    expect(setPlayers(rig.templates[0]?.players ?? []).map((player) => player.name)).toEqual(['Cy']);
   });
 
   test('refuses before it sends anything when the session runs another Archipelago version', async () => {

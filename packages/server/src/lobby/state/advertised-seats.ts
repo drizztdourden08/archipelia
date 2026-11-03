@@ -1,10 +1,8 @@
 /* @layer core @kind logic */
-import type { HeldSeat, OpenSeats } from '@drizztdourden08/archipelia-lobby-protocol';
 import type { Lobby } from '@archipelia/model';
+import type { Advertised } from './advertised-seats.type';
 import { openSeatsOf } from './open-seats-of';
 import { seatTaken } from './seat-taken';
-
-type Advertised = { seats?: HeldSeat[]; open?: OpenSeats; allowedGames?: string[] };
 
 const advertisedSeats = (lobby: Lobby): Advertised => {
   const open = openSeatsOf(lobby);

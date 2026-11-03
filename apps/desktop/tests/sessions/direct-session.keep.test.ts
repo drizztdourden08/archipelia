@@ -1,5 +1,6 @@
 /* @layer tests @kind test */
 import { afterEach, describe, expect, test, vi } from 'vitest';
+import { setPlayers } from '@archipelia/model';
 import type { AdminLobby, SetPlayer, SessionTemplate } from '@archipelia/model';
 import type { Bindings, HostLine } from '@drizztdourden08/archipelia-lobby-protocol/testing';
 import { connectWebSocket, createFakeClient, createScenarioKit, loadScenario } from '@drizztdourden08/archipelia-lobby-protocol/testing';
@@ -70,7 +71,7 @@ describe('a session that takes direct connections', () => {
     });
     const result = await client.play();
     expect(result.failure).toBeUndefined();
-    const players = on.templates[0]?.players.map((player) => player.name);
+    const players = setPlayers(on.templates[0]?.players ?? []).map((player) => player.name);
     expect(players).toEqual(expect.arrayContaining(['Link', 'Ana']));
     expect(players).toHaveLength(2);
     const ran = (await on.service.get(lobby.id))?.members.find((member) => member.displayName === 'Link');
@@ -114,7 +115,7 @@ describe('a session without direct connections', () => {
     await runSession(syncPlan(template, lobby.id), { ...lobbyDeps(on), beforeRun });
     expect(beforeRun).toHaveBeenCalledWith(lobby.id, template);
     await vi.waitFor(() => expect(on.templates).toHaveLength(1));
-    expect(on.templates[0]?.players.map((player) => player.name)).toEqual(['Ana']);
+    expect(setPlayers(on.templates[0]?.players ?? []).map((player) => player.name)).toEqual(['Ana']);
   });
 
   test('K1 runs under its lobby on this computer, and on no launch the app follows for a remote server', { tags: ['critical'] }, () => {
@@ -155,7 +156,7 @@ describe('the slots of the host in a session that takes direct connections', () 
     await store.remove();
     await runSession(syncPlan(template, lobby.id), lobbyDeps(on));
     await vi.waitFor(() => expect(on.templates).toHaveLength(1));
-    expect(on.templates[0]?.players.map((player) => player.name)).toEqual(['Cy']);
+    expect(setPlayers(on.templates[0]?.players ?? []).map((player) => player.name)).toEqual(['Cy']);
   });
 });
 
