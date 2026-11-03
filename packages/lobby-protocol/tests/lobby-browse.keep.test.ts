@@ -54,7 +54,7 @@ describe('K1 lobby.browse messages', () => {
   });
 });
 
-describe('K2 an older server answers the new requests cleanly', () => {
+describe('K2 an older server answers the new requests with a clean error', () => {
   test.each(['lobby-browse-old-server', 'join-token-old-server'])('%s plays through', { tags: ['critical'] }, async (name) => {
     const run = await runScenario(loadScenario(name));
     expect({ client: run.client.failure, server: run.server.failure }).toEqual({ client: undefined, server: undefined });

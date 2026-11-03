@@ -59,7 +59,9 @@ describe('K1 listing the lobbies of a server', { tags: ['critical'] }, () => {
     expect(await browse(kit)).toEqual([]);
     await kit.stop();
   });
+});
 
+describe('K1 joining by token and hiding a lobby', { tags: ['critical'] }, () => {
   test('a join by token goes through the approval rule like a join by code', async () => {
     const kit = await startService();
     await kit.service.create({ name: 'Approval', engine, options: { listed: true, admission: 'host-approval' } });
@@ -91,7 +93,9 @@ describe('K1 listing the lobbies of a server', { tags: ['critical'] }, () => {
     expect(info).toMatchObject({ ok: false, failure: { code: 'lobby-not-found' } });
     await kit.stop();
   });
+});
 
+describe('K1 a new join token', { tags: ['critical'] }, () => {
   test('showing a lobby again gives it a new token, and an update that keeps it shown keeps the token', async () => {
     const kit = await startService();
     const lobby = await kit.service.create({ name: 'Again', engine, options: { listed: true } });
