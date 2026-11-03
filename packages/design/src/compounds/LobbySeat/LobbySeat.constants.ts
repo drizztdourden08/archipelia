@@ -9,6 +9,11 @@ const INITIALS_LENGTH = 2;
 
 const HASH_STEP = 31;
 
+const SEAT_SIDES = [
+  { value: 'direct', label: 'Direct' },
+  { value: 'set', label: 'Set' },
+] as const;
+
 const NONE: readonly never[] = [];
 
-export { ART_MIN_PIXELS, ART_RATIO, HASH_STEP, INITIALS_LENGTH, NONE, SEAT_TINTS };
+export { ART_MIN_PIXELS, ART_RATIO, HASH_STEP, INITIALS_LENGTH, NONE, SEAT_SIDES, SEAT_TINTS };

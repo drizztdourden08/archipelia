@@ -8,17 +8,17 @@ import { SeatFoot } from './sub-components/SeatFoot';
 import { SeatName } from './sub-components/SeatName';
 import './LobbySeat.css';
 
-const LobbySeat = ({ state, name, game, art, meta = NONE, status, reason, actions = NONE, tools = NONE, selected, onOpen }: LobbySeatProps) => (
+const LobbySeat = ({ state, name, game, art, mark, meta = NONE, status, side, reason, actions = NONE, tools = NONE, selected, onOpen }: LobbySeatProps) => (
   <Box as="article" className="lobby-seat" data-state={state} data-selected={selected ? true : undefined} aria-label={name}>
     <Flex className="lobby-seat__who" gap="sm" align="start">
-      {state !== 'held' && <SeatAvatar key={art ?? ''} label={game ?? name} art={art} />}
+      <SeatAvatar key={art ?? ''} label={game ?? mark ?? name} art={art} />
       <Stack className="lobby-seat__text" gap="2xs">
         <SeatName name={name} meta={meta} onOpen={onOpen} />
       </Stack>
       <SeatButtons className="lobby-seat__tools" actions={tools} iconOnly />
     </Flex>
     {reason && <Text variant="caption" className="lobby-seat__reason">{reason}</Text>}
-    <SeatFoot status={status} actions={actions} />
+    <SeatFoot side={side} status={status} actions={actions} />
   </Box>
 );
 

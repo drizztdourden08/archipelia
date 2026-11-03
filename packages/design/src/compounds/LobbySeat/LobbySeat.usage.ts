@@ -11,13 +11,14 @@ const usage = {
     { case: 'A game to install.', use: 'GameCard' },
   ],
   rules: [
-    'Pass state filled for a seat with a player, held for a seat kept for a player who has not connected, attention for a player who waits on the host.',
+    'Pass state filled for a seat with a player, held for a seat kept for a player who has not connected, attention for a player who waits on the host, new for a seat just added whose side is not picked yet.',
     'Pass game and art: the art shows only when it is a real square picture; a wide or broken picture, or none, gives the initials of the game on a tinted square, so a screenshot is never squashed.',
     'Put the facts in meta, one line each, such as Slot 1 · Hollow Knight · Saved, then the preset or the client of the player.',
     'Give a filled seat a status such as Ready, and an attention seat a reason such as Waiting for approval.',
     'Put the next step in actions, at most one primary; put small tools such as Edit or Duplicate in tools, drawn as icon buttons in the corner.',
     'Pass onOpen to make the name a button that opens the player, and selected while it is open.',
-    'A held seat draws no art: pass the slot as its name and what it waits for as meta.',
+    'A held or new seat draws no art: pass the slot number as mark, so a dashed square shows it, and what it waits for as meta.',
+    'Pass side to draw the Direct or Set control at the foot of the card: no value while the side is not picked, locked once a player has joined.',
   ],
   a11y: [
     'The seat is an article named after its name, and the name is a level 3 heading.',

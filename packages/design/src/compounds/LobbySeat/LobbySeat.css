@@ -37,9 +37,20 @@
   --seat-edge: var(--c-border-strong);
   --seat-ground: var(--c-inset);
 
-  justify-content: center;
   border-style: dashed;
   box-shadow: none;
+}
+
+.lobby-seat[data-state='new'] {
+  --seat-edge: var(--c-primary);
+}
+
+.lobby-seat[data-state='held'] .lobby-seat__avatar,
+.lobby-seat[data-state='new'] .lobby-seat__avatar {
+  --seat-tint: var(--c-text-dim);
+  --seat-tint-soft: transparent;
+
+  border-style: dashed;
 }
 
 .lobby-seat__who {
@@ -49,11 +60,6 @@
 .lobby-seat__text {
   flex: 1;
   min-inline-size: 0;
-}
-
-.lobby-seat[data-state='held'] .lobby-seat__text {
-  align-items: center;
-  text-align: center;
 }
 
 .lobby-seat .lobby-seat__name {
@@ -69,7 +75,8 @@
   white-space: nowrap;
 }
 
-.lobby-seat[data-state='held'] .lobby-seat__name {
+.lobby-seat[data-state='held'] .lobby-seat__name,
+.lobby-seat[data-state='new'] .lobby-seat__name {
   color: var(--c-text-dim);
 }
 
