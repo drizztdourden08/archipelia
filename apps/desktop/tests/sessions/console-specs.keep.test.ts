@@ -16,7 +16,8 @@ describe('K2 console command specs', { tags: ['critical'] }, () => {
   });
 
   test('player slots list the room players and the option slot lists the server options', () => {
-    const lists = specOf('release')?.setup?.lists;
+    const spec = specOf('release');
+    const lists = spec !== undefined && 'setup' in spec ? spec.setup?.lists : undefined;
     expect(lists?.players).toEqual([{ value: 'Ana' }, { value: 'Bo' }]);
     expect(lists?.options).toContainEqual({ value: 'hint_cost' });
   });
