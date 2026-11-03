@@ -33,8 +33,9 @@ const LOG = [
 const endAt = START + 134 * MINUTE;
 
 test('K1 the end state counts finished slots, the duration and each slot status', { tags: ['critical'] }, () => {
-  const end = runEndOf({ players: PLAYERS, lines: LOG, endedAt: endAt });
+  const end = runEndOf({ players: PLAYERS, lines: LOG, endedAt: endAt, reason: 'stopped' });
   expect(end?.version).toBe(1);
+  expect(end?.reason).toBe('stopped');
   expect(end?.startedAt).toBe(START);
   expect(end?.endedAt).toBe(endAt);
   expect(end?.durationMs).toBe(134 * MINUTE);
@@ -43,14 +44,14 @@ test('K1 the end state counts finished slots, the duration and each slot status'
 });
 
 test('K1 a goal keeps the first completion time and how long after the start', { tags: ['critical'] }, () => {
-  const link = runEndOf({ players: PLAYERS, lines: LOG, endedAt: endAt })?.slots[0];
+  const link = runEndOf({ players: PLAYERS, lines: LOG, endedAt: endAt, reason: 'stopped' })?.slots[0];
   expect(link?.goalAt).toBe(START + 30 * MINUTE);
   expect(link?.goalAfterMs).toBe(30 * MINUTE);
   expect(link?.checked).toBe(2);
 });
 
 test('K1 first and last seen follow game clients, a player still online is seen until the end', { tags: ['critical'] }, () => {
-  const slots = runEndOf({ players: PLAYERS, lines: LOG, endedAt: endAt })?.slots ?? [];
+  const slots = runEndOf({ players: PLAYERS, lines: LOG, endedAt: endAt, reason: 'stopped' })?.slots ?? [];
   expect(slots[0]).toMatchObject({ firstSeenAt: START + MINUTE, lastSeenAt: endAt });
   expect(slots[1]).toMatchObject({ firstSeenAt: START + 3 * MINUTE, lastSeenAt: START + 50 * MINUTE });
   expect(slots[3]?.firstSeenAt).toBeUndefined();
@@ -58,8 +59,8 @@ test('K1 first and last seen follow game clients, a player still online is seen 
 });
 
 test('K1 a known total is kept next to the checks and an empty log gives no end state', { tags: ['critical'] }, () => {
-  const end = runEndOf({ players: PLAYERS, lines: LOG, endedAt: endAt, totals: { Link: 120 } });
+  const end = runEndOf({ players: PLAYERS, lines: LOG, endedAt: endAt, reason: 'stopped', totals: { Link: 120 } });
   expect(end?.slots[0]).toMatchObject({ checked: 2, total: 120 });
   expect(end?.slots[1]?.total).toBeUndefined();
-  expect(runEndOf({ players: PLAYERS, lines: [], endedAt: endAt })).toBeUndefined();
+  expect(runEndOf({ players: PLAYERS, lines: [], endedAt: endAt, reason: 'stopped' })).toBeUndefined();
 });

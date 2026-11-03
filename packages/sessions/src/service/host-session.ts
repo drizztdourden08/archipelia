@@ -11,6 +11,7 @@ import type { HostEngine } from '../engine/pick-host-engine.type';
 import { hostForSession } from './host-for-session';
 import { hostWarning } from './host-warning';
 import { warnSession } from './warn-session';
+import { createLiveTally } from '../run-end';
 
 const localEngine = ({ deps, runtime }: HostRun, session: Session): Promise<HostEngine> =>
   runtime ? Promise.resolve({ runtime }) : pickHostEngine({ source: deps, session });
@@ -20,10 +21,12 @@ const hostSession = async (run: HostRun, session: Session) => {
   const { server, host: hostTarget } = session.snapshot;
   const picked = hostTarget.kind === 'local' ? await localEngine(run, session) : undefined;
   const target = await hostForSession(deps, session, picked?.runtime);
-  const entry: LiveSession = { host: target, log: [] };
+  const tally = createLiveTally(deps.files, session.id, (session.players ?? []).map((player) => player.name));
+  const entry: LiveSession = { host: target, log: [], tally };
   live.set(session.id, entry);
   target.onLog((line) => {
     entry.log.push(line);
+    tally.add(line);
     if (entry.log.length > MAX_LOG_LINES) entry.log.shift();
     deps.emit({ type: 'log', sessionId: session.id, line });
   });

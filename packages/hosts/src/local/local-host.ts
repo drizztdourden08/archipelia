@@ -61,7 +61,11 @@ const createLocalHost = ({ runtime, port, bindHost = ALL_INTERFACES, advertiseHo
     child = undefined;
   };
 
-  return { kind: 'local', start, command, onLog: hub.subscribe, stop };
+  const onExit = (listener: () => void) => {
+    child?.once('exit', listener);
+  };
+
+  return { kind: 'local', start, command, onLog: hub.subscribe, onExit, stop };
 };
 
 export { createLocalHost };

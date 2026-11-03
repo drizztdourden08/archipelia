@@ -3,6 +3,7 @@ import type { EngineRuntime, HostTarget, SessionEngine } from '@archipelia/model
 import type { HostBinding, HostLogLine, SessionHost } from '@archipelia/hosts';
 import type { PlayerDeps } from '../players/write-players.type';
 import type { RunStore } from '../store/session-stores.type';
+import type { LiveTally } from '../run-end';
 import type { SessionEvent } from './session-event.type';
 
 type ServiceDeps = PlayerDeps & {
@@ -16,6 +17,6 @@ type ServiceDeps = PlayerDeps & {
   emit: (event: SessionEvent) => void;
 };
 
-type LiveSession = { host: SessionHost; log: HostLogLine[] };
+type LiveSession = { host: SessionHost; log: HostLogLine[]; tally: LiveTally };
 
 export type { LiveSession, ServiceDeps };
