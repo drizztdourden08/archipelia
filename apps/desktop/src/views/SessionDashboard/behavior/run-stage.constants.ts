@@ -6,7 +6,6 @@ const RUN_STAGE_TEXT = {
   running: 'Running',
   lan: 'LAN',
   up: 'Up',
-  address: 'Address',
   seed: 'Seed',
   copySeed: 'Copy seed',
   copyAddress: 'Copy address',

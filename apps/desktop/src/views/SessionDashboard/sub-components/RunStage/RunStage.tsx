@@ -35,7 +35,7 @@ const RunStage = ({ sessionId, children }: RunStageProps) => {
       />
     ),
     actions: <RunActions address={board.address} stoppable={canStop(session.status)} onStop={board.stopSession} />,
-    codes: runCodes(board.address, session.seed),
+    codes: runCodes(session),
     config: runConfig(snapshot),
     children: (
       <>

@@ -1,6 +1,9 @@
 /* @layer tests @kind test */
 import { describe, expect, test } from 'vitest';
+import type { LobbyRoom } from '@archipelia/model';
 import { mergeLobby } from '../../src/stores/merge-lobby';
+import { serverPlace } from '../../src/lobbies/server-place';
+import { lobbyCodes } from '../../src/views/SessionLobby/behavior/lobby-codes';
 import { joinFacts } from '../../src/views/SessionLobby/behavior/join-facts';
 import { directState } from '../../src/views/SessionBuilder/behavior/direct-state';
 import { newTemplate } from '../../src/views/SessionBuilder/behavior/new-template';
@@ -83,5 +86,29 @@ describe('K1 the lobby of a session', { tags: ['critical'] }, () => {
     expect(mergeLobby([newer], lobby({ rev: 2, name: 'Old' }))[0]?.name).toBe('New');
     expect(mergeLobby([newer], lobby({ rev: 4, name: 'Newest' }))[0]?.name).toBe('Newest');
     expect(mergeLobby(undefined, newer)).toEqual([newer]);
+  });
+});
+
+describe('K1 the network codes in the lobby header', { tags: ['critical'] }, () => {
+  const status = { state: 'listening', options: { mode: 'lan', publicLookup: true }, automation: false, roomPasswords: 'vault', lanAddress: '192.168.1.5', port: 38290 } as const;
+  const room: LobbyRoom = { seed: 's', zip: 'z', host: '192.168.1.5', port: 38281, tls: 'no', files: [], state: 'hosting' };
+  const shown = (codes: ReturnType<typeof lobbyCodes>) => codes.map((code) => `${code.label}=${code.value}`);
+
+  test('shows the host, the LAN address and the port of the server on this computer', () => {
+    const codes = lobbyCodes(lobby(), serverPlace('local', [], status));
+    expect(shown(codes)).toEqual(['Session code=K7QM-4XT2', 'Host=This computer', 'IP=192.168.1.5', 'Port=38290']);
+  });
+
+  test('shows the remote host and port of a remote server, and adds the room address once the room is up', () => {
+    const entry = { id: 'r1', label: 'Friend', url: 'wss://friend.example:38290', tokenRef: 'token' };
+    const place = serverPlace('r1', [entry], null);
+    expect(shown(lobbyCodes(lobby(), place))).toEqual(['Session code=K7QM-4XT2', 'Host=Friend', 'IP=friend.example', 'Port=38290']);
+    expect(shown(lobbyCodes(lobby({ room }), place)).at(-1)).toBe('Room address=192.168.1.5:38281');
+    expect(shown(lobbyCodes(lobby({ room: { ...room, state: 'stopped' } }), place))).toHaveLength(4);
+  });
+
+  test('shows nothing before the lobby exists and skips the address of a server that is not listening', () => {
+    expect(lobbyCodes(undefined, serverPlace('local', [], status))).toEqual([]);
+    expect(shown(lobbyCodes(lobby(), serverPlace('local', [], null)))).toEqual(['Session code=K7QM-4XT2', 'Host=This computer']);
   });
 });

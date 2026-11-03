@@ -33,4 +33,15 @@ const RUN_STATUS: Record<SessionStatus, RunStatusView> = {
   failed: { label: 'Failed', tone: 'danger' },
 };
 
-export { CONFIG_TEXT, COUNT_TEXT, PHASE_URGENT, RUN_STATUS, STAGE_GAMES_TEXT };
+const NETWORK_CODE_TEXT = {
+  host: 'Host',
+  hostCopy: 'Copy host',
+  ip: 'IP',
+  ipCopy: 'Copy IP',
+  port: 'Port',
+  portCopy: 'Copy port',
+  room: 'Room address',
+  roomCopy: 'Copy address',
+} as const;
+
+export { CONFIG_TEXT, COUNT_TEXT, NETWORK_CODE_TEXT, PHASE_URGENT, RUN_STATUS, STAGE_GAMES_TEXT };

@@ -3,4 +3,6 @@ import type { StatusTone } from '@drizztdourden08/tessera/primitives';
 
 type RunStatusView = { label: string; tone: StatusTone };
 
-export type { RunStatusView };
+type NetworkPlace = { host?: string; ip?: string; port?: number };
+
+export type { NetworkPlace, RunStatusView };
