@@ -94,7 +94,7 @@ describe('K1 the players in the lobby', { tags: ['critical'] }, () => {
 describe('K1 a game whose player file comes from its own app', { tags: ['critical'] }, () => {
   const APP_GAME: InstalledGame = { ...GAME, apworld: 'rotp', game: 'Relic', playerFile: 'app' };
   const library = { installed: [APP_GAME], presets: [{ ...PRESET, game: 'Relic' }] };
-  const imported = (yaml: string) => ({ slot: 1, name: 'Rel', game: 'Relic', source: { kind: 'yaml' as const, fileName: 'r.yaml', yaml } });
+  const imported = (yaml: string) => ({ kind: 'set' as const, slot: 1, name: 'Rel', game: 'Relic', source: { kind: 'yaml' as const, fileName: 'r.yaml', yaml } });
 
   test('a preset source is blocked with the app message, and nothing else is said about it', () => {
     expect(validatePlayers(withPlayers([presetPlayer(1, 'Rel', 'p1', 'Relic')]), library)).toEqual([
@@ -103,24 +103,15 @@ describe('K1 a game whose player file comes from its own app', { tags: ['critica
   });
 
   test('an imported file without pre_rolled is blocked, and one with it passes', () => {
-    expect(validatePlayers(withPlayers([imported('name: Rel
-game: Relic
-Relic:
-  death_link: true
-')]), library)).toEqual([
+    expect(validatePlayers(withPlayers([imported('name: Rel\ngame: Relic\nRelic:\n  death_link: true\n')]), library)).toEqual([
       { slot: 1, field: 'source', message: 'Rel: this Relic YAML was not saved by its app (no pre_rolled). Save the Archipelago files from the app again.' },
     ]);
-    expect(validatePlayers(withPlayers([imported('name: Rel
-game: Relic
-Relic:
-  pre_rolled:
-    world: abc
-')]), library)).toEqual([]);
+    expect(validatePlayers(withPlayers([imported('name: Rel\ngame: Relic\nRelic:\n  pre_rolled:\n    world: abc\n')]), library)).toEqual([]);
   });
 
   test('an empty import still asks for a file, and a direct slot is left alone', () => {
     expect(validatePlayers(withPlayers([imported('')]), library)).toEqual([{ slot: 1, field: 'source', message: 'Rel: import a player file' }]);
-    expect(validatePlayers(withPlayers([{ slot: 1, name: 'Rel', direct: true }]), library)).toEqual([]);
+    expect(validatePlayers(withPlayers([{ kind: 'direct' as const, slot: 1 }]), library)).toEqual([]);
   });
 
   test('a world with no recorded playerFile but a pre_rolled option counts as an app game', () => {

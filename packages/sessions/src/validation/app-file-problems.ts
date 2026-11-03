@@ -1,12 +1,12 @@
 /* @layer core @kind logic */
-import type { HostedPlayer } from '@archipelia/model';
+import type { SetPlayer } from '@archipelia/model';
 import { appGameOf } from './app-game-of';
 import { hasPreRolled } from './has-pre-rolled';
 import { labelOf } from './label-of';
 import { playerProblem } from './player-problem';
 import type { LibraryView, TemplateProblem } from './validate-players.type';
 
-const appFileProblems = (player: HostedPlayer, library: LibraryView): TemplateProblem[] => {
+const appFileProblems = (player: SetPlayer, library: LibraryView): TemplateProblem[] => {
   const game = appGameOf(player, library);
   if (!game) return [];
   const name = labelOf(player);

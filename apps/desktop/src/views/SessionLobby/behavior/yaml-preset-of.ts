@@ -1,6 +1,6 @@
 /* @layer renderer-app @kind logic */
 import { PRE_ROLLED_KEY, isRecord } from '@archipelia/model';
-import type { GamePreset, InstalledGame, OptionValue, SessionPlayer } from '@archipelia/model';
+import type { GamePreset, InstalledGame, OptionValue, SetPlayer } from '@archipelia/model';
 import { parseAllDocuments } from 'yaml';
 
 const valuesOf = (yaml: string, game: InstalledGame): Record<string, OptionValue> => {
@@ -12,8 +12,8 @@ const valuesOf = (yaml: string, game: InstalledGame): Record<string, OptionValue
   );
 };
 
-const yamlPresetOf = (player: SessionPlayer, game: InstalledGame): GamePreset | undefined => {
-  if (player.source?.kind !== 'yaml' || !player.source.yaml.trim()) return undefined;
+const yamlPresetOf = (player: SetPlayer, game: InstalledGame): GamePreset | undefined => {
+  if (player.source.kind !== 'yaml' || !player.source.yaml.trim()) return undefined;
   return { id: '', game: game.game, name: player.source.fileName, values: valuesOf(player.source.yaml, game), updatedAt: 0 };
 };
 
