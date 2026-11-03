@@ -1,5 +1,6 @@
 /* @layer renderer-app @kind config */
-import type { PlayerOrigin, SessionStatus, SpoilerLevel } from '@archipelia/model';
+import type { PlayerOrigin, SessionStatus, SlotEndStatus, SpoilerLevel } from '@archipelia/model';
+import type { StatusTone } from '@drizztdourden08/tessera/primitives';
 import type { RangeFilter, StatusFilter } from '../../stores/history-filter-store.type';
 
 const DATE_FORMAT = new Intl.DateTimeFormat(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
@@ -39,6 +40,15 @@ const TRUST_LABEL = { verified: 'Verified', unlisted: 'Unlisted' } as const;
 
 const SPOILER_LABEL: Record<SpoilerLevel, string> = { 0: 'None', 1: 'Basic', 2: 'Playthrough', 3: 'Full' };
 
+const NO_VALUE = '-';
+
+const END_STATUS: Record<SlotEndStatus, { label: string; tone: StatusTone }> = {
+  goal: { label: 'Goal done', tone: 'success' },
+  playing: { label: 'Playing', tone: 'info' },
+  connected: { label: 'Connected', tone: 'warning' },
+  never: { label: 'Never connected', tone: 'neutral' },
+};
+
 const TEXT = {
   runAgainGone: 'Session deleted, so there is nothing to run again.',
   runAgainLive: 'This run is live. Go to its tab.',
@@ -49,6 +59,7 @@ const TEXT = {
   noRuns: 'No run yet. Run a session to start one.',
   noChanges: 'Ran as saved. No setting was changed for this run.',
   noPlayers: 'No player was recorded for this run.',
+  noEnd: 'The end state was not recorded for this run.',
 } as const;
 
 const FAILURE = {
@@ -59,5 +70,5 @@ const FAILURE = {
 } as const;
 
 export {
-  CLEAN_DAYS, DATE_FORMAT, DAY_MS, FAILURE, LIST_WIDTH, LIVE, ORIGIN_LABEL, RANGE_OPTIONS, SPOILER_LABEL, STATUS_GROUP, STATUS_OPTIONS, TEXT, TRUST_LABEL,
+  CLEAN_DAYS, DATE_FORMAT, DAY_MS, END_STATUS, FAILURE, LIST_WIDTH, LIVE, NO_VALUE, ORIGIN_LABEL, RANGE_OPTIONS, SPOILER_LABEL, STATUS_GROUP, STATUS_OPTIONS, TEXT, TRUST_LABEL,
 };
