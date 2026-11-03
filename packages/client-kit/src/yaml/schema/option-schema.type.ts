@@ -1,6 +1,6 @@
 /* @layer client-kit @kind types */
 
-type OptionType = 'toggle' | 'choice' | 'range' | 'text' | 'dict';
+type OptionType = 'toggle' | 'choice' | 'range' | 'text' | 'dict' | 'set' | 'list';
 
 type OptionChoice = { value: string; id: number };
 
@@ -11,6 +11,7 @@ type OptionRow = {
   description?: string;
   default?: unknown;
   choices?: readonly OptionChoice[];
+  names?: readonly string[];
   numeric?: boolean;
   range?: { min: number; max: number };
   locked?: boolean;
