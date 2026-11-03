@@ -1,5 +1,5 @@
 /* @layer core @kind logic */
-const PLAIN_ARG = /^[^\s"'\\]+$/;
+import { PLAIN_ARG } from './quote-arg.constants';
 
 const quoteArg = (value: string): string => {
   if (PLAIN_ARG.test(value)) return value;

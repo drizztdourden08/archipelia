@@ -92,7 +92,9 @@ describe('K2 the release manifest forms', { tags: ['critical'] }, () => {
     expect(indexOfRelease(manifest)).toEqual(old);
     expect(JSON.parse(serializeApworldIndex(old))).not.toHaveProperty('format');
   });
+});
 
+describe('K2 refusing a release manifest', { tags: ['critical'] }, () => {
   test.each([
     [{ builds: [] }, 'at least one build'],
     [{ builds: [buildOf('0.6.8', HASH_A), buildOf('0.6.8', HASH_B)] }, 'same Archipelago version'],

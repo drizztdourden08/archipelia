@@ -2,12 +2,12 @@
 import { useCallback } from 'react';
 import type { OptionValue } from '@archipelia/model';
 import { FilterBar } from '@drizztdourden08/tessera/composites';
-import { Button, ButtonRow, Card, EmptyState, ScrollArea, SectionHeader, Stack, Text, Toggle } from '@drizztdourden08/tessera/primitives';
+import { Button, ButtonRow, Card, SectionHeader, Stack, Text, Toggle } from '@drizztdourden08/tessera/primitives';
 import type { OverridesPanelProps } from './OverridesPanel.type';
 import { overridesOf } from '../../behavior/overrides-of';
 import { useOverrideRows } from '../../behavior/useOverrideRows';
 import { APP_FILE_TEXT } from '../../SessionLobby.constants';
-import { OverrideRow } from '../OverrideRow';
+import { OverridesBody } from '../OverridesBody';
 
 const OverridesPanel = ({ player, game, preset, onValue, onReset, onResetAll, onClose }: OverridesPanelProps) => {
   const { slot } = player;
@@ -41,28 +41,7 @@ const OverridesPanel = ({ player, game, preset, onValue, onReset, onResetAll, on
           extra={<Toggle label="Changed only" checked={changedOnly} onChange={setChangedOnly} />}
         />
         {readOnly && <Text variant="caption" tone="muted">{APP_FILE_TEXT.readOnly}</Text>}
-        {!game || !preset
-          ? <EmptyState message={readOnly ? APP_FILE_TEXT.empty : 'Pick an installed game and a preset to change its options.'} />
-          : (
-            <ScrollArea scrollbar="slim" className="session-lobby__override-rows">
-              <Stack gap="xs">
-                {rows.length === 0 && <EmptyState message="No option matches" />}
-                {rows.map((row) => (
-                  <OverrideRow
-                    key={row.def.key}
-                    def={row.def}
-                    value={row.value}
-                    presetValue={row.presetValue}
-                    overridden={row.overridden}
-                    problem={row.problem}
-                    disabled={readOnly}
-                    onValue={handleValue}
-                    onReset={handleReset}
-                  />
-                ))}
-              </Stack>
-            </ScrollArea>
-          )}
+        <OverridesBody game={game} preset={preset} readOnly={readOnly} rows={rows} onValue={handleValue} onReset={handleReset} />
       </Stack>
     </Card>
   );
