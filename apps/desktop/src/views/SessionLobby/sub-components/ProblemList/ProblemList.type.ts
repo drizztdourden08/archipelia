@@ -2,9 +2,9 @@
 import type { TemplateProblem } from '@archipelia/sessions/validation';
 
 type ProblemListProps = {
-  problems: TemplateProblem[];
+  problems: readonly TemplateProblem[];
   attempted: boolean;
-  onShow: (problem: TemplateProblem) => void;
+  onOpenSlot: (slot: number) => void;
 };
 
 export type { ProblemListProps };

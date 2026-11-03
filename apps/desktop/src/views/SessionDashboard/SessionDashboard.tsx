@@ -1,13 +1,17 @@
 /* @layer renderer-app @kind component */
 import { EmptyState, Spinner, Stack } from '@drizztdourden08/tessera/primitives';
+import { ErrorCallout, LobbyStage } from '@archipelia/design';
+import { hostLabel } from '@archipelia/model';
 import type { SessionDashboardProps } from './SessionDashboard.type';
 import { useSessionDashboard } from './behavior/useSessionDashboard';
 import { useLiveRoom } from './behavior/useLiveRoom';
 import { canStop } from './behavior/can-stop';
-import { hostLabel } from '@archipelia/model';
-import { progressLabel } from './behavior/progress-label';
-import { ErrorCallout, RUN_STATUS, SessionStatusBar } from '@archipelia/design';
-import { SessionSummary } from './sub-components/SessionSummary';
+import { runCodes } from './behavior/run-codes';
+import { runConfig } from './behavior/run-config';
+import { RunActions } from './sub-components/RunActions';
+import { RunChips } from './sub-components/RunChips';
+import { RunPlayers } from './sub-components/RunPlayers';
+import { RunProgress } from './sub-components/RunProgress';
 import { useLoggedFailure } from '../../hooks/useLoggedFailure';
 import { FAILURE, LOADING_RUN } from './SessionDashboard.constants';
 import './SessionDashboard.css';
@@ -20,27 +24,31 @@ const SessionDashboard = ({ sessionId }: SessionDashboardProps) => {
   const { session } = board;
   if (!session) return <EmptyState icon={<Spinner />} message={LOADING_RUN} />;
 
-  const status = RUN_STATUS[session.status];
+  const { snapshot } = session;
+  const chips = (
+    <RunChips
+      status={session.status}
+      job={board.progress}
+      place={hostLabel(snapshot.host)}
+      lan={snapshot.lan === true}
+      count={live.players.length || snapshot.players.length}
+      uptime={board.uptime}
+    />
+  );
   return (
     <Stack gap="md" className="session-dashboard">
-      <SessionStatusBar
-        status={status.label}
-        statusTone={status.tone}
-        name={session.snapshot.name}
-        host={hostLabel(session.snapshot.host)}
-        address={board.address}
-        roomUrl={session.endpoint?.roomUrl}
-        seed={session.seed}
-        uptime={board.uptime}
-        progress={progressLabel(board.progress)}
-        copied={board.copied}
-        stoppable={canStop(session.status)}
-        onCopy={board.copyAddress}
-        onStop={board.stopSession}
-      />
-      {board.error && <ErrorCallout message={board.error} />}
-      {runFailure && <ErrorCallout message={runFailure} />}
-      <SessionSummary players={live.players} hints={live.hints} phase={live.phase} uptime={board.uptime} status={status.label} />
+      <LobbyStage
+        title={snapshot.name}
+        chips={chips}
+        actions={<RunActions address={board.address} stoppable={canStop(session.status)} onStop={board.stopSession} />}
+        codes={runCodes(board.address, session.seed)}
+        config={runConfig(snapshot)}
+      >
+        <RunProgress job={board.progress} />
+        {board.error && <ErrorCallout message={board.error} />}
+        {runFailure && <ErrorCallout message={runFailure} />}
+        <RunPlayers session={session} rows={live.players} />
+      </LobbyStage>
     </Stack>
   );
 };

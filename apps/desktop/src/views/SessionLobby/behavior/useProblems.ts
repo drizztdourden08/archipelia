@@ -23,7 +23,13 @@ const useProblems = (draft: SessionTemplate, library: LibraryView, select: (slot
     requestAnimationFrame(() => focusProblem(document.body, problem));
   }, [draft.players, select]);
 
-  return { attemptRun, problems, rootRef, runAttempted, showProblem };
+  const openSlot = useCallback((slot: number) => {
+    const problem = problems.find((entry) => entry.slot === slot);
+    if (problem) showProblem(problem);
+    else select(slot, false);
+  }, [problems, select, showProblem]);
+
+  return { attemptRun, openSlot, problems, rootRef, runAttempted, showProblem };
 };
 
 export { useProblems };

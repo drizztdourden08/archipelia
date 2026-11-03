@@ -19,7 +19,7 @@ import { LIVE_WIDGETS, SPOILER_WIDGET, STOPPED_WIDGETS } from './widget-content.
 
 const dashboard = (tour: AppReviewTour) => tour.find(SELECTOR.dashboard);
 
-const hosting = (tour: AppReviewTour) => waitText(tour, /hosting/i, () => (tour.find(SELECTOR.layer) ? null : dashboard(tour)), RUN_TIMEOUT_MS);
+const hosting = (tour: AppReviewTour) => waitText(tour, /^running$/im, () => (tour.find(SELECTOR.layer) ? null : dashboard(tour)), RUN_TIMEOUT_MS);
 
 const stopFromDashboard = async (tour: AppReviewTour) => {
   await clickNamed(tour, SELECTOR.button, 'Stop', dashboard(tour) ?? undefined);

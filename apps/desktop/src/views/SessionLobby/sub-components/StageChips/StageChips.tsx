@@ -6,12 +6,13 @@ import { useServerPlace } from '../../../../hooks/useServerPlace';
 import { LOBBY_PHASES } from '../../../../lobbies/lobby-statuses.constants';
 import { LOBBY_SCREEN } from '../../SessionLobby.constants';
 import { countLabel } from '../../behavior/count-label';
+import { problemsLabel } from '../../behavior/problems-label';
 import { phaseLook } from '../../behavior/phase-look';
 import { shownPhase } from '../../behavior/shown-phase';
 import { ChangesChip } from '../ChangesChip';
 import type { StageChipsProps } from './StageChips.type';
 
-const StageChips = ({ lobby, serverId, direct, changes, count }: StageChipsProps) => {
+const StageChips = ({ lobby, serverId, direct, changes, count, problems }: StageChipsProps) => {
   const place = useServerPlace(serverId);
   const { status } = useLocalServerStatus();
   const lan = place.local && status?.options.mode === 'lan';
@@ -21,6 +22,7 @@ const StageChips = ({ lobby, serverId, direct, changes, count }: StageChipsProps
       <Tag {...phaseLook(phase?.tone ?? 'neutral')} pill dot>{phase ? `${LOBBY_SCREEN.lobby} ${phase.label.toLowerCase()}` : LOBBY_SCREEN.loading}</Tag>
       <Tag pill icon={lan ? 'wifi' : 'monitor'}>{lan ? LOBBY_SCREEN.lan : place.label}</Tag>
       <Tag pill icon="users">{countLabel(count)}</Tag>
+      {problems > 0 && <Tag {...phaseLook('danger')} pill>{problemsLabel(problems)}</Tag>}
       <ChangesChip changes={changes} />
     </>
   );

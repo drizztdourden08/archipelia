@@ -12,11 +12,11 @@ const LobbyNotices = ({ screen }: LobbyNoticesProps) => {
   const failure = screen.lobby?.failure;
   return (
     <>
+      <ProblemList problems={screen.problems} attempted={screen.runAttempted} onOpenSlot={screen.openSlot} />
       {screen.dataFailed && <ErrorCallout message={SESSION_FAILED.data} onRetry={screen.reloadData} />}
       {screen.error && <ErrorCallout message={screen.error} />}
       {notices.map((notice) => <Callout key={notice} tone="warning">{notice}</Callout>)}
       {failure && <Callout tone="danger">{`${LOBBY_SCREEN.failed} ${failure.message}`}</Callout>}
-      <ProblemList problems={screen.problems} attempted={screen.runAttempted} onShow={screen.showProblem} />
     </>
   );
 };

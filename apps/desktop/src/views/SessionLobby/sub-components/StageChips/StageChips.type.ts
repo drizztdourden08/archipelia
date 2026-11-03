@@ -7,6 +7,7 @@ type StageChipsProps = {
   direct: boolean;
   changes: readonly RunOverride[];
   count: number;
+  problems: number;
 };
 
 export type { StageChipsProps };

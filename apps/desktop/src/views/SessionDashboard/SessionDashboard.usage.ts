@@ -2,7 +2,7 @@
 import type { ComponentUsage } from '@drizztdourden08/tessera';
 
 const usage = {
-  job: 'The room of one run: its status bar with Stop, and its summary, shown inside the tab of a session once it has run.',
+  job: 'The room of one run as the same framed LobbyStage as the lobby: the name with the run state, the place, the player count and the uptime, Copy address and Stop, the address and the seed, the generation progress, a row per player with its commands, and the config line locked while running.',
   useWhen: [
     'The room phase of a session tab, once the session has a run.',
   ],
@@ -12,12 +12,14 @@ const usage = {
   rules: [
     'Pass the id of the run to show; the tab that holds it owns which run that is and loads the runs.',
     'Ask before stopping a room.',
-    'Draw a summary tile that sums up a widget as an ActionTile that opens it, Players and Hints; keep a tile that only reads a value, Checks and Uptime, a StatTile.',
+    'Keep the frame of the lobby so Run does not move the stage or the widgets around it.',
+    'Show generation progress and errors inside the stage under the header, never in a separate dialog.',
+    'Show a Set slot nobody has connected to as Waiting for its player with the slot name to connect as, never Offline.',
   ],
   a11y: [
-    'The status bar comes first, with the status as text.',
+    'The header comes first, with the run state as text.',
     'Errors are alerts.',
-    'Each summary tile that opens a widget names its chevron after it, such as Show the Players widget.',
+    'Each row menu is named after its player, such as Commands for Ana.',
   ],
   tree: {
     path: ['a full screen view', 'a page of the multiworld app', 'the room that is hosting'],

@@ -62,10 +62,10 @@ const runSession = async (launched: LaunchedApp, tab: Locator) => {
   const progress = page.getByRole('dialog', { name: `Running ${TEMPLATE}` });
   await progress.getByRole('progressbar', { name: `Running ${TEMPLATE}`, exact: true }).waitFor();
   await settledProof(launched, '21-run-progress');
-  await tab.locator('.session-dashboard').getByText(/^hosting$/i).first().waitFor({ timeout: RUN_TIMEOUT });
+  await tab.locator('.session-dashboard').getByText(/^running$/i).first().waitFor({ timeout: RUN_TIMEOUT });
   await settledProof(launched, '22-tab-hosting');
   const dashboard = base(page);
-  await dashboard.getByText(/^hosting$/i).first().waitFor({ timeout: RUN_TIMEOUT });
+  await dashboard.getByText(/^running$/i).first().waitFor({ timeout: RUN_TIMEOUT });
   await dashboard.getByText(new RegExp(`^[\\w.-]+:${LOCAL_PORT}$`)).first().waitFor();
   await docked(page).getByText(/_Spoiler\.txt$/).waitFor();
   await page.getByRole('banner', { name: 'Title bar' }).getByRole('button', { name: 'Hosting', exact: true }).click();
