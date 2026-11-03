@@ -5,6 +5,8 @@ const OPTION_TYPES: readonly OptionType[] = ['toggle', 'choice', 'range', 'text'
 
 const UNROLLABLE_TYPES: readonly OptionType[] = ['text', 'dict', 'set', 'list'];
 
+const NAME_LIST_TYPES: readonly OptionType[] = ['set', 'list'];
+
 const ROLL_WORD = /^random$/i;
 
 const AP_COMMON_OPTION_KEYS: readonly string[] = [
@@ -23,4 +25,4 @@ const AP_COMMON_OPTION_KEYS: readonly string[] = [
   'plando_connections',
 ];
 
-export { AP_COMMON_OPTION_KEYS, OPTION_TYPES, ROLL_WORD, UNROLLABLE_TYPES };
+export { AP_COMMON_OPTION_KEYS, NAME_LIST_TYPES, OPTION_TYPES, ROLL_WORD, UNROLLABLE_TYPES };

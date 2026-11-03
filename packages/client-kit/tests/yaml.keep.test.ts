@@ -185,17 +185,17 @@ describe('K1 set and list rows', { tags: ['standard'] }, () => {
   test('names that need quoting are written quoted and read back unchanged', () => {
     const picked = ['Hammer: Jump', 'Say "hi"', 'yes', 'Plain Trick'];
     const text = buildPlayerYaml({ game: 'G', slotName: 'S', schema: setSchema, options: { tricks_in_logic: picked } });
-    expect(text).toBe(
-      'name: S
-game: G
-G:
-  tricks_in_logic:
-    - "Hammer: Jump"
-    - "Say \\"hi\\""
-    - "yes"
-    - Plain Trick
-',
-    );
+    expect(text).toBe([
+      'name: S',
+      'game: G',
+      'G:',
+      '  tricks_in_logic:',
+      '    - "Hammer: Jump"',
+      '    - "Say \\"hi\\""',
+      '    - "yes"',
+      '    - Plain Trick',
+      '',
+    ].join('\n'));
     for (const version of ['1.1', '1.2'] as const) {
       expect(parse(text, { version })).toEqual({ name: 'S', game: 'G', G: { tricks_in_logic: picked } });
     }
@@ -203,11 +203,7 @@ G:
 
   test('an empty set is written as []', () => {
     const text = buildPlayerYaml({ game: 'G', slotName: 'S', schema: setSchema, options: { tricks_in_logic: [] } });
-    expect(text).toBe('name: S
-game: G
-G:
-  tricks_in_logic: []
-');
+    expect(text).toBe(['name: S', 'game: G', 'G:', '  tricks_in_logic: []', ''].join('\n'));
   });
 });
 
