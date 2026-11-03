@@ -2,7 +2,7 @@
 import type { CheckResult } from './checks/check.type';
 import type { OptionRow } from './option-schema.type';
 import { OPTION_CHECKS } from './checks/option-checks.constants';
-import { ROLL_WORD } from './schema.constants';
+import { ROLL_WORD, UNROLLABLE_TYPES } from './schema.constants';
 
 const isRollWord = (value: unknown): boolean => typeof value === 'string' && ROLL_WORD.test(value);
 
@@ -10,7 +10,7 @@ const checkOptionValue = (row: OptionRow, value: unknown, allowRoll: boolean): C
   if (!isRollWord(value)) return OPTION_CHECKS[row.type](row, value);
   const own = row.type === 'choice' ? row.choices?.find((choice) => ROLL_WORD.test(choice.value)) : undefined;
   if (own !== undefined) return { ok: true, value: own.id };
-  const rollable = row.type !== 'text' && row.type !== 'dict';
+  const rollable = !UNROLLABLE_TYPES.includes(row.type);
   if (allowRoll && rollable) return { ok: true, value: 'random' };
   if (rollable) {
     return {

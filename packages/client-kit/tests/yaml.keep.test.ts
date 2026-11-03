@@ -1,10 +1,11 @@
 /* @layer tests @kind test */
 import { describe, expect, test } from 'vitest';
 import { parse } from 'yaml';
-import { buildPlayerYaml, emitYaml, isKitError, parseOptionSchema, validateOptions } from '../src';
+import { buildPlayerYaml, emitYaml, parseOptionSchema, validateOptions } from '../src';
 import type { PlayerYamlInput } from '../src';
 import { ROTP_GAME } from './helpers/rotp-world.constants';
 import { readFixture, readJsonFixture } from './helpers/read-fixture';
+import { failureOf } from './helpers/failure-of';
 
 const schema = parseOptionSchema(readJsonFixture('rotp-options.json'));
 
@@ -23,16 +24,6 @@ const input: PlayerYamlInput = {
     seed_text: 'seed: 1234',
   },
   preRolled: { pond: { demands: [1, 2, 3] }, shop: { prices: [], tag: 'random' } },
-};
-
-const failureOf = (run: () => unknown): { message: string; issues: { key: string; code: string }[] } => {
-  try {
-    run();
-  } catch (error) {
-    if (isKitError(error)) return { message: error.message, issues: [...error.issues] };
-    throw error;
-  }
-  throw new Error('expected a failure');
 };
 
 describe('the player YAML builder', () => {

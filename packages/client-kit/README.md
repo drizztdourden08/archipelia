@@ -79,7 +79,8 @@ The schema is the `options.json` a world ships in its `data` folder: a list of r
     "choices": [{ "value": "full", "id": 0 }, { "value": "minimal", "id": 2 }] },
   { "key": "dungeon_count", "type": "range", "default": 8, "range": { "min": 1, "max": 8 } },
   { "key": "seed_text", "type": "text", "default": "" },
-  { "key": "pre_rolled", "type": "dict", "default": {} }
+  { "key": "pre_rolled", "type": "dict", "default": {} },
+  { "key": "tricks_in_logic", "type": "set", "default": [], "names": ["Hammer: Jump", "Say \"hi\""] }
 ]
 ```
 
@@ -92,6 +93,10 @@ The schema is the `options.json` a world ships in its `data` folder: a list of r
 | `range` | a whole number from `range.min` to `range.max` |
 | `text` | a text |
 | `dict` | a plain object |
+| `set` | a list of names, each one of the row's `names`, none twice. The order given is kept. |
+| `list` | a list of names, each one of the row's `names`; a name may repeat and the order matters. |
+
+A `set` or `list` row carries `names`, the non-empty list of valid names, and a `default` that is a list of those names (`[]` for none). `parseOptionSchema` refuses a default outside `names`, and a set default that repeats a name. The value is written as a block list under the option key, every name through the emitter's quoting, and an empty value as `[]`. The word `random` is not accepted for a set or list. The issue codes for these rows are `wrong-type` (not a list), `bad-choice` (a name outside `names`) and `duplicate-value` (a name twice in a set).
 
 A choice that lists its own `random` value is written as that choice's `id`, never as the word `random`, because Archipelago reads the word as its own keyword for "roll any value". The names Archipelago adds to every world (`accessibility`, `progression_balancing`, `local_items`, `non_local_items`, `start_inventory`, `start_inventory_from_pool`, `start_hints`, `start_location_hints`, `exclude_locations`, `priority_locations`, `item_links`, `plando_items`, `plando_connections`) pass without a schema row. The issue codes are `unknown-option`, `wrong-type`, `bad-choice`, `out-of-range`, `bad-slot-name`, `bad-game`, `duplicate-value` and `bad-value`. The `locked` field of a row is read but not enforced.
 
