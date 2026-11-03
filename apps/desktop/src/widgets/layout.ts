@@ -3,7 +3,7 @@ import { defineLayoutPreset } from '@drizztdourden08/brock-react';
 
 export default defineLayoutPreset({
   revision: 4,
-  onRevision: 'offer',
+  onRevision: 'apply',
   rows: [
     ['main', { column: [['players', 'room'], ['hints', 'spoiler']] }],
     { cells: [['server-log', 'generation-log', 'console']], under: 'main' },
