@@ -57,6 +57,8 @@
   font-size: var(--text-lg);
   font-weight: var(--weight-semi);
   letter-spacing: var(--tracking-caps);
+  cursor: text;
+  user-select: text;
 }
 
 .lobby-stage__note {
