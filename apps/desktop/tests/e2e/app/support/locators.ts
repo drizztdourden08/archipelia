@@ -33,7 +33,7 @@ const MENU_HOME = 'Home';
 
 const IDLE_OPEN = 'Open Sessions';
 
-const dialogOf = (page: Page, title: string) => page.getByRole('dialog', { name: title, exact: true });
+const dialogOf = (page: Page, title: string | RegExp) => page.getByRole('dialog', { name: title, exact: true });
 
 const hub = (page: Page, title: HubTitle) => page.getByRole('dialog', { name: new RegExp(`^(Back )?${title}$`) });
 
