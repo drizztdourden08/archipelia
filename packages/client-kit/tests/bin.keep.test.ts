@@ -16,6 +16,7 @@ const DIST = join(ROOT, 'dist');
 
 const spawn = (cwd: string, args: string[], timezone = 'UTC') => spawnSync(process.execPath, [BIN, ...args], {
   cwd,
+  windowsHide: true,
   encoding: 'utf8',
   env: { ...process.env, TZ: timezone },
 });
@@ -49,7 +50,7 @@ describe('E2 the published package', { tags: ['e2e'] }, () => {
   test('builds plain JavaScript and declarations that run without type stripping', async () => {
     const dir = await workspace();
     const reference = hashOf(spawn(dir, BUILD).stdout);
-    const built = spawnSync(process.execPath, [join(ROOT, 'scripts', 'build.mjs')], { cwd: ROOT, encoding: 'utf8' });
+    const built = spawnSync(process.execPath, [join(ROOT, 'scripts', 'build.mjs')], { cwd: ROOT, encoding: 'utf8', windowsHide: true });
     expect(built.status, built.stderr).toBe(0);
     for (const file of ['index.js', 'node.js', 'cli.js', 'types/index.d.ts', 'types/node/index.d.ts']) {
       expect(existsSync(join(DIST, file)), file).toBe(true);

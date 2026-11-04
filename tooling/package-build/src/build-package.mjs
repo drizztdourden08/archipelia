@@ -22,7 +22,7 @@ const buildPackage = async ({ root, entries, external = [] }) => {
     logLevel: 'warning',
   });
   const tsc = require.resolve('typescript/bin/tsc');
-  const declarations = spawnSync(process.execPath, [tsc, '-p', join(root, 'tsconfig.build.json')], { cwd: root, stdio: 'inherit' });
+  const declarations = spawnSync(process.execPath, [tsc, '-p', join(root, 'tsconfig.build.json')], { cwd: root, stdio: 'inherit', windowsHide: true });
   if (declarations.status !== 0) process.exit(declarations.status ?? 1);
 };
 

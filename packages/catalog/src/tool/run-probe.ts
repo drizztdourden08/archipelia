@@ -5,8 +5,8 @@ import type { Probe } from './tool.type';
 
 const runProbe: Probe = (file, args, env) =>
   new Promise((resolve) => {
-    const options = { timeout: PROBE_TIMEOUT_MS, windowsHide: true, ...(env ? { env: { ...process.env, ...env } } : {}) };
-    execFile(file, args, options, (error, stdout) => resolve({ ok: error === null, out: String(stdout) }));
+    const extra = env ? { env: { ...process.env, ...env } } : {};
+    execFile(file, args, { timeout: PROBE_TIMEOUT_MS, windowsHide: true, ...extra }, (error, stdout) => resolve({ ok: error === null, out: String(stdout) }));
   });
 
 export { runProbe };
