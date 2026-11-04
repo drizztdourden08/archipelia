@@ -1,6 +1,6 @@
 /* @layer tests @kind test */
 import { describe, expect, test } from 'vitest';
-import type { InstalledGame, SessionTemplate } from '@archipelia/model';
+import type { DirectConnection, InstalledGame, SessionTemplate } from '@archipelia/model';
 import { templateOf } from '@archipelia/model';
 import { newTemplate } from '../../src/views/SessionBuilder/behavior/new-template';
 import { setupProblems } from '../../src/lobbies/setup-problems';
@@ -14,7 +14,7 @@ const withPlayers = (players: SessionTemplate['players']): SessionTemplate => ({
 
 const brokenCrystals = () => ({ ...presetPlayer(1, 'A'), source: { kind: 'preset' as const, presetId: 'p1', overrides: { crystals: 12 } } });
 
-const DIRECT = { admission: 'host-approval', allowUnlisted: false, allowedGames: [] } as const;
+const DIRECT: DirectConnection = { admission: 'host-approval', allowUnlisted: false, allowedGames: [] };
 
 describe('K1 the setup of a session', { tags: ['critical'] }, () => {
   test('a named session with no player is ready to start', () => {

@@ -8,8 +8,8 @@ const normal = (text: string) => text.toLowerCase().replace(/[_\-\s]+/g, ' ').tr
 const namesOf = (def: OptionDef) => new Set((def.choices ?? []).flatMap((choice) => [normal(choice.value), normal(choice.label)]));
 
 const factOf = (line: string, names: ReadonlySet<string>): TermFact | null => {
-  const found = FACT_LINE.exec(line);
-  return found && names.has(normal(found[1])) ? { term: found[1].trim(), text: found[2].trim() } : null;
+  const [, term, text] = FACT_LINE.exec(line) ?? [];
+  return term !== undefined && text !== undefined && names.has(normal(term)) ? { term: term.trim(), text: text.trim() } : null;
 };
 
 const splitTermFacts = (def: OptionDef): { description: string; facts: TermFact[] } => {

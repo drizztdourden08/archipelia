@@ -1,7 +1,7 @@
 /* @layer tests @kind test */
 import { afterEach, describe, expect, test, vi } from 'vitest';
 import { setPlayers } from '@archipelia/model';
-import type { AdminLobby, SetPlayer, SessionTemplate } from '@archipelia/model';
+import type { AdminLobby, DirectConnection, SetPlayer, SessionTemplate } from '@archipelia/model';
 import type { Bindings, HostLine } from '@drizztdourden08/archipelia-lobby-protocol/testing';
 import { connectWebSocket, createFakeClient, createScenarioKit, loadScenario } from '@drizztdourden08/archipelia-lobby-protocol/testing';
 import { startLobbyRig } from '@archipelia/server/testing';
@@ -21,7 +21,7 @@ import { runAction } from '../../src/views/SessionLobby/behavior/run-action';
 
 type Rig = Awaited<ReturnType<typeof startLobbyRig>>;
 
-const DIRECT = { admission: 'host-approval', allowUnlisted: false, allowedGames: [] } as const;
+const DIRECT: DirectConnection = { admission: 'host-approval', allowUnlisted: false, allowedGames: [] };
 
 const CY_YAML = ['name: Cy', 'game: Quest', ''].join('\n');
 

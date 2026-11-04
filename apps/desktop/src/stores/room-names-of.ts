@@ -15,7 +15,7 @@ const roomNamesOf = async (room: Client, players: readonly RoomPlayer[]): Promis
   const games = new Set(players.map((player) => player.game));
   const plain = plainNamesOf(room, games);
   const keys = [...games].flatMap((game) => [groupKeyOf('item', game), groupKeyOf('location', game)]);
-  const groups = await room.storage.fetch<API.JSONRecord>(keys).catch(() => ({}));
+  const groups = await room.storage.fetch<API.JSONRecord>(keys).catch((): API.JSONRecord => ({}));
   return Object.fromEntries(
     Object.entries(plain).map(([game, names]) => [game, {
       items: [...new Set([...names.items, ...groupNamesOf(groups[groupKeyOf('item', game)])])],

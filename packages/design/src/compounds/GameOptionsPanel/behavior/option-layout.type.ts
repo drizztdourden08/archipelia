@@ -21,6 +21,6 @@ type LayoutRow = {
 
 type LayoutTab = { id: string; label: string; changed: number; basic: LayoutRow[]; advanced: LayoutRow[] };
 
-type OptionLayout = { tabs: LayoutTab[]; changedRows: LayoutRow[] };
+type OptionLayout = { tabs: [LayoutTab, ...LayoutTab[]]; changedRows: LayoutRow[] };
 
 export type { LayoutRow, LayoutTab, OptionLayout, RowControl, TermFact };

@@ -22,7 +22,7 @@ describe('K1 player edits', { tags: ['critical'] }, () => {
 
   test('changing the game picks its first preset and clears overrides', () => {
     const player = withOverride(presetPlayer(1, 'A', '', 'Other'), 'x', 1, 0);
-    expect(withGame(player, 'Demo', [PRESET]).source).toEqual({ kind: 'preset', presetId: 'p1', overrides: {} });
+    expect(withGame(player, 'Demo', [PRESET], 'A').source).toEqual({ kind: 'preset', presetId: 'p1', overrides: {} });
   });
 
   test('an imported file sets the game from the file', () => {

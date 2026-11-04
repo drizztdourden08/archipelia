@@ -1,6 +1,6 @@
 /* @layer tests @kind test */
 import { describe, expect, test } from 'vitest';
-import type { GamePreset, InstalledGame, LobbyServerEntry, ServerEntry, SessionTemplate } from '@archipelia/model';
+import type { DirectConnection, GamePreset, InstalledGame, LobbyServerEntry, ServerEntry, SessionTemplate } from '@archipelia/model';
 import type { SettingsOption } from '@drizztdourden08/tessera/composites';
 import { joinAddress } from '../../src/lobbies/join-address';
 import type { LobbyServerStatus } from '../../src/lobbies/lobbies.type';
@@ -29,7 +29,7 @@ const status = (patch: Partial<LobbyServerStatus> = {}): LobbyServerStatus => ({
 
 const LOCAL = newTemplate('t1');
 
-const DIRECT = { admission: 'host-approval', allowUnlisted: false } as const;
+const DIRECT: DirectConnection = { admission: 'host-approval', allowUnlisted: false, allowedGames: [] };
 
 const LAN: SessionTemplate = { ...LOCAL, lan: true };
 

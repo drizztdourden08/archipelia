@@ -12,7 +12,7 @@ const createTemplateStore = (files: DataFiles) => {
     return stored ? templateOf(stored) : null;
   };
   const list = async (): Promise<SessionTemplate[]> => (await records.list()).map(templateOf);
-  const save = (template: SessionTemplate): Promise<SessionTemplate> => records.put({ ...template, updatedAt: Date.now() });
+  const save = async (template: SessionTemplate): Promise<SessionTemplate> => templateOf(await records.put({ ...template, updatedAt: Date.now() }));
   const create = (template: Omit<SessionTemplate, 'id' | 'updatedAt'>) => save({ ...template, id: newId(), updatedAt: 0 });
   return { get, list, remove: records.remove, create, save };
 };

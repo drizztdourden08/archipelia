@@ -1,11 +1,12 @@
 /* @layer tests @kind test */
 import { describe, expect, test, vi } from 'vitest';
+import type { DirectConnection } from '@archipelia/model';
 import { approvedJoiner } from '../lobbies/join-kit';
 import { listOn, liveSuite, playerOf, sessionOf } from './live-kit';
 
 const { kitOn, cleanups, stopRig } = liveSuite();
 
-const DIRECT = { admission: 'host-approval', allowUnlisted: true, allowedGames: [] } as const;
+const DIRECT: DirectConnection = { admission: 'host-approval', allowUnlisted: true, allowedGames: [] };
 
 describe('S2 run by tab id', { tags: ['standard'] }, () => {
   test('builds the run from the saved session and the tab overrides, and the run record carries the source and the origin of each player', async () => {
@@ -159,7 +160,7 @@ describe('K4 the preset settings in the players override', { tags: ['standard'] 
     await expect(live.start('t1', preset({ death_link: true }, 'Missing'))).rejects.toThrow('Missing is not installed');
     expect(await listOn(on)()).toEqual([]);
     const { tab } = await live.start('t1', preset({ death_link: true, crystals: 3 }));
-    expect(tab.overrides.players?.[0]?.name).toBe('Dee');
+    expect(tab.overrides.players?.[0]).toMatchObject({ name: 'Dee' });
   });
 });
 
