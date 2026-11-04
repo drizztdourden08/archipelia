@@ -12,7 +12,7 @@ const usage = {
   ],
   rules: [
     'Show a plain empty state when the session has no spoiler, and say that raising the spoiler level gives one.',
-    'Keep the spoiler covered until the player presses Show spoiler, and remember that choice per session in the widget state.',
+    'Keep the spoiler covered until the player presses Show spoiler, and keep that choice per session in the widget state.',
     'Once shown, read the log and list the placements, the playthrough, the entrances, the paths, the settings and the raw text in tabs.',
     'Group the placements by finder, receiver, game, sphere or item type, and filter them with the search box.',
     'Hide covers the spoiler again.',
