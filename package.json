@@ -38,7 +38,7 @@
   "devDependencies": {
     "@archipelia/engine-bundle": "workspace:*",
     "@drizztdourden08/brock-build": "^0.117.0",
-    "@drizztdourden08/brock-lint-config": "^0.117.0",
+    "@drizztdourden08/brock-lint-config": "^0.117.1",
     "@drizztdourden08/brock-thread": "^0.117.0",
     "@drizztdourden08/standards": "^0.14.9",
     "jscpd": "catalog:",

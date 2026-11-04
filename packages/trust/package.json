@@ -21,22 +21,22 @@
     "lint": "tsc --noEmit && eslint ."
   },
   "devDependencies": {
-    "@drizztdourden08/brock-lint-config": "^0.117.0",
+    "@drizztdourden08/brock-lint-config": "^0.117.1",
     "@sigstore/mock": "catalog:",
-    "ajv": "catalog:",
-    "nock": "catalog:",
     "@sigstore/sign": "catalog:",
     "@types/node": "catalog:",
+    "ajv": "catalog:",
     "eslint": "catalog:",
+    "nock": "catalog:",
     "typescript": "catalog:"
   },
   "dependencies": {
-    "archipelia": "workspace:*",
     "@archipelia/model": "workspace:*",
     "@sigstore/bundle": "catalog:",
     "@sigstore/protobuf-specs": "catalog:",
     "@sigstore/tuf": "catalog:",
     "@sigstore/verify": "catalog:",
+    "archipelia": "workspace:*",
     "fflate": "catalog:"
   }
 }
