@@ -75,7 +75,9 @@ describe('K1 where a session lives', { tags: ['critical'] }, () => {
     expect(withRemote(LOCAL, 'lobby:r1', HOSTING)).toMatchObject({ lobby: { serverId: 'r1' }, host: { kind: 'local' } });
     expect(withRemote(ON_FRIEND, 'gg', HOSTING).lobby).toBeUndefined();
   });
+});
 
+describe('K1 direct connections on by default here', { tags: ['critical'] }, () => {
   test('a new local session and a move from a remote host to this computer turn direct connections on', () => {
     expect(freshTemplate().direct).toEqual(DIRECT);
     expect(isListed(freshTemplate().direct)).toBe(true);
