@@ -4,7 +4,7 @@ import { DESCRIPTION_LINES } from './descriptions-fit.constants';
 import { SELECTOR } from './review-dom.constants';
 
 const cutAtTwoLines = (text: HTMLElement) => {
-  const line = Number.parseFloat(getComputedStyle(text).lineHeight);
+  const line = Number.parseFloat(getComputedStyle(text.firstElementChild ?? text).lineHeight);
   return Number.isNaN(line) || text.getBoundingClientRect().height <= line * DESCRIPTION_LINES + 1;
 };
 
