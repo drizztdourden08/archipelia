@@ -7,23 +7,23 @@ import { nameOf } from './name-of';
 import { stripHas } from './strip-has';
 import { tabStrip } from './tab-strip';
 import { tabBody } from './tab-body';
-import { waitNamed } from './wait-named';
+import { named } from './named';
 import { waitText } from './wait-text';
 
 const showsTab = (tour: AppReviewTour, title: string) => tour.waitFor(() => (
   tour.findAll(SELECTOR.tab, tabStrip(tour)).some((tab) => tab.getAttribute('aria-selected') === 'true' && nameOf(tab).includes(title)) ? true : null
 ));
 
-const openSavedLobby = async (tour: AppReviewTour, title: string, capture?: string) => {
+const openSavedLobby = async (tour: AppReviewTour, title: string, capture?: string, players = 2) => {
   const layer = () => tour.find(SELECTOR.layer);
   await clickNamed(tour, SELECTOR.button, new RegExp(`^${title}\\b`), layer() ?? undefined);
   await clickNamed(tour, SELECTOR.button, LOBBY_UI.run, layer() ?? undefined);
   await showsTab(tour, title);
-  const opened = await waitText(tour, /2 players/, () => tabBody(tour) ?? null, 15000);
+  const opened = await waitText(tour, new RegExp(`${players} players`), () => tabBody(tour) ?? null, 15000);
   tour.check('lobby-opens', opened, 'Run on a saved session opens its tab with the two players saved with it', 'Run did not open a tab with the saved players');
   const labelled = await stripHas(tour, title, 'Lobby');
   tour.check('lobby-tab', labelled, 'the tab is named after the session and its status says Lobby', 'the tab does not say it is in the lobby phase');
-  const run = await waitNamed(tour, SELECTOR.button, LOBBY_UI.run, tabBody(tour));
+  const run = await tour.waitFor(() => named(tour, SELECTOR.button, LOBBY_UI.run, tabBody(tour)));
   tour.check('lobby-run-ready', run instanceof HTMLButtonElement && !run.disabled, 'Run is on once the lobby has a player', 'Run is off on a lobby with two players');
   if (capture) await tour.capture(capture);
 };

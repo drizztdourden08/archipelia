@@ -33,7 +33,7 @@ const openStage = async (tour: AppReviewTour): Promise<AdminLobby | null> => {
   if (!(await seedLobby())) return null;
   nav.open(ROUTE.sessions);
   await waitText(tour, LOBBY_STAGE.session, () => tour.find(SELECTOR.layer));
-  await openSavedLobby(tour, LOBBY_STAGE.session);
+  await openSavedLobby(tour, LOBBY_STAGE.session, undefined, LOBBY_STAGE.seats);
   nav.close();
   return tour.waitFor(() => stageLobby() ?? null, 15000);
 };

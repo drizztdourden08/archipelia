@@ -54,7 +54,7 @@ const LOBBY_UI = {
 
 const TAB_UI = { stopAndClose: 'Stop the room and close' } as const;
 
-const OPTIONS_UI = { view: 'View options', title: (name: string) => `${name}'s options`, close: 'Close' } as const;
+const OPTIONS_UI = { view: 'View options', title: (name: string) => new RegExp(`(^|· )${name}$`), close: 'Close' } as const;
 
 const SEAT_UI = {
   card: '.lobby-seat', pending: 'attention', held: 'held', filled: 'filled', add: 'Add player', refuse: 'Refuse', keep: 'Keep in session', ready: 'Ready', done: 'Save slot', fresh: 'new', set: /^Set$/,
@@ -65,10 +65,10 @@ const LOBBY_STAGE = {
   held: 'Waiting for anyone to join',
   portOffset: 3,
   hintCost: 5,
+  seats: 3,
   count: /\d+ players?/,
   config: /Hint cost\s*5%[\s\S]*Release\s*Auto[\s\S]*Joining\s*Direct, with approval/,
   widgets: ['room', 'players', 'hints', 'server-log', 'generation-log', 'console', 'spoiler'],
-  widgetLabels: { room: 'Room', players: 'Players', hints: 'Hints', 'server-log': 'Server logs', 'generation-log': 'Generation logs', console: 'Console', spoiler: 'Spoiler' } as Record<string, string>,
   sizes: [{ name: 'wide', width: 1920, height: 1080 }, { name: 'hd', width: 1280, height: 720 }],
 } as const;
 
