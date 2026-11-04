@@ -18,14 +18,14 @@
     {
       "id": "soh-archipelia",
       "name": "Ship of Harkinian for Archipelia",
-      "homepage": "https://github.com/drizztdourden08/archipelia-soh",
+      "homepage": "https://github.com/drizztdourden08/Shipwright",
       "games": ["Ship of Harkinian"],
       "status": "active",
       "trust": {
         "method": "github-attestation",
-        "repo": "drizztdourden08/archipelia-soh",
-        "workflow": ".github/workflows/archipelia-release.yml",
-        "refs": ["refs/tags/archipelia-v*"],
+        "repo": "drizztdourden08/Shipwright",
+        "workflow": ".github/workflows/release.yml",
+        "refs": ["refs/tags/v*"],
         "issuer": "https://token.actions.githubusercontent.com"
       }
     }
@@ -51,11 +51,11 @@
       "game": "Ship of Harkinian",
       "module": "oot_soh",
       "displayName": "Ship of Harkinian",
-      "home": "https://github.com/drizztdourden08/archipelia-soh",
+      "home": "https://github.com/drizztdourden08/Shipwright",
       "tags": ["action", "adventure"],
       "client": "soh-archipelia",
       "release": {
-        "repo": "drizztdourden08/archipelia-soh",
+        "repo": "drizztdourden08/Shipwright",
         "world": "oot_soh.apworld",
         "manifest": "oot_soh.apworld.json",
         "kind": "builds",
