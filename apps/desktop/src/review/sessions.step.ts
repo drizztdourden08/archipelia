@@ -2,7 +2,7 @@
 import { defineReviewStep, nav } from '@drizztdourden08/brock-react';
 import type { AppReviewTour } from '@drizztdourden08/brock-react';
 import { ROUTE } from '../hooks/app-navigation.constants';
-import { REVIEW_SESSION, GUARD_DIALOG } from './review.constants';
+import { DIRECT_UI, REVIEW_SESSION, GUARD_DIALOG } from './review.constants';
 import { SELECTOR } from './review-dom.constants';
 import { checkEditorLayout } from './check-editor-layout';
 import { clickNamed } from './click-named';
@@ -19,8 +19,8 @@ const checkDetail = async (tour: AppReviewTour) => {
   tour.check('sessions-detail', shown, 'picking a session shows its setup with a link to its history', 'picking a session did not show its setup');
   const run = named(tour, SELECTOR.button, /^(Run|Go to its tab)$/, layer(tour) ?? undefined);
   tour.check('sessions-run', run !== null, 'the picked session offers Run, or Go to its tab when it is open', 'the picked session has no Run or Go to its tab button');
-  const seat = named(tour, SELECTOR.toggle, /connect directly$/, layer(tour) ?? undefined);
-  tour.check('sessions-direct-switch', seat !== null, 'each saved player has a switch for direct connections', 'the saved players have no direct switch');
+  const seat = named(tour, SELECTOR.toggle, DIRECT_UI.allow, layer(tour) ?? undefined);
+  tour.check('sessions-direct-switch', seat !== null, 'the setup page has a Direct connections switch', 'the setup page has no Direct connections switch');
   await tour.capture('detail');
 };
 

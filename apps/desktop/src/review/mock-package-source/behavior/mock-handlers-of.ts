@@ -1,7 +1,7 @@
 /* @layer renderer-app @kind logic */
 import type { PackageSourceHandlers } from '@archipelia/design';
 import type { SourceBuildPlan } from '@archipelia/model';
-import { MOCK_BUILD, MOCK_CONSENT, MOCK_LOG, MOCK_MODULE, MOCK_PLAN, MOCK_SUGGESTIONS, MOCK_TOOL } from '../mock-package-source.constants';
+import { MOCK_BUILD, MOCK_CONSENT, MOCK_INSTALL_MS, MOCK_LOG, MOCK_MODULE, MOCK_PLAN, MOCK_SUGGESTIONS, MOCK_TOOL } from '../mock-package-source.constants';
 import type { BuildStep, MockWorld } from './mock-handlers-of.type';
 import { logOf, NO_OP } from './mock-world.constants';
 
@@ -48,7 +48,7 @@ const mockHandlersOf = (world: MockWorld): Omit<PackageSourceHandlers, 'onClose'
     onToolInstall: (build) => {
       at({ kind: 'installing', build, tool: MOCK_TOOL });
       setBuildLog(logOf('Installer'));
-      later(() => startBuild(build));
+      later(() => startBuild(build), MOCK_INSTALL_MS);
     },
     onToolCancel: NO_OP,
     onConsent: (accepted) => {

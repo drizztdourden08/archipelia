@@ -46,7 +46,7 @@ const DIRECT_RUN_MS = 30000;
 
 const REVIEW_PLAYER = 'Zelda';
 
-const DIRECT_UI = { allow: /^Allow direct connection/, unlisted: /^Allow unlisted clients/, approval: /^Host approval/, section: /how players join/i } as const;
+const DIRECT_UI = { allow: /^Direct connections$/, unlisted: /^Allow unlisted clients/, approval: /^Ask before letting someone in/, section: /how players join/i } as const;
 
 const LOBBY_UI = {
   start: 'Save and run', run: 'Run', close: 'Close lobby', closeTitle: 'Close the lobby?', open: 'Open lobby',
@@ -57,12 +57,12 @@ const TAB_UI = { stopAndClose: 'Stop the room and close' } as const;
 const OPTIONS_UI = { view: 'View options', title: (name: string) => `${name}'s options`, close: 'Close' } as const;
 
 const SEAT_UI = {
-  card: '.lobby-seat', pending: 'attention', held: 'held', filled: 'filled', add: 'Add player', refuse: 'Refuse', keep: 'Keep in session', ready: 'Ready', done: 'Done',
+  card: '.lobby-seat', pending: 'attention', held: 'held', filled: 'filled', add: 'Add player', refuse: 'Refuse', keep: 'Keep in session', ready: 'Ready', done: 'Save slot', fresh: 'new', set: /^Set$/,
 } as const;
 
 const LOBBY_STAGE = {
   session: 'Review lobby',
-  held: 'Waiting for a player to connect',
+  held: 'Waiting for anyone to join',
   portOffset: 3,
   hintCost: 5,
   count: /\d+ players?/,
@@ -97,7 +97,7 @@ const SESSIONS_UI = {
   tab: 'Go to its tab', run: 'Run',
 } as const;
 
-const EDITOR_UI = { rows: ['Where', 'Direct', 'Password', 'World'], worldSections: ['generation', 'server-rules'], players: 'Players' } as const;
+const EDITOR_UI = { rows: ['Where', 'Joining', 'Password', 'World'], worldSections: ['generation', 'server-rules'], players: 'Slots' } as const;
 
 export {
   DIRECT_RUN_MS, DIRECT_UI, EDITOR_UI, GUARD_DIALOG, HOST_UI, JOIN_UI, LAN_STEP_TIMEOUT_MS, LISTEN_POLL_MS, LISTEN_WAIT_MS, LOBBY_STAGE, LOBBY_UI, MS_PER_SECOND, OPTIONS_UI, REVIEW_CHECKS, REVIEW_DIRECT, REVIEW_GAME, REVIEW_JOINER, REVIEW_LAYOUT, REVIEW_PLAYER, REVIEW_PLAYERS, REVIEW_PORT, REVIEW_PRESET, REVIEW_SECOND, REVIEW_SERVER, REVIEW_SESSION, RUN_TIMEOUT_MS, SAVE_STATE, SEAT_UI, SEED_TIMEOUT_MS, SERVER_ANSWER_MS, SERVER_FIELDS, SERVER_PROBLEMS,

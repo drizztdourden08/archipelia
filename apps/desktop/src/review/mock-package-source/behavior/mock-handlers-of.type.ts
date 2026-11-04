@@ -9,7 +9,7 @@ type MockWorld = {
   setFinish: (finish: SourceFinish) => void;
   setConsent: (consent: SourceConsent | null) => void;
   setBuildLog: (log: BuildLogView) => void;
-  later: (work: () => void) => void;
+  later: (work: () => void, wait?: number) => void;
   missed: RefObject<boolean>;
 };
 

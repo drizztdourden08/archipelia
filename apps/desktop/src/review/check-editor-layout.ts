@@ -16,7 +16,7 @@ const checkEditorLayout = async (tour: AppReviewTour) => {
   const advanced = advancedOf(root);
   tour.check('editor-advanced', advanced !== null && !advanced.open, 'the port and the world settings sit in Advanced, closed until asked for', 'the world settings are not in a closed Advanced section');
   const players = root?.querySelector<HTMLElement>(`[aria-label="${EDITOR_UI.players}"]`) ?? null;
-  tour.check('editor-players', players !== null, 'the setup page lists the saved players, each with a Direct switch', 'the setup page has no Players list');
+  tour.check('editor-players', players !== null, 'the setup page shows the slots of the session as a read-only summary', 'the setup page has no Slots summary');
 };
 
 export { checkEditorLayout };

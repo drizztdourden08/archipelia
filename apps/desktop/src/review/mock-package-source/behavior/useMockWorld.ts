@@ -13,7 +13,7 @@ const useMockWorld = (onClose: () => void): PackageSourceDialogProps => {
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
   const missed = useRef(false);
   useEffect(() => () => timers.current.forEach(clearTimeout), []);
-  const later = (work: () => void) => { timers.current.push(setTimeout(work, MOCK_DELAY_MS)); };
+  const later = (work: () => void, wait = MOCK_DELAY_MS) => { timers.current.push(setTimeout(work, wait)); };
   const handlers = mockHandlersOf({ setStep, setFinish, setConsent, setBuildLog, later, missed });
   return {
     title: MOCK_TITLE,

@@ -7,7 +7,7 @@ import { named } from './named';
 const labelOf = (id: string): string => LOBBY_STAGE.widgetLabels[id] ?? id;
 
 const docked = (tour: AppReviewTour, id: string): boolean =>
-  tour.find(`[data-widget-id="${id}"]`) !== null || named(tour, SELECTOR.tab, new RegExp(`^${labelOf(id)}\\b`)) !== null;
+  tour.find(`[data-widget-id="${id}"]`) !== null || named(tour, SELECTOR.tab, new RegExp(`^${labelOf(id)}\\b`, 'i')) !== null;
 
 const checkDock = (tour: AppReviewTour) => {
   const missing = LOBBY_STAGE.widgets.filter((id) => !docked(tour, id));

@@ -4,6 +4,8 @@ import type { SourceBuildPlan, SourceCandidate, SourcePlan, SourceSuggestions, S
 
 const MOCK_DELAY_MS = 450;
 
+const MOCK_INSTALL_MS = 2500;
+
 const MOCK_MODULE = 'ctrando';
 
 const MOCK_TITLE = 'Chrono Trigger';
@@ -55,4 +57,4 @@ const MOCK_CONSENT: SourceConsent = { packages: MOCK_PACKAGES, wheels: MOCK_WHEE
 
 const MOCK_LOG = ['Reading the build plan', 'Checking the tools', 'Running the build'];
 
-export { MOCK_BUILD, MOCK_CONSENT, MOCK_DELAY_MS, MOCK_LOG, MOCK_MODULE, MOCK_PLAN, MOCK_SUGGESTIONS, MOCK_TITLE, MOCK_TOOL };
+export { MOCK_BUILD, MOCK_CONSENT, MOCK_DELAY_MS, MOCK_INSTALL_MS, MOCK_LOG, MOCK_MODULE, MOCK_PLAN, MOCK_SUGGESTIONS, MOCK_TITLE, MOCK_TOOL };
