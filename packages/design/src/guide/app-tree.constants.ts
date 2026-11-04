@@ -48,6 +48,7 @@ const APP_TREE = [
       'the seats of a session lobby': null,
       'a spoiler log with its placements': null,
       'the grouped placements of a spoiler log': null,
+      'the spoiler of one run, covered until asked for': null,
     },
   },
   { at: ['layout'], answers: { 'the stage of a session lobby': null } },
