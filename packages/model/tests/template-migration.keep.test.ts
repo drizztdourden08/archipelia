@@ -36,6 +36,13 @@ describe('K3 a saved session read from disk', { tags: ['critical'] }, () => {
     expect(templateOf(stored).direct).toEqual({ admission: 'open', allowUnlisted: false, allowedGames: ['Celeste'] });
   });
 
+  test('keeps the Show on the network choice a session was saved with', () => {
+    const shown = { ...withLegacyDirect(), direct: { admission: 'open' as const, allowUnlisted: false, allowedGames: [], listed: true } };
+    const hidden = { ...shown, direct: { ...shown.direct, listed: false } };
+    expect(templateOf(shown).direct?.listed).toBe(true);
+    expect(templateOf(hidden).direct?.listed).toBe(false);
+  });
+
   test('moves the lobby out of a direct connection (the PR 46 shape) and keeps the admission settings', () => {
     const read = templateOf(withLegacyDirect());
     expect(read.lobby).toEqual({ serverId: 'r1', lobbyId: 'lb_1' });

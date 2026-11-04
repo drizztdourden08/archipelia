@@ -9,7 +9,7 @@ const serverOf = ({ hintCost, releaseMode, collectMode, remainingMode, autoShutd
   ({ hintCost, releaseMode, collectMode, remainingMode, autoShutdownMinutes });
 
 const directOf = (direct: DirectConnection | undefined): DirectConnection | null =>
-  (direct ? { admission: direct.admission, allowUnlisted: direct.allowUnlisted, ...(isListed(direct) ? { listed: true } : {}) } : null);
+  (direct ? { admission: direct.admission, allowUnlisted: direct.allowUnlisted, allowedGames: direct.allowedGames, listed: isListed(direct) } : null);
 
 const overridesOfRun = ({ snapshot }: Pick<Session, 'snapshot'>): SessionOverrides => ({
   players: snapshot.players,
