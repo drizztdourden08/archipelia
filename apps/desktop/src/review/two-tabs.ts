@@ -16,7 +16,6 @@ import { waitText } from './wait-text';
 
 const hostSecond = async (tour: AppReviewTour) => {
   nav.open(ROUTE.sessions);
-  await waitText(tour, REVIEW_SECOND, () => tour.find(SELECTOR.layer));
   await openSavedLobby(tour, REVIEW_SECOND);
   await clickNamed(tour, SELECTOR.button, 'Run', tabBody(tour));
   const hosting = await waitText(tour, /^running$/im, () => tour.find(SELECTOR.dashboard), RUN_TIMEOUT_MS);
@@ -44,7 +43,6 @@ const widgetsFollow = async (tour: AppReviewTour) => {
 const twoTabs = async (tour: AppReviewTour): Promise<boolean> => {
   if (!(await seedSecond())) return false;
   nav.open(ROUTE.sessions);
-  await waitText(tour, REVIEW_SESSION, () => tour.find(SELECTOR.layer));
   await openSavedLobby(tour, REVIEW_SESSION, 'session-lobby');
   if (!(await hostSecond(tour))) return false;
   await checkTwoTabs(tour);

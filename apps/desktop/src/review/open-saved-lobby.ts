@@ -8,6 +8,8 @@ import { stripHas } from './strip-has';
 import { tabStrip } from './tab-strip';
 import { tabBody } from './tab-body';
 import { named } from './named';
+import { pickSession } from './pick-session';
+import { pickSession } from './pick-session';
 import { waitText } from './wait-text';
 
 const showsTab = (tour: AppReviewTour, title: string) => tour.waitFor(() => (
@@ -15,9 +17,8 @@ const showsTab = (tour: AppReviewTour, title: string) => tour.waitFor(() => (
 ));
 
 const openSavedLobby = async (tour: AppReviewTour, title: string, capture?: string, players = 2) => {
-  const layer = () => tour.find(SELECTOR.layer);
-  await clickNamed(tour, SELECTOR.button, new RegExp(`^${title}\\b`), layer() ?? undefined);
-  await clickNamed(tour, SELECTOR.button, LOBBY_UI.run, layer() ?? undefined);
+  if (!(await pickSession(tour, title))) return;
+  await clickNamed(tour, SELECTOR.button, LOBBY_UI.run, tour.find(SELECTOR.layer) ?? undefined);
   await showsTab(tour, title);
   const opened = await waitText(tour, new RegExp(`${players} players`), () => tabBody(tour) ?? null, 15000);
   tour.check('lobby-opens', opened, 'Run on a saved session opens its tab with the two players saved with it', 'Run did not open a tab with the saved players');

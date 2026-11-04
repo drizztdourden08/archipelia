@@ -16,7 +16,6 @@ import { pendingJoin } from './pending-join';
 import { seedLobby } from './seed-lobby';
 import { tabStrip } from './tab-strip';
 import { waitNamed } from './wait-named';
-import { waitText } from './wait-text';
 
 const stageLobby = (): AdminLobby | undefined =>
   useLobbyStore.getState().lobbies[LOCAL_SERVER]?.find((lobby) => lobby.name === LOBBY_STAGE.session && lobby.phase !== 'closed');
@@ -32,7 +31,6 @@ const closeStage = async (tour: AppReviewTour) => {
 const openStage = async (tour: AppReviewTour): Promise<AdminLobby | null> => {
   if (!(await seedLobby())) return null;
   nav.open(ROUTE.sessions);
-  await waitText(tour, LOBBY_STAGE.session, () => tour.find(SELECTOR.layer));
   await openSavedLobby(tour, LOBBY_STAGE.session, undefined, LOBBY_STAGE.seats);
   nav.close();
   return tour.waitFor(() => stageLobby() ?? null, 15000);
