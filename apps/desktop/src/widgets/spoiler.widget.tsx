@@ -1,6 +1,7 @@
 /* @layer renderer-app @kind component */
 import type { WidgetMeta } from '@drizztdourden08/brock-react';
-import { NoSession, SpoilerWidget } from '../views/SessionDashboard';
+import { NoSession } from '../views/SessionDashboard';
+import { SpoilerWidget } from '../views/SpoilerWidget';
 import { useSessionView } from '../hooks/useSessionView';
 
 const meta: WidgetMeta = {

@@ -2,7 +2,7 @@
 import { useMemo } from 'react';
 import { useWidgetState } from '@drizztdourden08/brock-react';
 import { LogLines } from '@archipelia/design';
-import { textRows } from '../../../../behavior/text-rows';
+import { textRows } from '../../../SessionDashboard/behavior/text-rows';
 import type { RawPanelProps } from './RawPanel.type';
 
 const RawPanel = ({ text }: RawPanelProps) => {

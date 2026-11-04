@@ -2,7 +2,7 @@
 import { useMemo } from 'react';
 import type { Session } from '@archipelia/model';
 import { parseSpoiler } from '@archipelia/sessions/spoiler';
-import { useSessionText } from '../../../behavior/useSessionText';
+import { useSessionText } from '../../SessionDashboard/behavior/useSessionText';
 import { useItemTypes } from './useItemTypes';
 
 const useSpoilerLog = (session: Session, file: string | null) => {

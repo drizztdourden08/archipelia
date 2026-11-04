@@ -1,6 +1,6 @@
 /* @layer renderer-app @kind component */
 import { EmptyState } from '@drizztdourden08/tessera/primitives';
-import { TextState } from '../../../TextState';
+import { TextState } from '../../../SessionDashboard/sub-components/TextState';
 import { useSpoilerLog } from '../../behavior/useSpoilerLog';
 import { SpoilerLoaded } from '../SpoilerLoaded';
 import type { SpoilerBoardProps } from './SpoilerBoard.type';

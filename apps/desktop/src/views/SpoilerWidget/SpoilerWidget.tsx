@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import { useWidgetState } from '@drizztdourden08/brock-react';
 import { Button, EmptyState, Icon } from '@drizztdourden08/tessera/primitives';
 import type { SpoilerWidgetProps } from './SpoilerWidget.type';
-import { spoilerFileOf } from '../../behavior/spoiler-file-of';
+import { spoilerFileOf } from '../SessionDashboard/behavior/spoiler-file-of';
 import { SpoilerBoard } from './sub-components/SpoilerBoard';
 
 const SpoilerWidget = ({ session }: SpoilerWidgetProps) => {

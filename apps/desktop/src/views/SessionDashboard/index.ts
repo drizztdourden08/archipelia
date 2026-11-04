@@ -10,4 +10,3 @@ export { NoSession } from './sub-components/NoSession';
 export { ServerLogWidget } from './sub-components/ServerLogWidget';
 export { PlayersWidget } from './sub-components/PlayersWidget';
 export { RoomWidget } from './sub-components/RoomWidget';
-export { SpoilerWidget } from './sub-components/SpoilerWidget';

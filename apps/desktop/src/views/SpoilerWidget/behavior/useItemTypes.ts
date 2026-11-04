@@ -1,9 +1,9 @@
 /* @layer renderer-app @kind hook */
 import { useEffect, useMemo, useState } from 'react';
 import { parseItemTypes } from '@archipelia/sessions/spoiler';
-import { appApi } from '../../../../../ipc/app-api';
-import { logFailure } from '../../../../../hooks/log-failure';
-import { useSessionText } from '../../../behavior/useSessionText';
+import { appApi } from '../../../ipc/app-api';
+import { logFailure } from '../../../hooks/log-failure';
+import { useSessionText } from '../../SessionDashboard/behavior/useSessionText';
 import { ITEM_TYPES_FAILED } from '../SpoilerWidget.constants';
 import { itemTypesFileOf } from './item-types-file-of';
 
