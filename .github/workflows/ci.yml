@@ -27,6 +27,8 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
 
       # pnpm/action-setup takes the version from packageManager in the root package.json.
       # Naming a version here as well fails the step.

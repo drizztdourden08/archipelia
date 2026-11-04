@@ -21,7 +21,7 @@
     "lint": "tsc --noEmit && eslint ."
   },
   "devDependencies": {
-    "@drizztdourden08/brock-lint-config": "^0.116.0",
+    "@drizztdourden08/brock-lint-config": "^0.117.0",
     "@sigstore/mock": "catalog:",
     "ajv": "catalog:",
     "nock": "catalog:",
