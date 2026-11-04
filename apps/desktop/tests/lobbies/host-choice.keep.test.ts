@@ -7,6 +7,8 @@ import type { LobbyServerStatus } from '../../src/lobbies/lobbies.type';
 import { lobbyRequest } from '../../src/lobbies/lobby-request';
 import { sessionReach } from '../../src/lobbies/session-reach';
 import { hostingDefaults } from '../../src/views/SessionBuilder/behavior/hosting-defaults';
+import { isListed } from '../../src/lobbies/is-listed';
+import { freshTemplate } from '../../src/views/SessionBuilder/behavior/fresh-template';
 import { newTemplate } from '../../src/views/SessionBuilder/behavior/new-template';
 import { placeOf } from '../../src/views/SessionBuilder/behavior/place-of';
 import { placeOptions } from '../../src/views/SessionBuilder/behavior/place-options';
@@ -72,6 +74,16 @@ describe('K1 where a session lives', { tags: ['critical'] }, () => {
     expect(withPlace({ ...LOCAL, direct: DIRECT }, 'remote', CONTEXT)).toMatchObject({ lobby: { serverId: 'r1' }, direct: DIRECT });
     expect(withRemote(LOCAL, 'lobby:r1', HOSTING)).toMatchObject({ lobby: { serverId: 'r1' }, host: { kind: 'local' } });
     expect(withRemote(ON_FRIEND, 'gg', HOSTING).lobby).toBeUndefined();
+  });
+
+  test('a new local session and a move from a remote host to this computer turn direct connections on', () => {
+    expect(freshTemplate().direct).toEqual(DIRECT);
+    expect(isListed(freshTemplate().direct)).toBe(true);
+    const remote = withPlace(LOCAL, 'remote', CONTEXT);
+    expect(withPlace(remote, 'lan', CONTEXT)).toMatchObject({ lan: true, direct: DIRECT });
+    expect(withPlace(remote, 'local', CONTEXT).direct).toEqual(DIRECT);
+    expect(withPlace(withPlace({ ...LOCAL, direct: DIRECT }, 'lan', CONTEXT), 'local', CONTEXT).direct).toEqual(DIRECT);
+    expect(withPlace(LOCAL, 'lan', CONTEXT).direct).toBeUndefined();
   });
 
   test('lists archipelago.gg, the machines over SSH and the Archipelia servers, each with what it needs', () => {

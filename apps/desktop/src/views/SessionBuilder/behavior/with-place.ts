@@ -3,10 +3,13 @@ import type { SessionTemplate } from '@archipelia/model';
 import type { PlaceContext, SessionPlace } from '../SessionBuilder.type';
 import { hostOfKind } from './host-of-kind';
 import { remoteHost } from './remote-host';
+import { withDefaultDirect } from './with-default-direct';
 import { withoutPlace } from './without-place';
 
-const onThisComputer = (template: SessionTemplate, lan: boolean, { hosting }: PlaceContext): SessionTemplate =>
-  ({ ...withoutPlace(template), host: hostOfKind('local', template.host, [], hosting), ...(lan ? { lan } : {}) });
+const onThisComputer = (template: SessionTemplate, lan: boolean, { hosting }: PlaceContext): SessionTemplate => {
+  const placed = { ...withoutPlace(template), host: hostOfKind('local', template.host, [], hosting), ...(lan ? { lan } : {}) };
+  return template.host.kind === 'local' ? placed : withDefaultDirect(placed);
+};
 
 const onRemote = (template: SessionTemplate, { lobbyServers, servers, hosting }: PlaceContext): SessionTemplate => {
   const first = lobbyServers[0];

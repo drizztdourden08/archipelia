@@ -5,13 +5,13 @@ import { ErrorCallout } from '@archipelia/design';
 import { SESSION_FAILED } from '../../hooks/lobby-hooks.constants';
 import { useSavedTemplate } from '../../hooks/useSavedTemplate';
 import type { SessionBuilderProps } from './SessionBuilder.type';
-import { newTemplate } from './behavior/new-template';
+import { freshTemplate } from './behavior/fresh-template';
 import { useHostingDefaults } from './behavior/useHostingDefaults';
 import { BuilderForm } from './sub-components/BuilderForm';
 
 const SessionBuilder = ({ templateId, onDirty }: SessionBuilderProps) => {
   const hosting = useHostingDefaults();
-  const [fresh] = useState(() => (templateId === undefined ? newTemplate(undefined, hosting) : null));
+  const [fresh] = useState(() => (templateId === undefined ? freshTemplate(hosting) : null));
   const saved = useSavedTemplate(templateId);
   const initial = fresh ?? saved.template;
   if (saved.failed) return <ErrorCallout message={SESSION_FAILED.template} onRetry={saved.retry} />;
