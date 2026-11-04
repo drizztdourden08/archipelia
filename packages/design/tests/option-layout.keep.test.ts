@@ -34,7 +34,7 @@ describe('K1 option layout', { tags: ['critical'] }, () => {
     expect(optionLayoutOf(SCHEMA, {}).tabs.map((tab) => tab.id)).toEqual(['Game Options', 'Items']);
     const flat = optionLayoutOf({ ...SCHEMA, groups: [] }, {});
     expect(flat.tabs.map((tab) => tab.id)).toEqual(['Options']);
-    expect(flat.tabs[0]?.basic.length).toBeGreaterThan(0);
+    expect(flat.tabs[0].basic.length).toBeGreaterThan(0);
   });
 
   test('each tab lists its basic options first and its advanced ones apart', () => {
@@ -46,9 +46,9 @@ describe('K1 option layout', { tags: ['critical'] }, () => {
   test('the search keeps the options that match, and the changed counts ignore it', () => {
     const layout = optionLayoutOf(SCHEMA, { goal: 'crystals_only', exclude: ['Bow'] }, 'crys');
     const [options, items] = layout.tabs;
-    expect(keysOf(options?.basic ?? [])).toEqual(['crystals']);
+    expect(keysOf(options.basic)).toEqual(['crystals']);
     expect(items?.basic).toHaveLength(0);
-    expect([options?.changed, items?.changed]).toEqual([1, 1]);
+    expect([options.changed, items?.changed]).toEqual([1, 1]);
     expect(keysOf(layout.changedRows)).toEqual(['goal', 'exclude']);
   });
 
