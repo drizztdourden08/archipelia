@@ -22,7 +22,7 @@
     "lint": "tsc --noEmit && eslint . && stylelint \"src/**/*.css\" --allow-empty-input"
   },
   "devDependencies": {
-    "@drizztdourden08/brock-lint-config": "^0.117.1",
+    "@drizztdourden08/brock-lint-config": "^0.120.1",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "eslint": "catalog:",
@@ -32,7 +32,7 @@
   },
   "dependencies": {
     "@archipelia/model": "workspace:*",
-    "@drizztdourden08/tessera": "^0.101.1",
+    "@drizztdourden08/tessera": ">=0.87.0 <1",
     "react": "catalog:"
   }
 }
