@@ -7,7 +7,7 @@ const STOPPED_WIDGETS: [string, RegExp][] = [
   ['console', /Commands need a hosting room\./],
 ];
 
-const SPOILER_WIDGET: [string, RegExp][] = [['spoiler', /Archipelago/]];
+const SPOILER_WIDGET: [string, RegExp][] = [['spoiler', /Placements[sS]*Ana[sS]*Bo/]];
 
 const LIVE_WIDGETS: [string, RegExp][] = [
   ['players', /Ana[\s\S]*connected|Ana[\s\S]*playing/],
