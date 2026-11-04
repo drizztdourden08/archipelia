@@ -27,12 +27,12 @@ My first draft called this "HarbourMasters ships it". That was too strong. What 
 
 - The apworld `oot_soh` (game name `Ship of Harkinian`, world 1.4.2, min Archipelago 0.6.7) lives in `HarbourMasters/Archipelago-SoH`, branch `oot-soh`, a fork of ArchipelagoMW/Archipelago. Releases `Soh_1.0.0` (2025-11-02) to `Soh_1.4.2` (2026-07-03), each with the apworld, a YAML template and **separate SoH builds** (Windows, Linux, Mac).
 - The in-game client is in `jeromkiller/Shipwright_archipellago`, a personal fork of Shipwright, branch `Harkipellago`, about 340 commits ahead of and 555 behind upstream. A native `apclientpp` client under `soh/soh/Network/Archipelago`.
-- The repository is inside the HarbourMasters GitHub organisation, and its leads (aMannus, Jerm) are Shipwright contributors; jeromkiller is a public organisation member. But **none of it is in official SoH releases**: no Shipwright release note (9.3.1 and earlier) mentions Archipelago, the Shipwright README does not, and the client has never been merged upstream. The repository README itself says it is a separate build "for now". Whether the SoH team endorses it I cannot tell from public data; the owner may know better.
+- The repository is inside the HarbourMasters GitHub organisation, and its leads (aMannus, Jerm) are Shipwright contributors; jeromkiller is a public organisation member. But **none of it is in official SoH releases**: no Shipwright release note (9.3.1 and earlier) mentions Archipelago, the Shipwright README does not, and the client has never been merged upstream. The repository README itself says it is a separate build that may not stay separate. Whether the SoH team endorses it I cannot tell from public data; the owner may know better.
 - A third-party Android build (`Odrannnn/Shipwright-Archipelago-Android`) is a downstream of that fork.
 
 So treat it as a community integration, valuable as a reference (it solved the location table, hints, DeathLink) but not as something Archipelia can assume will ship with SoH.
 
-## 3. Archipelia side, in short
+## 3. Archipelia side, summary
 
 (Full contract: `packages/lobby-protocol/README.md`.) "Direct connection" lets a game's own client join an Archipelia lobby over a WebSocket protocol (`hello`, upload apworld and YAML, `ready`, then `lobby.started` returns the room address and password), after which the client talks to the Archipelago server normally. A client that proves its apworld with a GitHub attestation can be listed in `registry/registry.json`; others join as "unlisted" only if the host allows. The desktop app is itself a lobby client and host, runs Archipelago **0.6.7**, and builds player YAMLs from a world's options. It has no code today to launch or configure an external game process.
 
@@ -49,7 +49,7 @@ Archipelia (main process) runs two things: a TCP server on 43384 that SoH's Sail
 3. **Item in.** On `ReceivedItems`, send Sail `command` `give_item randomizer <id>`, queued until a save is loaded and Link can take items. The received index is kept in Archipelago data storage, not in the save file.
 4. **Housekeeping.** Goal (`GAME` status) on the credits/Ganon flag, DeathLink through a `kill` command, address changes handled by Archipelia since it owns the connection.
 
-Unknowns to prove in a spike, not guesses: whether a hand-written spoiler with placeholders loads cleanly and what `settings` it needs to match the apworld; whether every check type (cows, scrubs, shops, freestanding items, rupee-checks) raises a distinguishable flag; whether `give_item` is safe during cutscenes and shops; stability of the `RandomizerGet` numbering between SoH versions (pin per version). Size, rough: 4 to 8 weeks for one developer to reach a reliable playthrough; the check table and version pinning are the long tail.
+Unknowns to prove in a spike, not guesses: whether a hand-written spoiler with placeholders loads without errors and what `settings` it needs to match the apworld; whether every check type (cows, scrubs, shops, freestanding items, rupee-checks) raises a distinguishable flag; whether `give_item` is safe during cutscenes and shops; stability of the `RandomizerGet` numbering between SoH versions (pin per version). Size, rough: 4 to 8 weeks for one developer to reach a reliable playthrough; the check table and version pinning are the long tail.
 
 **Cleanest upgrade to Route 1:** an upstream Shipwright PR of a few dozen lines in `Sail.cpp`: forward a "check collected" hook that carries the `RandomizerCheck`, and add a "give randomizer item" effect with a location-aware ack. It removes the flag-to-check table and the item-id fragility. Upstream accepted all of Sail, so it is plausible, but we cannot depend on its timing.
 
@@ -59,7 +59,7 @@ Fork Shipwright (which is also how SoH defines a code mod), add an Archipelia lo
 
 ### Route 3: host and launch the existing community build
 
-Archipelia installs `oot_soh.apworld`, hosts the session, then starts the community SoH build pre-filled with address, slot and password (needs a small connect hook in that build, like the Android intent it already has). Fast (days to a couple of weeks) and uses a proven client, but it depends on a fork we do not control.
+Archipelia installs `oot_soh.apworld`, hosts the session, then starts the community SoH build pre-filled with address, slot and password (needs a small connect hook in that build, like the Android intent it already has). Fast (days to two weeks) and uses a proven client, but it depends on a fork we do not control.
 
 ## 5. Suggested plan
 
