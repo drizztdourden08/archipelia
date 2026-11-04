@@ -9,7 +9,7 @@ const pickSession = async (tour: AppReviewTour, title: string): Promise<boolean>
   const layer = () => tour.find(SELECTOR.layer) ?? undefined;
   const back = named(tour, SELECTOR.button, SESSIONS_UI.back, layer());
   if (back && back.getClientRects().length > 0) tour.click(back);
-  return clickNamed(tour, SELECTOR.button, new RegExp(`^${title}\b`), layer());
+  return clickNamed(tour, SELECTOR.button, new RegExp(`^${title}\\b`), layer());
 };
 
 export { pickSession };

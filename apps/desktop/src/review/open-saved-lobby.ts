@@ -9,7 +9,6 @@ import { tabStrip } from './tab-strip';
 import { tabBody } from './tab-body';
 import { named } from './named';
 import { pickSession } from './pick-session';
-import { pickSession } from './pick-session';
 import { waitText } from './wait-text';
 
 const showsTab = (tour: AppReviewTour, title: string) => tour.waitFor(() => (
